@@ -339,7 +339,6 @@ class ProductonlineController extends BaseController
         $con_content_arr = Yii::$app->request->post('content');
         $data = Yii::$app->request->post();
 
-
         if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
             try {
                 $this->validateContract([

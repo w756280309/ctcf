@@ -31,7 +31,7 @@ class OrderController extends BaseController
     /**
      * 认购页面.
      */
-    public function actionIndex($sn)
+    public function actionIndex($sn, $rand = false)
     {
         if (!preg_match('/^[A-Za-z0-9]+$/', $sn)) {
             throw $this->ex404();
@@ -46,31 +46,43 @@ class OrderController extends BaseController
         if ($deal->allowUseCoupon) {
             $validCoupons = UserCoupon::fetchValid($user, null, $deal);
 
-            if (Yii::$app->session->has('loan_coupon')) {
-                $c = CouponType::tableName();
-                $uc = UserCoupon::tableName();
-                $session = Yii::$app->session->get('loan_coupon');
-
-                $coupons = UserCoupon::find()
-                    ->innerJoin($c, "$c.id = $uc.couponType_id")
-                    ->where(["$uc.id" => $session['couponId']])
-                    ->select('amount')
-                    ->asArray()
-                    ->all();
-            } elseif (!empty($validCoupons)) {
-                $coupon = current($validCoupons);
-                $coupons[] = ['amount' => $coupon->couponType->amount];
-
-                Yii::$app->session->set('loan_coupon', ['couponId' => [$coupon->id]]);
-            }
+//            if (Yii::$app->session->has('loan_coupon')) {
+//                $c = CouponType::tableName();
+//                $uc = UserCoupon::tableName();
+//                $session = Yii::$app->session->get('loan_coupon');
+//
+//                $coupons = UserCoupon::find()
+//                    ->innerJoin($c, "$c.id = $uc.couponType_id")
+//                    ->where(["$uc.id" => $session['couponId']])
+//                    ->select('amount')
+//                    ->asArray()
+//                    ->all();
+//            } elseif (!empty($validCoupons)) {
+//                $coupon = current($validCoupons);
+//                $coupons[] = ['amount' => $coupon->couponType->amount];
+//
+//                Yii::$app->session->set('loan_coupon', ['couponId' => [$coupon->id]]);
+//            }
         }
+        $res = Yii::$app->session->get('loan_coupon');
 
+
+        if (is_null($res)) {
+            Yii::$app->session->set('loan_coupon', ['rand' => $rand, 'money' => '', 'couponId' => '']);
+        } else if (!isset($res['rand'])) {
+            //Yii::$app->session->remove('loan_coupon');
+            Yii::$app->session->set('loan_coupon', ['rand' => $rand, 'money' => '', 'couponId' => '']);
+        }else if ($rand && $res['rand'] != $rand) {
+            //Yii::$app->session->remove('loan_coupon');
+            Yii::$app->session->set('loan_coupon', ['rand' => $rand, 'money' => '', 'couponId' => '']);
+        }
+        $res = Yii::$app->session->get('loan_coupon');
         return $this->render('index', [
             'deal' => $deal,
             'user' => $user,
             'coupons' => $coupons,
             'validCoupons' => $validCoupons,
-            'money' => $money,
+            'money' => !is_null($res) ? $res['money'] : '',
         ]);
     }
 
@@ -82,9 +94,34 @@ class OrderController extends BaseController
         $deal = $this->findOr404(OnlineProduct::class, ['sn' => $sn]);
         $money = Yii::$app->request->post('money');
         $session = Yii::$app->session->get('loan_coupon');
-        $userCouponIds = isset($session['couponId']) ? $session['couponId'] : [];
+        $userCouponIds = isset($session['couponId']) ? $session['couponId'] : [];   //用户代金券或加息券
+
         $couponConfirm = Yii::$app->request->post('couponConfirm');
+
         $user = $this->getAuthedUser();
+        /**
+         * 加息券只可使用一张
+         * 加息券和代金券不可同时使用
+         */
+        $count = count($userCouponIds);
+        if ($count > 0) {
+            $jiaxi_count = UserCoupon::find()
+                ->innerJoinWith('couponType')
+                ->where([
+                    'isUsed' => false,
+                    'isDisabled' => false,
+                    'user_id' => $user->id,
+                ])
+                ->andWhere(['in', 'user_coupon.id', $userCouponIds])
+                ->andWhere(['coupon_type.type' => 1])
+                ->count();
+            if ($jiaxi_count > 1) {
+                return ['code' => '4', 'message' => '加息券每次只可使用一张'];
+            } else if($jiaxi_count == 1 && $count > 1) {
+                return ['code' => '4', 'message' => '加息券不可与代金券同时使用'];
+            }
+        }
+
         $pay = new PayService(PayService::REQUEST_AJAX);
 
         //检验代金券的使用
@@ -152,7 +189,6 @@ class OrderController extends BaseController
 
         //删除选中的session
         Yii::$app->session->remove('loan_coupon');
-
         return $orderManager->createOrder($sn, $money, $userCouponIds, $user->id, $investFrom);
     }
 

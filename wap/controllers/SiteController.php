@@ -8,6 +8,7 @@ use common\models\growth\AppMeta;
 use common\models\mall\PointRecord;
 use common\models\mall\ThirdPartyConnect;
 use common\models\message\PointMessage;
+use common\models\order\OnlineOrder;
 use common\models\product\LoanFinder;
 use common\models\stats\Perf;
 use common\models\thirdparty\SocialConnect;

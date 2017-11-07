@@ -211,7 +211,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
             <div class="col-xs-1"></div>
         </div>
     <?php } elseif($deal->end_date >= time()) { ?>
-        <form action="/deal/deal/toorder?sn=<?=$deal->sn . (defined('IN_APP') ? "&token=" . \yii\helpers\Html::encode(Yii::$app->request->get("token")): "") ?>" method="post" id="toorderform" data-to="1">
+        <form action="/deal/deal/toorder?sn=<?=$deal->sn .'&rand=' . time() . (defined('IN_APP') ? "&token=" . \yii\helpers\Html::encode(Yii::$app->request->get("token")): "") ?>" method="post" id="toorderform" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?=Yii::$app->request->csrfToken ?>">
         </form>
         <div id="x-purchase" class="row rengou" style="cursor: pointer">

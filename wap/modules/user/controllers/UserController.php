@@ -105,6 +105,7 @@ class UserController extends BaseController
         if (!$inApp || $appVersionCode >= 1.5) {
             //代金券总值
             $sumCoupon = UserCoupon::findCouponInUse($user->id, date('Y-m-d'))->sum('amount');
+            $countCoupon = UserCoupon::findCouponInUse($user->id, date('Y-m-d'))->count();
             $sumLicai = bcadd($ua->freeze_balance, $ua->investment_balance, 2);
         }
         $risk = Risk::find()
@@ -127,6 +128,7 @@ class UserController extends BaseController
 
         return [
             'sumCoupon' => $sumCoupon,
+            'countCoupon' => $countCoupon,
             'ua' => $ua,
             'user' => $user,
             'showPointsArea' => $showPointsArea,

@@ -6,9 +6,11 @@ use app\controllers\BaseController;
 use common\action\user\AddCouponAction;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
+use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 
@@ -36,10 +38,10 @@ class CouponController extends BaseController
         $count = $query->count();
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => '10']);
         $model = $query
-            ->select("$c.loanExpires, $c.amount, $c.name, $c.minInvest, if($uc.isUsed, bin(0),
+            ->select("$c.bonusDays, $c.loanCategories, $c.bonusRate, $c.type, $c.loanExpires, $c.amount, $c.name, $c.minInvest, if($uc.isUsed, bin(0),
              $uc.expiryDate < date(now())) as isExpired, $uc.expiryDate, $uc.isUsed, $uc.couponType_id")
             ->offset($pages->offset)
-            ->limit($pages->limit)
+//            ->limit($pages->limit)
             ->orderBy("isExpired, isUsed, $uc.expiryDate, amount desc, minInvest")
             ->asArray()
             ->all();
@@ -62,7 +64,7 @@ class CouponController extends BaseController
                 'cp' => $page,
             ];
         }
-
+        //var_dump($model);die;
         return $this->render('list', ['model' => $model, 'header' => $pages]);
     }
 
@@ -176,8 +178,16 @@ class CouponController extends BaseController
      */
     public function actionDelCoupon($sn)
     {
+        Yii::$app->session->remove('loan_coupon');
+        if (is_null(Yii::$app->session->get('loan_coupon'))) {
+            return 'success';
+        } else {
+            return 'error';
+        }
+//        var_dump(Yii::$app->session->get('loan_coupon'));
         if ($this->validateLoanWithCoupon($sn, 0)) {
-            Yii::$app->session->set('loan_coupon', ['couponId' => []]);
+            //Yii::$app->session->set('loan_coupon', ['couponId' => []]);
+            Yii::$app->session->remove('loan_coupon');
         }
     }
 
@@ -210,5 +220,45 @@ class CouponController extends BaseController
         }
 
         return $request;
+    }
+
+    /**
+     * 获取用户可用的代金券和加息券
+     * ajax方法请求
+     * @author ZouJianShuang
+     */
+    public function actionAvailableCoupons($money)
+    {
+        if (true || Yii::$app->request->isAjax) {
+            $res = $res = Yii::$app->session->get('loan_coupon');
+            if ($money != $res['money']) {
+                Yii::$app->session->remove('loan_coupon');
+                Yii::$app->session->set('loan_coupon', ['rand' => $res['rand'], 'money' => '', 'couponId' => '']);
+            }
+            if ($money) {
+                $res = UserCoupon::availableCoupons($money);
+            } else {
+                $res = UserCoupon::availableCoupons();
+            }
+
+            return $res;
+        }
+    }
+    /**
+     * 每次点击优惠券前，判断单个是否可用
+     */
+    public function actionValidateCoupon($sn, $couponId, $money)
+    {
+        $coupon = UserCoupon::findOne($couponId);
+        $loan = OnlineProduct::findOne(['sn' => $sn]);
+        $user = Yii::$app->user->getIdentity();
+        try {
+            UserCoupon::checkAllowUse($coupon, $money, $user, $loan);
+        } catch (\Exception $ex) {
+            return ['code' => 0, 'message' => $ex->getMessage()];
+        }
+
+        return ['code' => 1, 'message' => 'ok'];
+
     }
 }

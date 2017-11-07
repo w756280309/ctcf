@@ -1,111 +1,346 @@
 <?php
-
-use common\utils\StringUtils;
-use wap\assets\WapAsset;
-use yii\web\YiiAsset;
-
-$this->title = '我的代金券';
-$this->registerCssFile(ASSETS_BASE_URI.'css/coupon.css?v=20170714', ['depends' => WapAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/coupon-list.js?v=20170718', ['depends' => YiiAsset::class, 'position' => 3]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/couponcode.js', ['depends' => WapAsset::class]);
-$this->registerJs('var tp='.$header->pageCount.';', 1);
-
+$this->title = '优惠券';
 ?>
-<a class="checkin" href="/user/checkin">如何获取代金券</a><a href="javascript:" id="couponcode" class="couponcode">我有兑换码</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>理财卡券</title>
+	<link rel="stylesheet" href="http://view.wendujf.com/css/base.css?v=20170907">
+	<script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
+	<script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
+	<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/rate-coupon/account-coupon/css/index.css?v=1.1">
+	<style>
+		.list {
+			-webkit-overflow-scrolling: touch;
+		}
 
-<div style="clear:both"></div>
-<!--有优惠券的状态  -->
-<?php if (!empty($model)) { ?>
-    <div class="container coupon">
-    <?php
-    $todeal = null;
-    foreach ($model as $val) :
-        $desc = '去使用';
-        $div = '';
-        $image = 'ok_ticket';
+		* {
+			-webkit-box-sizing: content-box;
+			box-sizing: content-box;
+		}
+		.title-box * {
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+		label {
+			display: inline;
+			font-weight: 400;
+		}
 
-        if ($val['isUsed']) {
-            $desc = '已使用';
-            $div = '<div class="row over_img over_user_img"></div>';
-            $image = 'over_ticket';
-            $todeal = false;
-        } else {
-            if (date('Y-m-d') > $val['expiryDate']) {
-                $desc = '已过期';
-                $div = '<div class="row over_img over_time_img"></div>';
-                $image = 'over_ticket';
-                $todeal = false;
-            } else {
-                $todeal = true;
-            }
-        }
-        ?>
-        <a class="box" href="<?= $todeal ? '/deal/deal/index' : 'javascript:;'?>">
-            <div class="row coupon_num">
-                <img src="<?= ASSETS_BASE_URI ?>images/<?= $image ?>.png" alt="券">
-                <div class="row pos_box">
-                    <div class="col-xs-2"></div>
-                    <div class="col-xs-4 numbers">¥<span><?= StringUtils::amountFormat2($val['amount']) ?></span></div>
-                    <div class="col-xs-6 right_tip">
-                        <div class="a_height"></div>
-                        <div class="b_height">
-                            <p class="b_h4"><?= $val['name'] ?></p>
-                        </div>
-                        <div class="c_height">
-                            <p class="condition1">单笔投资满<?= $val['minInvestDesc'] ?>可用</p>
-                        </div>
-                        <div class="d_height"></div>
-                        <div class="c_height">
-                            <p class="condition1">
-                                <?= $val['loanExpires'] ? '期限满'.$val['loanExpires'].'天可用(除转让)' : '新手标、转让不可用' ?>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="clear"></div>
-                <?= $div ?>
-            </div>
-            <div class="row gray_time">
-                <img src="<?= ASSETS_BASE_URI ?>images/coupon_img.png" alt="底图">
-                <div class="row pos_box">
-                    <div class="col-xs-8 ticket_time">有效期至<?= $val['expiryDate'] ?></div>
-                    <div class='col-xs-4 <?= $todeal ? 'no-use' : 'over-use'?>'>
-                        <?= $todeal ? "<span class='go-use-coucpon'> $desc </span>" : $desc ?>
-                    </div>
-                </div>
-            </div>
-        </a>
-    <?php endforeach; ?>
-    <div class="load"></div>
+		.coupon-box .warning {
+			font-size: .34666667rem;
+			height: .34666667rem;
+			line-height: .34666667rem;
+			color: rgb(244, 67, 54);
+			text-align: center;
+			margin-bottom: 0.3rem;
+		}
+		.my-coupons .list-box .list .detail-wrapper .detail-main ul li a div.icon {
+			width: 37.5%;
+		}
+	</style>
+</head>
+<body>
+<div class="flex-content my-coupons">
+    <div class="menu clearfix">
+        <div class="blue-slide active"><span>代金券</span></div>
+        <div class="red-slide"><span>加息券</span></div>
     </div>
-<?php } else { ?>
-    <!--无优惠券的状态  -->
-    <div class="container coupon coupon_none"></div>
-<?php } ?>
-<div class="code-mark"></div>
-<div class="couponcode-box" id="couponcode-box">
-    <form action="/user/couponcode/duihuan" method="post" id="code-forms">
-        <h3 class="code-top">领取代金券<img class="close" src="<?= ASSETS_BASE_URI ?>images/close.png" alt=""></h3>
-        <div class="code-content">
-            <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>">
-            <div class="code-box">
-                <label for="code">兑换码</label>
-                <input id="code" class="coupon-code" type="text" maxlength="16" placeholder="请输入代金券兑换码" name="code" autocomplete="off" tabindex="1">
-                <div style="clear: both"></div>
-                <div class="popUp code_err"></div>
-            </div>
-            <div style="width: 100%">
-                <p class="refer">*兑换码一般从温都金服宣传页、合作网站等获得</p>
-                <p class="refer">*必须在有效期内兑换代金券，过期无法兑换</p>
-            </div>
-        </div>
-        <div class="code-success">
-            <div class="code-box code-info"><i></i><span>兑换成功!</span></div>
-            <div class="code-txt"><p>恭喜您获得了<span id="success-refer"></span></p></div>
-        </div>
-        <div class="code-bottom">
-            <a id="code_submit_button" tabindex="2" style="background: rgb(244, 67, 54);">立即兑换</a>
-        </div>
-        <input type="text" style="display:none" />
-    </form>
+    <div class="list-box">
+			<!--代金券：-->
+			<div class="list">
+                <div class="btn-rules">
+                    <a class="a-exchange">我有兑换码</a>
+                    <a class="a-rule">查看规则</a>
+                </div>
+                <div class="no-content
+                        <?php
+                    if (count($model)) {
+                        echo 'hide';
+                    } else {
+                        $num = 0;
+                        foreach ($model as $v) {
+                            if ($v['type'] == 0) $num++;
+                            if ($num > 0) echo 'hide';
+                        }
+                    }
+                    ?>">
+                    <h4>暂无代金券</h4>
+                    <p class="txt">参与平台活动和关注平台动态将有机会获得代金券哦！</p>
+                    <p class="bottom-tips"><a href="" class="sign-in">签到</a>获取代金券</p>
+                </div>
+                <div class="detail-wrapper">
+                    <div class="detail-main">
+                        <ul>
+                        <?php foreach ($model as $val) : ?>
+                            <?php if ($val['type'] < 1) : ?>
+                                                        <li class="box-shadow">
+                                                            <a href="<?php if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
+                                  echo '/deal/deal/index';
+                              } else {
+                                  echo '#';
+                              } ?>" class="clearfix">
+                                                                <div class="icon">
+                                    <?php
+                                    if ($val['isUsed'] == 1 || $val['expiryDate'] < date('Y-m-d')) {
+                                        echo '<img src="' . FE_BASE_URI . 'wap/rate-coupon/account-coupon/images/grey-coupon-bg.png">';
+                                    } else {
+                                        echo '<img src="' . FE_BASE_URI . 'wap/rate-coupon/account-coupon/images/blue-coupon-bg.png">';
+                                    }
+                                    ?>
+                                                                    <span class="num"><i>￥</i><?= $val['amount'] ?></span>
+                                                                    <span class="text">满<i
+                                                                            class="money"><?php echo $val['minInvest'] < 10000 ? intval($val['minInvest']) : intval($val['minInvest']) / 10000 . "万"; ?></i>元可用</span>
+                                                                </div>
+                                                                <div class="content">
+                                                                    <h4 class="name"><?= $val['name'] ?></h4>
+                                                                    <div class="extra">
+                                                                <span class="unable" style="line-height: 1.3rem;">
+                                                                    <?php
+                                                                    if ($val['loanCategories'] == 1) {
+                                                                        echo '温盈金产品可用';
+                                                                    } else if ($val['loanCategories'] == 2) {
+                                                                        echo '温盈宝产品可用';
+                                                                    } else {
+                                                                        echo '温盈金、温盈宝产品可用';
+                                                                    }
+                                                                    ?>
+                                                                </span>
+                                                                    </div>
+                                                                    <div class="bottom">
+                                                                        <span class="time">有效期至<?= $val['expiryDate'] ?></span>
+                                      <?php
+                                      if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
+                                          echo '<span class="go-to-use able-status">去使用</span>';
+                                      } else if ($val['isUsed']) {
+                                          echo '<span class="go-to-use">已使用</span>';
+                                      } else {
+                                          echo '<span class="go-to-use">已过期</span>';
+                                      }
+                                      ?>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                <div class="detail-bottom">
+                    <div class="title-bottom"><span class="line"></span><i>温馨提示</i></div>
+                    <p>代金券在投资项目时使用，使用后待项目收益开始时，将成为您总资产的一部分。</p>
+                </div>
+			</div>
+			<!--加息券：-->
+			<div class="list">
+                <div class="btn-rules">
+                    <a class="a-rule">查看规则</a>
+                </div>
+                <div class="no-content
+                                    <?php
+                    $num = 0;
+                    foreach ($model as $v) {
+                        if ($v['type'] == 1) $num++;
+                        if ($num > 0) echo 'hide';
+                    }
+                    ?>" id="no-jxq" style="display: none">
+                    <h4>暂无加息券</h4>
+                    <p class="txt">参与平台活动和关注平台动态将有机会获得加息券哦！</p>
+                    <p class="bottom-tips"><a href="" class="sign-in">签到</a>获取加息券</p>
+                </div>
+                <div class="detail-wrapper" id="detail-wrapper">
+                    <div class="detail-main">
+                        <ul>
+                <?php foreach ($model as $val) : ?>
+                    <?php if ($val['type'] == 1) : ?>
+                                                <li class="box-shadow">
+                                                    <a href="<?php if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
+                          echo '/deal/deal/index';
+                      } else {
+                          echo '#';
+                      } ?>" class="clearfix">
+                                                        <div class="icon">
+                            <?php
+                            if ($val['isUsed'] == 1 || $val['expiryDate'] < date('Y-m-d')) {
+                                echo '<img src="' . FE_BASE_URI . 'wap/rate-coupon/account-coupon/images/grey-coupon-bg.png">';
+                            } else {
+                                echo '<img src="' . FE_BASE_URI . 'wap/rate-coupon/account-coupon/images/orange-coupon-bg.png">';
+                            }
+                            ?>
+                                                    <span class="num"><i></i>+<?= round($val['bonusRate'], 1) ?>%</span>
+                                                    <span class="text">加息<i
+                                                            class="money"><?= $val['bonusDays'] ?></i>天</span>
+                                                </div>
+                                                <div class="content">
+                                                    <h4 class="name"><?= $val['name'] ?></h4>
+                                                    <div class="extra">
+                                                    <span class="unable">
+                                                    <?php
+                                                    if ($val['loanCategories'] == 1) {
+                                                        echo '温盈金产品可用';
+                                                    } else if ($val['loanCategories'] == 2) {
+                                                        echo '温盈宝产品可用';
+                                                    } else if ($val['loanCategories'] == 3) {
+                                                        echo '仅用于新手标产品';
+                                                    } else {
+                                                        echo '温盈金、温盈宝产品可用';
+                                                    }
+                                                    ?>
+                                                    </span>
+                                                    <span class="unable">满<?php echo $val['minInvest'] < 10000 ? intval($val['minInvest']) : intval($val['minInvest']) / 10000 . "万"; ?>元可用</span>
+
+                                                    </div>
+                                                    <div class="bottom">
+                                                        <span class="time">有效期至<?= $val['expiryDate'] ?></span>
+                      <?php
+                      if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
+                          echo '<span class="go-to-use able-status">去使用</span>';
+                      } else if ($val['isUsed']) {
+                          echo '<span class="go-to-use">已使用</span>';
+                      } else {
+                          echo '<span class="go-to-use">已过期</span>';
+                      }
+                      ?>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+                <div class="detail-bottom" id="detail-wrapper1">
+                    <div class="title-bottom"><span class="line"></span><i>温馨提示</i></div>
+                    <p>加息收益将随最后一期本息一起回到您的账户，项目中途转让将不享受任何加息券带来的收益。</p>
+                </div>
+			</div>
+    </div>
+	<div class="draw-coupon-box">
+		<div class="coupon-pops">
+			<img src="<?= FE_BASE_URI ?>wap/rate-coupon/account-coupon/images/draw-close.png" class="draw-close" alt="关闭按钮">
+			<h4>活动规则</h4>
+			<ul>
+				<li class="rule-title">规则概述</li>
+				<li>理财卡券只适用于部分标的，其中转让标不可使用，同一项目代金券和加息券不可叠加使用。</li>
+				<li class="rule-title">代金券</li>
+				<li>1、一次投资可使用多张代金券，多张代金券使用需要满足投资额不少于多张代金券的累计金额。</li>
+				<li>2、代金券不能与加息券叠加使用。
+				<li>3、代金券使用后，所投资项目开始收益后，代金券金额将成为账户总资产的一部分。</li>
+				<li class="rule-title">加息券
+				<li>1、一次投资使用1张加息券，使用后项目在加息时间内获得额外年化收益。</li>
+				<li>2、加息券不可叠加使用，也不与其他卡券叠加使用。</li>
+				<li>3、通过加息券获得的收益将随项目最后一期本息一期回到您的账户；项目中途转让将不享受任何加息券带来的收益。</li>
+				<li class="tel-bottom">详情咨询：400-101-5151</li>
+			</ul>
+		</div>
+	</div>
+	<input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken; ?>">
+	<div class="coupon-box">
+		<div class="coupon-pops">
+			<img src="<?= FE_BASE_URI ?>wap/rate-coupon/account-coupon/images/exchange-close2.png" class="draw-close"
+			     alt="关闭按钮">
+			<div class="exchange-title">输入兑换码</div>
+			<div class="exchange-input" style="padding: 0.9rem 0 0.55rem;">
+				<label for="">兑换码</label>
+				<input type="text" value="" placeholder="请输入卡券兑换码">
+			</div>
+			<p class="warning"></p>
+			<a class="btn-exchange">立即兑换</a>
+			<p class="tips">请在有效期内使用兑换码，过期将无法使用</p>
+			<p class="tips tips-last">兑换码通过温都金服宣传页、合作网站的活动所得</p>
+		</div>
+	</div>
 </div>
+<script>
+
+  $(function () {
+      $('.menu > div').on('click', function(){
+          var index = $(this).index();
+          $('.menu > div').removeClass('active');
+          $('.menu > div').eq(index).addClass('active');
+          $('.list-box .list').hide();
+          $('.list-box .list').eq(index).show();
+      });
+    $('#no-jiaxiquan').on('click', function () {
+      $('#no-jxq').show();
+      $(this).hide();
+      $('#detail-wrapper').hide();
+      $('#detail-wrapper1').hide();
+    })
+    // 规则
+    $('.btn-rules .a-rule').on('click', function () {
+      $('.draw-coupon-box').show();
+      $('body').on('touchmove', eventTarget, false);
+    });
+    $('.draw-coupon-box .draw-close').on('click', function () {
+      $('.draw-coupon-box').hide();
+      $('body').off('touchmove');
+    });
+
+    // 兑换
+    $('.btn-rules .a-exchange').on('click', function () {
+      $('.coupon-box').show();
+      $('body').on('touchmove', eventTarget, false);
+    });
+    $('.coupon-box .draw-close').on('click', function () {
+      $('.coupon-box').hide();
+      $('body').off('touchmove');
+    });
+    $(".coupon-box .btn-exchange").on("click", function () {
+      var code = $(".coupon-box .exchange-input input").val();
+		var _csrf = $("input[name=_csrf]").val();
+      if (code == '') {
+        $(".warning").html("请输入兑换码");
+        return false;
+      }
+      if (code.length !== 16) {
+        $(".warning").html("兑换码有误，请重新输入");
+        return false;
+      }
+      var reg = /^[a-zA-Z0-9]{16}$/;
+      if (!reg.test(code)) {
+        $(".warning").html("兑换码有误，请重新输入");
+        return false;
+      }
+      $(".warning").html("");
+      $.ajax({
+        url: "/user/couponcode/duihuan",
+        data: {
+        	code:code,
+			_csrf:_csrf
+		},
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+          if (data.requireLogin === 1) {
+            location.href = "/site/login";
+          }
+          if (data.code > 0) {
+            if (data.code === 1) {
+              $(".coupon-box .exchange-input input").val('');
+            }
+          } else {
+            $(".warning").html("");
+            $(".coupon-box .exchange-input input").val("");
+            $("#success-refer").html(data.data);
+            $(".coupon-box .btn-exchange").html("继续兑换");
+          }
+			$(".warning").html(data.message);
+        }
+      })
+    });
+
+
+    function eventTarget(event) {
+      var e = event || window.event;
+      e.preventDefault();
+    }
+
+  })
+
+</script>
+</body>
+</html>

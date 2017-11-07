@@ -2,6 +2,7 @@
 
 use common\utils\StringUtils;
 
+
 ?>
 <div class="top_one flex-content">
     <?php if (\Yii::$app->user->isGuest) { ?>
@@ -63,9 +64,9 @@ use common\utils\StringUtils;
         <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coupon.png" alt="">
         <div class="youhui_content f12">
             <?php if (!\Yii::$app->user->isGuest) { ?>
-                <p class="line_one f24" id="daijin"><?= isset($sumCoupon) ? StringUtils::amountFormat2($sumCoupon) : '0' ?></p>
+                <p class="line_one f24" id="daijin"><?= $countCoupon?></p>
             <?php } ?>
-            <p class="line_two">我的代金券 (元)</p>
+            <p class="line_two">优惠券(张)</p>
         </div>
     </a>
     <a href="/mall/point" class="my_youhui rg youhui2">

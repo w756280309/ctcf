@@ -109,4 +109,29 @@ class CouponType extends \yii\db\ActiveRecord
 
         return true;
     }
+
+    /**
+     * 校验单张的代金券或者加息券是否可用
+     * @param $userCoupon用户代金券or加息券; $deal标的; $investAmount投资金额
+     */
+    static function validateCoupon($userCoupon, $deal, $investAmount)
+    {
+        $user = \Yii::$app->user->getIdentity();
+        $checkMoney = $investAmount;
+        if (!is_null($userCoupon) && !is_null($deal) && !is_null($user) && !is_null($checkMoney)) {
+            $message = '';
+            try {
+                UserCoupon::checkAllowUse($userCoupon, $checkMoney, $user, $deal);
+            } catch (\Exception $ex) {
+                $message = $ex->getMessage();
+            }
+            if ($message) {
+                return ['code' => 0, 'message' => $message];
+            } else {
+                return ['code' => 1, 'message' => 'ok'];
+            }
+        } else {
+            return ['code' => 0, 'message' => '参数错误，请重试'];
+        }
+    }
 }

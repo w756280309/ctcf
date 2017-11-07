@@ -43,14 +43,14 @@ body{
 .text-align-ct {
     text-align:center;
 }
-/* 1px µ×±ß¿ò */
+/* 1px ï¿½×±ß¿ï¿½ */
 .border-bottom {
     border-bottom: 1px solid #d9dce4;
 }
 .margin-top,.margin-bottom{
     margin-top:10px;
 }
-/* ±êÌâ¸ß¶È */
+/* ï¿½ï¿½ï¿½ï¿½ß¶ï¿½ */
 .nav-height {
     margin-bottom:10px;
     height: 50px;
@@ -60,24 +60,24 @@ body{
 .nav-height img {
     height:30px!important;
 }
-/* 1.ĞĞ¹²ÓÃµÄ¸ß¶È  */
+/* 1.ï¿½Ğ¹ï¿½ï¿½ÃµÄ¸ß¶ï¿½  */
 .bg-height {
     height: 80px;
     line-height: 80px;
 }
-/*  2.ĞĞ¹²ÓÃµÄ¸ß¶È  */
+/*  2.ï¿½Ğ¹ï¿½ï¿½ÃµÄ¸ß¶ï¿½  */
 .sm-height {
     height: 52px;
     line-height: 50px;
 }
-/*  ¼ıÍ· arrow */
+/*  ï¿½ï¿½Í· arrow */
 
-/*  ´íÎóµ¯³ö¿ò   */
+/*  ï¿½ï¿½ï¿½óµ¯³ï¿½ï¿½ï¿½   */
 .error-info {
     position: absolute;
     top:40%;
     left:33.3%;
-    z-index: 99;
+    z-index: 10000;
     width:33.3%;
     height: 100px;
     line-height: 100px;
@@ -89,14 +89,14 @@ body{
     border-radius: 10px;
     display: none;
 }
-/*  È·ÈÏµ¯³ö¿ò   */
+/*  È·ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½   */
 
 
-/* °´Å¥ ¾àÀë¶¥²¿¾àÀë */
+/* ï¿½ï¿½Å¥ ï¿½ï¿½ï¿½ë¶¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 .login-sign-btn {
     margin-top: 50px;
 }
-/* °´Å¥ */
+/* ï¿½ï¿½Å¥ */
 .btn-common {
     marging-top:20px;
     width:100%;
@@ -120,7 +120,7 @@ body{
     background:#e7eaf1 ;
     border:1px solid #fabab5;
 }
-/* ÑéÖ¤Âë */
+/* ï¿½ï¿½Ö¤ï¿½ï¿½ */
 .yzm {
     position:absolute ;
     top:8px;
@@ -166,7 +166,7 @@ body{
     font-size: 16px;
     line-height: 40px;
 }
-/*ÔİÎŞÊı¾İ*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 .nodata {
     position: absolute;
     margin: auto auto;
@@ -233,7 +233,7 @@ body{
     z-index: 10;
     display: none;
 }
-/* 1px åº•è¾¹æ¡? */
+/* 1px åº•è¾¹ï¿½? */
 .border-bottom {
     border-bottom: 1px solid #d9dce4;
 }
@@ -262,7 +262,7 @@ body{
 }
 /*  ç®­å¤´ arrow */
 
-/*  æˆåŠŸå¼¹å‡ºæ¡?   */
+/*  æˆåŠŸå¼¹å‡ºï¿½?   */
 .succeed-info {
     position: absolute;
     top:40%;
@@ -288,7 +288,7 @@ body{
 .succeed-info div {
     line-height:20px;
 }
-/*  é”™è¯¯å¼¹å‡ºæ¡?   */
+/*  é”™è¯¯å¼¹å‡ºï¿½?   */
 .error-info {
     position: absolute;
     top:40%;
@@ -306,7 +306,7 @@ body{
     z-index: 20;
     display: none;
 }
-/*  ç¡®è®¤å¼¹å‡ºæ¡?   */
+/*  ç¡®è®¤å¼¹å‡ºï¿½?   */
 
 
 /* æŒ‰é’® è·ç¦»é¡¶éƒ¨è·ç¦» */
@@ -337,7 +337,7 @@ body{
     background:#e7eaf1 ;
     border:1px solid #fabab5;
 }
-/* éªŒè¯ç ? */
+/* éªŒè¯ï¿½? */
 .yzm {
     position:absolute ;
     top:8px;

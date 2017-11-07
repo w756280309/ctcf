@@ -1,0 +1,478 @@
+
+body {
+  position: relative;
+}
+
+.flex-content .homePage {
+  width: 100%;
+  height: 100%
+}
+
+.flex-content .homePage .homePage-title {
+  height: 1.06666667rem;
+  line-height: 1.06666667rem;
+  background-color: #ff6058;
+  font-size: 20px;
+  color: #000;
+  text-align: center
+}
+
+.flex-content .homePage .homePage-coupon {
+  margin-top: 400px;
+  padding: 0 30px;
+  height: 1.06666667rem;
+  line-height: 1.06666667rem;
+  background-color: #fff;
+  font-size: 20px;
+  color: #000
+}
+
+.mask2 {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: .5;
+  filter: alpha(opacity=60);
+  z-index: 1001
+}
+
+.coupon-box {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  max-width: 750px;
+  z-index: 1000
+}
+
+.coupon-box .coupon-box-title {
+  position: relative;
+  height: 1.30666667rem;
+  line-height: 1.30666667rem;
+  padding: 0 .4rem;
+  font-size: .45333333rem;
+  color: #4e545a;
+  text-align: center;
+  box-sizing: border-box
+}
+
+.coupon-box .coupon-box-title .rules-details {
+  position: absolute;
+  left: .4rem;
+  font-size: .32rem;
+  color: #7cbaf3
+}
+
+.coupon-box .coupon-box-title .btn-close {
+  position: absolute;
+  top: .4rem;
+  right: .4rem;
+  width: .56rem;
+  height: .56rem;
+  background: url(../images/icon_close.png) center no-repeat;
+  background-size: 60%
+}
+
+.coupon-box .coupon-box-kinds {
+  height: 1.36rem;
+  line-height: 1.32rem;
+  border-bottom: 1px solid #f0f0f0
+}
+
+.coupon-box .coupon-box-kinds .coupon-kinds {
+  padding: 0 1.61333333rem
+}
+
+.coupon-box .coupon-box-kinds .coupon-kinds li {
+  height: 100%;
+  width: 2.53333333rem;
+  font-size: .37333333rem;
+  text-align: center
+}
+
+.coupon-box .coupon-box-kinds .coupon-kinds li img {
+  position: relative;
+  top: -2px;
+  width: .53333333rem;
+  margin-right: .26666667rem
+}
+
+.coupon-box .coupon-box-content {
+  overflow: auto;
+  width: 100%
+}
+
+.coupon-box .coupon-box-content .jiaxi-content {
+
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list {
+  overflow: scroll;
+  height: 13rem;
+  padding-bottom: .2rem
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li {
+  width: 100%;
+  height: 2.88rem;
+  background-color: #fff;
+  border-bottom: 1px solid #f0f0f0
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li .num-part {
+  float: left;
+  width: 28%;
+  padding-top: 1rem;
+  text-align: right;
+  color: #fc9153;
+  box-sizing: border-box
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li .num-part .number {
+  height: .4rem;
+  line-height: .4rem;
+  font-size: .4rem
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li .num-part .number span {
+  font-size: .69333333rem
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li .num-part .limit {
+  height: .32rem;
+  line-height: .32rem;
+  font-size: .32rem;
+  margin-top: .29333333rem
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li .word-part {
+  display: table;
+  float: right;
+  position: relative;
+  width: 56.8%;
+  height: 100%;
+  text-align: left
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li .word-part .coupon-title {
+  position: absolute;
+  top: .30666667rem;
+  left: 0;
+  font-size: .4rem;
+  height: .4rem;
+  line-height: .4rem;
+  color: #4e545a
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li .word-part .coupon-date {
+  position: absolute;
+  bottom: .26666667rem;
+  left: 0;
+  font-size: .34666667rem;
+  height: .34666667rem;
+  line-height: .34666667rem;
+  color: #9ea0a4
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li .word-part .coupon-details {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: .33333333rem;
+  color: #6d7278;
+  height: .42666667rem;
+  line-height: .45rem
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li.active {
+  background: url(../images/icon_selected.png) 8.74666667rem center no-repeat, #fff5ef;
+  background-size: .69333333rem
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list li:first-child {
+  border-top: 1px solid #f0f0f0
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-remind {
+  font-size: .34666667rem;
+  color: #9ea0a4;
+  margin-top: .2rem;
+  margin-bottom: .53333333rem
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-remind .jiaxi-remind-title {
+  position: relative;
+  height: .34666667rem;
+  line-height: .34666667rem;
+  text-align: center
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-remind .jiaxi-remind-title span {
+  position: absolute;
+  top: 50%;
+  left: .4rem;
+  width: 3.33333333rem;
+  height: 1px;
+  background-color: #9ea0a4
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-remind .jiaxi-remind-content {
+  padding: 0 .4rem;
+  margin-top: .24rem;
+  line-height: .45333333rem;
+  box-sizing: border-box
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-none {
+  margin-top: 3.26666667rem
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-none .daijin-none-title {
+  font-size: .4rem;
+  height: .37333333rem;
+  line-height: .37333333rem;
+  text-align: center;
+  color: #4e545a;
+  margin-bottom: .4rem
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-none .daijin-none-content {
+  font-size: .37333333rem;
+  line-height: .6rem;
+  color: #9ea0a4;
+  text-align: center
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-none .daijin-none-link {
+  width: 5.36rem;
+  height: 1.22666667rem;
+  padding-top: .15rem;
+  margin: 5.62666667rem auto 0;
+  background-color: #efefef
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-none .daijin-none-link p {
+  font-size: .32rem;
+  color: #9ea0a4;
+  text-align: center
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-none .daijin-none-link p img {
+  width: .32rem;
+  margin-right: .18666667rem
+}
+
+.coupon-box .coupon-box-content .daijin-content {
+
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-remind {
+  height: .86666667rem;
+  line-height: .86666667rem;
+  padding-left: .66666667rem;
+  font-size: .32rem;
+  color: #4e545a;
+  box-sizing: border-box
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list {
+  overflow: scroll;
+  height: 13.5rem;
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li {
+  width: 100%;
+  height: 2.88rem;
+  background-color: #fff;
+  border-bottom: 1px solid #f0f0f0
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li .num-part {
+  float: left;
+  width: 28%;
+  padding-top: 1rem;
+  text-align: right;
+  color: #6d96e0;
+  box-sizing: border-box
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li .num-part .number {
+  height: .4rem;
+  line-height: .4rem;
+  font-size: .4rem
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li .num-part .number span {
+  font-size: .69333333rem
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li .num-part .limit {
+  height: .32rem;
+  line-height: .32rem;
+  font-size: .32rem;
+  margin-top: .29333333rem
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li .word-part {
+  display: table;
+  float: right;
+  position: relative;
+  width: 56.8%;
+  height: 100%;
+  text-align: left
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li .word-part .coupon-title {
+  position: absolute;
+  top: .30666667rem;
+  left: 0;
+  font-size: .4rem;
+  height: .4rem;
+  line-height: .4rem;
+  color: #4e545a
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li .word-part .coupon-date {
+  position: absolute;
+  bottom: .26666667rem;
+  left: 0;
+  font-size: .34666667rem;
+  height: .34666667rem;
+  line-height: .34666667rem;
+  color: #9ea0a4
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li .word-part .coupon-details {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: .33333333rem;
+  color: #6d7278;
+  height: .42666667rem;
+  line-height: .45rem
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li.active {
+  background: url(../images/icon_selected.png) 8.74666667rem center no-repeat, #ecf3ff;
+  background-size: .69333333rem
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list li:first-child {
+  border-top: 1px solid #f0f0f0
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-sure {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 1.52rem;
+  padding-top: .29333333rem;
+  background-color: #ff6058;
+  color: #fff;
+  text-align: center;
+  box-sizing: border-box;
+  z-index: 10000
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-sure .line-one {
+  font-size: .4rem;
+  height: .4rem;
+  line-height: .4rem;
+  margin-bottom: .2rem
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-sure .line-two {
+  font-size: .33333333rem;
+  height: .33333333rem;
+  line-height: .33333333rem
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-none {
+  margin-top: 3.26666667rem
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-none .daijin-none-title {
+  font-size: .4rem;
+  height: .37333333rem;
+  line-height: .37333333rem;
+  text-align: center;
+  color: #4e545a;
+  margin-bottom: .4rem
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-none .daijin-none-content {
+  font-size: .37333333rem;
+  line-height: .6rem;
+  color: #9ea0a4;
+  text-align: center
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-none .daijin-none-link {
+  width: 5.36rem;
+  height: 1.22666667rem;
+  padding-top: .15rem;
+  margin: 5.62666667rem auto 0;
+  background-color: #efefef
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-none .daijin-none-link p {
+  font-size: .32rem;
+  color: #9ea0a4;
+  text-align: center
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-none .daijin-none-link p img {
+  width: .32rem;
+  margin-right: .18666667rem
+}
+
+.rules-box {
+  position: fixed;
+  top: 12%;
+  left: 50%;
+  width: 9.17333333rem;
+  padding: .85333333rem .76rem .26666667rem;
+  margin-left: -4.58666667rem;
+  font-size: .34666667rem;
+  line-height: .61333333rem;
+  background-color: #fff;
+  border-radius: .26666667rem;
+  border: 1px solid #dbdbdb;
+  z-index: 99999
+}
+
+.rules-box .rules-title {
+  height: .45333333rem;
+  margin-bottom: .72rem;
+  line-height: .45333333rem;
+  font-size: .45333333rem;
+  color: #ec3a45;
+  text-align: center
+}
+
+.rules-box .rules-title img {
+  position: relative;
+  top: 2px;
+  width: .32rem;
+  float: left
+}
+
+.rules-box .rules-parts {
+  color: #50545b
+}
+
+.rules-box .rules-content {
+  color: #999
+}
+
+.rules-box .rules-content li {
+  list-style-type: decimal
+}
+
+.rules-box .rules-phone {
+  text-align: center;
+  color: #999
+}
+

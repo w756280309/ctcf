@@ -123,11 +123,11 @@ class DealController extends Controller
      * 立即认购.
      * @param type $sn 标的sn
      */
-    public function actionToorder($sn = null)
+    public function actionToorder($sn = null, $rand)
     {
         $pay = new PayService(PayService::REQUEST_AJAX);
         $user = $this->getAuthedUser();
-        $ret = $pay->toCart($this->getAuthedUser(), $sn);
+        $ret = $pay->toCart($this->getAuthedUser(), $sn, $rand);
         if (0 === $ret['code']) {
             $isInvested = UserInfo::find()
                 ->select('isInvested')
@@ -147,7 +147,6 @@ class DealController extends Controller
                 }
             }
         }
-
         return $ret;
     }
 }
