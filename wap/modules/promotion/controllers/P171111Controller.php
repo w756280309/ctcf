@@ -463,6 +463,7 @@ class P171111Controller extends BaseController
         $promo11Class = new $promo11->promoClass($promo11);
         $activeTicketCount = 0; //双11活动剩余有效喜卡个数
         $totalMoney = 0; //双11活动期间累计年化
+        $requirePopGameBox = 1; //默认未登录状态下弹出游戏弹窗
         if (null !== ($user = $this->getAuthedUser())) {
             try {
                 $promoClass->addUserTicket($user, 'free');
@@ -474,10 +475,19 @@ class P171111Controller extends BaseController
                 $drawBoxStatus = 'true';
             }
             $activeTicketCount = $promo11Class->getActiveTicketCount($user);
-            $startTime = new \DateTime('2017-11-01 00:00:00');
+            $startTime = new \DateTime($promo11->startTime);
             $endTime = new \DateTime($promo11->endTime);
             if (null !== $user) {
                 $totalMoney = UserInfo::calcAnnualInvest($user->id, $startTime->format('Y-m-d'), $endTime->format('Y-m-d'));
+            }
+
+            //如果登录状态下不存在“requirePlayGameBox”，则设置此字段，下次登录状态下将不会弹框
+            $redis = \Yii::$app->redis;
+            if (!$redis->hexists('requirePopGameBox', $user->id)) {
+                $redis->hset('requirePopGameBox', $user->id, true);
+                $redis->expire('requirePopGameBox', 5 * 24 * 3600);
+            } else {
+                $requirePopGameBox = 0;
             }
         }
         $this->registerPromoStatusInView($promo11);
@@ -486,6 +496,7 @@ class P171111Controller extends BaseController
             'drawBoxStatus' => $drawBoxStatus,
             'activeTicketCount' => $activeTicketCount,
             'totalMoney' => rtrim(rtrim(bcdiv($totalMoney, 10000, 2), '0'), '.'),
+            'requirePopGameBox' => $requirePopGameBox,
         ]);
     }
 

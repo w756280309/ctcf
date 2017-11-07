@@ -3,7 +3,7 @@ $this->title = '11月理财节';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/page-third.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/page-third.css?v=0.1">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/popover.js?v=2.0"></script>
 <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
@@ -21,9 +21,9 @@ $this->title = '11月理财节';
         <a class="my-prize" @click="computNum" data-num="0"></a>
         <!--  喜卡兑换入口 -->
         <a class="active-link left-link" @click="computNum" data-num="1" v-if="activeTicketCount > 0"><span>我的喜卡：<i class="card" v-cloak>{{activeTicketCount}}</i>张</span></a>
-        <a class="active-link left-link" data-num="1" v-if="activeTicketCount == 0"><span>我的喜卡：<i class="card" v-cloak>{{activeTicketCount}}</i>张</span></a>
+        <a class="active-link left-link" @click="showLoginPop" data-num="1" v-if="activeTicketCount == 0"><span>我的喜卡：<i class="card" v-cloak>{{activeTicketCount}}</i>张</span></a>
         <!--  红包雨入口 -->
-        <a class="active-link right-link" @click="rainResult" ></a>
+        <a class="active-link right-link" @click="starting" ></a>
     </div>
     <div class="banner-title"></div>
     <div class="banner-rate" >已累计年化：<span v-cloak><?= $totalMoney ?></span>万元</div>
@@ -68,7 +68,7 @@ $this->title = '11月理财节';
             <a class="draw-box" >
                 <img class="drawer" v-if="drawBoxStatus == 'true'" @click="computNum" data-num="2"  src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/draw-box-before.png" alt="未开启宝箱">
                 <img v-else  src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/draw-box-after.png" alt="已开启宝箱">
-                <img :class="[!!drawBoxStatus == 'true' ? 'show': '' ]" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/hander-icon.png" alt="" class="hand">
+                <img :class="[drawBoxStatus == 'true' ? 'show': '' ]" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/hander-icon.png" alt="" class="hand">
             </a>
             <div class="btn-box">
                 <a class="box-shadow" @click="starting">再玩一次</a>
@@ -79,7 +79,6 @@ $this->title = '11月理财节';
     <!-- 玩游戏询问 弹框 -->
     <div class="start-play-box" :class="[ !!startPlayBox ? 'showed' : '' ]">
         <div class="outer-box">
-            <img class="pop_close" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png" @click="startPlay" alt="">
             <div class="prizes-pomp">
                 <a class="close-start-btn yes-btn" @click="starting"></a>
                 <a class="close-start-btn no-btn" @click="startPlay"></a>
@@ -106,6 +105,7 @@ $this->title = '11月理财节';
             </div>
         </div>
     </div>
+    <input type="hidden" name="requirePopGameBox" value="<?= $requirePopGameBox ?>">
     <input type="hidden" name="drawBoxStatus" value="<?= $drawBoxStatus ?>">
     <input type="hidden" name="activeTicketCount" value="<?= $activeTicketCount ?>">
 </div>
@@ -114,6 +114,7 @@ $this->title = '11月理财节';
     var isLoggedin = $('input[name=isLoggedin]').val();
     var drawBoxStatus = $('input[name=drawBoxStatus]').val();
     var activeTicketCount = $('input[name=activeTicketCount]').val();
+    var requirePopGameBox = $('input[name=requirePopGameBox]').val();
     var rain = '';
     var myScroll = '';
     var allowClick1 = true;
@@ -126,17 +127,15 @@ $this->title = '11月理财节';
             count: 15,
             timer: '',
             redCount: 0,
-            rank: '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/A.png',
+            rank: '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/D.png',
             goldRedCount: 0,
             allRedCount: 0,
             ticket: {path:'',name:'',awardTime:''}, // 奖品列表
-            prize: { //中奖
-                path:'<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/prizes/coupon-5.png',name:'2017110820',time:'2017-03-16'
-            },
             promoStatus: promoStatus,
             isLoggedin: isLoggedin,
             drawBoxStatus: drawBoxStatus,
             activeTicketCount: activeTicketCount,
+            requirePopGameBox: requirePopGameBox,
             myPrizeBox: false, //我的奖品弹框
             rainResultBox: false, //红包雨结果页面
             startPlayBox: false, //初始 进入红包雨页面
@@ -146,11 +145,16 @@ $this->title = '11月理财节';
             isActive: false
         },
         created: function(){
-            this.drawBoxStatus = this.isLoggedin === 'true' ? this.drawBoxStatus : 'true';
             var that = this;
+            that.drawBoxStatus = that.isLoggedin === 'true' ? that.drawBoxStatus : 'true';
             $(function(){
                 FastClick.attach(document.body);
-                that.init();
+                if (that.requirePopGameBox === '1' ) {
+                    that.init();
+                }
+                if (!!that.rainResultBox) {
+                    $('body').on('touchmove', function(e){that.eventTarget(e);}, false);
+                }
             });
         },
         methods: {
@@ -182,16 +186,12 @@ $this->title = '11月理财节';
                 var that = this;
                 if (that.isLoggedin === 'true') { //已登录
                     if (that.promoStatus === '0') { // 活动进行中
-                        if (that.obj === 'my-prize') {
+                        if (that.obj === 'left-link') {
+                            that.openGladCard(e);
+                        } else if (that.obj === 'my-prize') {
                             that.myPrize(e);
                         } else if (that.obj === 'drawer') {
                             that.isDrawBox(e);
-                        } else if (that.obj === 'left-link') {
-                            that.openGladCard(e);
-                        }
-                    } else {
-                        if (that.obj === 'my-prize') {
-                            that.myPrize(e);
                         }
                     }
                 } else if (that.isLoggedin === 'false') {
@@ -284,17 +284,18 @@ $this->title = '11月理财节';
                 var that = this;
                 that.allRedCount = parseInt(that.redCount)+parseInt(that.goldRedCount);
                 var rank = that.allRedCount;
-                if ( rank < 5 ) {
-                    that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/A.png';
-                } else if ( rank < 15 ) {
-                    that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/B.png';
-                } else if ( rank < 30 ) {
-                    that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/C.png';
-                } else if ( rank < 45 ) {
+                if ( rank < 10 ) {
                     that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/D.png';
+                } else if ( rank < 20 ) {
+                    that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/C.png';
+                } else if ( rank < 30 ) {
+                    that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/B.png';
+                } else if ( rank < 40 ) {
+                    that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/A.png';
                 } else {
                     that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/S.png';
                 }
+                $('body').on('touchmove',function(e){ that.eventTarget(e)}, false);
             },
             isDrawBox: function () { // 开宝箱
                 if(!allowClick1) {
@@ -319,11 +320,18 @@ $this->title = '11月理财节';
                         popBtmBorderRadius: 0,
                         popBtmFontSize: ".50666667rem"
                     }, 'close');
-                    this.drawBoxStatus = 'false';
+                    that.drawBoxStatus = 'false';
                     allowClick1 = true;
                 });
                 xhr.fail(function(jqXHR) {
                     if (400 === jqXHR.status && jqXHR.responseText) {
+                        var resp = $.parseJSON(jqXHR.responseText);
+                        if (4 === resp.code) {
+                            toastCenter('您还没有抽奖机会哦！');
+                        } else if (1 === resp.code) {
+                            toastCenter('活动未开始');
+                        }
+                    } else {
                         toastCenter('系统繁忙，请稍后重试！');
                     }
                     allowClick1 = true;
@@ -336,7 +344,6 @@ $this->title = '11月理财节';
                     that.myPrizeBox = !that.myPrizeBox;
                     $('body').off('touchmove');
                 } else {
-                    var that = this;
                     var xhr = $.get('/promotion/p171111/third-award-list');
                     xhr.done(function(data) {
                         if (data.length == 0) { //无奖品
@@ -460,6 +467,13 @@ $this->title = '11月理财节';
                     });
                     xhr.fail(function(jqXHR) {
                         if (400 === jqXHR.status && jqXHR.responseText) {
+                            var resp = $.parseJSON(jqXHR.responseText);
+                            if (4 === resp.code) {
+                                toastCenter('您还没有抽奖机会哦！');
+                            } else if (1 === resp.code) {
+                                toastCenter('活动未开始');
+                            }
+                        } else {
                             toastCenter('系统繁忙，请稍后重试！');
                         }
                         allowClick2 = true;
@@ -501,7 +515,6 @@ $this->title = '11月理财节';
                 var e = event || window.event;
                 e.preventDefault();
             }
-
         }
     });
     Vue.config.devtools = false;
