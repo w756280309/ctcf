@@ -439,7 +439,7 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
         $bonusCoupon = $this->bonusCoupon;
         if (null !== $bonusCoupon) {
             $bonusCouponType = $bonusCoupon->couponType;
-            $profit = RepaymentHelper::calcBonusProfit($this->order_money, $bonusCouponType->bonusRate, $bonusCouponType->bonusDays);
+            $profit = RepaymentHelper::calcBonusProfit($this->order_money, $bonusCouponType->bonusRate/100, $bonusCouponType->bonusDays);
         }
 
         return $profit;

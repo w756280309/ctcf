@@ -217,12 +217,12 @@ class RepaymentHelper
     /**
      * 计算加息券产生的收益
      *
-     * @param string $amount           金额
-     * @param string $apr              利率
+     * @param string $amount           金额（元）
+     * @param string $apr              利率 例：0.05（即5%）
      * @param string $duration         期限（默认：天）
      * @param string $baseDurationUnit 期限单位/按年（默认：365天）
      *
-     * @return string 收益
+     * @return string 收益（元）
      */
     public static function calcBonusProfit($amount, $apr, $duration, $baseDurationUnit = '365')
     {
