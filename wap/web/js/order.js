@@ -57,7 +57,10 @@ function order() {
                     var couponBoxInfo = totalAmount + '元（共' + totalCount + '张）';
                     $('#updateCouponBox').html(couponBoxInfo);
                 } else {
-                    resetCoupon();
+                    toastCenter(data.message);
+                    setTimeout(function () {
+                        window.location.reload();
+                    },2000)
                 }
             }
             toastCenter(data.message);
@@ -77,17 +80,36 @@ function order() {
 function openPopup() {
     var count = $('#selectedCouponCount').val();
     var amount = $('#selectedCouponAmount').val();
+    var rate = $('#selectedCouponRate').val();
+    var day = $('#selectedCouponRateday').val();
     var message = '';
-
     if ('undefined' !== typeof count) {
-        message = '您有'+validCouponCount+'张代金券可用，目前已选择'+count+'张代金券可抵扣'+WDJF.numberFormat(amount, true)+'元投资';
+        message = '您有'+validCouponCount+'张优惠券可用，目前已选择'+count+'张代金券可抵扣'+WDJF.numberFormat(amount, true)+'元投资';
     } else {
-        message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
+        message = '您有'+validCouponCount+'张优惠券可用，本次未使用优惠券抵扣，点击确定立即投资';
     }
-
-    $('#info p').html(message);
-    $('#mask').show();
-    $('#info').show();
+    if(count == 1 && amount == 0){
+        message = '您有'+validCouponCount+'张优惠券可用，目前已选择1张加息券可'+day+'天加息'+rate;
+    }
+  layer.open({
+    title: [
+      '温馨提示',
+      'background-color: #ff6058; color:#fff;'
+    ]
+    ,content: message
+    ,shadeClose:false
+    ,className: 'customer-layer-popuo'
+    ,btn: ['确定', '取消']
+    ,no: function(index){
+      layer.closeAll();
+    }
+    ,yes: function(index){
+      $('#couponConfirm').val('1');
+      order();
+      $('#couponConfirm').val('');
+      layer.closeAll();
+    }
+  });
 }
 
 function profit($this)

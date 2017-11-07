@@ -10,6 +10,7 @@ use common\utils\StringUtils;
 use Exception;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use Yii;
 
 /**
  * This is the model class for table "user_coupon".
@@ -156,7 +157,12 @@ class UserCoupon extends ActiveRecord
                 'user_id' => $user->id,
             ])
             ->andWhere(['>=', 'expiryDate', date('Y-m-d')]);
-
+        /**
+         * pc端加息券延时上线
+         */
+        if (CLIENT_TYPE == 'pc') {
+            $query->andWhere(['type' => 0]);
+        }
         if (!empty($money)) {
             $query->andWhere(['<=', 'minInvest', $money]);
         }
@@ -193,36 +199,66 @@ class UserCoupon extends ActiveRecord
      */
     public static function checkAllowUse(UserCoupon $coupon, $money, User $user = null, Loan $loan = null)
     {
+        $name = ''; //代金券||加息券
+        if ($coupon->couponType->type == 0) {
+            $name = '代金券';
+        } else {
+            $name = '加息券';
+        }
         if (!defined('IN_APP') && $coupon->couponType->isAppOnly) {
-            throw new \Exception('该代金券只能在APP中使用');
+            throw new \Exception('该' .$name. '只能在APP中使用');
         }
 
         if ($loan) {
-            if (!$loan->allowUseCoupon) {
-                throw new Exception('该项目不允许使用代金券');
+            if (!$loan->allowUseCoupon && $coupon->couponType->type == 0) {
+                throw new Exception('该项目不允许使用' . $name);
+            }
+            if (!$loan->allowRateCoupon && $coupon->couponType->type == 1) {
+                throw new Exception('该项目不允许使用' . $name);
             }
 
             if ($coupon->couponType->loanExpires && $coupon->couponType->loanExpires > $loan->getSpanDays()) {
-                throw new Exception('该项目不允许使用此代金券');
+                throw new Exception('该项目不允许使用此' . $name);
+            }
+
+            //判断代金券使用类型
+            //1.代金券
+            if ($coupon->couponType->type == 0) {
+                if ($loan->is_xs) {
+                    throw new Exception('该'. $name . '不可用于新手标');
+                }
+                if ($coupon->couponType->loanCategories && $coupon->couponType->loanCategories != $loan->cid) {
+                    throw new Exception('该'. $name . '不可用于此类型的标的');
+                }
+            } else {
+                //2.加息券
+                if ($coupon->couponType->loanCategories == 3 && !$loan->is_xs) {
+                    throw new Exception('该'. $name . '只可用于新手标');
+                } else if (!$coupon->couponType->loanCategories && $loan->is_xs) {
+                    throw new Exception('该'. $name . '不可用于新手标');
+                } else  if (($coupon->couponType->loanCategories ==1 || $coupon->couponType->loanCategories ==2)
+                    && ($coupon->couponType->loanCategories != $loan->cid || $loan->is_xs)) {
+                    throw new Exception('该'. $name . '不可用于此类型的标的');
+                }
             }
         }
 
         if ($coupon->isUsed) {
-            throw new Exception('代金券已经使用');
+            throw new Exception($name .'已经使用');
         }
 
         if (null !== $user && $coupon->user_id !== intval($user->id)) {
-            throw new Exception('代金券使用异常');
+            throw new Exception($name .'使用异常');
         }
 
         $time = time();
 
         if (strtotime($coupon->expiryDate.' 23:59:59') < $time) {
-            throw new Exception('代金券不可以使用');
+            throw new Exception($name .'不可以使用');
         }
 
         if (bccomp($coupon->couponType->minInvest, $money, 2) > 0) {
-            throw new Exception('代金券最低投资'.StringUtils::amountFormat2($coupon->couponType->minInvest).'元可用', 1);
+            throw new Exception($name .'最低投资'.StringUtils::amountFormat2($coupon->couponType->minInvest).'元可用', 1);
         }
 
         return $coupon;
@@ -326,5 +362,60 @@ class UserCoupon extends ActiveRecord
         }
 
         return $query;
+    }
+    /**
+     * 获取用户可用代金券和加息券
+     */
+    static function availableCoupons($money = false)
+    {
+        $user = \Yii::$app->user->getIdentity();
+        if (!is_null($user)) {
+            if ($money) {
+                $coupon = self::fetchValid($user, $money);
+            } else {
+                $coupon = self::fetchValid($user);
+            }
+
+            $coupon_list = [];
+            foreach ($coupon as $k => $v) {
+                $coupon_list[] = [
+                    'userCouponId' => $k,
+                    'name' => $v['couponType']->name,
+                    'amount' => $v['couponType']->amount,
+                    'bonusRate' => $v['couponType']->bonusRate,
+                    'expiryDate' => $v->expiryDate,
+                    'type' => $v['couponType']->type,
+                    'loanExpires' => $v['couponType']->loanExpires,
+                    'minInvest' => $v['couponType']->minInvest,
+                    'loanCategories' => $v['couponType']->loanCategories,
+                    'bonusDays' => $v['couponType']->bonusDays,
+                ];
+            }
+            $res = Yii::$app->session->get('loan_coupon');
+
+            $total = ['count' => '', 'sum' => '', 'type' => ''];
+
+            if ($res['couponId']) {
+                $couponIds = $res['couponId'];
+                $total = 0;
+                $count = 0;
+                $type = 0;
+                foreach ($couponIds as $v) {
+                    $coupon_end = UserCoupon::findOne($v);
+                    $type = $coupon_end->couponType->type;
+                    if ($coupon_end->couponType->type) {
+                        $total = $coupon_end->couponType->bonusRate;
+                        $count = $coupon_end->couponType->bonusDays;
+                    } else {
+                        $total = bcadd($coupon_end->couponType->amount, $total, 2);
+                        $count ++;
+                    }
+                }
+                $total = ['count' => $count, 'sum' => $total, 'type' => $type];
+            }
+            return ['code' => 1, 'CouponList' => $coupon_list, 'selected' => Yii::$app->session->get('loan_coupon'), 'total' => $total];
+        } else {
+            return ['code' => 0, 'message' => '请登录'];
+        }
     }
 }

@@ -523,8 +523,16 @@ TPL;
                     </div>
                 </div>
             </div>
-
             <div class="span6 fix-offset">
+                <div class="control-group">
+                    <label class="control-label">允许使用加息券<span style="color:grey">(<?= $desc ?>)</span></label>
+                    <div class="controls">
+                        <?= $form->field($model, 'allowRateCoupon')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->allowUseCoupon] : []))->label(false) ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span6">
                 <div class="control-group">
                     <label class="control-label">新手专享标<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
@@ -533,7 +541,7 @@ TPL;
                 </div>
             </div>
 
-            <div class="span6 ">
+            <div class="span6 fix-offset">
                 <div class="control-group">
                     <label class="control-label">项目标签<span style="color:grey">(每个标签不超过四个字，且用中文逗号隔开)</span></label>
                     <div class="controls">
@@ -544,7 +552,7 @@ TPL;
                 </div>
             </div>
 
-            <div class="span6 fix-offset">
+            <div class="span6">
                 <div class="control-group">
                     <label class="control-label">理财计划<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
@@ -561,7 +569,7 @@ TPL;
                 </div>
             </div>
 
-            <div class="span6  fix-offset">
+            <div class="span6 fix-offset">
                 <div class="control-group">
                     <label class="control-label">允许转让</label>
                     <div class="controls">

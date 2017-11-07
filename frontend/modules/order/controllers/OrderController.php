@@ -46,6 +46,28 @@ class OrderController extends BaseController
         $detailData = Yii::$app->session->get('detail_data');
         $userCouponIds = isset($detailData[$sn]['couponId']) ? $detailData[$sn]['couponId'] : [];
 
+        /**
+         * 加息券只可使用一张
+         * 加息券和代金券不可同时使用
+         */
+//        $count = count($userCouponIds);
+//        if ($count > 0) {
+//            $jiaxi_count = UserCoupon::find()
+//                ->innerJoinWith('couponType')
+//                ->where([
+//                    'isUsed' => false,
+//                    'isDisabled' => false,
+//                    'user_id' => $user->id,
+//                ])
+//                ->andWhere(['in', 'user_coupon.id', $userCouponIds])
+//                ->andWhere(['coupon_type.type' => 1])
+//                ->count();
+//            if ($jiaxi_count > 1) {
+//                return ['code' => '4', 'message' => '加息券每次只可使用一张'];
+//            } else if ($jiaxi_count == 1 && $count > 1) {
+//                return ['code' => '4', 'message' => '加息券不可与代金券同时使用'];
+//            }
+//        }
         //检验代金券的使用
         $couponMoney = 0; //记录可用的代金券金额
         $checkMoney = $money; //校验输入的金额

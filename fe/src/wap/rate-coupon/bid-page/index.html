@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="format-detection" content="telphone=no, email=no"/>
+	<title>购买</title>
+	<link rel="stylesheet" href="../../common/css/wenjfbase.css">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" href="../../libs/swiper/swiper-3.4.2.min.css">
+	<script src="../../libs/lib.flexible3.js"></script>
+	<script src="../../libs/jquery-1.11.1.min.js"></script>
+	<script src="../../libs/fastclick.js"></script>
+	<script src="../../libs/swiper/swiper-3.4.2.min.js"></script>
+	<style>
+		.swiper-slide{
+			-webkit-overflow-scrolling : touch;
+		}
+	</style>
+</head>
+<body>
+<div class="flex-content">
+	<div class="homePage">
+		<div class="homePage-title">这里是标题</div>
+		<div class="homePage-coupon">
+			<p class="lf">优惠券</p>
+			<p class="rg">选择</p>
+		</div>
+	</div>
+</div>
+
+<div class="mask" style="display: none"></div>
+<div class="mask2" style="display: none"></div>
+<div class="coupon-box">
+	<div class="coupon-box-title clearfix">
+		<a class="rules-details">详细规则</a>
+		<span>选择一种卡券使用</span>
+		<div class="btn-close"></div>
+	</div>
+	<div class="coupon-box-kinds">
+		<ul class="coupon-kinds clearfix">
+			<li class="daijin lf">
+				<div class="daijin-a " style="display: none">
+					<img src="images/icon_chit.png" alt="">
+					<span style="color:#9ea0a4;">代金券</span>
+				</div>
+				<div class="daijin-b" style="border-bottom:2px solid #6d96e0;">
+					<img src="images/icon_chit_a.png" alt="">
+					<span style="color: #6d96e0">代金券</span>
+				</div>
+			</li>
+			<li class="jiaxi rg">
+				<div class="jiaxi-a ">
+					<img src="images/icon_rate.png" alt="">
+					<span style="color:#9ea0a4 ">加息券</span>
+				</div>
+				<div class="jiaxi-b " style="display: none;border-bottom: 2px solid #fc9153;">
+					<img src="images/icon_rate_a.png" alt="">
+					<span style="color:#fc9153 ">加息券</span>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="coupon-box-content swiper-container">
+		<div class="swiper-wrapper">
+			<div class="daijin-content swiper-slide">
+				<ul class="daijin-list ">
+					<p class="daijin-remind">您可以选择多张代金券</p>
+					<li class="clearfix">
+						<div class="num-part">
+							<p class="number">￥<span>80</span></p>
+							<p class="limit">满8万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<div class="num-part">
+							<p class="number">￥<span>8</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<div class="num-part">
+							<p class="number">￥<span>8</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<div class="num-part">
+							<p class="number">￥<span>8</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<div class="num-part">
+							<p class="number">￥<span>8</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<div class="num-part">
+							<p class="number">￥<span>8</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<div class="num-part">
+							<p class="number">￥<span>8</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<div class="num-part">
+							<p class="number">￥<span>8</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix">
+						<div class="num-part">
+							<p class="number">￥<span>8</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+				</ul>
+				<div class="daijin-sure ">
+					<p class="line-one">确认选择</p>
+					<p class="line-two">(您可以选择多张代金券)</p>
+				</div>
+				<div class="daijin-none" style="display: none">
+					<p class="daijin-none-title">暂无可用代金券</p>
+					<p class="daijin-none-content">参与平台活动和关注平台动态</p>
+					<p class="daijin-none-content">将有机会获得代金券哦！</p>
+					<div class="daijin-none-link">
+						<p><img src="images/icon_phone.png" alt="">客服电话：400-101-5151</p>
+						<p>(8:30-20:00)</p>
+					</div>
+				</div>
+			</div>
+			<div class="jiaxi-content swiper-slide">
+				<ul class="jiaxi-list ">
+					<li class="clearfix">
+						<div class="num-part">
+							<p class="number">+<span>5.0%</span></p>
+							<p class="limit">满8万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix ">
+						<div class="num-part">
+							<p class="number">+<span>10.0%</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix ">
+						<div class="num-part">
+							<p class="number">+<span>12.0%</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix ">
+						<div class="num-part">
+							<p class="number">+<span>8.0%</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix ">
+						<div class="num-part">
+							<p class="number">+<span>8.0%</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix ">
+						<div class="num-part">
+							<p class="number">+<span>8.0%</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+
+					<li class="clearfix ">
+						<div class="num-part">
+							<p class="number">+<span>8.0%</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix ">
+						<div class="num-part">
+							<p class="number">+<span>8.0%</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+					<li class="clearfix ">
+						<div class="num-part">
+							<p class="number">+<span>8.0%</span></p>
+							<p class="limit">满2万元可用</p>
+						</div>
+						<div class="word-part">
+							<p class="coupon-title">活动奖励</p>
+							<p class="coupon-date">有效期至2017-07-01</p>
+							<p class="coupon-details">新手标、转让标不可用<br>123123<br>123123</p>
+						</div>
+					</li>
+
+				</ul>
+				<div class="jiaxi-remind ">
+					<div class="jiaxi-remind-title"><span></span>温馨提示<span style="left:6.26rem;"></span></div>
+					<div class="jiaxi-remind-content">加息收益将随最后一期本息一起回到您的账户，项目中途转让将不享受任何加息券带来的收益。</div>
+				</div>
+				<div class="jiaxi-none" style="display: none;">
+					<p class="daijin-none-title">暂无可用加息券</p>
+					<p class="daijin-none-content">参与平台活动和关注平台动态</p>
+					<p class="daijin-none-content">将有机会获得加息券哦！</p>
+					<div class="daijin-none-link">
+						<p><img src="images/icon_phone.png" alt="">客服电话：400-101-5151</p>
+						<p>(8:30-20:00)</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="rules-box" style="display: none">
+	<p class="rules-title"><img src="images/icon_close.png" alt="">活动规则</p>
+	<p class="rules-parts">规则概述</p>
+	<ul class="rules-content">
+		<li>理财卡券只适用于部分标的，其中转让标不可使用，同一项目代金券和加息券不可叠加使用。</li>
+	</ul>
+	<p class="rules-parts">代金券</p>
+	<ul class="rules-content">
+		<li>一次投资可使用多张代金券，多张代金券使用需要满足投资额不少于多张代金券的累计金额。</li>
+		<li>代金券不能与加息券叠加使用。</li>
+		<li>代金券使用后，所投资项目开始收益后，代金券金额将成为账户总资产的一部分。</li>
+	</ul>
+	<p class="rules-parts">加息券</p>
+	<ul class="rules-content">
+		<li>一次投资使用1张加息券，使用后项目在加息时间内获得额外年化收益。</li>
+		<li>加息券不可叠加使用，也不与其他卡券叠加使用。</li>
+		<li>通过加息券获得的收益将随项目最后一期本息一期回到您的账户；项目中途转让将不享受任何加息券带来的收益。</li>
+	</ul>
+	<p class="rules-phone">详情咨询：400-101-5151</p>
+</div>
+<script>
+	$(function () {
+    FastClick.attach(document.body);
+    var nowSwiper;
+    var mySwiper = new Swiper('.swiper-container',{
+      speed:500,
+      autoHeight:true,
+      onSlideChangeEnd: function(){
+        $(".coupon-kinds li").eq(mySwiper.activeIndex).children().eq(0).hide();
+        $(".coupon-kinds li").eq(mySwiper.activeIndex).children().eq(1).show();
+        $(".coupon-kinds li").eq(mySwiper.activeIndex).siblings().children().eq(0).show();
+        $(".coupon-kinds li").eq(mySwiper.activeIndex).siblings().children().eq(1).hide();
+      }
+    });
+    //点击进入优惠券选择页
+		$(".homePage-coupon .rg").click(function () {
+      mySwiper.slideTo(nowSwiper,500,false);
+      $(".coupon-kinds li").eq(nowSwiper).children().eq(0).hide();
+      $(".coupon-kinds li").eq(nowSwiper).children().eq(1).show();
+      $(".coupon-kinds li").eq(nowSwiper).siblings().children().eq(0).show();
+      $(".coupon-kinds li").eq(nowSwiper).siblings().children().eq(1).hide();
+			$(".coupon-box").addClass("coupon-act");
+			$(".mask").show();
+      $('.flex-content').on('touchmove',eventTarget, false);
+    });
+		//点击蒙层关闭优惠券页
+		$(".mask").click(function () {
+      $(".coupon-box").removeClass("coupon-act");
+      $(".mask").hide();
+      $('.flex-content').off('touchmove');
+    });
+		$(".coupon-box-title .btn-close").click(function () {
+      $(".coupon-box").removeClass("coupon-act");
+      $(".mask").hide();
+      $('.flex-content').off('touchmove');
+    });
+		//优惠券table选项卡
+		$(".coupon-kinds li").click(function () {
+			$(this).children().eq(1).show();
+			$(this).children().eq(0).hide();
+			$(this).siblings().children().eq(0).show();
+			$(this).siblings().children().eq(1).hide();
+      mySwiper.slideTo($(this).index(),500,false);
+    });
+		//选择加息券
+		$(".jiaxi-list li").click(function () {
+      $(".jiaxi-list li,.daijin-list li").each(function () {
+	      $(this).removeClass('active');
+      });
+			$(this).addClass('active');
+			$(".coupon-box").removeClass('coupon-act');
+			$(".mask").hide();
+      $('.flex-content').off('touchmove');
+      $(".daijin-remind").html("您可以选多张代金券");
+      $(".line-two").html("(您可以选多张代金券)");
+      nowSwiper = 1;
+    });
+		//选择代金券
+		$(".daijin-list li").click(function () {
+      $(".jiaxi-list li").each(function () {
+        $(this).removeClass('active');
+      });
+      $(this).toggleClass('active');
+      var daijinNum = 0;
+      var daijinCount = 0;
+      $(".daijin-list li.active").each(function () {
+        daijinNum = daijinNum + Number($(this).find(".num-part .number span").text());
+        daijinCount = daijinCount+ $(this).length;
+      });
+      $(".daijin-remind").html("已选<span style='color:#6d96e0'>"+daijinCount+"</span>张代金券，可抵扣<span style='color:#6d96e0'>"+daijinNum+"</span>元投资")
+			$(".line-two").html("(已选"+daijinCount+"张代金券，可抵扣"+daijinNum+"元投资)");
+    });
+		//关闭规则
+		$(".rules-title img").click(function () {
+			$(".rules-box").hide();
+    });
+    $(".homePage-coupon .rg").click();
+    //显示规则
+    $(".rules-details").click(function () {
+	    $(".rules-box,.mask2").show();
+    });
+    //关闭规则
+    $(".rules-title img").click(function () {
+	    $(".rules-box,.mask2").hide();
+    });
+    //确认代金券按钮
+		$(".daijin-sure").click(function () {
+		  var daijinNum = 0;
+		  var daijinCount = 0;
+			$(".daijin-list li.active").each(function () {
+			  daijinNum = daijinNum + Number($(this).find(".num-part .number span").text());
+				daijinCount = daijinCount+ $(this).length;
+      });
+      $(".coupon-box").removeClass('coupon-act');
+      $(".mask").hide();
+      nowSwiper = 0;
+    });
+    function eventTarget(event) {
+      var e = event || window.event;
+      e.preventDefault();
+    }
+  })
+</script>
+</body>
+</html>

@@ -194,6 +194,28 @@ class CouponController extends BaseController
                     throw new \Exception('未找到代金券！');
                 }
                 $couponCount++;
+                /**
+                 * 加息券只可使用一张
+                 * 加息券和代金券不可同时使用
+                 */
+                if ($couponCount > 0) {
+                    $jiaxi_count = UserCoupon::find()
+                        ->innerJoinWith('couponType')
+                        ->where([
+                            'isUsed' => false,
+                            'isDisabled' => false,
+                            'user_id' => $user->id,
+                        ])
+                        ->andWhere(['in', 'user_coupon.id', $couponIds])
+                        ->andWhere(['coupon_type.type' => 1])
+                        ->count();
+                    if ($jiaxi_count > 1) {
+                        throw new \Exception('加息券每次只可使用一张');
+                    } else if($jiaxi_count == 1 && $couponCount > 1) {
+                        throw new \Exception('加息券不可与代金券同时使用');
+                    }
+                }
+
                 $totalMinInvest = bcadd($totalMinInvest, $coupon->couponType->minInvest, 2);
                 UserCoupon::checkAllowUse($coupon, $checkMoney, $user, $loan);
                 $couponMoney = bcadd($couponMoney, $coupon->couponType->amount, 2);

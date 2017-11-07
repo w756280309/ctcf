@@ -243,13 +243,13 @@ class PayService
      *
      * @return type
      */
-    public function toCart($user = null, $sn = null)
+    public function toCart($user = null, $sn = null, $rand = null)
     {
         $commonret = $this->checkCommonCond($user, $sn);
         if ($commonret !== true) {
             return $commonret;
         }
 
-        return ['code' => self::ERROR_SUCCESS,  'message' => '', 'tourl' => '/order/order?sn='.$sn];
+        return ['code' => self::ERROR_SUCCESS,  'message' => '', 'tourl' => '/order/order?sn='.$sn.'&rand='.$rand];
     }
 }
