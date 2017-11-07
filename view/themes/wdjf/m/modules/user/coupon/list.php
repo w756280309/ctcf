@@ -9,7 +9,7 @@ $this->title = '优惠券';
 	<link rel="stylesheet" href="http://view.wendujf.com/css/base.css?v=20170907">
 	<script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 	<script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-	<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/rate-coupon/account-coupon/css/index.css?v=1.1">
+	<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/rate-coupon/account-coupon/css/index.css?v=1.2">
 	<style>
 		.list {
 			-webkit-overflow-scrolling: touch;
@@ -35,9 +35,6 @@ $this->title = '优惠券';
 			color: rgb(244, 67, 54);
 			text-align: center;
 			margin-bottom: 0.3rem;
-		}
-		.my-coupons .list-box .list .detail-wrapper .detail-main ul li a div.icon {
-			width: 37.5%;
 		}
 	</style>
 </head>
@@ -221,7 +218,7 @@ $this->title = '优惠券';
 	<div class="draw-coupon-box">
 		<div class="coupon-pops">
 			<img src="<?= FE_BASE_URI ?>wap/rate-coupon/account-coupon/images/draw-close.png" class="draw-close" alt="关闭按钮">
-			<h4>活动规则</h4>
+			<h4>优惠券规则</h4>
 			<ul>
 				<li class="rule-title">规则概述</li>
 				<li>理财卡券只适用于部分标的，其中转让标不可使用，同一项目代金券和加息券不可叠加使用。</li>
@@ -255,7 +252,6 @@ $this->title = '优惠券';
 	</div>
 </div>
 <script>
-
   $(function () {
       $('.menu > div').on('click', function(){
           var index = $(this).index();
@@ -269,7 +265,7 @@ $this->title = '优惠券';
       $(this).hide();
       $('#detail-wrapper').hide();
       $('#detail-wrapper1').hide();
-    })
+    });
     // 规则
     $('.btn-rules .a-rule').on('click', function () {
       $('.draw-coupon-box').show();

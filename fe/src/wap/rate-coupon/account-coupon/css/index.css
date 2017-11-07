@@ -33,7 +33,7 @@
 .my-coupons .menu div.active span {
   color: #ff6058;
   border-bottom: 2px solid #ff6058;
-  height: 1.13rem;
+  height: 100%;
 }
 .my-coupons .btn-rules {
   position: relative;
