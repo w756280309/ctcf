@@ -109,7 +109,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
 		<div class="row sm-height border-bottom">
 			<div class="col-xs-4 safe-txt text-align-ct">投资金额</div>
 			<input name="money" maxlength="8" type="tel" id="money" value="<?= empty($money) ? '' : $money ?>"
-			       placeholder="请输入投资金额" class="col-xs-6 safe-lf text-align-lf" step="any">
+			       placeholder="请输入投资金额" class="col-xs-6 safe-lf text-align-lf" step="any" autocomplete="off">
 			<div class="col-xs-2 safe-txt">元</div>
 		</div>
       <?php if ($deal->allowUseCoupon) { ?>
