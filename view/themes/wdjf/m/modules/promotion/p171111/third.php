@@ -275,7 +275,7 @@ $this->title = '11月理财节';
                     that.goldRedCount = 0;
                 }
                 that.rainLoaded(e);
-                $.get('/data/data-new.json',function(res) {rain.start(res);});
+                $.get('/data/data-new.json?t=1',function(res) {rain.start(res);});
                 that.downTime(e);
                 $('#mask,#box').show();
                 $('body').on('touchmove',function(e){ that.eventTarget(e)}, false);
@@ -284,13 +284,13 @@ $this->title = '11月理财节';
                 var that = this;
                 that.allRedCount = parseInt(that.redCount)+parseInt(that.goldRedCount);
                 var rank = that.allRedCount;
-                if ( rank < 10 ) {
+                if ( rank < 5 ) {
                     that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/D.png';
-                } else if ( rank < 20 ) {
+                } else if ( rank < 10 ) {
                     that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/C.png';
-                } else if ( rank < 30 ) {
+                } else if ( rank < 15 ) {
                     that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/B.png';
-                } else if ( rank < 40 ) {
+                } else if ( rank < 20 ) {
                     that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/A.png';
                 } else {
                     that.rank = '<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/S.png';
@@ -406,8 +406,8 @@ $this->title = '11月理财节';
                 var el = that.createId('box');
                 rain =  new redPack({
                     el: el,         // 容器
-                    speed: 10,      // 速度，越小越快
-                    density: 200,   //  红包密度，越小越多
+                    speed: 12,      // 速度，越小越快
+                    density: 300,   //  红包密度，越小越多
                     callback: function(e) {  // 点击红包的回调
                         if (e.target.getAttribute('redClassName') === 'redpack') {
                             that.redCount++;

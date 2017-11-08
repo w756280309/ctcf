@@ -399,6 +399,23 @@ $this->title = '11月理财节';
                     popBtmFontSize: ".45333333rem"
                 },'close');
             },
+            seckillBefore: function () { //秒杀前提示弹框
+                var _this = this;
+                var number = _this.timeGapBtn;
+                poptpl.popComponent({
+                    popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/pop_bg_waiting.png) no-repeat',
+                    popBorder: 0,
+                    closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png",
+                    btnMsg: "立即秒杀",
+                    title: '<p id="waiting1" style="font-size:0.8rem;line-height: .9rem;margin: 2.8rem -1rem 2rem;color: #f03350;">是否立即消耗积分，<br>秒杀本商品？</p>',
+                    popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/pop_btn.png) no-repeat',
+                    popBtmBorderRadius: 0,
+                    popBtmColor: '#f03350',
+                    popBtmFontSize: ".45333333rem"
+                },function(){
+                    _this.nowSeckill(number);
+                });
+            },
             prizeRecord: function(event) { // 秒杀记录
                 var _this = this;
                 var e = event || window.event;
@@ -476,12 +493,24 @@ $this->title = '11月理财节';
                 var e = event || window.event;
                 _this.timeGapBtn = e.currentTarget.getAttribute('num');
                 var number = _this.timeGapBtn;
+                if (number === '2017110715' || number === '2017110720' || number === '2017110815' ||  number === '2017110820') {
+                    _this.seckillBefore(number);
+                    return false;
+                }
+                _this.nowSeckill(number);
+            },
+            nowSeckill: function(number) {
+                var _this = this;
                 $.ajax({
                     url: '/promotion/p171111/second-kill',
                     dataType: 'json',
                     type: 'get',
                     data: { activeNumber: number},
                     success: function (data) {
+                        if($('#waiting1').parents($('.pop').eq(0)).css('display') == 'block'){
+                            $('div.pop').eq(0).prev($('.mask')).remove();
+                            $('div.pop').eq(0).remove();
+                        }
                         if (data.code == 0) { // 领取奖品弹框
                             _this.prize = data.prize;
                             _this.prize.activityNumber = data.prize.activityNumber;

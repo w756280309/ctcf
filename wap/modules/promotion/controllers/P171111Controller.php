@@ -422,12 +422,12 @@ class P171111Controller extends BaseController
                 $repertoryInfo['repertoryPoints'] = 1;
                 break;
             case '2017110715':
-                $repertoryInfo['repertoryCount'] = 11;
+                $repertoryInfo['repertoryCount'] = 5;
                 $repertoryInfo['repertoryName'] = '电子血压计';
                 $repertoryInfo['repertoryPoints'] = 3626;
                 break;
             case '2017110720':
-                $repertoryInfo['repertoryCount'] = 5;
+                $repertoryInfo['repertoryCount'] = 2;
                 $repertoryInfo['repertoryName'] = '美的养生壶';
                 $repertoryInfo['repertoryPoints'] = 3266;
                 break;
@@ -437,7 +437,7 @@ class P171111Controller extends BaseController
                 $repertoryInfo['repertoryPoints'] = 1;
                 break;
             case '2017110815':
-                $repertoryInfo['repertoryCount'] = 6;
+                $repertoryInfo['repertoryCount'] = 3;
                 $repertoryInfo['repertoryName'] = '美的电水壶';
                 $repertoryInfo['repertoryPoints'] = 1680;
                 break;
