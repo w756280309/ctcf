@@ -203,4 +203,34 @@ class PromoController extends Controller
         }
         echo "\n";
     }
+
+    /**
+     * 2017年11月11日活动二在11月6日-8日预约加息券
+     * 2017年11月9日0点发送加息券
+     */
+
+    public function actionSendDoubleElevenCoupon()
+    {
+        $date = date('Y-m-d');
+        if ($date > '2017-11-11') {
+            \Yii::info("[command][promo/send-double-eleven-coupon]活动已结束", 'command');
+            return false;
+        }
+        $promoKey = 'promo_171108';
+        $promo = RankingPromo::findOne(['key' => $promoKey]);
+        if ($promo && class_exists($promo->promoClass)) {
+//          发加息券之前先判断当前时间是不是在活动二结束以后
+            if ($promo->isOnline) {
+                if (!empty($promo->endTime) && $date < $promo->endTime) {
+                    \Yii::info("[command][promo/send-double-eleven-coupon]活动未开始,2017年11月9日零点派发加息券", 'command');
+                    return false;
+                }
+            }
+            Yii::info('[command][promo/send-double-eleven-coupon]' . $date . '零点正常开始,准备发加息券', 'command');
+            $model = new $promo->promoClass($promo);
+            $userList = $model->getAwardUserList();
+            Yii::info('[command][promo/send-double-eleven-coupon] 活动期间，　共有'.count($userList).'个用户预约了加息券', 'command');
+            $model->sendAwardToUsers($userList);
+        }
+    }
 }
