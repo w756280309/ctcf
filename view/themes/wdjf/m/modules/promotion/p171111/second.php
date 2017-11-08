@@ -105,13 +105,17 @@ $this->title = '11月理财节';
     <p class="last-tips">本活动最终解释权归温都金服所有</p>
     <div class="prizes-box" :class="[ !!isActive ? 'show' : '' ]">
         <div class="outer-box">
-            <img class="pop_close" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png" alt="">
+            <img class="pop_close" @click="closePrizeList" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png" alt="">
             <div class="prizes-pomp">
                 <p class="prizes-title">奖品列表</p>
                 <div id="wrapper">
                     <ul>
                         <li class="clearfix" v-for="item in ticket">
-                            <div class="lf"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/prizes-2017110610.png" alt="礼品"></div>
+                            <div class="lf"><img :src="item.path" alt="礼品"></div>
+                            <div class="lf">
+                                <p>{{item.name}}</p>
+                                <p>中奖时间:{{item.time}}</p>
+                            </div>
                         </li>
                     </ul>
                 </div>
