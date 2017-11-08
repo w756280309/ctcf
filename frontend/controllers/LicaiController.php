@@ -71,7 +71,7 @@ class LicaiController extends Controller
         $pageSize = 0;
 
         $txClient = Yii::$container->get('txClient');
-        $response = $txClient->get('credit-note/list', ['page' => $page, 'isCanceled' => false, 'loans' => $array]);
+        $response = $txClient->post('credit-note/list', ['page' => $page, 'isCanceled' => false, 'loans' => $array]);
 
         if (null !== $response) {
             $notes = $response['data'];

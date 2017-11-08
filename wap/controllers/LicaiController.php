@@ -36,8 +36,7 @@ class LicaiController extends Controller
         $notes = [];
         $tp = 0;
         $txClient = Yii::$container->get('txClient');
-        $response = $txClient->get('credit-note/list', ['page' => $page, 'page_size' => 5, 'isCanceled' => false, 'loans' => $array]);
-
+        $response = $txClient->post('credit-note/list', ['page' => $page, 'page_size' => 5, 'isCanceled' => false, 'loans' => $array]);
         if (null !== $response) {
             $user = Yii::$app->user->getIdentity();
             if (!is_null($user)) {

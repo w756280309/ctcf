@@ -121,11 +121,21 @@ class CreditNoteController extends Controller
      */
     public function actionList()
     {
-        $requestQuery = $this->request->query;
-        $page = $requestQuery->getInt('page', 1);
-        $pageSize = $requestQuery->getInt('page_size', 10);
-        $getSort = $requestQuery->get('sort', 'isClosed,-createTime');
-        $loans = $requestQuery->get('loans', false);
+
+        $reqData = json_decode($this->request->rawBody, true);
+//        $requestQuery = $this->request->query;
+//        $page = $requestQuery->getInt('page', 1);
+//        $pageSize = $requestQuery->getInt('page_size', 10);
+//        $getSort = $requestQuery->get('sort', 'isClosed,-createTime');
+//        $loans = $requestQuery->get('loans', false);
+        $page = isset($reqData['page']) ? $reqData['page'] : 1;
+
+        $pageSize = isset($reqData['page_size']) ? $reqData['page_size'] : 10;
+
+        $getSort = isset($reqData['sort']) ? $reqData['sort'] : 'isClosed,-createTime';
+
+        $loans = isset($reqData['loans']) ? $reqData['loans'] : [];
+
 
         $sort = $getSort ? $getSort : 'isClosed,-createTime';
         $responseData = [
