@@ -125,6 +125,7 @@ class CreditNoteController extends Controller
         $page = $requestQuery->getInt('page', 1);
         $pageSize = $requestQuery->getInt('page_size', 10);
         $getSort = $requestQuery->get('sort', 'isClosed,-createTime');
+        $loans = $requestQuery->get('loans', false);
 
         $sort = $getSort ? $getSort : 'isClosed,-createTime';
         $responseData = [
@@ -154,6 +155,9 @@ class CreditNoteController extends Controller
         }
 
         $query = CreditNote::find()->where(['>', 'tradedAmount', 0])->orWhere(['isClosed' => false])->andWhere(['isTest' => false]);
+        if (count($loans) > 0) {
+            $query->andWhere(['NOt In', 'loan_id', $loans]);
+        }
         $count = $query->count();
         $responseData['total_count'] = $count;
         $creditNoteList = $query->offset(($page - 1) * $pageSize)->limit($pageSize)->orderBy($sortArray)->all();
