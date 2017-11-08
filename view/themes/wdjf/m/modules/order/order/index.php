@@ -486,9 +486,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
                             $("#selectedCouponRateday").val(jiaxiDay);
                             $(".coupon-box").hide();
                             $(".produce,.surplus,#orderform").show();
-                            var profitNow = delcommafy($('.yuqishouyi').text().slice(0, -1));
-                            var profitNew = Number(profitNow) + Number(data.data.jiaxi);
-                            $('.yuqishouyi').html(profitNew.toFixed(2) + "元(含加息" + data.data.jiaxi + "元)");
+//                            var profitNow = delcommafy($('.yuqishouyi').text().slice(0, -1));
+//                            var profitNew = Number(profitNow) + Number(data.data.jiaxi);
+//                            $('.yuqishouyi').html(profitNew.toFixed(2) + "元(含加息" + data.data.jiaxi + "元)");
                         },
                         error: function (jqXHR) {
                             toastCenter(jqXHR.responseJSON.message)
