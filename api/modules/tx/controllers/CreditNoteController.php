@@ -166,7 +166,7 @@ class CreditNoteController extends Controller
 
         $query = CreditNote::find()->where(['>', 'tradedAmount', 0])->orWhere(['isClosed' => false])->andWhere(['isTest' => false]);
         if (count($loans) > 0) {
-            $query->andWhere(['NOt In', 'loan_id', $loans]);
+            $query->andWhere(['in', 'loan_id', $loans]);
         }
         $count = $query->count();
         $responseData['total_count'] = $count;
