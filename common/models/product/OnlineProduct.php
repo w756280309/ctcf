@@ -733,7 +733,23 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             $query->orderBy('recommendTime desc, sort asc, finish_rate desc, id desc');
         }
 
-        $query->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE])->limit($count);
+        $query->where(['isPrivate' => 0, 'del_status' => OnlineProduct::STATUS_USE, 'online_status' => OnlineProduct::STATUS_ONLINE]);
+
+        //判断当前用户投资额
+        $user = Yii::$app->user->getIdentity();
+        $userInvestTotal = 0;
+        if (!is_null($user)) {
+            $userInfo = $user->info;
+            if (null !== $userInfo) {
+                $userInvestTotal = $userInfo->investTotal;
+            }
+        }
+
+        if ($userInvestTotal < 100000) {
+            $query->andWhere(['isLicai' => false]);
+            $query->andWhere("NOT((cid = 2) and if(refund_method = 1, expires > 180, expires > 6))");
+        }
+        $query->limit($count);
 
         return 1 === $count ? $query->one() : $query->all();
     }

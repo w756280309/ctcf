@@ -15,13 +15,15 @@ class LoanFinder
     {
         //用户理财余额
         $user = Yii::$app->user->getIdentity();
+        $userInvestTotal = 0;
         if (!is_null($user)) {
             $user_info = UserInfo::find()->where(['user_id' => $user->id])->one();
-            $balance =  $user->lendAccount->available_balance + $user_info->investTotal;
+            $balance = $user->lendAccount->available_balance + $user_info->investTotal;
+            $userInvestTotal = $user_info->investTotal;
         } else {
             $balance = 0;
         }
-        return OnlineProduct::find()
+        $query = OnlineProduct::find()
             ->select('*')
             ->addSelect(['xs_status' => 'if(is_xs = 1 && status < 3, 1, 0)'])
             ->addSelect(['isJiaxi' => 'if(jiaxi > 0 && status = 6, 1, 0)'])
@@ -33,5 +35,12 @@ class LoanFinder
                 'online_status' => OnlineProduct::STATUS_ONLINE,
             ])
             ->andWhere(['<=', 'balance_limit', $balance]);
+
+        if ($userInvestTotal < 100000) {
+            $query->andWhere(['isLicai' => false]);
+            $query->andWhere("NOT((cid = 2) and if(refund_method = 1, expires > 180, expires > 6))");
+        }
+
+        return $query;
     }
 }
