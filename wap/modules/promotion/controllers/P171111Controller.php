@@ -143,7 +143,7 @@ class P171111Controller extends BaseController
         }
         if ($currentTime >= '20:00:00' && $currentTime < '23:59:59') {
             $activeNav = 2;
-            if ($perSecondKillCount[2] >= $repertoryInfo[1]['repertoryCount']) {
+            if ($perSecondKillCount[2] >= $repertoryInfo[2]['repertoryCount']) {
                 $secondKillList[2]['secondKillStatus'] = 2;
             } else {
                 $secondKillList[2]['secondKillStatus'] = 0;
