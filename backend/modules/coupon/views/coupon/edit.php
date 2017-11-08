@@ -12,7 +12,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                代金券管理 <small>运营模块</small>
+                优惠券管理 <small>运营模块</small>
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -21,7 +21,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="/coupon/coupon/list">代金券管理</a>
+                    <a href="/coupon/coupon/list">优惠管理</a>
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
@@ -38,9 +38,16 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
         ?>
         <div class="portlet-body form">
             <div class="control-group">
-                <label class="control-label">代金券名称</label>
+                <label class="control-label">优惠券类型</label>
                 <div class="controls">
-                    <?= $form->field($model, 'name', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '代金券名称']])->textInput() ?>
+                    <?= $form->field($model, 'type', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span4']])->dropDownList(['0' => '代金券','1'=>'加息券'] )
+                    ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">优惠券名称</label>
+                <div class="controls">
+                    <?= $form->field($model, 'name', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '优惠券名称']])->textInput() ?>
                     <?= $form->field($model, 'name', ['template' => '{error}']) ?>
                 </div>
             </div>
@@ -53,9 +60,22 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     ?>
                 </div>
             </div>
-
             <div class="control-group">
-                <label class="control-label">代金券有效期</label>
+                <label class="control-label">加息券利率</label>
+                <div class="controls">
+                    <?= $form->field($model, 'bonusRate', ['template' => '<div class="input-prepend input-append">{input}<span class="add-on">%</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '加息券利率']])->textInput(['class' => 'm-wrap span12'])
+                    ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">加息天数</label>
+                <div class="controls">
+                    <?= $form->field($model, 'bonusDays', ['template' => '<div class="input-prepend input-append">{input}<span class="add-on">天</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '加息天数']])->textInput(['class' => 'm-wrap span12'])
+                    ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">优惠券有效期</label>
                 <div class="controls">
                     <?=
                         $form->field($model, 'expiresInDays', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '有效天数']])->textInput(['class' => 'm-wrap span12'])

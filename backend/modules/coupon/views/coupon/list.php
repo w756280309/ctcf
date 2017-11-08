@@ -13,9 +13,9 @@ use yii\widgets\LinkPager;
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                代金券管理 <small>运营模块</small>
+                优惠券管理 <small>运营模块</small>
                 <a href="/coupon/coupon/add" class="btn green float-right">
-                    <i class="icon-plus"></i> 添加代金券
+                    <i class="icon-plus"></i> 添加优惠券
                 </a>
             </h3>
             <ul class="breadcrumb">
@@ -25,11 +25,11 @@ use yii\widgets\LinkPager;
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="/coupon/coupon/list">代金券管理</a>
+                        <a href="/coupon/coupon/list">优惠券管理</a>
                         <i class="icon-angle-right"></i>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">代金券列表</a>
+                        <a href="javascript:void(0);">优惠券列表</a>
                     </li>
             </ul>
         </div>
@@ -40,9 +40,17 @@ use yii\widgets\LinkPager;
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td><span class="title">代金券名称</span></td>
+                            <td><span class="title">优惠券名称</span></td>
                             <td>
                                 <input type="text" class="m-wrap span8" name='name' value="<?= Html::encode($name) ?>"/>
+                            </td>
+                            <td><span class="title">优惠券类型</span></td>
+                            <td>
+                                <select name="type" class="w-wap">
+                                    <option value="">---全部---</option>
+                                    <option value="0" <?= $type == '0' ? 'selected' : '' ?> >代金券</option>
+                                    <option value="1" <?= $type == '1' ? 'selected' : '' ?> >加息券</option>
+                                </select>
                             </td>
                             <td>
                                 <div class="search-btn" align="right">
@@ -62,7 +70,16 @@ use yii\widgets\LinkPager;
                     <tr>
                         <th>序号</th>
                         <th>名称</th>
-                        <th class="money">面值</th>
+                        <?php if($type == '0'){ ?>
+                            <th class="money">面值</th>
+                        <?php } else if ($type == '1') { ?>
+                            <th>利率</th>
+                            <th>加息天数</th>
+                        <?php } else { ?>
+                            <th class="money">面值</th>
+                            <th>加息利率</th>
+                            <th>加息天数</th>
+                        <?php } ?>
                         <th class="money">起投金额</th>
                         <th>有效期</th>
                         <th>发放时间</th>
@@ -76,7 +93,17 @@ use yii\widgets\LinkPager;
                     <tr>
                         <td><?= ++$key ?></td>
                         <td><?= $val->name ?></td>
-                        <td class="money"><?= StringUtils::amountFormat2($val->amount) ?>元</td>
+                        <?php if($type == '0'){ ?>
+                            <td class="money"><?= StringUtils::amountFormat2($val->amount) ?>元</td>
+                        <?php } else if ($type  == '1') { ?>
+                            <td><?= StringUtils::amountFormat2($val->bonusRate) ?>%</td>
+                            <td><?= $val->bonusDays ?>天</td>
+                        <?php } else { ?>
+                            <td class="money"><?= StringUtils::amountFormat2($val->amount) ?>元</td>
+                            <td><?= StringUtils::amountFormat2($val->bonusRate) ?>%</td>
+                            <td><?= $val->bonusDays ?>天</td>
+                        <?php } ?>
+
                         <td class="money"><?= StringUtils::amountFormat2($val->minInvest) ?>元</td>
                         <td><?= empty($val->expiresInDays) ? $val->useEndDate : $val->expiresInDays.'天' ?></td>
                         <td><?= empty($val->issueStartDate) ? '---' : $val->issueStartDate.' - '.$val->issueEndDate ?></td>

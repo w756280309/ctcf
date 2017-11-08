@@ -16,7 +16,7 @@ use yii\data\Pagination;
 class CouponController extends BaseController
 {
     /**
-     * 代金券添加.
+     * 优惠券添加.
      */
     public function actionAdd()
     {
@@ -39,7 +39,7 @@ class CouponController extends BaseController
     }
 
     /**
-     * 代金券添加编辑预处理.
+     * 优惠券添加编辑预处理.
      */
     private function preprocess(CouponType $obj)
     {
@@ -69,7 +69,7 @@ class CouponController extends BaseController
     }
 
     /**
-     * 代金券修改.
+     * 优惠券修改.
      */
     public function actionEdit($id)
     {
@@ -78,7 +78,6 @@ class CouponController extends BaseController
         }
 
         $model = $this->findOr404(CouponType::class, $id);
-
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $this->preprocess($model)) {
             if (!$model->save(false)) {
                 throw new \Exception('数据库错误');
@@ -91,21 +90,30 @@ class CouponController extends BaseController
     }
 
     /**
-     * 代金券列表.
+     * 优惠券列表.
      */
     public function actionList()
     {
         $query = CouponType::find()->where(['isDisabled' => 0]);
-
         $name = Yii::$app->request->get('name');
+        $type = Yii::$app->request->get('type');
         if (!empty($name)) {
             $query->andFilterWhere(['like', 'name', $name]);
         }
+        if ($type === '0') {
+            $query->andWhere(['=', 'type', 0]);
+        } else if ($type === '1') {
+            $query->andWhere(['=', 'type', 1]);
+        } else {
+            $query->andWhere(['in', 'type', [0,1]]);
+        }
+
+
 
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
 
-        return $this->render('list', ['model' => $model, 'name' => $name, 'pages' => $pages]);
+        return $this->render('list', ['model' => $model, 'name' => $name, 'type' => $type, 'pages' => $pages]);
     }
 
     /**
@@ -199,13 +207,15 @@ class CouponController extends BaseController
     /**
      * 用户代金券列表.
      * 1. 每页最多显示15条记录;
-     * 2. 按照代金券发放时间的降序排列;
+     * 2. 按照优惠券发放时间的降序排列;
      */
     public function actionListForUser($uid)
     {
         $user = $this->findOr404(User::class, $uid);
         $u = UserCoupon::tableName();
+        $c = CouponType::tableName();
         $isUsed = Yii::$app->request->get('isUsed');
+        $type = Yii::$app->request->get('type');
         $query = UserCoupon::find()
             ->innerJoinWith('couponType')
             ->joinWith('admin')
@@ -217,8 +227,14 @@ class CouponController extends BaseController
         } elseif ($isUsed == 3) {
             $query->andWhere(['isUsed' => 0])->andWhere(['<' , 'expiryDate' , date('Y-m-d')]);
         }
+        if ($type === '0') {
+            $query->andWhere(["$c.type" => 0]);
+        } else if ($type === '1') {
+            $query->andWhere(["$c.type" => 1]);
+        } else {
+            $query->andWhere(["$c.type" => [0,1]]);
+        }
         $query->orderBy(["$u.created_at" => SORT_DESC]);
-
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -236,6 +252,7 @@ class CouponController extends BaseController
             'sumCoupon' => $sumCoupon,
             'CouponUsed' => $CouponUsed,
             'isUsed' => $isUsed,
+            'type' => $type
         ]);
     }
 

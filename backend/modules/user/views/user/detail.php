@@ -217,7 +217,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <li role="presentation" class="credit_order_nav"><a>转让买入</a></li>
                     <li role="presentation" class="credit_note_nav"><a>转让卖出</a></li>
                     <li role="presentation" class="bind_nav"><a>绑卡</a></li>
-                    <li role="presentation" class="coupon_nav"><a>代金券</a></li>
+                    <li role="presentation" class="coupon_nav"><a>优惠券</a></li>
                     <li role="presentation" class="points"><a>积分</a></li>
                     <li role="presentation" class="coins"><a>财富值</a></li>
                     <li role="presentation" class="invite_nav"><a>关系详情</a></li>

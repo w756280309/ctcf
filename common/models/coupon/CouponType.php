@@ -36,9 +36,9 @@ class CouponType extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'amount', 'minInvest', 'issueStartDate', 'issueEndDate'], 'required'],
-            [['amount', 'minInvest'], 'number'],
+            [['amount', 'minInvest','bonusDays','bonusRate'], 'number'],
             [['useStartDate', 'useEndDate', 'issueStartDate', 'issueEndDate'], 'safe'],
-            [['isDisabled', 'created_at', 'updated_at', 'expiresInDays', 'customerType', 'allowCollect', 'isAppOnly', 'loanExpires'], 'integer'],
+            [['isDisabled','type', 'created_at', 'updated_at', 'expiresInDays', 'customerType', 'allowCollect', 'isAppOnly', 'loanExpires'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['loanCategories'], 'string', 'max' => 30],
             [['sn'], 'unique']
@@ -80,6 +80,9 @@ class CouponType extends \yii\db\ActiveRecord
             'allowCollect' => '是否允许用户领取',
             'isAudited' => '是否审核',
             'loanExpires' => '项目期限',
+            'type' => '优惠券类型',
+            'bonusRate' => '加息利率',
+            'bonusDays' => '加息天数'
         ];
     }
 

@@ -25,6 +25,14 @@ use yii\grid\GridView;
                 </select>
             </td>
             <td>
+                <span class="title">券类型</span>
+                <select name="type" class="m-wap" id="type">
+                    <option value="">--全部---</option>
+                    <option value="0" <?= $type == '0' ? 'selected' : '' ?> >代金券</option>
+                    <option value="1" <?= $type == '1' ? 'selected' : '' ?> >加息券</option>
+                </select>
+            </td>
+            <td>
                 <div align="right" class="search-btn">
                     <button class="btn blue btn-block coupon_search" style="width: 100px;">搜索 <i
                                 class="m-icon-swapright m-icon-white"></i></button>
@@ -53,6 +61,22 @@ use yii\grid\GridView;
             'label' => '面值(元)',
             'value' => function ($data) {
                 return StringUtils::amountFormat2($data->couponType->amount);
+            },
+            'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
+        ],
+        [
+            'label' => '加息利率(%)',
+            'value' => function ($data) {
+                return StringUtils::amountFormat2($data->couponType->bonusRate);
+            },
+            'contentOptions' => ['class' => 'money'],
+            'headerOptions' => ['class' => 'money'],
+        ],
+        [
+            'label' => '加息天数',
+            'value' => function ($data) {
+                return StringUtils::amountFormat2($data->couponType->bonusDays);
             },
             'contentOptions' => ['class' => 'money'],
             'headerOptions' => ['class' => 'money'],
@@ -111,7 +135,8 @@ use yii\grid\GridView;
         });
         $('.coupon_search').on('click', function(){
             var isUsed = $('#coupon_search_form_type').val();
-            getCouponList('/coupon/coupon/list-for-user?uid=<?= $user->id?>&isUsed='+isUsed);
+            var type = $('#type').val();
+            getCouponList('/coupon/coupon/list-for-user?uid=<?= $user->id?>&isUsed='+isUsed+'&type='+type);
         });
     })
 </script>
