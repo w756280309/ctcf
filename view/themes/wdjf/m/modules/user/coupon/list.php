@@ -75,9 +75,9 @@ $this->title = '优惠券';
                                                         <li class="box-shadow">
                                                             <a href="<?php if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
                                   //echo '/deal/deal/index';
-                                  echo '#';
+                                  echo 'javascript:void(0)';
                               } else {
-                                  echo '#';
+                                  echo 'javascript:void(0)';
                               } ?>" class="clearfix">
                                                                 <div class="icon">
                                     <?php
