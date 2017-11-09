@@ -73,6 +73,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
             text-align: left;
         }
 
+        .customer-layer-popuo .layui-m-layerbtn {
+            font-size: 14px;
+        }
         .customer-layer-popuo .layui-m-layerbtn span[yes] {
             color: #ff6058;
         }
