@@ -130,11 +130,11 @@ class SiteController extends Controller
             ->all();
 
         //精选项目
-        $jingxuan = Issuer::find()
+        /*$jingxuan = Issuer::find()
             ->where(['allowShowOnPc' => true])
             ->orderBy(['sort' => SORT_ASC])
             ->limit(2)
-            ->all();
+            ->all();*/
 
         return $this->render('index', [
             'adv' => $adv,
@@ -145,7 +145,7 @@ class SiteController extends Controller
             'first_media' => $first_media,
             'licai' => $licai,
             'touzi' => $touzi,
-            'jingxuan' => $jingxuan,
+            //'jingxuan' => $jingxuan,
         ]);
     }
 

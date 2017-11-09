@@ -323,21 +323,14 @@ JSFILE
     </div>
     <div class = "more-box-right">
         <div class = "more-right-top">
-            <span>精选项目</span>
-            <a href = " " style="display: none;">更多&gt;</a>
+            <span>理财公告</span>
+            <a href="/news/index?type=notice" target="_blank">更多&gt;</a>
         </div>
-        <?php if (null !== $jingxuan) { ?>
-        <ul class="more-right-bottom">
-            <?php foreach ($jingxuan as $jx) { ?>
-            <li style="width: 75%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                <a href="<?= Html::encode($jx->pcLink) ?>" target="_blank"><?= $jx->pcTitle ?></a>
-            </li>
-            <li style="width: 75%;list-style: none;">
-                <p style="overflow: hidden;height: 36px;font-size: 12px;margin-top: 0.5em;margin-left: 1em;" class="issuer-desc"><?= $jx->pcDescription ?></p>
-            </li>
-            <?php } ?>
+        <ul class="more-right-bottom title-ellipsis">
+            <?php foreach ($notice as $val) : ?>
+                <li><a href="/news/detail?type=touzi&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></li>
+            <?php endforeach; ?>
         </ul>
-        <?php } ?>
     </div>
 </div>
 <div style="clear: both"></div>
