@@ -14,7 +14,7 @@ $this->title = '11月理财节';
     <div id="box" class="red-box"></div>
     <div id="mask"></div>
     <div class="banner">
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/banner-top.png" alt="banner">
+        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-third/banner-top-new.png" alt="banner">
     </div>
     <div class="banner banner-bottom">
         <!--  我的奖品入口 -->
