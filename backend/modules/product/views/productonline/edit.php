@@ -587,10 +587,9 @@ TPL;
             </div>
             <div class="span6  fix-offset">
                 <div class="control-group">
-                    <label class="control-label">部分用户可见<span style="color:grey">（累计资金额≥10万的用户可见，累计资金额=累计投资额+账户余额）</span></label>
-                    <div class="controls">
-                        <?=  $form->field($model, 'bfyhkj')->checkbox()->label(false)?>
-                    </div>
+                    <label class="control-label">指定累计资金额用户以上可见<span style="color:grey">（累计资金额=累计投资额+账户余额）</span></label>
+                    <?=
+                    $form->field($model, 'balance_limit', ['template' => '<div class="input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '请输入累计资金额', 'value' => $model->balance_limit > 0 ? $model->balance_limit : '']])->textInput(['class' => 'm-wrap span12']) ?>
                 </div>
             </div>
         </div>
