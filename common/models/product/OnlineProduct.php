@@ -737,15 +737,16 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
         //判断当前用户投资额
         $user = Yii::$app->user->getIdentity();
-        $userInvestTotal = 0;
+        $balance = 0;
         if (!is_null($user)) {
             $userInfo = $user->info;
-            if (null !== $userInfo) {
-                $userInvestTotal = $userInfo->investTotal;
+            $userAccount = $user->lendAccount;
+            if (null !== $userAccount && null !== $userInfo) {
+                $balance = $userAccount->available_balance + $userInfo->investTotal;
             }
         }
 
-        if ($userInvestTotal < 50000) {
+        if ($balance < 50000) {
             $query->andWhere(['isLicai' => false]);
             $query->andWhere("NOT((cid = 2) and if(refund_method = 1, expires > 180, expires > 6))");
         }
