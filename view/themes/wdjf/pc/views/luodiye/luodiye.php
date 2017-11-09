@@ -71,45 +71,45 @@ use yii\captcha\Captcha;
         <p>温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金安全，安享稳健高收益。</p>
     </div>
 </div>
-<div class="container-fluid container-fluid-because">
-    <div class="container-content content-because">
-        <h3>精品理财</h3>
-        <div class="content-because-border">
-            <span></span>
-        </div>
-        <div class="because-center">
-            <div class="because-left">
-                <p class="because-header">温盈金</p>
-                <p class="because-yuxuan">预期年化利</p>
-                <p class="because-number">5.5<span>%</span>-6.5<span>%</span></p>
-                <P class="because-time"><span>—</span><span class="time-font">投资期限1-12个月</span><span>—</span></P>
-                <div class="tip_pop">
-                    <div class="tip_pop-en">
-                        <div class="tip_pop-border">
-                        </div>
-                        <div class="tip_pop-content">1000元起投</div>
-                    </div>
-                </div>
-                <a href="/licai/">立即赚钱</a>
-            </div>
-            <div class="because-right">
-                <p class="because-header">温盈宝</p>
-                <p class="because-yuxuan">预期年化利</p>
-                <p class="because-number">6.5<span>%</span>-9<span>%</span></p>
-                <P class="because-time"><span>—</span><span class="time-font">投资期限1-24个月</span><span>—</span></P>
-                <P class="because-limit"></P>
-                <div class="tip_pop">
-                    <div class="tip_pop-en">
-                        <div class="tip_pop-border">
-                        </div>
-                        <div class="tip_pop-content">1万元起投</div>
-                    </div>
-                </div>
-                <a href="/licai/">立即赚钱</a>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<div class="container-fluid container-fluid-because">-->
+<!--    <div class="container-content content-because">-->
+<!--        <h3>精品理财</h3>-->
+<!--        <div class="content-because-border">-->
+<!--            <span></span>-->
+<!--        </div>-->
+<!--        <div class="because-center">-->
+<!--            <div class="because-left">-->
+<!--                <p class="because-header">温盈金</p>-->
+<!--                <p class="because-yuxuan">预期年化利</p>-->
+<!--                <p class="because-number">5.5<span>%</span>-6.5<span>%</span></p>-->
+<!--                <P class="because-time"><span>—</span><span class="time-font">投资期限1-12个月</span><span>—</span></P>-->
+<!--                <div class="tip_pop">-->
+<!--                    <div class="tip_pop-en">-->
+<!--                        <div class="tip_pop-border">-->
+<!--                        </div>-->
+<!--                        <div class="tip_pop-content">1000元起投</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <a href="/licai/">立即赚钱</a>-->
+<!--            </div>-->
+<!--            <div class="because-right">-->
+<!--                <p class="because-header">温盈宝</p>-->
+<!--                <p class="because-yuxuan">预期年化利</p>-->
+<!--                <p class="because-number">6.5<span>%</span>-9<span>%</span></p>-->
+<!--                <P class="because-time"><span>—</span><span class="time-font">投资期限1-24个月</span><span>—</span></P>-->
+<!--                <P class="because-limit"></P>-->
+<!--                <div class="tip_pop">-->
+<!--                    <div class="tip_pop-en">-->
+<!--                        <div class="tip_pop-border">-->
+<!--                        </div>-->
+<!--                        <div class="tip_pop-content">1万元起投</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <a href="/licai/">立即赚钱</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <div class="container-fluid">
     <div class="container-content content-because choose-width">
         <h3>为什么选择温都金服？</h3>

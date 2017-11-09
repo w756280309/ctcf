@@ -298,7 +298,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
                             } else if (data.CouponList[i].loanCategories == 1) {
                                 limitTxt = "温盈金产品可用";
                             } else {
-                                limitTxt = "温盈金、温盈宝产品可用";
+                                limitTxt = "温盈金产品可用";
                             }
                             if (!!data.CouponList[i].loanExpires) {
                                 limitTxt2 = "投资满" + parseInt(data.CouponList[i].minInvest) + "元可用"

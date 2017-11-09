@@ -77,7 +77,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/leadpage/leadpage.js?v=20160708', ['de
         <p class="tip-font">投资完成后，可到【账户】><span>【我的理财】</span>中，查看您的认购项目</p>
         <a class="container-left"></a>
         <div class="container-center">
-            <img src="../../images/leadpage/display_5.png" width="649" alt="">
+            <img src="../../images/leadpage/display_5_new.png" width="649" alt="">
         </div>
         <a class="container-right"></a>
     </div>

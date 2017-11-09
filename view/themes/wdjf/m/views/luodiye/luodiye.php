@@ -87,22 +87,22 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20170915', ['depe
                 <p class="description-header"><span>什么是温都金服？</span></p>
                 <p class="description-content">温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金，安享稳健收益。</p>
             </div>
-            <div class="row production-box">
-                <p class="production-header">精品理财</p>
-                <div class="licai-img">
-                    <div class="col-xs-6 licai-img">
-                        <a href="/deal/deal/index/">
-                            <img src="<?= ASSETS_BASE_URI ?>images/luodiye/wyj.png" alt="温盈金">
-                        </a>
-                    </div>
-                    <div class="col-xs-6 licai-img">
-                        <a href="/deal/deal/index/">
-                            <img src="<?= ASSETS_BASE_URI ?>images/luodiye/wyb.png" alt="温盈宝">
-                        </a>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-            </div>
+<!--            <div class="row production-box">-->
+<!--                <p class="production-header">精品理财</p>-->
+<!--                <div class="licai-img">-->
+<!--                    <div class="col-xs-6 licai-img">-->
+<!--                        <a href="/deal/deal/index/">-->
+<!--                            <img src="--><?//= ASSETS_BASE_URI ?><!--images/luodiye/wyj.png" alt="温盈金">-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                    <div class="col-xs-6 licai-img">-->
+<!--                        <a href="/deal/deal/index/">-->
+<!--                            <img src="--><?//= ASSETS_BASE_URI ?><!--images/luodiye/wyb.png" alt="温盈宝">-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                    <div class="clear"></div>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="row choose-box">
                 <h3>为什么选择温都金服？</h3>
                 <div class="choose-content">
