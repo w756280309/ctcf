@@ -52,7 +52,7 @@ class LicaiController extends Controller
         if (!is_null($user)) {
             $userIn = UserInfo::findOne(['user_id' => $user->id]);
         }
-        if (is_null($user) || $userIn->investTotal < 100000) {
+        if (is_null($user) || $userIn->investTotal < 50000) {
             $jianguan = true;
         } else {
             $jianguan = false;
