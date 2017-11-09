@@ -328,7 +328,7 @@ JSFILE
         </div>
         <ul class="more-right-bottom title-ellipsis">
             <?php foreach ($notice as $val) : ?>
-                <li><a href="/news/detail?type=touzi&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></li>
+                <li><a href="/news/detail?type=notice&id=<?= $val->id ?>" target="_blank"><?= $val->title ?></a></li>
             <?php endforeach; ?>
         </ul>
     </div>
