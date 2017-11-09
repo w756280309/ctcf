@@ -5,6 +5,7 @@ namespace app\controllers;
 use common\controllers\HelpersTrait;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
+use common\models\user\UserAccount;
 use common\models\user\UserInfo;
 use Yii;
 use yii\web\Controller;
@@ -17,13 +18,15 @@ class LicaiController extends Controller
     {
         $user = Yii::$app->user->getIdentity();
         if (!is_null($user)) {
-            $userIn = UserInfo::findOne(['user_id' => $user->id]);
+            $userAccount = UserAccount::findOne(['uid' => $user->id]);
+            $userInfo = UserInfo::findOne(['user_id' => $user->id]);
         }
-        if (is_null($user) || $userIn->investTotal < 50000) {
+        if (is_null($user) || $userAccount->available_balance + $userInfo->investTotal < 50000) {
             $jianguan = true;
         } else {
             $jianguan = false;
         }
+
         $array = [];
         if ($jianguan) {
             $query = OnlineProduct::find()->select('id');
