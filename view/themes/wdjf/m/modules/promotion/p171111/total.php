@@ -3,7 +3,7 @@
 $this->title = '11月理财节';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/index.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171111/css/index.css?v=20171109">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/vue.min.js"></script>
 <style type="text/css">
