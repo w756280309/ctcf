@@ -10,7 +10,7 @@ $this->backUrl = false;
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=20161223', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/TouchSlide.1.1.js', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.classyloader.js', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit_page.js?v=160929', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit_page.js?v=171109', ['depends' => 'wap\assets\WapAsset']);
 
 $this->registerJs('var tp = ' . $tp . ';', 1);
 $this->registerJs("var url = '/licai/notes';", 1);

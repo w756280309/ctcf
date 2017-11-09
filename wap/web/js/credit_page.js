@@ -64,7 +64,7 @@ $(function() {
                 {
                     if (data.code === 0) {
                         //如果当前页和返回页码相同，则改变页面html,否则视为异常
-                        if (currentPage === data.header.cp) {
+                        if (currentPage == data.header.cp) {
                             if (data.html) {
                                 $('.load').before(data.html);
                                 //页码＋1
