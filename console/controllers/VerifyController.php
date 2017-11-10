@@ -37,14 +37,13 @@ class VerifyController extends Controller
             ->andWhere(['>', 'created_at', strtotime('-1 day')])
             ->andWhere(['<', 'created_at', time() - 10 * 60])
             ->all();
-
         $update = BankCardUpdate::find()
             ->where(['status' => [BankCardUpdate::STATUS_ACCEPT, BankCardUpdate::STATUS_PENDING]])
             ->orderBy(['created_at' => SORT_DESC])
             ->all();
         $datas = ArrayHelper::merge($qpay, $update);
         $expireAt = strtotime('today -20 days');
-
+        $expireAtOne = strtotime('today -1 day');
         foreach ($datas as $dat) {
             if ($dat instanceof BankCardUpdate
                 && $dat->created_at < $expireAt
@@ -56,8 +55,18 @@ class VerifyController extends Controller
 
                 continue;
             }
-
             $resp = Yii::$container->get('ump')->getBindingTx($dat);
+            //换卡操作时间在一天以上，并且在联动查不到记录
+            if ($dat instanceof BankCardUpdate
+                && $dat->created_at < $expireAtOne
+                && $resp->get('ret_code') === '00240005'
+            ) {
+                BankCardUpdate::updateAll(['status' => BankCardUpdate::STATUS_FAIL],['id' => $dat->id]);
+                $msg = '用户[' . $dat->user->id . ']，于' . date('Y-m-d H:i:s', $dat->created_at) . ' 
+                进行【换卡】操作，操作失败，卡号' . $dat->cardNo . '，失败原因，定时任务申请时
+                间超过1天并且在联动超找不到记录，返回状态码:' . $resp->get('ret_code') ;
+                Yii::info($msg,'user_log');
+            }
             if ($resp->isSuccessful()) {
                 $user = $dat->user;
                 if (is_null($user)) {
