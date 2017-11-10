@@ -34,23 +34,23 @@ class DeployController extends Controller
         ];
 
         if ('ios' === $clienttype) {
-            if ($versionCode < 8) {
+            if ($versionCode < 15) {
                 $content = [
-                    'old_updatetype' => 2,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
-                    'updatedesc' => '增加代金券多选功能，每次投资可选多张优惠券；修复bug',  //新版本更新说明
-                    'versioncode' => '8',   //新版本版本号
-                    'versionname' => '1.6', //新版本版本名称
+                    'old_updatetype' => 3,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
+                    'updatedesc' => '优化加息券使用，优化产品购买流程',  //新版本更新说明
+                    'versioncode' => '15',   //新版本版本号
+                    'versionname' => '1.7.1', //新版本版本名称
                     'downloadurl' => 'https://itunes.apple.com/us/app/wen-dou-jin-fu/id1107540109?mt=8',   //新版本下载地址
                 ];
             }
         } else {
-            if ($versionCode < 10) {
+            if ($versionCode < 13) {
                 $content = [
                     'old_updatetype' => 3,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
-                    'updatedesc' => '账户功能增加安全性，优化产品部分交互体验',  //新版本更新说明
-                    'versioncode' => '10',   //新版本版本号
-                    'versionname' => '1.6.2', //新版本版本名称
-                    'downloadurl' => 'https://dapp.wenjf.com/wjf_v1.6.2.apk',   //新版本下载地址, android 不支持 http 向 https 的跳转，协议必须严格匹配
+                    'updatedesc' => '优化加息券使用，优化产品购买流程',  //新版本更新说明
+                    'versioncode' => '13',   //新版本版本号
+                    'versionname' => '1.7.1', //新版本版本名称
+                    'downloadurl' => 'https://dapp.wenjf.com/wjf_v1.7.1.apk',   //新版本下载地址, android 不支持 http 向 https 的跳转，协议必须严格匹配
                 ];
             }
         }
