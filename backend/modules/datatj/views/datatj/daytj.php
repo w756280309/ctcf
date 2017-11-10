@@ -7,11 +7,6 @@ use yii\grid\GridView;
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <h3 class="page-title">
-                日历史数据
-                <small style="color: red;">每5分钟更新一次，上次更新时间：<?= $lastUpdateTime ?></small>
-            </h3>
-            <a class="btn green btn-block" style="width: 140px;" href="/datatj/datatj/day-export">日统计数据导出</a>
             <ul class="breadcrumb">
                 <li>
                     <i class="icon-home"></i>
@@ -26,6 +21,9 @@ use yii\grid\GridView;
                     <a href="javascript:void(0);">日历史数据</a>
                 </li>
             </ul>
+            <p style="color: red;">每5分钟更新一次，上次更新时间：<?= $lastUpdateTime ?>
+            <a class="btn green" href="/datatj/datatj/day-export">日统计数据导出</a>
+</p>
         </div>
     </div>
 
@@ -141,18 +139,18 @@ use yii\grid\GridView;
                 ],
                 [
                     'attribute' => 'newRegisterAndInvestor',
-                    'label' => '当日注册当日投资人数',
+                    'label' => '?',
                     'format' => 'html',
                     'value' => function ($data) {
-                        return '<a href="/datatj/datatj/list?type=day&field=newRegisterAndInvestor&date=' . $data['bizDate'] . '&result=' . intval($data['newRegisterAndInvestor']) . '">' . intval($data['newRegisterAndInvestor']) . '</a>';
+                        return '<a title="当日注册当日投资人数" href="/datatj/datatj/list?type=day&field=newRegisterAndInvestor&date=' . $data['bizDate'] . '&result=' . intval($data['newRegisterAndInvestor']) . '">' . intval($data['newRegisterAndInvestor']) . '</a>';
                     }
                 ],
                 [
                     'attribute' => 'newInvestor',
-                    'label' => '非今日注册于今日投资新增人数',
+                    'label' => '?',
                     'format' => 'html',
                     'value' => function ($data) {
-                        return '<a href="/datatj/datatj/list?type=day&field=newInvestor&date=' . $data['bizDate'] . '&result=' . intval($data['newInvestor']) . '">' . intval($data['newInvestor']) . '</a>';
+                        return '<a title="非今日注册于今日投资新增人数" href="/datatj/datatj/list?type=day&field=newInvestor&date=' . $data['bizDate'] . '&result=' . intval($data['newInvestor']) . '">' . intval($data['newInvestor']) . '</a>';
                     }
                 ],
                 [
