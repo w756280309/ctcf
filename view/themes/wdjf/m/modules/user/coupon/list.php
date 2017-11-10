@@ -74,10 +74,8 @@ $this->title = '优惠券';
                             <?php if ($val['type'] < 1) : ?>
                                                         <li class="box-shadow">
                                                             <a href="<?php if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
-                                  //echo '/deal/deal/index';
-                                  echo 'javascript:void(0)';
+                                  echo '/deal/deal/index';
                               } else {
-                                  echo 'javascript:void(0)';
                               } ?>" class="clearfix">
                                                                 <div class="icon">
                                     <?php
@@ -108,7 +106,7 @@ $this->title = '优惠券';
                                                                     </div>
                                                                     <div class="bottom">
                                                                         <span class="time">有效期至<?= $val['expiryDate'] ?></span>
-                                      <!--<?php
+                                      <?php
                                       if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
                                           echo '<span class="go-to-use able-status">去使用</span>';
                                       } else if ($val['isUsed']) {
@@ -116,7 +114,7 @@ $this->title = '优惠券';
                                       } else {
                                           echo '<span class="go-to-use">已过期</span>';
                                       }
-                                      ?>-->
+                                      ?>
                                                                     </div>
                                                                 </div>
                                                             </a>
@@ -155,8 +153,7 @@ $this->title = '优惠券';
                     <?php if ($val['type'] == 1) : ?>
                                                 <li class="box-shadow">
                                                     <a href="<?php if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
-                          //echo '/deal/deal/index';
-                          echo 'javascript:void(0)';
+                          echo '/deal/deal/index';
                       } else {
                           echo 'javascript:void(0)';
                       } ?>" class="clearfix">
@@ -193,7 +190,7 @@ $this->title = '优惠券';
                                                     </div>
                                                     <div class="bottom">
                                                         <span class="time">有效期至<?= $val['expiryDate'] ?></span>
-                      <!--<?php
+                      <?php
                       if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
                           echo '<span class="go-to-use able-status">去使用</span>';
                       } else if ($val['isUsed']) {
@@ -201,7 +198,7 @@ $this->title = '优惠券';
                       } else {
                           echo '<span class="go-to-use">已过期</span>';
                       }
-                      ?>-->
+                      ?>
                                                     </div>
                                                 </div>
                                             </a>
