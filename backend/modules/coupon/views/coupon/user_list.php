@@ -4,7 +4,7 @@ use yii\grid\GridView;
 ?>
 <div class="float-left">
     <a class="btn green" href="javascript:openwin('/coupon/coupon/allow-issue-list?uid=<?= $user->id ?>' , 800, 400)">
-        发放代金券
+        发放优惠券
     </a>
     <span style="padding-left: 20px;">可用金额(元)：<?= isset($sumCoupon) ? StringUtils::amountFormat2($sumCoupon) : '0' ?></span>
     <span style="padding-left: 20px;">已用金额(元)：<?= isset($CouponUsed) ? StringUtils::amountFormat2($CouponUsed) : '0' ?></span>
@@ -17,8 +17,8 @@ use yii\grid\GridView;
 
             <td>
                 <span class="title">状态</span>
-                <select name="isUsed" id="coupon_search_form_type" m-wrap span6>
-                    <option value="">---全部---</option>
+                <select name="isUsed" id="coupon_search_form_type" class="m-wrap span3" >
+                    <option value="">--全部--</option>
                     <option value="1" <?= ($isUsed === '1') ? "selected='selected'" : "" ?> >未使用</option>
                     <option value="2" <?= ($isUsed === '2') ? "selected='selected'" : "" ?> >已使用</option>
                     <option value="3" <?= ($isUsed === '3') ? "selected='selected'" : "" ?> >已过期</option>
@@ -26,8 +26,8 @@ use yii\grid\GridView;
             </td>
             <td>
                 <span class="title">券类型</span>
-                <select name="type" class="m-wap" id="type">
-                    <option value="">--全部---</option>
+                <select name="type" class="m-wap span3" id="type">
+                    <option value="">--全部--</option>
                     <option value="0" <?= $type == '0' ? 'selected' : '' ?> >代金券</option>
                     <option value="1" <?= $type == '1' ? 'selected' : '' ?> >加息券</option>
                 </select>
@@ -53,8 +53,9 @@ use yii\grid\GridView;
         ],
         [
             'label' => '名称',
+            'format' =>'html',
             'value' => function ($data) {
-                return $data->couponType->name;
+                return '<a href="/coupon/coupon/edit?id=' . $data->couponType->id . '">' . $data->couponType->name . '</a>'; ;
             }
         ],
         [

@@ -261,7 +261,7 @@ class CouponController extends BaseController
      *
      * 1. 按面值的升序为第一序列,起投金额的升序为第二序列排序;
      */
-    public function actionAllowIssueList($uid, $cid = null)
+    public function actionAllowIssueList($uid, $cid = null, $couponType = null)
     {
         $nowDate = date('Y-m-d');
 
@@ -269,15 +269,17 @@ class CouponController extends BaseController
             ->where(['<=', 'issueStartDate', $nowDate])
             ->andWhere(['>=', 'issueEndDate', $nowDate])
             ->andWhere(['isDisabled' => 0, 'isAudited' => 1]);
-
         if (!empty($cid)) {
             $query->andWhere(['id' => $cid]);
         }
-
+        if ($couponType === '0') {
+            $query->andWhere(['type' => 0]);
+        } else if ($couponType === '1') {
+            $query->andWhere(['type' => 1]);
+        }
         if (Yii::$app->request->isAjax) {
             return ['code' => 0, 'data' => $query->asArray()->all()];
         }
-
         $query->orderBy(['amount' => SORT_ASC, 'minInvest' => SORT_ASC]);
 
         $this->layout = false;

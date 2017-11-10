@@ -37,14 +37,21 @@ $user_id = Html::encode($uid);
             $(function() {
                 $('#issue-coupon').on('change', function() {
                     var cid = $(this).val();
-
                     if ('' === cid) {
                         $('.coupon-info').html('');
                     } else {
                         $.get('/coupon/coupon/allow-issue-list?uid=<?= $user_id ?>&cid='+cid, function(data) {
                             if (!data.code) {
-                                var expire = data.data[0]['useEndDate'] ? '有效截止日期为'+data.data[0]['useEndDate'] : '有效期为'+data.data[0]['expiresInDays']+'天';
-                                $('.coupon-info').html('该代金券面值为'+data.data[0]['amount']+'元，最小投资金额为'+data.data[0]['minInvest']+'元，'+expire+'。');
+                                var expire = data.data[0]['useEndDate'] ? '有效截止日期为'+data.data[0]['useEndDate'] :
+                                    '有效期为'+data.data[0]['expiresInDays']+'天';
+                                if (data.data[0]['type'] === '0') {
+                                    $('.coupon-info').html('该代金券面值为'+data.data[0]['amount']+'元，' +
+                                        '最小投资金额为'+convertToMoney(data.data[0]['minInvest'])+'元，'+expire+'。');
+                                } else {
+                                    $('.coupon-info').html('该加息券利率为'+parseFloat(data.data[0]['bonusRate'])+'%，' +
+                                        '加息天数为'+data.data[0]['bonusDays']+'天,'+'最小投资金额为'+
+                                        convertToMoney(data.data[0]['minInvest'])+'元，'+expire+'。');
+                                }
                             } else {
                                 alert('获取代金券数据失败');
                             }
@@ -78,7 +85,36 @@ $user_id = Html::encode($uid);
                         });
                     }
                 });
+                //添加优惠券类型控制
+                $("#coupon-type").on('change', function () {
+                    var couponType = $("#coupon-type").val();
+                    $.get('/coupon/coupon/allow-issue-list?uid=<?= $user_id ?>&couponType='+couponType, function(data) {
+                        if (!data.code) {
+                           var issueCoupon = $("#issue-coupon");
+                           issueCoupon.html('')
+                           var couponData = data.data;
+                           var html = '<option>--请选择--</option>';
+                           for(var i =0; i<couponData.length; i++) {
+                               if(couponData[i]['type'] == 0) {
+                                   html+= '<option value="'+couponData[i]['id']+'">'+couponData[i]['name']+'-'+
+                                       parseFloat(couponData[i]['amount'])+'元-'+convertToMoney(couponData[i]['minInvest'])+'元起投</option>'
+                               }else if(couponData[i]['type'] == 1) {
+                                   html+= '<option value="'+couponData[i]['id']+'">'+couponData[i]['name']+'-'+
+                                       parseFloat(couponData[i]['bonusRate'])+'%-'+couponData[i]['bonusDays']+'天-'+
+                                       convertToMoney(couponData[i]['minInvest'])+'元起投</option>'
+                               }
+                           }
+                           issueCoupon.html(html)
+                        }
+                    });
+                })
             })
+            //将数字格式化为金额格式
+            function convertToMoney(num) {
+                num = parseFloat(num)
+                num = num.toLocaleString();
+                return num;
+            }
         </script>
     </head>
 
@@ -89,14 +125,31 @@ $user_id = Html::encode($uid);
                 <div class="form-horizontal form-view">
                     <form action="/coupon/coupon/issue-for-user" method="get" id="form">
                     <div class="control-group">
-                        <label class="control-label">可发代金券</label>
+                        <label class="control-label">可发优惠券</label>
                         <div class="controls">
                             <input type="hidden" name="uid" value="<?= $user_id ?>">
                             <select name="cid" id="issue-coupon">
                                 <option value="">--请选择--</option>
                                 <?php foreach($model as $val) : ?>
-                                    <option value="<?= $val->id ?>"><?= $val->name ?>-<?= StringUtils::amountFormat2($val->amount) ?>元-<?= StringUtils::amountFormat2($val->minInvest) ?>元起投</option>
+                                    <?php if ($val['type'] == '0') { ?>
+                                        <option value="<?= $val->id ?>">
+                                            <?= $val->name ?>-<?= StringUtils::amountFormat2($val->amount) ?>元-
+                                            <?= StringUtils::amountFormat2($val->minInvest) ?>元起投
+                                        </option>
+                                    <?php } else { ?>
+                                        <option value="<?= $val->id ?>">
+                                            <?= $val->name ?>-<?= StringUtils::amountFormat2($val->bonusRate) ?>%-
+                                            <?= $val->bonusDays ?>天-
+                                            <?= StringUtils::amountFormat2($val->minInvest) ?>元起投
+                                        </option>
+                                    <?php } ?>
                                 <?php endforeach; ?>
+                            </select>
+                            <label>&nbsp;&nbsp;优惠券类型</label>
+                            <select name="type" id="coupon-type" class="m-wap span2">
+                                <option value="">--全部--</option>
+                                <option value="0">代金券</option>
+                                <option value="1">加息券</option>
                             </select>
                         </div>
                     </div>
