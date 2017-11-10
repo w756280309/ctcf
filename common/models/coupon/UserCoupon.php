@@ -5,6 +5,7 @@ namespace common\models\coupon;
 use common\models\adminuser\Admin;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct as Loan;
+use common\models\product\OnlineProduct;
 use common\models\user\User;
 use common\utils\StringUtils;
 use Exception;
@@ -175,6 +176,7 @@ class UserCoupon extends ActiveRecord
             $query->andWhere("loanExpires is null or loanExpires <= ".$loan->getSpanDays());
         }
 
+
         return $query
             ->indexBy('id')
             ->orderBy([
@@ -257,7 +259,7 @@ class UserCoupon extends ActiveRecord
             throw new Exception($name .'不可以使用');
         }
 
-        if (bccomp($coupon->couponType->minInvest, $money, 2) > 0) {
+        if ($money && bccomp($coupon->couponType->minInvest, $money, 2) > 0) {
             throw new Exception($name .'最低投资'.StringUtils::amountFormat2($coupon->couponType->minInvest).'元可用', 1);
         }
 
@@ -366,18 +368,21 @@ class UserCoupon extends ActiveRecord
     /**
      * 获取用户可用代金券和加息券
      */
-    static function availableCoupons($money = false)
+    static function availableCoupons($sn)
     {
         $user = \Yii::$app->user->getIdentity();
+        $loan = OnlineProduct::findOne(['sn' =>$sn]);
+
         if (!is_null($user)) {
-            if ($money) {
-                $coupon = self::fetchValid($user, $money);
-            } else {
-                $coupon = self::fetchValid($user);
-            }
+            $coupon = self::fetchValid($user, $money = null, $loan);
 
             $coupon_list = [];
             foreach ($coupon as $k => $v) {
+                try {
+                    UserCoupon::checkAllowUse($v, $money = null, $user, $loan);
+                } catch (\Exception $ex) {
+                    continue;
+                }
                 $coupon_list[] = [
                     'userCouponId' => $k,
                     'name' => $v['couponType']->name,

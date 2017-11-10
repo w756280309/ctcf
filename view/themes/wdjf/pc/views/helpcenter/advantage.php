@@ -28,8 +28,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                         <span class="focus">股东</span><span>强势</span>
                         <p>温州报业传媒有限公司，</p>
                         <p>系温州日报报业集团全资子公司；</p>
-                        <p>南京金融资产交易中心，</p>
-                        <p>省级金融主管部门审批的合规平台；</p>
+<!--                        <p>南京金融资产交易中心，</p>-->
+<!--                        <p>省级金融主管部门审批的合规平台；</p>-->
                     </div>
 
                     <div class="section">

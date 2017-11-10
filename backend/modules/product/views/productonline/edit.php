@@ -527,7 +527,7 @@ TPL;
                 <div class="control-group">
                     <label class="control-label">允许使用加息券<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
-                        <?= $form->field($model, 'allowRateCoupon')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->allowUseCoupon] : []))->label(false) ?>
+                        <?= $form->field($model, 'allowRateCoupon')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->allowRateCoupon] : []))->label(false) ?>
                     </div>
                 </div>
             </div>
