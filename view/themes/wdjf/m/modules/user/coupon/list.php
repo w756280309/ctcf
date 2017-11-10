@@ -101,7 +101,7 @@ $this->title = '优惠券';
                                                                     } else if ($val['loanCategories'] == 2) {
                                                                         echo '温盈恒产品可用';
                                                                     } else {
-                                                                        echo '温盈金、温盈恒产品可用';
+                                                                        echo '正式标产品可用';
                                                                     }
                                                                     ?>
                                                                 </span>
@@ -184,7 +184,7 @@ $this->title = '优惠券';
                                                     } else if ($val['loanCategories'] == 3) {
                                                         echo '仅用于新手标产品';
                                                     } else {
-                                                        echo '温盈金、温盈恒产品可用';
+                                                        echo '正式标产品可用';
                                                     }
                                                     ?>
                                                     </span>

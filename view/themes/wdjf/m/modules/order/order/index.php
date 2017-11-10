@@ -294,11 +294,11 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
                             if (data.CouponList[i].loanCategories == 3) {
                                 limitTxt = "仅用于新手标产品";
                             } else if (data.CouponList[i].loanCategories == 2) {
-                                limitTxt = " 温盈宝产品可用";
+                                limitTxt = " 温盈恒产品可用";
                             } else if (data.CouponList[i].loanCategories == 1) {
                                 limitTxt = "温盈金产品可用";
                             } else {
-                                limitTxt = "温盈金产品可用";
+                                limitTxt = "正式标产品可用";
                             }
                             if (!!data.CouponList[i].loanExpires) {
                                 limitTxt2 = "投资满" + parseInt(data.CouponList[i].minInvest) + "元可用"
