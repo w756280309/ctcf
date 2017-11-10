@@ -153,8 +153,6 @@ class OrderController extends BaseController
             $userCouponIds = ArrayHelper::getColumn($userCoupons, 'id');
         }
 
-        //将所有可用的代金券写入session，并判断是否存在不可用的代金券，返回报错信息
-        Yii::$app->session->set('loan_coupon', ['couponId' => $userCouponIds]);
         if ($existUnUseCoupon) {
             $couponMoney = StringUtils::amountFormat2($couponMoney);
             return [
@@ -187,8 +185,6 @@ class OrderController extends BaseController
             $investFrom  = OnlineOrder::INVEST_FROM_WX;
         }
 
-        //删除选中的session
-        Yii::$app->session->remove('loan_coupon');
         return $orderManager->createOrder($sn, $money, $userCouponIds, $user->id, $investFrom);
     }
 
