@@ -13,9 +13,9 @@ $this->registerJs(<<<JSFILE
     $(function (){
         //统计数据
         $.get('/site/stats-for-index', function (data) {
-            $('#totalTradeAmount i').html(WDJF.numberFormat(accDiv(data.totalTradeAmount, 100000000), 0));
-            $('#totalRefundAmount i').html(WDJF.numberFormat(accDiv(data.totalRefundAmount, 10000), 0));
-            $('#totalRefundInterest i').html(WDJF.numberFormat(accDiv(data.totalRefundInterest, 10000), 0));
+            $('#totalTradeAmount i').html(Math.floor(WDJF.numberFormat(accDiv(data.totalTradeAmount, 100000000), 0)));
+            $('#totalRefundAmount i').html(Math.floor(WDJF.numberFormat(accDiv(data.totalRefundAmount, 100000000), 0)));
+            $('#totalRefundInterest i').html(Math.floor(WDJF.numberFormat(accDiv(data.totalRefundInterest, 100000000), 0)));
         });
        
     })
@@ -103,19 +103,19 @@ JSFILE
 <!--交易总额-->
 <div id="turnover-box">
     <ul class="turnover-box">
-        <li class="turnover-data lf">
-            <p class="turnover-data-number" id="totalTradeAmount"><i></i> <span>亿元</span></p>
+        <li class="turnover-data lf pt-data-first" style="display: none">
+            <p class="turnover-data-number" id="totalTradeAmount"><i></i> <span>亿+</span></p>
             <p class="turnover-data-name">平台累计交易额</p>
         </li>
         <li class="turnover-data lf">
-            <p class="turnover-data-number" id="totalRefundAmount"><i></i> <span>万元</span></p>
+            <p class="turnover-data-number" id="totalRefundAmount"><i></i> <span>亿+</span></p>
             <p class="turnover-data-name">累计兑付</p>
         </li>
         <li class="turnover-data lf">
-            <p class="turnover-data-number" id="totalRefundInterest"><i></i> <span>万元</span></p>
+            <p class="turnover-data-number" id="totalRefundInterest"><i></i> <span>亿+</span></p>
             <p class="turnover-data-name">带来收益</p>
         </li>
-        <li class="turnover-data rg">
+        <li class="turnover-data lf pt-data-last">
             <p class="turnover-data-number">100 <span>%</span></p>
             <p class="turnover-data-name">历史兑付率</p>
         </li>
@@ -358,7 +358,7 @@ JSFILE
         $.get('/site/top-list', function(data) {
             $('.top-list-show').html(data);
         });
-        $("#turnover-box").hide();
+
         //处理ajax登录
         function login() {
             //document.documentElement.style.overflow = 'hidden';   //禁用页面上下滚动效果
@@ -409,7 +409,8 @@ JSFILE
                 }
                 //判断个人投资总额大于五万时，前端页面显示总金额
                 if (data.showplatformStats) {
-                    $("#turnover-box").show();
+                    $('.pt-data-last').removeClass('lf').addClass('rg');
+                    $('.pt-data-first').show();
                 }
             });
         }

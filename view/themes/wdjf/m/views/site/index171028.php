@@ -111,7 +111,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
         <p class="data-box-title">平台数据</p>
         <div class="data-box-show">
             <p class="data-box-show-line1">温都金服平台已安全运营</p>
-            <p class="data-box-show-line2"><span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-05-20'))->days ?></span>天</p>
+            <p class="data-box-show-line2"><span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-05-20'))->days ?></span>天（历史兑付率100%）</p>
             <p class="data-box-show-line3" style="width: auto;display: inline-block;padding: 0 .5rem"><i class="totalTradeBox" style="font-style: normal;display: none">累计投资额<span id="totalTradeAmount"></span></i>  兑付<span id="totalRefundAmount"></span>  带来<span id="totalRefundInterest"></span>元收益</p>
         </div>
     </div>
