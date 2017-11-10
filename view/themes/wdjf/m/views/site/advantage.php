@@ -121,8 +121,8 @@
         <p class="h-num"><a href="javascript:;" class="number">2</a><span>股东</span>强势</p>
         <p class="suojin">温州报业传媒有限公司，</p>
         <p class="suojin">系温州日报报业集团全资子公司；</p>
-        <p class="suojin">南京金融资产交易中心，</p>
-        <p class="suojin">省级金融主管部门审批的合规平台；</p>
+<!--        <p class="suojin">南京金融资产交易中心，</p>-->
+<!--        <p class="suojin">省级金融主管部门审批的合规平台；</p>-->
         <p class="h-num"><a href="javascript:;" class="number">3</a><span>专业</span>稳健</p>
         <p class="suojin">资金全程托管，与平台隔离不被挪用；</p>
         <p class="suojin">绑定本人银行卡，提现只进本人账户；</p>

@@ -972,6 +972,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'full_time' => 0,
             'yuqi_faxi' => 0,
             'allowUseCoupon' => true,
+            'allowRateCoupon' => true,
             'paymentDay' => 20,
             'pointsMultiple' => 1,
         ]);

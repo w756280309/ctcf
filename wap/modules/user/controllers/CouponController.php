@@ -227,7 +227,7 @@ class CouponController extends BaseController
      * ajax方法请求
      * @author ZouJianShuang
      */
-    public function actionAvailableCoupons($money)
+    public function actionAvailableCoupons($money, $sn)
     {
         if (true || Yii::$app->request->isAjax) {
             $res = $res = Yii::$app->session->get('loan_coupon');
@@ -235,12 +235,7 @@ class CouponController extends BaseController
                 Yii::$app->session->remove('loan_coupon');
                 Yii::$app->session->set('loan_coupon', ['rand' => $res['rand'], 'money' => '', 'couponId' => '']);
             }
-            if ($money) {
-                $res = UserCoupon::availableCoupons($money);
-            } else {
-                $res = UserCoupon::availableCoupons();
-            }
-
+            $res = UserCoupon::availableCoupons($sn);
             return $res;
         }
     }

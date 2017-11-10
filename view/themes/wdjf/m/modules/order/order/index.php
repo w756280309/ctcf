@@ -281,7 +281,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
             $.ajax({
                 url: '/user/coupon/available-coupons',
                 type: 'get',
-                data: {money: money},
+                data: {money: money, sn: sn},
                 dataType: 'json',
                 async: false,
                 success: function (data) {
