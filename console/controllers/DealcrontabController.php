@@ -22,46 +22,95 @@ use common\utils\TxUtils;
 class DealcrontabController extends Controller
 {
     /**
-     * 定时 刷新满标 满标生成还款计划.
+     * 定时满标
+     * 1）存在其他推荐标的时，将该标的推荐时间置为0（即取消推荐状态）
+     * 2）募集中状态 2 修改为 3 满标（已售罄）状态
+     * 3）循环更新每个投资者账户的理财资产（+）及冻结金额（-）
+     * 4）创建满标资金流水
+     * 5）满标超投部分撤标
      */
     public function actionFull()
     {
-        $data = OnlineProduct::find()->where(['finish_rate' => 1, 'status' => 2])->orderBy('recommendTime asc')->all();
-        $bc = new BcRound();
-        foreach ($data as $dat) {
-            if (!empty($dat['recommendTime'])) {
-                $count = OnlineProduct::find()->where("recommendTime != 0")->andWhere(['isPrivate' => 0, 'del_status' => 0])->count();
+        //查询出3条待满标的募集中标的记录
+        $loans = OnlineProduct::find()
+            ->where([
+                'finish_rate' => 1,
+                'status' => 2,
+            ])->orderBy(['recommendTime' => SORT_ASC])
+            ->limit(3)
+            ->all();
 
-                if ($count > 1) {
-                    $dat->recommendTime = 0;
-                    $dat->save(false);
+        $db = Yii::$app->db;
+        foreach ($loans as $loan) {
+            //1）判断是否有其他推荐标，若存在，则将该标推荐时间置为0
+            $recommendTime = $loan->recommendTime;
+            if ($recommendTime > 0) {
+                if ($this->existOtherRecommendLoan($loan->id)) {
+                    $recommendTime = 0;
                 }
             }
 
-            $pid = $dat['id'];
-            OnlineProduct::updateAll(['status' => 3, 'sort' => OnlineProduct::SORT_FULL], ['id' => $pid]);
+            $transaction = $db->beginTransaction();
+            try {
+                //2）更新标的状态 募集中状态 "2" 到 满标 "3"
+                $updateLoanStatusSql = "update online_product set status = :status,recommendTime = :recommendTime where status = 2 and id = :id";
+                $affectRows = $db->createCommand($updateLoanStatusSql, [
+                    'status' => OnlineProduct::STATUS_FULL,
+                    'recommendTime' => $recommendTime,
+                    'id' => $loan->id,
+                ])->execute();
+                if (0 === $affectRows) {
+                    $transaction->rollBack();
+                    throw new \Exception('更新标的状态失败：募集中 到 满标');
+                }
 
-            $orders = OnlineOrder::getOrderListByCond(['online_pid' => $pid, 'status' => OnlineOrder::STATUS_SUCCESS]);
-            foreach ($orders as $ord) {
-                $ua = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $ord['uid']]);
-                $ua->investment_balance = $bc->bcround(bcadd($ua->investment_balance, $ord['order_money']), 2);
-                $ua->freeze_balance = $bc->bcround(bcsub($ua->freeze_balance, $ord['paymentAmount']), 2);//冻结金额减去实付金额
-                $ua->save();
-                $mrmodel = new MoneyRecord();
-                $mrmodel->account_id = $ua->id;
-                $mrmodel->sn = TxUtils::generateSn('MR');
-                $mrmodel->type = MoneyRecord::TYPE_FULL_TX;
-                $mrmodel->osn = $ord['sn'];
-                $mrmodel->uid = $ord['uid'];
-                $mrmodel->balance = $ua->available_balance;
-                $mrmodel->in_money = $ord['order_money'];
-                $mrmodel->remark = '项目满标,冻结金额转入理财金额账户。交易金额'.$ord['order_money'];
-                $mrmodel->save();//创建一个资金记录
+                //查询标的成功的投资记录
+                $orders = $loan->successOrders;
+                foreach ($orders as $order) {
+                    //3）更新每个投资者账户的理财资产（+）及冻结金额（-）
+                    $updateAccountSql = "update user_account set investment_balance = investment_balance + :investmentBalance, freeze_balance = freeze_balance - :freezeBalance where type = 1 and uid = :uid";
+                    $affectAccountRows = $db->createCommand($updateAccountSql, [
+                        'investmentBalance' => $order->order_money,
+                        'freezeBalance' => $order->paymentAmount,
+                        'uid' => $order->uid,
+                    ])->execute();
+                    if (0 === $affectAccountRows) {
+                        throw new \Exception('更新账户理财资产及冻结金额失败：募集中 到 满标');
+                    }
+
+                    //4）创建满标资金流水 type = 7
+                    $ua = UserAccount::findOne(['type' => UserAccount::TYPE_LEND, 'uid' => $order->uid]);
+                    $moneyRecord = new MoneyRecord();
+                    $moneyRecord->account_id = $ua->id;
+                    $moneyRecord->sn = TxUtils::generateSn('MR');
+                    $moneyRecord->type = MoneyRecord::TYPE_FULL_TX;
+                    $moneyRecord->osn = $order->sn;
+                    $moneyRecord->uid = $order->uid;
+                    $moneyRecord->balance = $ua->available_balance;
+                    $moneyRecord->in_money = $order->order_money;
+                    $moneyRecord->remark = '项目满标,冻结金额转入理财金额账户。交易金额' . $order->order_money;
+                    $moneyRecord->save(false);
+                }
+                $transaction->commit();
+            } catch (\Exception $ex) {
+                $transaction->rollBack();
+                throw $ex;
             }
 
-            OrderManager::findInvalidOrders($dat);
+            //5）超投部分-撤标逻辑（暂时不动）
+            OrderManager::findInvalidOrders($loan);
         }
     }
+
+    private function existOtherRecommendLoan($loanId)
+    {
+        return null !== OnlineProduct::find()
+            ->where(['isPrivate' => 0, 'del_status' => 0])
+            ->andFilterWhere(['>', 'recommendTime', 0])
+            ->andWhere(['<>', 'id', $loanId])
+            ->one();
+    }
+
     /**
      * 定时 修改预告期为募集期
      */
