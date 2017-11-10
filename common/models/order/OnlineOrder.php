@@ -6,6 +6,7 @@ use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\epay\EpayUser;
 use common\models\product\OnlineProduct;
+use common\models\product\RateSteps;
 use common\models\product\RepaymentHelper;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
@@ -443,5 +444,38 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
         }
 
         return $profit;
+    }
+
+    /**
+     * 根据投资金额计算预计收益(注:只根据投资金额)
+     * @param $product , $amount
+     */
+    static function revenue($product, $amount)
+    {
+        if (is_null($product)) {
+            throw new \Exception('数据未找到');
+        }
+        if ($amount <= 0) {
+            throw new \Exception('投资金额异常');
+        }
+        $duration = $product->getDuration();
+        $expires = $duration['value'];
+        $realRate = null;
+        if (1 === $product->isFlexRate && !empty($product->rateSteps)) {
+            $config = RateSteps::parse($product->rateSteps);
+            if (!empty($config)) {
+                $rate = RateSteps::getRateForAmount($config, $amount);
+                if (false !== $rate) {
+                    $realRate = bcdiv($rate, 100, 6);
+                }
+            }
+        }
+        if (is_null($realRate)) {
+            $realRate = $product->yield_rate;
+        }
+
+        $expectProfit = OnlineProduct::calcExpectProfit($amount, $product->refund_method, $expires, $realRate);
+        return $expectProfit;
+
     }
 }

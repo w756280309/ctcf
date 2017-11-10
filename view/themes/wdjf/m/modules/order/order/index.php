@@ -118,7 +118,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
                    placeholder="请输入投资金额" class="col-xs-6 safe-lf text-align-lf" step="any" autocomplete="off">
             <div class="col-xs-2 safe-txt">元</div>
         </div>
-        <?php if ($deal->allowUseCoupon) { ?>
+        <?php if ($deal->allowUseCoupon || $deal->allowRateCoupon) { ?>
             <input name="couponConfirm" id="couponConfirm" type="text" value="" hidden="hidden">
             <div class="row sm-height border-bottom" id="coupon">
                 <?php if ($validCouponCount) { ?>
@@ -489,7 +489,11 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
                             $("#selectedCouponRateday").val(jiaxiDay);
                             $(".coupon-box").hide();
                             $(".produce,.surplus,#orderform").show();
-                            profit($('#money'));
+                            if (data.data.jiaxi > 0 && data.data.yjsy > 0) {
+                                $('.yuqishouyi').html(data.data.yjsy + "元(含加息"+ data.data.jiaxi +"元)");
+                            }
+
+                            //profit($('#money'));
 //                            var profitNow = delcommafy($('.yuqishouyi').text().slice(0, -1));
 //                            var profitNew = Number(profitNow) + Number(data.data.jiaxi);
 //                            $('.yuqishouyi').html(profitNew.toFixed(2) + "元(含加息" + data.data.jiaxi + "元)");

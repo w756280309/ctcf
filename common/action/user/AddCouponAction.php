@@ -4,6 +4,7 @@ namespace common\action\user;
 
 use common\controllers\HelpersTrait;
 use common\models\coupon\UserCoupon;
+use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\product\RepaymentHelper;
 use common\utils\StringUtils;
@@ -116,11 +117,14 @@ class AddCouponAction extends Action
             }
             $total = 0;
             $jiaxi = 0;
+            $yjsy = 0;
             foreach ($couponIds as $v) {
                 $coupon_end = UserCoupon::findOne($v);
                 if ($coupon_end->couponType->type) {
                     $total = $coupon_end->couponType->bonusRate;
                     $jiaxi = RepaymentHelper::calcBonusProfit($money, $coupon_end->couponType->bonusRate/100, $coupon_end->couponType->bonusDays);
+                    $product = OnlineProduct::find()->where(['sn' => $sn])->one();
+                    $yjsy = bcadd(OnlineOrder::revenue($product, $money), $jiaxi, 2);
                 } else {
                     $total = bcadd($coupon_end->couponType->amount, $total, 2);
                 }
@@ -131,6 +135,7 @@ class AddCouponAction extends Action
                 'money' => $total,
                 'coupons' => $couponIds,
                 'jiaxi' => $jiaxi,
+                'yjsy' => $yjsy
             ];
             Yii::$app->session->set('loan_coupon', ['rand' => $session['rand'], 'couponId' => $couponIds, 'money' => $money]);
 
