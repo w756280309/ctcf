@@ -53,11 +53,12 @@ class DealcrontabController extends Controller
             $transaction = $db->beginTransaction();
             try {
                 //2）更新标的状态 募集中状态 "2" 到 满标 "3"
-                $updateLoanStatusSql = "update online_product set status = :status,recommendTime = :recommendTime where status = 2 and id = :id";
+                $updateLoanStatusSql = "update online_product set status = :status,recommendTime = :recommendTime,sort=:fullSort where status = 2 and id = :id";
                 $affectRows = $db->createCommand($updateLoanStatusSql, [
                     'status' => OnlineProduct::STATUS_FULL,
                     'recommendTime' => $recommendTime,
                     'id' => $loan->id,
+                    'fullSort' => OnlineProduct::SORT_FULL,
                 ])->execute();
                 if (0 === $affectRows) {
                     $transaction->rollBack();
