@@ -35,4 +35,9 @@ class NormalController extends Controller
     {
         return $this->render('170907');
     }
+
+    public function actionMall1111()
+    {
+        return $this->render('points171111');
+    }
 }
