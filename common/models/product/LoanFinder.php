@@ -37,7 +37,7 @@ class LoanFinder
             ])
             ->andWhere(['<=', 'balance_limit', $balance]);
 
-        if ($balance < 50000) {
+        if ($balance < 49000) {
             $query->andWhere('isLicai=0 or is_xs=1');
             $query->andWhere("NOT((cid = 2) and if(refund_method = 1, expires > 180, expires > 6))");
         }

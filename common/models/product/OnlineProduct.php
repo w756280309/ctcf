@@ -746,7 +746,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             }
         }
 
-        if ($balance < 50000) {
+        if ($balance < 49000) {
             $query->andWhere(['isLicai' => false]);
             $query->andWhere("NOT((cid = 2) and if(refund_method = 1, expires > 180, expires > 6))");
         }
