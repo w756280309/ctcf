@@ -62,7 +62,8 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20170915', ['depe
                     <div class="clear"></div>
                 </div>
                 <div class="text-box password-box">
-                    <input id="pass" class="login-info text-single" name="SignupForm[password]" maxlength="16" type="password" placeholder="请输入6到16位的密码" AUTOCOMPLETE="off">
+                    <input id="pass" class="login-info text-single" name="" maxlength="16" type="password" placeholder="请输入6到16位的密码" AUTOCOMPLETE="off" onfocus="this.type='password'">
+                    <input id="pass2" class="login-info text-single" name="SignupForm[password]" maxlength="16" type="hidden" placeholder="请输入6到16位的密码" AUTOCOMPLETE="off">
                     <a class="eye-choose login-eye password">
                         <img width="26" height="20" alt="eye-close" src="<?= ASSETS_BASE_URI ?>images/eye-close.png">
                     </a>

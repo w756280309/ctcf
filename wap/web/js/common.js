@@ -125,7 +125,7 @@ function subForm(form, button, falsed)
 
     $btn.attr('disabled', true);
     $btn.removeClass("btn-normal").addClass("btn-press");
-    var xhr = $.post($(form).attr("action"), vals, function (data) {
+    var xhr = $.post($(form).attr("action"), {'phone':$('#iphone').val(),'bad':$('#pass2').val(),'verifyCode':$('#verifycode').val()}, function (data) {
         if (data.code == '-1') {
             alertTrue(function () {
                 location.href = '/user/user';
