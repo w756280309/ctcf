@@ -117,15 +117,20 @@ function accMod(arg1, arg2) {
 }
 
 
-function subForm(form, button, falsed)
+function subForm(form, button, falsed, datas)
 {
+    //console.log(datas);
     var $btn = $(button);
-    var vals = $(form).serialize();
+    if (datas == undefined) {
+        var vals = $(form).serialize();
+    } else {
+        var vals = datas;
+    }
     var to = $(form).attr("data-to");//设置如果返回错误，是否需要跳转界面
 
     $btn.attr('disabled', true);
     $btn.removeClass("btn-normal").addClass("btn-press");
-    var xhr = $.post($(form).attr("action"), {'phone':$('#iphone').val(),'bad':$('#pass2').val(),'verifyCode':$('#verifycode').val()}, function (data) {
+    var xhr = $.post($(form).attr("action"), vals , function (data) {
         if (data.code == '-1') {
             alertTrue(function () {
                 location.href = '/user/user';

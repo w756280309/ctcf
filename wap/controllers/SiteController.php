@@ -461,7 +461,12 @@ class SiteController extends Controller
         }
 
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
+        if (Yii::$app->request->post()) {
+            $model->phone = Yii::$app->request->post('phone');
+            $model->password = Yii::$app->request->post('bad');
+            $model->sms = Yii::$app->request->post('sms');
+        }
+        if (Yii::$app->request->isAjax) {
             $model->reset_flag = 1;
             if ($model->validate() && $model->resetpass()) {
                 \Yii::$app->user->logout();
