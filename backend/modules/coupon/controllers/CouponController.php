@@ -382,4 +382,22 @@ class CouponController extends BaseController
 
         return $this->render('owner_list', ['coupon_id' => $id, 'status' => $status, 'dataProvider' => $dataProvider]);
     }
+
+    /**
+     * 删除代金券操作
+     */
+    public function actionDel($id)
+    {
+        $userCoupon = UserCoupon::findOne($id);
+        if (!is_null($userCoupon)) {
+            if ($userCoupon->isUsed == 1 || $userCoupon->expiryDate < date("Y-m-d")) {
+                //echo '此优惠券已无效';
+            } else {
+                $userCoupon->expiryDate = date("Y-m-d",strtotime("-1 day"));
+                if ($userCoupon->save()) {
+                    return $this->redirect('/user/user/detail?id=' . $userCoupon->user_id);
+                }
+            }
+        }
+    }
 }
