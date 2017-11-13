@@ -29,7 +29,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <input id="yzm" class="yzm yzm-normal" name="yzm" value="获取验证码" type="button">
     </div>
     <div class="col-xs-9 col">
-        <input id="pass" class="login-info" name="SignupForm[password]" maxlength="20" type="password"
+        <input id="pass" class="login-info" name="" maxlength="20" type="password"
+               placeholder="请输入6到20位的密码" AUTOCOMPLETE="off" onfocus="this.type='password'">
+        <input id="pass2" class="login-info" name="SignupForm[password]" maxlength="20" type="hidden"
                placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
     </div>
     <div class="col-xs-3 col border-bottom login-eye">
@@ -108,7 +110,11 @@ $this->params['breadcrumbs'][] = $this->title;
             return false;
         }
 
-        subForm("#resetpass_form", "#signup-btn");
+        $('#pass2').val($('#pass').val());
+        $('#pass').val('********');
+        $('#pass').attr('type', 'text');
+        var datas = {'phone':$('#iphone').val(),'bad':$('#pass2').val(),'verifyCode':$('#verifycode').val(),'sms':$('#yanzhengma').val()};
+        subForm("#resetpass_form", "#signup-btn", '', datas);
 
         $("#signup-btn").removeClass("btn-press").addClass("btn-normal");
     }

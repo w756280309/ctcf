@@ -125,7 +125,9 @@ $this->title = '登录';
             $('#pass').val('********');
             $('#pass').attr('type', 'text');
 
-            subForm('#login', '#login-btn', function (data) {
+            var datas = {'phone':$('#iphone').val(),'bad':$('#pass2').val(),'verifyCode':$('#verifycode').val(),'sms':$('#yanzhengma').val()};
+
+            subForm('#login', '#login-btn', '', datas,  function (data) {
                 if (data.code > 0 && data.requiresCaptcha) {
                     if ($('.verify-div-box').hasClass('hide')) {
                         $('.verify-div-box').removeClass('hide');
