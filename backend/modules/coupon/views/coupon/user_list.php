@@ -124,6 +124,15 @@ use yii\grid\GridView;
                 return $data->admin_id ? $data->admin->real_name : '---';
             },
         ],
+        [
+            'label' => '编辑',
+            'format' => 'html',
+            'value' => function ($data) {
+                if (!$data->isUsed && $data->expiryDate > date('Y-m-d')) {
+                    return '<a class="btn btn-primary check-ump-info" href="/coupon/coupon/del?id='.$data->id.'">删除</a>';
+                }
+            }
+        ],
     ],
 ])
 ?>
