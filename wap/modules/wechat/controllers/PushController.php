@@ -105,14 +105,16 @@ class PushController extends Controller
         if (is_null(UserAffiliation::findOne(['user_id' => $user->id]))) {
             $redis = Yii::$app->redis;
             $affiliator_id = $redis->hget('wechat-push', $openId);
-            $affiliator = Affiliator::findOne($affiliator_id);
-            $affiliate_cam = AffiliateCampaign::findOne(['affiliator_id' => $affiliator->id]);
-            $model = new UserAffiliation();
-            $model->user_id = $user->id;
-            $model->trackCode = $affiliate_cam->trackCode;
-            $model->affiliator_id = $affiliator->id;
-            if ($model->save()) {
-                $redis->hdel('wechat-push', $openId);
+            if ($affiliator_id) {
+                $affiliator = Affiliator::findOne($affiliator_id);
+                $affiliate_cam = AffiliateCampaign::findOne(['affiliator_id' => $affiliator->id]);
+                $model = new UserAffiliation();
+                $model->user_id = $user->id;
+                $model->trackCode = $affiliate_cam->trackCode;
+                $model->affiliator_id = $affiliator->id;
+                if ($model->save()) {
+                    $redis->hdel('wechat-push', $openId);
+                }
             }
         } else {
             //throw new \Exception('用户[$user->id]已经绑定渠道');

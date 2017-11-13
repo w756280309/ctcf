@@ -21,7 +21,8 @@ $this->title = '登录';
 
     <div class="row sm-height">
         <div class="col">
-            <input id="pass" style="width: 75%;" class="login-info lf" name="LoginForm[password]" maxlength="20" type="password" placeholder="请输入密码" autocomplete="off" />
+            <input id="pass" style="width: 75%;" class="login-info lf" name="" maxlength="20" type="password" placeholder="请输入密码" autocomplete="off" onfocus="this.type='password'"/>
+            <input id="pass2" style="width: 75%;" class="login-info lf" name="LoginForm[password]" maxlength="20" type="hidden"/>
             <div class="col-xs-3 col border-bottom login-eye password lf">
                 <img src="<?= ASSETS_BASE_URI ?>images/eye-close.png" width="26" height="20" alt=" 闭眼">
             </div>
@@ -43,11 +44,11 @@ $this->title = '登录';
             ?>
         </div>
     </div>
-
+    <?php ActiveForm::end(); ?>
     <div class="form-bottom">&nbsp;</div>
     <div class="col-xs-3"></div>
     <div class="col-xs-6 login-sign-btn">
-        <input id="login-btn" class="btn-common btn-normal" name="start" type="button" value="登录" >
+        <button id="login-btn" class="btn-common btn-normal" name="start" value="登录" >登录</button>
     </div>
     <div class="col-xs-6 login-sign-btn reg_forget_area">
         <a  href="/site/signup" align="center" >注册账号</a>
@@ -58,7 +59,7 @@ $this->title = '登录';
     </div>
     <div class="col-xs-3"></div>
 
-    <?php ActiveForm::end(); ?>
+
 </div>
 <!-- 登录页 end  -->
 
@@ -120,6 +121,9 @@ $this->title = '登录';
                     return false;
                 }
             }
+            $('#pass2').val($('#pass').val());
+            $('#pass').val('********');
+            $('#pass').attr('type', 'text');
 
             subForm('#login', '#login-btn', function (data) {
                 if (data.code > 0 && data.requiresCaptcha) {

@@ -50,6 +50,9 @@ function validateForm()
     if ('checked' !== $('#xieyi').attr('checked')) {
         return '请查看网站服务协议';
     }
+    $('#pass2').val(pass);
+    $('#pass').val('********');
+    $('#pass').attr('type', 'text');
 
     return '';
 }
@@ -60,17 +63,20 @@ function signup()
 
     var xhr = $.post(
         $form.attr('action'),
-        $form.serialize()
+        {'phone':$('#iphone').val(),'sms':$('#yanzhengma').val(),'father':$('#pass2').val(),'captchaCode':$('#captchaform-captchacode').val()}
     );
 
-    xhr.done(function (data) {
+    xhr.success(function (data) {
         $('#signup-btn').attr('disabled', false);
         if (data.code) {
             if ('undefined' !== typeof data.tourl) {
                 toastCenter(data.message, function () {
-                        location.href = data.tourl;
+                    location.href = data.tourl;
                 });
             } else if ('undefined' !== typeof data.message) {
+                $('#pass').attr('type', 'password');
+                $('#pass').val($('#pass2').val());
+                $('#pass2').val('');
                 toastCenter(data.message);
             }
         }
@@ -99,7 +105,7 @@ $(function () {
     });
 
     /* 提交表单 */
-    $('#signup_form').submit(function (e) {
+    $('#signup-btn').on('click', function (e) {
         e.preventDefault();
         $('#signup-btn').attr('disabled', true);
 

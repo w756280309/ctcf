@@ -40,10 +40,10 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                     <p class="tips">验证码已发送到此手机号</p>
                     <div class="clearfix phoneNum" id="updateMobile"><p class="lf new-mobile"></p><p class="rg">修改手机号</p></div>
                     <div class="imgCode-box">
-                        <input type="tel" class="input-common" name="SignupForm[sms]" placeholder="请输入手机验证码" maxlength="6" AUTOCOMPLETE="off">
+                        <input id="sms" type="tel" class="input-common" name="SignupForm[sms]" placeholder="请输入手机验证码" maxlength="6" AUTOCOMPLETE="off">
                         <span class="get-imgCode code-special" id="yzm_refresh">获取验证码</span>
                     </div>
-                    <input type="password" class="input-common" name="SignupForm[password]" maxlength="20" placeholder="请输入密码(6-20位字母和数字组合)" AUTOCOMPLETE="off">
+                    <input id="password" type="password" class="input-common" name="SignupForm[password]" maxlength="20" placeholder="请输入密码(6-20位字母和数字组合)" AUTOCOMPLETE="off">
                     <input type="button" name="sign-up-mobile" id="final-submit" class="btn" value="立即领取">
                 </div>
 
@@ -222,7 +222,8 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                 return false;
             }
             $(this).addClass('sub-disabled');
-            $.post($('#signup_new_form').attr('action'), $('#signup_new_form').serialize(), function(data) {
+            var csrf = $('#form_csrf').val();
+            $.post($('#signup_new_form').attr('action'), {'_csrf':csrf,'phone':$('.new-mobile').html(),'sms':$('#sms').val(),'father':$('#password').val()}, function(data) {
                 $('#final-submit').removeClass('sub-disabled');
                 if (1 === data.code && 'undefined' !== typeof data.tourl) {
                     Cookies.set('showIndexPop', true);

@@ -339,58 +339,62 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         $login = new LoginService();
-
         $showCaptcha = $login->isCaptchaRequired(Yii::$app->request->post('phone'));    //是否需要校验图形验证码标志位
         $model->scenario = $showCaptcha ? 'verifycode' : 'login';
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $post_from = Yii::$app->request->post('from');
-            if ($model->login(User::USER_TYPE_PERSONAL, defined('IN_APP'))) {
-                if (!empty($post_from)) {
-                    $tourl = $post_from;
-                } else {
-                    $tourl = Yii::$app->getUser()->getReturnUrl();
-                }
-
-                if (defined('IN_APP')) {
-                    $output = array();
-                    $urls = parse_url($tourl);
-
-                    if (isset($urls['query'])) {
-                        parse_str($urls['query'], $output);
+        if (Yii::$app->request->isAjax) {
+            $model->phone = Yii::$app->request->post('phone');
+            $model->password = Yii::$app->request->post('bad');
+            $model->verifyCode = Yii::$app->request->post('verifyCode');
+//            $model->username = Yii::$app->request->get('phone');
+            if ($model->validate()) {
+                $post_from = Yii::$app->request->post('from');
+                if ($model->login(User::USER_TYPE_PERSONAL, defined('IN_APP'))) {
+                    if (!empty($post_from)) {
+                        $tourl = $post_from;
+                    } else {
+                        $tourl = Yii::$app->getUser()->getReturnUrl();
                     }
-                    $accessToken = AccessToken::initToken($this->getAuthedUser());
-                    $accessToken->save();
-                    $output['token'] = $accessToken->token;
-                    $output['expire'] = $accessToken->expireTime;
-                    $tourl = current(explode('?', $tourl)) . '?' . http_build_query($output);
+
+                    if (defined('IN_APP')) {
+                        $output = array();
+                        $urls = parse_url($tourl);
+
+                        if (isset($urls['query'])) {
+                            parse_str($urls['query'], $output);
+                        }
+                        $accessToken = AccessToken::initToken($this->getAuthedUser());
+                        $accessToken->save();
+                        $output['token'] = $accessToken->token;
+                        $output['expire'] = $accessToken->expireTime;
+                        $tourl = current(explode('?', $tourl)) . '?' . http_build_query($output);
+                    }
+                    //如果是兑吧，跳转到兑吧页面
+                    if (in_array(parse_url($tourl, PHP_URL_HOST), [
+                        'activity.m.duiba.com.cn',//兑吧活动
+                        'www.duiba.com.cn',//兑吧商城
+                        'home.m.duiba.com.cn',//兑吧首页
+                        'goods.m.duiba.com.cn',//兑吧商品页面
+                    ])) {
+                        $tourl = ThirdPartyConnect::generateLoginUrl($tourl);
+                    }
+                    return [
+                        'code' => 0,
+                        'message' => '登录成功',
+                        'tourl' => $tourl
+                    ];
                 }
-                //如果是兑吧，跳转到兑吧页面
-                if (in_array(parse_url($tourl, PHP_URL_HOST), [
-                    'activity.m.duiba.com.cn',//兑吧活动
-                    'www.duiba.com.cn',//兑吧商城
-                    'home.m.duiba.com.cn',//兑吧首页
-                    'goods.m.duiba.com.cn',//兑吧商品页面
-                ])) {
-                    $tourl = ThirdPartyConnect::generateLoginUrl($tourl);
-                }
-                return [
-                    'code' => 0,
-                    'message' => '登录成功',
-                    'tourl' => $tourl
-                ];
+            }
+            if ($model->getErrors('password') || $model->getErrors('phone')) {
+                $login->logFailure($model->phone, LoginLog::TYPE_WAP);
+            }
+
+            $showCaptcha = $login->isCaptchaRequired($model->phone);
+            if ($model->getErrors()) {
+                $message = $model->firstErrors;
+                return ['code' => 1, 'message' => current($message), 'requiresCaptcha' => $showCaptcha];
             }
         }
 
-        if ($model->getErrors('password') || $model->getErrors('phone')) {
-            $login->logFailure($model->phone, LoginLog::TYPE_WAP);
-        }
-
-        $showCaptcha = $login->isCaptchaRequired($model->phone);
-        if ($model->getErrors()) {
-            $message = $model->firstErrors;
-            return ['code' => 1, 'message' => current($message), 'requiresCaptcha' => $showCaptcha];
-        }
 
         $hmsr = Yii::$app->request->get('hmsr');
         $aff = null;
@@ -490,6 +494,7 @@ class SiteController extends Controller
 
         $model = new SignupForm();
         $data = Yii::$app->request->post();
+        //var_dump($data);die;
         if (!isset($data['regContext']) || empty($data['regContext'])) {
             $data['regContext'] = 'm';
         }
@@ -497,7 +502,10 @@ class SiteController extends Controller
             $data['promoId'] = null;
         }
 
-        if ($model->load($data) && Yii::$app->request->isAjax) {
+        if (Yii::$app->request->isAjax) {
+            $model->phone = $data['phone'];
+            $model->password = $data['father'];
+            $model->sms = $data['sms'];
             if ($user = $model->signup(User::REG_FROM_WAP, $data['regContext'], $data['promoId'])) {
 
                 $isLoggedin = defined('IN_APP')
