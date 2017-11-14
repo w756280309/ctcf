@@ -25,6 +25,9 @@ class DatatjController extends Controller
         $annualInvestment = Perf::getAnnualInvestment();
         $usableMoney = Perf::getUsableMoney();
 
+        //平台累计对付金额及客户累计收益
+        $statsData = Perf::getStatsForIndex();
+
         //代金券统计
         $totalCoupon = Perf::getCoupon();
         $usedCoupon = Perf::getCoupon(1);
@@ -36,6 +39,7 @@ class DatatjController extends Controller
  GROUP BY f ORDER BY f ASC")->queryAll();//不同来源的购买人数、购买金额
         //平台累计已还清项目数
         $onlineProPay = OnlineProduct::find()->where(['status' => 6, 'isTest' => false, 'del_status' => false])->count();
+
         $fileData = [
             'totalOnlineInve' => $total['onlineInvestment'] + $today['onlineInvestment'],//线上累计投资金额
             'totalOfflineInve' => $total['offlineInvestment'] + $today['offlineInvestment'],//线下累计投资金额
@@ -52,6 +56,8 @@ class DatatjController extends Controller
             'todayOnlineInvestment' => $today['onlineInvestment'],//今日线上交易额
             'toadyRechargeCost' => $today['rechargeCost'],//今日充值手续费
             'todayRechargeMoney' => $today['rechargeMoney'],//今日充值金额
+            'totalRefundAmount' => $statsData['totalRefundAmount'],  //平台累计兑付金额
+            'totalRefundInterest' => $statsData['totalRefundInterest'], //平台累计收益
             'todayDraw' => $today['draw'],//今日体现
             'todayReg' => $today['reg'],//今日注册
             'todayIdVerified' => $today['idVerified'],//今日实名认证

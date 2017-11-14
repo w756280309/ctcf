@@ -60,6 +60,10 @@ CSS
         <div class="span4">今日充值手续费：<?= number_format($toadyRechargeCost, 2) ?>元</div>
     </div>
     <div class="row-fluid">
+        <div class="span4">平台累计兑付金额：<?= number_format($totalRefundAmount, 2) ?>元</div>
+        <div class="span4">平台累计收益金额：<?= number_format($totalRefundInterest, 2) ?>元</div>
+    </div>
+    <div class="row-fluid">
         <?php if($investorData) {
             foreach ($investorData as $k => $v) {
                 $from = intval($v['f']);
