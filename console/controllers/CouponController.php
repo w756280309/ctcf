@@ -12,17 +12,21 @@ use common\models\user\User;
 use common\models\coupon\CouponType;
 use common\models\user\UserInfo;
 use common\service\SmsService;
+use common\service\WDSmsService;
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use Yii;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
 
 class CouponController extends Controller
 {
     /**
      * 给即将过期的代金券发送过期短信提醒.
+     * 当前为3天(若今天为周一，则提示有效期到周三的)
      *
-     * @param int $expireDay 离现在为止即将过期的天数(若今天为周一，则提示有效期到周三的)
+     * @param int $expireDay 离现在为止即将过期的天数
      *
      * @throws \Exception
      */
@@ -30,49 +34,66 @@ class CouponController extends Controller
     {
         $u = User::tableName();
         $ct = CouponType::tableName();
-        $contactTel = \Yii::$app->params['platform_info.contact_tel'];
+        $contactTel = Yii::$app->params['platform_info.contact_tel'];
         $expiryDate = date('Y-m-d', strtotime('+' . ($expireDay - 1) . 'days'));
 
         $userCoupons = UserCoupon::find()
             ->innerJoin($ct, "couponType_id = $ct.id")
             ->innerJoin($u, "user_id = $u.id")
             ->where(['isUsed' => 0, "$ct.isDisabled" => 0, 'expiryDate' => $expiryDate])
-            ->orderBy(['user_id' => SORT_DESC, 'amount' => SORT_DESC])
             ->all();
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            if (!empty($userCoupons)) {
-                $lastUserId = 0;
-                $count = 0;
+
+        if (!empty($userCoupons)) {
+            $peopleCount = 0;
+            $groupUserCoupons = ArrayHelper::index($userCoupons, null, 'user_id');
+            $wodong = new WDSmsService();
+            foreach ($groupUserCoupons as $userId => $userCoupons) {
+                $user = User::findOne($userId);
+                $num = 0;
+                $amount = 0;
+                $peopleCount++;
+                $includedBonus = false;
                 foreach ($userCoupons as $userCoupon) {
-                    $user_id = $userCoupon->user->id;
-                    if ($user_id !== $lastUserId) {
-                        $message = [
-                            StringUtils::amountFormat2($userCoupon->couponType->amount) . '元',
-                            'https://m.wenjf.com/',
-                            $contactTel,
-                        ];
-
-                        //发送短信
-                        SmsService::send($userCoupon->user->getMobile(), 155508, $message, $userCoupon->user);
-
-                        $count++;
-                        $lastUserId = $user_id;
+                    $num++;
+                    $couponType = $userCoupon->couponType;
+                    if (0 === $couponType->type) {
+                        $amount = bcadd($amount, $couponType->amount, 2);
                     } else {
-                        continue;
+                        $includedBonus = true;
                     }
                 }
-                $transaction->commit();
-                $this->stdout('共给' . $count . '人发出代金券过期提醒!', Console::BG_YELLOW);
+                if ($includedBonus) {
+                    $param1 = $num.'张';
+                } else {
+                    $param1 = '共计'.StringUtils::amountFormat2($amount).'元';
+                }
 
-                return Controller::EXIT_CODE_NORMAL;
+                //沃动短信通道
+                $mobile = SecurityUtils::decrypt($user->safeMobile);
+                $templateContent = '【温都金服】尊敬的客户您好，您有{1}优惠券即将过期，请尽快使用，地址{2}，如有疑问请致电{3}，回复TD退订';
+                $templateMessage = [
+                    $param1,
+                    'https://m.wenjf.com/',
+                    $contactTel,
+                ];
+                $templateParam = [
+                    '{1}',
+                    '{2}',
+                    '{3}',
+                ];
+                $content = str_replace($templateParam, $templateMessage, $templateContent);
+
+                $res = $wodong->send($mobile, $content);
+                if (!$res) {
+                    throw new \Exception('给手机号为'.$mobile.'发送短信内容【'.$content.'】失败');
+                }
+                usleep(500000);
             }
-            $this->stdout('当前没有需要代金券过期提醒的用户!', Console::BG_YELLOW);
-            return Controller::EXIT_CODE_ERROR;
-        } catch(\Exception $ex) {
-            $transaction->rollBack();
-            throw new \Exception($ex->getMessage());
+            $this->stdout('共给' . $peopleCount . '人发出代金券过期提醒!', Console::BG_YELLOW);
+            return Controller::EXIT_CODE_NORMAL;
         }
+        $this->stdout('当前没有需要代金券过期提醒的用户!', Console::BG_YELLOW);
+        return Controller::EXIT_CODE_ERROR;
     }
 
     /**
