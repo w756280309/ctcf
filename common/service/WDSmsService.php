@@ -30,11 +30,11 @@ class WDSmsService
 
     public function send($mobile, $content)
     {
-        $black_mobile = explode(',', Yii::$app->params['NoSendSms']);
-        if (in_array($mobile, $black_mobile)) {
-            Yii::info('黑名单用户：' . $mobile);
-            return true;
+
+        if (!$this->canSend($mobile)) {
+            return false;
         }
+
         $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($mobile)]);
         if (!is_null($user)) {
             $smsMessage = SmsMessage::initSms($user, ['content' => $content], 'wodong', SmsMessage::LEVEL_MIDDLE);
@@ -54,12 +54,31 @@ class WDSmsService
                 $smsMessage->status = SmsMessage::STATUS_SENT;
                 $smsMessage->save();
                 return true;
-            } else {
-                return false;
             }
-        } else {
+        }
+
+        return false;
+    }
+
+    /**
+     * 判断一个手机号是否可以发送 黑白名单
+     *
+     * @param $mobile
+     *
+     * @return bool
+     */
+    private function canSend($mobile)
+    {
+        //判断黑名单
+        $black_mobile = explode(',', Yii::$app->params['NoSendSms']);
+        if (in_array($mobile, $black_mobile)) {
+            Yii::info('黑名单用户：' . $mobile);
             return false;
         }
 
+        //判断白名单
+        $smsWhiteList = Yii::$app->params['sms_white_list'];
+
+        return !(Yii::$app->params['mock_sms'] && !in_array($mobile, $smsWhiteList));
     }
 }
