@@ -145,18 +145,18 @@ use yii\grid\GridView;
                 ],
                 [
                     'attribute' => 'newRegisterAndInvestor',
-                    'label' => '当日注册当日投资人数',
+                    'label' => '新客新投人数',
                     'format' => 'html',
                     'value' => function ($data) {
-                        return '<a href="/datatj/datatj/list?type=month&field=newRegisterAndInvestor&date=' . date('Y-m', strtotime($data['bizDate'])) . '&result=' . intval($data['newRegisterAndInvestor']) . '">' . intval($data['newRegisterAndInvestor']) . '</a>';
+                        return '<a title="当日注册当日投资人数" href="/datatj/datatj/list?type=month&field=newRegisterAndInvestor&date=' . date('Y-m', strtotime($data['bizDate'])) . '&result=' . intval($data['newRegisterAndInvestor']) . '">' . intval($data['newRegisterAndInvestor']) . '</a>';
                     }
                 ],
                 [
                     'attribute' => 'newInvestor',
-                    'label' => '非当月注册于当月投资新增人数',
+                    'label' => '老客新投人数',
                     'format' => 'html',
                     'value' => function ($data) {
-                        return '<a href="/datatj/datatj/list?type=month&field=newInvestor&date=' . date('Y-m', strtotime($data['bizDate'])) . '&result=' . intval($data['newInvestor']) . '">' . intval($data['newInvestor']) . '</a>';
+                        return '<a title="非当月注册于当月投资新增人数" href="/datatj/datatj/list?type=month&field=newInvestor&date=' . date('Y-m', strtotime($data['bizDate'])) . '&result=' . intval($data['newInvestor']) . '">' . intval($data['newInvestor']) . '</a>';
                     }
                 ],
                 [

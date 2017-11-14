@@ -99,8 +99,8 @@ CSS
     </div>
     <div class="row-fluid">
         <div class="span4">平台今日绑卡用户数：<?= intval($qpayEnabled) ?>人</div>
-        <div class="span4">平台非今日注册于今日投资新增人数：<?= intval($newInvestor) ?>人</div>
-        <div class="span4">平台当日注册当日投资人数：<?= intval($newRegisterAndInvestor) ?>人</div>
+        <div class="span4">老客新投人数：<a title="平台非今日注册于今日投资新增人数" href="#"><?= intval($newInvestor) ?></a>人</div>
+        <div class="span4">新客新投人数：<a title="平台当日注册当日投资人数" href="#"><?= intval($newRegisterAndInvestor) ?></a>人</div>
     </div>
     <div class="row-fluid">
         <div class="span4">平台今日已投用户登录数：<?= intval($investAndLogin) ?>人</div>

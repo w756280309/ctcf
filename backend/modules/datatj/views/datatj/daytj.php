@@ -139,7 +139,7 @@ use yii\grid\GridView;
                 ],
                 [
                     'attribute' => 'newRegisterAndInvestor',
-                    'label' => '?',
+                    'label' => '新客新投人数',
                     'format' => 'html',
                     'value' => function ($data) {
                         return '<a title="当日注册当日投资人数" href="/datatj/datatj/list?type=day&field=newRegisterAndInvestor&date=' . $data['bizDate'] . '&result=' . intval($data['newRegisterAndInvestor']) . '">' . intval($data['newRegisterAndInvestor']) . '</a>';
@@ -147,7 +147,7 @@ use yii\grid\GridView;
                 ],
                 [
                     'attribute' => 'newInvestor',
-                    'label' => '?',
+                    'label' => '老客新投人数',
                     'format' => 'html',
                     'value' => function ($data) {
                         return '<a title="非今日注册于今日投资新增人数" href="/datatj/datatj/list?type=day&field=newInvestor&date=' . $data['bizDate'] . '&result=' . intval($data['newInvestor']) . '">' . intval($data['newInvestor']) . '</a>';
