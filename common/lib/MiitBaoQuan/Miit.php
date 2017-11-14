@@ -130,7 +130,6 @@ class Miit
             $model->preservationTime = str_pad($signTime, 13, '0');
             $model->save();
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
             \Yii::trace('保权失败,订单ID:'.$order_id.';失败信息'.$e->getMessage());
             throw $e;
         }
