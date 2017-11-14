@@ -179,6 +179,7 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
         }
         $real_name = '';
         $idCard = '';
+        $userName = '';
         $date = "年月日";
         $money = "";
         if (null !== $onlineOrder) {
@@ -186,7 +187,8 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
             $money = $onlineOrder->order_money;
             if (null !== $user) {
                 $real_name = $user->real_name;
-                $idCard = SecurityUtils::decrypt($user->safeIdCard);
+                $idCard = $user->getIdcard();
+                $userName = $user->getMobile();
             }
         }
         $res = preg_match_all('/(\｛|\{){2}(.+?)(\｝|\}){2}/is', $content, $array);
@@ -198,6 +200,9 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
                         break;
                     case '身份证号':
                         $content = str_replace($array[0][$key], $idCard, $content);
+                        break;
+                    case '用户名':
+                        $content = str_replace($array[0][$key], $userName, $content);
                         break;
                     case '认购日期':
                         $content = str_replace($array[0][$key], $date, $content);

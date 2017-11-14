@@ -44,8 +44,8 @@ class BaoQuanController extends Controller
             ->where(['status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN_ORDER])
             ->orderBy(['id' => SORT_ASC])
             ->limit(10)
-            ->orderBy(['id' => SORT_ASC])
             ->all();
+
         if (count($queues) > 0) {
             $this->dealLoanOrderBaoQuan($queues);
         }

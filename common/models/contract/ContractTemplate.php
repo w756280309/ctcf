@@ -74,18 +74,22 @@ class ContractTemplate extends \yii\db\ActiveRecord
         if (null === $ord) {
             $temp->content = preg_replace("/{{投资人}}/is", "", $temp->content);
             $temp->content = preg_replace("/{{身份证号}}/is", "", $temp->content);
+            $temp->content = preg_replace("/{{用户名}}/is", "", $temp->content);
             $temp->content = preg_replace("/{{认购日期}}/is", "年月日", $temp->content);
             $temp->content = preg_replace("/{{认购金额}}/is", "", $temp->content);
             $temp->content = preg_replace("/｛｛投资人｝｝/is", "", $temp->content);
             $temp->content = preg_replace("/｛｛身份证号｝｝/is", "", $temp->content);
+            $temp->content = preg_replace("/｛｛用户名｝｝/is", "", $temp->content);
             $temp->content = preg_replace("/｛｛认购日期｝｝/is", "年月日", $temp->content);
             $temp->content = preg_replace("/｛｛认购金额｝｝/is", "", $temp->content);
         } else {
             $temp->content = preg_replace("/{{投资人}}/is", $ord->user->real_name, $temp->content);
             $temp->content = preg_replace("/{{身份证号}}/is", $ord->user->idcard, $temp->content);
+            $temp->content = preg_replace("/{{用户名}}/is", $ord->user->getMobile(), $temp->content);
             $temp->content = preg_replace("/{{认购日期}}/is", date("Y年m月d日", $ord->order_time), $temp->content);
             $temp->content = preg_replace("/{{认购金额}}/is", $ord->order_money, $temp->content);
             $temp->content = preg_replace("/｛｛投资人｝｝/is", $ord->user->real_name, $temp->content);
+            $temp->content = preg_replace("/｛｛用户名｝｝/is", $ord->user->getMobile(), $temp->content);
             $temp->content = preg_replace("/｛｛身份证号｝｝/is", $ord->user->idcard, $temp->content);
             $temp->content = preg_replace("/｛｛认购日期｝｝/is", date("Y年m月d日", $ord->order_time), $temp->content);
             $temp->content = preg_replace("/｛｛认购金额｝｝/is", $ord->order_money, $temp->content);

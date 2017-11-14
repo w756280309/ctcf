@@ -8,7 +8,7 @@
 
 <?php if (isset($bq)) { ?>
     <div class="bao_quan_button">
-        <?php if ($miitBQ) : ?>
+        <?php if (isset($miitBQ) && $miitBQ) : ?>
             <button class="btn btn-primary" style="margin-bottom: 5%" onclick="window.location = '<?= $miitBQ ?>'">国家电子合同</button>
         <?php endif; ?>
         <?php if (isset($bq['downUrl'])) : ?>

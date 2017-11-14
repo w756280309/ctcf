@@ -150,7 +150,8 @@ trait ContractTrait
                 $user['idcard'],
                 $orderTime,
                 $amount,
-                $loanOrder->loan);
+                $loanOrder->loan,
+                $user->getMobile());
 
             $loanContract[$key]  = ['title' => $title, 'content' => $content, 'type' => 'loan'];
         }
@@ -187,7 +188,7 @@ trait ContractTrait
         return ['loanContract' => $loanContract, 'loanAmount' => $loanAmount, 'bqLoan' => $bqLoan];
     }
 
-    private function loadLoanContract($content ,$userName, $idCard, $orderTime, $amount, OnlineProduct $loan)
+    private function loadLoanContract($content ,$userName, $idCard, $orderTime, $amount, OnlineProduct $loan, $mobile)
     {
         $subSn = $loan->getSubSn();
         $fullTime = $loan->full_time ? date("Y年m月d日", $loan->full_time) : '';
@@ -196,6 +197,7 @@ trait ContractTrait
 
         $content = preg_replace("/{{投资人}}/is", $userName, $content);
         $content = preg_replace("/{{身份证号}}/is", $idCard, $content);
+        $content = preg_replace("/{{用户名}}/is", $mobile, $content);
         $content = preg_replace("/{{认购日期}}/is", date("Y年m月d日", $orderTime), $content);
         $content = preg_replace("/{{认购金额}}/is", $amount, $content);
         $content = preg_replace("/{{产品子类序号}}/is", $subSn, $content);
@@ -204,6 +206,7 @@ trait ContractTrait
         $content = preg_replace("/{{产品到期日}}/is", $finishDate, $content);
         $content = preg_replace("/｛｛投资人｝｝/is", $userName, $content);
         $content = preg_replace("/｛｛身份证号｝｝/is", $idCard, $content);
+        $content = preg_replace("/{{用户名}}/is", $mobile, $content);
         $content = preg_replace("/｛｛认购日期｝｝/is", date("Y年m月d日", $orderTime), $content);
         $content = preg_replace("/｛｛认购金额｝｝/is", $amount, $content);
         $content = preg_replace("/｛｛产品子类序号｝｝/is", $subSn, $content);

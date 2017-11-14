@@ -601,8 +601,8 @@ TPL;
         <?php
             if ($ctmodel && !$model->hasErrors()) {
                 echo CfcaUtils::renderXml($tpl, [
-                    'contentName' => '认购协议标题',
-                    'contentDetail' => '认购协议内容',
+                    'contentName' => '定向委托投资管理协议标题',
+                    'contentDetail' => '定向委托投资管理协议内容',
                     'name' => $ctmodel[0]['name'],
                     'content' => $ctmodel[0]['content'],
                 ]);
@@ -624,8 +624,8 @@ TPL;
                 }
             } else {
                 echo CfcaUtils::renderXml($tpl, [
-                    'contentName' => '认购协议标题',
-                    'contentDetail' => '认购协议内容',
+                    'contentName' => '定向委托投资管理协议标题',
+                    'contentDetail' => '定向委托投资管理协议内容',
                     'name' => $con_name_arr[0],
                     'content' => $con_content_arr[0],
                 ]);
