@@ -22,9 +22,9 @@ $this->registerJs('forceReload_V2();');
 	    <div class="swiper-container">
 		    <div class="swiper-wrapper">
 			    <div class="swiper-slide swiper-one">
-				    <p class="line-one">{{qishu}}期</p>
+				    <p class="line-one" v-cloak>{{qishu}}期</p>
 				    <p class="line-two">一等奖中奖用户</p>
-				    <p class="line-three">{{userMobile}}</p>
+				    <p class="line-three" v-cloak>{{userMobile}}</p>
 			    </div>
 			    <div class="swiper-slide swiper-two">
 				    <p class="line-one">点亮卡牌赢大奖</p>
