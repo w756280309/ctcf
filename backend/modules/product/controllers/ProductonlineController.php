@@ -84,10 +84,6 @@ class ProductonlineController extends BaseController
             throw new \Exception('合同协议至少要输入一份');
         }
 
-        if (false === strpos($param['title'][0], '定向委托投资管理协议')) {
-            throw new \Exception('合同名称错误,第一份合同应该录入定向委托投资管理协议');
-        }
-
         foreach ($param['title'] as $key => $title) {
             if (empty($title)) {
                 throw new \Exception('合同名称不能为空');
