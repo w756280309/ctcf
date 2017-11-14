@@ -4,6 +4,8 @@ namespace backend\modules\datatj\controllers;
 
 use backend\controllers\BaseController;
 use common\lib\user\UserStats;
+use common\models\order\OnlineOrder;
+use common\models\product\OnlineProduct;
 use common\models\stats\Perf;
 use common\models\user\User;
 use yii\bootstrap\Html;
@@ -469,7 +471,12 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             $startDate = date('Y-m-01');
         }
         if (empty($endDate) || false === strtotime($endDate)) {
-            $endDate = date('Y-m-d',strtotime('-1 day'));
+            if (date('d') === '01') {
+                $endDate = date('Y-m-d');
+            } else {
+                $endDate = date('Y-m-d',strtotime('-1 day'));
+            }
+
         }
 
         //提现数据
@@ -573,7 +580,98 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
 
         return $this->render('platform_rate', $fileData);
     }
+//新手标人数统计页面
+    public function actionXinshoutj($startDate = null, $endDate = null)
+    {
+        $startDate = $startDate ? date('Y-m-d',strtotime($startDate)) : null;
+        $endDate = $startDate ? date('Y-m-d',strtotime($endDate)) : null;
+        if (empty($startDate) || false === strtotime($startDate)) {
+            $startDate = date('Y-m-01');
+        }
+        if (empty($endDate) || false === strtotime($endDate)) {
+            if (date('d') === '01') {
+                $endDate = date('Y-m-d');
+            } else {
+                $endDate = date('Y-m-d',strtotime('-1 day'));
+            }
+        }
+        $exportData = [];
+        //startDate到endDate时间内新注册用户购买新手标信息
+        $xsData = Yii::$app->db->createCommand(
+            "SELECT  DISTINCT(o.uid), DATE(FROM_UNIXTIME(o.created_at)) as createdTime, p.expires FROM online_order AS o 
+            INNER JOIN user AS u ON o.uid = u.id 
+            INNER JOIN online_product AS p on o.online_pid = p.id 
+            WHERE p.`is_xs` = 1 
+            AND o.status = 1 
+            AND DATE(FROM_UNIXTIME(u.created_at)) 
+            BETWEEN :startDate 
+            AND :endDate 
+            and Date(FROM_UNIXTIME(o.created_at)) 
+            BETWEEN :startDate 
+            AND :endDate", [
+            'startDate' => $startDate,
+            'endDate' => $endDate
+        ])->queryAll();
+        $xsAndOtherData = [];
+        $xsAndDrawData = [];
+        $reOrderData = [];
 
+        if (!empty($xsData)) {
+            $xsAllUsers =array_column($xsData,'uid');
+            $xsAllUsers = array_unique($xsAllUsers);
+            $xsAllUserToString = implode(',',$xsAllUsers);
+            //用户投资新手标后投资其他标的的信息
+            $refundOtherData = Yii::$app->db->createCommand(
+                "SELECT DISTINCT(o.uid), DATE(FROM_UNIXTIME(o.created_at)) AS orderCreatedTime FROM online_order AS  o 
+                INNER JOIN online_product as p ON o.online_pid = p.id 
+                WHERE o.status = 1 
+                AND p.is_xs = 0 
+                AND o.uid IN (" . $xsAllUserToString . ") 
+                AND DATE(FROM_UNIXTIME(o.created_at)) > :startDate", [
+                    'startDate' =>$startDate
+            ])->queryAll();
+            $drawData = Yii::$app->db->createCommand(
+                "SELECT DISTINCT(uid), DATE(FROM_UNIXTIME(created_at)) AS drawTime FROM draw_record
+                WHERE status = 2 
+                AND uid IN (" . $xsAllUserToString . ") 
+                AND created_at > :startDate",[
+                    'startDate' =>$startDate
+            ])->queryAll();
+            foreach ($xsData as $value) {
+                $newEndTime = date('Y-m-d', strtotime($value['createdTime'] . '+' . $value['expires'] .' days'));
+                foreach ($refundOtherData as $item) {
+                    if (!empty($item) && $value['uid'] === $item['uid']) {
+                        if ($item['orderCreatedTime'] >= $value['createdTime'] && $item['orderCreatedTime'] <= $newEndTime) {
+                            if (!in_array($item['uid'], $xsAndOtherData)) {
+                                array_push($xsAndOtherData,$item['uid']);
+                            }
+                        }
+                        if ($item['orderCreatedTime'] > $newEndTime) {
+                            if (!in_array($item['uid'], $reOrderData)) {
+                                array_push($reOrderData,$item['uid']);
+                            }
+                        }
+                    } else {
+                        foreach ($drawData as $draw) {
+                            if (!empty($draw) && $value['uid'] === $draw['uid']) {
+                               if (in_array($draw['uid'], $xsAndDrawData)) {
+                                   array_push($xsAndDrawData, $draw['uid']);
+                               }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $exportData['xsCount'] = count($xsData);                      //新注册用户购买新手标人数
+        $exportData['xsAndOtherCount'] = count($xsAndOtherData);      //新注册用户购买新手标还买了其他标的的人数
+        $exportData['xsAndDrawCount'] = count($xsAndDrawData);        //只购买新手标到期提现人数
+        $exportData['reOrderCount'] = count($reOrderData);            //购买新手标到期复投人数
+        $exportData['startDate'] = $startDate;                        //查询开始时间
+        $exportData['endDate'] = $endDate;                            //查询结束时间
+
+        return $this->render('xinshoutj',$exportData);
+    }
 
     /**
      * 根据订单日期区间查询分销商统计数据.
@@ -644,5 +742,10 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             }
         }
         return $data;
+    }
+
+    function createdTimeAddExpires($createdTime, $expires)
+    {
+        return $createdTime+$expires;
     }
 }
