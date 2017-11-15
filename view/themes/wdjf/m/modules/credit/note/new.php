@@ -7,8 +7,19 @@ use yii\web\JqueryAsset;
 $this->title = '转让';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/transfer_order.css?v=20161027', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'layer/need/layer.css', ['position' => 1]);
+$this->registerCss(<<<CSS
+.customer-layer-popuo .layui-m-layercont {
+    text-align:left;
+}
+.customer-layer-popuo .layui-m-layerbtn span[yes] {
+    color :#ff6058;
+}
+CSS
+);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'layer/layer.js');
 
 $discountRate = Yii::$app->params['credit']['max_discount_rate'];
 $fee = Yii::$app->params['credit']['fee_rate'] * 1000;
@@ -155,6 +166,23 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         discount_rate_input.change(100,function () {
             validateData();
         });
+        var bonusAmount = '<?= $bonusAmount ?>';
+        var bonusAmountFormat = '<?= StringUtils::amountFormat2($bonusAmount) ?>';
+        if (bonusAmount > 0) {
+            layer.open({
+                title: [
+                    '温馨提示',
+                    'background-color: #ff6058; color:#fff;'
+                ]
+                ,content: '此项目已用加息券'+bonusAmountFormat+'元，将于项目到期后返还到账户。如果部分/全部转让成功，项目加息券加息收益将视为主动放弃。'
+                ,shadeClose:false
+                ,className: 'customer-layer-popuo'
+                ,btn: ['我知道了']
+                ,yes: function(index){
+                    layer.close(index);
+                }
+            });
+        }
     });
 
     function alertReferBox(val, callback)

@@ -176,7 +176,10 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
     <div class="confirmBox-top">
         <p></p>
     </div>
-    <div class="confirmBox-bottom">
+    <div class="confirmBox-bottom hide scene_bonus_refer">
+        <div onclick="confirmClose();">我知道了</div>
+    </div>
+    <div class="confirmBox-bottom scene-discount-refer">
         <div class="confirmBox-left" onclick="subClose()">关闭</div>
         <div class="confirmBox-right" onclick="subConfirm(this)">确认</div>
     </div>
@@ -214,7 +217,24 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                 $(this).attr('checked', 'checked');
             }
         });
+
+        var bonusAmount = '<?= $bonusAmount ?>';
+        var bonusAmountFormat = '<?= StringUtils::amountFormat2($bonusAmount) ?>';
+        if (bonusAmount > 0) {
+            $('.confirmBox .scene-discount-refer').css('display', 'none');
+            $('.confirmBox .scene_bonus_refer').css('display', 'block');
+            $('.confirmBox-top').find('p').text('此项目已用加息券'+bonusAmountFormat+'元，将于项目到期后返还到账户。如果部分/全部转让成功，项目加息券加息收益将视为主动放弃。').css('text-align', 'left');
+            $('.mask').show();
+            $('.confirmBox').show();
+        }
     });
+
+    function confirmClose() {
+        subClose();
+        $('.confirmBox .scene_bonus_refer').css('display', 'none');
+        $('.confirmBox .scene-discount-refer').css('display', 'block');
+        $('.confirmBox-top').find('p').text('');
+    }
 
     function subConfirm(obj)
     {
@@ -412,10 +432,11 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                 discount_rate_error.hide();
                 $('.mask').show();
                 $('.confirmBox').show();
+                $('.confirmBox .scene-discount-refer').show();
                 if (rate == 0) {
-                    $('.confirmBox-top').find('p').text('您确定要发布转让吗？');
+                    $('.confirmBox-top').find('p').text('您确定要发布转让吗？').css('text-align', 'center');
                 } else {
-                    $('.confirmBox-top').find('p').text('折让率为' + rate + '%，您确定要发布转让吗？');
+                    $('.confirmBox-top').find('p').text('折让率为' + rate + '%，您确定要发布转让吗？').css('text-align', 'center');
                 }
             }
         });
