@@ -44,11 +44,13 @@ class NewAction extends Action
             throw $this->controller->ex404('资产信息不合法');
         }
         $apr = $order->yield_rate;
+        $bonusProfit = $order->getBonusProfit();
 
         return $this->controller->render('new', [
             'asset' => $asset,
             'loan' => $loan,
             'apr' => $apr,
+            'bonusAmount' => $bonusProfit,
         ]);
     }
 }
