@@ -66,6 +66,8 @@ class VerifyController extends Controller
                 进行【换卡】操作，操作失败，卡号' . $dat->cardNo . '，失败原因，定时任务申请时
                 间超过1天并且在联动超找不到记录，返回状态码:' . $resp->get('ret_code') ;
                 Yii::info($msg,'user_log');
+
+                continue;
             }
             if ($resp->isSuccessful()) {
                 $user = $dat->user;
