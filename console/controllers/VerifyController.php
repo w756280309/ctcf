@@ -47,10 +47,13 @@ class VerifyController extends Controller
         foreach ($datas as $dat) {
             if ($dat instanceof BankCardUpdate
                 && $dat->created_at < $expireAt
-                && BankCardUpdate::STATUS_ACCEPT === $dat->status
+                && in_array($dat->status, [BankCardUpdate::STATUS_PENDING, BankCardUpdate::STATUS_ACCEPT])
             ) {
-                BankCardUpdate::updateAll(['status' => BankCardUpdate::STATUS_FAIL], ['id' => $dat->id]);
-                $msg = '用户['.$dat->user->id.']，于'.date('Y-m-d H:i:s', $dat->created_at).' 进行【换卡】操作，操作失败，卡号 '.$dat->cardNo.'，失败原因，定时任务处理状态为处理中并且申请期限超过20天的换卡记录为失败';
+                BankCardUpdate::updateAll([
+                    'status' => BankCardUpdate::STATUS_FAIL,
+                    'updated_at' => time()
+                ], ['id' => $dat->id]);
+                $msg = '用户['.$dat->user->id.']，于'.date('Y-m-d H:i:s', $dat->created_at).' 进行【换卡】操作，操作失败，卡号 '.$dat->cardNo.'，失败原因，定时任务处理状态为处理中或已申请并且期限超过20天的换卡记录为失败';
                 Yii::info($msg, 'user_log');
 
                 continue;
@@ -61,7 +64,10 @@ class VerifyController extends Controller
                 && $dat->created_at < $expireAtOne
                 && $resp->get('ret_code') === '00240005'
             ) {
-                BankCardUpdate::updateAll(['status' => BankCardUpdate::STATUS_FAIL],['id' => $dat->id]);
+                BankCardUpdate::updateAll([
+                    'status' => BankCardUpdate::STATUS_FAIL,
+                    'updated_at' => time()
+                ],['id' => $dat->id]);
                 $msg = '用户[' . $dat->user->id . ']，于' . date('Y-m-d H:i:s', $dat->created_at) . ' 
                 进行【换卡】操作，操作失败，卡号' . $dat->cardNo . '，失败原因，定时任务申请时
                 间超过1天并且在联动超找不到记录，返回状态码:' . $resp->get('ret_code') ;
@@ -91,7 +97,10 @@ class VerifyController extends Controller
                         $msg = '用户[' . $user->id . ']，于' . date('Y-m-d H:i:s', $dat->created_at) . ' 进行【绑卡】操作，操作失败，卡号 ' . $dat->card_number . '，失败原因，定时任务主动请求联动，联动返回状态:' . $resp->get('tran_state');
                         QpayBinding::updateAll(['status' => QpayBinding::STATUS_FAIL], ['id' => $dat->id]);
                     } elseif ($dat instanceof BankCardUpdate) {
-                        BankCardUpdate::updateAll(['status' => BankCardUpdate::STATUS_FAIL], ['id' => $dat->id]);
+                        BankCardUpdate::updateAll([
+                            'status' => BankCardUpdate::STATUS_FAIL,
+                            'updated_at' => time()
+                        ], ['id' => $dat->id]);
                         $msg = '用户[' . $user->id . ']，于' . date('Y-m-d H:i:s', $dat->created_at) . ' 进行【换卡】操作，操作失败，卡号 ' . $dat->cardNo . '，失败原因，定时任务主动请求联动，联动返回状态:' . $resp->get('tran_state');
                     }
                     if (isset($msg)) {
