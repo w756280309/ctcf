@@ -42,7 +42,7 @@ class m170911_085407_create_user_table extends Migration
             'updated_at' => $this->integer(10)->unsigned()->notNull()->comment('更新时间'),
             'created_at' => $this->integer(10)->unsigned()->notNull()->comment('注册时间'),
             'campaign_source' => $this->string(50)->comment('百度统计来源标志'),
-            'is_soft_deleted' => $this->integer(1)->defaultValue(0),
+            'is_soft_deleted' => $this->boolean(),
             'sort' => $this->integer(3)->defaultValue(0),
             'regContext' => $this->string()->notNull(),
             'registerIp' => $this->string(),
