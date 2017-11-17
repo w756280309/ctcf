@@ -3,6 +3,7 @@
 namespace common\lib\credit;
 
 use common\models\product\OnlineProduct;
+use common\models\tx\CreditNote;
 use common\models\tx\FinUtils;
 use common\models\tx\UserAsset;
 use common\models\user\User;
@@ -73,7 +74,7 @@ class CreditNote
         }
 
         //实际支付
-        $note = \common\models\tx\CreditNote::findOne($id);
+        $note = CreditNote::findOne($id);
         $order = $note->order;
         $interest = FinUtils::calculateCurrentProfit($note->loan, $amount, $order->apr);
         if (bccomp($user->lendAccount->available_balance, bcadd($amount, $interest), 2) < 0) {
