@@ -166,9 +166,9 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         discount_rate_input.change(100,function () {
             validateData();
         });
-        var bonusAmount = '<?= $bonusAmount ?>';
+        var alertBonus = '<?= $alertBonus ?>';
         var bonusAmountFormat = '<?= StringUtils::amountFormat2($bonusAmount) ?>';
-        if (bonusAmount > 0) {
+        if (alertBonus) {
             layer.open({
                 title: [
                     '温馨提示',

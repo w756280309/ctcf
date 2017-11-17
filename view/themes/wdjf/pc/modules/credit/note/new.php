@@ -173,7 +173,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
 <!--确认弹框-->
 <div class="confirmBox">
     <div class="confirmBox-title">提示</div>
-    <div class="confirmBox-top">
+    <div class="confirmBox-top" style="padding: 0px 17px;height:73px;">
         <p></p>
     </div>
     <div class="confirmBox-bottom hide scene_bonus_refer">
@@ -218,9 +218,9 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
             }
         });
 
-        var bonusAmount = '<?= $bonusAmount ?>';
+        var alertBonus = '<?= $alertBonus ?>';
         var bonusAmountFormat = '<?= StringUtils::amountFormat2($bonusAmount) ?>';
-        if (bonusAmount > 0) {
+        if (alertBonus) {
             $('.confirmBox .scene-discount-refer').css('display', 'none');
             $('.confirmBox .scene_bonus_refer').css('display', 'block');
             $('.confirmBox-top').find('p').text('此项目已用加息券'+bonusAmountFormat+'元，将于项目到期后返还到账户。如果部分/全部转让成功，项目加息券加息收益将视为主动放弃。').css('text-align', 'left');
@@ -434,9 +434,9 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                 $('.confirmBox').show();
                 $('.confirmBox .scene-discount-refer').show();
                 if (rate == 0) {
-                    $('.confirmBox-top').find('p').text('您确定要发布转让吗？').css('text-align', 'center');
+                    $('.confirmBox-top').css('line-height', '73px').find('p').text('您确定要发布转让吗？').css('text-align', 'center');
                 } else {
-                    $('.confirmBox-top').find('p').text('折让率为' + rate + '%，您确定要发布转让吗？').css('text-align', 'center');
+                    $('.confirmBox-top').css('line-height', '73px').find('p').text('折让率为' + rate + '%，您确定要发布转让吗？').css('text-align', 'center');
                 }
             }
         });
