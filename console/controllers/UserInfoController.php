@@ -3,6 +3,7 @@
 namespace console\controllers;
 
 use common\models\promo\InviteRecord;
+use common\models\tx\CreditOrder;
 use common\models\user\User;
 use common\models\user\UserInfo;
 use GuzzleHttp\Client;
@@ -89,5 +90,48 @@ class UserInfoController extends Controller
         }
 
         return self::EXIT_CODE_NORMAL;
+    }
+
+
+    /**
+     * 更新UserInfo表转让字段信息creditInvestCount，creditInvestTotal
+     * 这两个字段只增不减
+     *
+     * @return int
+     * @throws \Exception
+     */
+    public function actionInitCredit()
+    {
+        $orders = CreditOrder::find()
+            ->select("user_id, count(id) as totalNum, sum(principal) as investTotal")
+            ->where(['buyerPaymentStatus' => 1])
+            ->groupBy('user_id')
+            ->asArray()
+            ->all();
+
+        $this->stdout('共有'.count($orders).'人需要初始化转让数据'.PHP_EOL);
+        $db = \Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        try {
+            foreach ($orders as $order) {
+                $sql = "update user_info set creditInvestCount=:creditInvestCount,creditInvestTotal=:creditInvestTotal where user_id = :userId";
+                $updateCredit = $db->createCommand($sql, [
+                    'creditInvestCount' => $order['totalNum'],
+                    'creditInvestTotal' => $order['investTotal']/100,
+                    'userId' => $order['user_id'],
+                ])->execute();
+
+                if (0 === $updateCredit) {
+                    throw new \Exception($order['user_id'].'更新失败');
+                }
+            }
+            $transaction->commit();
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            throw $ex;
+        }
+        $this->stdout('脚本执行结束');
+
+        return Controller::EXIT_CODE_NORMAL;
     }
 }

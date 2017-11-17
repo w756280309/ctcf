@@ -203,4 +203,14 @@ class UserInfo extends ActiveRecord
             'endTime' => $endTime,
         ])->queryScalar();
     }
+
+    /**
+     * 累计投资额（包含转让）
+     *
+     * @return string
+     */
+    public function getTotalInvestMoney()
+    {
+        return bcadd($this->investTotal, $this->creditInvestTotal, 2);
+    }
 }

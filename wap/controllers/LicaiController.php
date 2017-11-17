@@ -17,11 +17,7 @@ class LicaiController extends Controller
     public function actionNotes($page = 1)
     {
         $user = Yii::$app->user->getIdentity();
-        if (!is_null($user)) {
-            $userAccount = UserAccount::findOne(['uid' => $user->id]);
-            $userInfo = UserInfo::findOne(['user_id' => $user->id]);
-        }
-        if (is_null($user) || $userAccount->available_balance + $userInfo->investTotal < 50000) {
+        if (is_null($user) || (null !== $user && $user->getJGMoney() < 50000)) {
             $jianguan = true;
         } else {
             $jianguan = false;
