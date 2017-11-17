@@ -2,6 +2,8 @@
 
 namespace common\action\credit;
 
+use common\models\tx\CreditOrder;
+use common\models\tx\UserAsset;
 use Yii;
 use yii\base\Action;
 use common\models\product\OnlineProduct;
@@ -45,12 +47,21 @@ class NewAction extends Action
         }
         $apr = $order->yield_rate;
         $bonusProfit = $order->getBonusProfit();
+        $a = UserAsset::tableName();
+        $c = CreditOrder::tableName();
+        $isNotTransfered = null === CreditOrder::find()
+            ->innerJoinWith('asset')
+            ->where(["$a.order_id" => $asset['order_id']])
+            ->andFilterWhere(['in', "$c.status", [CreditOrder::STATUS_SUCCESS, CreditOrder::STATUS_OTHER]])
+            ->one();
+        $alertBonus = $bonusProfit > 0 && $isNotTransfered;
 
         return $this->controller->render('new', [
             'asset' => $asset,
             'loan' => $loan,
             'apr' => $apr,
             'bonusAmount' => $bonusProfit,
+            'alertBonus' => $alertBonus,
         ]);
     }
 }
