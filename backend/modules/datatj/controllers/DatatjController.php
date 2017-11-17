@@ -589,20 +589,20 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             $startDate = date('Y-m-01');
         }
         if (empty($endDate) || false === strtotime($endDate)) {
-            if (date('d') === '01') {
-                $endDate = date('Y-m-d');
-            } else {
-                $endDate = date('Y-m-d',strtotime('-1 day'));
-            }
+                $endDate = date('Y-m-d',time());
         }
         $exportData = [];
         //startDate到endDate时间内新注册用户购买新手标信息
         $xsData = Yii::$app->db->createCommand(
-            "SELECT  DISTINCT(o.uid), DATE(FROM_UNIXTIME(o.created_at)) as createdTime, p.expires FROM online_order AS o 
+            "SELECT  DISTINCT(o.uid), 
+            DATE(FROM_UNIXTIME(o.created_at)) as createdTime,
+            DATE(FROM_UNIXTIME(p.finish_date)) AS finishDate 
+            FROM online_order AS o 
             INNER JOIN user AS u ON o.uid = u.id 
             INNER JOIN online_product AS p on o.online_pid = p.id 
             WHERE p.`is_xs` = 1 
             AND o.status = 1 
+            AND p.finish_date >0 
             AND DATE(FROM_UNIXTIME(u.created_at)) 
             BETWEEN :startDate 
             AND :endDate 
@@ -618,27 +618,36 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
 
         if (!empty($xsData)) {
             $xsAllUsers =array_column($xsData,'uid');
-            $xsAllUsers = array_unique($xsAllUsers);
             $xsAllUserToString = implode(',',$xsAllUsers);
             //用户投资新手标后投资其他标的的信息
             $refundOtherData = Yii::$app->db->createCommand(
-                "SELECT DISTINCT(o.uid), DATE(FROM_UNIXTIME(o.created_at)) AS orderCreatedTime FROM online_order AS  o 
+                "SELECT DISTINCT(o.uid), 
+                DATE(FROM_UNIXTIME(o.created_at)) AS orderCreatedTime 
+                FROM online_order AS  o 
                 INNER JOIN online_product as p ON o.online_pid = p.id 
                 WHERE o.status = 1 
                 AND p.is_xs = 0 
                 AND o.uid IN (" . $xsAllUserToString . ") 
-                AND DATE(FROM_UNIXTIME(o.created_at)) > :startDate", [
+                AND DATE(FROM_UNIXTIME(o.created_at)) >= :startDate", [
                     'startDate' =>$startDate
             ])->queryAll();
-            $drawData = Yii::$app->db->createCommand(
-                "SELECT DISTINCT(uid), DATE(FROM_UNIXTIME(created_at)) AS drawTime FROM draw_record
+            $refundAllUsers = array_column($refundOtherData, 'uid');
+            $unRefundUsers = array_diff($xsAllUsers, $refundAllUsers);
+            if (!empty($unRefundUsers)) {
+                $unRefundUsersToString = implode(',', $unRefundUsers);
+                $drawData = Yii::$app->db->createCommand(
+                    "SELECT DISTINCT(uid), 
+                DATE(FROM_UNIXTIME(created_at)) AS drawTime 
+                FROM draw_record
                 WHERE status = 2 
-                AND uid IN (" . $xsAllUserToString . ") 
-                AND created_at > :startDate",[
+                AND uid IN (" . $unRefundUsersToString . ") 
+                AND created_at >= :startDate",[
                     'startDate' =>$startDate
-            ])->queryAll();
+                ])->queryAll();
+            }
+
             foreach ($xsData as $value) {
-                $newEndTime = date('Y-m-d', strtotime($value['createdTime'] . '+' . $value['expires'] .' days'));
+                $newEndTime = $value['finishDate'];
                 foreach ($refundOtherData as $item) {
                     if (!empty($item) && $value['uid'] === $item['uid']) {
                         if ($item['orderCreatedTime'] >= $value['createdTime'] && $item['orderCreatedTime'] <= $newEndTime) {
@@ -651,12 +660,17 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                                 array_push($reOrderData,$item['uid']);
                             }
                         }
-                    } else {
+                    }
+                    if (!empty($unRefundUsers)) {
                         foreach ($drawData as $draw) {
-                            if (!empty($draw) && $value['uid'] === $draw['uid']) {
-                               if (in_array($draw['uid'], $xsAndDrawData)) {
-                                   array_push($xsAndDrawData, $draw['uid']);
-                               }
+                            if (!empty($draw)
+                                && $value['uid'] === $draw['uid']
+                                && $draw['drawTime'] > $newEndTime
+                            ) {
+                                if (!in_array($draw['uid'], $xsAndDrawData)) {
+                                    array_push($xsAndDrawData, $draw['uid']);
+                                }
+
                             }
                         }
                     }
