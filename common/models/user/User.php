@@ -4,6 +4,8 @@ namespace common\models\user;
 
 use common\models\affiliation\UserAffiliation;
 use common\models\bank\BankCardUpdate;
+use common\models\coupon\CouponType;
+use common\models\coupon\UserCoupon;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
 use common\models\order\OnlineOrder as Ord;
@@ -1129,5 +1131,18 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public static function findByMobile($mobile)
     {
         return User::find(['safeMobile' => SecurityUtils::encrypt($mobile)]);
+    }
+
+    public function getJGMoney()
+    {
+        $balance = 0;
+        $userInfo = $this->info;
+        $userAccount = $this->lendAccount;
+        if (null !== $userAccount && null !== $userInfo) {
+            $availableCouponMoney = UserCoupon::findCouponInUse($this->id, date('Y-m-d'))->sum('amount');
+            $balance = $userAccount->available_balance + $userInfo->getTotalInvestMoney() + $availableCouponMoney;
+        }
+
+        return $balance;
     }
 }

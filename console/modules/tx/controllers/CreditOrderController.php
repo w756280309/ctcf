@@ -902,6 +902,23 @@ class CreditOrderController extends Controller
 
         //9)更改原还款计划添加新还款计划
         $this->updateRepaymentPlan($order, $newAsset);
+
+        //10)更新用户转让购买信息
+        $this->updateBuyerCreditInfo($order);
+    }
+
+    private function updateBuyerCreditInfo($order)
+    {
+        if (CreditOrder::STATUS_SUCCESS === $order->status) {
+            $sql = "update user_info set creditInvestCount=creditInvestCount+1, creditInvestTotal=creditInvestTotal+:creditInvestTotal where user_id = :userId";
+            $affectedRows = \Yii::$app->db->createCommand($sql, [
+                'creditInvestTotal' => $order->principal/100,
+                'userId' => $order->user_id,
+            ])->execute();
+            if (0 === $affectedRows) {
+                throw new \Exception('更新用户转让购买信息失败');
+            }
+        }
     }
 
     //更新卖方用户统计信息（暂时未被调用）
