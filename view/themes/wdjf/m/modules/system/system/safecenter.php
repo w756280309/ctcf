@@ -62,7 +62,10 @@ use common\utils\SecurityUtils;
     <div class="col-xs-3"></div>
     <div class="col-xs-6">
         <?php if ($closeWin) : ?>
-            <input class="btn-common btn-normal safe-btn" type="button" value="安全退出" onclick="WeixinJSBridge.invoke('closeWindow');">
+            <form method="post" class="cmxform" action="/site/logout">
+                <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
+                <input class="btn-common btn-normal safe-btn" type="submit" value="安全退出">
+            </form>
         <?php else : ?>
             <form method="post" class="cmxform" action="/site/logout">
                 <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">

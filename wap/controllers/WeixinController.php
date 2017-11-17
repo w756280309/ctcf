@@ -152,7 +152,7 @@ class WeixinController extends Controller
                     'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
                 ]);
 
-                if (!is_null($social)) {
+                if (!is_null($social) && $social->isAutoLogin) {
                     $user = User::findOne($social->user_id);
                     if (!is_null($user)) {
                         Yii::$app->user->login($user);    //微信绑定,自动登录

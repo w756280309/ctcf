@@ -2,7 +2,11 @@
 
 namespace common\models\thirdparty;
 
+use common\models\mall\PointRecord;
+use common\models\message\PointMessage;
 use common\models\user\User;
+use common\service\PointsService;
+use Lhjx\Noty\Noty;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -135,5 +139,50 @@ class SocialConnect extends ActiveRecord
         ]);
 
         return !is_null($socialConnect);
+    }
+    /**
+     * 绑定微信后续操作
+     * 发放积分
+     */
+    public static function bind($user, $openId)
+    {
+        $social = SocialConnect::findOne([
+            'user_id' => $user->id,
+            'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
+            'resourceOwner_id' => $openId,
+        ]);
+
+        if (!is_null($social)) {
+
+            $pointRecord = PointRecord::findOne([
+                'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                'user_id' => $user->id,
+            ]);
+
+            if (is_null($pointRecord)) {
+                //绑定成功,发放10积分
+                $pointRecord = new PointRecord([
+                    'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                    'ref_id' => $social->id,
+                    'incr_points' => 10,
+                ]);
+
+                $res = PointsService::addUserPoints($pointRecord, false, $user);
+
+                if ($res) {
+                    $pointRecord = PointRecord::findOne([
+                        'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                        'ref_id' => $social->id,
+                        'incr_points' => 10,
+                        'user_id' => $user->id,
+                    ]);
+
+                    if ($pointRecord) {
+                        Noty::send(new PointMessage($pointRecord));
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

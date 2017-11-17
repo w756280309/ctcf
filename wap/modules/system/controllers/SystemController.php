@@ -18,8 +18,9 @@ class SystemController extends BaseController
         $uid = $this->getAuthedUser()->id;
 
         $user = User::find()->where(['id' => $uid, 'type' => User::USER_TYPE_PERSONAL, 'status' => User::STATUS_ACTIVE])->select('usercode, safeMobile')->one();
-
-        return $this->render('setting', ['model' => $user]);
+        //是否绑定微信
+        $social = SocialConnect::findOne(['user_id' => $uid, 'provider_type' => 'wechat']);
+        return $this->render('setting', ['model' => $user, 'social' => $social]);
     }
 
     /**

@@ -118,42 +118,7 @@ class WechatController extends Controller
             return $this->msg400(current($message), ['showCaptcha' => $showCaptcha]);
         }
 
-        $social = SocialConnect::findOne([
-            'user_id' => $user->id,
-            'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
-            'resourceOwner_id' => $openId,
-        ]);
-
-        if (!is_null($social)) {
-            $pointRecord = PointRecord::findOne([
-                'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
-                'user_id' => $user->id,
-            ]);
-
-            if (is_null($pointRecord)) {
-                //绑定成功,发放10积分
-                $pointRecord = new PointRecord([
-                    'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
-                    'ref_id' => $social->id,
-                    'incr_points' => 10,
-                ]);
-
-                $res = PointsService::addUserPoints($pointRecord, false, $user);
-
-                if ($res) {
-                    $pointRecord = PointRecord::findOne([
-                        'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
-                        'ref_id' => $social->id,
-                        'incr_points' => 10,
-                        'user_id' => $user->id,
-                    ]);
-
-                    if ($pointRecord) {
-                        Noty::send(new PointMessage($pointRecord));
-                    }
-                }
-            }
-        }
+        SocialConnect::bind($user, $openId);
 
         return [
             'code' => 0,
@@ -197,14 +162,15 @@ class WechatController extends Controller
     public function actionDoUnbind()
     {
         $user = $this->getAuthedUser();
-        $msg = $this->unbindValidate($user);
-
-        if (null !== $msg) {
-            return $this->msg400($msg);
-        }
+//        $msg = $this->unbindValidate($user);
+//
+//        if (null !== $msg) {
+//            return $this->msg400($msg);
+//        }
 
         try {
-            $openId = Yii::$app->session->get('resourceOwnerId');
+            $social = SocialConnect::findOne(['user_id' => $user->id, 'provider_type' => 'wechat']);
+            $openId = $social->resourceOwner_id;//Yii::$app->session->get('resourceOwnerId');
 
             $res = SocialConnect::disconnect($user->id, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
 
@@ -236,7 +202,7 @@ class WechatController extends Controller
     private function unbindValidate($user)
     {
         if (!$this->fromWx()) {
-            return '链接失效，请在微信中打开此页面';
+            return '请在微信中打开此页面';
         }
 
         if (null === $user) {
@@ -259,5 +225,47 @@ class WechatController extends Controller
             'message' => $msg,
             'data' => $data,
         ];
+    }
+
+    //登录状态下,个人中心直接绑定微信
+    public function actionDirectBind()
+    {
+        $user = $this->getAuthedUser();
+        $msg = $this->unbindValidate($user);
+
+        if (null !== $msg) {
+            return $this->msg400($msg);
+        }
+        $openId = Yii::$app->session->get('resourceOwnerId');
+        try {
+            SocialConnect::connect($user, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
+        } catch (\Exception $e) {
+            return $this->msg400($e->getMessage());
+        }
+        if (SocialConnect::bind($user, $openId)) {
+            return ['code' => 0, 'message' => '绑定微信成功'];
+        } else {
+            return ['code' => 1, 'message' => '绑定微信失败'];
+        }
+    }
+    //开启禁止微信自动登录
+    public function actionAutoLogin()
+    {
+        $user = $this->getAuthedUser();
+        if (!is_null($user)) {
+            try {
+                $model = SocialConnect::findOne(['user_id' => $user->id]);
+                $model->isAutoLogin = 1 - $model->isAutoLogin;
+                $model->save();
+            } catch (\Exception $e) {
+                return $this->msg400($e->getMessage());
+            }
+            if ($model->isAutoLogin) {
+                $message = '微信自动登录已开启';
+            } else {
+                $message = '微信自动登录已关闭';
+            }
+            return ['code' => 0, 'message' => $message];
+        }
     }
 }
