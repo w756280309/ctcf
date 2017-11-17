@@ -39,6 +39,7 @@ class VerifyController extends Controller
             ->all();
         $update = BankCardUpdate::find()
             ->where(['status' => [BankCardUpdate::STATUS_ACCEPT, BankCardUpdate::STATUS_PENDING]])
+            ->andWhere(['>', 'created_at', strtotime('-20 day')])
             ->orderBy(['created_at' => SORT_DESC])
             ->all();
         $datas = ArrayHelper::merge($qpay, $update);
