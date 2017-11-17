@@ -3,6 +3,8 @@
 namespace common\lib\credit;
 
 use common\models\product\OnlineProduct;
+use common\models\tx\FinUtils;
+use common\models\tx\UserAsset;
 use common\models\user\User;
 use common\utils\StringUtils;
 use Yii;
@@ -70,6 +72,13 @@ class CreditNote
             return ['code' => 1, 'message' => '您的可用余额不足'];
         }
 
+        //实际支付
+        $note = \common\models\tx\CreditNote::findOne($id);
+        $order = $note->order;
+        $interest = FinUtils::calculateCurrentProfit($note->loan, $amount, $order->apr);
+        if (bccomp($user->lendAccount->available_balance, bcadd($amount, $interest), 2) < 0) {
+            return ['code' => 1, 'message' => '您的可用余额不足'];
+        }
         //可投余额为0
         if ($restAmount === 0) {
             return ['code' => 1, 'message' => '当前项目不可投,可投余额为0'];
