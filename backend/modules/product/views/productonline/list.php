@@ -264,6 +264,15 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                             </select>
                         </div>
                     </div>
+                    <div class="item">
+                        <div class="item_label">
+                            <span class="title">底层融资方</span>
+                        </div>
+                        <div class="item_content">
+                            <input id="sn" type="text" class="m-wrap span4" name='originalBorrower'
+                                   value="<?= $loanSearch->originalBorrower ?>" placeholder="请输入底层融资方"/>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="group_buttons">

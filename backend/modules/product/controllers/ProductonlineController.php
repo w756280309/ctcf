@@ -127,6 +127,10 @@ class ProductonlineController extends BaseController
         if (0 === $loan->issuer) {   //当发行方没有选择时,发行方项目编号为空
             $loan->issuerSn = null;
         }
+        //当发行方选择不为立合时，底层融资方为空
+        if ("深圳立合旺通商业保理有限公司" !== $loan->issuerInfo->name) {
+            $loan->originalBorrower = null;
+        }
 
         if (!$loan->isFlexRate) {   //当是否启用浮动利率标志位为false时,清空浮动利率相关数据
             $loan->rateSteps = null;

@@ -61,6 +61,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string  $internalTitle 副标题（仅供内部使用）
  * @property string  $publishTime   产品上线时间
  * @property int     $kuanxianqi 宽限期
+ * @property string  $originalBorrower 底层融资方
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -127,7 +128,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit'],
+                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower'],
         ];
     }
 
@@ -246,6 +247,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ['kuanxianqi', 'validateGraceDay'],
             ['balance_limit', 'number'],
             ['balance_limit', 'default', 'value' => 0],
+            [['originalBorrower'], 'string', 'max' => 20],
         ];
     }
 

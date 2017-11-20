@@ -38,7 +38,7 @@ class LoanSearch extends Model
     public $investDateEnd;
     public $days;
     public $cid;
-
+    public $originalBorrower;
     public $hasInnerJoinOrder = false;
 
     public function rules()
@@ -51,7 +51,7 @@ class LoanSearch extends Model
                     return null;
                 }
             }],
-            [['title', 'internalTitle', 'sn', 'issuerSn', 'finishDateStart', 'finishDateEnd', 'investDateStart', 'investDateEnd'], 'filter', 'filter' => function ($value) {
+            [['title', 'internalTitle', 'sn', 'issuerSn', 'finishDateStart', 'finishDateEnd', 'investDateStart', 'investDateEnd', 'originalBorrower'], 'filter', 'filter' => function ($value) {
                 if (!is_null($value) && $value !== '') {
                     return trim($value);
                 } else {
@@ -83,6 +83,8 @@ class LoanSearch extends Model
         //项目名称
         $query->andFilterWhere(['like', "$loanTable.title", $this->title]);
 
+        //底层融资方
+        $query->andFilterWhere(['like', "$loanTable.originalBorrower", $this->originalBorrower]);
         //项目副标题
         $query->andFilterWhere(['like', "$loanTable.internalTitle", $this->internalTitle]);
 

@@ -394,8 +394,17 @@ TPL;
                 <div class="control-group">
                     <label class="control-label">发行方</label>
                     <div class="controls">
+                        <?php
+                        $change_input_option = array_merge([
+                            'autocomplete' => 'off',
+                            'class' => 'chosen-with-diselect span6',
+                            'onchange' => 'changeIssueName(this)',
+                        ], $disabled);
+                        ?>
                         <?=
-                            $form->field($model, 'issuer', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'class' => 'chosen-with-diselect span6']])->dropDownList(ArrayHelper::merge(['' => '--请选择--'], ArrayHelper::map($issuer, 'id', 'name')))
+                            $form->field($model, 'issuer', [
+                                'template' => '{input}{error}',
+                                'inputOptions' => $change_input_option])->dropDownList(ArrayHelper::merge(['' => '--请选择--'], ArrayHelper::map($issuer, 'id', 'name')))
                         ?>
                     </div>
                 </div>
@@ -412,7 +421,16 @@ TPL;
                 </div>
             </div>
         </div>
-
+        <div class="row-fluid originalBorrower" style="display: none">
+            <div class="span6">
+                <div class="control-group">
+                    <label>底层融资方</label>
+                    <div class="controls">
+                        <?= $form->field($model, 'originalBorrower', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '底层融资方']])->textInput(['class' => 'm-wrap span6']) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row-fluid">
             <div class="span6">
                 <div class="control-group">
@@ -687,6 +705,8 @@ TPL;
     $(function() {
         var $productForm = $('#product_product_form');
         var $submit = $productForm.find('button[type=submit]');
+        var originalBorrower = $("#onlineproduct-issuer option:selected").text();
+        originalBorrower = originalBorrower.replace(/(^\s*)|(\s*$)/g,"");
         if(parseInt($("#onlineproduct-refund_method").val())===1){
             $('#onlineproduct-kuanxianqi').removeAttr('readonly');
         }
@@ -723,6 +743,12 @@ TPL;
             $('.gudinghk').show();
         } else {
             $('.gudinghk').hide();
+        }
+
+        if(originalBorrower == '深圳立合旺通商业保理有限公司') {
+            $(".originalBorrower").show()
+        } else {
+            $(".originalBorrower").hide()
         }
 
         if ($('.refund_method').val() !== '1') {
@@ -787,6 +813,16 @@ TPL;
             $('#onlineproduct-is_fdate').attr('disabled', 'disabled');
             $('#onlineproduct-is_fdate').parent().removeClass('checked');
             $('#onlineproduct-kuanxianqi').attr('readonly', 'readonly');
+        }
+    }
+    //当发行方选择为‘深圳立合旺通商业保理有限公司’时，底层融资方显示，否则隐藏
+    function changeIssueName(obj) {
+        var issueName = $(obj).find("option:selected").text();
+        issueName = issueName.replace(/(^\s*)|(\s*$)/g,"");    //去掉字符串两边的空格
+        if (issueName == '深圳立合旺通商业保理有限公司') {
+            $(".originalBorrower").show()
+        } else {
+            $(".originalBorrower").hide();
         }
     }
 
