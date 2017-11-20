@@ -36,7 +36,7 @@ CSS
         <div class="span4">线下本月交易额：<div class="pull-right"><?= number_format($monthOfflineInvestment, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
-        <div class="span12">今日线上交易额：<div class="pull-right"><?= number_format($todayOnlineInvestment, 2) ?>元</div></div>
+        <div class="span4">今日线上交易额：<div class="pull-right"><?= number_format($todayOnlineInvestment, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
         <div class="span4">温盈宝累计销售额：<div class="pull-right"><?= number_format($totalInvestmentInWyb, 2) ?> 元</div></div>
