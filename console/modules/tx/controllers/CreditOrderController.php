@@ -909,7 +909,7 @@ class CreditOrderController extends Controller
 
     private function updateBuyerCreditInfo($order)
     {
-        if (CreditOrder::STATUS_SUCCESS === $order->status) {
+        if (CreditOrder::STATUS_SUCCESS === $order->buyerPaymentStatus) {
             $sql = "update user_info set creditInvestCount=creditInvestCount+1, creditInvestTotal=creditInvestTotal+:creditInvestTotal where user_id = :userId";
             $affectedRows = \Yii::$app->db->createCommand($sql, [
                 'creditInvestTotal' => $order->principal/100,
