@@ -107,7 +107,7 @@ $this->title = '优惠券';
                                                                     <div class="bottom">
                                                                         <span class="time">有效期至<?= $val['expiryDate'] ?></span>
                                       <?php
-                                      if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
+                                      if (!$val['isUsed'] && $val['expiryDate'] >= date('Y-m-d')) {
                                           echo '<span class="go-to-use able-status">去使用</span>';
                                       } else if ($val['isUsed']) {
                                           echo '<span class="go-to-use">已使用</span>';
@@ -191,7 +191,7 @@ $this->title = '优惠券';
                                                     <div class="bottom">
                                                         <span class="time">有效期至<?= $val['expiryDate'] ?></span>
                       <?php
-                      if (!$val['isUsed'] && $val['expiryDate'] > date('Y-m-d')) {
+                      if (!$val['isUsed'] && $val['expiryDate'] >= date('Y-m-d')) {
                           echo '<span class="go-to-use able-status">去使用</span>';
                       } else if ($val['isUsed']) {
                           echo '<span class="go-to-use">已使用</span>';
