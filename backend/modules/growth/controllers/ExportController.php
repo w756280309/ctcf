@@ -267,6 +267,47 @@ and date(from_unixtime(u.created_at)) <= :endDate',
                 'itemLabels' => ['注册时间', '渠道码', '姓名', '手机号', '是否绑卡', '投资总金额'],
                 'itemType' => ['date', 'string', 'string', 'string', 'int', 'string'],
             ],
+            'export_expires_and_invest' => [
+                'key' => 'export_expires_and_invest',
+                'title' => '投资指定产品期限并达指定金额',
+                'content' => '投资指定产品期限并达指定金额',
+                'sql' => 'select 
+u.real_name 姓名, u.safeMobile 手机号, ui.investTotal 累计交易金额, ui.lastInvestDate 最后一次投资日期 
+from user_info ui
+inner join user u on ui.user_id = u.id
+where ui.investTotal >= :money
+and ui.user_id not in (
+select distinct(o.uid) from online_order o 
+inner join online_product p on o.online_pid = p.id 
+where o.status = 1 
+and ((p.refund_method = 1 and p.expires >= :days) or (p.refund_method > 1 and p.expires >= :months)) 
+and p.isTest = 0)',
+                'params' => [
+                    'money' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'money',//参数名
+                        'type' => 'number',//参数的数据类型
+                        'value' => '200000',//参数的默认值
+                        'title' => '投资金额',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'days' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'days',//参数名
+                        'type' => 'number',//参数的数据类型
+                        'value' => 365,//参数的默认值
+                        'title' => '到期产品期限（天数）',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'months' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'months',//参数名
+                        'type' => 'number',//参数的数据类型
+                        'value' => 12,//参数的默认值
+                        'title' => '非到期产品期限（月份）',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['姓名', '手机号', '累计交易金额', '最后一次投资日期'],
+                'itemType' => ['string', 'string', 'string', 'date'],
+            ],
         ];
         parent::init();
     }

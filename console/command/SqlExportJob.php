@@ -49,21 +49,18 @@ class SqlExportJob extends Job
         $exportData[] = $itemLabels;
         
         foreach ($data as $num => $item) {
-            if ('repayment_expire_interest' === $paramKey) {
+            if (isset($item['手机号'])) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
+            }
+            if ('repayment_expire_interest' === $paramKey) {
                 $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
                 $item['原计划还款时间'] = date('Y-m-d', $item['原计划还款时间']);
             } else if ('last_ten_day_draw' === $paramKey) {
-                $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
                 $item['未投资时长'] = (new \DateTime)->diff(new \DateTime($item['未投资时长']))->days;
-            } else if ('custormer_annual_invest' === $paramKey) {
-                $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
             } else if ('order_no_licai_plan' === $paramKey) {
-                $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
                 $item['身份证号'] = SecurityUtils::decrypt($item['身份证号']);
-            } else if ('export_referral_user_info' === $paramKey) {
-                $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
             }
+
             $item = array_values($item);
             if (count($item) !== $labelLength) {
                 throw new \Exception('sql查询数据项和标题项个数不同');
