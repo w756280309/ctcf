@@ -492,6 +492,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'isCustomRepayment' => '是否是自定义还款',
             'internalTitle' => '项目副标题',
             'balance_limit' => '累计资金额',
+            'originalBorrower' => '底层融资方',
         ];
     }
 
