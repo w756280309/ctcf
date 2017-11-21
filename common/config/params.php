@@ -46,7 +46,7 @@ return [
     ],
     'drawFee' => 2, //单位元，提现手续费
     'draw_free_limit' => 5, //提现自然月免手续费限制，若超过50次，则收取手续费
-    'bank' => require(__DIR__.'/banks.php'),
+    'bank' => require(__DIR__ . '/banks.php'),
     'sms_white_list' => [],   //用户白名单功能只在mock_sms为true的时候有效，即mock_sms为true时，除了白名单里面设置的手机号，其他手机号一律不发短信
     'sms' => [
         'config' => [
@@ -242,5 +242,10 @@ return [
         'hostname' => env('QUEUE_REDIS_HOST'),
         'port' => env('QUEUE_REDIS_PORT'),
         'password' => env('QUEUE_REDIS_PASSWORD'),
+    ],
+    //立合接口配置
+    'li_he' => [
+        'url' => env('LIHE_URL'),
+        'key' => env('LIHE_KEY')
     ]
 ];

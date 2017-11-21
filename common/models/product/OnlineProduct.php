@@ -62,6 +62,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string  $publishTime   产品上线时间
  * @property int     $kuanxianqi 宽限期
  * @property string  $originalBorrower 底层融资方
+ * @property string  $pkg_sn  资源包SN
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -128,7 +129,8 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
                 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
                 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower'],
+                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',
+                'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower','pkg_sn'],
         ];
     }
 
@@ -191,7 +193,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function rules()
     {
         return [
-            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'refund_method', 'issuer', 'issuerSn'], 'required'],
+            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'refund_method', 'issuer', 'issuerSn','pkg_sn'], 'required'],
             ['finish_date', 'required', 'when' => function ($model) {
                 return $model->is_fdate == 1 && !empty($model->finish_date);
             },  'whenClient' => "function (attribute, value) {

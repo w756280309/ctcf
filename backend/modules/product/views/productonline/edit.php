@@ -610,6 +610,14 @@ TPL;
                     $form->field($model, 'balance_limit', ['template' => '<div class="input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '请输入累计资金额', 'value' => $model->balance_limit > 0 ? $model->balance_limit : '']])->textInput(['class' => 'm-wrap span12']) ?>
                 </div>
             </div>
+            <div class="span6">
+                <div class="control-group">
+                    <label class="control-label">资源包SN<span style="color:grey">(<?= $desc ?>)</span></label>
+                    <div class="controls">
+                        <?=  $form->field($model, 'pkg_sn')->textInput(array_merge(['autocomplete' => 'off', 'value' => $model->pkg_sn, 'class' => 'm-wrap span12'], $model->online_status ? ['disabled' => 'disabled'] : []))->label(false) ?>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <h3 class="form-section">项目合同信息</h3>
