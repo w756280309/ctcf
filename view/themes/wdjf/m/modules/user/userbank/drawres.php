@@ -25,9 +25,10 @@ $this->backUrl = false;
 <div class="row daojishi">
      <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-        <div style="text-align: center"><div style="display: inline" >预计<?= $date?>到账</div><div style=" font-weight:bold ;display: inline" >（节假日顺延）</div></div>
-        <div style="color:#ad8242">如遇节假日，到账时间将顺延到下个工作日哦！</div>
-        <div>如有疑问请客服电话：<a style="color: #0c0c0c" class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></div>
+        <div>工作日下午五点前提现当天到账</div>
+        <div>工作日下午五点后提现下一个工作日到账</div>
+        <div style="color:#af2e33">如遇节假日，到账时间将顺延到下个工作日哦！</div>
+        <div>如有疑问请客服电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></div>
         <?php } else { ?>
         <div>请联系客服: <a style="color: #0c0c0c" class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></div>
         <?php } ?>

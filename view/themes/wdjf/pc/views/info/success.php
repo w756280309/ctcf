@@ -13,6 +13,9 @@ $jumpUrl = Html::encode($info['jumpUrl']);
         <div class="invest-container-box invest-success">
             <div class="invest-content">
                 <p class="buy-txt"><i></i><span><?= $info['mainTitle'] ?></span></p>
+                <div style="text-align: center">工作日下午五点前提现当天到账</div>
+                <div style="text-align: center">工作日下午五点后提现下一个工作日到账</div>
+                <div style="color:#af2e33; text-align: center">如遇节假日，到账时间将顺延到下个工作日哦！</div>
                 <p class="buy-txt-tip"><?= $info['firstFuTitle'] ?></p>
                 <?php if ($info['linkType'] === 1 || $info['linkType'] === 3) { ?>
                     <a href="<?= $info['linkType'] === 1 && $jumpUrl ? $jumpUrl : 'javascript:void(0)' ?>" class="button-close"><?= $info['jumpReferWords'] ?></a>
