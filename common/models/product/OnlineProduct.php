@@ -62,7 +62,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string  $publishTime   产品上线时间
  * @property int     $kuanxianqi 宽限期
  * @property string  $originalBorrower 底层融资方
- * @property string  $pkg_sn  资源包SN
+ * @property string  $pkg_sn  资产包编号
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -193,7 +193,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function rules()
     {
         return [
-            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'refund_method', 'issuer', 'issuerSn','pkg_sn'], 'required'],
+            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'refund_method', 'issuer', 'issuerSn'], 'required'],
             ['finish_date', 'required', 'when' => function ($model) {
                 return $model->is_fdate == 1 && !empty($model->finish_date);
             },  'whenClient' => "function (attribute, value) {
@@ -495,6 +495,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'internalTitle' => '项目副标题',
             'balance_limit' => '累计资金额',
             'originalBorrower' => '底层融资方',
+            'pkg_sn' => '资产包编号',
         ];
     }
 

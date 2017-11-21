@@ -42,16 +42,18 @@ class LiheController extends Controller
     {
         if (!empty($sn)) {
             $this->repair = true;
-            $sql = 'SELECT *   from online_fangkuan fk,online_product p 
+            $sql = 'SELECT *   
+                    from online_fangkuan fk,online_product p 
                     where p.pkg_sn="' . $sn . '" 
-                    and fk.`status`=3 
+                    and fk.`status`>=3 
                     and fk.online_product_id=p.id';
         } else {
             $maxId = $this->redis->get($this->redis_succeed_max_id);
             $maxId = empty($maxId) ? 0 : $maxId;
-            $sql = 'SELECT *   from online_fangkuan fk,online_product p 
+            $sql = 'SELECT *   
+                    from online_fangkuan fk,online_product p 
                     where  fk.id >"' . $maxId . '" 
-                    and fk.`status`=3 
+                    and fk.`status`>=3 
                     and fk.online_product_id=p.id 
                     AND LENGTH(p.pkg_sn)>0';
         }

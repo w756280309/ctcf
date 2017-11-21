@@ -612,7 +612,7 @@ TPL;
             </div>
             <div class="span6">
                 <div class="control-group">
-                    <label class="control-label">资源包SN<span style="color:grey">(<?= $desc ?>)</span></label>
+                    <label class="control-label">资产包编号<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">
                         <?=  $form->field($model, 'pkg_sn')->textInput(array_merge(['autocomplete' => 'off', 'value' => $model->pkg_sn, 'class' => 'm-wrap span12'], $model->online_status ? ['disabled' => 'disabled'] : []))->label(false) ?>
                     </div>
