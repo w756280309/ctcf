@@ -54,7 +54,7 @@ class PushController extends Controller
             //被动回复
             if (strtolower($postObj->MsgType) == 'text' && !is_null($postObj->Content)) {
                 if(strpos(strval($postObj->Content), '答案') !== false) {
-                    $message = '白色（北极熊）。北极熊从北极点出发，向南向东向北走了个三角形回到北极点。';
+                    $message = '人民币';
                     $openid = strval($postObj->FromUserName);
                     Yii::$container->get('weixin_wdjf')->staff->message($message)->to(strval($openid))->send();
 //                    return "<xml>
