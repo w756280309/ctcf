@@ -63,6 +63,21 @@ class LuodiyeController extends Controller
         ]);
     }
 
+    public function actionCloth()
+    {
+        $this->layout = 'normal';
+        if (!Yii::$app->user->isGuest) {
+            return $this->redirect('/?_mark=' . time());
+        }
+        $captcha = new CaptchaForm();
+        $lastVerify = Yii::$app->session->get('lastVerify');
+
+        return $this->render('v2', [
+            'captcha' => $captcha,
+            'phone' => isset($lastVerify['phone']) ? $lastVerify['phone'] : '',
+        ]);
+    }
+
     public function actionCreateSms()
     {
         $type = Yii::$app->request->post('type');
