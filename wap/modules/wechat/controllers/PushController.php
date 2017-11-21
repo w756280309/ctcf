@@ -73,9 +73,13 @@ class PushController extends Controller
                 } else {
                     $event_key = strval($postObj->EventKey);
                 }
-                if (Affiliator::findOne($event_key)) {
+                $affiliator = Affiliator::findOne($event_key);
+                if (!is_null($affiliator)) {
                     $redis = Yii::$app->redis;
                     $redis->hset('wechat-push', $postObj->FromUserName, $event_key);
+                    //推送客服人员
+                    $lc_mes = '您目前的客服专员是【'.$affiliator->name.'】，有任何疑问他(她)都会帮您解答。';
+                    Yii::$container->get('weixin_wdjf')->staff->message($lc_mes)->to(strval($postObj->FromUserName))->send();
                     /**
                      * 推送有可能在用户注册后到达
                      */
