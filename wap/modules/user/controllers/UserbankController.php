@@ -221,7 +221,31 @@ class UserbankController extends BaseController
      */
     public function actionDrawres($ret = 'error')
     {
-        return $this->render('drawres', ['ret' => $ret]);
+        $time = time();
+        $arrivalDate = '';
+        $timeStandard = date("Y-m-d 17:00:00", $time);
+        if (date("Y-m-d H:i:s", $time) > $timeStandard) {
+            if (in_array(date('w', $time), [1, 2, 3, 4])) {
+                $arrivalDate = date("Y-m-d ", strtotime("+1days", $time));
+            } elseif (in_array(date('w', $time), [5])) {
+                $arrivalDate = date("Y-m-d ", strtotime("+3days", $time));
+            } elseif (in_array(date('w', $time), [6])) {
+                $arrivalDate = date("Y-m-d ", strtotime("+2days", $time));
+            } elseif (in_array(date('w', $time), [0])) {
+                $arrivalDate = date("Y-m-d ", strtotime("+1days", $time));
+            }
+        } else {
+            if (in_array(date('w', $time), [1, 2, 3, 4, 5])) {
+                $arrivalDate = date("Y-m-d ", $time);
+            } elseif (in_array(date('w', $time), [0])) {
+                $arrivalDate = date("Y-m-d ", strtotime("+1days", $time));
+            } elseif (in_array(date('w', $time), [6])) {
+                $arrivalDate = date("Y-m-d ", strtotime("+2days", $time));
+            }
+        }
+        $date = date('m-d', strtotime($arrivalDate));
+        $finalDate = str_replace('-','月',$date).'日';
+        return $this->render('drawres', ['ret' => $ret, 'date' => $finalDate]);
     }
 
     /**
