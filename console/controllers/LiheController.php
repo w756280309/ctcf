@@ -125,7 +125,7 @@ class LiheController extends Controller
             //	到期日，格式：2017-01-01
             'gracePeriodDate' => $this->formatDate($fkData['finish_date']),
             //	宽限期截止日期，格式：2017-01-01
-            'interestRate' => $fkData['yield_rate'],
+            'interestRate' => $fkData['yield_rate'] * 100,
             //	投资人利率，单位（%）<-->项目利率
             'actAmount' => $fkData['funded_money'],
             //	实际到账金额，单位（分）
