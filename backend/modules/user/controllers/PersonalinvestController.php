@@ -69,12 +69,14 @@ class PersonalinvestController extends BaseController
         $query = 'select u.id,u.real_name,b.bank_name,b.card_number from user as u inner join user_bank as b on u.id = b.uid where u.safeMobile = "'.SecurityUtils::encrypt($number).'"';
         $onlineUser = \Yii::$app->db->createCommand($query)->queryOne();
         if ($onlineUser['id']) {
-            $query_order = 'select o.id as oid,o.order_time,o.order_money,o.yield_rate,p.id as pid,p.finish_date,p.title,p.jixi_time,p.expires,p.refund_method from online_order as o inner join online_product as p on o.online_pid = p.id where o.uid= "'.$onlineUser['id'].'"';
+            $query_order = 'select o.uid,o.id as oid,o.order_time,o.order_money,o.yield_rate,p.id as pid,p.finish_date,p.title,p.jixi_time,p.expires,p.refund_method from online_order as o inner join online_product as p on o.online_pid = p.id where o.uid= "'.$onlineUser['id'].'"';
             $onlineOrder = \Yii::$app->db->createCommand($query_order)->queryAll();
             if (count($onlineOrder) > 0) {
                 foreach ($onlineOrder as $v) {
+                    $fx_time = [];
+                    $fx_money = [];
                     if ($v['jixi_time']) {
-                        $repayment = OnlineRepaymentPlan::find()->where(['online_pid' => $v['pid'], 'order_id' => $v['oid']])->orderBy('qishu')->all();
+                        $repayment = OnlineRepaymentPlan::find()->where(['online_pid' => $v['pid'], 'order_id' => $v['oid'], 'uid' => $v['uid']])->orderBy('qishu')->all();
                         foreach($repayment as $val) {
                             $fx_time[] = substr(date("Y-m-d H:i", $val->refund_time), 0, 10);
                             $fx_money[] = $val->benxi;
