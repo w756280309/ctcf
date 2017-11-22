@@ -42,7 +42,7 @@ class LiheController extends Controller
     {
         if (!empty($sn)) {
             $this->repair = true;
-            $sql = 'SELECT *   
+            $sql = 'SELECT fk.id as fkid,fk.*,p.*   
                     from online_fangkuan fk,online_product p 
                     where p.pkg_sn="' . $sn . '" 
                     and fk.`status`>=3 
@@ -50,7 +50,7 @@ class LiheController extends Controller
         } else {
             $maxId = $this->redis->get($this->redis_succeed_max_id);
             $maxId = empty($maxId) ? 0 : $maxId;
-            $sql = 'SELECT *   
+            $sql = 'SELECT fk.id as fkid,fk.*,p.* 
                     from online_fangkuan fk,online_product p 
                     where  fk.id >"' . $maxId . '" 
                     and fk.`status`>=3 
@@ -82,8 +82,8 @@ class LiheController extends Controller
     private function succeed($data)
     {
         $maxId = $this->redis->get($this->redis_succeed_max_id);
-        if ($data['id1'] > $maxId) {
-            $this->redis->set($this->redis_succeed_max_id, $data['id1']);
+        if ($data['fkid'] > $maxId) {
+            $this->redis->set($this->redis_succeed_max_id, $data['fkid']);
         }
     }
 
