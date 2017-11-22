@@ -82,8 +82,8 @@ class LiheController extends Controller
     private function succeed($data)
     {
         $maxId = $this->redis->get($this->redis_succeed_max_id);
-        if ($data['id'] > $maxId) {
-            $this->redis->set($this->redis_succeed_max_id, $data['id']);
+        if ($data['id1'] > $maxId) {
+            $this->redis->set($this->redis_succeed_max_id, $data['id1']);
         }
     }
 
