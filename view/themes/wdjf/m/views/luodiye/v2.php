@@ -15,7 +15,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
 <div class="flex-content">
     <div class="banner">
         <?php if (Yii::$app->controller->action->getUniqueId() === 'luodiye/cloth') { ?>
-            <img src="<?= FE_BASE_URI ?>wap/20170726luodiye/images/banner-cloth.png" alt="">
+            <img src="<?= FE_BASE_URI ?>wap/20170726luodiye/images/banner-cloth-new.png" alt="">
         <?php } else { ?>
             <img src="<?= FE_BASE_URI ?>wap/20170726luodiye/images/banner.png" alt="">
         <?php } ?>
