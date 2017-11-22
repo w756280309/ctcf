@@ -71,7 +71,7 @@ class UserStats
         $ui = UserInfo::tableName();
         $tpc = ThirdPartyConnect::tableName();
         $model = (new Query())
-            ->select("$u.*,$ui.id as bid, $ua.available_balance, $ui.firstInvestAmount, $ua.investment_balance, $u.birthdate, $ui.firstInvestDate, $tpc.publicId")
+            ->select("$u.*,$ub.id as bid, $ua.available_balance, $ui.firstInvestAmount, $ua.investment_balance, $u.birthdate, $ui.firstInvestDate, $tpc.publicId")
             ->from($u)
             ->leftJoin($ub, "$ub.uid = $u.id")
             ->leftJoin($ua, "$ua.uid = $u.id")
