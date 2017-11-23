@@ -21,7 +21,13 @@ class WechatSendTemplateController extends Controller
         $data = $userService->lists();
         if ($data['count'] > 0) {
             $users = $data['data']['openid'];
+            self::send($users);
         }
+
+    }
+
+    public static function send($users)
+    {
         if (isset($users) && count($users) > 0) {
             $app = Yii::$container->get('weixin_wdjf');
             $template_id = 'SG4yRtRnTSQ6pnBPjPjz762_xcLeTA3oyXjJxIdc2vc';
@@ -45,6 +51,15 @@ class WechatSendTemplateController extends Controller
                     continue;
                 }
             }
+            echo count($users) . '个微信用户发送成功';
+        }
+        $lastOpenId = $users[count($users) -1];   //最后一个发送的用户
+        $app = Yii::$container->get('weixin_wdjf');
+        $userService = $app->user;
+        $data2 = $userService->lists($lastOpenId);
+        if ($data2['count'] > 0) {
+            $users2 = $data2['data']['openid'];
+            self::send($users2);
         }
     }
 }
