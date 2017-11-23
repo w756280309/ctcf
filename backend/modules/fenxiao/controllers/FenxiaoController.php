@@ -160,6 +160,7 @@ class FenxiaoController extends BaseController
     public function actionList()
     {
         $query = Admin::find();
+        $query->andFilterWhere(['isDel' => false]);
         //设置搜索条件
         $name = Yii::$app->request->get('name');
         if ($name) {
@@ -326,5 +327,58 @@ class FenxiaoController extends BaseController
     public function actionCodeView($ticket)
     {
         return $this->render('code_view', ['ticket' => $ticket]);
+    }
+
+    /**
+     * 删除分销商
+     * 子集分销商一并删除
+     * @user ZouJIanShuang
+     */
+    public function actionDel($id)
+    {
+        if (empty($id)) {
+            throw $this->ex404();
+        }
+        $aff = $this->findOr404(Affiliator::class, $id);
+        $aff->isDel = true;
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $ids[] = $id;
+            self::doDel($ids);
+            $transaction->commit();
+
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+        }
+        return $this->redirect('list');
+    }
+
+    //执行删除分销商的方法
+    public static function doDel($id)
+    {
+        $affs = Affiliator::find()->where(['in', 'id', $id])->andWhere(['isDel' => false])->all();
+        foreach ($affs as $aff) {
+            $admin = Admin::findOne(['affiliator_id' => $aff->id, 'isDel' => false]);
+            $aff->isDel = true;
+            if (!$aff->save()) {
+                throw new \Exception('分销商【'. $aff->name .'】删除失败');
+            }
+            if (!is_null($admin)) {
+                $admin->isDel = true;
+                if (!$admin->save()) {
+                    throw new \Exception('分销商【'. $admin->name .'】删除失败');
+                }
+            }
+        }
+        //是否存在子类
+        $subAff = Affiliator::find()->where(['in', 'parentId', $id])->all();
+        if (count($subAff) > 0) {
+            $new_id = [];
+            foreach ($subAff as $v) {
+                $new_id[] = $v->id;
+            }
+            self::doDel($new_id);
+        }
+        return 'ok';
     }
 }
