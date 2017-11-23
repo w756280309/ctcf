@@ -24,13 +24,13 @@ class WechatSendTemplateController extends Controller
         }
         if (isset($users) && count($users) > 0) {
             $app = Yii::$container->get('weixin_wdjf');
-            $template_id = '4uRGKS0QHt28d7-Hka6SVPFk3uIv8Ddn1qJ5LG9rvH0';
-            $url = 'https://m.wenjf.com/promotion/p171111/second';
+            $template_id = 'SG4yRtRnTSQ6pnBPjPjz762_xcLeTA3oyXjJxIdc2vc';
+            $url = 'https://m.wenjf.com/promotion/promo-points/p171123';
             $data = [
-                'first' => '温都金服双十一理财节开幕在即，预约享全场加息！',
+                'first' => '寒冬来临，气温骤降，温都金服提醒您及时保暖添衣，温暖出行。祝您感恩节快乐！',
                 'keyword1' => '预约加息',
                 'keyword2' => '温都金服平台',
-                'remark' => '点击完成理财预约，领专属大额加息券！',
+                'remark' => '点击详情，立即参与感恩节回馈活动，海量积分等你领！',
             ];
             $n = 0; //发送的数量,每五次歇一秒
             foreach ($users as $user) {
