@@ -132,7 +132,7 @@ if (isset($cookies['pointPopUp'])) {
 				<a href="javascript:void(0)" onclick="location.replace('/user/user/orderdetail?id=<?= $order->id ?>')"
 				   class="rg">查看详情</a>
       <?php } else { ?>
-				<a href="javascript:void(0)" onclick="history.go(-1)" class="rg">重新购买</a>
+				<a href="javascript:void(0)" onclick="location.href='/deal/deal/index'" class="rg">重新购买</a>
       <?php } ?>
 	</div>
 </div>
@@ -141,7 +141,7 @@ if (isset($cookies['pointPopUp'])) {
     <?php if ('success' === $ret) { ?>
 			<a href="/user/checkin" class="qiandao-box"><img
 					src="<?= ASSETS_BASE_URI ?>images/bg_qiandao.png" alt=""></a>
-			<a href="/system/system/setting" style="display: block"><img src="<?= ASSETS_BASE_URI ?>images/bg_bind.png" alt="" class="bind-box"></a>
+			<a href="<?= !defined('IN_APP') ? '/system/system/setting' : 'javascript:void(0)' ?>" style="display: block"><img src="<?= ASSETS_BASE_URI ?>images/bg_bind.png" alt="" class="bind-box"></a>
     <?php } else { ?>
 			<div>遇到问题请联系客服，电话：<a class="contact-tel"
 			                     href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>
