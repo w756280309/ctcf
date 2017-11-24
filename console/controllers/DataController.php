@@ -55,7 +55,7 @@ class DataController extends Controller
         if (file_exists($file)) {
             unlink($file);
         }
-        $exportData[] = ['期数', '融资方', '发行方', '项目名称', '项目编号', '项目状态', '备案金额（元）', '募集金额（元）', '实际募集金额（元）', '年化收益率（%）', '开始融资时间', '满标时间', '起息日', '还款本金', '还款利息', '预计还款时间', '实际还款时间'];
+        $exportData[] = ['期数', '融资方', '发行方', '底层融资方', '项目名称', '项目编号', '项目状态', '备案金额（元）', '募集金额（元）', '实际募集金额（元）', '年化收益率（%）', '开始融资时间', '满标时间', '起息日', '还款本金', '还款利息', '预计还款时间', '实际还款时间'];
         $records = $issuerData['model'];
         $issuer = $issuerData['issuer'];
         $repaymentPlan = $issuerData['plan'];
@@ -67,6 +67,7 @@ class DataController extends Controller
                         $repayment['qishu'],
                         $loan->borrower->org_name,
                         $issuer->name,
+                        $loan->originalBorrower,
                         $loan->title,
                         $loan->issuerSn,
                         \Yii::$app->params['deal_status'][$loan->status],
@@ -88,6 +89,7 @@ class DataController extends Controller
                     '---',
                     $loan->borrower->org_name,
                     $issuer->name,
+                    $loan->originalBorrower,
                     $loan->title,
                     $loan->issuerSn,
                     \Yii::$app->params['deal_status'][$loan->status],
