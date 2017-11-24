@@ -25,6 +25,7 @@ class OfflineUser extends ActiveRecord
         return [
             [['realName', 'idCard', 'mobile'], 'required'],
             [['realName', 'idCard', 'mobile'], 'string'],
+            [['idCard'], CnIdCardValidator::className()],
         ];
     }
 
