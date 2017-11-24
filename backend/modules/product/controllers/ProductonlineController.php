@@ -162,6 +162,8 @@ class ProductonlineController extends BaseController
         $paymentAmount = $query->sum('paymentAmount');
         $umpResp = Yii::$container->get('ump')->getLoanInfo($loan->id);
         $couponTransfer = $loan->isCouponAmountTransferred();
+        $bonusTransfer = $loan->isBonusAmountTransferred();
+        $bonusAmount = $loan->getBonusAmount();
 
         if ($umpResp->isSuccessful()) {
             $balance = bcdiv($umpResp->get('balance'), 100, 2);
@@ -175,6 +177,8 @@ class ProductonlineController extends BaseController
             'couponAmount' => $couponAmount,
             'paymentAmount' => $paymentAmount,
             'couponTransfer' => $couponTransfer,
+            'bonusTransfer' => $bonusTransfer,
+            'bonusAmount' => $bonusAmount,
         ]);
     }
 

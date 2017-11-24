@@ -342,4 +342,9 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             ]);
         }
     }
+
+    public function getOrder()
+    {
+        return $this->hasOne(OnlineOrder::class, ['id' => 'order_id']);
+    }
 }

@@ -1219,10 +1219,10 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         return intval($this->refund_method);
     }
 
-    //获取贴现状态
+    //获取代金券贴现状态
     public function isCouponAmountTransferred()
     {
-        $paymentLog = PaymentLog::findOne(['loan_id' => $this->id]);
+        $paymentLog = PaymentLog::findOne(['loan_id' => $this->id, 'ref_type' => 0]);
         $couponTransfer = false;
         if (!is_null($paymentLog)) {
             $umpResp = Yii::$container->get('ump')->getCouponTransferInfo($paymentLog);
@@ -1232,5 +1232,32 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
 
         return $couponTransfer;
+    }
+
+    //获取加息券贴现状态
+    public function isBonusAmountTransferred()
+    {
+        $paymentLog = PaymentLog::findOne(['loan_id' => $this->id, 'ref_type' => 1]);
+        $bonusTransfer = false;
+        if (!is_null($paymentLog)) {
+            $umpResp = Yii::$container->get('ump')->getCouponTransferInfo($paymentLog);
+            if ($umpResp->get('ret_code') === '0000') {
+                $bonusTransfer = true;
+            }
+        }
+
+        return $bonusTransfer;
+    }
+
+    //获取加息券贴现金额
+    public function getBonusAmount()
+    {
+        $bonusAmount = '0';
+        $paymentLog = PaymentLog::findOne(['loan_id' => $this->id, 'ref_type' => 1]);
+        if (null !== $paymentLog) {
+            $bonusAmount = $paymentLog->amount;
+        }
+
+        return $bonusAmount;
     }
 }
