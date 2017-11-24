@@ -143,9 +143,12 @@ function subForm(form, button, falsed, datas)
             if (data.code != 0) {
                 toast(data.message, function () {
                     if (typeof falsed !== 'undefined') {
-                        falsed(data);
+                        //falsed(data);
                     }
                 });
+                if (data.requiresCaptcha) {
+                    window.location.reload();
+                }
             }
 
             if (to == 1 && data.tourl != undefined) {
