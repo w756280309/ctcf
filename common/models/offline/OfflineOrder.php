@@ -2,6 +2,7 @@
 
 namespace common\models\offline;
 
+use common\models\adminuser\Admin;
 use yii\db\ActiveRecord;
 use common\models\affiliation\Affiliator;
 use Zii\Validator\CnIdCardValidator;
@@ -113,5 +114,13 @@ class OfflineOrder extends ActiveRecord
         }
 
         return bcdiv(bcmul($this->money * 10000, $this->loan->expires, 14), $base, 2);
+    }
+    /**
+     * 审核人
+     */
+    public function getAudit()
+    {
+        $admin = Admin::findOne($this->auditor);
+        return !is_null($admin) ? $admin->real_name : '';
     }
 }
