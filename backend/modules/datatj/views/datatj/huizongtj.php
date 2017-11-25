@@ -8,7 +8,7 @@ CSS
 );
 ?>
 <?php $this->beginBlock('blockmain'); ?>
-<div class="container-fluid">
+<div class="container-fluid" style="font-family: monospace;">
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
@@ -31,7 +31,7 @@ CSS
         <div class="span4">线下累计交易额：<div class="pull-right"><?= number_format($totalOfflineInve, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
-        <div class="span4">本月交易额：<div class="pull-right"><span style="color: red;"><?= number_format($monthTotalInvestment, 2) ?></span> 元</div></div>
+        <div class="span4">本月交易额：<div class="pull-right"><span style="color: red;"><?= number_format($monthTotalInvestment, 2) ?></span>元</div></div>
         <div class="span4">线上本月交易额：<div class="pull-right"><?= number_format($monthOnlineInvestment, 2) ?>元</div></div>
         <div class="span4">线下本月交易额：<div class="pull-right"><?= number_format($monthOfflineInvestment, 2) ?>元</div></div>
     </div>
