@@ -23,7 +23,7 @@ use yii\helpers\Console;
 class CouponController extends Controller
 {
     /**
-     * 给即将过期的代金券发送过期短信提醒.
+     * 给即将过期的优惠券发送过期短信提醒.
      * 当前为3天(若今天为周一，则提示有效期到周三的)
      *
      * @param int $expireDay 离现在为止即将过期的天数
@@ -70,16 +70,14 @@ class CouponController extends Controller
 
                 //沃动短信通道
                 $mobile = SecurityUtils::decrypt($user->safeMobile);
-                $templateContent = '【温都金服】尊敬的客户您好，您有{1}优惠券即将过期，请尽快使用，地址{2}，如有疑问请致电{3}，回复TD退订';
+                $templateContent = '【温都金服】尊敬的客户您好，您有{1}优惠券即将过期，请尽快使用，如有疑问请致电{2}，回复TD退订';
                 $templateMessage = [
                     $param1,
-                    'https://m.wenjf.com/',
                     $contactTel,
                 ];
                 $templateParam = [
                     '{1}',
                     '{2}',
-                    '{3}',
                 ];
                 $content = str_replace($templateParam, $templateMessage, $templateContent);
 
