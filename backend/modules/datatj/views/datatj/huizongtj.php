@@ -8,7 +8,7 @@ CSS
 );
 ?>
 <?php $this->beginBlock('blockmain'); ?>
-<div class="container-fluid">
+<div class="container-fluid" style="font-family: monospace;">
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
