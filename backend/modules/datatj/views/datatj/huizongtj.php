@@ -31,7 +31,7 @@ CSS
         <div class="span4">线下累计交易额：<div class="pull-right"><?= number_format($totalOfflineInve, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
-        <div class="span4">本月交易额：<div class="pull-right"><span style="color: red;"><?= number_format($monthTotalInvestment, 2) ?></span> 元</div></div>
+        <div class="span4">本月交易额：<div class="pull-right"><span style="color: red;"><?= number_format($monthTotalInvestment, 2) ?></span>元</div></div>
         <div class="span4">线上本月交易额：<div class="pull-right"><?= number_format($monthOnlineInvestment, 2) ?>元</div></div>
         <div class="span4">线下本月交易额：<div class="pull-right"><?= number_format($monthOfflineInvestment, 2) ?>元</div></div>
     </div>
@@ -39,7 +39,7 @@ CSS
         <div class="span4">今日线上交易额：<div class="pull-right"><?= number_format($todayOnlineInvestment, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
-        <div class="span4">温盈宝累计销售额：<div class="pull-right"><?= number_format($totalInvestmentInWyb, 2) ?> 元</div></div>
+        <div class="span4">温盈宝累计销售额：<div class="pull-right"><?= number_format($totalInvestmentInWyb, 2) ?>元</div></div>
         <div class="span4">温盈金累计销售额：<div class="pull-right"><?= number_format($totalInvestmentInWyj, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
@@ -69,15 +69,15 @@ CSS
                 $from = intval($v['f']);
                 $money = number_format($v['m'], 2);
                 if ($from === OnlineOrder::INVEST_FROM_WAP) {
-                    echo '<div class="span4">wap投资：<div class="pull-right">' . $money . ' 元</div></div>';
+                    echo '<div class="span4">wap投资：<div class="pull-right">' . $money . '元</div></div>';
                 } else if ($from === OnlineOrder::INVEST_FROM_WX) {
-                    echo '<div class="span4">微信投资：<div class="pull-right">' . $money . ' 元</div></div>';
+                    echo '<div class="span4">微信投资：<div class="pull-right">' . $money . '元</div></div>';
                 } else if ($from === OnlineOrder::INVEST_FROM_APP) {
-                    echo '<div class="span4">app投资：<div class="pull-right">' . $money . ' 元</div></div>';
+                    echo '<div class="span4">app投资：<div class="pull-right">' . $money . '元</div></div>';
                 } else if ($from ===OnlineOrder::INVEST_FROM_PC) {
-                    echo '<div class="span4">pc投资：<div class="pull-right">' . $money . ' 元</div></div>';
+                    echo '<div class="span4">pc投资：<div class="pull-right">' . $money . '元</div></div>';
                 } else {
-                    echo '<div class="span4">未知来源投资：<div class="pull-right">' . $money . ' 元</div></div>';
+                    echo '<div class="span4">未知来源投资：<div class="pull-right">' . $money . '元</div></div>';
                 }
                 if($k ==2)
                 {
@@ -116,15 +116,15 @@ CSS
                 $from = intval($v['f']);
                 $count = intval($v['c']);
                 if ($from === User::REG_FROM_WAP) {
-                    echo '<div class="span4">wap注册：<div class="pull-right">' . $count . ' 人</div></div>';
+                    echo '<div class="span4">wap注册：<div class="pull-right">' . $count . '人</div></div>';
                 } else if ($from === User::REG_FROM_WX) {
-                    echo '<div class="span4">微信注册：<div class="pull-right">' . $count . ' 人</div></div>';
+                    echo '<div class="span4">微信注册：<div class="pull-right">' . $count . '人</div></div>';
                 } else if ($from === User::REG_FROM_APP) {
-                    echo '<div class="span4">app注册：<div class="pull-right">' . $count . ' 人</div></div>';
+                    echo '<div class="span4">app注册：<div class="pull-right">' . $count . '人</div></div>';
                 } else if ($from === User::REG_FROM_PC) {
-                    echo '<div class="span4">pc注册：<div class="pull-right">' . $count . ' 人</div></div>';
+                    echo '<div class="span4">pc注册：<div class="pull-right">' . $count . '人</div></div>';
                 } else {
-                    echo '<div class="span4">未知来源注册：<div class="pull-right">' . $count . ' 人</div></div>';
+                    echo '<div class="span4">未知来源注册：<div class="pull-right">' . $count . '人</div></div>';
                 }
                 if($k ==2)
                 {
@@ -139,15 +139,15 @@ CSS
                 $from = intval($v['f']);
                 $count = intval($v['c']);
                 if ($from === OnlineOrder::INVEST_FROM_WAP) {
-                    echo '<div class="span4">wap投资：<div class="pull-right">' . $count . ' 人</div></div>';
+                    echo '<div class="span4">wap投资：<div class="pull-right">' . $count . '人</div></div>';
                 } else if ($from === OnlineOrder::INVEST_FROM_WX) {
-                    echo '<div class="span4">微信投资：<div class="pull-right">' . $count . ' 人</div></div>';
+                    echo '<div class="span4">微信投资：<div class="pull-right">' . $count . '人</div></div>';
                 } else if ($from ===OnlineOrder::INVEST_FROM_APP) {
-                    echo '<div class="span4">app投资：<div class="pull-right">' . $count . ' 人</div></div>';
+                    echo '<div class="span4">app投资：<div class="pull-right">' . $count . '人</div></div>';
                 } else if ($from === OnlineOrder::INVEST_FROM_PC) {
-                    echo '<div class="span4">pc投资：<div class="pull-right">' . $count . ' 人</div></div>';
+                    echo '<div class="span4">pc投资：<div class="pull-right">' . $count . '人</div></div>';
                 } else {
-                    echo '<div class="span4">未知来源投资：<div class="pull-right">' . $count . ' 人</div></div>';
+                    echo '<div class="span4">未知来源投资：<div class="pull-right">' . $count . '人</div></div>';
                 }
                 if($k ==2)
                 {
