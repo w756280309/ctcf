@@ -126,16 +126,44 @@ $this->title = '登录';
             $('#pass').attr('type', 'text');
 
             var datas = {'phone':$('#iphone').val(),'bad':$('#pass2').val(),'verifyCode':$('#verifycode').val(),'sms':$('#yanzhengma').val()};
+            var $btn = $('#login-btn');
+            var to = $('#login').attr("data-to");//设置如果返回错误，是否需要跳转界面
 
-            subForm('#login', '#login-btn', '', datas,  function (data) {
-                if (data.code > 0 && data.requiresCaptcha) {
-                    if ($('.verify-div-box').hasClass('hide')) {
-                        $('.verify-div-box').removeClass('hide');
-                    }
-                    $('#loginform-verifycode-image').attr('src', '/site/captcha?' + Math.random());
+            $btn.attr('disabled', true);
+            $btn.removeClass("btn-normal").addClass("btn-press");
+            var xhr = $.post($('#login').attr("action"), datas , function (data) {
+                if (data.code != 0) {
+                    $('#pass').val( $('#pass2').val());
+                    $('#pass').attr('type', 'password');
                 }
-            });
+                if (data.code == '-1') {
+                    alertTrue(function () {
+                        location.href = '/user/user';
+                    })
+                } else if (data.code != 0 && to == 1 && data.tourl != undefined) {
+                    toast(data.message, function() {
+                        location.href = data.tourl;
+                    });
+                } else {
+                    if (data.code != 0) {
+                        toast(data.message);
+                         if (data.code > 0 && data.requiresCaptcha) {
+                             if ($('.verify-div-box').hasClass('hide')) {
+                                 $('.verify-div-box').removeClass('hide');
+                             }
+                             $('#loginform-verifycode-image').attr('src', '/site/captcha?' + Math.random());
+                         }
+                    }
+                    if (to == 1 && data.tourl != undefined) {
+                        location.href = data.tourl;
+                    }
+                }
 
+            });
+            xhr.always(function () {
+                $btn.removeClass("btn-press").addClass("btn-normal");
+                $btn.attr('disabled', false);
+            });
             $(this).removeClass('btn-press').addClass('btn-normal');
         });
         $('input.login-info').focus(function () {
