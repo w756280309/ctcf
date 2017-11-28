@@ -139,4 +139,28 @@ class PersonalinvestController extends BaseController
         }
         return $data;
     }
+
+    /**
+     * 查看
+     */
+    public function actionView($number, $type)
+    {
+        $data = [];
+        if ($type == 'online') {
+            $data = self::online($data, $number);
+        } else {
+            $data = self::offline($data, $number);
+        }
+        //var_dump($data);die;
+        return $this->render('view',['data' => $data]);
+    }
+    //查看付息
+    public function actionViewFx($time, $money)
+    {
+        $this->layout = false;
+        $time = explode(',', $time);
+        $money = explode(',', $money);
+        return $this->render('detail', ['time' => $time, 'money' => $money]);
+        //return $this->render('view-fx',['time' => $time, 'money' => $money]);
+    }
 }
