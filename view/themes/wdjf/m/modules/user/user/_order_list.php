@@ -38,6 +38,18 @@ use common\utils\StringUtils;
                         ?>
                     元</span>
                 </p>
+                <p>
+                    <span class="info-label">认购日期：</span>
+                    <span class="info-val">
+                        <?php
+                            if (2 === $type) {
+                                echo date('Y-m-d', $val['created_at']);
+                            } else {
+                                echo (new \DateTime($val['txOrderTime']))->format('Y-m-d');
+                            }
+                        ?>
+                    </span>
+                </p>
                 <?php if (empty($val['loan']['finish_date'])) { ?>
                     <p>
                         <span class="info-label">项目期限：</span>
