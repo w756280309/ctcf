@@ -5,6 +5,7 @@ namespace common\models\offline;
 use yii\db\ActiveRecord;
 use \Zii\Model\CoinsTrait;
 use \Zii\Model\LevelTrait;
+use Zii\Validator\CnIdCardValidator;
 
 /**
  * This is the model class for table "offline_user".
@@ -25,7 +26,7 @@ class OfflineUser extends ActiveRecord
         return [
             [['realName', 'idCard', 'mobile'], 'required'],
             [['realName', 'idCard', 'mobile'], 'string'],
-            [['idCard'], CnIdCardValidator::className()],
+            [['idCard'], CnIdCardValidator::class],
         ];
     }
 
