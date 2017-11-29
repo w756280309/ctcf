@@ -28,7 +28,8 @@ use common\utils\StringUtils;
         <div class="row loan-info">
             <div class="col-xs-8 loan-info1">
                 <p>
-                    <span class="info-label">认购金额：</span><span class="info-val">
+                    <span class="info-label">认购金额：</span>
+                    <span class="info-val">
                         <?php
                             if (2 === $type) {
                                 echo StringUtils::amountFormat3($val['order_money']);
@@ -37,6 +38,18 @@ use common\utils\StringUtils;
                             }
                         ?>
                     元</span>
+                </p>
+                <p>
+                    <span class="info-label">认购日期：</span>
+                    <span class="info-val">
+                        <?php
+                            if (2 === $type) {
+                                echo date('Y-m-d', $val['created_at']);
+                            } else {
+                                echo (new \DateTime($val['txOrderTime']))->format('Y-m-d');
+                            }
+                        ?>
+                    </span>
                 </p>
                 <?php if (empty($val['loan']['finish_date'])) { ?>
                     <p>
@@ -50,7 +63,12 @@ use common\utils\StringUtils;
                         </span>
                     </p>
                 <?php } else { ?>
-                    <p><span class="info-label">到期时间：</span><span class="info-val"><?= date('Y-m-d', $val['loan']['finish_date']) ?></span></p>
+                    <p>
+                        <span class="info-label">到期时间：</span>
+                        <span class="info-val">
+                            <?= date('Y-m-d', $val['loan']['finish_date']) ?>
+                        </span>
+                    </p>
                 <?php } ?>
             </div>
             <?php if (in_array($loanStatus, [OnlineProduct::STATUS_NOW, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) { ?>
