@@ -51,8 +51,6 @@ class RepaymentHelper
             for ($i = 1; $i <= $term; $i++) {
                 //获取当期还款时间
                 $time = (new DT($startDate))->addMonth(($i - 1) * $totalMonthEachTerm)->getTimestamp();
-                $paymentDay = min(intval($paymentDay), intval(date('t', $time)));//取还款日和当月最后一天的最小值
-                $paymentDay = str_pad($paymentDay, 2, '0', STR_PAD_LEFT);
                 $m = intval(date('m', $time));
                 if ($repaymentMethod === 7) {
                     if ($m <= 3) {
@@ -75,7 +73,14 @@ class RepaymentHelper
                 } else {
                     $m = str_pad($m, 2, '0', STR_PAD_LEFT);
                 }
-                $paymentDate = date('Y', $time) . '-' . $m . '-' . $paymentDay;
+
+                //获得实际还款月的最后一天，去取还款月的最后一天和已设还款日的最小值
+                $curMonthFirstDay = date('Y', $time) . '-' . $m . '-01';
+                $curMonthEndDay = date('t', strtotime($curMonthFirstDay));
+                $paymentTmpDay = min(intval($paymentDay), intval($curMonthEndDay));
+                $paymentPadDay = str_pad($paymentTmpDay, 2, '0', STR_PAD_LEFT);
+                $paymentDate = date('Y', $time) . '-' . $m . '-' . $paymentPadDay;
+
                 //如果还款时间大于最后一个还款日退出
                 if ($paymentDate > $endDate) {
                     break;
