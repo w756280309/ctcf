@@ -141,8 +141,7 @@ function subForm(form, button, falsed, datas)
             });
         } else {
             if (data.code != 0) {
-                toast(data.message, function () {
-                });
+                toast(data.message);
                 if (data.code > 0 && data.requiresCaptcha) {
                     if ($('.verify-div-box').hasClass('hide')) {
                         $('.verify-div-box').removeClass('hide');
@@ -150,7 +149,6 @@ function subForm(form, button, falsed, datas)
                     $('#loginform-verifycode-image').attr('src', '/site/captcha?' + Math.random());
                 }
             }
-
             if (to == 1 && data.tourl != undefined) {
                 location.href = data.tourl;
             }

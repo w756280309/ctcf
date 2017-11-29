@@ -102,21 +102,10 @@ class BirthdayCoupon
                         }
                         $successCoupon++;
                     }
-                    //发短信
-//                    $message = [
-//                        $user->real_name,
-//                        180,
-//                        \Yii::$app->params['clientOption']['host']['frontend'] . ' ',
-//                        \Yii::$app->params['platform_info.contact_tel'],
-//                    ];
-//                    $templateId = \Yii::$app->params['sms']['birthday_coupon'];
-//                    $res = SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
-//                    if (!$res) {
-//                        throw new \Exception();
-//                    }
+
                     //沃动短信通道
                     $wodong = new WDSmsService();
-                    $res = $wodong->send(SecurityUtils::decrypt($user->safeMobile), '【温都金服】尊敬的' .$user->real_name. '，温都金服祝您生日快乐！赠您生日感恩代金券礼包，180天有效，赶紧登陆官网https://www.wenjf.com/ 看看吧，客服热线400-101-5151，退订回N');
+                    $res = $wodong->send(SecurityUtils::decrypt($user->safeMobile), '【温都金服】尊敬的' .$user->real_name. '，温都金服祝您生日快乐！赠您生日感恩代金券礼包，180天有效，客服热线400-101-5151，退订回N');
                     if (!$res) {
                         throw new \Exception();
                     }
