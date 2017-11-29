@@ -100,7 +100,14 @@ $isOrg = $user->isOrgUser();
                                 </select>
                             </td>
                         <?php } ?>
-                            <td><span class="title">提现时间</span></td>
+                            <td><span class="title">项目标题</span></td>
+                            <td>
+                                <input type="text" value="<?= Yii::$app->request->get('title') ?>" name="title">
+                            </td>
+                            <td><span class="title">项目副标题</span></td>
+                            <td>
+                                <input type="text" value="<?= Yii::$app->request->get('internalTitle') ?>" name="internalTitle">
+                            </td><td><span class="title">提现时间</span></td>
                             <td>
                                 <input type="text" value="<?= $time ?>" name="time" onclick='WdatePicker({dateFmt: "yyyy-MM-dd", maxDate: "<?=  date('Y-m-d') ?>"});'>
                             </td>

@@ -28,8 +28,9 @@ class DrawrecordController extends BaseController
 
         //提现明细页面的搜索功能
         $status = intval(Yii::$app->request->get('status'));
+        $title = Yii::$app->request->get('title');
+        $internalTitle = Yii::$app->request->get('internalTitle');
         $time = Yii::$app->request->get('time');
-
         $query = DrawRecord::find()
             ->where(['uid' => $id]);
 
@@ -41,7 +42,30 @@ class DrawrecordController extends BaseController
             $query->andFilterWhere(['<', 'created_at', strtotime($time.' 23:59:59')]);
             $query->andFilterWhere(['>=', 'created_at', strtotime($time.' 0:00:00')]);
         }
+        //标题搜索
+        $query2 = 'select o.sn from online_fangkuan as o right join online_product as p on o.online_product_id = p.id where';
+        if (!empty($title)) {
+            $query2 .= ' p.title like "%' . $title . '%"';
+        }
+        if (!empty($internalTitle)) {
+            if (!empty($title)) {
+                $query2 .= ' and';
+            }
+            $query2 .= ' p.internalTitle like "%' . $internalTitle . '%"';
+        }
 
+        if (!empty($title) || !empty($internalTitle)) {
+            $orders = Yii::$app->db->createCommand($query2)->queryAll();
+            if (count($orders) > 0) {
+                $orders2 = [];
+                foreach ($orders as $v) {
+                    $orders2[] = $v['sn'];
+                }
+            } else {
+                $orders2 = ['1', '2'];  //自定义数组，所搜不存在时展示
+            }
+            $query->andFilterWhere(['in', 'orderSn', $orders2]);
+        }
         //正常显示详情页
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
         $model = $query
