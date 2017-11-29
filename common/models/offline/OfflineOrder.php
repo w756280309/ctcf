@@ -118,7 +118,7 @@ class OfflineOrder extends ActiveRecord
     /**
      * 审核人
      */
-    public function getAudit()
+    public function getAuditorName()
     {
         $admin = Admin::findOne($this->auditor);
         return !is_null($admin) ? $admin->real_name : '';
