@@ -28,7 +28,8 @@ use common\utils\StringUtils;
         <div class="row loan-info">
             <div class="col-xs-8 loan-info1">
                 <p>
-                    <span class="info-label">认购金额：</span><span class="info-val">
+                    <span class="info-label">认购金额：</span>
+                    <span class="info-val">
                         <?php
                             if (2 === $type) {
                                 echo StringUtils::amountFormat3($val['order_money']);
@@ -62,7 +63,12 @@ use common\utils\StringUtils;
                         </span>
                     </p>
                 <?php } else { ?>
-                    <p><span class="info-label">到期时间：</span><span class="info-val"><?= date('Y-m-d', $val['loan']['finish_date']) ?></span></p>
+                    <p>
+                        <span class="info-label">到期时间：</span>
+                        <span class="info-val">
+                            <?= date('Y-m-d', $val['loan']['finish_date']) ?>
+                        </span>
+                    </p>
                 <?php } ?>
             </div>
             <?php if (in_array($loanStatus, [OnlineProduct::STATUS_NOW, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) { ?>
