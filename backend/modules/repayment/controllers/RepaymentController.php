@@ -217,7 +217,7 @@ class RepaymentController extends BaseController
         $total_repayment = $bcround->bcround($totalFund, 2);
         $balance = $bcround->bcround(bcsub($saleac->available_balance, $total_repayment), 2);
 
-        if (!$repayment->isRepaid && 0 >= bccomp($balance, 0)) {
+        if (!$repayment->isRepaid && 0 > bccomp($balance, 0)) {
             return ['result' => 0, 'message' => '融资用户账户余额不足'];
         }
         //当不允许访问联动时候，默认联动测处理成功
