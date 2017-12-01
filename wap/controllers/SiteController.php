@@ -766,4 +766,25 @@ class SiteController extends Controller
 
         return $this->redirect($redirect);
     }
+
+    /**
+     * APP下载提示页 - （场景：兑吧活动微信端被封）
+     *
+     * App端跳转到指定目标地址
+     * 非App端渲染App下载提示页
+     */
+    public function actionRefer($redirect = null)
+    {
+        $disableAppRefer = AppMeta::getValue('disable_app_refer');
+
+        if ('on' === $disableAppRefer) {
+            return $this->redirect($redirect);
+        }
+
+        if (defined('IN_APP')) {
+            return $this->redirect($redirect);
+        }
+
+        return $this->render('refer');
+    }
 }
