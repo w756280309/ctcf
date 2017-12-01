@@ -86,11 +86,8 @@ class DatatjController extends BaseController
 
         $sql = "SELECT * FROM perf WHERE bizDate < DATE_FORMAT(NOW(),'%Y-%m-%d') order by bizDate desc";
         $allData = Yii::$app->db_read->createCommand($sql)->queryAll();
+        $allData = array_merge([$todayData], $allData);
         $pages = new Pagination(['totalCount' => count($allData), 'pageSize' => 20]);
-        $page = Yii::$app->request->get('page');
-        if (!isset($page) || 1 === intval($page)) {
-            $allData = array_merge([$todayData], $allData);
-        }
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $allData,
