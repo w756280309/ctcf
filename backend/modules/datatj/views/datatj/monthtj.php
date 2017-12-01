@@ -170,7 +170,7 @@ use yii\grid\GridView;
                     'attribute' => 'repayMoney',
                     'label' => '月回款总额',
                     'value' => function ($data) {
-                        return intval($data['successFound']);
+                        return intval($data['repayMoney']);
                     }
                 ],
             ],
