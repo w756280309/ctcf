@@ -60,8 +60,9 @@ use yii\grid\GridView;
             ],
             [
                 'label' => '项目名称',
+                'format' => 'html',
                 'value' => function($data) use ($orders) {
-                    return  in_array($data->ref_type, [PointRecord::TYPE_LOAN_ORDER, PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1])  && isset($orders[$data->ref_id]) ? $orders[$data->ref_id]->loan->title : '---';
+                    return  in_array($data->ref_type, [PointRecord::TYPE_LOAN_ORDER, PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1])  && isset($orders[$data->ref_id]) ? '<a href="/product/productonline/list?title=' . $orders[$data->ref_id]->loan->title . '">' . $orders[$data->ref_id]->loan->title . '</a>' : '---';
                 }
             ],
             [
