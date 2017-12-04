@@ -76,7 +76,7 @@ $user_id = Html::encode($uid);
                         allowClick = false;
                         var xhr = $.get(form.attr('action'), form.serialize(), function (data) {
                             newalert(!data.code, data.message);
-                            parent.location.reload();
+                            parent.location.href="/user/user/detail?id=<?= $uid ?>&type=1&tabClass=<?= $tabClass ?>"
                             allowClick = true;
                         });
 

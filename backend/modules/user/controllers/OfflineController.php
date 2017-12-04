@@ -49,14 +49,14 @@ class OfflineController extends BaseController
     /**
      * 线下会员详情页
      */
-    public function actionDetail($id)
+    public function actionDetail($id, $tabClass = null)
     {
         $user = OfflineUser::findOne($id);
         if (null === $user) {
             throw $this->ex404();
         }
 
-        return $this->render('detail', ['user' => $user]);
+        return $this->render('detail', ['user' => $user, 'tabClass' => $tabClass]);
     }
 
     /**
@@ -81,7 +81,7 @@ class OfflineController extends BaseController
     /**
      * 线下会员详情页-积分流水
      */
-    public function actionPoints($id)
+    public function actionPoints($id, $tabClass = null)
     {
         $user = $this->findOr404(OfflineUser::class, $id);
         $query = PointRecord::find()->where(['user_id' => $id, 'isOffline' => true])->orderBy(['recordTime' => SORT_DESC, 'id' => SORT_DESC]);
@@ -115,6 +115,7 @@ class OfflineController extends BaseController
             'orders' => $orders,
             'user' => $user,
             'ref_type' => $ref_type,
+            'tabClass' => $tabClass
         ]);
     }
 

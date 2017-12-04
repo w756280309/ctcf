@@ -243,6 +243,15 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
 </div>
 
 <script>
+    $(function () {
+        var tabClass = "<?= $tabClass ?>"
+        if (tabClass != '') {
+            $('.'+tabClass).trigger('click');
+        }else {
+            getMoneyRecord('/user/user/detail?id=<?= $normalUser->id?>&key=money_record');
+        }
+    })
+
     function getMoneyRecord(href)
     {
         $.get(href, function(data) {
@@ -352,8 +361,6 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
         })
     }
 
-    getMoneyRecord('/user/user/detail?id=<?= $normalUser->id?>&key=money_record');
-
     $('#list_nav li').click(function () {
         var index = $("#list_nav li").index(this);
         if(!$(this).hasClass('active')) {
@@ -366,9 +373,15 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
 
     $('.points').click(function () {
         if (!$('#point_list').html()) {
-            getPointList('/user/user/point-list?userId=<?= $normalUser->id ?>');
+            getPointList('/user/user/point-list?userId=<?= $normalUser->id ?>&tabClass=points');
         }
     });
+
+    $('.money_record_nav').click(function () {
+        if (!$('#money_record_list').html()) {
+            getMoneyRecord('/user/user/detail?id=<?= $normalUser->id?>&key=money_record');
+        }
+    })
 
     $('.coins').click(function () {
         if (!$('#coin_list').html()) {
@@ -384,7 +397,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
 
     $('.coupon_nav').click(function(){
         if (!$('#coupon_list').html()) {
-            getCouponList('/coupon/coupon/list-for-user?uid=<?= $normalUser->id?>')
+            getCouponList('/coupon/coupon/list-for-user?uid=<?= $normalUser->id?>&tabClass=coupon_nav')
         }
     });
 

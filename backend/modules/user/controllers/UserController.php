@@ -59,7 +59,7 @@ class UserController extends BaseController
     /**
      * 积分明细.
      */
-    public function actionPointList($userId)
+    public function actionPointList($userId, $tabClass = null)
     {
         $user = $this->findOr404(User::class, $userId);
         $query = PointRecord::find()
@@ -101,6 +101,7 @@ class UserController extends BaseController
             'orders' => $orders,
             'user' => $user,
             'ref_type' => $ref_type,
+            'tabClass' => $tabClass
         ]);
     }
 
@@ -226,7 +227,7 @@ class UserController extends BaseController
     /**
      * 查看用户详情.
      */
-    public function actionDetail($id)
+    public function actionDetail($id, $tabClass = null)
     {
         $user = User::findOne($id);
         $status = Yii::$app->request->get('status');
@@ -239,7 +240,7 @@ class UserController extends BaseController
             if (Yii::$app->request->isAjax) {
                 return $this->dealAjax($user);
             }
-            return $this->normalUserDetail($user);
+            return $this->normalUserDetail($user, $tabClass);
         }
     }
 
@@ -612,7 +613,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
      * 普通会员详情
      * @param User $user
      */
-    private function normalUserDetail(User $user)
+    private function normalUserDetail(User $user, $tabClass = null)
     {
         $id = $user->id;
         //查询是否绑定微信息
@@ -677,6 +678,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'transferSum' => bcdiv($noteData['transferSum'], 100, 2),
             'userAccount' => $ua,
             'is_wechat' => $is_wechat,
+            'tabClass' => $tabClass
         ]);
     }
 

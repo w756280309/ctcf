@@ -8,7 +8,7 @@ use yii\grid\GridView;
 
 
 <div class="float-left">
-    <a class="btn green" href="/user/point/add?userId=<?= $user->id ?>">
+    <a class="btn green" href="/user/point/add?userId=<?= $user->id ?>&tabClass=<?= $tabClass ?>">
         发放积分
     </a>
 </div>

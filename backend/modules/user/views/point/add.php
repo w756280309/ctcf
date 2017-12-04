@@ -17,7 +17,7 @@ $this->title = '发放积分';
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="<?= $isOffline === 0 ? '/user/user/detail?id='.$userId.'&type=1' : '/user/offline/detail?id='.$userId ?>">积分明细</a>
+                    <a href="<?= $isOffline === 0 ? '/user/user/detail?id=' . $userId . '&type=1&tabClass=' . $tabClass : '/user/offline/detail?id=' . $userId . '&tabClass=' . $tabClass ?>">积分明细</a>
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
@@ -28,7 +28,7 @@ $this->title = '发放积分';
 
         <?php
         $form = ActiveForm::begin([
-            'action' => '/user/point/add?userId='.$userId.'&isOffline='.$isOffline.'&backUrl='.$backUrl,
+            'action' => '/user/point/add?userId='.$userId.'&tabClass=' . $tabClass . '&isOffline=' . $isOffline . '&backUrl=' . $backUrl,
             'options' => [
                 'class' => 'form-horizontal form-bordered form-label-stripped',
             ]
@@ -57,7 +57,7 @@ $this->title = '发放积分';
                     if($backUrl) {
                         echo $backUrl;
                     } else {
-                        echo $isOffline === 0 ? '/user/user/detail?id='.$userId.'&type=1' : '/user/offline/detail?id='.$userId;
+                        echo $isOffline === 0 ? '/user/user/detail?id='.$userId.'&type=1&tabClass=' . $tabClass : '/user/offline/detail?id=' . $userId . '&tabClass=' . $tabClass;
                     }
                 ?>" class="btn">取消</a>
             </div>

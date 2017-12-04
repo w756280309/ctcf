@@ -22,8 +22,7 @@ class RankingController extends BaseController
     {
         $query = RankingPromo::find()
             ->orderBy([
-                'endTime' => SORT_DESC,
-                'id' => SORT_DESC,
+                'startTime' => SORT_DESC,
             ]);
 
         $dataProvider = new ActiveDataProvider([
