@@ -111,8 +111,7 @@ class DatatjController extends Controller
     {
         $dbRead = Yii::$app->db_read;
         //历史数据，不包含当月
-        $sql = "SELECT DATE_FORMAT(bizDate,'%Y-%m') as bizDate, SUM(totalInvestment) AS totalInvestment, SUM(onlineInvestment) AS onlineInvestment,SUM(offlineInvestment) AS offlineInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj
-FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
+        $sql = "SELECT DATE_FORMAT(bizDate,'%Y-%m') as bizDate, SUM(totalInvestment) AS totalInvestment, SUM(onlineInvestment) AS onlineInvestment,SUM(offlineInvestment) AS offlineInvestment,SUM(rechargeMoney) AS rechargeMoney,SUM(drawAmount) AS drawAmount,SUM(rechargeCost) AS rechargeCost ,SUM(reg) AS reg,SUM(idVerified) AS idVerified,SUM(successFound) AS successFound, SUM(qpayEnabled) AS qpayEnabled, SUM(investor) AS investor, SUM(newRegisterAndInvestor) AS newRegisterAndInvestor, SUM(newInvestor) AS newInvestor,SUM(investmentInWyb) AS investmentInWyb, SUM(investmentInWyj) AS investmentInWyj, SUM(repayMoney) AS repayMoney FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m') GROUP BY DATE_FORMAT(bizDate,'%Y-%m') ORDER BY DATE_FORMAT(bizDate,'%Y-%m') DESC";
         $data = $dbRead->createCommand($sql)->queryAll();
 
         //存入redis

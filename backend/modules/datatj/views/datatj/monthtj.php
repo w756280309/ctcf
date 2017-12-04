@@ -166,6 +166,15 @@ use yii\grid\GridView;
                         return intval($data['successFound']);
                     }
                 ],
+                [
+                    'attribute' => 'repayMoney',
+                    'label' => '月回款总额',
+                    'value' => function ($data) {
+                        return number_format($data['repayMoney'], 2);
+                    },
+                    'contentOptions' => ['class' => 'money'],
+                    'headerOptions' => ['class' => 'money'],
+                ],
             ],
             'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
         ]) ?>
