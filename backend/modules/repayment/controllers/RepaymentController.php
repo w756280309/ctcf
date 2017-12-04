@@ -486,7 +486,7 @@ class RepaymentController extends BaseController
             ->where(['online_pid' => $loan->id])
             ->andWhere(['status' => OnlineRepaymentPlan::STATUS_WEIHUAN])
             ->max('qishu');
-        $currentTermIsFinal = $lastTerm === $repaidRepayment->qishu;  //当前是否是最后一期
+        $currentTermIsFinal = $lastTerm === $repaidRepayment->term;  //当前是否是最后一期
 
         foreach ($plans as $plan) {
             $orderBonusProfit = 0;
@@ -714,12 +714,12 @@ class RepaymentController extends BaseController
         }
 
         //获得剩余本息余额
-        $restBenxi = OnlineRepaymentPlan::find()
+        $restBenxi = (float) OnlineRepaymentPlan::find()
             ->where([
                 'online_pid' => $loan->id,
                 'status' => OnlineRepaymentPlan::STATUS_WEIHUAN
             ])->andFilterWhere([
-                '<>', 'qishu', $refundRepayment->qishu,
+                '<>', 'qishu', $refundRepayment->term,
             ])->sum('benxi');
         $isRefreshCalcLiXi = $this->isRefreshCalcLiXi($loan, date('Y-m-d'));
         $db = Yii::$app->db;
@@ -777,7 +777,7 @@ class RepaymentController extends BaseController
                     'uid' => $plan->uid,
                     'in_money' => $lenderRepaymentRecord->benxi,
                     'balance' => $lendAccount->available_balance,
-                    'remark' => '第'.$refundRepayment->qishu.'期'.'本金:'.$lenderRepaymentRecord->benjin.'元;利息:'.$lenderRepaymentRecord->lixi.'元;',
+                    'remark' => '第'.$plan->qishu.'期'.'本金:'.$lenderRepaymentRecord->benjin.'元;利息:'.$lenderRepaymentRecord->lixi.'元;',
                 ]);
                 $lenderMoneyRecord->save(false);
 
@@ -790,7 +790,6 @@ class RepaymentController extends BaseController
                         throw new \Exception($fkResp->get('ret_msg'));
                     }
                 }
-                $transaction->commit();
             }
             $updateRefundRepaymentSql = "update repayment set isRefunded=:isRefunded,refundedAt=:refundedAt where id = :repaymentId and isRefunded=false";
             $updateRefundRepayment = $db->createCommand($updateRefundRepaymentSql, [
@@ -801,6 +800,7 @@ class RepaymentController extends BaseController
             if (!$updateRefundRepayment) {
                 throw new \Exception('更新');
             }
+            $transaction->commit();
         } catch (\Exception $ex) {
             $transaction->rollBack();
             throw $ex;
