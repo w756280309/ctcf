@@ -294,7 +294,8 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $repaymentData = RepaymentHelper::calcRepayment($paymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr);
 
         //原有最后一期还款利息（不包含加息）
-        $lastRepaymentKey = end(array_keys($repaymentData));
+        $dataKeys = array_keys($repaymentData);
+        $lastRepaymentKey = end($dataKeys);
         $lastRepaymentInterest = $repaymentData[$lastRepaymentKey]['interest'];
 
         //最后一期还款利息 = 原有最后一期还款利息 + 加息券产生收益
