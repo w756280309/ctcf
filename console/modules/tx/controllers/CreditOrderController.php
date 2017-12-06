@@ -614,7 +614,7 @@ class CreditOrderController extends Controller
             ])
             ->andWhere(['>', 'refund_time', strtotime($order->createTime)])
             ->andWhere(['status' => 0]);
-
+        Yii::trace($asset->loan_id.','.$asset->order_id.','.$asset->user_id.','.$asset->id, 'credit_order');
         if ($asset->hasTransferred()) {
             $query->andWhere(['asset_id' => $asset->id]);
         } else {
@@ -647,12 +647,13 @@ class CreditOrderController extends Controller
 
         //重新生成订单对应的还款计划
         $creditOrderMock = $order->mockOrder();
-        $creditOrderMock->generatePlan($asset);
+        $creditOrderMock->generatePlan($newAsset);
 
         if (bccomp($assetAmount, 0, 0) > 0) {
             //剩余资产对应订单计算还款本息并生成还款计划
             $restOrder = Clone $creditOrderMock;
             $restOrder->order_money = $assetAmount;
+            $restOrder->uid = $asset->user_id;
             $restOrder->generatePlan($asset);
         } else {
             //当用户资产全部转出,并且原有订单还存留有还款计划时,修改该资产为已回款,否则标记该记录失效
@@ -661,10 +662,10 @@ class CreditOrderController extends Controller
 
         //更新还款批次
         $payments = RepaymentPlan::find()
-            ->select('term, sum(benxi) as amount, sum(benjin) as principal, sum(lixi) as interest')
+            ->select('qishu, sum(benxi) as amount, sum(benjin) as principal, sum(lixi) as interest')
             ->where(['online_pid' => $asset->loan_id])
             ->andWhere(['status' => 0])
-            ->groupBy('term')
+            ->groupBy('qishu')
             ->asArray()
             ->all();
         foreach ($payments as $payment) {
@@ -673,7 +674,7 @@ class CreditOrderController extends Controller
                 'amount' => $payment['amount'],
                 'principal' => $payment['principal'],
                 'interest' => $payment['interest'],
-                'term' => $payment['term'],
+                'term' => $payment['qishu'],
                 'loanId' => $asset->loan_id,
             ])->execute();
         }

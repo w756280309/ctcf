@@ -145,12 +145,13 @@ class CreditOrder extends ActiveRecord
 
     public function mockOrder()
     {
+        $asset = $this->asset;
         return new OnlineOrder([
             'id' => $this->asset->order_id,
             'uid' => $this->user_id,
-            'online_pid' => $this->asset->loan_id,
-            'order_money' => $this->principal,
-            'yield_rate' => $this->order->yield_rate,
+            'online_pid' => $asset->loan_id,
+            'order_money' => $this->principal / 100,
+            'yield_rate' => $asset->order->yield_rate,
             'created_at' => strtotime($this->createTime),
             'status' => $this->buyerPaymentStatus ? OnlineOrder::STATUS_SUCCESS : OnlineOrder::STATUS_FALSE,
         ]);

@@ -501,7 +501,7 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
 
         //判断标的状态
         $loan = $this->loan;
-        if (null === $loan ||  5 > $loan->getRefundMethod()) {
+        if (null === $loan ||  5 > $loan->status) {
             return false;
         }
 
@@ -571,7 +571,7 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
                 'refund_time' => strtotime($value['date']),
             ];
             $plan = OnlineRepaymentPlan::initPlan($this, $planPrepareData);
-            if (null !== $asset) {
+            if (null !== $asset && $asset->hasTransferred()) {
                 $plan->asset_id = $asset->id;
             }
             $plan->save(false);
