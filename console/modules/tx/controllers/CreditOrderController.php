@@ -2,6 +2,8 @@
 
 namespace console\modules\tx\controllers;
 
+use common\models\order\OnlineOrder;
+use common\models\payment\Repayment;
 use common\models\tx\FinUtils;
 use Tx\UmpClient as Client;
 use common\models\order\BaoQuanQueue;
@@ -600,8 +602,6 @@ class CreditOrderController extends Controller
         if (null === $asset) {
             throw new \Exception('没有找到资产信息');
         }
-        $loan = $asset->loan;
-        $loanOrder = $asset->order;
 
         $assetAmount = bcdiv($asset->amount, 100, 2);//资产的剩余金额，以元为单位
         Yii::trace('原资产购买之后剩余金额:'.$assetAmount.PHP_EOL, 'credit_order');
@@ -612,7 +612,8 @@ class CreditOrderController extends Controller
                 'order_id' => $asset->order_id,
                 'uid' => $asset->user_id,
             ])
-            ->andWhere(['>', 'refund_time', strtotime($order->createTime)]);
+            ->andWhere(['>', 'refund_time', strtotime($order->createTime)])
+            ->andWhere(['status' => 0]);
 
         if ($asset->hasTransferred()) {
             $query->andWhere(['asset_id' => $asset->id]);
@@ -638,84 +639,43 @@ class CreditOrderController extends Controller
             throw new \Exception('未找到新建的订单用户资产');
         }
 
-        //9)更新旧还款计划，生成新还款计划
+        //删除原还款计划，生成新还款计划
+        foreach ($repayments as $repayment) {
+            //删除原还款计划
+            $repayment->delete();
+        }
+
+        //重新生成订单对应的还款计划
+        $creditOrderMock = $order->mockOrder();
+        $creditOrderMock->generatePlan($asset);
+
         if (bccomp($assetAmount, 0, 0) > 0) {
-            $previousTotalLixi = array_sum(ArrayHelper::getColumn($repayments, 'lixi'));//原总利息
-            Yii::trace('原还款计划剩余总利息:'.$previousTotalLixi.PHP_EOL, 'credit_order');
-            $newRepayments = $loan->getRepaymentPlan($order->principal, $loanOrder->apr);
-            foreach ($newRepayments as $key => $newRepayment) {
-                if ($newRepayment['date'] <= $order->createTime) {
-                    unset($newRepayments[$key]);
-                }
-            }
-            $newRepayments = array_values($newRepayments);
-            $newCount = count($newRepayments);
-            Yii::trace('用订单金额新生成还款计划期数:'.$newCount.PHP_EOL, 'credit_order');
-            if ($newCount !== $count) {
-                throw new \Exception('新还款计划期数和旧回款计划期数不一样');
-            }
-            $newTotalLixi = array_sum(array_column($newRepayments, 'interest'));//新还款计划的总利息
-            Yii::trace('新还款计划总利息:'.$newTotalLixi.PHP_EOL, 'credit_order');
-
-            $totalLixi = 0;//新还款计划累计金额
-            //更改原还款计划
-            foreach ($repayments as $key => $repayment) {
-                Yii::trace('原资产未被购买完，更新旧还款计划，生成新还款计划:'.PHP_EOL, 'credit_order');
-
-                //新建新的还款计划
-                $newRepayment = new RepaymentPlan();
-                $attributes = $repayment->getAttributes();
-                unset($attributes['id']);
-                $newRepayment->setAttributes($attributes, false);
-                $newRepayment->sn = FinUtils::generateSn('HP');
-                $newRepayment->uid = $order->user_id;
-                if ($key === $count - 1) {
-                    $newLixi = bcsub($newTotalLixi, $totalLixi, 2);
-                    Yii::trace('新还款计划利息:'.$newLixi.PHP_EOL, 'credit_order');
-                } else {
-                    $newLixi = $newRepayments[$key]['interest'];
-                    Yii::trace('新还款计划利息:'.$newLixi.PHP_EOL, 'credit_order');
-                }
-                $totalLixi = bcadd($totalLixi, $newLixi, 2);
-                $newRepayment->lixi = $newLixi;
-                $newRepayment->asset_id = $newAsset->id;  //将订单对应的新增用户资产ID存入还款计划中
-                if ($key === $count - 1) {
-                    //最后一期
-                    $newRepayment->benjin = $principal;
-                    $repayment->benjin = $assetAmount;
-                } else {
-                    $repayment->benjin = 0;
-                    $newRepayment->benjin = 0;
-                }
-                $newRepayment->benxi = bcadd($newRepayment->lixi, $newRepayment->benjin, 2);
-                $newRepayment->save(false);
-
-                Yii::trace('新还款计划ID'.$newRepayment->id.'本金:'.$newRepayment->benjin.';利息:'.$newRepayment->lixi.PHP_EOL, 'credit_order');
-                //更新原有还款计划
-                $repayment->lixi = bcsub($repayment->lixi, $newLixi, 2);
-                $repayment->benxi = bcadd($repayment->lixi, $repayment->benjin, 2);
-                $repayment->save(false);
-                Yii::trace('原还款计划ID'.$repayment->id.'本金:'.$repayment->benjin.';利息:'.$repayment->lixi.';user_id:'.$repayment->uid.';loan_id:'.$repayment->online_pid.';order_id'.$repayment->order_id.PHP_EOL, 'credit_order');
-            }
+            //剩余资产对应订单计算还款本息并生成还款计划
+            $restOrder = Clone $creditOrderMock;
+            $restOrder->order_money = $assetAmount;
+            $restOrder->generatePlan($asset);
         } else {
-            foreach ($repayments as $repayment) {
-                Yii::trace('原资产被买完，删除原还款计划，生成新还款计划:'.PHP_EOL, 'credit_order');
-                //新建新的还款计划
-                $newRepayment = new RepaymentPlan();
-                $attributes = $repayment->getAttributes();
-                unset($attributes['id']);
-                $newRepayment->setAttributes($attributes, false);
-                $newRepayment->sn = FinUtils::generateSn('HP');
-                $newRepayment->uid = $order->user_id;
-                $newRepayment->asset_id = $newAsset->id;  //将订单对应的新增用户资产ID存入还款计划中
-                $newRepayment->save(false);
+            //当用户资产全部转出,并且原有订单还存留有还款计划时,修改该资产为已回款,否则标记该记录失效
+            $this->updateAsset($asset);
+        }
 
-                Yii::trace('新还款计划ID'.$newRepayment->id.'本金:'.$newRepayment->benjin.';利息:'.$newRepayment->lixi.PHP_EOL, 'credit_order');
-                //删除原还款计划
-                $repayment->delete();
-            }
-
-            $this->updateAsset($asset);  //当用户资产全部转出,并且原有订单还存留有还款计划时,修改该资产为已回款,否则标记该记录失效
+        //更新还款批次
+        $payments = RepaymentPlan::find()
+            ->select('term, sum(benxi) as amount, sum(benjin) as principal, sum(lixi) as interest')
+            ->where(['online_pid' => $asset->loan_id])
+            ->andWhere(['status' => 0])
+            ->groupBy('term')
+            ->asArray()
+            ->all();
+        foreach ($payments as $payment) {
+            $sql = "update repayment set amount=:amount,principal=:principal,interest=:interest where term=:term and loan_id=:loanId";
+            Yii::$app->db->createCommand($sql, [
+                'amount' => $payment['amount'],
+                'principal' => $payment['principal'],
+                'interest' => $payment['interest'],
+                'term' => $payment['term'],
+                'loanId' => $asset->loan_id,
+            ])->execute();
         }
     }
 

@@ -5,17 +5,22 @@ namespace common\models\order;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\epay\EpayUser;
+use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use common\models\product\RateSteps;
 use common\models\product\RepaymentHelper;
+use common\models\tx\CreditOrder;
+use common\models\tx\UserAsset;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
 use common\models\user\User;
 use EBaoQuan\Client;
 use P2pl\OrderTxInterface;
+use phpDocumentor\Reflection\Types\Self_;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "online_order".
@@ -439,6 +444,9 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
         $profit = '0';
         $bonusCoupon = $this->bonusCoupon;
         if (null !== $bonusCoupon) {
+            if ($this->isTransferred()) {
+                return $profit;
+            }
             $bonusCouponType = $bonusCoupon->couponType;
             $profit = RepaymentHelper::calcBonusProfit($this->order_money, $bonusCouponType->bonusRate/100, $bonusCouponType->bonusDays);
         }
@@ -477,5 +485,96 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
         $expectProfit = OnlineProduct::calcExpectProfit($amount, $product->refund_method, $expires, $realRate);
         return $expectProfit;
 
+    }
+
+    /**
+     * 判断一个订单是否被转让过
+     *
+     * @return bool
+     */
+    public function isTransferred()
+    {
+        //判断订单状态
+        if (in_array($this->status, [self::STATUS_FALSE, self::STATUS_CANCEL])) {
+            return false;
+        }
+
+        //判断标的状态
+        $loan = $this->loan;
+        if (null === $loan ||  5 > $loan->getRefundMethod()) {
+            return false;
+        }
+
+        $co = CreditOrder::tableName();
+        $a = UserAsset::tableName();
+
+        return null !== CreditOrder::find()
+            ->innerJoinWith('asset')
+            ->where(["$a.order_id" => $this->id])
+            ->andWhere(["$co.buyerPaymentStatus" => 1])
+            ->one();
+    }
+
+    //根据当前订单和资产生成还款计划
+    public function generatePlan($asset = null)
+    {
+        $refundPlan = [];
+        $refundDates = [];
+        $benxiData = OnlineRepaymentPlan::calcBenxi($this);
+        if (empty($benxiData)) {
+            throw new \Exception('还款数据不能为空');
+        }
+
+        if (null !== $asset) {
+            //查询已经还款的部分
+            $query = OnlineRepaymentPlan::find()
+                ->where([
+                    'online_pid' => $asset->loan_id,
+                    'order_id' => $asset->order_id,
+                    'uid' => $asset->user_id,
+                ])->andWhere(['<', 'refund_time', $this->created_at])
+                ->andWhere(['in', 'status', [OnlineRepaymentPlan::STATUS_TIQIAM, OnlineRepaymentPlan::STATUS_YIHUAN]]);
+
+            if ($asset->hasTransferred()) {
+                $query->andWhere(['asset_id' => $asset->id]);
+            } else {
+                $query->andWhere(['asset_id' => null]);
+            }
+
+            $refundPlan = $query->all();
+            if (!empty($refundPlan)) {
+                $refundTimes = ArrayHelper::getColumn($refundPlan, 'refund_time');
+                $refundDates = array_filter($refundTimes, function($refundTime) {
+                    return date('Y-m-d', $refundTime);
+                });
+            }
+        }
+
+        foreach ($benxiData as $key => $value) {
+            //期数
+            $term = $key + 1;
+
+            //如果对应期数的还款利息已还，则跳过本次循环，不再生成新的还款计划
+            if (!empty($refundPlan)) {
+                if (in_array($value['date'], $refundDates)) {
+                    continue;
+                }
+            }
+
+            //生成新的还款计划
+            $amount = bcadd($value['principal'], $value['interest'], 2);
+            $planPrepareData = [
+                'qishu' => $term,
+                'benxi' => $amount,
+                'benjin' => $value['principal'],
+                'lixi' => $value['interest'],
+                'refund_time' => strtotime($value['date']),
+            ];
+            $plan = OnlineRepaymentPlan::initPlan($this, $planPrepareData);
+            if (null !== $asset) {
+                $plan->asset_id = $asset->id;
+            }
+            $plan->save(false);
+        }
     }
 }
