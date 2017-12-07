@@ -3,6 +3,7 @@
 namespace app\modules\wechat\controllers;
 
 use common\models\user\User;
+use common\models\wechat\Reply;
 use EasyWeChat\Message\Image;
 use EasyWeChat\Message\Text;
 use yii\web\Controller;
@@ -165,11 +166,8 @@ class PushController extends Controller
         if (strtolower($postObj->MsgType) == 'text' && !is_null($postObj->Content)) {
             $openid = strval($postObj->FromUserName);
             $app = Yii::$container->get('weixin_wdjf');
-            if(strpos(strval($postObj->Content), '答案') !== false) {
-                $message = '人民币';
-                $app->staff->message($message)->to(strval($openid))->send();
-            } else if (strpos(strval($postObj->Content), '福利') !== false) {
-                $template_id = 'YCe17Ta3LbwhwQWe3aBOuTLE2EgYN_Tlho6mRz7aUC0';
+            if (strpos(strval($postObj->Content), '福利') !== false) {
+                $template_id = 'Wf2CgM-J0s1Pp7DYngnxNTK6bn-86H2Qehm42uVHP0g';
                 $url = 'https://m.wenjf.com/promotion/wrm170210?utm_source=toutiao&hmsr=toutiao';
                 $data = [
                     'first' => "您被选中为幸运用户，限时开启红包、超市卡福利！",
@@ -178,10 +176,18 @@ class PushController extends Controller
                     'remark' => "\n点击参与活动，立即领取160元超市卡！",
                 ];
                 $app->notice->to($openid)->uses($template_id)->andUrl($url)->data($data)->send();
-            } else if (strpos(strval($postObj->Content), '投票') !== false) {
-                $mediaId = '';
-                $text = new Image(['media_id' => $mediaId]);
-                $app->staff->message($text)->to(strval($openid))->send();
+            }
+            //自动编辑的
+            $replys = Reply::find()->where(['isDel' => false])->all();
+            foreach ($replys as $reply) {
+                if(strpos(strval($postObj->Content), $reply->keyword) !== false) {
+                    if ($reply->type == 'text') {
+                        $message = $reply->content;
+                    } else if ($reply->type == 'image') {
+                        $message = new Image(['media_id' => $reply->content]);
+                    }
+                    $app->staff->message($message)->to(strval($openid))->send();
+                }
             }
         }
     }
