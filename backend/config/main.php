@@ -109,5 +109,8 @@ return [
         'source' => [
             'class' => 'Wcg\Growth\Integration\Yii2Module\Module',
         ],
+        'wechat' => [
+            'class' => 'backend\modules\wechat\Module',
+        ],
     ],
 ];
