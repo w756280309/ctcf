@@ -59,6 +59,9 @@ Yii::$container->set('weixin_wdjf', function(){
         'debug' => false,       //所有日志均不会记录
         'app_id' => Yii::$app->params['weixin']['appId'],
         'secret' => Yii::$app->params['weixin']['appSecret'],
+        'guzzle' => [
+            'timeout' => 15,
+        ],
     ];
     $app = new \EasyWeChat\Foundation\Application($options);
     $cache = new \Doctrine\Common\Cache\RedisCache();
