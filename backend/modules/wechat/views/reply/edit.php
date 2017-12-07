@@ -75,8 +75,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
 
-                <a href="/system/role/list" class="btn">取消</a>
-
             </div>
 
             <?php $form->end(); ?>
