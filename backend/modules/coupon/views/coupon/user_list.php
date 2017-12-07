@@ -3,7 +3,7 @@ use common\utils\StringUtils;
 use yii\grid\GridView;
 ?>
 <div class="float-left">
-    <a class="btn green" href="javascript:openwin('/coupon/coupon/allow-issue-list?uid=<?= $user->id ?>' , 800, 400)">
+    <a class="btn green" href="javascript:openwin('/coupon/coupon/allow-issue-list?uid=<?= $user->id ?>&tabClass=<?= $tabClass ?>' , 800, 400)">
         发放优惠券
     </a>
     <span style="padding-left: 20px;">可用金额(元)：<?= isset($sumCoupon) ? StringUtils::amountFormat2($sumCoupon) : '0' ?></span>
@@ -129,7 +129,7 @@ use yii\grid\GridView;
             'format' => 'html',
             'value' => function ($data) {
                 if (!$data->isUsed && $data->expiryDate > date('Y-m-d')) {
-                    return '<a class="btn btn-primary check-ump-info" href="/coupon/coupon/del?id='.$data->id.'">删除</a>';
+                    return '<a class="btn btn-primary check-ump-info" href="/coupon/coupon/del?id=' . $data->id . '&tabClass=' .  Yii::$app->request->get('tabClass') . '">删除</a>';
                 }
             }
         ],

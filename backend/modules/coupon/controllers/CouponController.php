@@ -209,7 +209,7 @@ class CouponController extends BaseController
      * 1. 每页最多显示15条记录;
      * 2. 按照优惠券发放时间的降序排列;
      */
-    public function actionListForUser($uid)
+    public function actionListForUser($uid, $tabClass = null)
     {
         $user = $this->findOr404(User::class, $uid);
         $u = UserCoupon::tableName();
@@ -252,7 +252,8 @@ class CouponController extends BaseController
             'sumCoupon' => $sumCoupon,
             'CouponUsed' => $CouponUsed,
             'isUsed' => $isUsed,
-            'type' => $type
+            'type' => $type,
+            'tabClass' => $tabClass
         ]);
     }
 
@@ -261,7 +262,7 @@ class CouponController extends BaseController
      *
      * 1. 按面值的升序为第一序列,起投金额的升序为第二序列排序;
      */
-    public function actionAllowIssueList($uid, $cid = null, $couponType = null)
+    public function actionAllowIssueList($uid, $tabClass = null, $cid = null, $couponType = null)
     {
         $nowDate = date('Y-m-d');
 
@@ -281,10 +282,9 @@ class CouponController extends BaseController
             return ['code' => 0, 'data' => $query->asArray()->all()];
         }
         $query->orderBy(['amount' => SORT_ASC, 'minInvest' => SORT_ASC]);
-
         $this->layout = false;
 
-        return $this->render('issue_list', ['model' => $query->all(), 'uid' => $uid]);
+        return $this->render('issue_list', ['model' => $query->all(), 'uid' => $uid, 'tabClass' => $tabClass]);
     }
 
     /**
@@ -386,7 +386,7 @@ class CouponController extends BaseController
     /**
      * 删除代金券操作
      */
-    public function actionDel($id)
+    public function actionDel($id, $tabClass = null)
     {
         $userCoupon = UserCoupon::findOne($id);
         if (!is_null($userCoupon)) {
@@ -395,7 +395,7 @@ class CouponController extends BaseController
             } else {
                 $userCoupon->expiryDate = date("Y-m-d",strtotime("-1 day"));
                 if ($userCoupon->save()) {
-                    return $this->redirect('/user/user/detail?id=' . $userCoupon->user_id);
+                    return $this->redirect('/user/user/detail?id=' . $userCoupon->user_id . '&tabClass=' . $tabClass);
                 }
             }
         }

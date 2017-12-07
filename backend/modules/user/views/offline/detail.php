@@ -77,7 +77,7 @@ $this->title = '线下会员详情';
             <div>
                 <ul class="nav nav-tabs nav-pills" role="tablist" id="list_nav">
                     <li role="presentation" class="point_record_nav active"><a href="javascript:getLoanOrderList('/user/offline/orders?id=<?= $user->id?>')">标的投资</a></li>
-                    <li role="presentation" class="point_record_nav"><a href="javascript:getPointList('/user/offline/points?id=<?= $user->id?>')">积分</a></li>
+                    <li role="presentation" class="point_record_nav"><a href="javascript:getPointList('/user/offline/points?id=<?= $user->id?>&tabClass=point_record_nav')">积分</a></li>
                     <li role="presentation" class="point_record_nav"><a href="javascript:getCoinList('/user/user/coin-list?userId=<?= $user->id ?>&isOffline=1')">财富值</a></li>
                     <li role="presentation" class="point_record_nav">
                         <a href="javascript:getOnlineList('/user/offline/online-user?id=<?= $user->id ?>')">线上会员</a>
@@ -92,6 +92,15 @@ $this->title = '线下会员详情';
 </div>
 
 <script>
+    $(function () {
+        var tabClass = "<?= $tabClass ?>"
+        if (tabClass == 'point_record_nav') {
+            $('li.point_record_nav').eq(1).addClass('active').siblings().removeClass('active');
+           getPointList('/user/offline/points?id=<?= $user->id?>&tabClass=point_record_nav')
+        } else {
+            getLoanOrderList('/user/offline/orders?id=<?= $user->id?>');
+        }
+    })
     function getLoanOrderList(href)
     {
         $.get(href, function(data) {
@@ -136,6 +145,6 @@ $this->title = '线下会员详情';
         }
     });
     //默认第一个显示
-    getLoanOrderList('/user/offline/orders?id=<?= $user->id?>');
+
 </script>
 <?php $this->endBlock(); ?>

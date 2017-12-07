@@ -15,7 +15,7 @@ class PointController extends BaseController
     /**
      * 发放积分.
      */
-    public function actionAdd($userId, $isOffline = 0, $backUrl = false)
+    public function actionAdd($userId, $tabClass = null, $isOffline = 0, $backUrl = false)
     {
         $points =  $isOffline ? OfflineUser::findOne($userId) : User::findOne($userId);
         if (empty($points->id) || !in_array($isOffline, ['0', '1'])) {
@@ -32,10 +32,16 @@ class PointController extends BaseController
                 if ($backUrl) {
                     return $this->redirect($backUrl);
                 }
-                $this->redirect($isOffline ? '/user/offline/detail?id='.$userId : '/user/user/detail?id='.$userId.'&type=1');
+                $this->redirect($isOffline ? '/user/offline/detail?id=' . $userId . '&tabClass=' .$tabClass : '/user/user/detail?id=' . $userId . '&type=1&tabClass=' . $tabClass);
             }
         }
-        return $this->render('add', ['userId' => $userId, 'PointRecord' => $PointRecord, 'isOffline' => $isOffline, 'backUrl' => $backUrl]);
+        return $this->render('add', [
+            'userId' => $userId,
+            'PointRecord' => $PointRecord,
+            'isOffline' => $isOffline,
+            'backUrl' => $backUrl,
+            'tabClass' => $tabClass
+        ]);
     }
 
     /**
