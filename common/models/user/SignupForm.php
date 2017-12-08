@@ -3,10 +3,12 @@
 namespace common\models\user;
 
 use common\lib\validator\LoginpassValidator;
+use common\models\affiliation\AffiliateCampaign;
 use common\models\affiliation\AffiliationManager;
 use common\models\affiliation\Affiliator;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
+use common\models\growth\AppMeta;
 use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
 use common\models\sms\SmsConfig;
@@ -226,12 +228,20 @@ class SignupForm extends Model
             SmsService::editSms(SecurityUtils::decrypt($user->safeMobile));
 
             //记录用户与分销商关系 - 注册后续处理模块2
-            //判断如果当前渠道未被标记，且邀请者属于瑞安分销商，则记录用户属于瑞安分销商
+            //例：判断如果当前渠道未被标记，且邀请者属于瑞安分销商，则记录用户属于瑞安分销商
             if (null === $campaignSource) {
-                //其中2为正式站瑞安分销商ID
-                $affiliator = Affiliator::findOne(2);
-                if (null !== $affiliator && $affiliator->isAffiliatorCampaign($inviterAffliationCampaignSource)) {
-                    $campaignSource = $inviterAffliationCampaignSource;
+                $affiliatorIds = AppMeta::getValue('affiliator_inherit');
+                if (null !== $affiliatorIds) {
+                    $affiliatorIds = explode(',', $affiliatorIds);
+                    if (!empty($affiliatorIds)) {
+                        $affiliateCampaign = AffiliateCampaign::find()
+                            ->where(['trackCode' => $inviterAffliationCampaignSource])
+                            ->andWhere(['in', 'affiliator_id', $affiliatorIds])
+                            ->one();
+                        if (null !== $affiliateCampaign) {
+                            $campaignSource = $inviterAffliationCampaignSource;
+                        }
+                    }
                 }
             }
             if (null !== $campaignSource) {
