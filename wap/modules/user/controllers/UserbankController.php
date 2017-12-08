@@ -111,6 +111,11 @@ class UserbankController extends BaseController
         ]);
     }
 
+    public function actionRefer()
+    {
+        return $this->render('refer');
+    }
+
     /**
      * 提现申请表单页.
      */

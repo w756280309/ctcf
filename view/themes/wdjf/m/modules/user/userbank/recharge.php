@@ -10,8 +10,8 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
 }
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css?v=20160803"/>
-
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css?v=20171208"/>
+<script src="<?= ASSETS_BASE_URI ?>js/layer.js?v=1"></script>
 <!--银行卡-->
 <div class="row bank-card">
     <div class="col-xs-2 bank-img"><img src="<?= ASSETS_BASE_URI ?>images/bankicon/<?= $user_bank->bank_id ?>.png" alt=""/></div>
@@ -35,40 +35,41 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
 <form method="post" class="cmxform" id="form" action="/user/qpay/qrecharge/verify" data-to="1">
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <input name="from" type="hidden" value="<?= Yii::$app->request->get('from'); ?>">
-    <div class="row kahao">
+    <div class="row kahao recharge-kahao">
         <div class="col-xs-3 col-sm-2">充值金额</div>
-        <div class="col-xs-9 col-sm-8 safe-lf"><input type="text" id="fund"  name='RechargeRecord[fund]' placeholder="输入充值金额"/></div>
+        <div class="col-xs-9 col-sm-8 safe-lf">
+            <input type="number" id="fund" autocomplete="off" name='RechargeRecord[fund]' placeholder="输入充值金额"/>
+            <span class="trans" ></span>
+        </div>
+    </div>
+    <p class="formula">手机充值超过<span class="formula-money"></span>每日限额，您可以用电脑登录温都金服官网（www.wenjf.com）充值<a class="a-formula">[查看详情]</a></p>
+
+    <!--提交按钮-->
+    <div class="row">
+        <div class="col-xs-12 login-sign-btn">
+            <!--当快捷充值不支持时,按钮禁用-->
+            <input id="rechargebtn" class="rechargebtn btn-common btn-normal" type="submit" value="立即充值" <?= $bank->isDisabled ? "disabled=\"disabled\"" : "" ?>>
+        </div>
     </div>
     <!--  当快捷充值被禁用,需要显示提示信息 -->
     <?php if ($bank->isDisabled) { ?>
         <div class="note form-bottom">*绑定银行暂不支持快捷充值，如有问题请联系客服<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>。</div>
     <?php } else { ?>
-        <br>
         <div class="note">
             <ul>
-                <li>*温馨提示：</li>
-                <li>为保障安全，连续3次因余额不足导致充值失败，快捷充值通道将被锁定24小时，请核实后交易；</li>
-                <li>如果快捷充值通道已被锁定，可先选择PC官网进行网银充值；</li>
-                <li>如需要大额充值，可选择PC官网进行网银充值，地址（www.wenjf.com），如有疑问，请联系客服<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>。</li>
+                <li class="li-title">温馨提示</li>
+                <li>为保障安全，连续3次充值失败，24小时内将无法通过手机充值。</li>
+                <li>您还可以电脑登录网站（www.wenjf.com）充值，电脑网银充值不受银行充值金额限制。</li>
+                <li>客服电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></li>
             </ul>
         </div>
         <div class="form-bottom">&nbsp;</div>
     <?php } ?>
-    <!--提交按钮-->
-    <div class="row">
-        <div class="col-xs-3"></div>
-        <div class="col-xs-6 login-sign-btn">
-            <!--当快捷充值不支持时,按钮禁用-->
-            <input id="rechargebtn" class="btn-common btn-normal" type="submit" value="立即充值" <?= $bank->isDisabled ? "disabled=\"disabled\"" : "" ?>>
-        </div>
-        <div class="col-xs-3"></div>
-    </div>
 </form>
 
 <script type="text/javascript">
     var csrf;
-    function validateform()
-    {
+    function validateform() {
         if($.trim($('#fund').val()) === '') {
             toast('充值金额不能为空');
             $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
@@ -88,9 +89,63 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
         return true;
     }
     $(function() {
-       var err = '<?= isset($data['code']) ? $data['code'] : '' ?>';
-       var mess = '<?= isset($data['message']) ? $data['message'] : '' ?>';
-       var tourl = '<?= isset($data['tourl']) ? $data['tourl'] : '' ?>';
+        var err = '<?= isset($data['code']) ? $data['code'] : '' ?>';
+        var mess = '<?= isset($data['message']) ? $data['message'] : '' ?>';
+        var tourl = '<?= isset($data['tourl']) ? $data['tourl'] : '' ?>';
+        var singleLimit = '<?= $bank['singleLimit'] ?>';
+        var singleLimitUnit = '<?= StringUtils::amountFormat1('{amount}{unit}', $bank['singleLimit']) ?>';
+        var dailyLimit = '<?= $bank['dailyLimit'] ?>';
+        var dailyLimitUnit = '<?= StringUtils::amountFormat1('{amount}{unit}', $bank['dailyLimit']) ?>';
+        $('.formula-money').html(dailyLimitUnit);
+        (function () {
+            if ( parseFloat($('#fund').val()) > parseFloat(dailyLimit) ) {
+                $('.recharge-kahao .trans,.cmxform .formula').show();
+                return false;
+            } else {
+                $('.recharge-kahao .trans,.cmxform .formula').hide();
+                return false;
+            }
+        })();
+        $('.formula').on('click', '.a-formula', function () {
+            $('.recharge-kahao .trans,.cmxform .formula').hide();
+            location.href='/user/userbank/refer';
+        });
+        inputListener('#fund',dailyLimit);
+        function inputListener(obj,dailyMoney) {
+            document.querySelector(obj).addEventListener('input', function () {
+                var _this = this;
+                _this.onkeyup = function () {
+                    _this.value = _this.value.replace(/[^\d.]/g, '');
+                    if ( parseFloat(_this.value) > parseFloat(dailyMoney) ) {
+                        $('.recharge-kahao .trans,.cmxform .formula').show();
+                        return false;
+                    } else {
+                        $('.recharge-kahao .trans,.cmxform .formula').hide();
+                        return false;
+                    }
+
+                }
+            });
+        }
+
+        //  温馨提示 弹框
+        function openPopup() {
+            var message = '';
+            if(singleLimit != undefined){
+                message = '本次充值超过单笔'+singleLimitUnit+'限额，建议您分多笔进行充值';
+            }
+            layer.open({
+                title: ['温馨提示', 'background-color: #ff6058; color:#fff;']
+                ,content: message
+                ,shadeClose:false
+                ,className: 'customer-layer-popuo'
+                ,btn: [ '返回修改']
+                ,no: function(index){
+                    layer.closeAll();
+                }
+            });
+        }
+
        if(err === '1') {
            toast(mess, function() {
                if (tourl !== '') {
@@ -104,17 +159,20 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
 
        $('#form').on('submit', function(e) {
            e.preventDefault();
-
+           var money = $('#fund').val();
            var $btn = $('#rechargebtn');
            $btn.addClass("btn-press").removeClass("btn-normal");
+           if (parseFloat(singleLimit) < parseFloat(money) ) {
+               openPopup();
+               return false;
+           }
            if (!validateform()) {
                return false;
            }
            subRecharge();
            $btn.removeClass("btn-press").addClass("btn-normal");
        });
-
-    })
+    });
 
     function subRecharge(){
         var $form = $('#form');
