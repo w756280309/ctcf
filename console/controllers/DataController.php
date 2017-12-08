@@ -594,4 +594,23 @@ and date(from_unixtime(u.created_at)) <= :endDate";
         $objWriter->save($file);
         exit();
     }
+
+    public function actionUserViaBank($bankId)
+    {
+        $sql = "select u.safeMobile from user_bank ub inner join user u on ub.uid=u.id where u.type=1 and ub.bank_id=:bankId";
+        $users = Yii::$app->db->createCommand($sql, [
+            'bankId' => $bankId,
+        ])->queryAll();
+        foreach ($users as $k => $user) {
+            $users[$k]['safeMobile'] = SecurityUtils::decrypt($user['safeMobile']);
+        }
+
+        $title = ['手机号'];
+        array_unshift($users, $title);
+        $file = Yii::getAlias('@app/runtime/user_via_bank_'.date('YmdHis').'.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($users);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
+    }
 }
