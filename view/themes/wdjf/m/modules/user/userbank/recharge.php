@@ -53,7 +53,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     </div>
     <!--  当快捷充值被禁用,需要显示提示信息 -->
     <?php if ($bank->isDisabled) { ?>
-        <div class="note form-bottom">*绑定银行暂不支持快捷充值，如有问题请联系客服<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>。</div>
+        <div class="note form-bottom" style="font-size: 13px">*当前所绑定银行卡的快捷充值已暂停，您可以用电脑登录网站（www.wenjf.com）进行大额充值。如有疑问请拨打客服电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>。</div>
     <?php } else { ?>
         <div class="note">
             <ul>
