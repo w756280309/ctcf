@@ -94,7 +94,7 @@ if ($isLuodiye) {
     <a class="link-last" href="/deal/deal/index/">立即认购</a>
 </div>
 <p class="danger-tip">理财非存款，产品有风险，投资须谨慎</p>
-<div class="fixed-float">
+<!--<div class="fixed-float">
     <img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt="">
 </div>
 <div class="fixed-box">
@@ -113,4 +113,4 @@ if ($isLuodiye) {
             </tr>
         </table>
     </div>
-</div>
+</div>-->

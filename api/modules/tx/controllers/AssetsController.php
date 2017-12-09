@@ -3,8 +3,10 @@
 namespace api\modules\tx\controllers;
 
 use common\models\tx\CreditNote;
+use common\models\tx\CreditOrder;
 use common\models\tx\Loan;
 use common\models\order\OnlineRepaymentPlan as Plan;
+use common\models\tx\Order;
 use common\models\tx\UserAsset;
 use Yii;
 use yii\data\ArrayDataProvider;
@@ -147,14 +149,18 @@ class AssetsController extends Controller
 
         $assetsData = [];
         if ($userId > 0) {
+            $co = CreditOrder::tableName();
+            $ua = UserAsset::tableName();
             $assetQuery = UserAsset::find()
-                ->where(['user_id' => $userId]);
+                ->select("$ua.*, $co.createTime as txOrderTime")
+                ->leftJoin($co, "$co.id = $ua.credit_order_id")
+                ->where(["$ua.user_id" => $userId]);
 
             if (1 === $type) {  //收益中
-                $assetQuery->andWhere(['isRepaid' => false]);
-                $assetQuery->andWhere(['>', 'amount', 0]);
+                $assetQuery->andWhere(["$ua.isRepaid" => false]);
+                $assetQuery->andWhere(['>', "$ua.amount", 0]);
             } elseif (3 === $type) {    //已还清
-                $assetQuery->andWhere(['isRepaid' => true, 'isInvalid' => false]);
+                $assetQuery->andWhere(["$ua.isRepaid" => true, "$ua.isInvalid" => false]);
             }
 
             $assets = $assetQuery->asArray()->all();
@@ -178,6 +184,11 @@ class AssetsController extends Controller
                 if (isset($loans[$asset['loan_id']])) {
                     $assetsData[$key] = $asset;
                     $assetsData[$key]['loan'] = $loans[$asset['loan_id']];
+                    $assetsData[$key]['txOrderTime'] = $asset['txOrderTime'];
+                    if (empty($asset['credit_order_id'])) {
+                        $order = Order::findOne($asset['order_id']);
+                        $assetsData[$key]['txOrderTime'] = null === $order ? null : $order->getOrderTime();
+                    }
                 }
             }
             if (1 === $type) {

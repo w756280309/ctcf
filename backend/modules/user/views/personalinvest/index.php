@@ -19,12 +19,11 @@ $menus = AuthSys::getMenus('A100000');
             <ul class="breadcrumb">
                 <li>
                     <i class="icon-home"></i>
-                    <a href="/adv/adv/index">会员管理</a>
+                    <a href="/user/user/listt">会员管理</a>
                     <i class="icon-angle-right"></i>
                 </li>
                 <li>
-                    <a href="/adv/adv/index">个人投资详情导出</a>
-                    <i class="icon-angle-right"></i>
+                    <a href="/user/personalinvest/index">个人投资详情导出</a>
                 </li>
             </ul>
         </div>
@@ -73,9 +72,11 @@ $menus = AuthSys::getMenus('A100000');
                     <?php
                         if (!is_null($model)) {
                             if (Yii::$app->request->get('type') == 'online') {
-                                echo '<td>'.$model->real_name.'</td><td>'.\common\utils\SecurityUtils::decrypt($model->safeMobile).'</td><td><center><a href="/user/personalinvest/export?number='.\common\utils\SecurityUtils::decrypt($model->safeMobile) .'&type=online">导出</a></center></td>';
+                                echo '<td>'.$model->real_name.'</td><td>'.\common\utils\SecurityUtils::decrypt($model->safeMobile).'</td><td><center><a href="/user/personalinvest/view?number='.\common\utils\SecurityUtils::decrypt($model->safeMobile) .'&type=online" class="btn mini green"><i class="icon-edit"></i>查看</a>
+                                    <a href="/user/personalinvest/export?number='.\common\utils\SecurityUtils::decrypt($model->safeMobile) .'&type=online" class="btn mini green"><i class="icon-edit"></i>导出</a></center></td>';
                             } else {
-                                echo '<td>'.$model->realName.'</td><td>'.$model->idCard.'</td><td><center><a href="/user/personalinvest/export?number='.$model->idCard.'&type=offline">导出</a></center></td>';
+                                echo '<td>'.$model->realName.'</td><td>'.$model->idCard.'</td><td><center><a href="/user/personalinvest/view?number='.$model->idCard .'&type=offline" class="btn mini green"><i class="icon-edit"></i>查看</a>
+                                    <a href="/user/personalinvest/export?number='.$model->idCard.'&type=offline" class="btn mini green">导出</a></center></td>';
 
                             }
                                                     } else {

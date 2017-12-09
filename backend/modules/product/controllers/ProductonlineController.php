@@ -1136,8 +1136,8 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
         $pageSize = 10;
 
         $txClient = Yii::$container->get('txClient');
-        $response = $txClient->get('credit-note/list', ['page' => $page, 'page_size' => $pageSize, 'sort' => '-createTime']);
-
+        $response = $txClient->post('credit-note/list', ['page' => $page, 'page_size' => $pageSize, 'sort' => '-createTime']);
+        
         if (null !== $response) {
             $notes = $response['data'];
             $totalCount = $response['total_count'];

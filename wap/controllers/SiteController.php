@@ -562,43 +562,48 @@ class SiteController extends Controller
                 if (Yii::$app->session->has('resourceOwnerId')) {
                     $openId = Yii::$app->session->get('resourceOwnerId');
                     //绑定微信
-                    SocialConnect::connect($user, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
-                    $social = SocialConnect::findOne([
-                        'user_id' => $user->id,
-                        'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
-                        'resourceOwner_id' => $openId,
-                    ]);
-                    //发积分
-                    if (!is_null($social)) {
-                        $pointRecord = PointRecord::findOne([
-                            'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                    try {
+                        SocialConnect::connect($user, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
+                        $social = SocialConnect::findOne([
                             'user_id' => $user->id,
+                            'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
+                            'resourceOwner_id' => $openId,
                         ]);
-
-                        if (is_null($pointRecord)) {
-                            //绑定成功,发放10积分
-                            $pointRecord = new PointRecord([
+                        //发积分
+                        if (!is_null($social)) {
+                            $pointRecord = PointRecord::findOne([
                                 'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
-                                'ref_id' => $social->id,
-                                'incr_points' => 10,
+                                'user_id' => $user->id,
                             ]);
 
-                            $res = PointsService::addUserPoints($pointRecord, false, $user);
-
-                            if ($res) {
-                                $pointRecord = PointRecord::findOne([
+                            if (is_null($pointRecord)) {
+                                //绑定成功,发放10积分
+                                $pointRecord = new PointRecord([
                                     'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
                                     'ref_id' => $social->id,
                                     'incr_points' => 10,
-                                    'user_id' => $user->id,
                                 ]);
 
-                                if ($pointRecord) {
-                                    Noty::send(new PointMessage($pointRecord));
+                                $res = PointsService::addUserPoints($pointRecord, false, $user);
+
+                                if ($res) {
+                                    $pointRecord = PointRecord::findOne([
+                                        'ref_type' => PointRecord::TYPE_WECHAT_CONNECT,
+                                        'ref_id' => $social->id,
+                                        'incr_points' => 10,
+                                        'user_id' => $user->id,
+                                    ]);
+
+                                    if ($pointRecord) {
+                                        Noty::send(new PointMessage($pointRecord));
+                                    }
                                 }
                             }
                         }
+                    } catch (\Exception $e) {
+                        return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];
                     }
+
                     //绑定渠道
                     PushController::bindQD($user, $openId);
                 }
@@ -760,5 +765,26 @@ class SiteController extends Controller
         }
 
         return $this->redirect($redirect);
+    }
+
+    /**
+     * APP下载提示页 - （场景：兑吧活动微信端被封）
+     *
+     * App端跳转到指定目标地址
+     * 非App端渲染App下载提示页
+     */
+    public function actionRefer($redirect = null)
+    {
+        $disableAppRefer = AppMeta::getValue('disable_app_refer');
+
+        if ('on' === $disableAppRefer) {
+            return $this->redirect($redirect);
+        }
+
+        if (defined('IN_APP')) {
+            return $this->redirect($redirect);
+        }
+
+        return $this->render('refer');
     }
 }

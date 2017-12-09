@@ -84,7 +84,7 @@ $this->title = '兑换商品';
             </div>
             <div class="form-actions">
                 <button type="button" class="btn blue subm-btn"><i class="icon-ok"></i> 确定 </button>&nbsp;&nbsp;&nbsp;
-                <a href="/user/offline/detail?id=<?= $user->id ?>" class="btn">取消</a>
+                <a href="/user/offline/detail?id=<?= $user->id . '&tabClass=' . Yii::$app->request->get('tabClass') ?>" class="btn">取消</a>
             </div>
         </div>
         <?php $form->end(); ?>
@@ -118,7 +118,7 @@ $this->title = '兑换商品';
             $.post(form.attr("action"), vals, function (data) {
                 _this.removeAttr('disabled');
                 if (0 === data.code) {
-                    location.href = $('.detail-list').attr('href');
+                    location.href = "/user/offline/detail?id=<?= $user->id ?>&tabClass=<?= Yii::$app->request->get('tabClass') ?>";
                 } else {
                     layer.msg(data.message, {icon: 2});
                     return false;
