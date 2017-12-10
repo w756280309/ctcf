@@ -83,12 +83,20 @@ class UserbankController extends BaseController
 
         //检查用户是否完成快捷支付
         $data = BankService::checkKuaijie($user);
-        if (1 === $data['code'] && \Yii::$app->request->isAjax) {
-            return [
-                'code' => $data['code'],
-                'message' => $data['message'],
-                'next' => $data['tourl']
-            ];
+        if (1 === $data['code']) {
+            if (\Yii::$app->request->isAjax) {
+                return [
+                    'code' => $data['code'],
+                    'message' => $data['message'],
+                    'next' => $data['tourl']
+                ];
+            } else {
+                if (isset($data['tourl']) && '' !== $data['tourl']) {
+                    return $this->redirect($data['tourl']);
+                } else {
+                    return $this->redirect('/user/user');
+                }
+            }
         }
 
         $user_bank = UserBanks::find()->where(['uid' => $user->id])->select('id,binding_sn,bank_id,bank_name,card_number')->one();

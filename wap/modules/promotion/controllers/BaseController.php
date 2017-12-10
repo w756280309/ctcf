@@ -100,7 +100,7 @@ class BaseController extends Controller
         return [];
     }
 
-    private function getErrorByCode($code)
+    protected function getErrorByCode($code)
     {
         Yii::$app->response->statusCode = 400;
         $errors = self::getErrors();
@@ -111,7 +111,7 @@ class BaseController extends Controller
         return $errors[$code];
     }
 
-    private static function getErrors()
+    protected static function getErrors()
     {
         return [
             self::ERROR_CODE_NOT_BEGIN => [
