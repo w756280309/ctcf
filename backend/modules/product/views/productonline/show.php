@@ -36,15 +36,21 @@ use common\utils\StringUtils;
                 <td><strong>标的账户余额(联动)</strong></td>
                 <td><?= StringUtils::amountFormat2($balance) ?>元</td>
                 <td><strong>募集金额</strong></td>
-                <td><?= StringUtils::amountFormat2($loan->funded_money)?></td>
+                <td><?= StringUtils::amountFormat2($loan->funded_money) ?>元</td>
             </tr>
             <tr>
                 <td><strong>用户实际支付金额</strong></td>
-                <td><?= StringUtils::amountFormat2($paymentAmount)?></td>
+                <td><?= StringUtils::amountFormat2($paymentAmount) ?>元</td>
                 <td><strong>代金券金额</strong></td>
-                <td><?= StringUtils::amountFormat2($couponAmount)?></td>
-                <td><strong>是否已贴现</strong></td>
+                <td><?= StringUtils::amountFormat2($couponAmount) ?>元</td>
+                <td><strong>代金券是否已贴现</strong></td>
                 <td><?= $couponTransfer ? '是' : '否'?></td>
+            </tr>
+            <tr>
+                <td><strong>加息券贴现金额</strong></td>
+                <td><?= StringUtils::amountFormat2($bonusAmount) ?>元</td>
+                <td><strong>加息券是否已贴现</strong></td>
+                <td><?= $bonusTransfer ? '是' : '否'?></td>
             </tr>
         </table>
     </div>

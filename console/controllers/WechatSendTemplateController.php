@@ -62,4 +62,18 @@ class WechatSendTemplateController extends Controller
             self::send($users2);
         }
     }
+
+    //上传素材
+    public function actionUpload()
+    {
+        $app = Yii::$container->get('weixin_wdjf');
+        // 永久素材->图片
+        $material = $app->material;
+        //删除
+//        $mediaId = 'FEIlP-GGH2nXsrGXUcQq2619ZEfn_8in86q6I-IGGVc';
+//        $result = $material->delete($mediaId);
+        //上传
+        $result = $material->uploadImage(Yii::getAlias('@backend') . '/web/upload/wechat/toupiao.jpg');
+        var_dump($result);
+    }
 }

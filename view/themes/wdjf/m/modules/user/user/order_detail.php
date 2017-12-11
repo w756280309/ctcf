@@ -9,6 +9,7 @@ use common\models\product\RateSteps;
 use common\models\order\OnlineRepaymentPlan;
 use common\utils\StringUtils;
 use wap\assets\WapAsset;
+use yii\helpers\ArrayHelper;
 use yii\web\JqueryAsset;
 
 $this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1]);
@@ -166,8 +167,15 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
             <div class="row" id="repayment-content">
                 <div class="col-xs-12">
                     <ul class="repayment-content">
+                        <?php
+                            $terms = ArrayHelper::getColumn($plan, 'qishu');
+                            $lastTerm = !empty($terms) ? end($terms) : null;
+                        ?>
                         <?php foreach($plan as $key => $val) : ++$key; ?>
-                            <?php $hasRepaid = in_array($val['status'], [OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM]);?>
+                            <?php
+                                $hasRepaid = in_array($val['status'], [OnlineRepaymentPlan::STATUS_YIHUAN, OnlineRepaymentPlan::STATUS_TIQIAM]);
+                                $requireCalcBonusProfit = $val['qishu'] === $lastTerm && bccomp($bonusProfit, 0, 2) > 0;
+                            ?>
                             <?php if ($val['benjin'] > 0) { ?>
                                 <li>
                                     <div>第<?= $key ?>期</div>
@@ -182,10 +190,26 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
                                 <div>第<?= $key ?>期</div>
                                 <div><?= date('Y.m.d', $val['refund_time']) ?></div>
                                 <div>利息</div>
-                                <div><?= StringUtils::amountFormat3($val['lixi']) ?>元</div>
+                                <div>
+                                    <?php if ($requireCalcBonusProfit) { ?>
+                                        <?= StringUtils::amountFormat3(bcsub($val['lixi'], $bonusProfit, 2)) ?>元
+                                    <?php } else { ?>
+                                        <?= StringUtils::amountFormat3($val['lixi']) ?>元
+                                    <?php } ?>
+                                </div>
                                 <!--还款计划-文字颜色-->
                                 <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
                             </li>
+                            <?php if ($requireCalcBonusProfit) { ?>
+                                <li>
+                                    <div>第<?= $key ?>期</div>
+                                    <div><?= date('Y.m.d', $val['refund_time']) ?></div>
+                                    <div>加息收益</div>
+                                    <div><?= StringUtils::amountFormat3($bonusProfit) ?>元</div>
+                                    <!--还款计划-文字颜色-->
+                                    <p class="<?= $hasRepaid ? 'repayment-green' : 'repayment-red' ?>"><?= $hasRepaid ? '已还' : '未还' ?></p>
+                                </li>
+                            <?php  } ?>
                         <?php endforeach; ?>
                         <!--下拉按钮-->
                         <div class="repayment-down"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>

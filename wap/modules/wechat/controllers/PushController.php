@@ -3,6 +3,8 @@
 namespace app\modules\wechat\controllers;
 
 use common\models\user\User;
+use common\models\wechat\Reply;
+use EasyWeChat\Message\Image;
 use EasyWeChat\Message\Text;
 use yii\web\Controller;
 use Yii;
@@ -52,20 +54,8 @@ class PushController extends Controller
                 $res = self::sendMessage($postObj->EventKey, $postObj->FromUserName);
             }
             //被动回复
-            if (strtolower($postObj->MsgType) == 'text' && !is_null($postObj->Content)) {
-                if(strpos(strval($postObj->Content), '答案') !== false) {
-                    $message = '人民币';
-                    $openid = strval($postObj->FromUserName);
-                    Yii::$container->get('weixin_wdjf')->staff->message($message)->to(strval($openid))->send();
-//                    return "<xml>
-//<ToUserName><![CDATA[".$postObj->FromUserName."]]></ToUserName>
-//<FromUserName><![CDATA[]]></FromUserName>
-//<CreateTime>".time()."</CreateTime>
-//<MsgType><![CDATA[text]]></MsgType>
-//<Content><![CDATA[".'白色（北极熊）。北极熊从北极点出发，向南向东向北走了个三角形回到北极点。'."]]></Content>
-//</xml>";
-                }
-            }
+            self::passiveREsponse($postObj);
+
             if (($postObj->Event == 'subscribe' || $postObj->Event == 'SCAN') && $postObj->FromUserName) {
                 //绑定渠道
                 if ($postObj->Event == 'subscribe') {
@@ -170,5 +160,35 @@ class PushController extends Controller
             Yii::$container->get('weixin_wdjf')->staff->message($content)->to(strval($openid))->send();
         }
     }
-
+    //被动回复
+    public static function passiveREsponse($postObj)
+    {
+        if (strtolower($postObj->MsgType) == 'text' && !is_null($postObj->Content)) {
+            $openid = strval($postObj->FromUserName);
+            $app = Yii::$container->get('weixin_wdjf');
+            if (strpos(strval($postObj->Content), '福利') !== false) {
+                $template_id = 'Wf2CgM-J0s1Pp7DYngnxNTK6bn-86H2Qehm42uVHP0g';
+                $url = 'https://m.wenjf.com/promotion/wrm170210?utm_source=toutiao&hmsr=toutiao';
+                $data = [
+                    'first' => "您被选中为幸运用户，限时开启红包、超市卡福利！",
+                    'keyword1' => '新用户专享福利',
+                    'keyword2' => "温都金服",
+                    'remark' => "\n点击参与活动，立即领取160元超市卡！",
+                ];
+                $app->notice->to($openid)->uses($template_id)->andUrl($url)->data($data)->send();
+            }
+            //自动编辑的
+            $replys = Reply::find()->where(['isDel' => false])->all();
+            foreach ($replys as $reply) {
+                if(strpos(strval($postObj->Content), $reply->keyword) !== false) {
+                    if ($reply->type == 'text') {
+                        $message = $reply->content;
+                    } else if ($reply->type == 'image') {
+                        $message = new Image(['media_id' => $reply->content]);
+                    }
+                    $app->staff->message($message)->to(strval($openid))->send();
+                }
+            }
+        }
+    }
 }

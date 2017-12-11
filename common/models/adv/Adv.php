@@ -207,9 +207,14 @@ class Adv extends ActiveRecord
         $queryData = isset($parseUrl['query']) ? explode('&', $parseUrl['query']) : [];
         $params = [];
         foreach ($queryData as $item) {
-            list($key, $value) = explode('=', $item);
-            $params[$key] = $value;
+            $pos = strpos($item, '=');
+            if (false !== $pos) {
+                $param = substr($item, 0, $pos);
+                $value = substr($item, $pos + 1);
+                $params[$param] = $value;
+            }
         }
+
         if ($shareKey) {
             $params['wx_share_key'] = $shareKey;
         }

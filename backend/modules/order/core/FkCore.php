@@ -38,26 +38,13 @@ class FkCore
         $coupon_amount = 0;
         foreach ($orders as $val) {
             if ($val['couponAmount'] > 0) {
-                $coupon_amount = bcadd($coupon_amount, $val['couponAmount']);
+                $coupon_amount = bcadd($coupon_amount, $val['couponAmount'], 14);
             }
-            $total = bcadd($total, $val['order_money']);
+            $total = bcadd($total, $val['order_money'], 14);
         }
 
         /*生成放款批次 start*/
         $transaction = Yii::$app->db->beginTransaction();
-        if (bccomp($coupon_amount, 0)) {
-            $plog = new PaymentLog([
-                'txSn' => TxUtils::generateSn('P'),
-                'amount' => $coupon_amount,
-                'toParty_id' => $product->borrow_uid,
-                'loan_id' => $pid,
-            ]);
-            if (!$plog->save()) {
-                $transaction->rollBack();
-
-                return ['res' => 0, 'msg' => '交易记录生成失败'];
-            }
-        }
 
         $ofk = new OnlineFangkuan();
         $ofk->sn = OnlineFangkuan::createSN();
@@ -78,6 +65,21 @@ class FkCore
             $transaction->rollBack();
 
             return ['res' => 0, 'msg' => '放款批次异常2'];
+        }
+        if (bccomp($coupon_amount, 0, 14)) {
+            $plog = new PaymentLog([
+                'txSn' => TxUtils::generateSn('P'),
+                'amount' => $bcround->bcround($coupon_amount, 2),
+                'toParty_id' => $product->borrow_uid,
+                'loan_id' => $pid,
+                'ref_type' => 0,
+                'ref_id' => $ofk->id,
+            ]);
+            if (!$plog->save()) {
+                $transaction->rollBack();
+
+                return ['res' => 0, 'msg' => '交易记录生成失败'];
+            }
         }
         $ofkd = new OnlineFangkuanDetail();
         $fkdstatus = $status;

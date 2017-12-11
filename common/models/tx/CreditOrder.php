@@ -4,6 +4,7 @@ namespace common\models\tx;
 
 use common\models\epay\EpayUser;
 use common\models\order\EbaoQuan;
+use common\models\order\OnlineOrder;
 use common\models\user\User;
 use Zii\Behavior\DateTimeBehavior;
 use Zii\Model\ActiveRecord;
@@ -140,5 +141,19 @@ class CreditOrder extends ActiveRecord
             'uid' => $this->user_id,
             'itemId' => $this->id,
         ])->one();
+    }
+
+    public function mockOrder()
+    {
+        $asset = $this->asset;
+        return new OnlineOrder([
+            'id' => $this->asset->order_id,
+            'uid' => $this->user_id,
+            'online_pid' => $asset->loan_id,
+            'order_money' => $this->principal / 100,
+            'yield_rate' => $asset->order->yield_rate,
+            'created_at' => strtotime($this->createTime),
+            'status' => $this->buyerPaymentStatus ? OnlineOrder::STATUS_SUCCESS : OnlineOrder::STATUS_FALSE,
+        ]);
     }
 }

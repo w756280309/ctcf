@@ -63,10 +63,10 @@
     color: #f44336;
     padding: 0 5%;
 }
-
 .kahao div input {
     margin-top: 10px;
 }
+
 
 .yzm-show {
     width: 100px !important;
@@ -79,4 +79,82 @@
 .ryzm-disabled {
     background:#fff !important;
     border: 1px solid #f44336 !important;
+}
+/* 充值限额修改 */
+.login-sign-btn {
+    margin-top: 91px;
+}
+.rechargebtn {
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    background: #ff6058;
+    border: none;
+}
+.note {
+    margin-top: 67px;
+    /*color: #f44336;*/
+    /*padding: 0 5%;*/
+}
+.note ul li {
+    line-height: 16px;
+    color: #7f8592;
+    font-size: 13px;
+}
+.note ul li.li-title {
+    margin-bottom: 14px;
+    color: #4e545a;
+    font-size: 15px;
+    text-align: center;
+}
+.note ul li .contact-tel {
+    color: #7f8592;
+}
+.customer-layer-popuo {
+    /*color: green;*/
+}
+.customer-layer-popuo .layui-m-layercont {
+    text-align: left;
+}
+.customer-layer-popuo .layui-m-layerbtn {
+    font-size: 14px;
+}
+.customer-layer-popuo .layui-m-layerbtn span[yes] {
+    color: #ff6058;
+}
+.layui-m-layershade {
+    background-color: rgba(0, 0, 0, .1)
+}
+.cmxform {
+    position: relative;
+}
+.cmxform .formula {
+    display: none;
+    position: absolute;
+    top: 45px;
+    width: 100%;
+    line-height: 18px;
+    padding: 8px 4%;
+    color: #c9944e;
+    font-size: 13px;
+    background: #fff6e8;
+}
+.cmxform .formula .a-formula {
+    margin-left: 13px;
+    display: inline-block;
+    color: #7cbaf3;
+    text-decoration: none;
+}
+.recharge-kahao .trans {
+    display: none;
+    position: absolute;
+    left: 7%;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 9px solid rgba(0, 0, 0, 0);
+    border-right:9px solid rgba(0, 0, 0, 0);
+    border-bottom: 15px solid #fff6e8;
 }

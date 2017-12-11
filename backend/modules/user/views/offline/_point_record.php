@@ -7,11 +7,11 @@ use yii\grid\GridView;
 ?>
 
 <div class="float-left">
-    <a class="btn green" href="/user/offline/exchange-goods?id=<?= $id ?>">
+    <a class="btn green" href="/user/offline/exchange-goods?id=<?= $id ?>&tabClass=<?= $tabClass ?>">
         兑换商品
     </a>
 
-    <a class="btn green" href="/user/point/add?userId=<?= $id ?>&isOffline=1">
+    <a class="btn green" href="/user/point/add?userId=<?= $id ?>&tabClass=<?= $tabClass ?>&isOffline=1">
         发放积分
     </a>
 </div>

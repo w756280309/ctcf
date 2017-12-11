@@ -99,6 +99,11 @@ class AssetsController extends Controller
             throw $this->ex400('标的不是已还清项目');
         }
 
+        CreditNote::updateAll(['isClosed' => true], [
+            'loan_id' => $loan->id,
+            'isClosed' => false,
+        ]);
+
         return UserAsset::updateAll(['isRepaid' => true], ['loan_id' => $loan->id]);
     }
 

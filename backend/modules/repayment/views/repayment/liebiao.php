@@ -137,7 +137,7 @@ $bc = new BcRound();
                                     <td><?= $val['qishu'] ?></td>
                                     <td><?= $val['uid'] ?></td>
                                     <td><?= $val['real_name'] ?></td>
-                                    <td><?= $val['mobile'] ?></td>
+                                    <td><?= \common\utils\SecurityUtils::decrypt($val['safeMobile']) ?></td>
                                     <td style="text-align: right; padding-right: 70px"><?= $val['benjin'] ?></td>
                                     <td style="text-align: right; padding-right: 70px"><?= $val['lixi'] ?></td>
                                     <td style="text-align: right; padding-right: 70px"><?= $val['benxi'] ?></td>
