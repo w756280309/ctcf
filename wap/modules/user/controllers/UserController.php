@@ -289,12 +289,15 @@ class UserController extends BaseController
 
         $deal = Ord::findOne($id);
         if (null === $deal) {
-            throw $this->ex404();    //当对象为空时,抛出404异常
+            throw $this->ex404();
         }
+
+        //获得加息券收益
+        $bonusProfit = $deal->getBonusProfit();
 
         $product = Loan::findOne($deal->online_pid);
         if (null === $product) {
-            throw $this->ex404();    //当对象为空时,抛出404异常
+            throw $this->ex404();
         }
 
         $totalFund = OrderManager::getTotalInvestment($product, $this->getAuthedUser());
@@ -317,6 +320,7 @@ class UserController extends BaseController
 
             $plan = Plan::find()
                 ->where($cond)
+                ->orderBy(['qishu' => SORT_ASC])
                 ->asArray()
                 ->all();
 
@@ -336,6 +340,7 @@ class UserController extends BaseController
 
         return $this->render('order_detail', [
             'deal' => $deal,
+            'bonusProfit' => $bonusProfit,
             'product' => $product,
             'plan' => $plan,
             'profit' => $profit,
