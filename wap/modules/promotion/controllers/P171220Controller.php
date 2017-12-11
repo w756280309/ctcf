@@ -35,14 +35,12 @@ class P171220Controller extends BaseController
                 ],
             ],
         ]);
-        var_dump($data);exit;
         $view = \Yii::$app->view;
         $js = <<<JS
 var dataStr = '$data';
 var data = eval('(' + dataStr + ')');
 JS;
         $view->registerJs($js, View::POS_HEAD);
-
         return $this->render('index');
     }
 
