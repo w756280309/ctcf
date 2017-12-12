@@ -78,7 +78,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
         <ul class="bids-box-bidlist clearfix">
             <li>
                 <a href="/deal/deal/index">
-                <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_bidList_1.png" alt="">
+                <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_bidList_1_new.png" alt="">
                 </a>
             </li>
             <li>
