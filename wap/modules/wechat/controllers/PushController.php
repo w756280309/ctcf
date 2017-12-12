@@ -181,12 +181,20 @@ class PushController extends Controller
             $replys = Reply::find()->where(['isDel' => false])->all();
             foreach ($replys as $reply) {
                 if(strpos(strval($postObj->Content), $reply->keyword) !== false) {
-                    if ($reply->type == 'text') {
+                    if ($reply->type == 'text') {   //文本
                         $message = $reply->content;
-                    } else if ($reply->type == 'image') {
+                        $app->staff->message($message)->to(strval($openid))->send();
+                    } else if ($reply->type == 'image') {   //图片
                         $message = new Image(['media_id' => $reply->content]);
+                        $app->staff->message($message)->to(strval($openid))->send();
+                    } else if ($reply->type == 'layout') {  //模板
+                        $datas = json_decode($reply->content);
+                        $template_id = $datas->template_id;
+                        $url = $datas->url;
+                        $data = $datas->data;
+                        $app->notice->to($openid)->uses($template_id)->andUrl($url)->data($data)->send();
                     }
-                    $app->staff->message($message)->to(strval($openid))->send();
+
                 }
             }
         }

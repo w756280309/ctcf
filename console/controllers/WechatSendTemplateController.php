@@ -3,6 +3,7 @@
 namespace console\controllers;
 
 use common\models\thirdparty\SocialConnect;
+use common\models\wechat\Reply;
 use Yii;
 use yii\console\Controller;
 
@@ -13,31 +14,41 @@ use yii\console\Controller;
  */
 class WechatSendTemplateController extends Controller
 {
-    public function actionIndex()
+    public function actionIndex($id)
     {
+        $model = Reply::findOne(['id' =>$id, 'style' => 'whole_message', 'isDel' => false]);
+        if (is_null($model)) {
+            echo '相关模板消息不存在或已禁用';die;
+        }
         //获取关注公众号的用户
         $app = Yii::$container->get('weixin_wdjf');
         $userService = $app->user;
         $data = $userService->lists();
         if ($data['count'] > 0) {
             $users = $data['data']['openid'];
-            self::send($users);
+            self::send($users, $model);
         }
 
     }
 
-    public static function send($users)
+    public static function send($users, $model)
     {
         if (isset($users) && count($users) > 0) {
+            echo count($users) . '个微信用户等待发送';
             $app = Yii::$container->get('weixin_wdjf');
-            $template_id = 'SG4yRtRnTSQ6pnBPjPjz762_xcLeTA3oyXjJxIdc2vc';
-            $url = 'https://m.wenjf.com/promotion/promo-points/p171123';
-            $data = [
-                'first' => '寒冬来临，气温骤降，温都金服提醒您及时保暖添衣，温暖出行。祝您感恩节快乐！',
-                'keyword1' => '预约加息',
-                'keyword2' => '温都金服平台',
-                'remark' => '点击详情，立即参与感恩节回馈活动，海量积分等你领！',
-            ];
+            $array = json_decode($model->content);
+            $template_id = $array->template_id;
+            $url = $array->url;
+            $data = $array->data;
+
+//            $template_id = 'Wf2CgM-J0s1Pp7DYngnxNTK6bn-86H2Qehm42uVHP0g';
+//            $url = 'https://m.wenjf.com/promotion/p171212/?utm_source=wxmp_wdjf&utm_medium=message&utm_content=171212-01';
+//            $data = [
+//                'first' => '双12狂欢开启，大额加息券限时返场，充值就送！送！送！',
+//                'keyword1' => '双12回馈',
+//                'keyword2' => '温都金服',
+//                'remark' => "\n由于手机端快捷充值限额，大额充值请使用电脑登录温都金服官网(www.wenjf.com)进行网银充值，有问题请立即与我们联系。点击立即参与活动",
+//            ];
             $n = 0; //发送的数量,每五次歇一秒
             foreach ($users as $user) {
                 $n ++;
@@ -51,7 +62,6 @@ class WechatSendTemplateController extends Controller
                     continue;
                 }
             }
-            echo count($users) . '个微信用户发送成功';
         }
         $lastOpenId = $users[count($users) -1];   //最后一个发送的用户
         $app = Yii::$container->get('weixin_wdjf');
@@ -59,7 +69,7 @@ class WechatSendTemplateController extends Controller
         $data2 = $userService->lists($lastOpenId);
         if ($data2['count'] > 0) {
             $users2 = $data2['data']['openid'];
-            self::send($users2);
+            self::send($users2, $model);
         }
     }
 
