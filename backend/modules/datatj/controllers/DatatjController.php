@@ -486,9 +486,9 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             AND DATE( FROM_UNIXTIME( created_at ) ) 
             BETWEEN  :startDate
             AND  :endDate", [
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ])->queryOne();
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryOne();
 
         if (!empty($drawData)) {
             $drawCount = $drawData['drawUser'];
@@ -512,9 +512,9 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             AND  :endDate
             AND benxi >0
             GROUP BY uid", [
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ])->queryAll();
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
         $refundCount = count($refundData);
         if ($refundCount === 0) {
             $fileData['message'] = "指定时间段内没有还款数据 ";
@@ -525,6 +525,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             $refundAmount = array_sum(array_column($refundAllAmount, 'amount'));
             $reinvestAmount = 0;
             $increaseInvestAmount = 0;
+            $newUserInvestData = [];
 
             //既有回款又有投资，并且不是首投用户 投资数据
             $sql = "SELECT o.uid,sum(o.order_money) as amount
@@ -544,10 +545,34 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                 'startDate' => $startDate,
                 'endDate' => $endDate,
             ])->queryAll();
-            $reinvestUserCount = count($userInvestData);
 
+            //转让标的既有回款，又有投资的投资数据
+            $credit_sql = "SELECT user_id as uid, sum(amount)/100 as amount
+                FROM credit_order 
+                WHERE status = 1  
+                AND DATE(createTime) 
+                BETWEEN :startDate 
+                AND :endDate 
+                AND user_id IN (" . $refundUserToString . ")
+                AND amount > 10
+                GROUP BY user_id";
+            $creditUserInvestData = Yii::$app->db_tx->createCommand($credit_sql, [
+                'startDate' => $startDate,
+                'endDate' => $endDate
+            ])->queryAll();
+
+            $userInvestData = array_merge($userInvestData, $creditUserInvestData);
+            //将用户id相同的标的投资和转让投资合并，金额相加，
+            foreach ($userInvestData as $value) {
+                if (!isset($newUserInvestData[$value['uid']])) {
+                    $newUserInvestData[$value['uid']] = $value;
+                } else {
+                    $newUserInvestData[$value['uid']]['amount'] += $value['amount'];
+                }
+            }
+            $reinvestUserCount = count($newUserInvestData);
             //统计每个用户的 复投金额 和 新增金额
-            foreach ($userInvestData as $item) {
+            foreach ($newUserInvestData as $item) {
                 $userId = $item['uid'];
                 $amount = $item['amount'];
                 if (!isset($refundAllAmount[$userId])) {
