@@ -2,6 +2,9 @@
 
 namespace wap\modules\promotion\controllers;
 
+use common\models\promo\Reward;
+use wap\modules\promotion\models\RankingPromo;
+use Yii;
 use yii\web\View;
 
 class P171220Controller extends BaseController
@@ -13,7 +16,9 @@ class P171220Controller extends BaseController
      */
     public function actionIndex()
     {
-        $isGuest = \Yii::$app->user->isGuest;
+        $isGuest = Yii::$app->user->isGuest;
+        $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_171220']);
+        $restTime = $this->getRestTime($promo);
         $data = json_encode([
             'restTime' => strtotime('2017-12-20 10:00:00') - time(),
             'isLoggedIn' => !$isGuest,
@@ -35,7 +40,7 @@ class P171220Controller extends BaseController
                 ],
             ],
         ]);
-        $view = \Yii::$app->view;
+        $view = Yii::$app->view;
         $js = <<<JS
 var dataStr = '$data';
 var data = eval('(' + dataStr + ')');
@@ -44,12 +49,31 @@ JS;
         return $this->render('index');
     }
 
+    private function getRestTime($promo)
+    {
+        $nowTime = time();
+        $startTime = strtotime($promo->startTime);
+        if ($startTime > $nowTime) {
+            return -1;
+        }
+
+        $recentOpenTime = Reward::find()
+            ->where(['promo_id' => $promo->id])
+            ->andFilterWhere(['>', 'createTime', date('Y-m-d H:i:s')])
+            ->orderBy(['createTime' => SORT_ASC])
+            ->limit(1)
+            ->one();
+        $lastOpenTime = ;
+        //获得距离当前最近的一次秒杀商品未开始时间
+        //获得最后一次秒杀商品开始时间
+    }
+
     /**
      * 秒杀Action
      */
     public function actionKill()
     {
-        $sn = \Yii::$app->request->get('sn');
+        $sn = Yii::$app->request->get('sn');
         return [
             'code' => 1,
             'message' => '秒杀成功',
