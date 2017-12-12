@@ -115,12 +115,4 @@ class OfflineOrder extends ActiveRecord
 
         return bcdiv(bcmul($this->money * 10000, $this->loan->expires, 14), $base, 2);
     }
-    /**
-     * 审核人
-     */
-    public function getAuditorName()
-    {
-        $admin = Admin::findOne($this->auditor);
-        return !is_null($admin) ? $admin->real_name : '';
-    }
 }
