@@ -64,6 +64,9 @@ class Perf extends ActiveRecord
     private $loanOrderUids;
     private $visitorUids;
 
+    /**
+     * @return yii\db\Connection
+     */
     private static function getDbRead()
     {
         return Yii::$app->db_read;
@@ -423,6 +426,37 @@ AND p.is_xs = 1
     {
         $sql = 'SELECT SUM(funded_money) FROM online_product WHERE `status` IN(5,7) AND isTest = 0';
             return self::getDbRead()->createCommand($sql)->queryScalar();
+    }
+
+    /**
+     * 线上年化累计交易额
+     * 到期本息  交易额×项目期限/365
+     * 非到期本息：交易额×项目期限/12
+     */
+    public static function getOnlineAnnualTotalInvestment()
+    {
+        $sql = 'SELECT SUM(o.order_money * p.expires / if (p.refund_method = 1, 365, 12)) 
+              FROM online_order o 
+              INNER JOIN online_product p 
+              ON o.online_pid = p.id 
+              WHERE o.status = 1 
+              AND p.isTest = 0';
+        return self::getDbRead()->createCommand($sql)->queryScalar();
+    }
+
+    /**
+     * 线下年化累计交易额
+     * 以天为单位： 交易额×项目期限/365
+     * 以月为单位：交易额×项目期限/12
+     */
+    public static function getOfflineAnnualTotalInvestment()
+    {
+        $sql = 'SELECT SUM(o.money * l.expires / if (l.unit = "天", 365 , 12)) * 10000 
+            FROM offline_order o 
+            INNER JOIN offline_loan l 
+            ON o.loan_id = l.id 
+            WHERE o.isDeleted = 0';
+        return self::getDbRead()->createCommand($sql)->queryScalar();
     }
 
     /**

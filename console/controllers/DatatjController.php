@@ -28,6 +28,12 @@ class DatatjController extends Controller
         //平台累计对付金额及客户累计收益
         $statsData = Perf::getStatsForIndex();
 
+        //线上年化累计交易额
+        $onlineAnnualTotalInvestment = Perf::getOnlineAnnualTotalInvestment();
+
+        //线下年化累计交易额
+        $offlineAnnualTotalInvestment = Perf::getOfflineAnnualTotalInvestment();
+        
         //代金券统计
         $totalCoupon = Perf::getCoupon();
         $usedCoupon = Perf::getCoupon(1);
@@ -44,6 +50,8 @@ class DatatjController extends Controller
             'totalOnlineInve' => $total['onlineInvestment'] + $today['onlineInvestment'],//线上累计投资金额
             'totalOfflineInve' => $total['offlineInvestment'] + $today['offlineInvestment'],//线下累计投资金额
             'totalTotalInve' => $total['totalTotalInve'] + $today['totalInvestment'],//平台累计交易额 线上+线下
+            'onlineAnnualTotalInvestment' => $onlineAnnualTotalInvestment,  //线上年化累计交易额
+            'offlineAnnualTotalInvestment' => $offlineAnnualTotalInvestment,  //线下年化累计交易额
             'totalRechargeCost' => $total['totalRechargeCost'] + $today['rechargeCost'],//累计充值手续费
             'totalReg' => $total['totalReg'] + $today['reg'],//累计注册用户
             'totalIdVerified' => $total['totalIdVerified'] + $today['idVerified'],//累计实名认证
