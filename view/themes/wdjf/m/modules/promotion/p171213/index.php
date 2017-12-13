@@ -46,7 +46,7 @@ $this->title  = '网银充值福利';
 <div class="pop-fail" style="display: none">
 	<div class="btn-close"></div>
 	<p class="head-line">抱歉，您还没有领取资格哦，</p>
-	<p class="head-line reason1" style="display: none">单笔网银充值10万即可领取！</p>
+	<p class="head-line reason1" style="display: none">累计网银充值10万即可领取！</p>
 	<p class="head-line reason2" style="display: none">成功使用网银充值即可领取！</p>
 	<img src="<?= FE_BASE_URI ?>wap/campaigns/internet-recharge/images/pic_pop_fail.png" alt="">
 	<p class="body-line">大额充值请登录温都金服官网，使用网银进行充值。充值遇到任何问题，欢迎您与我们联系，或者到线下门店获得指导。<a href="/user/userbank/refer" class="">网银充值教程>></a>
