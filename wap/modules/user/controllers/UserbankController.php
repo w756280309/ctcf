@@ -14,9 +14,30 @@ use common\models\bank\BankCardUpdate;
 use common\service\BankService;
 use common\service\UmpService;
 use Yii;
+use yii\filters\AccessControl;
 
 class UserbankController extends BaseController
 {
+    public function behaviors()
+    {
+        $access = [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'], //登录用户退出
+                    ],
+                ],
+                'except' => [
+                    'refer',
+                ],
+            ],
+        ];
+
+        return $access;
+    }
+
     //Android和iOS的账户中心的原生代码，等APP更新时候重新更新地址，之后此临时转跳可以删除
     public function actionBindbank()
     {
