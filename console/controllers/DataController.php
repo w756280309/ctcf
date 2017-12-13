@@ -3,7 +3,10 @@
 namespace console\controllers;
 
 use common\lib\user\UserStats;
+use common\models\affiliation\Affiliator;
+use common\models\affiliation\UserAffiliation;
 use common\models\draw\DrawManager;
+use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineFangkuan;
 use common\models\product\Issuer;
@@ -609,6 +612,62 @@ and date(from_unixtime(u.created_at)) <= :endDate";
         array_unshift($users, $title);
         $file = Yii::getAlias('@app/runtime/user_via_bank_'.date('YmdHis').'.xlsx');
         $objPHPExcel = UserStats::initPhpExcelObject($users);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
+    }
+
+    public function actionExportUser()
+    {
+        $ua = UserAccount::tableName();
+        $u = User::tableName();
+        $uf = UserAffiliation::tableName();
+        $af = Affiliator::tableName();
+
+        //线下数据处理
+        $onlineUsers = User::find()
+            ->select("$u.safeIdCard, $u.real_name, $u.safeMobile, $af.name, $ua.investment_balance")
+            ->innerJoin($ua, "$ua.uid = $u.id")
+            ->leftJoin($uf, "$uf.user_id = $u.id")
+            ->leftJoin($af, "$af.id = $uf.affiliator_id")
+            ->where(["$u.type" => User::USER_TYPE_PERSONAL])
+            ->andWhere(["$u.idcard_status" => true])
+            ->asArray()
+            ->all();
+        $offlineUsers = OfflineUser::find()
+            ->indexBy('idCard')
+            ->all();
+        $offlineCards = ArrayHelper::getColumn($offlineUsers, 'idCard');
+
+        //线上数据处理
+        foreach ($onlineUsers as $k => $onlineUser) {
+            $onlineUsers[$k]['safeIdCard'] = SecurityUtils::decrypt($onlineUser['safeIdCard']);
+            $onlineUsers[$k]['safeMobile'] = SecurityUtils::decrypt($onlineUser['safeMobile']);
+        }
+        $onlineUsers = ArrayHelper::index($onlineUsers, 'safeIdCard');
+        $onlineCards = array_keys($onlineUsers);
+
+        //数据排重
+        $idcards = array_intersect(array_unique($onlineCards), $offlineCards);
+
+        //开始拼凑导出数据
+        $this->stdout('开始导出数据，用户数据总量'.count($idcards).'人');
+        $data = [];
+        //姓名、注册手机号、身份证号、分销商、线上线下分别的理财资产金额
+        foreach ($idcards as $k => $idcard) {
+            $data[$k]['realName'] = $onlineUsers[$idcard]['real_name'];
+            $data[$k]['mobile'] = $onlineUsers[$idcard]['safeMobile'];
+            $data[$k]['idCard'] = $idcard;
+            $data[$k]['affiliatorName'] = $onlineUsers[$idcard]['name'];
+            $data[$k]['onlineAsset'] = $onlineUsers[$idcard]['investment_balance'];
+            $data[$k]['offlineAsset'] = $offlineUsers[$idcard]->getInvestment_balance() * 10000;
+        }
+
+        //生成用户信息excel
+        $title = ['姓名', '注册手机号', '身份证号', '分销商', '线上理财资产', '线下理财资产'];
+        array_unshift($data, $title);
+        $file = Yii::getAlias('@app/runtime/user_oo_'.date('YmdHis').'.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($data);
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
         exit();
