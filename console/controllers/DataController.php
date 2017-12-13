@@ -634,10 +634,19 @@ and date(from_unixtime(u.created_at)) <= :endDate";
             ->andWhere(["$u.idcard_status" => true])
             ->asArray()
             ->all();
-        $offlineUsers = OfflineUser::find()
-            ->indexBy('idCard')
-            ->all();
+        $sql = "SELECT 
+u.idCard,
+sum(o.money * 10000) AS orderAsset 
+from offline_order as o 
+inner join offline_user as u on o.user_id = u.id 
+inner join offline_loan as p on o.loan_id = p.id 
+where o.isDeleted = 0 and curDate() < date(p.finish_date)
+group by o.user_id 
+having orderAsset >= 0";
+
+        $offlineUsers = Yii::$app->db->createCommand($sql)->queryAll();
         $offlineCards = ArrayHelper::getColumn($offlineUsers, 'idCard');
+        $offlineUsers = ArrayHelper::index($offlineUsers, 'idCard');
 
         //线上数据处理
         foreach ($onlineUsers as $k => $onlineUser) {
@@ -657,10 +666,10 @@ and date(from_unixtime(u.created_at)) <= :endDate";
         foreach ($idcards as $k => $idcard) {
             $data[$k]['realName'] = $onlineUsers[$idcard]['real_name'];
             $data[$k]['mobile'] = $onlineUsers[$idcard]['safeMobile'];
-            $data[$k]['idCard'] = $idcard;
+            $data[$k]['idCard'] = '\''.$idcard;
             $data[$k]['affiliatorName'] = $onlineUsers[$idcard]['name'];
             $data[$k]['onlineAsset'] = $onlineUsers[$idcard]['investment_balance'];
-            $data[$k]['offlineAsset'] = $offlineUsers[$idcard]->getInvestment_balance() * 10000;
+            $data[$k]['offlineAsset'] = $offlineUsers[$idcard]['orderAsset'];
         }
 
         //生成用户信息excel
