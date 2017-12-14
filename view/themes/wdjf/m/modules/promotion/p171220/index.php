@@ -1,5 +1,5 @@
 <?php
-$this->title = '积分秒杀活动';
+$this->title = '积分限时秒杀';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
@@ -241,8 +241,9 @@ $this->title = '积分秒杀活动';
                 $('body').off('touchmove');
             },
             closePrizeList: function() {
+                var that = this;
                 $('body').off('touchmove');
-                this.isActive = !this.isActive;
+                that.isActive = !that.isActive;
             },
             playGame: function(event) {
                 var e = event || window.event;
@@ -281,6 +282,16 @@ $this->title = '积分秒杀活动';
                             that.systemError(e);
                         } else if (7 === resp.code) {//商品已售罄
                             that.failOver(e);
+                        } else if (8 === resp.code) {
+                            that.toastCenter('秒杀未开始');
+                        } else if (4 === resp.code) {
+                            that.toastCenter('已售罄');
+                        } else if (3 === resp.code) {
+                            that.toastCenter('您还未登录');
+                        } else if (2 === resp.code) {
+                            that.toastCenter('活动已结束');
+                        } else if (1 === resp.code) {
+                            that.toastCenter('活动未开始');
                         }
                     }
                     flag = true;
@@ -299,9 +310,9 @@ $this->title = '积分秒杀活动';
                             that.ticket[i].sn = res[i].sn;
                             that.ticket[i].path = '<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/prize-'+res[i].sn+'.png';
                             that.ticket[i].name = res[i].name;
-                            that.ticket[i].point = '消耗积分:12'+res[i].ref_amount;
+                            that.ticket[i].point = '消耗积分:'+res[i].ref_amount;
                         }
-                        this.isActive = !this.isActive;
+                        that.isActive = !that.isActive;
                         setTimeout(function(e){ that.loaded(e); },50);
                         $('body').on('touchmove',function(e){that.eventTarget(e)}, false);
                     }
