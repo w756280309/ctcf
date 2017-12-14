@@ -28,7 +28,7 @@ $this->title = '积分限时秒杀';
     <div class="content-bottom">
         <a class="seckill-record"  data-num="0"  @click="computNum">秒杀记录>></a>
         <a href="/deal/deal/index" class="btn invest"></a>
-        <a class="btn" :class="btnClass" :current=btnCurrentPoints data-num="1" @click="computNum"></a>
+        <a class="btn" :class="btnClass" :current=btnCurrentPoints :giftName=giftName data-num="1" @click="computNum"></a>
     </div>
     <div class="rule-title"></div>
     <div class="rule-content">
@@ -75,6 +75,7 @@ $this->title = '积分限时秒杀';
             obj:'',
             timer: '10',
             btnClass: '',
+            giftName: '',
             btnCurrentPoints: 0,
             slideContent: [{
                 sn: "",
@@ -177,6 +178,7 @@ $this->title = '积分限时秒杀';
             computNum: function (event){
                 var e = event || window.event;
                 var that = this;
+//                var gift = e.currentTarget.getAttribute('giftName');
                 var n = e.currentTarget.getAttribute('data-num');
                 switch(n) {
                     case '0':
@@ -185,7 +187,7 @@ $this->title = '积分限时秒杀';
                         break;
                     case '1':
                         that.obj = 'seckill';
-                        that.showPromoStatus('seckill');
+                        that.showPromoStatus('seckill',that.giftName);
                         break;
                 }
             },
@@ -267,7 +269,7 @@ $this->title = '积分限时秒杀';
                 if (!flag) {
                     return false;
                 }
-                var xhr = $.get('/promotion/p171220/kill?sn=17122010');
+                var xhr = $.get('/promotion/p171220/kill?sn='+that.giftName);
                 flag = false;
                 xhr.done(function(res) {
                     that.success(e);
@@ -341,7 +343,7 @@ $this->title = '积分限时秒杀';
                     popBtmColor: '#efde9e',
                     popBtmFontSize: ".45333333rem",
                     btnMsg: "确定秒杀"
-                }, that.seckill);
+                }, that.seckill(e));
                 $('.pop').append('<a class="popBtm2" style="margin-left: 7.49%;background:url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-btn-bg.png) no-repeat;background-size:100% 100%;border-radius:0 ;color:#efde9e;font-size:.45333333rem ;">我再想想</a>')
                 $('.pop .popBtm2').on('click', function(){
                     that.closePop();
@@ -469,6 +471,7 @@ $this->title = '积分限时秒杀';
                     if (activeIndex%2 == index2) {
                         that.timer = that.slideContent[index1].timePoint;
                         that.btnCurrentPoints = that.slideContent[index1].currentPoints;
+                        that.giftName = that.slideContent[index1].sn;
                         var firstTimer = that.slideContent[index1].restTime;
                         if ( firstTimer > 0 ) {
                             that.btnClass = 'seckill-btn-before';
@@ -483,6 +486,7 @@ $this->title = '积分限时秒杀';
                     } else if (activeIndex%2 == index1) {
                         that.timer = that.slideContent[index2].timePoint;
                         that.btnCurrentPoints = that.slideContent[index2].currentPoints;
+                        that.giftName = that.slideContent[index2].sn;
                         var secondTimer = that.slideContent[index2].restTime;
                         if ( secondTimer > 0 ) {
                             that.btnClass = 'seckill-btn-before';
@@ -508,10 +512,18 @@ $this->title = '积分限时秒杀';
             prevButton: '.swiper-button-prev',
             onInit: function (swiper) {
                 var that = app;
+                if (that.restTime < 0) {
+                    that.btnClass = 'seckill-btn';
+                    return false;
+                }
                 that.adChange(swiper.activeIndex, 0, 1);
             },
             onSlideChangeEnd: function (swiper) {
                 var that = app;
+                if (that.restTime < 0) {
+                    that.btnClass = 'seckill-btn';
+                    return false;
+                }
                 that.adChange(swiper.activeIndex, 0, 1);
             }
         });
