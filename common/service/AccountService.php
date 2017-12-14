@@ -13,12 +13,18 @@ use common\models\user\User;
 
 class AccountService
 {
-
     /**
-     * 充值成功时,作如下操作:
-     * 1.融资用户入金
-     * 2.记录充值流水
-     * 3.更新充值记录状态为成功
+     * 充值流水 将充值初始变为充值成功状态
+     *
+     * - 充值流水校验
+     * - 修改充值状态
+     * - 获得当前最新的user_account
+     * - 添加资金流水
+     * - 更新user_account记录（available_balance， in_sum, account_balance(此字段后期不再维护））
+     *
+     * @param RechargeRecord $recharge 充值流水
+     *
+     * @return bool
      */
     public function confirmRecharge(RechargeRecord $recharge)
     {
@@ -32,43 +38,47 @@ class AccountService
             return true;
         }
 
-        $user = $recharge->user;
-        $user_acount = $user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : $user->borrowAccount;
-
-        $bc = new BcRound();
-        bcscale(14);
-        $transaction = Yii::$app->db->beginTransaction();
         //修改充值状态
-        $res = RechargeRecord::updateAll(['status' => RechargeRecord::STATUS_YES], ['id' => $recharge->id]);
-        if (!$res) {
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        $sql = "update recharge_record set status = :status where status = 0";
+        $affectedRows = $db->createCommand($sql, [
+            'status' => RechargeRecord::STATUS_YES,
+        ])->execute();
+        if (0 === $affectedRows) {
             $transaction->rollBack();
             return false;
         }
-        $user_acount->refresh();
-        //添加交易流水
+
+        //添加资金流水
+        //获得当前最新的user_account
+        $user = $recharge->user;
+        $userAccount = $user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : $user->borrowAccount;
+        $userAccount->refresh();
+        $bc = new BcRound();
+        bcscale(14);
         $money_record = new MoneyRecord([
             'sn' => MoneyRecord::createSN(),
             'type' => (RechargeRecord::PAY_TYPE_POS === (int)$recharge->pay_type) ? MoneyRecord::TYPE_RECHARGE_POS : MoneyRecord::TYPE_RECHARGE,
             'osn' => $recharge->sn,
-            'account_id' => $user_acount->id,
+            'account_id' => $userAccount->id,
             'uid' => $user->id,
-            'balance' => $bc->bcround(bcadd($user_acount->available_balance, $recharge->fund), 2),
+            'balance' => $bc->bcround(bcadd($userAccount->available_balance, $recharge->fund), 2),
             'in_money' => $recharge->fund,
         ]);
-
         if (!$money_record->save()) {
             $transaction->rollBack();
             return false;
         }
 
-        //录入user_acount记录
-        $sql = "update user_account set account_balance = account_balance + :amount, available_balance = available_balance + :amount, in_sum = in_sum + :amount where id = :accountId";
-        $res = Yii::$app->db->createCommand($sql, ['amount' => $recharge->fund, 'accountId' => $user_acount->id])->execute();
-        if (!$res) {
+        //更新user_account记录
+        //20170930 - account_balance字段不再维护
+        $sql = "update user_account set available_balance = available_balance + :amount, in_sum = in_sum + :amount where id = :accountId";
+        $res = $db->createCommand($sql, ['amount' => $recharge->fund, 'accountId' => $userAccount->id])->execute();
+        if (0 === $res) {
             $transaction->rollBack();
             return false;
         }
-
         $transaction->commit();
 
         return true;
