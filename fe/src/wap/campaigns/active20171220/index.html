@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../common/css/wenjfbase.css">
     <link rel="stylesheet" href="../../common/css/popover.css">
     <link rel="stylesheet" href="../../libs/swiper/swiper-3.4.2.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index.css?v=0.1">
     <script src="../../libs/lib.flexible3.js"></script>
     <script src="../../libs/jquery-1.11.1.min.js"></script>
     <script src="../../common/js/popover.js?v=2.0"></script>
@@ -279,11 +279,6 @@
                 $('body').off('touchmove');
                 this.isActive = !this.isActive;
             },
-            showPrizeList: function() {
-                var that = this;
-                that.closePop();
-                $('body').off('touchmove');
-            },
             playGame: function(event) {
                 var e = event || window.event;
                 var that = this;
@@ -393,9 +388,8 @@
                             that.ticket[i].point = '消耗积分:12'+res[i].ref_amount;
                         }
                         this.isActive = !this.isActive;
-                        that.showPrizeList();
                         setTimeout(function(e){ that.loaded(e); },50);
-//                        $('body').on('touchmove',function(e){that.eventTarget(e)}, false);
+                        $('body').on('touchmove',function(e){that.eventTarget(e)}, false);
                     }
 //                });
 //                xhr.fail(function(jqXHR) {
