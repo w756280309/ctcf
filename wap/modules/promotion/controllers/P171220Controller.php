@@ -20,11 +20,13 @@ class P171220Controller extends BaseController
     public function actionIndex()
     {
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_171220']);
-        $isGuest = null === $this->getAuthedUser();
+        $user = $this->getAuthedUser();
+        $isGuest = null === $user;
         $data  = [];
         $responseData = [
             'restTime' => $this->getRestTime($promo),
             'isLoggedIn' => !$isGuest,
+            'myyPoint' => $isGuest ? 0 : $user->points,
             'promoStatus' => $this->getPromoStatus($promo),
             'data' => $data,
         ];
@@ -44,11 +46,12 @@ class P171220Controller extends BaseController
         }
         $rewards = $rewardQuery->orderBy(['createTime' => SORT_ASC])->all();
         foreach ($rewards as $k => $reward) {
+            $rewardAt = strtotime($reward->createTime);
             $data[$k]['name'] = $reward->name;
             $data[$k]['sn'] = $reward->sn;
             $data[$k]['timePoint'] = substr($reward->sn, -2);
             $data[$k]['currentPoints'] = (int) $reward->ref_amount;
-            $data[$k]['restTime'] = $nowTime - $reward->created_at >= 0 ? $nowTime - $reward->created_at : 0;
+            $data[$k]['restTime'] = $rewardAt - $nowTime >= 0 ? $rewardAt - $nowTime : 0;
             $data[$k]['allNum'] = null === $reward->limit ? 99999 : $reward->limit;
             $data[$k]['alreadyNum'] = $this->getSecKillNum($promo, $reward->id);
         }
@@ -60,6 +63,7 @@ class P171220Controller extends BaseController
         $responseData['data'] = $data;
 
         //写入到view层js的data变量里
+        $responseData = json_encode($responseData);
         $view = Yii::$app->view;
         $js = <<<JS
 var dataStr = '$responseData';
@@ -110,7 +114,7 @@ JS;
         }
         $recentOpenTime = strtotime($recentOpenAt);
 
-        return $recentOpenTime-$nowTime;
+        return $recentOpenTime - $nowTime;
     }
 
     /**
@@ -164,14 +168,15 @@ JS;
         //秒杀
         try {
             $promoClass = new $promo->promoClass($promo);
-            $ticket = $promoClass->secKill($user, $sn);
+            $killTime = new \DateTime();
+            $ticket = $promoClass->secKill($user, $sn, $killTime);
             return [
                 'code' => self::STATUS_SUCCESS,
                 'message' => '秒杀成功',
                 'ticket' => $ticket,
             ];
         } catch (\Exception $ex) {
-            if (in_array($ex->getCode(), [4, 5, 6, 7])) {
+            if (in_array($ex->getCode(), [4, 5, 6, 7, 8])) {
                 return [
                     'code' => $ex->getCode(),
                     'message' => $ex->getMessage(),
