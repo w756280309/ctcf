@@ -26,7 +26,7 @@ class P171220Controller extends BaseController
         $responseData = [
             'restTime' => $this->getRestTime($promo),
             'isLoggedIn' => !$isGuest,
-            'myyPoint' => $isGuest ? 0 : $user->points,
+            'myPoint' => $isGuest ? 0 : $user->points,
             'promoStatus' => $this->getPromoStatus($promo),
             'data' => $data,
         ];
