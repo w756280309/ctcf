@@ -20,9 +20,16 @@ class Reply extends ActiveRecord
     public function rules()
     {
         return [
-            [['keyword', 'type'], 'required'],
+            [['keyword', 'type', 'style'], 'required'],
             ['keyword', 'unique', 'message'=>'关键字已占用'],
             [['isDel', 'content'], 'safe'],
+        ];
+    }
+    public function scenarios()
+    {
+        return [
+            'auto_reply' => ['keyword', 'type', 'isDel', 'content', 'style', 'createdAt'],
+            'whole_message' => ['content', 'isDel', 'style', 'createdAt']
         ];
     }
 
@@ -44,6 +51,24 @@ class Reply extends ActiveRecord
             'isDel' => '是否删除',
             'updatedAt' => '更新时间',
             'createdAt' => '创建时间',
+            'style' => '消息类型',
+        ];
+    }
+    //回复类型
+    public static function types()
+    {
+        return [
+            'text' => '文本',
+            'image' => '图片',
+            'layout' => '模板消息',
+        ];
+    }
+    //消息类型
+    public static function styles()
+    {
+        return [
+            'whole_message' => '全体消息',
+            'auto_reply' => '自动回复',
         ];
     }
 

@@ -24,10 +24,7 @@ class ReplyController extends BaseController
         $data = Reply::find();
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
         $model = $data->offset($pages->offset)->limit($pages->limit)->orderBy('id asc')->asArray()->all();
-        $types = [
-            'text' => '文本',
-            'image' => '图片',
-        ];
+
         $status = [
             '0' => '启用',
             '1' => '禁用',
@@ -36,14 +33,18 @@ class ReplyController extends BaseController
             'model' => $model,
             'pages' => $pages,
             'status' => $status,
-            'types' => $types,
+            'types' => Reply::types(),
+            'styles' => Reply::styles(),
             ]);
     }
 
-    public function actionEdit($id = false)
+    public function actionEdit($id = null)
     {
         $model = $id ? Reply::findOne($id) : new Reply();
+        $model->scenario = 'auto_reply';
         if (Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
+
+            $model->style = 'auto_reply';
             if ($model->type == 'image' && isset($_FILES['Reply'])) {
                 $path = Yii::getAlias('@backend') . '/web/upload/wechat/';
                 if (!file_exists($path)) {
@@ -62,15 +63,27 @@ class ReplyController extends BaseController
                     }
                 }
             }
+
             if ($model->validate()) {
-                $model->save();
+                $model->save(false);
                 return $this->redirect('index');
             }
         }
-        $types = [
-            'text' => '文本',
-            'image' => '图片',
-        ];
-        return $this->render('edit', ['model' => $model, 'types' => $types]);
+        return $this->render('edit', ['model' => $model, 'types' => Reply::types()]);
+    }
+
+    //全体消息
+    public function actionEditWholeMessage($id = null)
+    {
+        $model = $id ? Reply::findOne($id) : new Reply();
+        $model->scenario = 'whole_message';
+        if (Yii::$app->request->post() && $model->load(Yii::$app->request->post())) {
+            $model->style = 'whole_message';
+            $model->validate();
+            if ($model->save(false)) {
+                return $this->redirect('index');
+            }
+        }
+        return $this->render('edit-whole-message', ['model' => $model, 'types' => Reply::types()]);
     }
 }

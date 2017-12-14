@@ -16,7 +16,10 @@ $menus = AuthSys::getMenus('A100000');
                 <h3 class="page-title">
                     运营管理 <small>公众号管理模块【主要包含自动回复】</small>
                     <a href="/wechat/reply/edit" id="sample_editable_1_new" class="btn green" style="float: right;">
-                        新增 <i class="icon-plus"></i>
+                        新增自动回复 <i class="icon-plus"></i>
+                    </a>
+                    <a href="/wechat/reply/edit-whole-message" id="sample_editable_1_new" class="btn green" style="float: right; margin-right: 5%">
+                        新增全体消息 <i class="icon-plus"></i>
                     </a>
                 </h3>
                 <ul class="breadcrumb">
@@ -41,7 +44,8 @@ $menus = AuthSys::getMenus('A100000');
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>类型</th>
+                        <th>消息类型</th>
+                        <th>回复类型</th>
                         <th>关键字</th>
                         <th>回复内容</th>
                         <th>状态</th>
@@ -54,14 +58,21 @@ $menus = AuthSys::getMenus('A100000');
                             <td>
                                 <?= $val['id'] ?>
                             </td>
+                            <td><?= $styles[$val['style']] ?></td>
                             <td><?= $types[$val['type']] ?></td>
                             <td><?= $val['keyword'] ?></td>
-                            <td><?= $val['content'] ?></td>
+                            <td><?= substr($val['content'], 0, 50) ?></td>
                             <td>
                                 <?= $status[$val['isDel']] ?>
                             </td>
                             <td style="text-align: center">
-                                <a href="/wechat/reply/edit?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
+                                <a href="/wechat/reply/<?php
+                                if ($val['style'] == 'auto_reply') {
+                                    echo 'edit';
+                                } else {
+                                    echo 'edit-whole-message';
+                                }
+                                ?>?id=<?= $val['id'] ?>" class="btn mini green"><i class="icon-edit"></i> 编辑</a>
                                 |
                             </td>
                         </tr>

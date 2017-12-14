@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+	<link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/internet-recharge/css/index.css">
+	<script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+	<script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+	<script src="__FE_BASE_URI__/libs/fastclick.js"></script>
+</head>
+<body>
+<div class="flex-content">
+	<div class="top-part"></div>
+	<div class="middle-part">
+		<p class="recharge-number">已通过网银充值：<span class="notLogin">未登录</span><span class="hasLogin hide"><span class="Num">10</span>万元</span></p>
+		<div class="btn-getReward clearfix">
+			<div class="lf"></div>
+			<div class="rg"></div>
+		</div>
+	</div>
+	<div class="bottom-part">
+		<p class="rules-title">活动规则</p>
+		<a href="/user/userbank/refer" class="rules-link">网银充值教程>></a>
+		<ul class="rules-list">
+			<li>活动期间通过温都金服官网（www.wenjf.com）进行一次网银充值，即可领取“聪”礼包，内含<span>10元代金券、0.5%7天加息券、16积分；</span></li>
+			<li>活动期间通过网银单笔充值达到10万元，即可领取“慧”礼包，内含 <span>30元代金券、1%7天加息券、66积分；</span></li>
+			<li>在网银充值中遇到任何问题，我们将为您提供全面的人工指导。
+				<p>联系电话：400-101-5151；</p>
+				<p>客服微信：wdjfNO1、wdjfNO2；</p>
+				<p>门店地址：温州市鹿城区飞霞南路657号保</p>
+				<p style="text-indent: 5em">丰大楼四层。</p>
+			</li>
+		</ul>
+		<p class="rules-remind">本活动最终解释权归温都金服所有</p>
+	</div>
+</div>
+<div class="mask" style="display: none"></div>
+<div class="pop-reward" style="display: none">
+	<img src="__FE_BASE_URI__wap/campaigns/internet-recharge/images/pic_reward_cong.png" alt="" class="pic-one">
+	<img src="__FE_BASE_URI__wap/campaigns/internet-recharge/images/pic_reward_hui.png" alt="" class="pic-two hide">
+	<div class="pop-reward-button">收下奖品</div>
+</div>
+<div class="pop-fail" style="display: none">
+	<div class="btn-close"></div>
+	<p class="head-line">抱歉，您还没有领取资格哦，</p>
+	<p class="head-line reason1">单笔网银充值10万即可领取！</p>
+	<p class="head-line reason2 hide">成功使用网银充值即可领取！</p>
+	<img src="__FE_BASE_URI__wap/campaigns/internet-recharge/images/pic_pop_fail.png" alt="">
+	<p class="body-line">大额充值请登录温都金服官网，使用网银进行充值。充值遇到任何问题，欢迎您与我们联系，或者到线下门店获得指导。<a href="/user/userbank/refer" class="">网银充值教程>></a></p>
+	<div class="pop-fail-button">我知道了</div>
+</div>
+<div class="pop-has-hui" style="display: none">
+	<div class="btn-close"></div>
+	<p class="pop-has-title">您已经领取过该礼包了哦!</p>
+	<div class="pop-fail-button">我知道了</div>
+</div>
+<div class="pop-has-cong" style="display: none">
+	<div class="btn-close"></div>
+	<p class="pop-has-title">您已经领取过该礼包了哦!</p>
+	<div class="pop-fail-button">我知道了</div>
+</div>
+
+</body>
+<script>
+  $(function () {
+    FastClick.attach(document.body);
+    $(".btn-getReward .lf").on("click",function () {
+	    $(".mask,.pop-has-cong").show();
+	    $("body").css("overflow","hidden")
+    });
+    $(".btn-getReward .rg").on("click",function () {
+      $(".mask,.pop-reward").show();
+      $("body").css("overflow","hidden")
+    });
+    $(".pop-fail-button,.btn-close,.pop-reward-button").on("click",function () {
+      $(this).parent().hide();
+      $(".mask").hide();
+      $("body").css("overflow","auto")
+    });
+  })
+</script>
+</html>
