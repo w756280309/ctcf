@@ -491,6 +491,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
                             $(".produce,.surplus,#orderform").show();
                             if (data.data.jiaxi > 0 && data.data.yjsy > 0) {
                                 $('.yuqishouyi').html(data.data.yjsy + "元(含加息"+ data.data.jiaxi +"元)");
+                                $('.shijizhifu').html(money + '.00元');
                             }
 
                             //profit($('#money'));
