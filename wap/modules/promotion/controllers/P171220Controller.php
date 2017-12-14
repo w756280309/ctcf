@@ -177,6 +177,7 @@ JS;
             ];
         } catch (\Exception $ex) {
             if (in_array($ex->getCode(), [4, 5, 6, 7, 8])) {
+                Yii::$app->response->statusCode = 400;
                 return [
                     'code' => $ex->getCode(),
                     'message' => $ex->getMessage(),
