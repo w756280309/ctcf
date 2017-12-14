@@ -15,9 +15,9 @@ class Promo171220 extends BasePromo
         if (null === $reward) {
             throw new \Exception('商品不存在', 6);
         }
-/*        if ($killTime < (new \DateTime($reward->createTime))) {
+        if ($killTime < (new \DateTime($reward->createTime))) {
             throw new \Exception('秒杀未开始', 8);
-        }*/
+        }
         if (null !== $reward->limit && $reward->limit <= 0) {
             throw new \Exception('商品已售罄', 7);
         }
@@ -40,6 +40,8 @@ class Promo171220 extends BasePromo
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
+            $ticketToken = $this->promo->id . '-' . $user->id . '-' . $rewardSn;
+            TicketToken::initNew($ticketToken)->save(false);
             PointsService::addUserPoints($pointRecord, false, $user);
             PromoService::award($user, $reward, $this->promo);
             $transaction->commit();
