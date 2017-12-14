@@ -14,8 +14,8 @@ $this->title = '积分限时秒杀';
     <div class="banner">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/banner.png" alt="banner">
     </div>
-    <div class="down-time">距离下一场秒杀还有<span v-for="l in list">{{l.time}}</span></div>
-    <div class="active-title">{{timer}}点场</div>
+    <div class="down-time">距离下一场秒杀还有<span v-cloak v-for="l in list">{{l.time}}</span></div>
+    <div class="active-title"><span v-cloak >{{timer}}</span>点场</div>
     <div class="content">
         <a class="swiper-button-prev arrow"></a>
         <a class="swiper-button-next arrow"></a>
@@ -187,7 +187,7 @@ $this->title = '积分限时秒杀';
                         break;
                     case '1':
                         that.obj = 'seckill';
-                        that.showPromoStatus('seckill',that.giftName);
+                        that.showPromoStatus('seckill');
                         break;
                 }
             },
@@ -199,7 +199,7 @@ $this->title = '积分限时秒杀';
                         if (that.obj === 'my-prize') {
                             that.prizeRecord(e);
                         } else if (that.obj === 'seckill') {
-                            that.playGame(e);
+                            that.playGame();
                         }
                     } else {
                         if (that.obj === 'my-prize') {
@@ -247,14 +247,13 @@ $this->title = '积分限时秒杀';
                 $('body').off('touchmove');
                 that.isActive = !that.isActive;
             },
-            playGame: function(event) {
-                var e = event || window.event;
+            playGame: function() {
                 var that = this;
                 if (!!$('.btn').hasClass('seckill-btn') ) {
                     if ($('.seckill-btn').attr('current') > that.myPoint) {
-                        that.noEnoughPoints(e);
+                        that.noEnoughPoints();
                     } else {
-                        that.tipSHow(e);
+                        that.tipSHow();
                     }
                 } else if (!!$('.btn').hasClass('seckill-btn-before') ) {
                     return false;
@@ -262,26 +261,24 @@ $this->title = '积分限时秒杀';
                     return false;
                 }
             },
-            seckill: function(event) {
-                var e = event || window.event;
+            seckill: function() {
                 var that = this;
-                that.closePop();
                 if (!flag) {
                     return false;
                 }
+                that.closePop();
                 var xhr = $.get('/promotion/p171220/kill?sn='+that.giftName);
                 flag = false;
                 xhr.done(function(res) {
-                    that.success(e);
-                    flag = true;
+                    that.success();
                 });
                 xhr.fail(function(jqXHR) {
                     if (400 === jqXHR.status && jqXHR.responseText) {//系统错误
                         var resp = $.parseJSON(jqXHR.responseText);
                         if (5 === resp.code) {//积分不足
-                            that.noEnoughPoints(e);
+                            that.noEnoughPoints();
                         } else if (6 === resp.code) {//系统错误
-                            that.systemError(e);
+                            that.systemError();
                         } else if (7 === resp.code) {//商品已售罄
                             that.failOver(e);
                         } else if (8 === resp.code) {
@@ -295,8 +292,8 @@ $this->title = '积分限时秒杀';
                         } else if (1 === resp.code) {
                             that.toastCenter('活动未开始');
                         }
+                        flag = true;
                     }
-                    flag = true;
                 });
             },
             prizeRecord: function(event) { // 秒杀记录
@@ -305,14 +302,14 @@ $this->title = '积分限时秒杀';
                 var xhr = $.get('/promotion/p171220/award-list?key=promo_171220');
                 xhr.done(function(res) {
                     if (res.length == 0) { //无奖品
-                        that.noPrize();
+                        that.noPrize(e);
                     } else {
                         that.ticket = res;
                         for (var i = 0;i < res.length; i++) {
                             that.ticket[i].sn = res[i].sn;
                             that.ticket[i].path = '<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/prize-'+res[i].sn+'.png';
                             that.ticket[i].name = res[i].name;
-                            that.ticket[i].point = '消耗积分:'+res[i].ref_amount;
+                            that.ticket[i].point = '消耗积分: '+parseInt(res[i].ref_amount);
                         }
                         that.isActive = !that.isActive;
                         setTimeout(function(e){ that.loaded(e); },50);
@@ -325,8 +322,7 @@ $this->title = '积分限时秒杀';
                     }
                 });
             },
-            tipSHow: function(event) {
-                var e = event || window.event;
+            tipSHow: function() {
                 var that = this;
                 poptpl.popComponent({
                     popTopHasDiv : true,
@@ -343,7 +339,7 @@ $this->title = '积分限时秒杀';
                     popBtmColor: '#efde9e',
                     popBtmFontSize: ".45333333rem",
                     btnMsg: "确定秒杀"
-                }, that.seckill(e));
+                }, that.seckill);
                 $('.pop').append('<a class="popBtm2" style="margin-left: 7.49%;background:url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-btn-bg.png) no-repeat;background-size:100% 100%;border-radius:0 ;color:#efde9e;font-size:.45333333rem ;">我再想想</a>')
                 $('.pop .popBtm2').on('click', function(){
                     that.closePop();
@@ -415,6 +411,7 @@ $this->title = '积分限时秒杀';
                 }, function() {
                     setTimeout(function(){  location.reload(); },200);
                 });
+                flag = true;
                 $('body').on('touchmove',function(e){that.eventTarget(e)}, false);
             },
             noEnoughPoints: function(event) {
