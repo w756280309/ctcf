@@ -1,18 +1,25 @@
-<?php
-$this->title = '积分秒杀活动';
-?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/popover.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/swiper/swiper-3.4.2.min.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20171220/css/index.css">
-<script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-<script src="<?= FE_BASE_URI ?>wap/common/js/popover.js?v=2.0"></script>
-<script src="<?= FE_BASE_URI ?>libs/vue.min.js"></script>
-<script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
-<script src="<?= FE_BASE_URI ?>libs/swiper/swiper-3.4.2.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>12月秒杀</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="../../common/css/popover.css">
+    <link rel="stylesheet" href="../../libs/swiper/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="css/index.css?v=0.1">
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <script src="../../common/js/popover.js?v=2.0"></script>
+    <script src="../../libs/vue.min.js"></script>
+    <script src="../../libs/iscroll.js"></script>
+    <script src="../../libs/swiper/swiper-3.4.2.min.js"></script>
+</head>
+<body>
 <div class="flex-content" id="app">
     <div class="banner">
-        <img src="<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/banner.png" alt="banner">
+        <img src="images/banner.png" alt="banner">
     </div>
     <div class="down-time">距离下一场秒杀还有<span v-for="l in list">{{l.time}}</span></div>
     <div class="active-title">{{timer}}点场</div>
@@ -40,10 +47,11 @@ $this->title = '积分秒杀活动';
         </ul>
     </div>
     <p class="copy-right">本次活动最终解释权归温都金服所有</p>
+
     <!--秒杀列表-->
     <div class="prizes-box" :class="[ !!isActive ? 'showed' : '' ]">
         <div class="outer-box">
-            <img class="pop_close" @click="closePrizeList" src="<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-close.png" alt="">
+            <img class="pop_close" @click="closePrizeList" src="images/pop-close.png" alt="">
             <div class="prizes-pomp">
                 <p class="prizes-title">秒杀列表</p>
                 <div id="wrapper">
@@ -62,6 +70,33 @@ $this->title = '积分秒杀活动';
     </div>
 </div>
 <script>
+    var datas = {
+        "restTime": 0,
+        "isLoggedIn": true,
+        "promoStatus": 0,
+        "myPoint": 122,
+        "data": [
+            {
+                "name": "格力取暖器",
+                "sn": "17122010",
+                "currentPoints": 40,
+                "timePoint": 10,
+                "restTime": 0,
+                "allNum": 1,
+                "alreadyNum": 0
+            },
+            {
+                "name": "飞利浦面包机",
+                "sn": "17122016",
+                "currentPoints": 20,
+                "timePoint": 16,
+                "restTime": 0,
+                "allNum": 3,
+                "alreadyNum": 0
+            }
+        ]
+    };
+    var mySwiper='';
     var myScroll='';
     var flag = true;
     var app = new Vue({
@@ -103,7 +138,7 @@ $this->title = '积分秒杀活动';
                 for (var i=0; i < datas.data.length; i++) {
                     that.slideContent[i]= datas.data[i];
                     that.slideContent[i].sn = datas.data[i].sn;
-                    that.slideContent[i].path = '<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/' + datas.data[i].sn+ '.png';
+                    that.slideContent[i].path = 'images/' + datas.data[i].sn+ '.png';
                     that.slideContent[i].currentPoints = datas.data[i].currentPoints;
                     that.slideContent[i].timePoint = datas.data[i].timePoint;
                     that.slideContent[i].restTime = datas.data[i].restTime;
@@ -230,7 +265,7 @@ $this->title = '积分秒杀活动';
                 } else if (that.promoStatus == 2) {
                     if (that.obj == 'my-prize') {
                         that.showLoginPop(that.obj);
-                        return false;
+                       return false;
                     }
                     that.toastCenter('活动已结束');
                 }
@@ -249,8 +284,10 @@ $this->title = '积分秒杀活动';
                 var that = this;
                 if (!!$('.btn').hasClass('seckill-btn') ) {
                     if ($('.seckill-btn').attr('current') > that.myPoint) {
+                        console.log('积分不足');
                         that.noEnoughPoints(e);
                     } else {
+                        console.log('要秒杀弹框');
                         that.tipSHow(e);
                     }
                 } else if (!!$('.btn').hasClass('seckill-btn-before') ) {
@@ -262,42 +299,91 @@ $this->title = '积分秒杀活动';
             seckill: function(event) {
                 var e = event || window.event;
                 var that = this;
-                that.closePop();
                 if (!flag) {
                     return false;
                 }
-                var xhr = $.get('/promotion/p171220/kill?sn=17122010');
-                flag = false;
-                xhr.done(function(res) {
+                that.closePop();
+//                var xhr = $.get('/promotion/p171220/kill?sn=17122010');
+//                flag = false;
+//                xhr.done(function(res) {
                     that.success(e);
                     flag = true;
-                });
-                xhr.fail(function(jqXHR) {
-                    if (400 === jqXHR.status && jqXHR.responseText) {//系统错误
-                        var resp = $.parseJSON(jqXHR.responseText);
-                        if (5 === resp.code) {//积分不足
-                            that.noEnoughPoints(e);
-                        } else if (6 === resp.code) {//系统错误
-                            that.systemError(e);
-                        } else if (7 === resp.code) {//商品已售罄
-                            that.failOver(e);
-                        }
-                    }
-                    flag = true;
-                });
+//                });
+//                xhr.fail(function(jqXHR) {
+//                    if (400 === jqXHR.status && jqXHR.responseText) {//系统错误
+//                        var resp = $.parseJSON(jqXHR.responseText);
+//                        if (5 === resp.code) {//积分不足
+//                            that.noEnoughPoints(e);
+//                        } else if (6 === resp.code) {//系统错误
+//                            that.systemError(e);
+//                        } else if (7 === resp.code) {//商品已售罄
+//                            that.failOver(e);
+//                        }
+//                    }
+//                    flag = true;
+//                });
             },
             prizeRecord: function(event) { // 秒杀记录
                 var e = event || window.event;
+                var res = [
+                    {
+                        "id": 1,
+                        "sn": "17122010",
+                        "ref_type": "PIKU",
+                        "ref_amount": "1000",
+                        "name": "飞利浦面包机",
+                        "path": "",
+                        "awardTime": "2017-10-11 10:55:55"
+                    },
+                    {
+                        "id": 2,
+                        "sn": "17122016",
+                        "ref_type": "PIKU",
+                        "ref_amount": "1000",
+                        "name": "飞利浦面包机",
+                        "path": "",
+                        "awardTime": "2017-10-11 10:55:55"
+                    },
+                    {
+                        "id": 1,
+                        "sn": "17122010",
+                        "ref_type": "PIKU",
+                        "ref_amount": "1000",
+                        "name": "格力取暖器",
+                        "path": "",
+                        "awardTime": "2017-10-11 10:55:55"
+                    },
+                    {
+                        "id": 1,
+                        "sn": "17122016",
+                        "ref_type": "PIKU",
+                        "ref_amount": "1000",
+                        "name": "格力取暖器",
+                        "path": "",
+                        "awardTime": "2017-10-11 10:55:55"
+                    },
+                    {
+                        "id": 2,
+                        "sn": "17122016",
+                        "ref_type": "PIKU",
+                        "ref_amount": "1000",
+                        "name": "飞利浦面包机",
+                        "path": "",
+                        "awardTime": "2017-10-11 10:55:55"
+                    }
+                ];
                 var that = this;
-                var xhr = $.get('/promotion/p171220/award-list?key=promo_171220');
-                xhr.done(function(res) {
-                    if (res.length == 0) { //无奖品
+//                var xhr = $.get('/promotion/p171220/award-list?key=promo_171220');
+//                xhr.done(function(res) {
+                    var length = 3;
+                    if (length == 0) { //无奖品
+//                    if (res.length == 0) { //无奖品
                         that.noPrize();
                     } else {
                         that.ticket = res;
                         for (var i = 0;i < res.length; i++) {
                             that.ticket[i].sn = res[i].sn;
-                            that.ticket[i].path = '<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/prize-'+res[i].sn+'.png';
+                            that.ticket[i].path = 'images/prize-'+res[i].sn+'.png';
                             that.ticket[i].name = res[i].name;
                             that.ticket[i].point = '消耗积分:12'+res[i].ref_amount;
                         }
@@ -305,12 +391,12 @@ $this->title = '积分秒杀活动';
                         setTimeout(function(e){ that.loaded(e); },50);
                         $('body').on('touchmove',function(e){that.eventTarget(e)}, false);
                     }
-                });
-                xhr.fail(function(jqXHR) {
-                    if (400 === jqXHR.status && jqXHR.responseText) {//系统错误
-                        that.systemError();
-                    }
-                });
+//                });
+//                xhr.fail(function(jqXHR) {
+//                    if (400 === jqXHR.status && jqXHR.responseText) {//系统错误
+//                        that.systemError();
+//                    }
+//                });
             },
             tipSHow: function(event) {
                 var e = event || window.event;
@@ -318,20 +404,20 @@ $this->title = '积分秒杀活动';
                 poptpl.popComponent({
                     popTopHasDiv : true,
                     title: '<p style="font-weight: bold;line-height: 0.66666667rem;color: #97280a; font-size: 0.66666667rem;">温馨提示</p>',
-                    popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-bg.png) no-repeat',
+                    popBackground: 'url(images/pop-bg.png) no-repeat',
                     popBorder: 0,
                     closeTop:"-1.2rem",
                     closeLeft:"-0.57333333rem",
-                    closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-close.png",
+                    closeUrl: "images/pop-close.png",
                     popMiddleHasDiv: true,
                     contentMsg: '<p style="margin: -.15rem auto 0;width: 80%;font-weight: bold;text-align:left;line-height: 0.66666667rem;color: #97280a;">秒杀成功将立即扣除相应积分，秒杀失败不会扣除积分。<br>是否立即参与秒杀？</p>',
-                    popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-btn-bg.png) no-repeat',
+                    popBtmBackground: 'url(images/pop-btn-bg.png) no-repeat',
                     popBtmBorderRadius: 0,
                     popBtmColor: '#efde9e',
                     popBtmFontSize: ".45333333rem",
                     btnMsg: "确定秒杀"
                 }, that.seckill);
-                $('.pop').append('<a class="popBtm2" style="margin-left: 7.49%;background:url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-btn-bg.png) no-repeat;background-size:100% 100%;border-radius:0 ;color:#efde9e;font-size:.45333333rem ;">我再想想</a>')
+                $('.pop').append('<a class="popBtm2" style="margin-left: 7.49%;background:url(images/pop-btn-bg.png) no-repeat;background-size:100% 100%;border-radius:0 ;color:#efde9e;font-size:.45333333rem ;">我再想想</a>')
                 $('.pop .popBtm2').on('click', function(){
                     that.closePop();
                 });
@@ -340,14 +426,14 @@ $this->title = '积分秒杀活动';
                 var e = event || window.event;
                 var that = this;
                 poptpl.popComponent({
-                    popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-bg.png) no-repeat',
+                    popBackground: 'url(images/pop-bg.png) no-repeat',
                     popBorder: 0,
                     closeTop:"-1.2rem",
                     closeLeft:"-0.57333333rem",
-                    closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-close.png",
+                    closeUrl: "images/pop-close.png",
                     btnMsg: "去看看",
                     title: '<p style="font-size:0.48rem; color: #97280a;font-weight: bold;padding-top: .38rem;margin-bottom: 1rem;line-height: 0.66666667rem;color: #97280a;">sorry，您还没有秒杀到任何商品哦！<br>快去参与秒杀吧！</p>',
-                    popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-btn-bg.png) no-repeat',
+                    popBtmBackground: 'url(images/pop-btn-bg.png) no-repeat',
                     popBtmBorderRadius: 0,
                     popBtmColor: '#efde9e',
                     popBtmFontSize: ".45333333rem"
@@ -358,18 +444,18 @@ $this->title = '积分秒杀活动';
                 var e = event || window.event;
                 var that = this;
                 poptpl.popComponent({
-                    popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-bg.png) no-repeat',
+                    popBackground: 'url(images/pop-bg.png) no-repeat',
                     popBorder: 0,
                     closeTop:"-1.2rem",
                     closeLeft:"-0.57333333rem",
-                    closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-close.png",
+                    closeUrl: "images/pop-close.png",
                     btnMsg: "我知道了",
                     popTopColor: "#f03350",
                     bgSize: "100% 100%",
                     title: '<p style="font-size:0.48rem;color: #97280a;font-weight: bold">Sorry，商品被抢光了！<br>快去看看别的场次吧！</p>',
-                    popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-btn-bg.png) no-repeat',
+                    popBtmBackground: 'url(images/pop-btn-bg.png) no-repeat',
                     popMiddleHasDiv: true,
-                    contentMsg: "<img style='margin: -.4rem auto 0;display: block;height: 2.24rem;' src='<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/fail.png' alt='图片地址'/>",
+                    contentMsg: "<img style='margin: -.4rem auto 0;display: block;height: 2.24rem;' src='images/fail.png' alt='图片地址'/>",
                     popBtmBorderRadius: 0,
                     popBtmFontSize: ".45333333rem",
                     popBtmColor: '#efde9e'
@@ -384,23 +470,27 @@ $this->title = '积分秒杀活动';
                 var e = event || window.event;
                 var that = this;
                 poptpl.popComponent({
-                    popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-bg.png) no-repeat',
+                    popBackground: 'url(images/pop-bg.png) no-repeat',
                     popBorder: 0,
                     closeTop:"-1.2rem",
                     closeLeft:"-0.57333333rem",
-                    closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-close.png",
+                    closeUrl: "images/pop-close.png",
                     btnMsg: "收下商品",
                     popTopColor: "#f03350",
                     bgSize: "100% 100%",
                     title: '<p style="font-size:0.48rem;color: #97280a;font-weight: bold">恭喜您抢到了本件商品！<br>再去看看别的场次吧！</p>',
-                    popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-btn-bg.png) no-repeat',
+                    popBtmBackground: 'url(images/pop-btn-bg.png) no-repeat',
                     popMiddleHasDiv: true,
-                    contentMsg: "<img style='margin: -.4rem auto 0;display: block;height: 2.52rem;' src='<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/success.png' alt='图片地址'/>",
+                    contentMsg: "<img style='margin: -.4rem auto 0;display: block;height: 2.52rem;' src='images/success.png' alt='图片地址'/>",
                     popBtmBorderRadius: 0,
                     popBtmFontSize: ".45333333rem",
                     popBtmColor: '#efde9e'
                 }, function() {
-                    setTimeout(function(){  location.reload(); },200);
+                    setTimeout(function(){
+                        location.reload();
+//                        var that = this;
+//                        that.btnClass = 'seckill-btn-after';
+                    },200)
                 });
                 $('body').on('touchmove',function(e){that.eventTarget(e)}, false);
             },
@@ -408,18 +498,18 @@ $this->title = '积分秒杀活动';
                 var e = event || window.event;
                 var that = this;
                 poptpl.popComponent({
-                    popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-bg.png) no-repeat',
+                    popBackground: 'url(images/pop-bg.png) no-repeat',
                     popBorder: 0,
                     closeTop:"-1.2rem",
                     closeLeft:"-0.57333333rem",
-                    closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-close.png",
+                    closeUrl: "images/pop-close.png",
                     btnMsg: "赚积分",
                     popTopColor: "#f03350",
                     bgSize: "100% 100%",
                     title: '<p style="font-size:0.48rem;color: #97280a;font-weight: bold">Sorry，您的积分不足！<br>快去投资赚取积分吧！</p>',
-                    popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-btn-bg.png) no-repeat',
+                    popBtmBackground: 'url(images/pop-btn-bg.png) no-repeat',
                     popMiddleHasDiv: true,
-                    contentMsg: "<img style='margin: -.4rem auto 0;display: block;height: 2.24rem;' src='<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/fail.png' alt='图片地址'/>",
+                    contentMsg: "<img style='margin: -.4rem auto 0;display: block;height: 2.24rem;' src='images/fail.png' alt='图片地址'/>",
                     popBtmBorderRadius: 0,
                     popBtmFontSize: ".45333333rem",
                     popBtmColor: '#efde9e',
@@ -488,21 +578,32 @@ $this->title = '积分秒杀活动';
             }
         }
     });
-    Vue.config.devtools = false;
+    Vue.config.devtools = true;
 
-    $(function(){
-        mySwiper = new Swiper('.swiper-container', {
-            loop: true,
-            nextButton: '.swiper-button-next',
-            prevButton: '.swiper-button-prev',
-            onInit: function (swiper) {
-                var that = app;
-                that.adChange(swiper.activeIndex, 0, 1);
-            },
-            onSlideChangeEnd: function (swiper) {
-                var that = app;
-                that.adChange(swiper.activeIndex, 0, 1);
-            }
-        });
+$(function(){
+    mySwiper = new Swiper('.swiper-container', {
+        loop: true,
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        onInit: function (swiper) {
+            var that = app;
+//            if (that.restTime != 0) {
+//                that.btnClass = 'seckill-btn';
+//                return false;
+//            }
+            that.adChange(swiper.activeIndex, 0, 1);
+        },
+        onSlideChangeEnd: function (swiper) {
+            var that = app;
+//            if (that.restTime != 0) {
+//                that.btnClass = 'seckill-btn';
+//                return false;
+//            }
+            that.adChange(swiper.activeIndex, 0, 1);
+        }
     });
+});
+
 </script>
+</body>
+</html>
