@@ -3,7 +3,7 @@
 $this->title  = '网银充值福利';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/internet-recharge/css/index.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/internet-recharge/css/index.css?v=1">
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
@@ -23,6 +23,7 @@ $this->title  = '网银充值福利';
 		<p class="rules-title">活动规则</p>
 		<a href="/user/userbank/refer" class="rules-link">网银充值教程>></a>
 		<ul class="rules-list">
+			<li>活动时间：2017年12月14日开始；</li>
 			<li>活动期间通过温都金服官网（www.wenjf.com）进行一次网银充值，即可领取“聪”礼包，内含<span>10元代金券、0.5%7天加息券、16积分；</span></li>
 			<li>活动期间通过网银累计充值达到10万元，即可领取“慧”礼包，内含 <span>30元代金券、1.0%7天加息券、66积分；</span></li>
 			<li>在网银充值中遇到任何问题，我们将为您提供全面的人工指导。
