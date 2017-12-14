@@ -244,11 +244,6 @@ $this->title = '积分秒杀活动';
                 $('body').off('touchmove');
                 this.isActive = !this.isActive;
             },
-            showPrizeList: function() {
-                var that = this;
-                that.closePop();
-                $('body').off('touchmove');
-            },
             playGame: function(event) {
                 var e = event || window.event;
                 var that = this;
@@ -307,9 +302,8 @@ $this->title = '积分秒杀活动';
                             that.ticket[i].point = '消耗积分:12'+res[i].ref_amount;
                         }
                         this.isActive = !this.isActive;
-                        that.showPrizeList();
                         setTimeout(function(e){ that.loaded(e); },50);
-    //                        $('body').on('touchmove',function(e){that.eventTarget(e)}, false);
+                        $('body').on('touchmove',function(e){that.eventTarget(e)}, false);
                     }
                 });
                 xhr.fail(function(jqXHR) {
@@ -511,5 +505,4 @@ $this->title = '积分秒杀活动';
             }
         });
     });
-
 </script>
