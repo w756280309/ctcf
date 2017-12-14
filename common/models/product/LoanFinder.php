@@ -3,6 +3,7 @@
 namespace common\models\product;
 use common\models\affiliation\AffiliateCampaign;
 use common\models\affiliation\Affiliator;
+use common\models\affiliation\UserAffiliation;
 use common\models\growth\AppMeta;
 use Yii;
 use common\models\user\UserInfo;
@@ -45,12 +46,18 @@ class LoanFinder
         $affiliatorIds = AppMeta::getValue('hidden_deal_for_affiliator');
         if (null !== $affiliatorIds) {
             $affiliatorIds = explode(',', $affiliatorIds);
+            //获取当前的分销商
+            $currentAffiliatorId = null;
+            $userAffiliation = $user->userAffiliation;
+            if (null !== $userAffiliation) {
+                $currentAffiliatorId = $userAffiliation->affiliator_id;
+            }
             $campaignSources = AffiliateCampaign::find()
                 ->select('trackCode')
                 ->where(['in', 'affiliator_id', $affiliatorIds])
                 ->column();
             $currentCampaign = Yii::$app->request->cookies->getValue('campaign_source');
-            if (in_array($currentCampaign, $campaignSources) || (!is_null($user) && in_array($user->campaign_source, $campaignSources))) {
+            if (in_array($currentCampaign, $campaignSources) || (!is_null($user) && in_array($currentAffiliatorId, $affiliatorIds))) {
                 $query->andWhere('if(refund_method = 1, expires >= 180, expires >= 6) or is_xs = 1');
             }
         }
