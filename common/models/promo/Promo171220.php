@@ -5,15 +5,19 @@ namespace common\models\promo;
 use common\models\mall\PointRecord;
 use common\models\user\User;
 use common\service\PointsService;
+use Yii;
 
 class Promo171220 extends BasePromo
 {
-    public function secKill(User $user, $rewardSn)
+    public function secKill(User $user, $rewardSn, $killTime)
     {
         $reward = Reward::fetchOneBySn($rewardSn);
         if (null === $reward) {
             throw new \Exception('商品不存在', 6);
         }
+/*        if ($killTime < (new \DateTime($reward->createTime))) {
+            throw new \Exception('秒杀未开始', 8);
+        }*/
         if (null !== $reward->limit && $reward->limit <= 0) {
             throw new \Exception('商品已售罄', 7);
         }
@@ -30,11 +34,20 @@ class Promo171220 extends BasePromo
         }
 
         $pointRecord = new PointRecord([
-            'ref_type' => PointRecord::TYPE_PROMO,
+            'ref_type' => PointRecord::TYPE_POINT_ORDER,
             'decr_points' => $reward->ref_amount,
         ]);
-        PointsService::addUserPoints($pointRecord, false, $user);
 
-        return PromoService::award($user, $reward, $this->promo);
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            PointsService::addUserPoints($pointRecord, false, $user);
+            PromoService::award($user, $reward, $this->promo);
+            $transaction->commit();
+
+            return $reward;
+        } catch (\Exception $ex) {
+            $transaction->rollback();
+            throw $ex;
+        }
     }
 }
