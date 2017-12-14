@@ -48,8 +48,14 @@ class P171220Controller extends BaseController
             $data[$k]['sn'] = $reward->sn;
             $data[$k]['timePoint'] = substr($reward->sn, -2);
             $data[$k]['currentPoints'] = (int) $reward->ref_amount;
+            $data[$k]['restTime'] = $nowTime - $reward->created_at >= 0 ? $nowTime - $reward->created_at : 0;
             $data[$k]['allNum'] = null === $reward->limit ? 99999 : $reward->limit;
             $data[$k]['alreadyNum'] = $this->getSecKillNum($promo, $reward->id);
+        }
+
+        //当前小时数大于等于16点时，商品信息后面优先展示
+        if (date('H') >= 16) {
+            $data = array_reverse($data);
         }
         $responseData['data'] = $data;
 
