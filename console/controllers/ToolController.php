@@ -635,54 +635,67 @@ group by o.uid
             ->from($r)
             ->innerJoin($u, "$u.id = $r.uid")
             ->innerJoin($e, "$e.appUserId = $u.id")
-            ->where(['<=', "$r.created_at", strtotime('2017-12-15 14:00:00')]);
+            ->where(["$r.status" => 1])
+            ->andWhere(['<=', "$r.created_at", strtotime('2017-12-15 14:00:00')])
+            ->orderBy(["$r.uid" => SORT_DESC]);
 
-        $moneyRechargeSns = MoneyRecord::find()
-            ->select('osn')
-            ->where(['in', 'type', [MoneyRecord::TYPE_RECHARGE_POS, MoneyRecord::TYPE_RECHARGE]])
-            ->column();
+        $fileCache = Yii::$app->cache;
+        $moneyRechargeSns = $fileCache->getOrSet('repairSns', function ($cache) {
+            return MoneyRecord::find()
+                ->select('osn')
+                ->where(['in', 'type', [MoneyRecord::TYPE_RECHARGE_POS, MoneyRecord::TYPE_RECHARGE]])
+                ->column();
+        });
 
         $num = 0;
         $timesCount = 0;
-        $file = Yii::getAlias('@app/runtime/repair_recharge_sns_'.date('YmdHis').'.txt');
-        file_put_contents($file, '用户ID-本地余额-联动余额-充值sn-本地充值状态-联动充值状态'.PHP_EOL, FILE_APPEND);
+        $balanceUids = [];
+        $file = Yii::getAlias('@app/runtime/repairSns'.'.csv');
+        file_put_contents($file, "用户ID\t本地用户余额\t联动用户余额\t充值流水sn\t本地充值订单状态\t联动充值订单状态0初始1成功2失败5交易关闭46不明".PHP_EOL);
         foreach ($rechargeRecordQuery->batch(200) as $rechargeRecords) {
             foreach ($rechargeRecords as $rechargeRecord) {
                 $uType = (int) $rechargeRecord['uType'];
                 $status = (int) $rechargeRecord['status'];
+                $uid = $rechargeRecord['uid'];
                 if (1 === $status && in_array($rechargeRecord['sn'], $moneyRechargeSns)) {
                     continue;
                 }
 
-                //获取本地余额
-                if (1 === $uType) {
-                    $userAccount = UserAccount::find()
-                        ->where(['user_account.type' => UserAccount::TYPE_LEND])
-                        ->andWhere(['uid' => $rechargeRecord['uid']])
-                        ->one();
-                } else {
-                    $userAccount = UserAccount::find()
-                        ->where(['user_account.type' => UserAccount::TYPE_BORROW])
-                        ->andWhere(['uid' => $rechargeRecord['uid']])
-                        ->one();
-                }
-                $balance = null === $userAccount ? 0 : $userAccount['available_balance'] * 100;
-
-                //获取联动余额
-                $umpBalance = 0;
-                if (2 === $uType) {
-                    $resp = \Yii::$container->get('ump')->getMerchantInfo($rechargeRecord['epayUserId']);
-                    if ($resp->isSuccessful()) {
-                        $umpBalance = $resp->get('balance');
+                $balance = '**'; //占位符
+                $umpBalance = '**'; //占位符
+                if (!in_array($uid, $balanceUids)) {
+                    //获取本地余额
+                    if (1 === $uType) {
+                        $userAccount = UserAccount::find()
+                            ->where(['user_account.type' => UserAccount::TYPE_LEND])
+                            ->andWhere(['uid' => $rechargeRecord['uid']])
+                            ->one();
+                    } else {
+                        $userAccount = UserAccount::find()
+                            ->where(['user_account.type' => UserAccount::TYPE_BORROW])
+                            ->andWhere(['uid' => $rechargeRecord['uid']])
+                            ->one();
                     }
-                } else {
-                    $userUmpInfo = Yii::$container->get('ump')->getUserInfo($rechargeRecord['epayUserId']);
-                    if ($userUmpInfo->isSuccessful()) {
-                        $umpBalance = $userUmpInfo->get('balance');
+                    $balance = null === $userAccount ? 0 : $userAccount['available_balance'] * 100;
+
+                    //获取联动余额
+                    $umpBalance = 0;
+                    if (2 === $uType) {
+                        $resp = \Yii::$container->get('ump')->getMerchantInfo($rechargeRecord['epayUserId']);
+                        if ($resp->isSuccessful()) {
+                            $umpBalance = $resp->get('balance');
+                            $balances[$uid]['ump'] = $umpBalance;
+                        }
+                    } else {
+                        $userUmpInfo = Yii::$container->get('ump')->getUserInfo($rechargeRecord['epayUserId']);
+                        if ($userUmpInfo->isSuccessful()) {
+                            $umpBalance = $userUmpInfo->get('balance');
+                        }
                     }
                 }
+                $balanceUids[] = $uid;
 
-                $umpStatus = 0; //未查到 - 初始状态
+                $umpStatus = null; //初始状态null
                 $resp = Yii::$container->get('ump')->getRechargeInfo($rechargeRecord['sn'], $rechargeRecord['created_at']);
                 if ($resp->isSuccessful()) {
                     $tranState = (int) $resp->get('tran_state');
@@ -690,13 +703,15 @@ group by o.uid
                         $umpStatus = RechargeRecord::STATUS_YES;
                     } elseif (3 === $tranState) {
                         $umpStatus = RechargeRecord::STATUS_FAULT;
+                    } else {
+                        $umpStatus = $tranState;
                     }
                     if ($status === $umpStatus) {
                         continue;
                     }
                 }
                 $num++;
-                $data = $rechargeRecord['uid'].'-'.$balance.'-'.$umpBalance.'-'.$rechargeRecord['sn'] . '-' . $status . '-' . $umpStatus . PHP_EOL;
+                $data = $rechargeRecord['uid']."\t".$balance."\t".$umpBalance."\t".$rechargeRecord['sn'] . "\t" . $status . "\t" . $umpStatus . PHP_EOL;
                 file_put_contents($file, $data, FILE_APPEND);
             }
             $timesCount++;
