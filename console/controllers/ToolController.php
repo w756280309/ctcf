@@ -645,13 +645,17 @@ group by o.uid
         $num = 0;
         $timesCount = 0;
         $file = Yii::getAlias('@app/runtime/repair_recharge_sns_'.date('YmdHis').'.txt');
+        file_put_contents($file, '用户ID-本地余额-联动余额-充值sn-本地充值状态-联动充值状态'.PHP_EOL, FILE_APPEND);
         foreach ($rechargeRecordQuery->batch(200) as $rechargeRecords) {
             foreach ($rechargeRecords as $rechargeRecord) {
-                if (1 === $rechargeRecord['status'] && in_array($rechargeRecord['sn'], $moneyRechargeSns)) {
+                $uType = (int) $rechargeRecord['uType'];
+                $status = (int) $rechargeRecord['status'];
+                if (1 === $status && in_array($rechargeRecord['sn'], $moneyRechargeSns)) {
                     continue;
                 }
+
                 //获取本地余额
-                if (1 === $rechargeRecord['uType']) {
+                if (1 === $uType) {
                     $userAccount = UserAccount::find()
                         ->where(['user_account.type' => UserAccount::TYPE_LEND])
                         ->andWhere(['uid' => $rechargeRecord['uid']])
@@ -666,7 +670,7 @@ group by o.uid
 
                 //获取联动余额
                 $umpBalance = 0;
-                if (2 === $rechargeRecord['uType']) {
+                if (2 === $uType) {
                     $resp = \Yii::$container->get('ump')->getMerchantInfo($rechargeRecord['epayUserId']);
                     if ($resp->isSuccessful()) {
                         $umpBalance = $resp->get('balance');
@@ -687,12 +691,12 @@ group by o.uid
                     } elseif (3 === $tranState) {
                         $umpStatus = RechargeRecord::STATUS_FAULT;
                     }
-                    if ($rechargeRecord['status'] === $umpStatus) {
+                    if ($status === $umpStatus) {
                         continue;
                     }
                 }
                 $num++;
-                $data = $rechargeRecord['uid'].'-'.$balance.'-'.$umpBalance.'-'.$rechargeRecord['sn'] . '-' . $rechargeRecord['status'] . '-' . $umpStatus . PHP_EOL;
+                $data = $rechargeRecord['uid'].'-'.$balance.'-'.$umpBalance.'-'.$rechargeRecord['sn'] . '-' . $status . '-' . $umpStatus . PHP_EOL;
                 file_put_contents($file, $data, FILE_APPEND);
             }
             $timesCount++;
