@@ -10,6 +10,7 @@ use common\models\order\OnlineRepaymentPlan;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use common\models\tx\CreditOrder;
+use common\models\user\RechargeRecord;
 use common\models\user\DrawRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
@@ -18,6 +19,8 @@ use common\utils\TxUtils;
 use Ding\DingNotify;
 use Yii;
 use yii\console\Controller;
+use yii\db\ActiveQuery;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -616,5 +619,86 @@ group by o.uid
         }
 
         $this->stdout("需要修复数据个数 $dirtyCount, 成功修复订单个数 $successCount, 修复失败个数 $errorCount \n");
+    }
+
+    /**
+     * 修复线上充值事故
+     * 问题：全量更新status=1
+     */
+    public function actionRechargeEvent()
+    {
+        $r = RechargeRecord::tableName();
+        $u = User::tableName();
+        $e = EpayUser::tableName();
+        $rechargeRecordQuery = (new Query())
+            ->select("$r.*,$u.type uType,$e.epayUserId")
+            ->from($r)
+            ->innerJoin($u, "$u.id = $r.uid")
+            ->innerJoin($e, "$e.appUserId = $u.id")
+            ->where(['<=', "$r.created_at", strtotime('2017-12-15 14:00:00')]);
+
+        $moneyRechargeSns = MoneyRecord::find()
+            ->select('osn')
+            ->where(['in', 'type', [MoneyRecord::TYPE_RECHARGE_POS, MoneyRecord::TYPE_RECHARGE]])
+            ->column();
+
+        $num = 0;
+        $timesCount = 0;
+        $file = Yii::getAlias('@app/runtime/repair_recharge_sns_'.date('YmdHis').'.txt');
+        foreach ($rechargeRecordQuery->batch(200) as $rechargeRecords) {
+            foreach ($rechargeRecords as $rechargeRecord) {
+                if (1 === $rechargeRecord['status'] && in_array($rechargeRecord['sn'], $moneyRechargeSns)) {
+                    continue;
+                }
+                //获取本地余额
+                if (1 === $rechargeRecord['uType']) {
+                    $userAccount = UserAccount::find()
+                        ->where(['user_account.type' => UserAccount::TYPE_LEND])
+                        ->andWhere(['uid' => $rechargeRecord['uid']])
+                        ->one();
+                } else {
+                    $userAccount = UserAccount::find()
+                        ->where(['user_account.type' => UserAccount::TYPE_BORROW])
+                        ->andWhere(['uid' => $rechargeRecord['uid']])
+                        ->one();
+                }
+                $balance = null === $userAccount ? 0 : $userAccount['available_balance'] * 100;
+
+                //获取联动余额
+                $umpBalance = 0;
+                if (2 === $rechargeRecord['uType']) {
+                    $resp = \Yii::$container->get('ump')->getMerchantInfo($rechargeRecord['epayUserId']);
+                    if ($resp->isSuccessful()) {
+                        $umpBalance = $resp->get('balance');
+                    }
+                } else {
+                    $userUmpInfo = Yii::$container->get('ump')->getUserInfo($rechargeRecord['epayUserId']);
+                    if ($userUmpInfo->isSuccessful()) {
+                        $umpBalance = $userUmpInfo->get('balance');
+                    }
+                }
+
+                $umpStatus = 0; //未查到 - 初始状态
+                $resp = Yii::$container->get('ump')->getRechargeInfo($rechargeRecord['sn'], $rechargeRecord['created_at']);
+                if ($resp->isSuccessful()) {
+                    $tranState = (int) $resp->get('tran_state');
+                    if (2 === $tranState) {
+                        $umpStatus = RechargeRecord::STATUS_YES;
+                    } elseif (3 === $tranState) {
+                        $umpStatus = RechargeRecord::STATUS_FAULT;
+                    }
+                    if ($rechargeRecord['status'] === $umpStatus) {
+                        continue;
+                    }
+                }
+                $num++;
+                $data = $rechargeRecord['uid'].'-'.$balance.'-'.$umpBalance.'-'.$rechargeRecord['sn'] . '-' . $rechargeRecord['status'] . '-' . $umpStatus . PHP_EOL;
+                file_put_contents($file, $data, FILE_APPEND);
+            }
+            $timesCount++;
+            echo $timesCount.PHP_EOL;
+        }
+
+        $this->stdout('需要修复的充值记录条数有'.$num.'条');
     }
 }
