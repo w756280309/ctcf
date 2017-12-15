@@ -2,6 +2,7 @@
 
 namespace common\models\offline;
 
+use common\models\product\RepaymentHelper;
 use yii\db\ActiveRecord;
 
 /**
@@ -74,5 +75,29 @@ class OfflineLoan extends ActiveRecord
     public function getRepayment()
     {
         return $this->hasMany(OfflineRepayment::className(),['loan_id' => 'id']);
+    }
+    //所有成交的订单
+    public function getSuccessOrder()
+    {
+        return OfflineOrder::find()->where(['loan_id' => $this->id, 'isDeleted' => false])->all();
+    }
+    //获取计息日
+    public function getStartDate()
+    {
+        return date('Y-m-d', $this->jixi_time);
+    }
+
+    /**
+     * 获取指定标的的所有还款日
+     */
+    public function getPaymentDates()
+    {
+        return RepaymentHelper::calcRepaymentDate($this->getStartDate(),
+            $this->getEndDate(),
+            $this->repaymentMethod,
+            $this->expires,
+            $this->paymentDay,
+            $this->isCustomRepayment
+        );
     }
 }
