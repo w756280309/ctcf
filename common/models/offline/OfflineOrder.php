@@ -114,4 +114,9 @@ class OfflineOrder extends ActiveRecord
 
         return bcdiv(bcmul($this->money * 10000, $this->loan->expires, 14), $base, 2);
     }
+    //分期还款最后一期
+    public function getLastTerm()
+    {
+        return OfflineRepaymentPlan::find()->where(['order_id' => $this->id])->count();
+    }
 }

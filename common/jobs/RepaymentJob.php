@@ -142,16 +142,30 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                     $user = $plan->user;
                     $loan = $plan->loan;
                     $order = $plan->order;
-                    $message = [
-                        $user->realName,    //用户名
-                        $loan->title,       //产品名
-                        '第' . $plan->qishu . '期',   //第多少期
-                        bcadd($plan->benxi, $plan->tiexi, 2),   //金额
-                        substr($order->bankCardNo, -4),       //银行卡尾号
-                        $order->accBankName,     //银行
-                    ];
-                    $templateId = '';
-                    SmsService::send($user->mobile, $templateId, $message);
+                    if ($order->lastTerm == $plan->qishu) {
+                        $message = [
+                            $user->realName,
+                            $loan->title,
+                            bcadd($plan->benxi, $plan->tiexi, 2),
+                            substr($order->bankCardNo, -4),
+                            $order->accBankName,
+                        ];
+                        //最后一期
+                        $templateId = Yii::$app->params['offline_repayment_sms']['fuxi_last'];
+                        SmsService::send($user->mobile, $templateId, $message);
+                    } else {
+                        //分期
+                        $message = [
+                            $user->realName,    //用户名
+                            $loan->title,       //产品名
+                            '第' . $plan->qishu . '期',   //第多少期
+                            bcadd($plan->benxi, $plan->tiexi, 2),   //金额
+                            substr($order->bankCardNo, -4),       //银行卡尾号
+                            $order->accBankName,     //银行
+                        ];
+                        $templateId = Yii::$app->params['offline_repayment_sms']['fuxi_ordinary'];
+                        SmsService::send($user->mobile, $templateId, $message);
+                    }
                 } catch (\Exception $e) {
                     var_dump($e->getMessage());
                     throw new \Exception($e->getMessage());
