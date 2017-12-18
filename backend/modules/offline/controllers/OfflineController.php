@@ -760,9 +760,9 @@ class OfflineController extends BaseController
     public function actionText()
     {
         Yii::$app->queue->push(new RepaymentJob([
-            'id' => 700,
+            'id' => 6,
             'operator' => Yii::$app->user->getId(),
-            'action' => 'sendsms',
+            'action' => 'add',
         ]));
     }
 }
