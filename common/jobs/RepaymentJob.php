@@ -97,7 +97,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                         'operator' => $this->operator,
                     ]);
                     //最后一期计算贴息
-                    if ($term == count($amountData) && strtotime($loan->jixi_time) > strtotime($order->valueDate)) {
+                    if ($term == count($amountData) && strtotime($loan->jixi_time) > strtotime($order->valueDate) && !is_null($order->valueDate)) {
                         $plan->yuqi_day = bcdiv(bcsub(strtotime($loan->jixi_time), strtotime($order->valueDate)), bcmul(24, 3600));
                         //todo
                         $plan->tiexi = bcdiv(bcmul($plan->yuqi_day, bcmul($order->money * 10000, $order->apr)), 365 , 2);
