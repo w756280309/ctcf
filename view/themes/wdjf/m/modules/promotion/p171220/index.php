@@ -280,7 +280,7 @@ $this->title = '积分限时秒杀';
                         } else if (6 === resp.code) {//系统错误
                             that.systemError();
                         } else if (7 === resp.code) {//商品已售罄
-                            that.failOver(e);
+                            that.failOver();
                         } else if (8 === resp.code) {
                             that.toastCenter('秒杀未开始');
                         } else if (4 === resp.code) {
@@ -291,6 +291,8 @@ $this->title = '积分限时秒杀';
                             that.toastCenter('活动已结束');
                         } else if (1 === resp.code) {
                             that.toastCenter('活动未开始');
+                        } else {
+                            that.systemError();
                         }
                         flag = true;
                     }
