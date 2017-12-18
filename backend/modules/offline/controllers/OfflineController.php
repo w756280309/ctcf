@@ -757,4 +757,8 @@ class OfflineController extends BaseController
             throw new \Exception('还款计划【'.$plan->id.'】编辑失败');
         }
     }
+    public function actionText()
+    {
+        Yii::info('测试');
+    }
 }
