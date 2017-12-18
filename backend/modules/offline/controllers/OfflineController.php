@@ -757,12 +757,4 @@ class OfflineController extends BaseController
             throw new \Exception('还款计划【'.$plan->id.'】编辑失败');
         }
     }
-    public function actionText()
-    {
-        Yii::$app->queue->push(new RepaymentJob([
-            'id' => 6,
-            'operator' => Yii::$app->user->getId(),
-            'action' => 'add',
-        ]));
-    }
 }

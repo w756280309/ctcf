@@ -57,7 +57,6 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
         //发送短信
         if ($this->action == 'sendsms') {
             $plans = OfflineRepaymentPlan::find()->where(['status' => 1])->andWhere(['in', 'id', $this->id])->all();
-            //var_dump($plans);die;
             self::sendSms($plans);
         }
     }
@@ -173,10 +172,9 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                             $order->accBankName,     //银行
                         ];
                         $templateId = Yii::$app->params['offline_repayment_sms']['fuxi_ordinary'];
-                        SmsService::send($user->mobile, $templateId, $message);
+                        $res = SmsService::send($user->mobile, $templateId, $message);
                     }
                 } catch (\Exception $e) {
-                    var_dump($e->getMessage());
                     throw new \Exception($e->getMessage());
                 }
             }
