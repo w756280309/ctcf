@@ -10,6 +10,10 @@ namespace common\models\offline;
 use common\models\product\RepaymentHelper;
 use yii\behaviors\TimestampBehavior;
 
+/**
+ * Class OfflineRepaymentPlan
+ * @package common\models\offline
+ */
 class OfflineRepaymentPlan extends \yii\db\ActiveRecord
 {
     public function rules()

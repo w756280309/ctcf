@@ -132,14 +132,14 @@ use yii\helpers\Html;
                             'jixi' => function($url, $model, $key){
                                 if (0 == $model->is_jixi) {
                                     return "<a href=\"javascript:void(0)\" onclick=\"openwin('/offline/offline/jixi?id=$model->id&type=loan', 500, 300)\" class=\"btn mini green\">
-                                    <i class=\"icon-minus-sign\"></i>计息</a>";
+                                    设置起息日</a>";
                                 }
 
                             },
                             'confirm_jixi' => function($url, $model, $key){
                                 if (null !== $model->jixi_time && $model->is_jixi == 0) {
                                     return '<a href="/offline/offline/loan-confirm?id='.$model->id.'" onclick="return confirm(\'确认要计息吗？\')" class="btn mini green confirm_jixi"><i
-                                                class="icon-edit"></i> 确认计息</a>';
+                                                class="icon-edit"></i>确认计息</a>';
                                 }
 
                             },

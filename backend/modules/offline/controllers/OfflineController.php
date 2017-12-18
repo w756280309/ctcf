@@ -637,6 +637,7 @@ class OfflineController extends BaseController
     /**
      * 设置起息日
      * @params $type ['loan' => '标的', 'order' => '订单']
+     * 目前只用作标的
      */
     public function actionJixi($id, $type) {
         $this->layout = false;
@@ -656,7 +657,6 @@ class OfflineController extends BaseController
     //还款计划
     public function actionRepaymentPlan($id)
     {
-        //$this->layout = false;
         $model = OfflineLoan::findOne(['id' => $id, 'is_jixi' => true]);
         return $this->render('repayment_plan', ['model' => $model]);
     }
