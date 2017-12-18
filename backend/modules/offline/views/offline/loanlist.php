@@ -104,16 +104,16 @@ use yii\helpers\Html;
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => '操作',
-                        'template' => '{repayment} {list} {edit} {jixi} {confirm_jixi} {letter}',//只需要展示删除和更新
+                        'template' => '{repayment} {list} {edit} {jixi} {confirm_jixi} {huankuan} {letter}',//只需要展示删除和更新
                         'headerOptions' => ['width' => '140'],
                         'buttons' => [
                             'repayment' => function($url, $model, $key){
-                                return Html::a('分期列表',
-                                    ['repayment', 'id' => $key],
-                                    [
-                                        'class' => 'btn mini green',
-                                    ]
-                                );
+//                                return Html::a('分期列表',
+//                                    ['repayment', 'id' => $key],
+//                                    [
+//                                        'class' => 'btn mini green',
+//                                    ]
+//                                );
                             },
                             'list' => function($url, $model, $key){
                                 return Html::a('投资记录',
@@ -140,6 +140,13 @@ use yii\helpers\Html;
                                 if (null !== $model->jixi_time && $model->is_jixi == 0) {
                                     return '<a href="/offline/offline/loan-confirm?id='.$model->id.'" onclick="return confirm(\'确认要计息吗？\')" class="btn mini green confirm_jixi"><i
                                                 class="icon-edit"></i> 确认计息</a>';
+                                }
+
+                            },
+                            'huankuan' => function($url, $model, $key){
+                                if (null !== $model->jixi_time && $model->is_jixi == 1) {
+                                    return '<a href="/offline/offline/repayment-plan?id='.$model->id.'" class="btn mini green confirm_jixi"><i
+                                                class="icon-edit"></i>还款计划</a>';
                                 }
 
                             },
