@@ -71,7 +71,7 @@ class OfflineController extends BaseController
                             $neworder->save();
                             if ($neworder->valueDate) {
                                 //更新积分和累计年化投资额
-                                $this->updatePointsAndAnnual($neworder, PointRecord::TYPE_OFFLINE_BUY_ORDER);
+                                //$this->updatePointsAndAnnual($neworder, PointRecord::TYPE_OFFLINE_BUY_ORDER);
                             }
                         } else {
                             $error_index = $key + 1;

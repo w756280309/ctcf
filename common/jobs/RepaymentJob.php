@@ -7,9 +7,12 @@
  */
 namespace common\jobs;
 
+use common\models\mall\PointRecord;
 use common\models\offline\OfflineLoan;
+use common\models\offline\OfflinePointManager;
 use common\models\offline\OfflineRepayment;
 use common\models\offline\OfflineRepaymentPlan;
+use common\models\offline\OfflineUserManager;
 use common\models\order\OnlineRepaymentPlan;
 use common\service\SmsService;
 use yii\base\Object;
@@ -112,6 +115,12 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                         'dueDate' => $value['date'],
                     ];
                 }
+                //发积分等操作
+                $pointManager = new OfflinePointManager();
+                $pointManager->updatePoints($order, PointRecord::TYPE_OFFLINE_BUY_ORDER);
+
+                $offlineUserManager = new OfflineUserManager();
+                $offlineUserManager->updateAnnualInvestment($order);
             }
             if (empty($repaymentData)) {
                 throw new \Exception('标的还款数据不能为空');
