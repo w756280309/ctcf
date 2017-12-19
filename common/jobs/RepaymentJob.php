@@ -146,6 +146,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
     {
         if (!empty($plans)) {
             foreach ($plans as $plan) {
+                $transaction = Yii::$app->db->beginTransaction();
                 try {
                     $user = $plan->user;
                     $loan = $plan->loan;
@@ -174,7 +175,9 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                         $templateId = Yii::$app->params['offline_repayment_sms']['fuxi_ordinary'];
                         $res = SmsService::send($user->mobile, $templateId, $message);
                     }
+                    $transaction->commit();
                 } catch (\Exception $e) {
+                    $transaction->rollBack();
                     throw new \Exception($e->getMessage());
                 }
             }

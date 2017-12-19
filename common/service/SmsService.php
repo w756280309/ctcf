@@ -164,9 +164,6 @@ class SmsService
         $black_mobile = explode(',', Yii::$app->params['NoSendSms']);
         if (in_array($mobile, $black_mobile)) {
             Yii::info('黑名单用户：' . $mobile);
-            echo 'black';
-            echo $mobile;
-            var_dump($black_mobile);
             return true;
         }
         if (null === $user) {
@@ -182,7 +179,6 @@ class SmsService
             echo 'cansend';
             $smsMessage->status = SmsMessage::STATUS_SENT;
         }
-        var_dump($smsMessage->save());die;
         return $smsMessage->save(false);
     }
 
