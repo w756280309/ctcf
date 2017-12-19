@@ -162,9 +162,11 @@ class SmsService
     public static function send($mobile, $templateId, array $data = [], User $user = null, $level = SmsMessage::LEVEL_MIDDLE)
     {
         $black_mobile = explode(',', Yii::$app->params['NoSendSms']);
-        var_dump($black_mobile);die;
         if (in_array($mobile, $black_mobile)) {
             Yii::info('黑名单用户：' . $mobile);
+            echo 'black';
+            echo $mobile;
+            var_dump($black_mobile);
             return true;
         }
         if (null === $user) {
@@ -177,6 +179,7 @@ class SmsService
         $smsMessage = SmsMessage::initSms($user, $data, $templateId, $level);
 
         if (!self::canSend($mobile)) {
+            echo 'cansend';
             $smsMessage->status = SmsMessage::STATUS_SENT;
         }
 
