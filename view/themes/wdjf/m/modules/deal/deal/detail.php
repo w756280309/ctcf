@@ -1,15 +1,16 @@
 <?php
 
 use common\models\product\RateSteps;
-use common\view\LoanHelper;
+use common\models\product\RedeemHelper;
 use common\utils\StringUtils;
+use common\view\LoanHelper;
 use wap\assets\WapAsset;
 use yii\helpers\HtmlPurifier;
 
 $this->title = '项目详情';
 
 $this->registerCssFile(FE_BASE_URI.'libs/videojs/video-js.min.css', ['position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20170907', ['depends' => WapAsset::class, 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/xiangqing.css?v=20171218', ['depends' => WapAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]);
 
 ?>
@@ -105,6 +106,8 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
                 <img src="<?= ASSETS_BASE_URI ?>images/credit/tip.png" alt="">
             <?php }?>
         </div>
+
+
         <?php if(!empty($refundMethodDescription)) { ?>
             <div class="row" id='chart-box' hidden="true">
                 <div class="col-xs-12">
@@ -155,6 +158,41 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
         </div>
     <?php } ?>
 <?php } ?>
+
+<!-- 添加内容开始 -->
+<?php if ($deal->isRedeemable) { ?>
+<div class=earn-ransom>
+    <h5>收益说明</h5>
+    <div class="row earnings-tips">
+        <div class="col-xs-4 col">投资金额</div>
+        <div class="col-xs-4 col">提前赎回利率</div>
+        <div class="col-xs-4 col">到期兑付利率</div>
+    </div>
+    <div class="row earnings-contain">
+        <div class="col-xs-4 col">认购10万(含)起</div>
+        <div class="col-xs-4 col">8.6</div>
+        <div class="col-xs-4 col">9.0</div>
+    </div>
+    <div class="row earnings-contain">
+        <div class="col-xs-4 col">认购50万(含)起</div>
+        <div class="col-xs-4 col">8.8</div>
+        <div class="col-xs-4 col">9.3</div>
+    </div>
+    <div class="row earnings-contain">
+        <div class="col-xs-4 col">认购100万(含)起</div>
+        <div class="col-xs-4 col">9.1</div>
+        <div class="col-xs-4 col">9.5</div>
+    </div>
+    <h5 class='ransom-h5'>赎回说明</h5>
+    <ol class="ransom-list" id='ransom-list' style="list-style: decimal;">
+        <li>到期自动兑付最高利率达到9.5%，建议您选择到期后自动兑付。</li>
+        <li>到期自动兑付：如不提前赎回，产品将从购买日的1095天后，自动兑付所有投资本金及收益。</li>
+        <li>提前赎回，购买后，可在<?= RedeemHelper::formatRedemptionPeriods($deal->redemptionPeriods) ?>期间预约赎回，预约成功后，<?= RedeemHelper::formatRedemptionPaymentDates($deal->redemptionPaymentDates) ?>当日兑付所有投资本金及收益。赎回不收取任何手续费。</li>
+        <li>提前赎回将根据实际投资金额和投资期限计算实际收益，收益率低于到期自动兑付的利率。</li>
+    </ol>
+</div
+<?php } ?>
+<!-- 添加内容结束 -->
 
 <!--视频的增加-->
 <?php if ($deal->issuerInfo && $deal->issuerInfo->video) { ?>

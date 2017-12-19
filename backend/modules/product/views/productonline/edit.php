@@ -506,6 +506,63 @@ TPL;
         </div>
 
         <div class="row-fluid">
+            <div class="span6">
+                <div class="control-group">
+                    <label class="control-label">赎回申请开放时段</label>
+                    <div class="controls">
+                        <?=
+                        $form->field($model, 'redemptionPeriods', [
+                            'template' => '<div class="input-append">{input}</div>',
+                            'inputOptions' => [
+                                'placeholder' => '赎回申请开放时段',
+                                'maxlength' => true,
+                            ]
+                        ])->textarea(array_merge(['rows'=>'5','cols'=>'250'])) ?>
+                        <?php
+                            $redeemInput = ['autocomplete' => 'on'];
+                        ?>
+                        <?= $form->field($model, 'redemptionPeriods', ['template' => '{error}']) ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">赎回付款日</label>
+                    <div class="controls">
+                        <?=
+                        $form->field($model, 'redemptionPaymentDates', [
+                            'template' => '{input}',
+                            'inputOptions' => [
+                                'placeholder' => '赎回付款日',
+                                'maxlength' => true,
+                            ]
+                        ])->textInput(['class' => 'm-wrap span10']) ?>
+                        <?php
+                        $redeemInput = ['autocomplete' => 'on'];
+                        ?>
+                        <?= $form->field($model, 'redemptionPaymentDates', ['template' => '{error}']) ?>
+                    </div>
+                </div>
+                <?= $form->field($model, 'isRedeemable')->checkbox($redeemInput) ?>
+            </div>
+            <div class="span6">
+                <div class="control-group">
+                    <label class="control-label">赎回申请开放时段示例</label>
+                    <div class="controls">
+                        20171210,20171220<br/>
+                        20181210,20181220
+                    </div>
+                    <p>应以英文逗号隔开，若存在多个时段，每个时段需另起一行</p>
+                </div>
+                <div class="control-group" style="padding-top: 70px;">
+                    <label class="control-label">赎回付款日示例</label>
+                    <div class="controls">
+                        20171210,20171220
+                    </div>
+                    <p>若存在多个赎回付款日，应以英文逗号隔开</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
             <div class="span6 gudinghk">
                 <div class="control-group">
                     <label class="control-label">固定还款日</label>
@@ -793,7 +850,29 @@ TPL;
             } else {
                 rateSteps.removeAttr('disabled');
             }
-        })
+        });
+
+        //是否使用主动赎回设置
+        var isRedeemableBox = $('#onlineproduct-isredeemable');
+        var redemptionPeriods = $('#onlineproduct-redemptionperiods');
+        var redemptionPaymentDates = $('#onlineproduct-redemptionpaymentdates');
+        var isRedeemable = <?= intval($model->isRedeemable)?>;
+        if (!isRedeemable) {
+            redemptionPeriods.val('');
+            redemptionPaymentDates.val('');
+            redemptionPeriods.attr('disabled', 'disabled');
+            redemptionPaymentDates.attr('disabled', 'disabled');
+        }
+        isRedeemableBox.on('click', function () {
+            if (true === $(this).parent().hasClass('checked')) {
+                redemptionPeriods.val('');
+                redemptionPeriods.attr('disabled', 'disabled');
+                redemptionPaymentDates.attr('disabled', 'disabled');
+            } else {
+                redemptionPeriods.removeAttr('disabled');
+                redemptionPaymentDates.removeAttr('disabled');
+            }
+        });
     });
 
     //选择还款方式是到期本息的可以设置产品到期日以及宽限期。否则不可以设置
