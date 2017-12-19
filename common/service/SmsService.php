@@ -182,6 +182,7 @@ class SmsService
             echo 'cansend';
             $smsMessage->status = SmsMessage::STATUS_SENT;
         }
+        var_dump($smsMessage);
 
         return $smsMessage->save(false);
     }
