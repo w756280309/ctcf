@@ -190,12 +190,12 @@
             "version": "v1.3.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/bestiejs/punycode.js.git",
+                "url": "https://github.com/bower-asset/punycode.git",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
+                "url": "https://api.github.com/repos/bower-asset/punycode/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3",
                 "shasum": ""
             },
@@ -2894,7 +2894,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git",
-                "reference": "2f80ed18a101167249de406b4e1d20e8eec2c9d3"
+                "reference": "3276a6d389d29aeb25b6601142281f495c08770d"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -2918,7 +2918,7 @@
             ],
             "description": "工具库",
             "homepage": "http://dx.wangcaigu.cn/diffusion/WCGLIBS/",
-            "time": "2017-12-19T03:58:12+00:00"
+            "time": "2017-12-19T05:36:02+00:00"
         },
         {
             "name": "yiisoft/yii2",
