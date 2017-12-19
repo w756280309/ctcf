@@ -162,6 +162,7 @@ class SmsService
     public static function send($mobile, $templateId, array $data = [], User $user = null, $level = SmsMessage::LEVEL_MIDDLE)
     {
         $black_mobile = explode(',', Yii::$app->params['NoSendSms']);
+        var_dump($black_mobile);die;
         if (in_array($mobile, $black_mobile)) {
             Yii::info('黑名单用户：' . $mobile);
             return true;
