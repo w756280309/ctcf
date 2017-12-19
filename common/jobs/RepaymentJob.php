@@ -33,31 +33,31 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
 
     public function execute($queue)
     {
-        $loan = OfflineLoan::findOne($this->id);
-        if (!is_null($loan)) {
-            $transaction = Yii::$app->db->beginTransaction();
-            if ($this->action == 'add') {   //生成还款计划
-                try {
-                    self::saveRepayment($loan);    //还款计划
-                    //self::sendSms($loan);   //发短信
-                    $transaction->commit();
-                } catch (\Exception $e) {
-                    $transaction->rollBack();
-                }
-            } else if ($this->action == 'del') {    //删除还款计划
-                try {
-                    self::delRepayment($loan);
-                    $transaction->commit();
-                } catch (\Exception $e) {
-                    $transaction->rollBack();
+        if ($this->action === 'add' || $this->action === 'del') {
+            $loan = OfflineLoan::findOne($this->id);
+            if (!is_null($loan)) {
+                $transaction = Yii::$app->db->beginTransaction();
+                if ($this->action == 'add') {   //生成还款计划
+                    try {
+                        $this->saveRepayment($loan);    //还款计划
+                        //self::sendSms($loan);   //发短信
+                        $transaction->commit();
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                    }
+                } else if ($this->action == 'del') {    //删除还款计划
+                    try {
+                        self::delRepayment($loan);
+                        $transaction->commit();
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                    }
                 }
             }
         }
-
         //发送短信
         if ($this->action == 'sendsms') {
-            echo 'sms';
-            $plans = OfflineRepaymentPlan::find()->where(['status' => 1])->andWhere(['in', 'id', $this->id])->all();
+            $plans = OfflineRepaymentPlan::find()->where(['status' => 1, 'isSendSms' => false])->andWhere(['in', 'id', $this->id])->all();
             self::sendSms($plans);
         }
     }
@@ -143,10 +143,9 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
         }
     }
     //给投标用户发短信
-    public function sendSms($plans)
+    public static function sendSms($plans)
     {
         if (!empty($plans)) {
-            echo 'ok';
             foreach ($plans as $plan) {
                 try {
                     $user = $plan->user;
@@ -162,7 +161,6 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                         ];
                         //最后一期
                         $templateId = Yii::$app->params['offline_repayment_sms']['fuxi_last'];
-                        $res = SmsService::send($user->mobile, $templateId, $message);
                     } else {
                         //分期
                         $message = [
@@ -174,9 +172,13 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                             $order->accBankName,     //银行
                         ];
                         $templateId = Yii::$app->params['offline_repayment_sms']['fuxi_ordinary'];
-                        $res = SmsService::send($user->mobile, $templateId, $message);
                     }
-                    var_dump($res);
+                    $res = SmsService::send($user->mobile, $templateId, $message);
+                    if ($res) {
+                        //修改状态
+                        $plan->isSendSms = true;
+                        $plan->save(false);
+                    }
                 } catch (\Exception $e) {
                     throw new \Exception($e->getMessage());
                 }
