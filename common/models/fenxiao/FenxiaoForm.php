@@ -13,6 +13,7 @@ class FenxiaoForm extends Model
     public $affName;
     public $imageFile;
     public $isRecommend;
+    public $isBranch;
 
     /**
      * {@inheritdoc}
@@ -27,7 +28,7 @@ class FenxiaoForm extends Model
             ['affCode', 'match', 'pattern' => '/^[0-9a-zA-Z_-]+$/', 'message' => '{attribute}格式错误，只允许字母、数字、"_"和"-"。'],
             ['imageFile', 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             ['imageFile', 'file', 'skipOnEmpty' => true, 'maxSize' => 51200, 'tooBig' => '图片大小不能超过50KB'],
-            ['isRecommend', 'boolean'],
+            [['isRecommend', 'isBranch'], 'boolean'],
         ];
     }
 
@@ -43,6 +44,7 @@ class FenxiaoForm extends Model
             'affName' => '分销商名称',
             'imageFile' => '',
             'isRecommend' => '推荐媒体',
+            'isBranch' => '是否是网点(门店)'
         ];
     }
 }

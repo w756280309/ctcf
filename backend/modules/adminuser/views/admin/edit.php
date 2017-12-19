@@ -64,6 +64,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= $form->field($model, 'auths', ['template' => '{error}']); ?>
                             </div>
                     </div>
+                    <div class="control-group">
+                        <label class="control-label">门店(网点)</label>
+                        <div class="controls">
+                            <?= $form->field($model, 'affiliator_id', ['inputOptions' => ['class' => 'm-wrap span4'], 'template' => '{input}'])->dropDownList(['0' => '请选择'] + $affiliators); ?>
+                            <?= $form->field($model, 'affiliator_id', ['template' => '{error}']); ?>
+                        </div>
+                    </div>
             
                     <div class="control-group">
                             <label class="control-label">邮箱</label>

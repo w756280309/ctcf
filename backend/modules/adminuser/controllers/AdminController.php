@@ -2,6 +2,7 @@
 
 namespace app\modules\adminuser\controllers;
 
+use common\models\affiliation\Affiliator;
 use Yii;
 use backend\controllers\BaseController;
 use yii\web\Response;
@@ -55,6 +56,12 @@ class AdminController extends BaseController
         foreach ($_rawCategories as $c) {
             $totalCategories[$c['sn']] = $c['role_name'];
         }
+        //渠道
+        $totalAffiliators = [];
+        $affiliators = Affiliator::find()->select(['id', 'name'])->all();
+        foreach ($affiliators as $af) {
+            $totalAffiliators[$af->id] = $af->name;
+        }
 
         $aus = '';
         $model = new Admin();
@@ -106,10 +113,10 @@ class AdminController extends BaseController
             $this->alert = 1;
             $this->toUrl = 'list';
 
-            return $this->render('edit', ['model' => $model, 'roles' => $totalCategories, 'authsval' => $aus]);
+            return $this->render('edit', ['model' => $model, 'roles' => $totalCategories, 'affiliators' => $totalAffiliators, 'authsval' => $aus]);
         }
 
-        return $this->render('edit', ['model' => $model, 'roles' => $totalCategories, 'authsval' => $aus]);
+        return $this->render('edit', ['model' => $model, 'roles' => $totalCategories, 'affiliators' => $totalAffiliators, 'authsval' => $aus]);
     }
 
     public function actionRoles($aid = null, $rid = null)

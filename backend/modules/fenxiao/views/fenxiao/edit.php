@@ -132,6 +132,19 @@ $this->title = ($desc = empty($admin) ? "添加" : "编辑").'分销商';
                     <?= $form->field($model, 'isRecommend', ['template' => '{error}']) ?>
                 </div>
             </div>
+            <div class="control-group">
+                <label class="control-label">是否是网点(门店)</label>
+                <div class="controls">
+                    <?=
+                    $form->field($model, 'isBranch', [
+                        'template' => '{input}',
+                        'inputOptions' => [
+                            'class' => 'm-wrap span12',
+                        ]])->checkbox()
+                    ?>
+                    <?= $form->field($model, 'isBranch', ['template' => '{error}']) ?>
+                </div>
+            </div>
 
             <div class="form-actions">
                 <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
