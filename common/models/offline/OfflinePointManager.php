@@ -58,7 +58,10 @@ class OfflinePointManager
         } else {
             $points = max(1, ceil(bcdiv(bcmul($order->annualInvestment, 6, 14), 1000, 2)));
             //新用户首投赠送1400积分
-            $orders = OfflineOrder::find()->where(['user_id' => $order->user_id])->andWhere(['<', '	created_at', $order->created_at])->all();
+            $orders = OfflineOrder::find()
+                ->where(['user_id' => $order->user_id])
+                ->andWhere(['<', 'created_at', $order->created_at])
+                ->all();
             if (count($orders) == 0) {
                 $points = bcadd($points, 1400, 2);
             }
