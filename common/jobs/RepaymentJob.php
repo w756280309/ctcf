@@ -173,7 +173,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                         ];
                         $templateId = Yii::$app->params['offline_repayment_sms']['fuxi_ordinary'];
                     }
-                    $res = SmsService::send($user->mobile, $templateId, $message);
+                    $res = SmsService::send($order->mobile, $templateId, $message);
                     if ($res) {
                         //修改状态
                         $plan->isSendSms = true;
