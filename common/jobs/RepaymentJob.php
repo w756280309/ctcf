@@ -116,11 +116,11 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                     ];
                 }
                 //发积分等操作
-//                $pointManager = new OfflinePointManager();
-//                $pointManager->updatePoints($order, PointRecord::TYPE_OFFLINE_BUY_ORDER);
-//
-//                $offlineUserManager = new OfflineUserManager();
-//                $offlineUserManager->updateAnnualInvestment($order);
+                $pointManager = new OfflinePointManager();
+                $pointManager->updatePoints($order, PointRecord::TYPE_OFFLINE_BUY_ORDER);
+
+                $offlineUserManager = new OfflineUserManager();
+                $offlineUserManager->updateAnnualInvestment($order);
             }
             if (empty($repaymentData)) {
                 throw new \Exception('标的还款数据不能为空');
