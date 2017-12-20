@@ -356,7 +356,6 @@ class OfflineController extends BaseController
                     $refresh = true;
                     $this->updatePointsAndAnnual($model, PointRecord::TYPE_OFFLINE_BUY_ORDER);
                     $transaction->commit();
-                    die;
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
                 }
