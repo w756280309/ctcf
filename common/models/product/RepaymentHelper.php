@@ -294,7 +294,7 @@ class RepaymentHelper
                     }
 
                     $refundDays = (new \DateTime($startDate))->diff(new \DateTime($val))->days;    //应还款天数
-                    $interest = Bc::round(bcdiv(bcmul($totalInterest, $refundDays, 14), $totalDays, 14), 2);
+                    $interest = Bc::round(bcmul(bcdiv(bcmul($amount, $apr, 14), 365, 14), $refundDays, 14), 2);
                 } else {
                     $interest = Bc::round(bcdiv($totalInterest, $count, 14), 2);    //普通计息和自然计息都按照14位精度严格计算,即从小数位后第三位舍去
                 }
