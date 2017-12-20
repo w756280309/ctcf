@@ -41,7 +41,7 @@ class AccountService
         //修改充值状态
         $db = Yii::$app->db;
         $transaction = $db->beginTransaction();
-        $sql = "update recharge_record set status = :status where id = :id and status = 0";
+        $sql = "update recharge_record set status = :status where id = :id and status IN (0, 2)";
         $affectedRows = $db->createCommand($sql, [
             'id' => $recharge->id,
             'status' => RechargeRecord::STATUS_YES,
