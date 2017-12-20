@@ -74,11 +74,14 @@ class OfflinePointManager
         if ($type === PointRecord::TYPE_OFFLINE_POINT_ORDER) {
             $points = $order->points;
         } else {
-            $models = OfflineOrder::find()->where(['user_id' => $order->user_id])->all();
-            if (count($models) == 1) {  //新用户首投给3500积分
-                $points = 1400;
-            } else {
-                $points = max(1, ceil(bcdiv(bcmul($order->annualInvestment, 6, 14), 1000, 2)));
+            $points = max(1, ceil(bcdiv(bcmul($order->annualInvestment, 6, 14), 1000, 2)));
+            //新用户首投赠送1400积分
+            $orders = OfflineOrder::find()
+                ->where(['user_id' => $order->user_id])
+                ->andWhere(['<', 'created_at', $order->created_at])
+                ->all();
+            if (count($orders) == 0) {
+                $points = bcadd($points, 1400, 2);
             }
         }
         if (in_array($type, PointRecord::getDecrType())) {

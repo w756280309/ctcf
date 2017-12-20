@@ -17,8 +17,8 @@ use yii\db\ActiveRecord;
  * @property string $interest   利息
  * @property integer $isRepaid  是否还款，指融资用户扣钱
  * @property string $repaidAt  还款时间 dateTime类型
- * @property integer $isRefunded  是否回款,指给用户转钱
- * @property string $refundedAt 回款时间 dateTime类型
+ * @property integer $isRefunded  是否回款,指给用户转钱 => 本期是否全部还款
+ * @property string $refundedAt 回款时间 dateTime类型 => 本期全部还款结束时间
  */
 class OfflineRepayment extends ActiveRecord
 {
@@ -53,5 +53,23 @@ class OfflineRepayment extends ActiveRecord
     public function getLoan()
     {
         return $this->hasOne(OfflineLoan::className(), ['id' => 'loan_id']);
+    }
+    public function getPlans()
+    {
+        return OfflineRepaymentPlan::find()->where(['loan_id' => $this->loan_id, 'qishu' => $this->term])->all();
+    }
+    //当前期所有订单是否全部还完
+    public function getIsAllRefunded()
+    {
+        $plans = OfflineRepaymentPlan::find()->where([
+            'loan_id' => $this->loan_id,
+            'qishu' => $this->term,
+            'status' => 0,
+            ])->all();
+        if (count($plans) > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
