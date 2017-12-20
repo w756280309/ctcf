@@ -18,6 +18,7 @@ use common\models\offline\OfflineUser;
 use common\models\offline\OfflineUserManager;
 use common\models\product\OnlineProduct;
 use common\utils\ExcelUtils;
+use common\utils\SecurityUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
@@ -756,13 +757,5 @@ class OfflineController extends BaseController
         } else {
             throw new \Exception('还款计划【'.$plan->id.'】编辑失败');
         }
-    }
-    public function actionText()
-    {
-        Yii::$app->queue->push(new RepaymentJob([
-            'id' => 32,
-            'operator' => Yii::$app->user->getId(),
-            'action' => 'add',
-        ]));
     }
 }
