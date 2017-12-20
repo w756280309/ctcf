@@ -102,7 +102,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                         //todo
                         $plan->tiexi = bcdiv(bcmul($plan->yuqi_day, bcmul($order->money * 10000, $order->apr)), 365 , 2);
                         $amount = bcadd($amount, $plan->tiexi, 2);
-                        $value['principal'] = bcadd($value['interest'], $plan->tiexi);
+                        //$value['principal'] = bcadd($value['interest'], $plan->tiexi);
                     }
                     if (!$plan->save()) {
                         throw new \Exception('还款计划（repayment_plan）保存失败');
