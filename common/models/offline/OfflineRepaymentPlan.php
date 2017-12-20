@@ -56,7 +56,7 @@ class OfflineRepaymentPlan extends \yii\db\ActiveRecord
         $amount = bcmul($order->money, 10000);//订单金额(单位：万元)
 
         //原有计算订单的还款本息数组
-        $repaymentData = RepaymentHelper::calcRepayment($paymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr);
+        $repaymentData = RepaymentHelper::calcRepayment2($paymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr);
         return $repaymentData;
     }
 

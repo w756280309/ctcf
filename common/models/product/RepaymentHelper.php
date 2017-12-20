@@ -234,4 +234,79 @@ class RepaymentHelper
         //标的投资本金 x 加息券加息利率 x 加息天数 / 365
         return bcdiv(bcmul(bcmul($amount, $apr, 14), $duration, 14), $baseDurationUnit, 2) ;
     }
+    public static function calcRepayment2($repaymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr)
+    {
+        $amount = Bc::round($amount, 2);
+        $apr = Bc::round($apr, 4);
+        $count = count($repaymentDates);
+        if ($count < 0) {
+            throw new \Exception('还款日期不能为空');
+        }
+        if ($startDate > $repaymentDates[0]) {
+            throw new \Exception('还款日不能小于计息日期');
+        }
+        bcscale(14);
+        if (10 === $repaymentMethod) {//等额本息
+            $repayPlan = Builder::create(Builder::TYPE_DEBX)
+                ->setStartDate(new DT($startDate))
+                ->setMonth($duration)
+                ->setRate($apr)
+                ->build($amount);
+            $res = [];
+            foreach ($repayPlan as $index => $repayTerm) {
+                $res[$index] = [
+                    'date' => $repayTerm->getEndDate()->add(new \DateInterval('P1D'))->format('Y-m-d'),
+                    'principal' => Bc::round($repayTerm->getPrincipal(), 2),
+                    'interest' => Bc::round($repayTerm->getInterest(), 2),
+                ];
+            }
+            return $res;
+        }
+
+        if ($repaymentMethod === 1) {   //到期本息计算利息
+            $interest = Bc::round(bcdiv(bcmul($amount, bcmul($duration, $apr, 14), 14), 365, 14), 2);
+
+            return [
+                [
+                    'date' => $repaymentDates[0],    //还款日期
+                    'principal' => $amount,   //还款本金,以元为单位
+                    'interest' => $interest,    //还款利息,以元为单位
+                ],
+            ];
+        }
+
+        $res = [];
+        $totalInterest = Bc::round(bcdiv(bcmul(bcmul($amount, $apr, 14), $duration, 14), 12, 14), 2);    //计算总利息
+        if (bccomp($totalInterest, '0.00', 2) <= 0) {
+            $totalInterest = '0.01';
+        }
+        $totalDays = (new \DateTime($startDate))->diff(new \DateTime(end($repaymentDates)))->days;
+        foreach ($repaymentDates as $key => $val) {
+            $principal = '0.00';
+            if (1 == 2) {
+                $principal = $amount;
+                $interest = Bc::round(bcsub($totalInterest, array_sum(array_column($res, 'interest')), 2), 2);   //最后一期分期利息计算,用总的减去前面计算出来的,确保总额没有差错
+            } else {
+                if (in_array($repaymentMethod, [6, 7, 8, 9])) {
+                    $startDate = ($key === 0) ? $startDate : $repaymentDates[$key - 1];
+                    if ($val < $startDate) {
+                        throw new \Exception('标的计息日不能小于还款日');
+                    }
+
+                    $refundDays = (new \DateTime($startDate))->diff(new \DateTime($val))->days;    //应还款天数
+                    $interest = Bc::round(bcdiv(bcmul($totalInterest, $refundDays, 14), $totalDays, 14), 2);
+                } else {
+                    $interest = Bc::round(bcdiv($totalInterest, $count, 14), 2);    //普通计息和自然计息都按照14位精度严格计算,即从小数位后第三位舍去
+                }
+            }
+
+            $res[$key] = [
+                'date' => $val,    //还款日期
+                'principal' => $principal,   //还款本金
+                'interest' => $interest,    //还款利息
+            ];
+        }
+
+        return $res;
+    }
 }
