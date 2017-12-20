@@ -37,7 +37,7 @@ use yii\bootstrap\ActiveForm;
                         <label class="control-label">付息日期</label>
                         <div class="controls">
                             <span class="text">
-                                <input name="fuxi_date" type="text" class ="m-wrap span12" onclick = WdatePicker({dateFmt:"yyyy-MM-dd"})>
+                                <input name="fuxi_date" type="text" class ="m-wrap span12" onclick = WdatePicker({dateFmt:"yyyy-MM-dd"}) required>
                             </span>
                         </div>
                     </div>
