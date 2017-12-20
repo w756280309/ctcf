@@ -22,8 +22,8 @@ class OfflineLoan extends ActiveRecord
     {
         return [
             'confirm' => ['jixi_time'],
-            'default' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate', 'repaymentMethod'],
-            'edit' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate', 'repaymentMethod'],
+            'default' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate', 'repaymentMethod', 'paymentDay'],
+            'edit' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate', 'repaymentMethod', 'paymentDay'],
             'addexcel' => ['title',  'expires', 'unit', 'jixi_time', 'yield_rate'],
         ];
     }
@@ -42,6 +42,7 @@ class OfflineLoan extends ActiveRecord
             ['jixi_time', 'string', 'max' => 255],
             ['unit', 'string', 'max' => 20],
             ['repaymentMethod', 'integer'],
+            ['paymentDay', 'integer', 'max' => 30],
         ];
     }
 
@@ -58,7 +59,7 @@ class OfflineLoan extends ActiveRecord
             'jixi_time' => '起息日',
             'finish_date' => '到期日',
             'repaymentMethod' => '还款方式',
-
+            'paymentDay' => '固定还款日',
         ];
     }
 
@@ -112,7 +113,7 @@ class OfflineLoan extends ActiveRecord
             $this->getEndDate(),    //结束日（最后一期还款时间）
             $this->repaymentMethod, //还款方式
             $this->expires,     //项目期限
-            null,  //固定还款日
+            $this->paymentDay,  //固定还款日
             null
         );
     }
