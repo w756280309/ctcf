@@ -42,7 +42,12 @@ class LiheController extends Controller
     {
         if (!empty($sn)) {
             $this->repair = true;
-            $sql = 'SELECT fk.id as fkid,fk.*,p.*   
+            $sql = 'SELECT fk.id as fkid,
+                    p.id as pid,
+                    p.sn as psn,
+                    fk.sn as fksn,
+                    fk.created_at as fk_created_at,
+                    fk.*,p.*   
                     from online_fangkuan fk,online_product p 
                     where p.pkg_sn="' . $sn . '" 
                     and fk.`status`>=3 
@@ -50,7 +55,12 @@ class LiheController extends Controller
         } else {
             $maxId = $this->redis->get($this->redis_succeed_max_id);
             $maxId = empty($maxId) ? 0 : $maxId;
-            $sql = 'SELECT fk.id as fkid,fk.*,p.* 
+            $sql = 'SELECT fk.id as fkid,
+                    p.id as pid,
+                    p.sn as psn,
+                    fk.sn as fksn,
+                    fk.created_at as fk_created_at,
+                    fk.*,p.* 
                     from online_fangkuan fk,online_product p 
                     where  fk.id >"' . $maxId . '" 
                     and fk.`status`>=3 
@@ -113,9 +123,9 @@ class LiheController extends Controller
         //计算方式=还款方式
         $refund_method = ($fkData['refund_method'] + 1) * 10;
         $data = [
-            'pid' => $fkData['id'],
+            'pid' => $fkData['pid'],
             //标的主键id
-            'name' => $fkData['title'] . '+' . $fkData['sn'],
+            'name' => $fkData['title'] . '+' . $fkData['psn'],
             //	标的名+编号
             'amount' => $fkData['money'],
             //	标的融资金额，单位（分）
@@ -141,7 +151,7 @@ class LiheController extends Controller
             //	后收平台服务费率，六位纯小数，例如千分之五：0.005000
             'laterCollectMoney' => 0,
             //	后收金额，单位（分）
-            'lendTime' => $this->formatDate($fkData['created_at']),
+            'lendTime' => $this->formatDate($fkData['fk_created_at']),
             //	平台放款时间，格式：2017-01-01
             'lendMoney' => $fkData['order_money'],
             //	平台放款金额，单位（分）
