@@ -127,7 +127,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     </div>
 </div>
 
-<?php if ($deal->isFlexRate) { ?>
+<?php if ($deal->isFlexRate && !$deal->isRedeemable) { ?>
     <div class="row tab lee_title">
         <div class="col-xs-1"></div>
         <div class="col-xs-10 lee_shuoming">收益说明</div>
