@@ -7,6 +7,7 @@ use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
+use common\models\payment\PaymentLog;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use common\models\tx\CreditOrder;
@@ -719,5 +720,44 @@ group by o.uid
         }
 
         $this->stdout('需要修复的充值记录条数有'.$num.'条');
+    }
+
+    /**
+     * 向指定标的贴息
+     *
+     * 注意不要多次执行此代码
+     *
+     * @param int    $loanId 标的IID
+     * @param string $amount 金额
+     *
+     * @throws \Exception
+     */
+    public function actionTransferToLoan($loanId, $amount)
+    {
+        if (is_null($loanId) || $amount <= 0) {
+            throw new \Exception('参数错误');
+        }
+
+        $loan = OnlineProduct::findOne($loanId);
+        if (null === $loan) {
+            throw new \Exception('标的未找到');
+        }
+        if ($loan->status >= 4 && $loan->status < 7) {
+            throw new \Exception('标的状态不对');
+        }
+
+        $paymentLog = new PaymentLog([
+            'txSn' => TxUtils::generateSn('P'),
+            'createdAt' => time(),
+            'loan_id' => $loanId,
+            'amount' => $amount,
+        ]);
+
+        $res = Yii::$container->get('ump')->merOrder($paymentLog);
+        if (!$res->isSuccessful()) {
+            throw new \Exception($res->get('ret_msg'));
+        }
+
+        $this->stdout('向标的ID'.$loanId.'贴息'.$amount.'元');
     }
 }
