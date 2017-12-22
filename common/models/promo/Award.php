@@ -130,6 +130,7 @@ class Award extends ActiveRecord
     {
         $award = self::initNew($user, $promo, $ticket);
         $award->ref_type = self::TYPE_GOODS;
+        $award->amount = null === $reward ? null : $reward->ref_amount;
         $award->ref_id = $goodsType->id;
         $award->reward_id = is_null($reward) ? null : $reward->id;
 

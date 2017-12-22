@@ -267,7 +267,7 @@ i,em {
     cursor: pointer;
 }
 .tab{
-    margin-top: 20px;
+    margin-top: 11px;
     background: #fff;
     padding-top: 30px;
 }
@@ -446,4 +446,58 @@ p.notice-coupon {
 }
 .bottom-note {
     padding-bottom: 10px;
+}
+/*20171218页面修改*/
+.earn-ransom{
+   border-top:1px solid #e7eaf1;
+    /*margin-top: 20px;*/
+}
+.earn-ransom .col{
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+}
+
+.earn-ransom .earnings-tips{
+    line-height:33px;
+    height: 33px;
+    font-size:14px;
+    background-color: #f5f8fd;
+}
+.earn-ransom .earnings-contain{
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    /* background: #f0f4fd;*/
+    background-color: #fff;
+    font-size:14px;
+}
+/*earnings-tips earnings-contain
+.earnings-contain*/
+.earn-ransom h5{
+    height:42px;
+    line-height: 42px;
+    color:#4e545a;
+    font-size: 18px;
+    box-sizing: border-box;
+    padding-left: 15px;
+    background-color: #fff;
+}
+.earn-ransom .ransom-h5{
+    margin-top: 11px;
+}
+.earn-ransom ol#ransom-list{
+    list-style:decimal;
+    padding-left:30px;
+    padding-right:14px;
+    background-color: #fff;
+    padding-bottom:16px;
+}
+.earn-ransom ol li{
+    line-height: 25px;
+    font-size: 13px;
+    list-style:decimal;
+}
+.earn-ransom ol li:first-child{
+    color:#ff6058;
 }

@@ -558,7 +558,6 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
             if (null !== $asset && $asset->hasTransferred()) {
                 $plan->asset_id = $asset->id;
             }
-
             $plan->save(false);
         }
     }

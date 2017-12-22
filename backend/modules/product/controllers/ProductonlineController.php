@@ -136,6 +136,13 @@ class ProductonlineController extends BaseController
             $loan->rateSteps = null;
         }
 
+        if (!$loan->isRedeemable) {
+            $loan->redemptionPaymentDates = null;
+            $loan->redemptionPeriods = null;
+        } else {
+            $loan->redemptionPaymentDates = trim($loan->redemptionPaymentDates, ',');
+        }
+
         if (!$loan->isNatureRefundMethod()) {  //当标的还款方式不为按自然时间付息的方式时,固定日期置为null
             $loan->paymentDay = null;
         }
@@ -190,7 +197,6 @@ class ProductonlineController extends BaseController
         $model = OnlineProduct::initNew();
         $model->scenario = 'create';
         $model->allowTransfer = true;
-
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
         $data = Yii::$app->request->post();

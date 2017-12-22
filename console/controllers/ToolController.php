@@ -7,9 +7,11 @@ use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
+use common\models\payment\PaymentLog;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
 use common\models\tx\CreditOrder;
+use common\models\user\RechargeRecord;
 use common\models\user\DrawRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
@@ -18,6 +20,8 @@ use common\utils\TxUtils;
 use Ding\DingNotify;
 use Yii;
 use yii\console\Controller;
+use yii\db\ActiveQuery;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -616,5 +620,144 @@ group by o.uid
         }
 
         $this->stdout("需要修复数据个数 $dirtyCount, 成功修复订单个数 $successCount, 修复失败个数 $errorCount \n");
+    }
+
+    /**
+     * 修复线上充值事故
+     * 问题：全量更新status=1
+     */
+    public function actionRechargeEvent()
+    {
+        $r = RechargeRecord::tableName();
+        $u = User::tableName();
+        $e = EpayUser::tableName();
+        $rechargeRecordQuery = (new Query())
+            ->select("$r.*,$u.type uType,$e.epayUserId")
+            ->from($r)
+            ->innerJoin($u, "$u.id = $r.uid")
+            ->innerJoin($e, "$e.appUserId = $u.id")
+            ->where(["$r.status" => 1])
+            ->andWhere(['<=', "$r.created_at", strtotime('2017-12-15 14:00:00')])
+            ->orderBy(["$r.uid" => SORT_DESC]);
+
+        $fileCache = Yii::$app->cache;
+        $moneyRechargeSns = $fileCache->getOrSet('repairSns', function ($cache) {
+            return MoneyRecord::find()
+                ->select('osn')
+                ->where(['in', 'type', [MoneyRecord::TYPE_RECHARGE_POS, MoneyRecord::TYPE_RECHARGE]])
+                ->column();
+        });
+
+        $num = 0;
+        $timesCount = 0;
+        $balanceUids = [];
+        $file = Yii::getAlias('@app/runtime/repairSns'.'.csv');
+        file_put_contents($file, "用户ID\t本地用户余额\t联动用户余额\t充值流水sn\t本地充值订单状态\t联动充值订单状态0初始1成功2失败5交易关闭46不明".PHP_EOL);
+        foreach ($rechargeRecordQuery->batch(200) as $rechargeRecords) {
+            foreach ($rechargeRecords as $rechargeRecord) {
+                $uType = (int) $rechargeRecord['uType'];
+                $status = (int) $rechargeRecord['status'];
+                $uid = $rechargeRecord['uid'];
+                if (1 === $status && in_array($rechargeRecord['sn'], $moneyRechargeSns)) {
+                    continue;
+                }
+
+                $balance = '**'; //占位符
+                $umpBalance = '**'; //占位符
+                if (!in_array($uid, $balanceUids)) {
+                    //获取本地余额
+                    if (1 === $uType) {
+                        $userAccount = UserAccount::find()
+                            ->where(['user_account.type' => UserAccount::TYPE_LEND])
+                            ->andWhere(['uid' => $rechargeRecord['uid']])
+                            ->one();
+                    } else {
+                        $userAccount = UserAccount::find()
+                            ->where(['user_account.type' => UserAccount::TYPE_BORROW])
+                            ->andWhere(['uid' => $rechargeRecord['uid']])
+                            ->one();
+                    }
+                    $balance = null === $userAccount ? 0 : $userAccount['available_balance'] * 100;
+
+                    //获取联动余额
+                    $umpBalance = 0;
+                    if (2 === $uType) {
+                        $resp = \Yii::$container->get('ump')->getMerchantInfo($rechargeRecord['epayUserId']);
+                        if ($resp->isSuccessful()) {
+                            $umpBalance = $resp->get('balance');
+                            $balances[$uid]['ump'] = $umpBalance;
+                        }
+                    } else {
+                        $userUmpInfo = Yii::$container->get('ump')->getUserInfo($rechargeRecord['epayUserId']);
+                        if ($userUmpInfo->isSuccessful()) {
+                            $umpBalance = $userUmpInfo->get('balance');
+                        }
+                    }
+                }
+                $balanceUids[] = $uid;
+
+                $umpStatus = null; //初始状态null
+                $resp = Yii::$container->get('ump')->getRechargeInfo($rechargeRecord['sn'], $rechargeRecord['created_at']);
+                if ($resp->isSuccessful()) {
+                    $tranState = (int) $resp->get('tran_state');
+                    if (2 === $tranState) {
+                        $umpStatus = RechargeRecord::STATUS_YES;
+                    } elseif (3 === $tranState) {
+                        $umpStatus = RechargeRecord::STATUS_FAULT;
+                    } else {
+                        $umpStatus = $tranState;
+                    }
+                    if ($status === $umpStatus) {
+                        continue;
+                    }
+                }
+                $num++;
+                $data = $rechargeRecord['uid']."\t".$balance."\t".$umpBalance."\t".$rechargeRecord['sn'] . "\t" . $status . "\t" . $umpStatus . PHP_EOL;
+                file_put_contents($file, $data, FILE_APPEND);
+            }
+            $timesCount++;
+            echo $timesCount.PHP_EOL;
+        }
+
+        $this->stdout('需要修复的充值记录条数有'.$num.'条');
+    }
+
+    /**
+     * 向指定标的贴息
+     *
+     * 注意不要多次执行此代码
+     *
+     * @param int    $loanId 标的IID
+     * @param string $amount 金额
+     *
+     * @throws \Exception
+     */
+    public function actionTransferToLoan($loanId, $amount)
+    {
+        if (is_null($loanId) || $amount <= 0) {
+            throw new \Exception('参数错误');
+        }
+
+        $loan = OnlineProduct::findOne($loanId);
+        if (null === $loan) {
+            throw new \Exception('标的未找到');
+        }
+        if ($loan->status >= 4 && $loan->status < 7) {
+            throw new \Exception('标的状态不对');
+        }
+
+        $paymentLog = new PaymentLog([
+            'txSn' => TxUtils::generateSn('P'),
+            'createdAt' => time(),
+            'loan_id' => $loanId,
+            'amount' => $amount,
+        ]);
+
+        $res = Yii::$container->get('ump')->merOrder($paymentLog);
+        if (!$res->isSuccessful()) {
+            throw new \Exception($res->get('ret_msg'));
+        }
+
+        $this->stdout('向标的ID'.$loanId.'贴息'.$amount.'元');
     }
 }

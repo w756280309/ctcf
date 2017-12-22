@@ -2,6 +2,7 @@
 
 namespace common\models\offline;
 
+use common\models\adminuser\Admin;
 use yii\db\ActiveRecord;
 use common\models\affiliation\Affiliator;
 use Zii\Validator\CnIdCardValidator;
@@ -113,5 +114,10 @@ class OfflineOrder extends ActiveRecord
         }
 
         return bcdiv(bcmul($this->money * 10000, $this->loan->expires, 14), $base, 2);
+    }
+    //分期还款最后一期
+    public function getLastTerm()
+    {
+        return OfflineRepaymentPlan::find()->where(['order_id' => $this->id])->count();
     }
 }

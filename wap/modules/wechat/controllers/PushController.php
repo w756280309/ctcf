@@ -166,17 +166,6 @@ class PushController extends Controller
         if (strtolower($postObj->MsgType) == 'text' && !is_null($postObj->Content)) {
             $openid = strval($postObj->FromUserName);
             $app = Yii::$container->get('weixin_wdjf');
-            if (strpos(strval($postObj->Content), '福利') !== false) {
-                $template_id = 'Wf2CgM-J0s1Pp7DYngnxNTK6bn-86H2Qehm42uVHP0g';
-                $url = 'https://m.wenjf.com/promotion/wrm170210?utm_source=toutiao&hmsr=toutiao';
-                $data = [
-                    'first' => "您被选中为幸运用户，限时开启红包、超市卡福利！",
-                    'keyword1' => '新用户专享福利',
-                    'keyword2' => "温都金服",
-                    'remark' => "\n点击参与活动，立即领取160元超市卡！",
-                ];
-                $app->notice->to($openid)->uses($template_id)->andUrl($url)->data($data)->send();
-            }
             //自动编辑的
             $replys = Reply::find()->where(['isDel' => false])->all();
             foreach ($replys as $reply) {

@@ -63,6 +63,9 @@ use yii\behaviors\TimestampBehavior;
  * @property int     $kuanxianqi 宽限期
  * @property string  $originalBorrower 底层融资方
  * @property string  $pkg_sn  资产包编号
+ * @property boolean $isRedeemable 是否允许主动赎回
+ * @property string  $redemptionPeriods 赎回申请开放时段（可支持多个）
+ * @property string  $redemptionPaymentDates 赎回付款日（可支持多个）
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -126,11 +129,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'del' => ['del_status'],
             'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
-            'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status',
-                'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time',
-                'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort',
-                'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',
-                'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower','pkg_sn'],
+            'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status', 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn', 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates'],
         ];
     }
 
@@ -250,6 +249,13 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ['balance_limit', 'number'],
             ['balance_limit', 'default', 'value' => 0],
             [['originalBorrower'], 'string', 'max' => 20],
+            ['isRedeemable', 'integer'],
+            [['redemptionPeriods', 'redemptionPaymentDates'], 'required', 'when' => function ($model) {
+                return 1 === $model->isRedeemable;
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#onlineproduct-isredeemable').parent().hasClass('checked');
+            }"],
+            ['redemptionPeriods', 'checkRedemptionPeriods'],
         ];
     }
 
@@ -353,6 +359,38 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             }
             if (!RateSteps::checkRateSteps($rateSteps, floatval($yield_rate))) {
                 $this->addError('rateSteps', '浮动利率格式错误');
+            }
+        }
+    }
+
+    public function checkRedemptionPeriods()
+    {
+        $isRedeemable = $this->isRedeemable;
+        $redemptionPeriods = $this->redemptionPeriods;
+        if ($isRedeemable) {
+            if (empty($redemptionPeriods)) {
+                $this->addError('redemptionPeriods', '赎回申请开放时段不能为空');
+            }
+            if (!RedeemHelper::checkRedemptionPeriods($redemptionPeriods)) {
+                $this->addError('redemptionPeriods', '赎回申请开放时段格式错误');
+            }
+        }
+    }
+
+    public function checkRedemptionPaymentDates()
+    {
+        $isRedeemable = $this->isRedeemable;
+        $redemptionPaymentDates = trim($this->redemptionPaymentDates, ',');
+        if ($isRedeemable) {
+            if ('' === $redemptionPaymentDates) {
+                $this->addError('redemptionPaymentDates', '赎回付款日不能为空');
+            }
+            $redemptionPaymentDates = explode(',', $redemptionPaymentDates);
+            foreach ($redemptionPaymentDates as $redemptionPaymentDate) {
+                if (false === strtotime($redemptionPaymentDate)) {
+                    $this->addError('redemptionPaymentDates', '赎回付款日格式错误');
+                    break;
+                }
             }
         }
     }
@@ -496,6 +534,9 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'balance_limit' => '累计资金额',
             'originalBorrower' => '底层融资方',
             'pkg_sn' => '资产包编号',
+            'isRedeemable' => '是否允许主动赎回',
+            'redemptionPeriods' => '赎回申请开放时段',
+            'redemptionPaymentDates' => '赎回付款日',
         ];
     }
 

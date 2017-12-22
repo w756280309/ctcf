@@ -17,14 +17,15 @@ use Yii;
 class DrawManager
 {
     /**
-     * 创建一个提现申请.
+     * 创建一个提现申请
      *
-     * @param UserAccount $account
-     * @param float $money
-     * @param float $fee
+     * @param UserAccount $account 账户信息
+     * @param string      $money   提现金额
+     * @param string      $fee     提现手续费
+     *
      * @return DrawRecord
      */
-    public static function initDraw(UserAccount $account, $money, $fee = 0)
+    public static function initDraw(UserAccount $account, $money, $fee = '0')
     {
         $money = DrawRecord::getDrawableMoney($account, $money, $fee);
 
@@ -33,12 +34,14 @@ class DrawManager
 
     /**
      * 初始化提现记录
-     * @param UserAccount $account
-     * @param $money
-     * @param int $fee
+     *
+     * @param UserAccount $account 账户信息
+     * @param string      $money   提现金额
+     * @param string      $fee     提现手续费
+     *
      * @return DrawRecord
      */
-    public static function initNew(UserAccount $account, $money, $fee = 0)
+    public static function initNew(UserAccount $account, $money, $fee = '0')
     {
         $user = $account->user;
         $ubank = $user->qpay;
@@ -46,10 +49,10 @@ class DrawManager
         $draw->sn = DrawRecord::createSN();
         $draw->money = $money;
         $draw->fee = $fee;
-        $draw->pay_id = 0; // 支付公司ID
+        $draw->pay_id = 0;
         $draw->account_id = $account->id;
         $draw->uid = $user->id;
-        $draw->pay_bank_id = '0'; // TODO
+        $draw->pay_bank_id = '0';
         $draw->bank_id = $ubank->bank_id;
         $draw->bank_name = $ubank->bank_name;
         $draw->bank_account = $ubank->card_number;
@@ -57,81 +60,107 @@ class DrawManager
         $draw->identification_number = SecurityUtils::decrypt($user->safeIdCard);
         $draw->user_bank_id = $ubank->id;
         $draw->status = DrawRecord::STATUS_ZERO;
+
         return $draw;
     }
 
     /**
-     * 修改提现申请的状态为已受理.
+     * 修改提现申请的状态为已受理并记录流水及余额变动
+     * - 提现状态校验
+     * - 更新提现状态 提现初始 0 -> 1 提现成功
+     * - 记录money_record 1 及更新user_account - 提现金额
+     * - 记录money_record 103 及更新user_account - 提现手续费
+     * - 短信提醒 提现受理成功，模板号：71400
+     *
+     * @param DrawRecord $draw
+     *
+     * @return DrawRecord
+     * @throws DrawException
      */
     public static function ackDraw(DrawRecord $draw)
     {
+        //提现状态校验
         if (DrawRecord::STATUS_ZERO !== (int) $draw->status) {
-            throw new DrawException('审核受理失败,提现申请状态异常');
+            throw new DrawException('【提现受理】提现记录：当前提现状态失败');
         }
-        $user = $draw->user;
-        $fee = $draw->fee;
-        $account = $user->type == 1 ? $user->lendAccount : $user->borrowAccount;
-        $transaction = Yii::$app->db->beginTransaction();
 
-        $sql = "update draw_record set `status` = :drawStatus where `sn` = :drawSn and `status` = " . DrawRecord::STATUS_ZERO;
-        $affectedRows = Yii::$app->db->createCommand($sql, [
+        //更新提现状态
+        /* 事务开始 */
+        /* 提现初始 0 -> 1 提现成功 */
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        $sql = "update draw_record set `status` = :drawStatus where `sn` = :drawSn and `status` = 0";
+        $affectedRows = $db->createCommand($sql, [
             'drawStatus' => DrawRecord::STATUS_EXAMINED,
             'drawSn' => $draw->sn,
         ])->execute();
-        if ($affectedRows < 1) {
+        if (0 === $affectedRows) {
             $transaction->rollBack();
-            throw new DrawException('审核受理失败');
+            throw new DrawException('【提现受理】提现记录：更新受理状态失败');
         }
-        $draw->status = DrawRecord::STATUS_EXAMINED;
 
-        //录入money_record记录
+        /* 获得当前提现用户账户信息 */
+        $draw->refresh();
+        $user = $draw->user;
+        $fee = $draw->fee;
+        $account = $user->type == 1 ? $user->lendAccount : $user->borrowAccount;
+
+        //记录money_record及更新user_account，分2块，提现金额、提现手续费
+        /* 提现金额 */
         $bc = new BcRound();
         bcscale(14);
-        $account->available_balance = $bc->bcround(bcsub($account->available_balance, $draw->money), 2);
-        //提现受理成功之后账户余额要减去提现金额
-        $account->account_balance = $bc->bcround(bcsub($account->account_balance, $draw->money), 2);
-        $money_record = new MoneyRecord();
-        $money_record->sn = MoneyRecord::createSN();
-        $money_record->type = MoneyRecord::TYPE_DRAW;
-        $money_record->osn = $draw->sn;
-        $money_record->account_id = $account->id;
-        $money_record->uid = $user->id;
-        $money_record->balance = $account->available_balance;
-        $money_record->out_money = $draw->money;
-
-        $account->available_balance = $bc->bcround(bcsub($account->available_balance, $fee), 2);
-        //160309提现受理成功之后账户余额要减去手续费
-        $account->account_balance = $bc->bcround(bcsub($account->account_balance, $fee), 2);
-        if (!$money_record->save()) {
+        $moneyRecord = new MoneyRecord();
+        $moneyRecord->sn = MoneyRecord::createSN();
+        $moneyRecord->type = MoneyRecord::TYPE_DRAW;
+        $moneyRecord->osn = $draw->sn;
+        $moneyRecord->account_id = $account->id;
+        $moneyRecord->uid = $user->id;
+        $moneyRecord->balance = $bc->bcround(bcsub($account->available_balance, $draw->money), 2);
+        $moneyRecord->out_money = $draw->money;
+        if (!$moneyRecord->save()) {
             $transaction->rollBack();
-            throw new DrawException('提现申请失败');
+            throw new DrawException('【提现受理】资金流水记录：提现金额失败');
         }
+        $sql = "update user_account set available_balance = available_balance - :amount, out_sum = out_sum - :amount where id = :accountId";
+        $res = $db->createCommand($sql, [
+            'amount' => $draw->money,
+            'accountId' => $account->id,
+        ])->execute();
+        if (0 === $res) {
+            $transaction->rollBack();
+            throw new DrawException('【提现受理】账户余额更新：提现金额失败');
+        }
+
+        /* 提现手续费 */
         if ($fee > 0) {
-            $mrecord = new MoneyRecord();
-            $mrecord->osn = $draw->sn;
-            $mrecord->account_id = $account->id;
-            $mrecord->uid = $user->id;
-            $mrecord->sn = MoneyRecord::createSN();
-            $mrecord->type = MoneyRecord::TYPE_DRAW_FEE;
-            $mrecord->balance = $account->available_balance;
-            $mrecord->out_money = $fee;
-            if (!$mrecord->save()) {
+            $account->refresh();
+            $feeRecord = new MoneyRecord();
+            $feeRecord->osn = $draw->sn;
+            $feeRecord->account_id = $account->id;
+            $feeRecord->uid = $user->id;
+            $feeRecord->sn = MoneyRecord::createSN();
+            $feeRecord->type = MoneyRecord::TYPE_DRAW_FEE;
+            $feeRecord->balance = $bc->bcround(bcsub($account->available_balance, $draw->fee), 2);
+            $feeRecord->out_money = $fee;
+            if (!$feeRecord->save()) {
                 $transaction->rollBack();
-                throw new DrawException('提现申请失败');
+                throw new DrawException('【提现受理】资金流水记录：提现手续费失败');
+            }
+            $sql = "update user_account set available_balance = available_balance - :fee, out_sum = out_sum - :fee where id = :accountId";
+            $res = $db->createCommand($sql, [
+                'fee' => $draw->fee,
+                'accountId' => $account->id,
+            ])->execute();
+            if (0 === $res) {
+                $transaction->rollBack();
+                throw new DrawException('【提现受理】账户余额更新：提现金额失败');
             }
         }
 
-        //录入user_acount记录
-        //$account->available_balance = $account->available_balance;//多余的赋值，上边已经计算过了
-        //$account->freeze_balance = $bc->bcround(bcadd($account->freeze_balance, bcadd($draw->money, $fee)), 2);
-        //160309提现受理成功之后不冻结，
-        $account->out_sum = $bc->bcround(bcadd($account->out_sum, bcadd($draw->money, $fee)), 2);
+        //事务提交
+        $transaction->commit();
 
-        if (!$account->save()) {
-            $transaction->rollBack();
-            throw new DrawException('提现申请失败');
-        }
-
+        //短信提醒 提现受理成功 - 模板号：71400
         $message = [
             $user->real_name,
             date('Y-m-d H:i', $draw->created_at),
@@ -139,65 +168,84 @@ class DrawManager
             'T+1',
             Yii::$app->params['platform_info.contact_tel'],
         ];
-
         $templateId = Yii::$app->params['sms']['tixian_apply'];
-
         SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
-
-        $transaction->commit();
 
         return $draw;
     }
 
     /**
      * 确定提现完成
+     * - 状态检验
+     * - 查询联动提现流水状态
+     * - 成功 tranState 2
+     *      - 更新提现状态为成功 受理中 1 -> 2 提现成功
+     *      - 记录money_record 101
+     *      - 写入微信推送队列
+     * - 失败 tranState 3 5 15
+     *      - 更新提现状态为失败 受理中 1 -> 11 提现失败
+     *      - 执行提现撤销逻辑 记录money_record，并返还 提现金额 + 提现手续费
      *
      * @param DrawRecord $draw
      *
-     * @throws \Exception
+     * @return void
+     * @throws DrawException
      */
     public static function commitDraw(DrawRecord $draw)
     {
+        //状态检验
         $drawStatus = (int) $draw->status;
-
         if ($drawStatus !== DrawRecord::STATUS_EXAMINED) {
-            throw new DrawException('必须是受理成功的');
+            throw new DrawException('【提现成功】提现记录状态：提现状态应为受理中');
         }
-        $resp = \Yii::$container->get('ump')->getDrawInfo($draw);
 
+        //查询联动是否提现成功
+        $resp = \Yii::$container->get('ump')->getDrawInfo($draw);
+        $db = Yii::$app->db;
         if ($resp->isSuccessful()) {
             $tranState = (int) $resp->get('tran_state');
             if (2 === $tranState) {
-                $transaction = Yii::$app->db->beginTransaction();
-                $money = bcadd($draw->money, $draw->fee, 2);
-                $userAccount = UserAccount::find()->where('uid = '.$draw->uid)->one();
-                $draw->status = DrawRecord::STATUS_SUCCESS;
-
-                $momeyRecord = new MoneyRecord();
-                $momeyRecord->uid = $draw->uid;
-                $momeyRecord->sn = MoneyRecord::createSN();
-                $momeyRecord->osn = $draw->sn;
-                $momeyRecord->account_id = $userAccount->id;
-                $momeyRecord->type = MoneyRecord::TYPE_DRAW_SUCCESS;
-                $momeyRecord->balance = $userAccount->available_balance;
-                $momeyRecord->out_money = $money;
-
-                if ($draw->save(false) && $momeyRecord->save(false) && $userAccount->save(false)) {
-                    $transaction->commit();
-                } else {
+                $transaction = $db->beginTransaction();
+                $sql = "update draw_record set `status` = :drawStatus where `sn` = :drawSn and `status` = 1";
+                $affectedRows = $db->createCommand($sql, [
+                    'drawStatus' => DrawRecord::STATUS_SUCCESS,
+                    'drawSn' => $draw->sn,
+                ])->execute();
+                if (0 === $affectedRows) {
                     $transaction->rollBack();
+                    throw new DrawException('【提现成功】提现记录：更新提现状态失败');
                 }
+
+                //记录资金流水
+                $userAccount = UserAccount::find()
+                    ->where(['uid' => $draw->uid])
+                    ->one();
+                $moneyRecord = new MoneyRecord();
+                $moneyRecord->uid = $draw->uid;
+                $moneyRecord->sn = MoneyRecord::createSN();
+                $moneyRecord->osn = $draw->sn;
+                $moneyRecord->account_id = $userAccount->id;
+                $moneyRecord->type = MoneyRecord::TYPE_DRAW_SUCCESS;
+                $moneyRecord->balance = $userAccount->available_balance;
+                $moneyRecord->out_money = bcadd($draw->money, $draw->fee, 2);
+                if (!$moneyRecord->save()) {
+                    $transaction->rollBack();
+                    throw new DrawException('【提现成功】资金流水记录：提现手续费+提现金额失败');
+                }
+                $transaction->commit();
             } elseif ($tranState === 3 || $tranState === 5 || $tranState === 15) {
-                $user = User::findOne($draw->uid);
+                $user = $draw->user;
                 if (!empty($user)) {
+                    //联动提现失败钉钉提醒
                     $msg = '用户['.$user->id.']，于'.date('Y-m-d H:i:s', $draw->created_at);
                     $msg .= ' 进行提现操作，操作失败，联动提现失败，失败信息:'.$resp->get('ret_msg');
-
                     (new DingNotify('wdjf'))->sendToUsers($msg);
                 }
-                //失败的代码
+                //提现受理 -> 提现失败过程
                 self::cancel($draw, DrawRecord::STATUS_DENY);
             }
+
+            //提现成功 - 写入微信推送队列
             if (DrawRecord::STATUS_SUCCESS === $draw->status) {
                 //如果提现成功，将对应的消息写入task
                 Noty::send(new DrawMessage($draw));
@@ -206,54 +254,92 @@ class DrawManager
     }
 
     /**
-     * @param DrawRecord $draw
-     * @param type       $status
+     * 提现失败 - 撤销提现金额及提现手续费
+     * - 获得用户账户信息
+     * - 更新提现状态 受理中 1 -> 失败 11
+     * - 提现金额退回 money_record 100
+     * - 提现手续费退回 money_record 104
+     *
+     * @param DrawRecord $draw   提现流水
+     * @param int        $status 状态
      *
      * @return DrawRecord
-     *
      * @throws DrawException
      */
     public static function cancel(DrawRecord $draw, $status)
     {
+        /* 获得用户账户信息 */
         $user = $draw->user;
         $account = $user->type == 1 ? $user->lendAccount : $user->borrowAccount;
-
-        $mrfee = MoneyRecord::findOne(['osn' => $draw->sn, 'type' => MoneyRecord::TYPE_DRAW_FEE]); //获取提现手续费的记录
         $bc = new BcRound();
         bcscale(14);
-        $transaction = Yii::$app->db->beginTransaction();
-        $draw->status = $status;
-        if (!$draw->save(false)) {
+
+        /* 事务开始 */
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+
+        /* 更新提现状态 受理中 1 -> 失败 11 */
+        $sql = "update draw_record set `status` = :drawStatus where `sn` = :drawSn and `status` = 1";
+        $affectedRows = $db->createCommand($sql, [
+            'drawStatus' => $status,
+            'drawSn' => $draw->sn,
+        ])->execute();
+        if (0 === $affectedRows) {
             $transaction->rollBack();
-            throw new DrawException('审核失败');
+            throw new DrawException('【提现失败】提现记录：更新提现状态失败');
         }
-        if (DrawRecord::STATUS_DENY === (int) $status) { //处理如果不通过的情况
-            $account->available_balance = $bc->bcround(bcadd($account->available_balance, $draw->money), 2);
-            $account->account_balance = $bc->bcround(bcadd($account->account_balance, $draw->money), 2);//160309账户总额在提现结果失败之后增加
-            $money_record = new MoneyRecord([
+
+        if (DrawRecord::STATUS_DENY === (int) $status) {
+            /* 提现金额退回 */
+            $moneyRecord = new MoneyRecord([
                 'sn' => MoneyRecord::createSN(),
                 'type' => MoneyRecord::TYPE_DRAW_CANCEL,
                 'osn' => $draw->sn,
                 'account_id' => $account->id,
                 'uid' => $account->uid,
-                'balance' => $account->available_balance,
+                'balance' => $bc->bcround(bcadd($account->available_balance, $draw->money), 2),
                 'in_money' => $draw->money,
             ]);
-            $fee_record = null;//返还手续费对象
-            if (null !== $mrfee) { //如果存在提现手续费,将冻结提现手续费的金额解冻
-                $draw->money = bcadd($mrfee->out_money, $draw->money); //将手续费也加入到解冻金额中
-                $account->available_balance = $bc->bcround(bcadd($account->available_balance, $mrfee->out_money), 2);
-                $account->account_balance = $bc->bcround(bcadd($account->account_balance, $mrfee->out_money), 2);//160309账户总额在提现结果失败之后增加手续费
-                $fee_record = clone $money_record;
-                $fee_record->type = MoneyRecord::TYPE_DRAW_FEE_RETURN;
-                $fee_record->in_money = $mrfee->out_money;
-                $fee_record->balance = $account->available_balance;
-            }
-            $account->drawable_balance = $bc->bcround(bcadd($account->drawable_balance, $draw->money), 2);
-            $account->in_sum = $bc->bcround(bcadd($account->in_sum, $draw->money), 2);
-            if (!$money_record->save() || !$account->save() || (null !== $fee_record && !$fee_record->save(false))) {
+            if (!$moneyRecord->save()) {
                 $transaction->rollBack();
-                throw new DrawException('审核失败');
+                throw new DrawException('【提现失败】资金流水记录：提现金额失败');
+            }
+            $sql = "update user_account set available_balance = available_balance + :amount, in_sum = in_sum + :amount where id = :accountId";
+            $res = $db->createCommand($sql, [
+                'amount' => $draw->money,
+                'accountId' => $account->id,
+            ])->execute();
+            if (0 === $res) {
+                $transaction->rollBack();
+                throw new DrawException('【提现失败】提现流水：提现金额退回失败');
+            }
+
+            /* 提现手续费退回 */
+            //如果存在提现手续费,将冻结提现手续费的金额解冻
+            $mrFee = MoneyRecord::findOne(['osn' => $draw->sn, 'type' => MoneyRecord::TYPE_DRAW_FEE]);
+            if (null !== $mrFee) {
+                $account->refresh();
+                $feeRecord = new MoneyRecord();
+                $feeRecord->osn = $draw->sn;
+                $feeRecord->account_id = $account->id;
+                $feeRecord->uid = $account->uid;
+                $feeRecord->sn = MoneyRecord::createSN();
+                $feeRecord->type = MoneyRecord::TYPE_DRAW_FEE_RETURN;
+                $feeRecord->balance = $bc->bcround(bcadd($account->available_balance, $draw->fee), 2);
+                $feeRecord->in_money = $mrFee->out_money;
+                if (!$feeRecord->save()) {
+                    $transaction->rollBack();
+                    throw new DrawException('【提现失败】资金流水记录：提现手续费失败');
+                }
+                $sql = "update user_account set available_balance = available_balance + :fee, in_sum = in_sum + :fee where id = :accountId";
+                $res = $db->createCommand($sql, [
+                    'fee' => $mrFee->out_money,
+                    'accountId' => $account->id,
+                ])->execute();
+                if (0 === $res) {
+                    $transaction->rollBack();
+                    throw new DrawException('【提现失败】账户余额更新：提现手续费退回失败');
+                }
             }
         }
         $transaction->commit();

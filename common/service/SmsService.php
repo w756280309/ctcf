@@ -178,8 +178,7 @@ class SmsService
         if (!self::canSend($mobile)) {
             $smsMessage->status = SmsMessage::STATUS_SENT;
         }
-
-        return $smsMessage->save(false);
+       return $smsMessage->save(false);
     }
 
     /**

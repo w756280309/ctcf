@@ -93,7 +93,13 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['de
                     <?= $form->field($model, 'expires', ['template' => '{error}']); ?>
                 </div>
             </div>
-
+            <div class="control-group">
+                <label class="control-label">固定还款日</label>
+                <div class="controls">
+                    <?= $form->field($model, 'paymentDay', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->textInput() ?>
+                    <?= $form->field($model, 'paymentDay', ['template' => '{error}']); ?>
+                </div>
+            </div>
 
             <div class="form-actions">
                 <button type="button" class="btn blue" id="submit_btn"><i class="icon-ok"></i> 提交</button>

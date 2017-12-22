@@ -3,6 +3,8 @@
 namespace common\models\offline;
 
 use common\models\mall\PointRecord;
+use common\utils\TxUtils;
+use Wcg\Xii\Crm\Model\Account;
 
 class OfflinePointManager
 {
@@ -40,6 +42,22 @@ class OfflinePointManager
             if (!$res) {
                 throw new \Exception('积分流水更新失败');
             }
+            //是否首投&存在邀请人
+            $models = OfflineOrder::find()->where(['user_id' => $order->user_id])->all();
+            if (count($models) == 1) {  //新用户首投
+                //判断是否存在邀请人
+                $acount = Account::findOne($order->user->crmAccount_id);
+                if (!is_null($acount)) {
+                    if ($acount->identity->inviter) {
+
+                        //判断邀请人是否是线下用户
+                        $inviter = OfflineUser::findOne(['crmAccount_id' => $acount->identity->inviter]);
+                        if (!is_null($inviter)) {
+                            self::sendPointsInviter($inviter, $order->money, $order->id);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -57,11 +75,47 @@ class OfflinePointManager
             $points = $order->points;
         } else {
             $points = max(1, ceil(bcdiv(bcmul($order->annualInvestment, 6, 14), 1000, 2)));
+            //新用户首投赠送1400积分
+            $orders = OfflineOrder::find()
+                ->where(['user_id' => $order->user_id])
+                ->andWhere(['<', 'created_at', $order->created_at])
+                ->all();
+            if (count($orders) == 0) {
+                $points = bcadd($points, 1400, 2);
+            }
         }
         if (in_array($type, PointRecord::getDecrType())) {
             $points = 0 - $points;
         }
 
         return (int) $points;
+    }
+    /**
+     * 线下用户首投，如果有邀请人的话，给邀请人发积分
+     * 邀请人积分 = 投资人投资金额 × 0.6%
+     * 线下订单单位是（万元），所以积分 = ×60
+     */
+    private function sendPointsInviter(OfflineUser $user, $money, $order_id)
+    {
+        $points = $money * 60;
+        //更新积分
+        $res = \Yii::$app->db->createCommand("UPDATE `offline_user` SET `points` = `points` + :points WHERE `id` = :userId", ['points' => $points, 'userId' => $user->id])->execute();
+        if (!$res) {
+            throw new \Exception('积分更新失败');
+        }
+        //流水
+        $model = new PointRecord([
+            'sn' => TxUtils::generateSn('OFF'),
+            'user_id' => $user->id,
+            'ref_type' => 'inviting_awards',
+            'ref_id' => $order_id,
+            'incr_points' => $points,
+            'final_points' => bcadd($user->points, $points),
+            'isOffline' => true,
+            'remark' => '邀请奖励',
+        ]);
+        if (!$model->save(false)) {
+            throw new \Exception('积分更新失败');
+        }
     }
 }

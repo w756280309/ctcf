@@ -39,7 +39,7 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface, AdminInte
     public function scenarios()
     {
         return [
-            'register' => ['id', 'username', 'email', 'real_name', 'status', 'password_hash', 'user_pass', 'role_sn', 'auths', 'udesk_email'],
+            'register' => ['id', 'username', 'email', 'real_name', 'status', 'password_hash', 'user_pass', 'role_sn', 'auths', 'udesk_email', 'affiliator_id'],
             'active' => ['status'],
             'log' => ['last_login_ip', 'last_login_time'],
             'editpass' => ['password_hash'],

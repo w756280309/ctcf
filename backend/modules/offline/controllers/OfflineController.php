@@ -3,17 +3,22 @@
 namespace backend\modules\offline\controllers;
 
 use backend\controllers\BaseController;
+use common\jobs\RepaymentJob;
+use common\lib\product\ProductProcessor;
 use common\models\adminuser\AdminLog;
 use common\models\offline\OfflineOrder;
 use common\models\affiliation\Affiliator;
 use common\models\offline\OfflineLoan;
 use common\models\offline\ImportForm;
 use common\models\offline\OfflineRepayment;
+use common\models\offline\OfflineRepaymentPlan;
 use common\models\offline\OfflineStats;
 use common\models\offline\OfflinePointManager;
 use common\models\offline\OfflineUser;
 use common\models\offline\OfflineUserManager;
+use common\models\product\OnlineProduct;
 use common\utils\ExcelUtils;
+use common\utils\SecurityUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
@@ -67,7 +72,7 @@ class OfflineController extends BaseController
                             $neworder->save();
                             if ($neworder->valueDate) {
                                 //更新积分和累计年化投资额
-                                $this->updatePointsAndAnnual($neworder, PointRecord::TYPE_OFFLINE_BUY_ORDER);
+                                //$this->updatePointsAndAnnual($neworder, PointRecord::TYPE_OFFLINE_BUY_ORDER);
                             }
                         } else {
                             $error_index = $key + 1;
@@ -366,52 +371,85 @@ class OfflineController extends BaseController
 
     public function actionLoanConfirm($id)
     {
-        $this->layout = false;
-        $refresh = false;
-        $ofl = OfflineLoan::tableName();
-        $ofo = OfflineOrder::tableName();
-        if (empty($id)) {
-            throw $this->ex404();
-        }
-        $model = OfflineLoan::find()->innerJoinWith('order')
-            ->where(["$ofl.id" => $id , "$ofo.isDeleted" => false])
-            ->one();
-        if (null === $model) {
-            $model = OfflineLoan::find()->where(["$ofl.id" => $id])->one();
-        }
-        if (!empty($model->jixi_time)) {
-            $model->addError('jixi_time', '已有起息日期，不能再次确认');
-        }
-        //更新标的表 jixi_time
-        $model->scenario = 'confirm';
-        $post = Yii::$app->request->post();
-        if ($model->load($post)) {
-            if (empty($model->jixi_time)) {
-                $model->addError('jixi_time', '起息日期不能为空');
+        //正式的
+        $loan = OfflineLoan::findOne($id);
+        if (!is_null($loan) && $loan->is_jixi == false) {
+            //将标的修改为确认计息状态
+            $loan->is_jixi = true;
+            //标的到期日
+            $pp = new ProductProcessor();
+            if ($loan->unit == '天') {
+                $loan->finish_date = $pp->LoanTerms('d1',date('Y-m-d', strtotime($loan->jixi_time)), $loan->expires);
+            } else if ($loan->unit == '个月') {
+                $loan->finish_date = $pp->LoanTerms('m1',date('Y-m-d', strtotime($loan->jixi_time)), $loan->expires);
             }
-            if (empty($model->getErrors())) {
-                $model->save();
-                $transaction = Yii::$app->db->beginTransaction();
-                if (null !== $model->order) {
-                    try {
-                        $refresh = true;
-                        foreach ($model->order as $order) {
-                            $order->scenario = 'confirm';
-                            if (empty($order->valueDate)) {
-                                $order->valueDate = $post['OfflineLoan']['jixi_time'];
-                                $order->save();
-                                $this->updatePointsAndAnnual($order, PointRecord::TYPE_OFFLINE_BUY_ORDER);
-                            }
-                        }
-                        $transaction->commit();
-                    } catch (\Exception $ex) {
-                        $transaction->rollBack();
-                    }
-                }
+            $transaction = Yii::$app->db->beginTransaction();
+            if (!$loan->save(false)) {
+                $transaction->rollBack();
             }
+            //记录日志
+            $log = AdminLog::initNew([
+                'tableName' => OfflineLoan::tableName(),
+                'primaryKey' => $loan->id
+            ], Yii::$app->user, ['is_jixi' => true]);
+            if (! $log->save(false)) {
+                $transaction->rollBack();
+            }
+            $transaction->commit();
+            //异步处理
+            Yii::$app->queue->push(new RepaymentJob([
+                'id' => $id,
+                'operator' => Yii::$app->user->getId(),
+                'action' => 'add',
+            ]));
         }
-
-        return $this->render('loanjixi', ['model' => $model, 'refresh' => $refresh]);
+        return $this->redirect('loanlist');
+//        $this->layout = false;
+//        $refresh = false;
+//        $ofl = OfflineLoan::tableName();
+//        $ofo = OfflineOrder::tableName();
+//        if (empty($id)) {
+//            throw $this->ex404();
+//        }
+//        $model = OfflineLoan::find()->innerJoinWith('order')
+//            ->where(["$ofl.id" => $id , "$ofo.isDeleted" => false])
+//            ->one();
+//        if (null === $model) {
+//            $model = OfflineLoan::find()->where(["$ofl.id" => $id])->one();
+//        }
+//        if (!empty($model->jixi_time)) {
+//            $model->addError('jixi_time', '已有起息日期，不能再次确认');
+//        }
+//        //更新标的表 jixi_time
+//        $model->scenario = 'confirm';
+//        $post = Yii::$app->request->post();
+//        if ($model->load($post)) {
+//            if (empty($model->jixi_time)) {
+//                $model->addError('jixi_time', '起息日期不能为空');
+//            }
+//            if (empty($model->getErrors())) {
+//                $model->save();
+//                $transaction = Yii::$app->db->beginTransaction();
+//                if (null !== $model->order) {
+//                    try {
+//                        $refresh = true;
+//                        foreach ($model->order as $order) {
+//                            $order->scenario = 'confirm';
+//                            if (empty($order->valueDate)) {
+//                                $order->valueDate = $post['OfflineLoan']['jixi_time'];
+//                                $order->save();
+//                                $this->updatePointsAndAnnual($order, PointRecord::TYPE_OFFLINE_BUY_ORDER);
+//                            }
+//                        }
+//                        $transaction->commit();
+//                    } catch (\Exception $ex) {
+//                        $transaction->rollBack();
+//                    }
+//                }
+//            }
+//        }
+//
+//        return $this->render('loanjixi', ['model' => $model, 'refresh' => $refresh]);
     }
     /**
      * 根据订单和类型更新积分和累计年化投资
@@ -597,6 +635,127 @@ class OfflineController extends BaseController
             'loan_id' => $loan_id,
         ]);
     }
+    /**
+     * 设置起息日
+     * @params $type ['loan' => '标的', 'order' => '订单']
+     * 目前只用作标的
+     */
+    public function actionJixi($id, $type) {
+        $this->layout = false;
+        $model = $type == 'loan' ? OfflineLoan::findOne($id) : OfflineOrder::findOne($id);
+        $refresh = false;
+        if ($model->load(Yii::$app->request->post())) {
+            $res = $model->save(false);
+            $refresh = true;
+        }
+        return $this->render('jixi_date', [
+            'model' => $model,
+            'type' => $type,
+            'refresh' => $refresh,
+            ]);
+    }
 
+    //还款计划
+    public function actionRepaymentPlan($id)
+    {
+        $model = OfflineLoan::findOne(['id' => $id, 'is_jixi' => true]);
+        return $this->render('repayment_plan', ['model' => $model]);
+    }
 
+    /** 重置还款计划
+     * @param $id
+     */
+    public function actionResetRepayment($id)
+    {
+        $loan = OfflineLoan::findOne($id);
+        //存在标的，并且存在还款计划
+        if (!is_null($loan) && count($loan->repayments) > 0) {
+            $transaction = Yii::$app->db->beginTransaction();
+            //将标的的  is_jixi => false; finish_date => null;
+            $loan->is_jixi = false;
+            $loan->finish_date = null;
+            if (!$loan->save()) {
+                $transaction->rollBack();
+            } else {
+                //记录日志
+                $log = AdminLog::initNew([
+                    'tableName' => OfflineLoan::tableName(),
+                    'primaryKey' => $loan->id
+                ], Yii::$app->user, ['is_jixi' => false, 'finish_date' => null]);
+                if (! $log->save(false)) {
+                    $transaction->rollBack();
+                } else {
+                    $transaction->commit();
+                    //异步删除offline_repayment & offline_repayment_plan
+                    Yii::$app->queue->push(new RepaymentJob([
+                        'id' => $id,
+                        'operator' => Yii::$app->user->getId(),
+                        'action' => 'del',
+                    ]));
+                }
+            }
+        }
+        return $this->redirect('loanlist');
+    }
+
+    //付息
+    public function actionFuxi($id, $type)
+    {
+        $this->layout = false;
+        $model = $type == 'plan' ? OfflineRepaymentPlan::findOne($id) : OfflineRepayment::findOne($id);
+        $refresh = false;
+        if (Yii::$app->request->post()) {
+            $plan_id = [];
+            if ($type == 'plan') {  //单个还款计划
+                $model->actualRefundTime = Yii::$app->request->post('fuxi_date');
+                $model->status = 1; //已还
+                $model->operator = Yii::$app->user->getId();
+                if ($model->save(false)) {
+                    $plan_id[] = $model->id;
+                    $refresh = true;
+                }
+            } else if ($type == 'repayment') {  //每期还款计划
+                $plans = OfflineRepaymentPlan::find()->where([
+                    'loan_id' => $model->loan->id,
+                    'qishu' => $model->term,
+                    'status' => 0,
+                ])->all();
+                if (!empty($plans)) {
+                    foreach ($plans as $plan) {
+                        $plan->actualRefundTime = Yii::$app->request->post('fuxi_date');
+                        $plan->status = 1; //已还
+                        $plan->operator = Yii::$app->user->getId();
+                        if ($plan->save(false)) {
+                            $plan_id[] = $plan->id;
+                        }
+                    }
+                    $refresh = true;
+                }
+            }
+            //异步发短信
+            Yii::$app->queue->push(new RepaymentJob([
+                'id' => $plan_id,
+                'operator' => Yii::$app->user->getId(),
+                'action' => 'sendsms',
+            ]));
+        }
+        return $this->render('fuxi', [
+            'type' => $type,
+            'refresh' => $refresh,
+        ]);
+    }
+
+    //单个执行还款，发短信
+    public static function fuxiSingle(OfflineRepaymentPlan $plan, $date)
+    {
+        $plan->actualRefundTime = $date;
+        $plan->status = 1; //已还
+        $plan->operator = Yii::$app->user->getId();
+        if ($plan->save(false)) {
+            //发短信
+
+        } else {
+            throw new \Exception('还款计划【'.$plan->id.'】编辑失败');
+        }
+    }
 }

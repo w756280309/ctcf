@@ -204,28 +204,29 @@ class Adv extends ActiveRecord
         $parseUrl = parse_url($link);
         $shareKey = $this->share ? $this->share->shareKey : '';
         $token = \Yii::$app->request->get('token');
-        $queryData = isset($parseUrl['query']) ? explode('&', $parseUrl['query']) : [];
+        $queryData = isset($parseUrl['query']) ? $parseUrl['query'] : '';
         $params = [];
-        foreach ($queryData as $item) {
-            $pos = strpos($item, '=');
-            if (false !== $pos) {
-                $param = substr($item, 0, $pos);
-                $value = substr($item, $pos + 1);
-                $params[$param] = $value;
-            }
+        if ('' !== $queryData) {
+            parse_str($queryData, $params);
         }
 
+        //拼接shareKey
         if ($shareKey) {
             $params['wx_share_key'] = $shareKey;
         }
+
+        //拼接APP的token
         if ($token && defined('IN_APP')) {
             $params['token'] = $token;
         }
 
+        //拼接sheme
         $link = '';
         if (isset($parseUrl['scheme'])) {
             $link .= $parseUrl['scheme'] . '://';
         }
+
+        //拼接host
         if (isset($parseUrl['host'])) {
             $link .= $parseUrl['host'];
         }

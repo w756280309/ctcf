@@ -65,7 +65,7 @@ class PointRecord extends ActiveRecord
             [['recordTime'], 'safe'],
             [['sn', 'ref_type'], 'string', 'max' => 32],
             [['remark'], 'string', 'max' => 20],
-            [['incr_points'], 'integer', 'max' => 100000],
+            [['incr_points'], 'integer'],
         ];
     }
 
