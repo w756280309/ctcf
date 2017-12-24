@@ -74,7 +74,7 @@ class Promo171225 extends BasePromo
             5 => [
                 ['name' => '100元超市卡', 'path' => 'wap/campaigns/active20171218/images/gift_14.png'],
                 ['name' => '175元温都猫充值卡', 'path' => 'wap/campaigns/active20171218/images/gift_10.png'],
-                ['name' => '24英寸万向轮拉杆箱', 'path' => 'wap/campaigns/active20171218/images/gift_09.png'],
+                ['name' => '万向轮拉杆箱', 'path' => 'wap/campaigns/active20171218/images/gift_09.png'],
             ],
         ];
     }
