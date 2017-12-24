@@ -44,7 +44,7 @@ class LoanFinder
 
         //判断当前 访问渠道 或者 注册渠道 为建德和金华分销商对应渠道，则隐藏180天以下的标的
         $affiliatorIds = AppMeta::getValue('hidden_deal_for_affiliator');
-        if (null !== $affiliatorIds) {
+        if (null !== $affiliatorIds && null !== $user) {
             $affiliatorIds = explode(',', $affiliatorIds);
             //获取当前的分销商
             $currentAffiliatorId = null;
