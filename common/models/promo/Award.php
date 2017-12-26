@@ -156,8 +156,29 @@ class Award extends ActiveRecord
         return $award;
     }
 
-    public function getReward()
+    /**
+     * 根据配置获得一个query object，常用于查询活动的奖品
+     *
+     * @param int   $userId     用户ID
+     * @param int   $promoId    活动ID
+     * @param array $rewardSns  奖品sn
+     *
+     * @return $this the query object itself
+     */
+    public static function findByConfig($userId, $promoId, Array $rewardSns = [])
     {
-        return ;
+        $r = Reward::tableName();
+        $a = Award::tableName();
+        $query = Award::find()
+            ->innerJoin("$r", "$a.reward_id = $r.id")
+            ->where([
+                "$a.promo_id" => $promoId,
+                "$a.user_id" => $userId,
+            ]);
+        if (!empty($rewardSns)) {
+            $query->andWhere(['in', "$r.sn", $rewardSns]);
+        }
+
+        return $query;
     }
 }

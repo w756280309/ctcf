@@ -88,23 +88,34 @@ class LotterController extends Controller
                 $o = OnlineOrder::tableName();
                 $pu = PokerUser::tableName();
                 $p = OnlineProduct::tableName();
-                $rewardUser = PokerUser::find()
-                    ->innerJoin($o, "$o.id = $pu.order_id")
-                    ->innerJoin($p, "$p.id = $o.online_pid")
-                    ->where(['term' => $term])
-                    ->andWhere(['spade' => $spade])
-                    ->andWhere(["$p.isTest" => false])
-                    ->andFilterWhere(['>', 'diamond', 0])
-                    ->andFilterWhere(['>', 'order_id', 0])
-                    ->orderBy(['order_id' => SORT_ASC])
-                    ->limit(1)
-                    ->one();
-                if (null !== $rewardUser) {
-                    $spade = $rewardUser->spade;
-                    $heart = $rewardUser->heart;
-                    $club = $rewardUser->club;
-                    $diamond = $rewardUser->diamond;
+                for ($orderMoney = 5; $orderMoney >= 1; $orderMoney--) {
+                    if ($orderMoney >= 2) {
+                        $where = ['>=', "$o.order_money", $orderMoney * 10000];
+                    } else {
+                        $where = ['>', "$o.order_money", 0];
+                    }
+                    $rewardUser = PokerUser::find()
+                        ->innerJoin($o, "$o.id = $pu.order_id")
+                        ->innerJoin($p, "$p.id = $o.online_pid")
+                        ->where(['term' => $term])
+                        ->andWhere(['spade' => $spade])
+                        ->andWhere(["$p.isTest" => false])
+                        ->andFilterWhere(['>', 'diamond', 0])
+                        ->andFilterWhere(['>', 'order_id', 0])
+                        ->andFilterWhere(['>', 'club', 0])
+                        ->andWhere($where)
+                        ->orderBy(['order_id' => SORT_ASC])
+                        ->limit(1)
+                        ->one();
+                    if (null !== $rewardUser) {
+                        $spade = $rewardUser->spade;
+                        $heart = $rewardUser->heart;
+                        $club = $rewardUser->club;
+                        $diamond = $rewardUser->diamond;
+                        break;
+                    }
                 }
+
             }
 
             //添加开奖号码

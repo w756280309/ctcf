@@ -275,9 +275,10 @@ class PromoService
                 break;
             case Reward::TYPE_PIKU:
                 $goodsType = GoodsType::findOne($reward->ref_id);
-                if (null !== $goodsType) {
-                    Award::goodsAward($user, $promo, $goodsType, $ticket, $reward)->save(false);
+                if (null === $goodsType) {
+                    throw new \Exception('1005:未找到对应实体商品');
                 }
+                Award::goodsAward($user, $promo, $goodsType, $ticket, $reward)->save(false);
                 break;
             case Reward::TYPE_RED_PACKET:
                 $metadata['promo_id'] = $reward->promo_id;

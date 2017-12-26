@@ -283,21 +283,20 @@ class RepaymentHelper
         $totalDays = (new \DateTime($startDate))->diff(new \DateTime(end($repaymentDates)))->days;
         foreach ($repaymentDates as $key => $val) {
             $principal = '0.00';
-            if (1 == 2) {
+            if ($count == $key + 1) {
                 $principal = $amount;
-                $interest = Bc::round(bcsub($totalInterest, array_sum(array_column($res, 'interest')), 2), 2);   //最后一期分期利息计算,用总的减去前面计算出来的,确保总额没有差错
-            } else {
-                if (in_array($repaymentMethod, [6, 7, 8, 9])) {
-                    $startDate = ($key === 0) ? $startDate : $repaymentDates[$key - 1];
-                    if ($val < $startDate) {
-                        throw new \Exception('标的计息日不能小于还款日');
-                    }
-
-                    $refundDays = (new \DateTime($startDate))->diff(new \DateTime($val))->days;    //应还款天数
-                    $interest = Bc::round(bcmul(bcdiv(bcmul($amount, $apr, 14), 365, 14), $refundDays, 14), 2);
-                } else {
-                    $interest = Bc::round(bcdiv($totalInterest, $count, 14), 2);    //普通计息和自然计息都按照14位精度严格计算,即从小数位后第三位舍去
+                //$interest = Bc::round(bcsub($totalInterest, array_sum(array_column($res, 'interest')), 2), 2);   //最后一期分期利息计算,用总的减去前面计算出来的,确保总额没有差错
+            }
+            if (in_array($repaymentMethod, [6, 7, 8, 9])) {
+                $startDate = ($key === 0) ? $startDate : $repaymentDates[$key - 1];
+                if ($val < $startDate) {
+                    throw new \Exception('标的计息日不能小于还款日');
                 }
+
+                $refundDays = (new \DateTime($startDate))->diff(new \DateTime($val))->days;    //应还款天数
+                $interest = Bc::round(bcmul(bcdiv(bcmul($amount, $apr, 14), 365, 14), $refundDays, 14), 2);
+            } else {
+                $interest = Bc::round(bcdiv($totalInterest, $count, 14), 2);    //普通计息和自然计息都按照14位精度严格计算,即从小数位后第三位舍去
             }
 
             $res[$key] = [
