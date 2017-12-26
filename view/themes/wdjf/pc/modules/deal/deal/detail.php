@@ -2,6 +2,7 @@
 
 use common\models\product\RateSteps;
 use common\models\product\OnlineProduct;
+use common\models\product\RedeemHelper;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use yii\helpers\HtmlPurifier;
@@ -12,7 +13,7 @@ $this->title = '项目详情';
 $this->registerJsFile(ASSETS_BASE_URI.'js/detail.js?v=170720');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/deallist.css?v=161124');
-$this->registerCssFile(ASSETS_BASE_URI.'css/deal/detail.css?v=170414');
+$this->registerCssFile(ASSETS_BASE_URI.'css/deal/detail.css?v=1704141221');
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
@@ -95,7 +96,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                 <p class="grace-period notice-coupon">此项目不参与活动，不可使用代金券。</p>
             <?php } ?>
         </div>
-        <?php if ($deal->isFlexRate) { ?>
+        <?php if ($deal->isFlexRate && !$deal->isRedeemable) { ?>
             <!--pl-subscription-->
             <div class="pl-subscription">
                 <ul class="clearfix">
@@ -118,6 +119,51 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                 </ul>
             </div>
         <?php } ?>
+
+
+        <!--        1225添加认购表格和赎回说明开始-->
+        <!-- 添加内容开始 -->
+        <?php if ($deal->isRedeemable) { ?>
+        <div class=earn-ransom>
+            <!-- <h5>收益说明</h5> -->
+            <table class='earnings-tips'>
+                <tr>
+                    <th>认购金额（元）</th>
+                    <th>提前赎回利率</th>
+                    <th>到期兑付利率</th>
+                </tr>
+                <tr>
+                    <td>累计认购10万(含)起</td>
+                    <td>8.6</td>
+                    <td>9</td>
+                </tr>
+                <tr>
+                    <td>累计认购50万(含)起</td>
+                    <td>8.8</td>
+                    <td>9.3</td>
+                </tr>
+                <tr>
+                    <td>累计认购100万(含)起</td>
+                    <td>9.1</td>
+                    <td>9.5</td>
+                </tr>
+            </table>
+            <h5 class='ransom-h5'>赎回说明</h5>
+            <ol class="ransom-list" id='ransom-list'>
+                <li class="ransom-list-weidth">建议投资者选择到期后自动兑付，最高利率达到9.5%；提前赎回将根据实际投资金额和投资期限计算实际收益，收益率低于到期自动兑付的利率。</li>
+                <li class="ransom-list-weidth">封闭期：本产品从购买日至2019年10月31日属封闭期，投资者在封闭期内不得赎回理财产品。</li>
+                <li>提前赎回：封闭期过后，投资者可在<?= RedeemHelper::formatRedemptionPeriods($deal->redemptionPeriods) ?>期间预约提前赎回；预约成功后，<?= RedeemHelper::formatRedemptionPaymentDates($deal->redemptionPaymentDates) ?>当日为投资者兑付所有投资本金及收益。赎回不收取任何手续费。</li>
+                <li>到期自动兑付：如投资者不提前赎回，产品从购买日起算，满3年后，自动兑付所有投资本金及收益，收益率高于提前赎回利率。具体收益详见收益说明。</li>
+                <li>付息方式说明：购买后，每自然年6月20日，12月20日按照提前赎回利率支付收益。若投资者未申请提前赎回，将在2019年12月20日补足所有差额收益。</li>
+            </ol>
+        </div>
+        <?php } ?>
+
+
+        <!-- 添加内容结束 -->
+        <!--        1225添加认购表格和赎回说明结束-->
+
+
         <!--pl-detail-->
         <div class="pl-detail">
             <div class="plD-title">
