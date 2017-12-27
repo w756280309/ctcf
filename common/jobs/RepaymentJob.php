@@ -69,6 +69,10 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
         if (count($orders) > 0) {
             $repaymentData = [];
             foreach ($orders as $order) {
+                if (!$order->valueDate) {
+                    $order->valueDate = mb_substr($loan->jixi_time, 0, 10);
+                    $order->save(false);
+                }
                 $amountData = OfflineRepaymentPlan::calcBenxi($order);
                 if (empty($amountData)) {
                     throw new \Exception('还款数据不能为空');
