@@ -475,14 +475,22 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             }
 
         }
-
+        //融资用户id统计
+        $orgUsersData = Yii::$app->db->createCommand(
+            "SELECT id FROM `user` WHERE 
+            type = 2"
+        )->queryAll();
+        $orgUsers = array_column($orgUsersData , 'id');
+        $orgUsersToString = implode(',', $orgUsers);
         //提现数据
         $drawCount = 0;
         $drawAmount = 0;
         $drawData = Yii::$app->db->createCommand(
             "SELECT COUNT( DISTINCT uid ) as drawUser, SUM( money ) as drawAmount 
             FROM  `draw_record` 
-            WHERE STATUS =2
+            WHERE STATUS = 2 
+            AND uid
+            NOT IN (" . $orgUsersToString .") 
             AND DATE( FROM_UNIXTIME( created_at ) ) 
             BETWEEN  :startDate
             AND  :endDate", [
