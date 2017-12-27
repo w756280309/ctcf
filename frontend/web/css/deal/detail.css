@@ -162,6 +162,88 @@ body {
 .pl-center{
     text-align: center;
 }
+
+/*1225添加认购表格和赎回说明开始*/
+.earn-ransom{
+    border-top:1px solid #e7eaf1;
+    margin-top: 20px;
+
+}
+/*  .earning-msg{
+   clear:both;
+  }
+  .earn-ransom .col{
+   text-align: center;
+}*/
+table.earnings-tips{
+    width:100%;
+    border:1px solid #F0EFF1;
+    border-collapse:collapse
+}
+table.earnings-tips tr+tr{
+    border-top:1px solid #F0EFF1;
+}
+table.earnings-tips th,table.earnings-tips td{
+    font-weight: 400;
+}
+table.earnings-tips tr:nth-child(n+1){
+    text-align: center;
+    line-height: 40px;
+    background-color: #fff;
+    font-size:14px;
+}
+table.earnings-tips tr:first-child{
+    line-height:33px;
+    height: 33px;
+    font-size:14px;
+    background-color: #F0EFF1;
+}
+table.earnings-tips tr th{
+    width:33.333333%;
+    color:#474747;
+}
+table.earnings-tips tr td{
+    color:#BDBAB9;
+}
+
+
+/*earnings-tips earnings-contain
+.earnings-contain*/
+.earn-ransom h5{
+    height:66px;
+    line-height: 66px;
+    color:#4e545a;
+    font-size: 18px;
+    box-sizing: border-box;
+    padding-left: 15px;
+    background-color: #fff;
+}
+.earn-ransom .ransom-h5{
+    margin-top: 11px;
+    border-bottom:1px solid #F0EFF1;
+}
+.earn-ransom ol#ransom-list{
+    padding-left:30px;
+    padding-right:14px;
+    background-color: #fff;
+    padding-top:14px;
+    padding-bottom:16px;
+}
+.earn-ransom ol li{
+    line-height: 25px;
+    font-size: 13px;
+    list-style:disc;
+
+}
+.earn-ransom ol li.ransom-list-weidth{
+    font-weight:700;
+}
+.earn-ransom ol li:first-child{
+    color:#ff6058;
+}
+/*1225添加认购表格和赎回说明结束*/
+
+
 /*pl-detail*/
 .pl-detail {
     width: 646px;
