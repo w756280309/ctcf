@@ -66,6 +66,7 @@ use yii\behaviors\TimestampBehavior;
  * @property boolean $isRedeemable 是否允许主动赎回
  * @property string  $redemptionPeriods 赎回申请开放时段（可支持多个）
  * @property string  $redemptionPaymentDates 赎回付款日（可支持多个）
+ * @property boolean $isDailyAccrual 是否分期设置截止日期 - todo 临时方案
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -129,7 +130,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'del' => ['del_status'],
             'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
-            'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status', 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn', 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates'],
+            'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status', 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn', 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates', 'isDailyAccrual'],
         ];
     }
 
@@ -806,8 +807,13 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public function getDuration()
     {
-        //如果 项目 是到期本息 并且 有产品到期日，那么项目期限需要按照指定逻辑进行计算
-        if (intval($this->refund_method) === OnlineProduct::REFUND_METHOD_DAOQIBENXI) {
+        $refundMethod = (int) $this->refund_method;
+        $finishDate = (int) $this->finish_date;
+        $unit = $this->getUnit();
+
+        if ($refundMethod !== OnlineProduct::REFUND_METHOD_DAOQIBENXI && 0 === $finishDate) {
+            $expires = $this->expires;
+        } else {
             if ( $this->finish_date > 0) {
                 if ($this->jixi_time && $this->is_jixi) {
                     //项目期限＝ 产品到期日－计息日期 + 1；后台确认计息时候已经算好并保存到数据库了
@@ -822,13 +828,24 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             } else {
                 $expires = $this->expires;
             }
-            $unit = '天';
-        } else {
-            $expires = $this->expires;
-            $unit = '个月';
         }
         $expires = max($expires, 0);
+
         return ['value' => $expires, 'unit' => $unit];
+    }
+
+    public function getUnit()
+    {
+        $unit = '天';
+        if ($this->isAmortized()) {
+            if ($this->isDailyAccrual) {
+                $unit = '天';
+            } else {
+                $unit = '个月';
+            }
+        }
+
+        return $unit;
     }
 
     /**
