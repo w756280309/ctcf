@@ -3,6 +3,7 @@
 namespace backend\modules\user\controllers;
 
 use backend\controllers\BaseController;
+use backend\modules\user\core\v1_0\UserAccountBackendCore;
 use common\models\order\OnlineFangkuan;
 use common\models\product\OnlineProduct;
 use common\models\user\DrawRecord;
@@ -88,23 +89,18 @@ class DrawrecordController extends BaseController
                 ->asArray()
                 ->all();
         }
-
-        $moneyTotal = 0;  //提现总额
-        $successNum = 0;  //成功笔数
-        $failureNum = 0;  //失败笔数
-
-        $numdata = DrawRecord::find()
-            ->where(['uid' => $id])
-            ->all();
-
-        foreach ($numdata as $data) {
-            if (DrawRecord::STATUS_SUCCESS === $data->status) {
-                $moneyTotal = bcadd($moneyTotal, $data->money, 2);
-                ++$successNum;
-            } elseif (DrawRecord::STATUS_FAIL === $data->status) {
-                ++$failureNum;
-            }
-        }
+        //提现成功笔数及金额
+        $uabc = new UserAccountBackendCore();
+        $drawSuccess = $uabc->getDrawSuccess($id);
+        $moneyTotal = $drawSuccess['sum']; //提现成功总额
+        $successNum = $drawSuccess['count'];  //成功笔数
+        //提现失败笔数
+        $drawFail = DrawRecord::find()
+            ->select('count(id) as count')
+            ->where(['uid' => $id, 'status' => DrawRecord::STATUS_FAIL])
+            ->asArray()
+            ->one();
+        $failureNum = $drawFail['count']; //失败笔数
 
         return $this->render('list', [
             'status' => $status,

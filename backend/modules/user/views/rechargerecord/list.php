@@ -61,18 +61,20 @@ $type = (int) $type;
                         <td>
                             <span class="title">充值金额总计（元）：<?=  number_format($moneyTotal, 2)?></span>
                         </td>
-                        <td>
-                            <span class="title">成功（次）：<?= $successNum ?></span></td>
-                        <td>
-                            <span class="title">失败（次）：<?= $failureNum ?></span></td>
                     <?php } else { ?>
-                      <td colspan="2">
+                        <td colspan="2">
                             <span class="title">企业名：<?= $user['org_name'] ?></span>
                         </td>
                         <td colspan="2">
                             <span class="title">充值金额总计（元）：<?=  number_format($moneyTotal, 2)?></span>
                         </td>
                     <?php }?>
+                        <td>
+                            <span class="title">充值成功次数：<?= $successNum ?></span>
+                        </td>
+                        <td>
+                            <span class="title">充值失败次数：<?= $failureNum ?></span>
+                        </td>
                     </tr>
                 <tr>
                     <td colspan="2">（本平台账户）当前可用余额（元）：<?= $available_balance ?></td>
