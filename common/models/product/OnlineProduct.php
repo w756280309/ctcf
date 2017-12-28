@@ -1167,16 +1167,17 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      *  1. 等额本息使用旺财谷计算逻辑，利息是使用四舍五入法
      *  2. 其余还款方式的计算结果都是舍去法计算
      *
-     * @param $money        string      投资金额
-     * @param $refundMethod int         还款方式
-     * @param $expires      int         项目期限，到期本息项目期限单位为天，其他类型还款方式项目期限为月
-     * @param $rate         string      利率(实际购买利率)
+     * @param $money          string      投资金额
+     * @param $refundMethod   int         还款方式
+     * @param $expires        int         项目期限，到期本息项目期限单位为天，其他类型还款方式项目期限为月
+     * @param $rate           string      利率(实际购买利率)
+     * @param $isDailyAccrual bool        分期支持项目截止日
      *
      * @return string
      */
-    public static function calcExpectProfit($money, $refundMethod, $expires, $rate)
+    public static function calcExpectProfit($money, $refundMethod, $expires, $rate, $isDailyAccrual = false)
     {
-        if ($refundMethod === OnlineProduct::REFUND_METHOD_DAOQIBENXI) {
+        if ($refundMethod === OnlineProduct::REFUND_METHOD_DAOQIBENXI || $isDailyAccrual) {
             $expectProfit = bcdiv(
                 bcmul(
                     bcmul(
