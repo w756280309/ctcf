@@ -207,7 +207,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
             $loan->finish_date = $up['finish_date'];
         } else {
             //有截止日期时候，项目期限=截止日期 - 起息日期
-            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$loan->refund_method) {
+            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === (int)$loan->refund_method || $loan->isDailyAccrual) {
                 $expires = (new \DateTime(date('Y-m-d', $loan->finish_date)))->diff((new \DateTime(date('Y-m-d', $loan->jixi_time))))->days;
                 $loan->expires = $expires;
                 $up['expires'] = $expires;
@@ -229,10 +229,6 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $orders = $loan->successOrders;
         $templateId = Yii::$app->params['sms']['manbiao'];
         $userIds = [];
-        //todo 分期标的且设置了固定截止日暂时不支持计息
-        if ($loan->finish_date > 0 && $loan->isAmortized()) {
-            return false;
-        }
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $loan = self::updateLoanWileConfirmInterest($loan);
@@ -295,7 +291,7 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $amount = $ord->order_money;//订单金额
 
         //原有计算订单的还款本息数组
-        $repaymentData = RepaymentHelper::calcRepayment($paymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr);
+        $repaymentData = RepaymentHelper::calcRepayment($paymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr, $loan->isDailyAccrual);
 
         //原有最后一期还款利息（不包含加息）
         $dataKeys = array_keys($repaymentData);
