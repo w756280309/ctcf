@@ -816,12 +816,6 @@ TPL;
             $(".originalBorrower").hide()
         }
 
-        if ($('.refund_method').val() !== '1') {
-            disabledIsFdate(1);
-            $('#onlineproduct-is_fdate').attr('disabled', 'disabled');
-            $('#onlineproduct-is_fdate').parent().removeClass('checked');
-        }
-
         //是否使用截止日期关系着产品到期日和宽限期天数的设置。如果勾选，可以填写截止日和宽限期，否则不可以填写
         $('#onlineproduct-is_fdate').bind('click', function() {
             if (true === $(this).parent().hasClass('checked')) {
@@ -831,7 +825,7 @@ TPL;
             }
         });
 
-        <?php if ((int)$model->refund_method > 1) { ?>
+        <?php if ((int)$model->refund_method > 1 && !$model->isDailyAccrual) { ?>
             $('#onlineproduct-expires').next().html('(个月)');//当编辑项目的还款方式是：除了到期本息之外的任意的还款方式。单位都默认是个月
         <?php } ?>
 
@@ -893,12 +887,8 @@ TPL;
         }
 
         if ($(obj).val() === '1') {
-            $('#onlineproduct-is_fdate').removeAttr('disabled');
             $('#onlineproduct-kuanxianqi').removeAttr('readonly');
         } else {
-            disabledIsFdate(1);
-            $('#onlineproduct-is_fdate').attr('disabled', 'disabled');
-            $('#onlineproduct-is_fdate').parent().removeClass('checked');
             $('#onlineproduct-kuanxianqi').attr('readonly', 'readonly');
         }
     }
@@ -978,13 +968,11 @@ TPL;
     function disabledIsFdate(flag)
     {
         if (flag) {
-            $('#onlineproduct-kuanxianqi').val('');
             $('#onlineproduct-finish_date').val('');
             $('#onlineproduct-finish_date').attr('readonly', 'readonly');
             $('#onlineproduct-finish_date').replaceWith($('#onlineproduct-finish_date').clone());
         } else {
             $('#onlineproduct-finish_date').removeAttr('readonly');
-            $('#onlineproduct-kuanxianqi').removeAttr('readonly');
         }
     }
 </script>

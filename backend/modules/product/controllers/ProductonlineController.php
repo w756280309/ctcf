@@ -114,14 +114,16 @@ class ProductonlineController extends BaseController
             $loan->dizeng_money = intval($loan->dizeng_money);
         }
 
-        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI !== $refund_method) {   //还款方式只有到期本息,才设置项目截止日和宽限期
-            $loan->finish_date = 0;
+        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI !== $refund_method) {   //还款方式只有到期本息,才设置宽限期
             $loan->kuanxianqi = 0;
         }
 
-        if (!empty($loan->finish_date) && OnlineProduct::REFUND_METHOD_DAOQIBENXI === $refund_method) {
+        if (!empty($loan->finish_date)) {
             //标的未计息时候，项目期限 = 截止日 - 当前日期 - 1 (页面显示的项目期限都是直接计算，没有使用数据库数据)
             $loan->expires = (new \DateTime(date('Y-m-d', $loan->finish_date)))->diff((new \DateTime(date('Y-m-d'))))->days - 1;
+            if ($loan->isAmortized() && !$loan->online_status) {
+                $loan->isDailyAccrual = true;
+            }
         }
 
         if (0 === $loan->issuer) {   //当发行方没有选择时,发行方项目编号为空
@@ -146,7 +148,7 @@ class ProductonlineController extends BaseController
         if (!$loan->isNatureRefundMethod()) {  //当标的还款方式不为按自然时间付息的方式时,固定日期置为null
             $loan->paymentDay = null;
         }
-        $loan->allowTransfer = true;
+
         $loan->isJixiExamined = true;
         if ($refund_method === OnlineProduct::REFUND_METHOD_DEBX) {//等额本息强制不允许转让
             $loan->allowTransfer = false;
@@ -281,6 +283,7 @@ class ProductonlineController extends BaseController
         $model->sn = '';
         $model->epayLoanAccountId = '';
         $model->recommendTime = '';
+        $model->expires = '';
         $model->fee = '';
         $model->expires_show = '';
         $model->kuanxianqi = '';

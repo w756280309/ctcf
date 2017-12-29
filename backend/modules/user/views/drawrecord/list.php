@@ -63,11 +63,6 @@ $isOrg = $user->isOrgUser();
                         <td>
                             <span class="title">成功提现金额总计（元）：<?= StringUtils::amountFormat3($moneyTotal) ?></span>
                         </td>
-                        <td>
-                            <span class="title">成功（次）：<?= $successNum ?></span></td>
-                        <td>
-                            <span class="title">失败（次）：<?= $failureNum ?></span></td>
-                        </td>
                     <?php } else { ?>
                         <td>
                             <span class="title">企业名：<?= $user['org_name'] ?></span>
@@ -75,7 +70,14 @@ $isOrg = $user->isOrgUser();
                         <td>
                             <span class="title">成功提现金额总计（元）：<?= StringUtils::amountFormat3($moneyTotal) ?></span>
                         </td>
+
                     <?php } ?>
+                        <td>
+                            <span class="title">提现成功次数：<?= $successNum ?></span>
+                        </td>
+                        <td>
+                            <span class="title">提现失败次数：<?= $failureNum ?></span>
+                        </td>
                 </tr>
             </table>
         </div>

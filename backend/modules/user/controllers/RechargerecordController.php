@@ -3,6 +3,7 @@
 namespace backend\modules\user\controllers;
 
 use backend\controllers\BaseController;
+use backend\modules\user\core\v1_0\UserAccountBackendCore;
 use common\lib\bchelp\BcRound;
 use common\models\bank\Bank;
 use common\models\epay\EpayUser;
@@ -75,22 +76,18 @@ class RechargerecordController extends BaseController
 
         //取出用户
         $user = User::findOne(['id' => $id]);
-
-        $moneyTotal = 0;  //取出充值金额总计，应该包括充值成功的和充值失败的
-        $successNum = 0;  //充值成功笔数
-        $failureNum = 0;  //充值失败笔数
-        $numdata = RechargeRecord::find()->where(['uid' => $id, 'status' => [1, 2]])->select('fund,status')->asArray()->all();
-        $bc = new BcRound();
-        bcscale(14);
-        foreach ($numdata as $data) {
-            if ($data['status'] == 1) {
-                $moneyTotal = bcadd($moneyTotal, $data['fund']);
-                ++$successNum;
-            } else {
-                ++$failureNum;
-            }
-        }
-        $moneyTotal = $bc->bcround($moneyTotal, 2);
+        //充值成功次数及金额
+        $uabc = new UserAccountBackendCore();
+        $rechargeSuccess = $uabc->getRechargeSuccess($id);
+        $moneyTotal = $rechargeSuccess['sum']; //取出充值成功总金额
+        $successNum = $rechargeSuccess['count']; //充值成功笔数
+        //充值失败次数
+        $rechargeFail = RechargeRecord::find()
+            ->select('count(id) as count')
+            ->where(['uid' => $id, 'status' => RechargeRecord::STATUS_FAULT])
+            ->asArray()
+            ->one();
+        $failureNum = $rechargeFail['count'];  //充值失败笔数
 
         //查看当前用户账户信息
         $userAccount = UserAccount::find()->where(['uid' => $id])->one();

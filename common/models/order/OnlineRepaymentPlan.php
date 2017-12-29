@@ -229,6 +229,10 @@ class OnlineRepaymentPlan extends \yii\db\ActiveRecord
         $orders = $loan->successOrders;
         $templateId = Yii::$app->params['sms']['manbiao'];
         $userIds = [];
+        //todo 分期标的且设置了固定截止日暂时不支持计息
+        if ($loan->finish_date > 0 && $loan->isAmortized()) {
+            return false;
+        }
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $loan = self::updateLoanWileConfirmInterest($loan);

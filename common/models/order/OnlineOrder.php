@@ -482,7 +482,7 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
             $realRate = $product->yield_rate;
         }
 
-        $expectProfit = OnlineProduct::calcExpectProfit($amount, $product->refund_method, $expires, $realRate);
+        $expectProfit = OnlineProduct::calcExpectProfit($amount, $product->refund_method, $expires, $realRate, $product->isDailyAccrual);
         return $expectProfit;
 
     }

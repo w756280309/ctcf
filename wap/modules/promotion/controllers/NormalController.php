@@ -40,4 +40,22 @@ class NormalController extends Controller
     {
         return $this->render('points171111');
     }
+
+    /**
+     * 元旦活动
+     * @return mixed
+     */
+    public function actionNewYear()
+    {
+        return $this->render('new_year');
+    }
+
+    /**
+     * 元旦活动落地页
+     * @return mixed
+     */
+    public function actionNewbie()
+    {
+        return $this->render('newbie_bonus');
+    }
 }
