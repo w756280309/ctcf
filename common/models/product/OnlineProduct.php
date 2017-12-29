@@ -925,10 +925,10 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             $this->refund_method,
             $this->expires,
             $this->paymentDay,
-            $this->isCustomRepayment
+            $this->isCustomRepayment,
+            $this->isDailyAccrual
         );
     }
-
 
     /**
      * 判断标的是否为按自然时间付息方式
@@ -1225,7 +1225,11 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             if (!$this->isAmortized()) {
                 $endDate = $pp->LoanTerms('d1', date('Y-m-d', $this->jixi_time), $this->expires);
             } else {
-                $endDate = date("Y-m-d", $pp->calcRetDate($this->expires, $this->jixi_time));//如果由于29,30,31造成的跨月的要回归到上一个月最后一天
+                if ($this->isDailyAccrual) {
+                    $endDate = $pp->LoanTerms('d1', date('Y-m-d', $this->jixi_time), $this->expires);
+                } else {
+                    $endDate = date("Y-m-d", $pp->calcRetDate($this->expires, $this->jixi_time));//如果由于29,30,31造成的跨月的要回归到上一个月最后一天
+                }
             }
         } else {
             $endDate = date('Y-m-d', $this->finish_date);

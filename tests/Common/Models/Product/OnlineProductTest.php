@@ -52,6 +52,134 @@ class OnlineProductTest extends YiiAppTestCase
     }
 
     /**
+     * 测试   按月付息，到期本息
+     */
+    public function testPaymentDates41()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-07-06'),
+            'expires' => 60,
+            'refund_method' => 2,
+            'finish_date' => strtotime('2016-09-06'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2016-08-06', '2016-09-06']);
+    }
+
+    /**
+     * 测试   按月付息，到期本息  - 同年截止日
+     */
+    public function testPaymentDates42()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2017-06-08'),
+            'expires' => 60,
+            'refund_method' => 2,
+            'finish_date' => strtotime('2017-09-07'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2017-07-08', '2017-08-08', '2017-09-07']);
+    }
+
+    /**
+     * 测试   按月付息，到期本息  - 同年截止日
+     */
+    public function testPaymentDates43()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2017-06-05'),
+            'expires' => 60,
+            'refund_method' => 2,
+            'finish_date' => strtotime('2017-09-07'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2017-07-05', '2017-08-05', '2017-09-05', '2017-09-07']);
+    }
+
+    /**
+     * 测试   按月付息，到期本息  - 次年截止日
+     */
+    public function testPaymentDates44()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2017-11-30'),
+            'expires' => 60,
+            'refund_method' => 2,
+            'finish_date' => strtotime('2018-03-30'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2017-12-30', '2018-01-30', '2018-02-28', '2018-03-30']);
+    }
+
+    /**
+     * 测试   按月付息，到期本息  - 次年截止日
+     */
+    public function testPaymentDates45()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2017-11-29'),
+            'expires' => 60,
+            'refund_method' => 2,
+            'finish_date' => strtotime('2018-03-30'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2017-12-29', '2018-01-29', '2018-02-28', '2018-03-29', '2018-03-30']);
+    }
+
+    /**
+     * 测试   按月付息，到期本息  - 次年截止日 - 31号
+     */
+    public function testPaymentDates46()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2017-10-31'),
+            'expires' => 60,
+            'refund_method' => 2,
+            'finish_date' => strtotime('2018-03-20'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2017-11-30', '2017-12-31', '2018-01-31', '2018-02-28', '2018-03-20']);
+    }
+
+    /**
+     * 测试   按月付息，到期本息  - 跨一整年截止日 - 15号
+     */
+    public function testPaymentDates47()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2017-10-15'),
+            'expires' => 60,
+            'refund_method' => 2,
+            'finish_date' => strtotime('2019-02-27'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2017-11-15', '2017-12-15', '2018-01-15', '2018-02-15', '2018-03-15', '2018-04-15', '2018-05-15', '2018-06-15', '2018-07-15', '2018-08-15', '2018-09-15', '2018-10-15', '2018-11-15', '2018-12-15', '2019-01-15', '2019-02-15', '2019-02-27']);
+    }
+
+    /**
+     * 测试   按月付息，到期本息  - 跨一整年截止日 - 31号
+     */
+    public function testPaymentDates48()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2017-10-31'),
+            'expires' => 60,
+            'refund_method' => 2,
+            'finish_date' => strtotime('2019-02-27'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2017-11-30', '2017-12-31', '2018-01-31', '2018-02-28', '2018-03-31', '2018-04-30', '2018-05-31', '2018-06-30', '2018-07-31', '2018-08-31', '2018-09-30', '2018-10-31', '2018-11-30', '2018-12-31', '2019-01-31', '2019-02-27']);
+    }
+
+    /**
      * 测试   按季付息，到期本息, 不到一季
      */
     public function testPaymentDates5()
@@ -184,6 +312,57 @@ class OnlineProductTest extends YiiAppTestCase
     /**
      * 测试   按自然季度付息，到期本息
      */
+    public function testPaymentDates131()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-07-09'),
+            'expires' => 4,
+            'refund_method' => 7,
+            'paymentDay' => 15,
+            'finish_date' => strtotime('2016-11-30'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2016-09-15', '2016-11-30']);
+    }
+
+    /**
+     * 测试   按自然季度付息，到期本息
+     */
+    public function testPaymentDates132()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-07-09'),
+            'expires' => 4,
+            'refund_method' => 7,
+            'paymentDay' => 15,
+            'finish_date' => strtotime('2016-12-30'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2016-09-15', '2016-12-15', '2016-12-30']);
+    }
+
+    /**
+     * 测试   按自然季度付息，到期本息
+     */
+    public function testPaymentDates133()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-07-09'),
+            'expires' => 4,
+            'refund_method' => 7,
+            'paymentDay' => 15,
+            'finish_date' => strtotime('2016-12-15'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2016-09-15', '2016-12-15']);
+    }
+
+    /**
+     * 测试   按自然季度付息，到期本息
+     */
     public function testPaymentDates14()
     {
         $loan = new OnlineProduct([
@@ -199,6 +378,40 @@ class OnlineProductTest extends YiiAppTestCase
     /**
      * 测试   按自然季度付息，到期本息
      */
+    public function testPaymentDates141()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-09-13'),
+            'expires' => 4,
+            'refund_method' => 7,
+            'paymentDay' => 15,
+            'finish_date' => strtotime('2017-01-11'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2016-09-15', '2016-12-15', '2017-01-11']);
+    }
+
+    /**
+     * 测试   按自然季度付息，到期本息
+     */
+    public function testPaymentDates142()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-09-13'),
+            'expires' => 4,
+            'refund_method' => 7,
+            'paymentDay' => 15,
+            'finish_date' => strtotime('2017-03-15'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2016-09-15', '2016-12-15', '2017-03-15']);
+    }
+
+    /**
+     * 测试   按自然季度付息，到期本息
+     */
     public function testPaymentDates15()
     {
         $loan = new OnlineProduct([
@@ -209,6 +422,40 @@ class OnlineProductTest extends YiiAppTestCase
         ]);
         $res = $loan->getPaymentDates();
         $this->assertEquals($res, ['2016-09-20', '2016-12-20']);
+    }
+
+    /**
+     * 测试   按自然季度付息，到期本息
+     */
+    public function testPaymentDates151()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-06-01'),
+            'expires' => 6,
+            'refund_method' => 7,
+            'paymentDay' => 31,
+            'finish_date' => strtotime('2017-06-20'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2016-06-30', '2016-09-30', '2016-12-31', '2017-03-31', '2017-06-20']);
+    }
+
+    /**
+     * 测试   按自然季度付息，到期本息
+     */
+    public function testPaymentDates152()
+    {
+        $loan = new OnlineProduct([
+            'jixi_time' => strtotime('2016-06-01'),
+            'expires' => 6,
+            'refund_method' => 7,
+            'paymentDay' => 31,
+            'finish_date' => strtotime('2018-06-20'),
+            'isDailyAccrual' => true,
+        ]);
+        $res = $loan->getPaymentDates();
+        $this->assertEquals($res, ['2016-06-30', '2016-09-30', '2016-12-31', '2017-03-31', '2017-06-30', '2017-09-30', '2017-12-31', '2018-03-31', '2018-06-20']);
     }
 
     /**

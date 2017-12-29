@@ -239,6 +239,48 @@ class RepaymentHelperTest extends YiiAppTestCase
         ], $plan);
     }
 
+    public function testNatureQuarterWithFinishDate()   //按自然季计息
+    {
+        $startDate = '2016-07-16';
+        $endDate = '2017-07-16';
+        $repaymentMethod = 7;
+        $duration = 365;
+        $paymentDay = 31;
+        $isCustomRepayment = false;
+        $amount = 8000;
+        $apr = 0.1;
+        $isDailyAccrual = true;
+        $plan = RepaymentHelper::calcRepaymentPlan($startDate, $endDate, $repaymentMethod, $duration, $paymentDay, $isCustomRepayment, $amount, $apr, $isDailyAccrual);
+
+        $this->assertEquals([
+            [
+                'date' => '2016-09-30',
+                'principal' => '0.00',
+                'interest' => '166.58'
+            ],
+            [
+                'date' => '2016-12-31',
+                'principal' => '0.00',
+                'interest' => '201.64'
+            ],
+            [
+                'date' => '2017-03-31',
+                'principal' => '0.00',
+                'interest' => '197.26'
+            ],
+            [
+                'date' => '2017-06-30',
+                'principal' => '0.00',
+                'interest' => '199.45'
+            ],
+            [
+                'date' => '2017-07-16',
+                'principal' => '8000.00',
+                'interest' => '35.07'
+            ],
+        ], $plan);
+    }
+
     public function testNatureHalfYear()    //按自然半年计息
     {
         $startDate = '2020-02-29';
