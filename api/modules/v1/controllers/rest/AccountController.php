@@ -21,7 +21,7 @@ class AccountController extends Controller
 
         $userMobile = $this->getQueryParam('user_mobile');
         if (null !== $userMobile && is_string($userMobile)) {
-            if (!preg_match('/^1[34578]\d{9}$/', $userMobile)) {
+            if (!preg_match('/^1\d{10}$/', $userMobile)) {
                 throw $this->exBadParam('user_mobile');
             }
 

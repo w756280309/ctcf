@@ -46,7 +46,7 @@ class SmsService
             return ['code' => 1, 'message' => '请输入手机号'];
         }
 
-        $reDate = '/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/';
+        $reDate = '/^1\d{10}$/';
         $re = preg_match($reDate, $phone);
         if (!$re) {
             return ['code' => 1, 'message' => '手机号码输入错误'];
