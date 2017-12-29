@@ -8,6 +8,7 @@ use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
+use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder as Ord;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderQueue;
@@ -1145,5 +1146,10 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         }
 
         return $balance;
+    }
+    //获取线下用户
+    public function getOffline()
+    {
+        return OfflineUser::findOne($this->offlineUserId);
     }
 }

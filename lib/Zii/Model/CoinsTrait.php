@@ -2,6 +2,8 @@
 
 namespace Zii\Model;
 
+use common\models\user\User;
+
 trait CoinsTrait
 {
     /**
@@ -11,6 +13,10 @@ trait CoinsTrait
      */
     public function getCoins()
     {
-        return bcdiv($this->annualInvestment, 10000, 0);
+        $amount = $this->annualInvestment;
+        if ($this Instanceof User && $this->offline) {
+            $amount = bcadd($this->offline->annualInvestment, $this->annualInvestment, 2);
+        }
+        return bcdiv($amount, 10000, 0);
     }
 }
