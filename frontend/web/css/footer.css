@@ -140,7 +140,8 @@
     width: 36px;
 }
 .about-qq {
-    background: #f44336 url("../images/about-hover.png") no-repeat scroll right -76px;
+    background: #f44336 url("../images/about-tel-white.jpg") no-repeat scroll 250px 0;
+    background-size: 40px 40px;
     color: #fff;
     font-size: 14px;
     height: 36px;

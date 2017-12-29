@@ -3,11 +3,13 @@
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use wap\assets\WapAsset;
+use common\view\UdeskWebIMHelper;
 use yii\web\YiiAsset;
 
 $this->title = '购买';
 
 $validCouponCount = count($validCoupons);
+UdeskWebIMHelper::init($this);
 
 $yr = $deal->yield_rate;
 $qixian = $deal->getDuration()['value'];
@@ -159,7 +161,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
             <span class="x-confirm">确定</span>
         </div>
     </div>
-
+<p id="btn_udesk_im"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
     <div class="mask2" style="display: none"></div>
     <div class="coupon-box" style="display: none">
         <div class="coupon-box-title clearfix">

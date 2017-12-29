@@ -247,5 +247,11 @@ return [
     'li_he' => [
         'url' => env('LIHE_URL'),
         'key' => env('LIHE_KEY')
-    ]
+    ],
+    //u_desk在线客服功能配置
+    'u_desk' => [
+        'im_user_key' => env('UDESK_IM_USER_KEY'),
+        'code' => env('UDESK_CODE'),
+        'link' => env('UDESK_LINK'),
+    ],
 ];

@@ -13,6 +13,7 @@ class UserSearch extends User
     {
         return [
             'name',
+            'usercode',
             'mobile',
             'noInvestDaysMin',
             'noInvestDaysMax',
@@ -53,6 +54,8 @@ class UserSearch extends User
         $query->andFilterWhere(['like', 'user.real_name', trim($this->name)]);
         //过滤手机号
         $query->andFilterWhere(['user.safeMobile'=>SecurityUtils::encrypt(trim($this->mobile))]);
+        //过滤会员ID
+        $query->andFilterWhere(['user.usercode' => trim($this->usercode)]);
         //过滤 未投资时长
         $noInvestDaysMin = is_numeric($this->noInvestDaysMin) ? intval(trim($this->noInvestDaysMin)) : null;
         $noInvestDaysMax = is_numeric($this->noInvestDaysMax) ? intval(trim($this->noInvestDaysMax)) : null;

@@ -1,8 +1,8 @@
 <?php
+
 use common\utils\StringUtils;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/header.css', ['depends' => 'frontend\assets\FrontAsset']);
-
 $action = Yii::$app->controller->action->getUniqueId();
 $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
 ?>

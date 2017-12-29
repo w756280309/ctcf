@@ -13,7 +13,9 @@ $this->showBottomNav = true;
 
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
+use common\view\UdeskWebIMHelper;
 
+UdeskWebIMHelper::init($this);
 $this->registerCssFile(FE_BASE_URI . "libs/swiper/swiper-3.4.2.min.css");
 $this->registerCssFile(FE_BASE_URI . "wap/common/css/wenjfbase.css?v=171028");
 $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => JqueryAsset::class, 'position' => 1]);
@@ -129,7 +131,9 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
         <p class="phone-box-number"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/icon_phone.png" alt=""><span class="num-1"><?= Yii::$app->params['platform_info.contact_tel'] ?></span><span class="num-2">(8:30-20:00）</span></p>
         <p class="phone-box-address">温州市鹿城区飞霞南路657号保丰大楼四层</p>
     </a>
+    <p id="btn_udesk_im" style="padding-top: 25px;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
     <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/logo_wendu.png" alt="" class="logo-box">
+
 </div>
 <?php if (!defined('IN_APP') && $this->showBottomNav) { ?>
     <?= $this->renderFile('@wap/views/layouts/footer.php')?>
