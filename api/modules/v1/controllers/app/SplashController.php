@@ -28,7 +28,7 @@ class SplashController extends Controller
             'result' => 'success',
             'msg' => '成功',
             'content' => [
-                'adv_id' => $splash['sn'],
+                'adv_id' => (int)$splash['sn'],
                 'img_640x960' => $baseDir . $splashModel->getMediaUri($splash['img640x960']),
                 'img_640x1136' => $baseDir . $splashModel->getMediaUri($splash['img640x1136']),
                 'img_750x1334' => $baseDir . $splashModel->getMediaUri($splash['img750x1334']),

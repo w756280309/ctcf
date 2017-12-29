@@ -158,7 +158,7 @@ class Splash extends ActiveRecord
      */
     public static function create_code()
     {
-        $sn = time() . bin2hex(random_bytes(2));
+        $sn = time() . mt_rand(1000, 9999);
         return $sn;
     }
     //初始化
