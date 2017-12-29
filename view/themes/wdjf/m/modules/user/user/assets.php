@@ -55,6 +55,12 @@ $currentUrl = Yii::$app->request->absoluteUrl;
                     <div class="rg"><span class="comColor"><?= StringUtils::amountFormat2($availableBalance) ?></span>元</div>
                 </a>
             </li>
+            <li>
+                <a class="clearfix slb f15" href="<?= $user->offline ? '/user/user/myofforder' : '#' ?>">
+                    <div class="lf"><span class="colorBlock assetgreen f15"></span>门店理财</div>
+                    <div class="rg"><span class="comColor"><?= $user->offline ? $user->offline->totalAssets : 0 ?></span>元</div>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
@@ -95,7 +101,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
                     fontSize:font,
                     fontWeight:500,
                 },
-                subtext: '<?= StringUtils::amountFormat3($user->lendAccount->totalFund) ?>',
+                subtext: '<?= StringUtils::amountFormat3($user->totalAssets) ?>',
                 subtextStyle:{
                     color:'#f25f57',
                     fontSize:font,

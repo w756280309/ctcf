@@ -73,6 +73,15 @@ UdeskWebIMHelper::init($this);
         </li>
     <?php } ?>
 </ul>
+<a href="<?= $user->offline ? '/user/user/myofforder' : '#' ?>">
+    <div class="out_ops flex-content">
+        <div class="lf f15"style="background-position: 0 0">门店理财</div>
+        <div class="rg">
+            <span class="f15" id="off_licai" style="color: #ff0000"></span>
+            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+        </div>
+    </div>
+</a>
 <a href="/user/invite">
     <div class="out_ops flex-content">
         <div class="lf f15" style="background-position: 0 -1.518rem">邀请好友</div>
@@ -135,6 +144,8 @@ UdeskWebIMHelper::init($this);
                 $('#licai').html(WDJF.numberFormat(data.sumLicai, true));
                 $('#licai').after('元');
             }
+            $('#off_licai').html(WDJF.numberFormat(data.off_licai, true));
+            $('#off_licai').after('元');
         });
     });
 

@@ -31,7 +31,7 @@ use common\utils\StringUtils;
                 <li class="number lf">
                     <a href="/user/user/assets">
                         <p class="property_word f15">资产总额 (元)</p>
-                        <p class="property_number f24" id="zonge"><?= isset($ua) ? StringUtils::amountFormat3($ua->getTotalFund()) : '' ?></p>
+                        <p class="property_number f24" id="zonge"><?= isset($ua) ? StringUtils::amountFormat3($user->totalAssets) : '' ?></p>
                     </a>
                 </li>
                 <li class="number lf">

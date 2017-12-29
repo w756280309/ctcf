@@ -1147,9 +1147,22 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
 
         return $balance;
     }
-    //获取线下用户
+
+    //获取线下账户
     public function getOffline()
     {
         return OfflineUser::findOne($this->offlineUserId);
+    }
+    /**
+     * 用户资产总额
+     * 线上资产总额 + 门店理财总资产（未到期的）
+     */
+    public function getTotalAssets()
+    {
+        $acount = $this->lendAccount->totalFund;
+        if ($this->Offline) {
+            $acount += $this->offline->totalAssets;
+        }
+        return $acount;
     }
 }
