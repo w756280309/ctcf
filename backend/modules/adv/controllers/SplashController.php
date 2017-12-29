@@ -7,6 +7,7 @@ use common\models\adv\Splash;
 use common\models\media\Media;
 use Yii;
 use yii\data\Pagination;
+use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 
 class SplashController extends BaseController
@@ -138,7 +139,7 @@ class SplashController extends BaseController
             $subPath = 'upload/splash/' . date('ymd', time()) . '/';
             $path .= $subPath;
             if (!file_exists($path)) {
-                mkdir($path);
+                FileHelper::createDirectory($path);
             }
             $picPath = $subPath . $imageName . '_' . time() . '.' . $uploadFile->extension;
             $uploadFile->saveAs($picPath);
