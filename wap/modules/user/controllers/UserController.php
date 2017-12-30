@@ -298,7 +298,7 @@ class UserController extends BaseController
                 'backUrl' => $backUrl,
             ]);
         }
-        return $this->goBack();
+        return $this->redirect('index');
     }
     /**
      * 投资详情页

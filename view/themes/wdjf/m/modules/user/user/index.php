@@ -73,7 +73,7 @@ UdeskWebIMHelper::init($this);
         </li>
     <?php } ?>
 </ul>
-<a href="<?= $user->offline ? '/user/user/myofforder' : '#' ?>">
+<a href="/user/user/myofforder">
     <div class="out_ops flex-content">
         <div class="lf f15"style="background-position: 0 0">门店理财</div>
         <div class="rg">
