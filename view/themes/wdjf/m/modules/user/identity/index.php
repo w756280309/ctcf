@@ -5,7 +5,8 @@ use common\view\UdeskWebIMHelper;
 
 $this->title = '实名认证';
 $this->showViewport = false;
-UdeskWebIMHelper::init($this);
+//hotfix: 有体验问题，先注释掉
+//UdeskWebIMHelper::init($this);
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
