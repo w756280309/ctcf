@@ -82,7 +82,7 @@ class UserController extends BaseController
         return [
             'html' => $html,
             'sumLicai' => isset($backArr['sumLicai']) ? $backArr['sumLicai'] : '',
-            'off_licai' => $backArr['off_licai'] ?: '',
+            'off_licai' => isset($backArr['off_licai'])? $backArr['off_licai'] : '',
         ];
     }
 
@@ -138,7 +138,7 @@ class UserController extends BaseController
             'showPointsArea' => $showPointsArea,
             'sumLicai' => $sumLicai,
             'riskContent' => $riskContent,
-            'off_licai' => $user->offline ? $user->offline->totalAssets : 0,
+            'off_licai' => (!is_null($user) && $user->offline) ? $user->offline->totalAssets : 0,
         ];
     }
 
