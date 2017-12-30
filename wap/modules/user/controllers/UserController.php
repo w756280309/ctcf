@@ -277,6 +277,21 @@ class UserController extends BaseController
             $query = OfflineOrder::find()->where(['user_id' => $user->offlineUserId, 'isDeleted' => false]);
             $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);
             $model = $query->offset($pages->offset)->limit($pages->limit)->all();
+
+            $tp = $pages->pageCount;
+            $header = [
+                'count' => $pages->totalCount,
+                'size' => $pageSize,
+                'tp' => $tp,
+                'cp' => intval($page),
+            ];
+            $code = ($page > $tp) ? 1 : 0;
+            $message = ($page > $tp) ? '数据错误' : '消息返回';
+
+            if (Yii::$app->request->isAjax) {
+                $html = $this->renderFile('@wap/modules/user/views/user/_offline_order_list.php', ['model' => $model]);
+                return ['header' => $header, 'html' => $html, 'code' => $code, 'message' => $message];
+            }
             return $this->render('off-order', [
                 'model' => $model,
                 'pages' => $pages,
