@@ -51,12 +51,25 @@ use common\utils\StringUtils;
                         ?>
                     </span>
                 </p>
-                <p>
-                    <span class="info-label">到期时间：</span>
-                    <span class="info-val">
-                        <?= date('Y-m-d', $val['loan']['finish_date']) ?>
-                    </span>
-                </p>
+                <?php if (empty($val['loan']['finish_date'])) { ?>
+                    <p>
+                        <span class="info-label">项目期限：</span>
+                        <span class="info-val">
+                            <?php
+                                $loan = new OnlineProduct($val['loan']);
+                                $ex = $loan->getDuration();
+                            ?>
+                            <?= $ex['value'] ?><?= $ex['unit']?>
+                        </span>
+                    </p>
+                <?php } else { ?>
+                    <p>
+                        <span class="info-label">到期时间：</span>
+                        <span class="info-val">
+                            <?= date('Y-m-d', $val['loan']['finish_date']) ?>
+                        </span>
+                    </p>
+                <?php } ?>
             </div>
             <?php if (in_array($loanStatus, [OnlineProduct::STATUS_NOW, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) { ?>
                 <div class="col-xs-4 loan-info2">
