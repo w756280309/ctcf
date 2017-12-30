@@ -42,8 +42,8 @@ class Splash extends ActiveRecord
                 'overWidth' => '{attribute}的宽度应为640px',
                 'minWidth' => 640,
                 'underWidth' => '{attribute}的宽度应为640px',
-                'maxSize' => 1048576,
-                'tooBig' => '图片大小不能超过1M',
+                'maxSize' => 2097152,
+                'tooBig' => '图片大小不能超过2M',
             ],
             [
                 'img640x1136',
@@ -56,8 +56,8 @@ class Splash extends ActiveRecord
                 'overWidth' => '{attribute}的宽度应为640px',
                 'minWidth' => 640,
                 'underWidth' => '{attribute}的宽度应为640px',
-                'maxSize' => 1048576,
-                'tooBig' => '图片大小不能超过1M',
+                'maxSize' => 2097152,
+                'tooBig' => '图片大小不能超过2M',
             ],
             [
                 'img750x1334',
@@ -70,8 +70,8 @@ class Splash extends ActiveRecord
                 'overWidth' => '{attribute}的宽度应为750px',
                 'minWidth' => 750,
                 'underWidth' => '{attribute}的宽度应为750px',
-                'maxSize' => 1048576,
-                'tooBig' => '图片大小不能超过1M',
+                'maxSize' => 2097152,
+                'tooBig' => '图片大小不能超过2M',
             ],
             [
                 'img1242x2208',
@@ -84,8 +84,8 @@ class Splash extends ActiveRecord
                 'overWidth' => '{attribute}的宽度应为1242px',
                 'minWidth' => 1242,
                 'underWidth' => '{attribute}的宽度应为1242px',
-                'maxSize' => 1048576,
-                'tooBig' => '图片大小不能超过1M',
+                'maxSize' => 2097152,
+                'tooBig' => '图片大小不能超过2M',
             ],
             [
                 'img1080x1920',
@@ -98,8 +98,8 @@ class Splash extends ActiveRecord
                 'overWidth' => '{attribute}的宽度应为1080px',
                 'minWidth' => 1080,
                 'underWidth' => '{attribute}的宽度应为1080px',
-                'maxSize' => 1048576,
-                'tooBig' => '图片大小不能超过1M',
+                'maxSize' => 2097152,
+                'tooBig' => '图片大小不能超过2M',
             ],
             ['title', 'string', 'max' => 60],
             ['isPublished', 'boolean'],
@@ -158,7 +158,7 @@ class Splash extends ActiveRecord
      */
     public static function create_code()
     {
-        $sn = time() . mt_rand(1000, 9999);
+        $sn = time() - strtotime('2017-01-01');
         return $sn;
     }
     //初始化

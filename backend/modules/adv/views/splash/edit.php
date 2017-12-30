@@ -67,7 +67,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                         <?=
                         $form->field($model, $image['name'], [
                             'template' => '{input}
-                        <span class="notice" >*图片大小不超过1M，格式可以为jpg或png，并且大小限定为：高'. $image['height'] . 'px，宽' . $image['width'] . 'px</span>',
+                        <span class="notice" >*图片大小不超过2M，格式可以为jpg或png，并且大小限定为：高'. $image['height'] . 'px，宽' . $image['width'] . 'px</span>',
                         ])
                             ->fileInput()
                         ?>
