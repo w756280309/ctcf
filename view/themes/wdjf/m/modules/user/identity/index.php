@@ -57,7 +57,7 @@ $this->showViewport = false;
         <p class="tipsCtn">*平台为保障您的资金安全，投资前请先进行实名认证</p>
     </div>
 </div>
-<p id="btn_udesk_im" style="position:absolute;bottom: 30px;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
+<!--<p id="btn_udesk_im" style="position:absolute;bottom: 30px;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>-->
 
 <script type="text/javascript">
 var csrf = $("meta[name=csrf-token]").attr('content');
