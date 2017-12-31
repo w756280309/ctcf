@@ -12,7 +12,7 @@ $host = Yii::$app->params['clientOption']['host']['wap'];
 
 $share = new Share([
     'title' => '好友送您50元代金券，温都金服理财，亲测靠谱！',
-    'description' => '新手专享，预期年化收益率10%，注册更有288元红包送！',
+    'description' => '新手专享，预期年化收益率10%，注册更有698元红包送！',
     'url' => $host.'luodiye/invite?code='.$user->usercode,
     'imgUrl' => (ASSETS_BASE_URI === '/' ? $host : ASSETS_BASE_URI).'promo/1608/images/invite/icon.jpg',
 ]);

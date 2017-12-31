@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>新人红包升级</title>
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+    <script src="__FE_BASE_URI__/libs/layer_mobile/layer.js"></script>
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20171229/css/index.css?v=0.1">
+    <script src="__FE_BASE_URI__/libs/fastclick.js"></script>
+</head>
+<body>
+<div class="flex-content" id="app">
+    <div class="part-top"></div>
+    <div class="part-middle">
+        <div class="btn btn-red" style="left: 1.09333333rem;">补领180元红包</div>
+        <div class="btn btn-red" style="right: 1.09333333rem;">补领230元红包</div>
+    </div>
+    <div class="part-bottom">
+        <a href="#" class="go-invest"></a>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+      FastClick.attach(document.body);
+      function eventTarget(event) {
+        event.preventDefault();
+      }
+
+      $(".btn-red").on("click",function () {
+        if($(this).index() == 0){
+          openPopup(1);
+        }else{
+          openPopup(2)
+        }
+      });
+      function openPopup(index) {
+        $('body').on('touchmove', eventTarget, false);
+        var message;
+        if(index == 1){
+          message = '代金券在领取前会一直保留，一旦领取将进入有效期，建议您需要使用的时候再领取。<br><br>是否现在就领取180元代金券（100万起投，有效期90天）？';
+        }else{
+          message = '代金券在领取前会一直保留，一旦领取将进入有效期，建议您需要使用的时候再领取。<br><br>是否现在就领取230元代金券（200万起投，有效期90天）？';
+        }
+        layer.open({
+          title: [
+            '温馨提示',
+            'background-color: #ff6058; color:#fff;'
+          ]
+          ,content: message
+          ,shadeClose:false
+          ,className: 'customer-layer-popuo'
+          ,btn: ['现在就用', '我再想想']
+          ,no: function(index){
+            layer.closeAll();
+            $('body').unbind('touchmove');
+          }
+          ,yes: function(index){
+//            $.ajax({
+//              url:"",
+//              dataType:"",
+//              data:{},
+//              success:function (res) {
+//                console.log(res)
+//              }
+//            })
+          }
+        });
+      }
+    })
+</script>
+</html>

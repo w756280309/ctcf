@@ -35,7 +35,7 @@ if ($isLuodiye) {
         </div>
         <div class="front-font">
             <?php if ($isLuodiye) { ?>
-                <p>新手标288元红包等你拿</p>
+                <p>新手标698元红包等你拿</p>
                 <p>预期年化收益率10%</p>
             <?php } else { ?>
                 <p>好友邀请送好礼</p>
@@ -55,7 +55,7 @@ if ($isLuodiye) {
         </div>
         <div class="transform-center">
             <p class="p-tip">恭喜您获得代金券！</p>
-            <p class="p-number"><?= $isLuodiye ? 288 : 50 ?>元</p>
+            <p class="p-number"><?= $isLuodiye ? 698 : 50 ?>元</p>
             <p class="p-use">投资即可使用</p>
         </div>
         <div class="transform-bottom">

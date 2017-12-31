@@ -13,7 +13,7 @@ $this->title = '元旦3倍积分';
         <a href="/deal/deal/index"></a>
     </div>
     <div class="part-three">
-        <a href="/user/coupon/list"></a>
+        <a href="/promotion/p698/index"></a>
     </div>
     <div class="part-four"></div>
 </div>

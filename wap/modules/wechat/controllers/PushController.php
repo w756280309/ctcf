@@ -122,7 +122,7 @@ class PushController extends Controller
         $message = new Text(['content' => '亲！欢迎来到温都金服！
 国资平台，靠谱！优质项目，赚钱！全程监管，放心！
 初次见面，先送您二重好礼略表心意！
-一重注册礼：注册就送288红包！
+一重注册礼：注册就送698红包！
 二重首投礼：首次投资送最高160元超市卡！
 
 ' .'<a href="https://m.wenjf.com/luodiye/v2">领超市卡点这里</a>
