@@ -55,7 +55,7 @@ class OfflinePointManager
                 }
 
                 if ($isFirst < 3 && !is_null($inviter)) { //前三次返现
-                    if ($inviter->onlineUserId) {
+                    if ($inviter->onlineUserId && $type == PointRecord::TYPE_OFFLINE_BUY_ORDER) {
                         self::fanxian($inviter, $order->money);
                     } elseif ($isFirst == 0 && is_null($inviter->onlineUserId)) {   //首次发几份
                         $invite_type = $points > 0 ? PointRecord::TYPE_OFFLINE_INVITE_REWARD : PointRecord::TYPE_OFFLINE_INVITE_RESET;
