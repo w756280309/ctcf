@@ -20,7 +20,7 @@ class OfflinePointManager
      *
      * @throws \Exception
      */
-    public function updatePoints(OfflineOrder $order, $type)
+    public function updatePoints($order, $type)
     {
         $user = $order->user;
         $record = PointRecord::find()->where([
@@ -32,7 +32,7 @@ class OfflinePointManager
         if (empty($record)) {
             $transaction = \Yii::$app->db->beginTransaction();
             try {
-                $points = $this->getOrderPoints($order, $type);
+                $points = self::getOrderPoints($order, $type);
 
                 //更新线下账户积分
                 self::updateOfflinePoints($order, $type, $user, $points);
@@ -45,25 +45,26 @@ class OfflinePointManager
                     }
                 }
 
-                //是否首投&存在邀请人
-                $isFirst = self::isFirst($order);
+                if ($type != PointRecord::TYPE_OFFLINE_POINT_ORDER) {
+                    //是否首投&存在邀请人
+                    $isFirst = self::isFirst($order);
 
-                //邀请人
-                $acount = Account::findOne($user->crmAccount_id);
-                if (!is_null($acount)) {
-                    $inviter = OfflineUser::findOne(['crmAccount_id' => $acount->identity->inviter]);
-                }
-
-                if ($isFirst < 3 && !is_null($inviter)) { //前三次返现
-                    if ($inviter->onlineUserId && $type == PointRecord::TYPE_OFFLINE_BUY_ORDER) {
-                        self::fanxian($inviter, $order->money);
-                    } elseif ($isFirst == 0 && is_null($inviter->onlineUserId)) {   //首次发几份
-                        $invite_type = $points > 0 ? PointRecord::TYPE_OFFLINE_INVITE_REWARD : PointRecord::TYPE_OFFLINE_INVITE_RESET;
-                        self::sendPointsInviter($inviter, $order->money, $order->id, $invite_type);
+                    //邀请人
+                    $acount = Account::findOne($user->crmAccount_id);
+                    if (!is_null($acount)) {
+                        $inviter = OfflineUser::findOne(['crmAccount_id' => $acount->identity->inviter]);
                     }
 
-                }
+                    if ($isFirst < 3 && !is_null($inviter)) { //前三次返现
+                        if ($inviter->onlineUserId && $type == PointRecord::TYPE_OFFLINE_BUY_ORDER) {
+                            self::fanxian($inviter, $order->money);
+                        } elseif ($isFirst == 0 && is_null($inviter->onlineUserId)) {   //首次发几份
+                            $invite_type = $points > 0 ? PointRecord::TYPE_OFFLINE_INVITE_REWARD : PointRecord::TYPE_OFFLINE_INVITE_RESET;
+                            self::sendPointsInviter($inviter, $order->money, $order->id, $invite_type);
+                        }
 
+                    }
+                }
                 $transaction->commit();
             } catch (\Exception $e) {
                 $transaction->rollBack();
@@ -106,7 +107,7 @@ class OfflinePointManager
      *
      * @return int    订单积分
      */
-    private function getOrderPoints(OfflineOrder $order, $type)
+    private function getOrderPoints($order, $type)
     {
         if ($type === PointRecord::TYPE_OFFLINE_POINT_ORDER) {
             $points = $order->points;
@@ -120,10 +121,12 @@ class OfflinePointManager
                     $points = ceil($points * self::multiple($online_user));
                 }
             }
-            //新用户首投赠送1400积分
-            $isFirst = self::isFirst($order);
-            if ($isFirst == 0) {
-                $points = bcadd($points, 1400, 2);
+            if ($type != PointRecord::TYPE_OFFLINE_POINT_ORDER) {
+                //新用户首投赠送1400积分
+                $isFirst = self::isFirst($order);
+                if ($isFirst == 0) {
+                    $points = bcadd($points, 1400, 2);
+                }
             }
         }
         if (in_array($type, PointRecord::getDecrType())) {
