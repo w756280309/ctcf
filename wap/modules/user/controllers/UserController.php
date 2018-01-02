@@ -273,7 +273,7 @@ class UserController extends BaseController
     {
         $pageSize = 5;
         $user = $this->getAuthedUser();
-        if ($user && $user->offline) {
+        if ($user) {
             $query = OfflineOrder::find()->where(['user_id' => $user->offlineUserId, 'isDeleted' => false]);
             $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);
             $model = $query->offset($pages->offset)->limit($pages->limit)->all();
@@ -298,7 +298,6 @@ class UserController extends BaseController
                 'backUrl' => $backUrl,
             ]);
         }
-        return $this->redirect('index');
     }
     /**
      * 投资详情页
