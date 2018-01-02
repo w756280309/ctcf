@@ -119,7 +119,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
         <div class="col-xs-12">
             <a href="#" class="subscription-title">
                 <div class="subscription-left">还款银行 </div>
-                <div class="subscription-right"><?= substr_replace($model->bankCardNo, '**** **** **** ', 0, -4) . '（'. $model->accBankName .'）'?></div>
+                <div class="information-content-right"><?= substr_replace($model->bankCardNo, '**** **** **** ', 0, -4) . '（'. $model->accBankName .'）'?></div>
             </a>
         </div>
     </div>
@@ -127,7 +127,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
         <div class="col-xs-12">
             <a href="#" class="subscription-title">
                 <div class="subscription-left">认购合同 <span class=""></span></div>
-                <div class="subscription-right">（已提供纸质版）</div>
+                <div class="information-content-right">（已提供纸质版）</div>
             </a>
         </div>
     </div>
