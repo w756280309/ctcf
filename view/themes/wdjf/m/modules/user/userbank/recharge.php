@@ -2,8 +2,10 @@
 
 use yii\helpers\Html;
 use common\utils\StringUtils;
+use common\view\UdeskWebIMHelper;
 
 $this->title="充值";
+UdeskWebIMHelper::init($this);
 
 if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     $this->backUrl = Html::encode($backUrl);
@@ -66,6 +68,8 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
         <div class="form-bottom">&nbsp;</div>
     <?php } ?>
 </form>
+
+<a href="javascript:void(0)" id="btn_udesk_im" style="display:block; margin-top: 10%;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</a>
 
 <script type="text/javascript">
     var csrf;

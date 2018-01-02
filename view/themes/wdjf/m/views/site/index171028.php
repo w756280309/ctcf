@@ -13,7 +13,9 @@ $this->showBottomNav = true;
 
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
+use common\view\UdeskWebIMHelper;
 
+UdeskWebIMHelper::init($this);
 $this->registerCssFile(FE_BASE_URI . "libs/swiper/swiper-3.4.2.min.css");
 $this->registerCssFile(FE_BASE_URI . "wap/common/css/wenjfbase.css?v=171028");
 $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => JqueryAsset::class, 'position' => 1]);
@@ -47,7 +49,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
             <span class="newbid-insideBox-title">新手专享</span>
             <p class="newbid-insideBox-shouyiNum">10%</p>
             <p class="newbid-insideBox-shouyiTxt">预期年化收益</p>
-            <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_newbid.png" class="newbid-insideBox-pic">
+            <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_newbid_1.png" class="newbid-insideBox-pic">
             <a href="/site/signup" class="newbid-insideBox-register">注册</a>
             <a href="/site/login" class="newbid-insideBox-login">登录</a>
         </div>
@@ -129,7 +131,9 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
         <p class="phone-box-number"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/icon_phone.png" alt=""><span class="num-1"><?= Yii::$app->params['platform_info.contact_tel'] ?></span><span class="num-2">(8:30-20:00）</span></p>
         <p class="phone-box-address">温州市鹿城区飞霞南路657号保丰大楼四层</p>
     </a>
+    <p id="btn_udesk_im" style="padding-top: 25px;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
     <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/logo_wendu.png" alt="" class="logo-box">
+
 </div>
 <?php if (!defined('IN_APP') && $this->showBottomNav) { ?>
     <?= $this->renderFile('@wap/views/layouts/footer.php')?>
@@ -140,7 +144,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
         <img class="popover-bg" src="<?= FE_BASE_URI ?>wap/index/images/popover_01.png" alt="">
         <div class="popover-ctn">
             <img class="popover-close" src="<?= FE_BASE_URI ?>wap/index/images/popover-close.png" alt="">
-            <p class="popover-title">价值288元代金券<br>已发到您的账户</p>
+            <p class="popover-title">价值698元代金券<br>已发到您的账户</p>
             <p class="popover-detail">你也可以在账户-代金券中,查看奖励</p>
             <a class="btn_01" href="/user/coupon/list">查看详情</a>
             <a class="btn_02" href="javascript:void(0)">去投资 领取160元超市卡</a>

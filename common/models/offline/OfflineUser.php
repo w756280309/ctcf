@@ -72,4 +72,21 @@ class OfflineUser extends ActiveRecord
             ->sum('money');
         return $investment_balance;
     }
+
+    /**
+     * 理财总资产
+     * 收益中
+     * 注：线下数据单位为（万元）
+     */
+    public function getTotalAssets()
+    {
+        return OfflineOrder::find()
+            ->where([
+                'offline_order.user_id' => $this->id ,
+                'offline_order.isDeleted' => false,
+            ])
+            ->andWhere(['>', 'offline_loan.finish_date', date('Y-m-d H:i:s')])
+            ->leftJoin('offline_loan', 'offline_loan.id = offline_order.loan_id')
+            ->sum('offline_order.money') * 10000;
+    }
 }

@@ -17,11 +17,26 @@ class RepaymentHelper
      * @param int $duration 项目期限
      * @param int $paymentDay 固定还款日
      * @param bool $isCustomRepayment 是否是自定义还款
+     * @param bool $isDailyAccrual 是否是分期截止日（按天），默认不是
      *
      * @return array
      */
-    public static function calcRepaymentDate($startDate, $endDate, $repaymentMethod, $duration, $paymentDay, $isCustomRepayment)
+    public static function calcRepaymentDate($startDate, $endDate, $repaymentMethod, $duration, $paymentDay, $isCustomRepayment, $isDailyAccrual = false)
     {
+        if ($isDailyAccrual && $repaymentMethod > 1) {
+            $startDateTime = new \DateTime($startDate);
+            $endDateTime = new \DateTime($endDate);
+            $dateDiff = $endDateTime->diff($startDateTime);
+            $duration = $dateDiff->m;
+            $diffYear = $dateDiff->y;
+            if ($diffYear > 0) {
+                $duration = $duration + 12 * $diffYear;
+            }
+            if ($dateDiff->d > 0) {
+                $duration += 1;
+            }
+        }
+
         //$term 表示期数 $totalMonthEachTerm 表示 每期多少月
         if ($repaymentMethod === 2 || $repaymentMethod === 6 || $repaymentMethod === 10) {
             $term = $duration;
@@ -109,6 +124,7 @@ class RepaymentHelper
             array_pop($paymentDays);
             $paymentDays[] = $endDate;
         }
+
         return $paymentDays;
     }
 
@@ -121,10 +137,12 @@ class RepaymentHelper
      * @param   int     $duration           项目期限
      * @param   float   $amount             金额
      * @param   float   $apr                利率
+     * @param   bool    $isDailyAccrual     是否是分期截止日（按天），默认不是
+     *
      * @return array
      * @throws \Exception
      */
-    public static function calcRepayment($repaymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr)
+    public static function calcRepayment($repaymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr, $isDailyAccrual = false)
     {
         $amount = Bc::round($amount, 2);
         $apr = Bc::round($apr, 4);
@@ -132,9 +150,11 @@ class RepaymentHelper
         if ($count < 0) {
             throw new \Exception('还款日期不能为空');
         }
+
         if ($startDate > $repaymentDates[0]) {
             throw new \Exception('还款日不能小于计息日期');
         }
+
         bcscale(14);
         if (10 === $repaymentMethod) {//等额本息
             $repayPlan = Builder::create(Builder::TYPE_DEBX)
@@ -153,7 +173,7 @@ class RepaymentHelper
             return $res;
         }
 
-        if ($repaymentMethod === 1) {   //到期本息计算利息
+        if (1 === $repaymentMethod) {   //到期本息计算利息
             $interest = Bc::round(bcdiv(bcmul($amount, bcmul($duration, $apr, 14), 14), 365, 14), 2);
 
             return [
@@ -166,6 +186,27 @@ class RepaymentHelper
         }
 
         $res = [];
+        //判断是分期类型标的且设置了截止日
+        if ($repaymentMethod >= 2 && $isDailyAccrual) {
+            foreach ($repaymentDates as $k => $valueDate) {
+                $principal = '0.00';
+                if ($k === ($count - 1)) {
+                    $principal = $amount;
+                }
+                $startDate = ($k === 0) ? $startDate : $repaymentDates[$k - 1];
+                $refundDays = (new \DateTime($startDate))->diff(new \DateTime($valueDate))->days; //当期付息天数
+                $interest = Bc::round(bcdiv(bcmul($amount, bcmul($refundDays, $apr, 14), 14), 365, 14), 2);
+                $res[$k] = [
+                    'date' => $valueDate,    //还款日期
+                    'principal' => $principal,   //还款本金
+                    'interest' => $interest,    //还款利息
+                ];
+            }
+
+            return $res;
+        }
+
+        //分期类型 - 按月付息，不设到期截止日
         $totalInterest = Bc::round(bcdiv(bcmul(bcmul($amount, $apr, 14), $duration, 14), 12, 14), 2);    //计算总利息
         if (bccomp($totalInterest, '0.00', 2) <= 0) {
             $totalInterest = '0.01';
@@ -211,12 +252,14 @@ class RepaymentHelper
      * @param   bool   $isCustomRepayment   是否是自定义还款
      * @param   float  $amount              投资金额
      * @param   float  $apr                 利率
+     * @param   bool   $isDailyAccrual      是否分期设置了截止日
+     *
      * @return array
      */
-    public static function calcRepaymentPlan($startDate, $endDate, $repaymentMethod, $duration, $paymentDay, $isCustomRepayment, $amount, $apr)
+    public static function calcRepaymentPlan($startDate, $endDate, $repaymentMethod, $duration, $paymentDay, $isCustomRepayment, $amount, $apr, $isDailyAccrual = false)
     {
-        $repaymentDates = self::calcRepaymentDate($startDate, $endDate, $repaymentMethod, $duration, $paymentDay, $isCustomRepayment);
-        return self::calcRepayment($repaymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr);
+        $repaymentDates = self::calcRepaymentDate($startDate, $endDate, $repaymentMethod, $duration, $paymentDay, $isCustomRepayment, $isDailyAccrual);
+        return self::calcRepayment($repaymentDates, $repaymentMethod, $startDate, $duration, $amount, $apr, $isDailyAccrual);
     }
 
     /**

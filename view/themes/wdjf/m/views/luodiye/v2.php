@@ -17,7 +17,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
         <?php if (Yii::$app->controller->action->getUniqueId() === 'luodiye/cloth') { ?>
             <img src="<?= FE_BASE_URI ?>wap/20170726luodiye/images/banner-cloth-new.png" alt="">
         <?php } else { ?>
-            <img src="<?= FE_BASE_URI ?>wap/20170726luodiye/images/banner.png" alt="">
+            <img src="<?= FE_BASE_URI ?>wap/20170726luodiye/images/ld_v2.png" alt="">
         <?php } ?>
         <img onclick='location.href="/?_mark=<?= time() ?>"' src="<?= FE_BASE_URI ?>wap/20170726luodiye/images/home.png" alt="">
     </div>
@@ -79,7 +79,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                     </dl>
                     <dl class="dl-one">
                         <dt class="dt-com m60">股东背景</dt>
-                        <dd><img data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/contact.png" alt=""></dd>
+                        <dd><img data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/contact_new.png" alt=""></dd>
                     </dl>
                     <dl class="dl-one">
                         <dt class="dt-com m60">平台优势</dt>

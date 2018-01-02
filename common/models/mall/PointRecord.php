@@ -46,6 +46,9 @@ class PointRecord extends ActiveRecord
     const TYPE_CHECK_IN = 'check_in';//签到获取
     const TYPE_WECHAT_CONNECT = 'wechat_connect'; //微信绑定奖励
     const REF_TYPE_CHECK_IN_RETENTION = 'check_in_retention'; //签到回归奖励
+    const TYPE_OFFLINE_INVITE_REWARD = 'offline_invite_reward'; //线下邀请奖励
+    const TYPE_OFFLINE_INVITE_RESET = 'offline_invite_reset';   //线下邀请投资撤回
+    const TYPE_ACCOUNT_MERGE = 'account_merge';    //账号合并
 
     /**
      * @inheritdoc
@@ -113,6 +116,9 @@ class PointRecord extends ActiveRecord
             self::TYPE_CHECK_IN => '签到获得',
             self::TYPE_WECHAT_CONNECT => '绑定账户奖励',
             self::REF_TYPE_CHECK_IN_RETENTION => '签到回归奖励',
+            self::TYPE_OFFLINE_INVITE_REWARD => '线下邀请奖励',
+            self::TYPE_OFFLINE_INVITE_RESET => '线下邀请人取消投资',
+            self::TYPE_ACCOUNT_MERGE => '账号合并',
         ];
         return isset($name[$type]) ? $name[$type] : '';
     }
@@ -139,6 +145,7 @@ class PointRecord extends ActiveRecord
             self::TYPE_POINT_ORDER,
             self::TYPE_OFFLINE_POINT_ORDER,
             self::TYPE_OFFLINE_ORDER_DELETE,
+            self::TYPE_OFFLINE_INVITE_RESET,
         ];
     }
 
@@ -154,6 +161,7 @@ class PointRecord extends ActiveRecord
             'ref_type' => $type,
             'ref_id' => $order->id,
             'final_points' => $user->points,
+            'remark' => self::getTypeName($type),
             'recordTime' => date('Y-m-d H:i:s'),
             'isOffline' => true,
             'offGoodsName' => isset($order->offGoodsName) ? $order->offGoodsName : $order->loan->title,

@@ -120,4 +120,9 @@ class OfflineOrder extends ActiveRecord
     {
         return OfflineRepaymentPlan::find()->where(['order_id' => $this->id])->count();
     }
+    //预期收益
+    public function getExpectedEarn()
+    {
+        return OfflineRepaymentPlan::find()->where(['order_id' => $this->id])->sum('lixi');
+    }
 }

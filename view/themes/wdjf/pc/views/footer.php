@@ -1,5 +1,8 @@
 <?php
-$this->registerCssFile(ASSETS_BASE_URI.'css/footer.css?v=20170519', ['depends' => 'frontend\assets\FrontAsset']);
+use common\view\UdeskWebIMHelper;
+
+UdeskWebIMHelper::init($this);
+$this->registerCssFile(ASSETS_BASE_URI.'css/footer.css?v=20171208', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'frontend\assets\FrontAsset']);
 ?>
 
@@ -42,11 +45,11 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
                 </div>
             </div>
         </a>
-        <a href="javascript:;" class="about-img3 message">
-            <span id="copy-buttons"  data-clipboard-text="1430843929" class="about-qq message1">客服QQ：1430843929（点击复制）</span>
+        <a href="javascript:;" class="about-img3 message" style="background: url(<?= ASSETS_BASE_URI ?>images/about-tel-balck.jpg) no-repeat ;background-size: 40px 40px;background-position: 0 0 ">
+            <span class="about-qq message1">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?></span>
         </a>
         <a href="javascript:;" class="about-img4 message">
-            <span class="about-line message1">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?></span>
+            <span id="btn_udesk_im" style="width: 250px; color:white;" class="about-line message1">在线客服</span>
         </a>
         <a href="javascript:;" class="about-img5">
             <div class="about-app">
@@ -58,7 +61,6 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
         </a>
     </div>
 </div>
-
 <script>
     $(function() {
         $('.message').hover(function() {
@@ -71,7 +73,6 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
         if ($(window).scrollTop() <= 500) {
             $(".about-img1").hide();
         }
-
         $(window).scroll(function () {
             if ($(this).scrollTop() >= 500) {
                 $(".about-img1").show();
@@ -116,6 +117,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
             } catch(error) {
 
             }
-        }
+        };
     })
 </script>
+

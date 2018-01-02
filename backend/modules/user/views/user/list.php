@@ -140,7 +140,10 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                     <input type="text" class="m-wrap span4"  name='investTimeMin' value="<?= Html::encode($request['investTimeMin']) ?>"  onclick="WdatePicker()">
                                     <input type="text" class="m-wrap span4"  name='investTimeMax' value="<?= Html::encode($request['investTimeMax']) ?>"  onclick="WdatePicker()">
                                 </td>
-                                <td></td>
+                                <td>
+                                    <span class="title">会员ID</span>
+                                    <input type="text" class="m-wrap span6" name="usercode" value="<?= Html::encode($request['usercode']) ?>" placeholder="会员ID">
+                                </td>
                             </tr>
                             <tr>
                                 <td>

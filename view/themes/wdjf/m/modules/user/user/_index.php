@@ -7,7 +7,7 @@ use common\utils\StringUtils;
 <div class="top_one flex-content">
     <?php if (\Yii::$app->user->isGuest) { ?>
         <div id="statu_one" style="padding-top: 1.173rem;">
-            <p class="award f24">注册就送<span class="f27" style="font-weight: 500;">288元</span>专享红包</p>
+            <p class="award f24">注册就送<span class="f27" style="font-weight: 500;">698元</span>专享红包</p>
             <div class="buttons">
                 <a href="/site/signup" class="button f17 lf">注 册</a>
                 <a href="/site/login?next=<?= urlencode(Yii::$app->request->hostInfo.'/user/user') ?>" class="button f17 rg">登 录</a>
@@ -31,7 +31,7 @@ use common\utils\StringUtils;
                 <li class="number lf">
                     <a href="/user/user/assets">
                         <p class="property_word f15">资产总额 (元)</p>
-                        <p class="property_number f24" id="zonge"><?= isset($ua) ? StringUtils::amountFormat3($ua->getTotalFund()) : '' ?></p>
+                        <p class="property_number f24" id="zonge"><?= isset($ua) ? StringUtils::amountFormat3($user->totalAssets) : '' ?></p>
                     </a>
                 </li>
                 <li class="number lf">

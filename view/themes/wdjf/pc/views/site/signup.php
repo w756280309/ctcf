@@ -63,7 +63,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20170307', ['de
         </div>
     <?php ActiveForm::end(); ?>
     <div class="register-image">
-        <img alt="" src="<?= ASSETS_BASE_URI ?>images/newbelongings.png">
+        <img alt="" src="<?= ASSETS_BASE_URI ?>images/new_banner.png">
     </div>
 </div>
 <div class="clear"></div>

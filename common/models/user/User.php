@@ -8,6 +8,7 @@ use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
+use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder as Ord;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderQueue;
@@ -1145,5 +1146,23 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         }
 
         return $balance;
+    }
+
+    //获取线下账户
+    public function getOffline()
+    {
+        return OfflineUser::findOne($this->offlineUserId);
+    }
+    /**
+     * 用户资产总额
+     * 线上资产总额 + 门店理财总资产（未到期的）
+     */
+    public function getTotalAssets()
+    {
+        $acount = $this->lendAccount->totalFund;
+        if ($this->Offline) {
+            $acount += $this->offline->totalAssets;
+        }
+        return $acount;
     }
 }

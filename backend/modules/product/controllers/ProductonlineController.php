@@ -283,7 +283,10 @@ class ProductonlineController extends BaseController
         $model->sn = '';
         $model->epayLoanAccountId = '';
         $model->recommendTime = '';
-        $model->expires = '';
+        if ($model->isDailyAccrual) {
+            $model->expires = '';
+            $model->isDailyAccrual = false;
+        }
         $model->fee = '';
         $model->expires_show = '';
         $model->kuanxianqi = '';

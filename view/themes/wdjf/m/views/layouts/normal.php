@@ -5,7 +5,6 @@ use common\view\AnalyticsHelper;
 use yii\helpers\Html;
 
 AnalyticsHelper::registerTo($this);
-
 $meta = PageMeta::getMeta(Yii::$app->request);
 
 if (null !== $meta) {
@@ -31,7 +30,6 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/lib.js?v=20170216', ['depends' => [\
 $this->registerJs('$(function () {
                 hmsr();
             });', 3);
-
 ?>
 
 <?php $this->beginPage(); ?>

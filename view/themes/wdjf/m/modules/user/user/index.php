@@ -1,7 +1,10 @@
 <?php
 
+use common\view\UdeskWebIMHelper;
+
 $this->title = '账户中心';
 $this->showBottomNav = true;
+UdeskWebIMHelper::init($this);
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
@@ -70,6 +73,15 @@ $this->showBottomNav = true;
         </li>
     <?php } ?>
 </ul>
+<a href="/user/user/myofforder">
+    <div class="out_ops flex-content">
+        <div class="lf f15"style="background-position: 0 0">门店理财</div>
+        <div class="rg">
+            <span class="f15" id="off_licai" style="color: #ff0000"></span>
+            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+        </div>
+    </div>
+</a>
 <a href="/user/invite">
     <div class="out_ops flex-content">
         <div class="lf f15" style="background-position: 0 -1.518rem">邀请好友</div>
@@ -87,14 +99,25 @@ $this->showBottomNav = true;
         </div>
     </div>
 </a>
-<a href="/site/help">
-    <div class="out_ops flex-content">
-        <div class="lf f15" style="background-position: 0 -2.03rem">帮助中心</div>
-        <div class="rg f15">
-            &nbsp;<img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
-        </div>
-    </div>
-</a>
+<ul class="options flex-content f15" style="margin-top: 8px;">
+    <li class="ops clearfix">
+        <a href="javascript:void(0)" id="btn_udesk_im" class="clearfix">
+            <div class="lf f15" style="background:url(<?= FE_BASE_URI ?>wap/new-homepage/images/online-servic-red.png) no-repeat;background-size: 21% 100%;background-position: 0 0">在线客服</div>
+            <div class="rg f15">
+                &nbsp;<img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+    <li class="ops clearfix">
+        <a href="/site/help" class="clearfix">
+            <div class="lf f15" style="background-position: 0 -2.03rem">帮助中心</div>
+            <div class="rg f15">
+                &nbsp;<img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+</ul>
+
 <a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>">
     <p class="customer_service f15">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?></p>
     <p class="customer_service f15">（8:30-20:00）</p>
@@ -121,6 +144,8 @@ $this->showBottomNav = true;
                 $('#licai').html(WDJF.numberFormat(data.sumLicai, true));
                 $('#licai').after('元');
             }
+            $('#off_licai').html(WDJF.numberFormat(data.off_licai, true));
+            $('#off_licai').after('元');
         });
     });
 
@@ -180,4 +205,5 @@ $this->showBottomNav = true;
             $('#daijin, #jifen').removeClass('f24').addClass('f20');
         }
     }
+
 </script>

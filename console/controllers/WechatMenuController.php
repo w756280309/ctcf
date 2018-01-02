@@ -84,9 +84,9 @@ class WechatMenuController extends Controller
                         "key" => "COMPANYINTRODUC"
                     ],
                     [
-                        "type" => "click",
-                        "name" => "意见反馈",
-                        "key" => "OPINIONFEEDBACK"
+                        "type" => "view",
+                        "name" => "在线客服",
+                        "url" => "https://wenjf.udesk.cn/im_client/?web_plugin_id=34255"
                     ],
                     [
                         "type" => "click",

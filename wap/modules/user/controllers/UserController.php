@@ -4,12 +4,16 @@ namespace app\modules\user\controllers;
 
 use app\controllers\BaseController;
 use common\models\coupon\UserCoupon;
+use common\models\offline\OfflineOrder;
+use common\models\offline\OfflineRepaymentPlan;
+use common\models\offline\OfflineUser;
 use common\models\user\MoneyRecord;
 use common\models\order\OnlineOrder as Ord;
 use common\models\product\OnlineProduct as Loan;
 use common\models\order\OnlineRepaymentPlan as Plan;
 use common\models\order\OrderManager;
 use common\service\BankService;
+use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
 use Wcg\Xii\Risk\Model\Risk;
 use Yii;
@@ -75,10 +79,10 @@ class UserController extends BaseController
         $this->layout = false;
 
         $html = $this->render('_index', $backArr);
-
         return [
             'html' => $html,
             'sumLicai' => isset($backArr['sumLicai']) ? $backArr['sumLicai'] : '',
+            'off_licai' => isset($backArr['off_licai'])? $backArr['off_licai'] : '',
         ];
     }
 
@@ -134,6 +138,7 @@ class UserController extends BaseController
             'showPointsArea' => $showPointsArea,
             'sumLicai' => $sumLicai,
             'riskContent' => $riskContent,
+            'off_licai' => (!is_null($user) && $user->offline) ? $user->offline->totalAssets : 0,
         ];
     }
 
@@ -260,7 +265,40 @@ class UserController extends BaseController
             'backUrl' => $backUrl,
         ]);
     }
+    /**
+     * 线下理财
+     *
+     */
+    public function actionMyofforder($page = 1, $backUrl = null)
+    {
+        $pageSize = 5;
+        $user = $this->getAuthedUser();
+        if ($user) {
+            $query = OfflineOrder::find()->where(['user_id' => $user->offlineUserId, 'isDeleted' => false]);
+            $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);
+            $model = $query->offset($pages->offset)->limit($pages->limit)->all();
 
+            $tp = $pages->pageCount;
+            $header = [
+                'count' => $pages->totalCount,
+                'size' => $pageSize,
+                'tp' => $tp,
+                'cp' => intval($page),
+            ];
+            $code = ($page > $tp) ? 1 : 0;
+            $message = ($page > $tp) ? '数据错误' : '消息返回';
+
+            if (Yii::$app->request->isAjax) {
+                $html = $this->renderFile('@wap/modules/user/views/user/_offline_order_list.php', ['model' => $model]);
+                return ['header' => $header, 'html' => $html, 'code' => $code, 'message' => $message];
+            }
+            return $this->render('off-order', [
+                'model' => $model,
+                'pages' => $pages,
+                'backUrl' => $backUrl,
+            ]);
+        }
+    }
     /**
      * 投资详情页
      *
@@ -349,6 +387,21 @@ class UserController extends BaseController
             'asset' => $asset,
             'fromTransfer' => $fromTransfer,
         ]);
+    }
+    //线下订单详情
+    public function actionOfflineOrderdetail($id)
+    {
+        $model = OfflineOrder::findOne($id);
+        //还款计划
+        $plans = OfflineRepaymentPlan::find()->where([
+            'order_id' => $id,
+            'loan_id' => $model->loan->id,
+            'uid' => $model->user_id,
+        ])->all();
+        return $this->render('offline_order_detail', [
+            'model' => $model,
+            'plans' => $plans,
+            ]);
     }
 
     /**

@@ -11,6 +11,7 @@ use common\models\coupon\UserCoupon;
 use common\models\growth\AppMeta;
 use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
+use common\models\promo\TicketToken;
 use common\models\sms\SmsConfig;
 use common\service\SmsService;
 use common\utils\SecurityUtils;
@@ -203,9 +204,15 @@ class SignupForm extends Model
                 '0016:1000-8',      //8元，起投1000元，有效期30天
                 '0016:100000-80',   //80元，起投10万，有效期30天
                 '0016:200000-150',  //150元，起投20万，有效期30天
+                '0029:1000000-180', //180元，起投100万，有效期90天
+                '0030:2000000-230', //230元，起投200万，有效期90天
             ]]);
             foreach ($regCouponTypes as $regCouponType) {
                 try {
+                    if ('0029:1000000-180' === $regCouponType->sn || '0030:2000000-230' === $regCouponType->sn) {
+                        $ticketKey = 'P698-' . $user->id . '-' . $regCouponType->id;
+                        TicketToken::initNew($ticketKey)->save(false);
+                    }
                     if (UserCoupon::addUserCoupon($user, $regCouponType)->save()) {
                         $issuedCoupon = true;
                     }

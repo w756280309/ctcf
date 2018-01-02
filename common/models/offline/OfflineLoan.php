@@ -148,4 +148,22 @@ class OfflineLoan extends ActiveRecord
     {
         return OfflineRepaymentPlan::find()->where(['loan_id' => $this->id])->sum('tiexi');
     }
+    //状态
+    public function getStatus()
+    {
+        $status = [
+            'raise' => '募集中',
+            'income' => '收益中',
+            'end' => '已还清',
+        ];
+        if (!is_null($this->finish_date) && strtotime(date('Y-m-d')) > strtotime($this->finish_date)) {
+            return $status['end'];
+        }
+        if (!is_null($this->jixi_time) && strtotime($this->jixi_time) < time() && time() < strtotime($this->finish_date)) {
+            return $status['income'];
+        }
+        if (is_null($this->jixi_time) || !$this->is_jixi || time() < strtotime($this->jixi_time)) {
+            return $status['raise'];
+        }
+    }
 }

@@ -72,4 +72,26 @@ class OfflineRepaymentPlan extends \yii\db\ActiveRecord
     {
         return OfflineLoan::findOne($this->loan_id);
     }
+    //判断当期是否已还
+    public function getRepaymentStatus()
+    {
+        if ($this->status == 1 || $this->status == 2) { //提前还款或已还
+            return true;
+        } else {
+            //获取最大还款期数
+            $plan = self::find()
+                ->where(['uid' => $this->uid, 'loan_id' => $this->loan_id])
+                ->andWhere(['in', 'status', ['1', '2']])
+                ->orderBy('qishu desc')
+                ->one();
+            if (!is_null($plan) && $plan->qishu > $this->qishu) {
+                return true;
+            } else {
+                if (time() > strtotime($this->	refund_time)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
