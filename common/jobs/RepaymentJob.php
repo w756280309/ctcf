@@ -125,6 +125,10 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
 
                 $offlineUserManager = new OfflineUserManager();
                 $offlineUserManager->updateAnnualInvestment($order);
+
+                //发计息短信和确认函短信
+                self::sendJixiSms($order->mobile, $order->user->realName, $order->orderDate, $order->loan->title, $order->valueDate);
+
             }
             if (empty($repaymentData)) {
                 throw new \Exception('标的还款数据不能为空');
@@ -211,5 +215,32 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
         } else {
             throw new \Exception('删除线下标的还款计划失败，['.$loan->title.']');
         }
+    }
+
+    /**
+     * @param $name     用户名
+     * @param $orderDate    认购日期
+     * @param $loanName     标的名
+     * @param $qixiTime     起息日
+     */
+    private function sendJixiSms($mobile, $name, $orderDate, $loanName, $qixiTime)
+    {
+        //计息短信
+        $message = [
+            $name,
+            $orderDate,
+            $loanName,
+            $qixiTime,
+        ];
+        $templateId = Yii::$app->params['offline_repayment_sms']['jixi'];
+        SmsService::send($mobile, $templateId, $message);
+
+        //确认函短信
+        $message = [
+            $name,
+            $loanName,
+        ];
+        $templateId = Yii::$app->params['offline_repayment_sms']['querenhan'];
+        SmsService::send($mobile, $templateId, $message);
     }
 }
