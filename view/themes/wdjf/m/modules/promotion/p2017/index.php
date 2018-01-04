@@ -3,7 +3,7 @@
 use common\models\adv\Share;
 
 $this->title = '2017温都金服年报';
-$hostInfo = Yii::$app->request->hostInfo;
+$hostInfo = Yii::$app->params['clientOption']['host']['wap'];
 $this->share = new Share([
     'title' => '这是我的2017年报，快来看看吧！',
     'description' => '温都金服，市民身边的财富管家',
