@@ -96,7 +96,7 @@ class P2017Controller extends BaseController
         //基础数据处理
         $platOnlineDateOut = $platOnlineDate->format('Y.n.j'); //平台上线日期
         $registerDateOut = $registerDate->format('Y.n.j'); //注册日期
-        $platToRegisterDays = $registerDate->diff($platOnlineDate)->days + 1; //第n天注册
+        $platToRegisterDays = $registerDate < $platOnlineDate ? 1 : $registerDate->diff($platOnlineDate)->days + 1; //第n天注册
         $investDateOut = $investDate->format('Y.n.j'); //第一次投资日期
         $userData = [
             'platOnlineDateOut' => $platOnlineDateOut, //平台上线日期
@@ -253,6 +253,8 @@ class P2017Controller extends BaseController
 
         //加息券个数
         $bonusCouponNum = (int) $queryBonus->andWhere(["$ct.type" => 1])->count();
+        $platOnlineDate = new \DateTime('2016-05-20');
+        $registerDate = $registerDate > $platOnlineDate ? $registerDate : $platOnlineDate;
         $registerToTodayDays = $todayDate->diff($registerDate)->days;
 
         //用户投资慈善金额
