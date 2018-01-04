@@ -77,7 +77,7 @@ JS;
             }
 CSS;
 
-        $view->registerJs($_js, View::POS_HEAD, 'body_close');
+        $view->registerJs($_js, View::POS_HEAD, 'body_close_udesk');
         $view->registerCss($_css);
     }
 }
