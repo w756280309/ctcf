@@ -5,6 +5,7 @@ namespace wap\modules\promotion\controllers;
 use common\controllers\HelpersTrait;
 use common\models\promo\PromoLotteryTicket;
 use common\models\promo\PromoService;
+use common\models\thirdparty\SocialConnect;
 use common\models\user\UserInfo;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
@@ -182,5 +183,28 @@ class BaseController extends Controller
         $promoStatus = $this->getPromoStatus($promo);
         $view = \Yii::$app->view;
         $view->params['promoStatus'] = $promoStatus;
+    }
+
+    public function getWxInfo($id)
+    {
+        $data = [
+            'headImgUrl' => null,
+            'nickName' => null,
+        ];
+
+        $connect = SocialConnect::findOne(['user_id' => $id]);
+        if (null !== $connect) {
+            try {
+                $app = Yii::$container->get('weixin_wdjf');
+                $info = $app->user->get($connect->resourceOwner_id);
+                if (isset($info['openid'])) {
+                    return ['headImgUrl' => $info->headimgurl, 'nickName' => $info->nickname];
+                }
+            } catch (\Exception $ex) {
+                //不允许获得不到微信头像及昵称时报错
+            }
+        }
+
+        return $data;
     }
 }

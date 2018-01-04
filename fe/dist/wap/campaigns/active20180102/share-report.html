@@ -1,0 +1,69 @@
+<!--
+
+<?php
+use common\models\adv\Share;
+$this->title = "年报";
+
+$this->share = new Share([
+'title' => '我在这里玩答题闯关获得了大红包！快来一起玩吧！',
+'description' => '温都金服七夕献礼，海量红包、礼品送不停！',
+'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170823/images/wx_share.png',
+'url' => Yii::$app->request->hostInfo.'/promotion/fest-77-in/index',
+]);
+?>
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>年报分享页-新投资人</title>
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+    <!--<link rel="stylesheet" href="../../libs/swiper/swiper-3.4.2.min.css">-->
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20180102/css/share.css">
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+
+    <script src="__FE_BASE_URI__/libs/vue.min.js"></script>
+    <!--<script src="../../libs/swiper/swiper-3.4.2.min.js"></script>-->
+</head>
+<body>
+<div class="flex-content new-share" id="app">
+    <div class="new-share-nav">
+        <div class="new-nav-contain">
+            <p>至今，温都金服已安全运营<span>288</span>天</p>
+            <p>已累计兑付<span>22</span>亿元</p>
+            <p>兑付率达<span>100%</span></p>
+            <p>为客户赚取<span>1</span>亿元</p>
+            <p>未来，温都金服将继续与您携手同行</p>
+        </div>
+        <a @click="weixinShare" class="new-nav-button">分享给好友</a>
+    </div>
+    <div v-if="isShowMask" @click="removeMask" style="position: fixed;left: 0;bottom:0;width: 100%;height: 100%;background: #000;opacity: 0.6;z-index: 11;" >
+        <div style="position: fixed;left: 0;bottom:0;width: 100%;height: 100%;z-index: 12;text-align: right;">
+            <img style="float: right;width: 80%;" src="__FE_BASE_URI__wap/campaigns/active20180102/images/share.png" alt="">
+        </div>
+    </div>
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data:{
+            isShowMask:false,
+        },
+        methods:{
+            weixinShare:function(){
+                console.log(navigator.userAgent);
+                if(navigator.userAgent.indexOf('MicroMessenger') > -1 ) {
+                    this.isShowMask = true;
+                }
+            },
+            removeMask:function () {
+                this.isShowMask = false;
+            }
+        }
+    });
+</script>
+</body>
+</html>

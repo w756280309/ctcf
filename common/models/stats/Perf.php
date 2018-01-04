@@ -859,4 +859,17 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
         $sql = "SELECT date_format(op.actualRefundTime, '%Y-%m') as m,count(distinct op.uid) as c FROM `online_repayment_plan` as op left join online_product as p on p.id = op.online_pid where p.isTest = 0 and op.status in (1,2) and op.actualRefundTime is not null group by m";
         return self::getDbRead()->createCommand($sql)->queryAll();
     }
+
+    public static function getStats()
+    {
+        $cache = Yii::$app->db_cache;
+        $key = 'index_stats';
+
+        if (!$cache->get($key)) {
+            $statsData = Perf::getStatsForIndex();
+            $cache->set($key, $statsData, 600);   //缓存十分钟
+        }
+
+        return $cache->get($key);
+    }
 }
