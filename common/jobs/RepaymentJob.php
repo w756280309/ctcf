@@ -127,8 +127,9 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                 $offlineUserManager->updateAnnualInvestment($order);
 
                 //发计息短信和确认函短信
-                self::sendJixiSms($order->mobile, $order->user->realName, $order->orderDate, $order->loan->title, $order->valueDate);
-
+                if (strtotime(date('Y-m-d')) == strtotime($order->valueDate)) {
+                    self::sendJixiSms($order->mobile, $order->user->realName, $order->orderDate, $order->loan->title, $order->valueDate);
+                }
             }
             if (empty($repaymentData)) {
                 throw new \Exception('标的还款数据不能为空');
