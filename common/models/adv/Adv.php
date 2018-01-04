@@ -116,7 +116,7 @@ class Adv extends ActiveRecord
             ['title', 'string', 'max' => 15],
             ['share_id', 'integer'],
             ['canShare', 'boolean'],
-            [['start_date', 'timing'], 'safe'],
+            [['start_date', 'timing', 'investLeast'], 'safe'],
         ];
     }
 
@@ -142,6 +142,7 @@ class Adv extends ActiveRecord
             'show_order'  => '显示顺序',
             'start_date' => '开始时间',
             'timing' => '定时',
+            'investLeast' => '最少投资可见',
         ];
     }
 
@@ -250,12 +251,13 @@ class Adv extends ActiveRecord
     /*
      * 首页轮播图
      */
-    public static function fetchHomeBanners($is_m = false)
+    public static function fetchHomeBanners($is_m = false, $totalAssets = 0)
     {
 
         $now = date('Y-m-d H:i:s');
         $where = "status = 0 and del_status = 0 and `type` = 0
-                and (timing = 0 or (timing = 1 and start_date <= '$now'))";
+                and (timing = 0 or (timing = 1 and start_date <= '$now'))
+                and investLeast <= $totalAssets";
         if ($is_m) {
             if (defined('IN_APP')) {
                 $where .= " and isDisabledInApp = 0";
@@ -270,6 +272,5 @@ class Adv extends ActiveRecord
             ->orderBy(['show_order' => SORT_ASC, 'id' => SORT_DESC])
             ->limit(5)
             ->all();
-
     }
 }

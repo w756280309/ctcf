@@ -1144,7 +1144,10 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             $availableCouponMoney = UserCoupon::findCouponInUse($this->id, date('Y-m-d'))->sum('amount');
             $balance = $userAccount->available_balance + $userInfo->getTotalInvestMoney() + $availableCouponMoney;
         }
-
+        //加上线下投资额
+        if ($this->offline) {
+            $balance += $this->offline->totalAssets;
+        }
         return $balance;
     }
 

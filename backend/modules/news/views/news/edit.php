@@ -99,6 +99,13 @@ $this->title = '编辑资讯';
                         <?= $form->field($model, 'sort', ['template' => '{error}']); ?>
                     </div>
                 </div>
+                <div class="control-group">
+                    <label class="control-label">最少投资可见（元）</label>
+                    <div class="controls">
+                        <?= $form->field($model, 'investLeast', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span3', 'placeholder' => '显示顺序']])->textInput() ?>
+                        <?= $form->field($model, 'investLeast', ['template' => '{error}']); ?>
+                    </div>
+                </div>
                 <div class="form-actions">
                     <button type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
                     <a href="/news/news/index" class="btn">取消</a>
