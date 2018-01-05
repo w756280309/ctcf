@@ -5,9 +5,9 @@ use yii\helpers\ArrayHelper;
 
 ?>
 
-<div class="col-xs-4 safe-txt text-align-ct">优惠券</div>
+<div class="lf" style="width: 31%;color:#a3a4a6;font-size: 13px">优惠券</div>
 <?php //if (empty($coupons)) { ?>
-    <div class="col-xs-8 safe-txt" onclick="toCoupon()"><span class="notice">请选择</span></div>
+    <div class="col-xs-8 safe-txt" onclick="toCoupon()" style="padding: 0;"><span class="notice">选择代金券或加息券</span></div>
 <?php //} else { ?>
 <!--    --><?php
 //        $count = (int) count($coupons);

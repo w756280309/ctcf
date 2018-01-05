@@ -73,10 +73,29 @@ div.headpic {
     background:#fff;
 }
 .surplus {
-    height: 36px;
-    font-size:13px;
+    position: relative;
+    height: 1.306rem;
+    font-size:14px;
     color: #7c7c7c;
-    line-height: 34px;
+    line-height: 1.306rem;
+    background-color: #fff;
+    padding-left:0.61333333rem;
+
+}
+.surplus div{
+    border-bottom: 1px solid #f0f0f0;
+}
+.surplus input{
+    width: 56.39%;
+    height: 60%;
+    line-height:0.8rem;
+    position: relative;
+    top: 18%;
+    color: #4e545a;
+}
+.surplus .safe-txt img{
+    width:0.38666667rem;
+    vertical-align: middle;
 }
 .surplus a {
     height: 36px;
@@ -84,10 +103,14 @@ div.headpic {
     color: #007aff;
     line-height: 34px;
 }
+#coupon{
+    padding-left: 0.61333333rem;
+    margin-top:0.32rem;
+}
 .produce {
     padding-top: 10px;
     padding-bottom: 10px;
-    font-size: 12px;
+    font-size: 13px;
     color: #fff;
     background: #f44336;
 }
@@ -216,8 +239,9 @@ a.set:visited {
     color: #f44336;
 }
 .shouyi {
-    height:36px;
-    line-height: 34px;
+    height:0.86666667rem;
+    line-height:0.86666667rem;
+    padding-left: 0.61333333rem;
 }
 
 #bind-box .col-xs-12{
@@ -363,12 +387,12 @@ a:hover {
 }
 .yuqishouyi {
     color:#f44336;
-    line-height:35px;
+    /*line-height:35px;*/
     font-size:12px;
 }
 .shijizhifu {
     color:#f44336;
-    line-height:35px;
+    /*line-height:35px;*/
     font-size:12px;
 }
 .rz-msg{
@@ -397,7 +421,7 @@ a.visit:hover {
 }
 /* 添加警示字体颜色 */
 span.notice {
-    color: #f44336;
+    color: #007aff;
 }
 
 /* 正在审核中文字样式 */
@@ -433,4 +457,52 @@ span.notice {
 
 .checkin a {
     cursor: pointer;
+}
+.scroll-slide {
+    -webkit-overflow-scrolling: touch;
+}
+
+.coupon-box {
+    position: relative;
+}
+
+.coupon-box .coupon-box-content .daijin-content .daijin-list {
+    height: auto;
+    padding-bottom: 1.6rem;
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-list {
+    height: auto;
+    padding-bottom: 2.1rem;
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-remind {
+    color: #ccc;
+    padding-top: .2rem;
+    padding-bottom: .53333333rem;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.coupon-box .coupon-box-content .jiaxi-content .jiaxi-remind .jiaxi-remind-title span {
+    background-color: #eee;
+}
+
+.customer-layer-popuo {
+    /*color: green;*/
+}
+
+.customer-layer-popuo .layui-m-layercont {
+    text-align: left;
+}
+
+.customer-layer-popuo .layui-m-layerbtn {
+    font-size: 14px;
+}
+.customer-layer-popuo .layui-m-layerbtn span[yes] {
+    color: #ff6058;
+}
+
+.layui-m-layershade {
+    background-color: rgba(0, 0, 0, .1)
 }

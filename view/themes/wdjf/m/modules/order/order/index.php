@@ -27,7 +27,9 @@ JS
     , 1);
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/order.js?v=20171108', ['depends' => YiiAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends' => WapAsset::class]);
+
+$this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends' => WapAsset::class]);
+
 
 ?>
     <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/rate-coupon/bid-page/css/index.css?v=1">
@@ -37,119 +39,103 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
     <script src="<?= ASSETS_BASE_URI ?>js/layer.js?v=1"></script>
 
     <style>
-        .scroll-slide {
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .coupon-box {
-            position: relative;
-        }
-
-        .coupon-box .coupon-box-content .daijin-content .daijin-list {
-            height: auto;
-            padding-bottom: 1.6rem;
-        }
-
-        .coupon-box .coupon-box-content .jiaxi-content .jiaxi-list {
-            height: auto;
-            padding-bottom: 2.1rem;
-        }
-
-        .coupon-box .coupon-box-content .jiaxi-content .jiaxi-remind {
-            color: #ccc;
-            padding-top: .2rem;
-            padding-bottom: .53333333rem;
-            margin-top: 0;
-            margin-bottom: 0;
-        }
-
-        .coupon-box .coupon-box-content .jiaxi-content .jiaxi-remind .jiaxi-remind-title span {
-            background-color: #eee;
-        }
-
-        .customer-layer-popuo {
-            /*color: green;*/
-        }
-
-        .customer-layer-popuo .layui-m-layercont {
-            text-align: left;
-        }
-
-        .customer-layer-popuo .layui-m-layerbtn {
-            font-size: 14px;
-        }
-        .customer-layer-popuo .layui-m-layerbtn span[yes] {
-            color: #ff6058;
-        }
-
-        .layui-m-layershade {
-            background-color: rgba(0, 0, 0, .1)
-        }
+	    .produce{
+		    background-color: #ff6058;
+	    }
+	    .produce .col-xs-4{
+		    padding-left: 0.61333rem;
+		    padding-right: 0;
+		    color: #ffd8d6;
+	    }
+	    .login-sign-btn{
+		    margin-top:0.37333333rem;
+		    height:auto;
+	    }
+	    .login-sign-btn #buybtn{
+		    width: 92%;
+		    height:1.06666667rem;
+		    line-height:1.06666667rem;
+		    background-color: #ff6058;
+		    color: #fff;
+		    border-radius: 4px;
+	    }
+	    .pop-limitCoupon{
+		    position: relative;
+		    top:-0.32rem;
+		    width: 100%;
+		    height:1.38666667rem;
+		    line-height:1.7rem;
+		    background: url("<?= ASSETS_BASE_URI ?>images/bg_pop_limit.png") no-repeat;
+		    background-size: 100%;
+		    text-align: center;
+		    font-size: 12px;
+		    color: #c9944e;
+		    z-index: 100;
+	    }
     </style>
     <!--   购买页 start-->
     <div class="row produce">
-        <div class="col-xs-12 text-align-lf first-hang"><?= $deal->title ?></div>
-        <div class="col-xs-4 text-align-ct">预期年化收益</div>
-        <div class="col-xs-8 text-align-lf col"><?= LoanHelper::getDealRate($deal) ?>
+        <div class="col-xs-12 text-align-lf first-hang" style="padding-left: 0.613rem;"><?= $deal->title ?></div>
+        <div style="width: 35%;" class="col-xs-4 text-align-lf">预期年化收益</div>
+        <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= LoanHelper::getDealRate($deal) ?>
             %<?php if (!empty($deal->jiaxi)) { ?>+<?= $deal->jiaxi ?>%<?php } ?></div>
-        <div class="col-xs-4 text-align-ct">项目期限</div>
-        <div class="col-xs-8 text-align-lf col">
+        <div style="width: 35%;" class="col-xs-4 text-align-lf">项目期限</div>
+        <div style="width: 65%;" class="col-xs-8 text-align-lf col">
             <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit'] ?>
         </div>
-        <div class="col-xs-4 text-align-ct">可投余额</div>
-        <div class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->getLoanBalance()) ?>元</div>
-        <div class="col-xs-4 text-align-ct">起投金额</div>
-        <div class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->start_money) ?>元</div>
-        <div class="col-xs-4 text-align-ct">递增金额</div>
-        <div class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->dizeng_money) ?>元</div>
+        <div style="width: 35%;" class="col-xs-4 text-align-lf">可投余额</div>
+        <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->getLoanBalance()) ?>元</div>
+        <div style="width: 35%;" class="col-xs-4 text-align-lf">起投金额</div>
+        <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->start_money) ?>元</div>
+        <div style="width: 35%;" class="col-xs-4 text-align-lf">递增金额</div>
+        <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->dizeng_money) ?>元</div>
     </div>
     <div class="row surplus margin-top">
-        <div class="col-xs-4 text-align-ct">可用金额</div>
-        <div
-                class="col-xs-5 safe-lf text-align-lf"><?= StringUtils::amountFormat3($user->lendAccount->available_balance) ?>
+        <div class="lf" style="width: 31%;color:#a3a4a6;">可用余额</div>
+        <div class="lf" style="width: 51%;color: #4e545a"><?= StringUtils::amountFormat3($user->lendAccount->available_balance) ?>
             元
         </div>
-        <div class="col-xs-3 safe-txt text-align-ct"><a
+        <div class="lf" style="width: 14%;" onclick="location.href('/user/userbank/recharge')"><a
                     href="/user/userbank/recharge?from=<?= urlencode('/order/order?sn=' . $deal->sn) ?>">去充值</a></div>
     </div>
-    <form action="/order/order/doorder?sn=<?= $deal->sn ?>" method="post" id="orderform" data-to="1">
+    <form style="position: relative;" action="/order/order/doorder?sn=<?= $deal->sn ?>" method="post" id="orderform" data-to="1">
         <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
-        <div class="row sm-height border-bottom">
-            <div class="col-xs-4 safe-txt text-align-ct">投资金额</div>
+        <div class="row surplus">
+            <div class="lf" style="border:none;width: 31%;color:#a3a4a6;">投资金额(元)</div>
             <input name="money" maxlength="8" type="tel" id="money" value="<?= empty($money) ? '' : $money ?>"
-                   placeholder="请输入投资金额" class="col-xs-6 safe-lf text-align-lf" step="any" autocomplete="off">
-            <div class="col-xs-2 safe-txt">元</div>
+                   placeholder="请输入投资金额" class="lf" step="any" autocomplete="off">
+            <div id="btnDelete" class="col-xs-2 safe-txt" style="position: absolute;right: 0;border:none;width: 14%;"><img class="delete-input" src="<?= ASSETS_BASE_URI ?>images/icon_delete.png" alt=""></div>
         </div>
-        <?php if ($deal->allowUseCoupon || $deal->allowRateCoupon) { ?>
             <input name="couponConfirm" id="couponConfirm" type="text" value="" hidden="hidden">
-            <div class="row sm-height border-bottom" id="coupon">
-                <?php if ($validCouponCount) { ?>
+            <div class="row sm-height" id="coupon">
+                <?php if ($deal->allowUseCoupon === 1 || $deal->allowRateCoupon === 1) { ?>
                     <?= $this->renderFile('@app/modules/user/views/coupon/_valid_coupon.php', ['coupons' => $coupons]) ?>
                 <?php } else { ?>
-                    <div class="col-xs-4 safe-txt text-align-ct">优惠券</div>
-                    <div class="col-xs-8 safe-txt">无可用</div>
+                    <div class="lf" style="width: 31%;font-size: 14px;color:#a3a4a6;">优惠券</div>
+                    <div class="safe-txt">此标的代金券和加息券都不可用</div>
                 <?php } ?>
             </div>
+
+        <?php if ($deal->allowUseCoupon === 0 && $deal->allowRateCoupon === 1) {  ?>
+            <div class="pop-limitCoupon">此标的不可使用代金券</div>
+        <?php } elseif ($deal->allowRateCoupon === 0 && $deal->allowUseCoupon === 1) { ?>
+            <div class="pop-limitCoupon">此标的不可使用加息券</div>
         <?php } ?>
 
         <div class="row shouyi">
-            <div class="col-xs-4 safe-lf text-align-ct">实际支付</div>
-            <div class="col-xs-8 safe-lf text-align-lf shijizhifu">0.00元</div>
+            <div class="lf" style="font-size:13px;border-bottom: 1px solid #f0f0f0;width: 31%;color:#a3a4a6;">实际支付</div>
+            <div class="lf shijizhifu" style="border-bottom: 1px solid #f0f0f0;width: 65%;color: #4e545a">0.00元</div>
         </div>
         <div class="row shouyi">
-            <div class="col-xs-4 safe-lf text-align-ct">预计收益</div>
-            <div class="col-xs-8 safe-lf text-align-lf yuqishouyi">0.00元</div>
+            <div class="lf" style="width: 31%;color:#a3a4a6;font-size: 13px">预计收益</div>
+            <div class="lf yuqishouyi" style="width: 65%;color: #4e545a">0.00元</div>
         </div>
 
         <div class="row login-sign-btn ht">
-            <div class="col-xs-3"></div>
-            <div class="col-xs-6 text-align-ct">
-                <input id="buybtn" class="btn-common btn-normal" type="submit" style="background: #F2F2F2;" value="购买">
-            </div>
-            <div class="col-xs-3"></div>
+	          <input id="buybtn" class="btn-common btn-normal" type="submit" value="购买">
         </div>
-        <div class="row surplus">
-            <center><a class="col-xs-12" href="/order/order/agreement?id=<?= $deal->id ?>">查看“产品合同”</a></center>
+        <div class="row" style="margin: 0.533rem auto .5rem;">
+            <center><a style="text-align: left;padding-left: 0.613rem;" class="col-xs-12 lf" href="/order/order/agreement?id=<?= $deal->id ?>">我已阅读并同意<span style="color: #007aff">《产品合同》</span></a></center>
         </div>
     </form>
 
@@ -161,7 +147,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
             <span class="x-confirm">确定</span>
         </div>
     </div>
-<p id="btn_udesk_im"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
+<p id="btn_udesk_im" style="margin-bottom: 1rem;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
     <div class="mask2" style="display: none"></div>
     <div class="coupon-box" style="display: none">
         <div class="coupon-box-title clearfix">
@@ -261,7 +247,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
     <input type="hidden" id="selectedCouponCount" value="0">
     <input type="hidden" id="selectedCouponRate" value="0">
     <input type="hidden" id="selectedCouponRateday" value="0">
-<?php if ($deal->allowUseCoupon && $validCouponCount) { ?>
+<?php if ($deal->allowUseCoupon ===1 || $deal->allowRateCoupon === 1) { //修改T857问题,此处修改为邹键双找到的问题点?>
     <script type="text/javascript">
         FastClick.attach(document.body);
         var money = $('#money').val();
@@ -401,7 +387,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
             if (!money) {
                 toastCenter("请先输入投资金额");
             } else {
-                $(".produce,.surplus,#orderform").hide();
+                $(".produce,.surplus,#orderform,#btn_udesk_im").hide();
                 $(".coupon-box").show();
             }
         }
@@ -422,6 +408,11 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
 
         $(function () {
             forceReload_V2();
+            $("#btnDelete").on("click",function () {
+	            $("input[name]").val("");
+              profit($("input[name]"));
+                $(".safe-txt .notice").html("选择代金券或加息券");
+            });
             $('#money').on('keyup', function () {
                 money = $(this).val();
                 $("#selectedCouponAmount").val(0);
@@ -430,14 +421,14 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
                 $("#selectedCouponRateday").val(0);
                 profit($('#money'));
                 initCouponPage();
-                $(".safe-txt .notice").html("请选择");
+                $(".safe-txt .notice").html("选择代金券或加息券");
             });
             money = 0;
             initCouponPage();
             //点击蒙层关闭优惠券页
             $(".coupon-box-title .btn-close").click(function () {
                 $(".coupon-box").hide();
-                $(".produce,.surplus,#orderform").show();
+                $(".produce,.surplus,#orderform,#btn_udesk_im").show();
             });
             //优惠券table选项卡
             $(".coupon-kinds li").click(function () {
@@ -490,7 +481,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
                             $("#selectedCouponRate").val(jiaxiNum);
                             $("#selectedCouponRateday").val(jiaxiDay);
                             $(".coupon-box").hide();
-                            $(".produce,.surplus,#orderform").show();
+                            $(".produce,.surplus,#orderform,#btn_udesk_im").show();
                             if (data.data.jiaxi > 0 && data.data.yjsy > 0) {
                                 $('.yuqishouyi').html(data.data.yjsy + "元(含加息"+ data.data.jiaxi +"元)");
                                 $('.shijizhifu').html(money + '.00元');
@@ -551,7 +542,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
                             } else {
                                 $(".daijin-remind").html("您可以选择多张代金券");
                                 $(".line-two").html("您可以选择多张代金券");
-                                $(".safe-txt .notice").html("请选择");
+                                $(".safe-txt .notice").html("选择代金券或加息券");
                                 $("#selectedCouponAmount").val(0);
                                 $("#selectedCouponCount").val(0);
                             }
@@ -574,7 +565,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170103', ['depends
             //确认代金券按钮
             $(".daijin-sure").click(function () {
                 $(".coupon-box").hide();
-                $(".produce,.surplus,#orderform").show();
+                $(".produce,.surplus,#orderform,#btn_udesk_im").show();
 
             });
         })
