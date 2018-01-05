@@ -69,7 +69,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     <?php } ?>
 </form>
 
-<a href="javascript:void(0)" id="btn_udesk_im" style="display:block; margin-top: 10%;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</a>
+<a href="javascript:void(0)" id="btn_udesk_im" style="display:block; margin-bottom: 10%;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</a>
 
 <script type="text/javascript">
     var csrf;

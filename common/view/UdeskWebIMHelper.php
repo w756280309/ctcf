@@ -65,7 +65,7 @@ JS;
                 width: 100%;
                 text-align: center;
                 margin:0 auto;
-                font-size: 16px;
+                font-size: 14px;
                 color: #000;
                 cursor: pointer;
             }
