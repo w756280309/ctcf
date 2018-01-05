@@ -16,6 +16,7 @@ $this->share = new Share([
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/swiper/swiper-3.4.2.min.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20180102/css/index.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
+<script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/vue.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/swiper/swiper.animate.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/swiper/swiper-3.4.2.min.js"></script>
@@ -118,7 +119,7 @@ $this->share = new Share([
             </div>
 
             <div class="swiper-slide page-four">
-                <div class="content">
+                <div class="content" style="z-index: 10;">
                     <img class="logo" src="<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/logo.png" alt="">
                     <img class="cloud2 ani" swiper-animate-effect="fadeInLeft" swiper-animate-duration="0.5s" swiper-animate-delay="0s" src="<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/cloud_02.png" alt="">
                     <img class="flower2 ani" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.5s" swiper-animate-delay="0s"  src="<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/flower_02.png" alt="">
@@ -236,8 +237,8 @@ $this->share = new Share([
                         <dd class="lf">
                             <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.2s">2017年1月，获得ICP证书</p>
                             <img class="icp ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="1s" swiper-animate-delay="0s" src="<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/icp.png" alt="">
-                            <p class="p2 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.6s">2017年11月，首批接入国家级合同保全的金融平台</p>
-                            <p class="p3 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1s">2017年12月，喜获中信国安战略投资</p>
+                            <p class="p2 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.6s">2017年5月，周年庆单日交易额突破6924万元</p>
+                            <p class="p3 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1s">2017年11月，首批接入国家级合同保全的金融平台</p>
                             <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1.4s">我们将继续努力奉行“稳健 专业 贴心”的价值观与“安全理财，幸福千万家”的使命</p>
                             <p class="p5 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1.8s">未来，温都金服将继续与您携手同行</p>
                         </dd>
@@ -268,6 +269,7 @@ $this->share = new Share([
 
 
 <script>
+    FastClick.attach(document.body);
     var app = new Vue({
         el: '#app',
         data:{

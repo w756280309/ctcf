@@ -5,6 +5,13 @@ $this->title = 'TA的2017年报';
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20180102/css/share.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
+<style>
+    div.new-share {
+        background: url(<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/share-new-bg-1.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+    }
+</style>
 <div class="flex-content new-share" id="app">
     <div class="new-share-nav">
         <div class="new-nav-contain">
