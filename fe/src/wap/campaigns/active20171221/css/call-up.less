@@ -1,0 +1,240 @@
+@q:75rem;
+.active{
+  display:block!important;
+}
+body{
+  position:relative;
+  //left:0;
+  //top:0;
+  //right:0;
+  //bottom:0;
+}
+.flex-content{
+  overflow: hidden;
+  background:url(../images/active-bg2.png) 0 0 no-repeat;
+  -webkit-background-size: 100%;
+  background-size: 100%;
+  height:1334/@q;
+  width:10rem;
+  position: relative;
+  #box-top{
+    display:none;
+    position:fixed;
+    z-index: 6;
+    top:0;
+    left:0;
+    //margin:0 auto;
+    height: 100vh;
+    width:100%;
+    max-width: 750px;
+    background:url(../images/shade-bg.png) no-repeat;
+    .box-top-mid{
+      height: 731/@q;
+      width:560/@q;
+      background:url(../images/shade-contain2.png) 0 0 no-repeat;
+      position:absolute;
+      left:50%;
+      top:50%;
+      //transform:translate(-50%,-50%);
+      margin-left:-280/@q;
+      margin-top:-365/@q;
+      -webkit-background-size: 100%;
+      background-size: 100%;
+      .cue-login{
+        width: 184/@q;
+        height:269/@q;
+        background: url(../images/glim-login.png) 0 0 no-repeat;
+        -webkit-background-size: 100%;
+        background-size: 100%;
+        position:absolute;
+        top:-135/@q;
+        right:-52/@q;
+      }
+      .cue-close{
+        width: 105/@q;
+        height:105/@q;
+        background: url(../images/shade-close.png) 0 0 no-repeat;
+        -webkit-background-size: 100%;
+        background-size: 100%;
+        position:absolute;
+        bottom:-174/@q;
+        left:228/@q;
+      }
+      p.active-state{
+        font-size:26/@q;
+        position:absolute;
+        bottom:22/@q;
+        left:0;
+        width: 100%;
+        color:#ff3939;
+        text-align: center;
+      }
+      .mid-box-contain{
+        padding-top: 150/@q;
+        //text-align: center;
+        font-size:32/@q;
+        color:#9f6b2f;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding-left:29/@q;
+        padding-right:35/@q;
+        ol{
+          li{
+
+            span{
+              width:46/@q;
+              float: left;
+            }
+            p{
+              padding-left:46/@q;
+              -webkit-box-sizing: border-box;
+              -moz-box-sizing: border-box;
+              box-sizing: border-box;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .a-nav{
+    position:fixed;
+    width: 69/@q;
+    height: 205/@q;
+    right:0;
+    top:400/@q;
+    background: url(../images/active-rules.png) 0 0 no-repeat;
+    -webkit-background-size: 100%;
+    background-size: 100%;
+    overflow: hidden;
+    z-index: 6;
+    //font-size: 50px;
+
+    span{
+      line-height:0.5rem;
+      margin:24/@q auto;
+      display: block;
+      width: 35/@q;
+      font-size:26/@q;
+      word-wrap: break-word;
+      letter-spacing: 5/@q;
+      color:#e14742;
+    }
+  }
+  .jackpot-btn{
+    width: 550/@q;
+    height:93/@q;
+    line-height: 93/@q;
+    background:url(../images/jackpot-btn.png) 0 0 no-repeat;
+    -webkit-background-size: 100%;
+    background-size: 100%;
+    margin:590/@q auto 20/@q;
+    text-align: center;
+    color:#d5984e;
+    font-size: 39/@q;
+    letter-spacing: 0.15em;
+    span{
+      letter-spacing: 0.2em;
+      color:#ff3939;
+      font-size:42/@q;
+    }
+  }
+  p.msg{
+    height: 51/@q;
+    line-height: 51/@q;
+    font-size:29/@q;
+    color: #9f6b2f;
+    text-align: center;
+    span{
+      color:#ff3939;
+      font-size:33/@q;
+      letter-spacing: 0.1em;
+    }
+  }
+  .call-progress{
+    margin:33/@q auto 55/@q;
+    width: 698/@q;
+    height:268/@q;
+    background:url(../images/call-progress.png) 0 0 no-repeat;
+    -webkit-background-size: 100%;
+    background-size: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position:relative;
+    ul.ring-bg{
+      height: 90/@q;
+      position:absolute;
+      top:88/@q;
+      left:0;
+      width: 100%;
+      z-index: 2;
+      li{
+        height:100%;
+        width:12.8939828%;
+        margin:0 1.88634%;
+        float: left;
+        background:url(../images/default-avatar-bg.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        position:relative;
+      }
+    }
+    ul.head-portrait{
+      height: 90/@q;
+      position:absolute;
+      top:88/@q;
+      left:0;
+      width: 100%;
+      z-index: 3;
+      li{
+        height:100%;
+        width:12.8939828%;
+        margin:0 1.88634%;
+        float: left;
+        //background:url(../images/default-avatar-bg.png) 0 0 no-repeat;
+        //-webkit-background-size: 100% 100%;
+        //background-size: 100% 100%;
+        position:relative;
+        img{
+          position:absolute;
+          bottom:7/@q;
+          left:12/@q;
+          width: 66/@q;
+          height:66/@q;
+          display:block;
+          margin:0 auto;
+          -webkit-border-radius: 50%;
+          -moz-border-radius: 50%;
+          border-radius: 50%;
+          //background:url(../images/default-avatar.png) 0 0 no-repeat;
+          //-webkit-background-size: 100% 100%;
+          //background-size: 100% 100%;
+        }
+      }
+    }
+    .call-progress-tips{
+      font-size:29/@q;
+      height:29/@q;
+      line-height:29/@q;
+      color:#2d2d2d;
+      position:absolute;
+      right:28/@q;
+      bottom:28/@q;
+    }
+  }
+  div.get-friend-btn{
+    background:url(../images/get-friend-btn.png) 0 0 no-repeat;
+    -webkit-background-size: 100%;
+    background-size: 100%;
+    height: 104/@q;
+    line-height:104/@q;
+    font-size:45/@q;
+    text-align: center;
+    width: 508/@q;
+    margin:0 auto;
+    letter-spacing: 0.1em;
+    color:#f8eea3;
+  }
+}

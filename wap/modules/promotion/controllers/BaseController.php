@@ -185,6 +185,7 @@ class BaseController extends Controller
         $view->params['promoStatus'] = $promoStatus;
     }
 
+    //根据用户I
     public function getWxInfo($id)
     {
         $data = [
@@ -203,6 +204,29 @@ class BaseController extends Controller
             } catch (\Exception $ex) {
                 //不允许获得不到微信头像及昵称时报错
             }
+        }
+
+        return $data;
+    }
+
+    public function getWxsInfo(Array $openIds)
+    {
+        $data = [];
+        if (empty($openIds)) {
+            return $data;
+        }
+
+        try {
+            $openIds = array_values($openIds);
+            $app = Yii::$container->get('weixin_wdjf');
+            $infos = $app->user->batchGet($openIds);
+            if (isset($infos['errcode'])) {
+                return $data;
+            }
+
+            return $infos;
+        } catch (\Exception $ex) {
+            //不允许获得不到微信头像及昵称时报错
         }
 
         return $data;

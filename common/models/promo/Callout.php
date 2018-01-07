@@ -36,4 +36,12 @@ class Callout extends ActiveRecord
             'callerOpenId' => $callerOpenId,
         ]);
     }
+
+    public static function findByPromoUser($promo, $user)
+    {
+        return Callout::find()
+            ->where(['user_id' => $user->id])
+            ->andWhere(['promo_id' => $promo->id])
+            ->andFilterWhere(['<=', 'endTime', $promo->endTime]);
+    }
 }
