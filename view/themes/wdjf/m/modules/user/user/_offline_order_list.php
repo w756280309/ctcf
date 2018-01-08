@@ -14,11 +14,11 @@ use common\utils\StringUtils;
         <div class="loan-title">
             <div class="title-overflow"><?= '【门店】' . $val->loan->title ?></div>
             <?php
-            if ($val->loan->status == '募集中') {
+            if ($type == 2) {
                 $class = ['class' => 'column-title-rg1', 'name' => '募集中'];
-            } else if ($val->loan->status == '收益中') {
+            } else if ($type == 1) {
                 $class = ['class' => 'column-title-rg2', 'name' => '收益中'];
-            } else if ($val->loan->status == '已还清') {
+            } else if ($type == 3) {
                 $class = ['class' => 'column-title-rg', 'name' => '已还清'];
             }
             ?>
@@ -38,15 +38,15 @@ use common\utils\StringUtils;
                         <?= $val->orderDate ?>
                     </span>
                 </p>
-                <span class="info-label"><?php if ($val->loan->status == '收益中') { echo '到期时间';} else if ($val->loan->status == '募集中') { echo '项目期限';} else if ($val->loan->status == '已还清') {echo '还款时间';} ?>：</span>
+                <span class="info-label"><?php if ($type == 1) { echo '到期时间';} else if ($type == 2) { echo '项目期限';} else if ($type == 3) {echo '还款时间';} ?>：</span>
                 <span class="info-val">
-                    <?=  in_array($val->loan->status, ['收益中', '已还清']) ? date('Y-m-d', strtotime($val->loan->finish_date)) : $val->loan->expires . $val->loan->unit ?>
+                    <?=  in_array($type, ['1', '3']) ? date('Y-m-d', strtotime($val->loan->finish_date)) : $val->loan->expires . $val->loan->unit ?>
                 </span>
             </div>
             <?php if ($val->expectedEarn > 0) : ?>
                 <div class="col-xs-4 loan-info2">
                     <p class="info-val"><?= $val->expectedEarn ?>元</p>
-                    <p class="info-label"><?php if ($val->loan->status == '收益中') { echo '预期收益';} else if ($val->loan->status == '已还清') {echo '实际收益';} ?></p>
+                    <p class="info-label"><?php if ($type == 1) { echo '预期收益';} else if ($type == 3) {echo '实际收益';} ?></p>
                 </div>
             <?php endif; ?>
         </div>

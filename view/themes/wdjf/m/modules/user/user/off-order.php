@@ -17,7 +17,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/licai.css?v=20160927', ['depends' =>
 
 ?>
     <script type="text/javascript">
-        var url = '/user/user/myofforder';
+        var url = '/user/user/myofforder?type=<?= $type ?>';
         var tp = '<?= $pages->pageCount ?>';
     </script>
     <script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
