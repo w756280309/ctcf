@@ -487,7 +487,7 @@ class Client
     }
 
     /**
-     * 4.3.5 标的转账[无密]
+     * 4.3.5 标的转账[无密] - 个人用户
      * 用户投标.
      *
      * @param OrderTxInterface $ord
@@ -505,6 +505,32 @@ class Client
             'partic_type' => '01',
             'partic_acc_type' => '01',
             'partic_user_id' => $ord->getEpayUserId(),
+            'amount' => $ord->getPaymentAmount() * 100,
+        ];
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 4.3.5 标的转账[无密] - 企业用户
+     * 用户投标.
+     *
+     * @param OrderTxInterface $ord        订单
+     * @param string           $epayUserId 企业投资者联动账户ID
+     *
+     */
+    public function orderCompanyNopass(OrderTxInterface $ord, $epayUserId)
+    {
+        $data = [
+            'service' => 'project_transfer_nopwd',
+            'notify_url' => $this->hostInfo . "/order/qpay/notify/backend",
+            'order_id' => $ord->getTxSn(),
+            'mer_date' => date('Ymd', $ord->getTxDate()),
+            'project_id' => $ord->getLoanId(),
+            'serv_type' => '01',
+            'trans_action' => '01',
+            'partic_type' => '01',
+            'partic_acc_type' => '02',
+            'partic_user_id' => $epayUserId,
             'amount' => $ord->getPaymentAmount() * 100,
         ];
         return $this->doRequest($data);

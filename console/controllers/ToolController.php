@@ -18,6 +18,7 @@ use common\models\user\User;
 use common\models\user\UserAccount;
 use common\utils\TxUtils;
 use Ding\DingNotify;
+use EasyWeChat\Core\Exception;
 use Yii;
 use yii\console\Controller;
 use yii\db\ActiveQuery;
@@ -759,5 +760,76 @@ group by o.uid
         }
 
         $this->stdout('向标的ID'.$loanId.'贴息'.$amount.'元');
+    }
+
+    public function actionLhwtInvest($loanSn, $money)
+    {
+        $lhwtEpayUserId = Yii::$app->params['ump']['lhwt_merchant_id'];
+        $loan = OnlineProduct::findOne(['sn' => $loanSn]);
+        if (null === $loan) {
+            throw new Exception('标的信息不存在');
+        }
+        if (2 !== $loan->status) {
+            throw new \Exception('当前标的非募集中状态');
+        }
+
+        //请求联动client
+        $ump = \Yii::$container->get('ump');
+
+        //查询联动余额：
+        $merchantInfo = $ump->getMerchantInfo($lhwtEpayUserId);
+        $userBalance = bcdiv($merchantInfo->get('balance'), 100, 2);
+        $userBalancestr = '当前联动投资者账户联动余额为：'.$userBalance.'元'.PHP_EOL;
+        $this->stdout($userBalancestr);
+        Yii::info($userBalancestr, 'recharge_log');
+
+        //查询标的余额
+        $loanInfo = $ump->getLoanInfo($loan->id);
+        if ($loanInfo->isSuccessful()) {
+            $balance = bcdiv($loanInfo->get('balance'), 100, 2);
+        } else {
+            $this->stdout($loanInfo->get('ret_msg'));
+            $balance = 0;
+        }
+        $loanStr = '当前联动标的账户余额为：'.$balance.'元'.PHP_EOL;
+        $this->stdout($loanStr);
+        Yii::info($loanStr, 'recharge_log');
+
+        //联动用户余额与投资金额，投资金额与标的剩余账户余额比较
+        if (bccomp($userBalance, $money, 2) < 0) {
+            Yii::info('用户联动当前余额小于投资余额'.PHP_EOL, 'recharge_log');
+            throw new \Exception('用户联动当前余额小于投资余额');
+        }
+
+        //标的投资金额与剩余可投资金额作比较
+        $restBalance = bcsub($loan->money, $balance, 2);
+        $loanRestStr = '当前联动标的剩余账户余额为：'.$restBalance.'元'.PHP_EOL;
+        Yii::info($loanRestStr, 'recharge_log'.PHP_EOL);
+        $this->stdout($loanRestStr);
+        if (bccomp($money, $restBalance, 2) > 0) {
+            Yii::info('用户投资金额大于标的账户余额'.PHP_EOL, 'recharge_log');
+            throw new \Exception('用户投资金额大于标的账户余额');
+        }
+
+        //虚拟订单对象
+        $order = new OnlineOrder([
+            'online_pid' => $loan->id,
+            'sn' => OnlineOrder::createSN(),
+            'created_at' => time(),
+            'paymentAmount' => $money,
+        ]);
+
+        //企业用户免密投资
+        $ret = $ump->orderCompanyNopass($order, $lhwtEpayUserId);
+        if ($ret->isSuccessful()) {
+            $successStr = '【投资成功】订单编号：'.$order->sn.'，标的sn：'.$loanSn.'，投资者：立合旺通，投资时间:'.$order->created_at.'，投资金额：'.$money.PHP_EOL;
+            Yii::info($successStr, 'recharge_log');
+            $this->stdout($successStr);
+        } else {
+            $this->stdout($ret->get('ret_msg'));
+            $failStr = '【投资失败】订单编号：'.$order->sn.'，标的sn：'.$loanSn.'，投资者：立合旺通，投资时间:'.$order->created_at.'，投资金额：'.$money.PHP_EOL;
+            Yii::info($failStr, 'recharge_log');
+            $this->stdout($failStr);
+        }
     }
 }
