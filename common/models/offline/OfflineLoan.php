@@ -156,13 +156,11 @@ class OfflineLoan extends ActiveRecord
             'income' => '收益中',
             'end' => '已还清',
         ];
-        if (!is_null($this->finish_date) && strtotime(date('Y-m-d')) > strtotime($this->finish_date)) {
+        if ($this->is_jixi && strtotime(date('Y-m-d')) > strtotime($this->finish_date)) {
             return $status['end'];
-        }
-        if (!is_null($this->jixi_time) && strtotime($this->jixi_time) < time() && time() < strtotime($this->finish_date)) {
+        } else if ($this->is_jixi && strtotime(date('Y-m-d')) <= strtotime($this->finish_date)) {
             return $status['income'];
-        }
-        if (is_null($this->jixi_time) || !$this->is_jixi || time() < strtotime($this->jixi_time)) {
+        } else if (!$this->is_jixi) {
             return $status['raise'];
         }
     }
