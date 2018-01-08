@@ -34,7 +34,7 @@ AppAsset::register($this);
                     <?php if (Yii::$app->user->isGuest) { ?>
                         <a class="navbar-link" href="/site/login">登录</a>
                     <?php } else { ?>
-                        <a class="navbar-link" href="/user/useraccount/accountcenter">我的账户</a>
+                        <a class="navbar-link" href="/user/useraccount/accountcenter"><?= Yii::$app->user->getIdentity()->org_name ?></a>
                         <a class="navbar-link" href="javascript:void(0)" onclick="$('#logout').submit();">退出登录</a>
                         <form method="post" id="logout" action="/site/logout">
                             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
