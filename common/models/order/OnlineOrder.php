@@ -57,7 +57,7 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     public $drawpwd;
     private $_user = false;
 
-    private $baoquanＤownloadLink;//保全合同下载链接
+    private $baoquanDownloadLink;//保全合同下载链接
 
     /**
      * {@inheritdoc}
@@ -389,12 +389,12 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     //获取保全合同下载链接
     public function getBaoquanDownloadLink()
     {
-        if (is_null($this->baoquanＤownloadLink)) {
+        if (is_null($this->baoquanDownloadLink)) {
             $baoQuan = $this->fetchBaoQuan();
 
-            $this->baoquanＤownloadLink = is_null($baoQuan) ? null : Client::contractFileDownload($baoQuan);
+            $this->baoquanDownloadLink = is_null($baoQuan) ? null : Client::contractFileDownload($baoQuan);
         }
-        return $this->baoquanＤownloadLink;
+        return $this->baoquanDownloadLink;
     }
 
     public function getCoupon()
