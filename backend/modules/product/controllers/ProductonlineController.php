@@ -404,6 +404,36 @@ class ProductonlineController extends BaseController
             'issuer' => $this->issuerInfo(),
         ]);
     }
+    //高级编辑页面（有权限的操作人员在标的的整个过程中均可编辑保存）
+    public function actionSeniorEdit($id)
+    {
+        if (empty($id)) {
+            throw $this->ex404();
+        }
+        $model = $this->findOr404(OnlineProduct::class, $id);
+        $model->scenario = 'senior_edit';
+        $data = Yii::$app->request->post();
+        if ($model->load($data) && $model->validate()) {
+            if (!$model->hasErrors()) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    $model->save(false);
+                    $log = AdminLog::initNew($model);
+                    $log->save();
+                    $transaction->commit();
+                    return $this->redirect(['list']);
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    $model->addError('title', '标的添加异常'.$e->getMessage());
+                }
+            }
+        }
+
+        return $this->render('senior_edit', [
+            'model' => $model,
+            'issuer' => $this->issuerInfo(),
+        ]);
+    }
 
     /**
      * 上线操作.
@@ -552,12 +582,13 @@ class ProductonlineController extends BaseController
         }
         $pages = new Pagination(['totalCount' => $totalCount, 'pageSize' => '20']);
         $models = $query->offset($pages->offset)->limit($pages->limit)->all();
-
+        $userAuthSeniorEdit = intval(OnlineProduct::hasAuthSeniorEdit());
         return $this->render('list', [
             'models' => $models,
             'pages' => $pages,
             'loanStatus' => $loanStatus,
             'loanSearch' => $loanSearch,
+            'userAuthSeniorEdit' => $userAuthSeniorEdit
         ]);
     }
 

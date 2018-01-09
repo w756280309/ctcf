@@ -3,6 +3,8 @@
 namespace common\models\product;
 
 use common\lib\product\ProductProcessor;
+use common\models\adminuser\AdminAuth;
+use common\models\adminuser\Auth;
 use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineOrder;
 use common\models\payment\PaymentLog;
@@ -131,6 +133,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
             'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status', 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn', 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates', 'isDailyAccrual'],
+            'senior_edit' => ['title', 'internalTitle', 'kuanxianqi', 'issuerSn', 'pkg_sn'],
         ];
     }
 
@@ -284,6 +287,24 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
             }
         }
+    }
+    //判断用户是否有编辑主标题，副标题，宽限期，资产包编号，发行方编号的权限
+    public static function hasAuthSeniorEdit()
+    {
+        $admin = Yii::$app->user->getIdentity();
+        $admin_id = $admin->getId();
+        if ('R001' === $admin->role_sn) {
+            return true;
+        }
+        $path = 'product/productonline/senior-edit';
+        $auth_table = Auth::tableName();
+        $admin_auth_table = AdminAuth::tableName();
+        $adminAuth = AdminAuth::find()
+            ->innerJoin($auth_table, $admin_auth_table.'.auth_sn='.$auth_table.'.sn')
+            ->where(['admin_id' => $admin_id])
+            ->andWhere(['path' => $path])
+            ->one();
+        return !empty($adminAuth);
     }
 
     /**
