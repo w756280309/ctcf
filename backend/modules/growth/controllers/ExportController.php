@@ -308,6 +308,86 @@ and p.isTest = 0)',
                 'itemLabels' => ['姓名', '手机号', '累计交易金额', '最后一次投资日期'],
                 'itemType' => ['string', 'string', 'string', 'date'],
             ],
+            'xs_due_list_export' => [
+                'key' => 'xs_due_list_export',
+                'title' => '新手标数据导出',
+                'content' => '导出新手标数据信息',
+                'sql' => 'select 
+u.real_name 姓名,
+u.safeMobile 手机号,
+from_unixtime(o.refund_time) 到期时间,
+o.benxi 到期金额,a.name 分销商
+from online_repayment_record o 
+inner join online_product p on o.online_pid = p.id 
+inner join user u on u.id = o.uid 
+left join user_affiliation ua on ua.user_id = o.uid 
+left join affiliator a on a.id = ua.affiliator_id 
+where date(from_unixtime(o.refund_time)) >= :startDate 
+and date(from_unixtime(o.refund_time)) <= :endDate 
+and o.status in (1,2) 
+and p.is_xs = 1 
+and p.isTest = 0 
+order by o.refund_time asc',
+                'params' => [
+                    'startDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'startDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-2 day')),//参数的默认值
+                        'title' => '开始日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'endDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'endDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-1 day')),//参数的默认值
+                        'title' => '结束日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['姓名', '手机号', '到期时间', '到期金额', '分销商'],
+                'itemType' => ['string', 'string', 'date', 'string', 'string'],
+            ],
+            'export_referral_user_count' => [
+                'key' => 'export_referral_user_count',
+                'title' => '渠道用户统计信息导出',
+                'content' => '渠道用户统计信息导出',
+                'sql' => 'select 
+u.campaign_source 分销渠道,
+count(distinct(u.id)) 注册人数, 
+count(distinct(o.uid)) 购买人数, 
+sum(o.order_money) 购买金额 
+from user u 
+left join online_order o on u.id = o.uid 
+where u.campaign_source in (:campaignSource) 
+and date(from_unixtime(u.created_at)) >= :startDate 
+and date(from_unixtime(u.created_at)) <= :endDate 
+group by u.campaign_source',
+                'params' => [
+                    'startDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'startDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-2 day')),//参数的默认值
+                        'title' => '开始日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'endDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'endDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-1 day')),//参数的默认值
+                        'title' => '结束日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'campaignSource' => [//参数列表， key 是参数名， 不可为空
+                        'name' => '渠道信息',//参数名
+                        'type' => 'string',//参数的数据类型
+                        'value' => 'wzdsbgd,wzcjgd,wdjfgd',//参数的默认值
+                        'title' => '渠道用户统计信息导出',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['分销渠道', '注册人数', '购买人数', '购买金额'],
+                'itemType' => ['string', 'string', 'string', 'string'],
+            ],
         ];
         parent::init();
     }
