@@ -721,6 +721,35 @@ class Client
     }
 
     /**
+     * 4.4.2 充值申请 - .
+     *
+     * @param QpayTxInterface $recharge 充值记录对象
+     * @param string          $payType  支付方式 取值范围：B2BBANK（企业网银）,B2CDEBITBANK（个人借记卡网银）
+     * @param string          $merId    被充值企业资金账户托管平台商户号
+     * @param string          $gateId   发卡行编号
+     */
+    public function OrgRechargeApplyLhwt(QpayTxInterface $recharge, $payType, $merId, $gateId)
+    {
+        $data = [
+            'service' => 'mer_recharge',
+            'ret_url' => $this->hostInfo . "/user/bpay/brecharge/frontend",
+            'notify_url' => $this->hostInfo . "/user/bpay/brecharge/backend-notify",
+            'order_id' => $recharge->getTxSn(),
+            'mer_date' => $recharge->getTxDate(),
+            'pay_type' => $payType,
+            'recharge_mer_id' => $merId,
+            'account_type' => '01',
+            'amount' => $recharge->getAmount(),
+            'gate_id' => $gateId,
+            'user_ip' => $recharge->getClientIp(),
+            'com_amt_type' => 2,
+        ];
+
+        $params = $this->buildQuery($data);
+        header('Location:'.$this->apiUrl.'?'.$params);
+    }
+
+    /**
      * 4.5.1 充值交易查询接口.
      *
      * @param type $txSn   商户订单号

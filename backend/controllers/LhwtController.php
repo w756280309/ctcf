@@ -43,6 +43,6 @@ class LhwtController extends BaseController
             'fund' => $money,
         ]);
         file_put_contents($file, date('Y-m-d H:i:s') . "|  正在请求联动进行充值，充值金额：{$recharge->fund}，充值时间：{$recharge->created_at}充值订单sn:{$recharge->sn} \n\n", FILE_APPEND);
-        $ump->OrgRechargeApply($recharge, 'B2BBANK', $platformUserId, 'CMB');
+        $ump->OrgRechargeApplyLhwt($recharge, 'B2BBANK', $platformUserId, 'CMB');
     }
 }
