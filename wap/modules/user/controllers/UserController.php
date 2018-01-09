@@ -283,12 +283,10 @@ class UserController extends BaseController
                 ->innerJoin('offline_loan', 'offline_loan.id = offline_order.loan_id')
                 ->where(['user_id' => $user->offlineUserId, 'isDeleted' => false]);
             if ($type == 1) {   //收益中
-                $query->andWhere(['offline_loan.is_jixi' => true])
-                    ->andWhere(['>=', 'offline_loan.finish_date', date('Y-m-d')])
+                $query->andWhere(['>=', 'offline_loan.finish_date', date('Y-m-d')])
                     ->orderBy(['offline_loan.finish_date' => SORT_ASC]);
             } else if ($type == 3) {    //已还清
-                $query->andWhere(['offline_loan.is_jixi' => true])
-                    ->andWhere(['<', 'offline_loan.finish_date', date('Y-m-d')])
+                $query->andWhere(['<', 'offline_loan.finish_date', date('Y-m-d')])
                     ->orderBy(['offline_order.orderDate' => SORT_ASC]);
             }
             $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);
