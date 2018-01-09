@@ -1,5 +1,6 @@
 <?php
 use common\models\user\QpayBinding;
+use common\models\bank\BankCardUpdate;
 use yii\grid\GridView;
 
 echo GridView::widget([
@@ -58,6 +59,16 @@ echo GridView::widget([
                 return '<a class="btn btn-primary check-ump-info" href="/user/bank-card/ump-info?id='.$data->id.'&type='.($data instanceof QpayBinding ? 'b' : 'u').'">查询流水在联动状态</a>';
             }
         ],
+        [
+            'label' => '同步换卡信息',
+            'format' => 'html',
+            'value' => function ($data) {
+                if ($data instanceof BankCardUpdate && in_array($data->status, [0,3])) {
+                    $label = '<a class="btn btn-primary update-bank-card-status" href="/user/bank-card/update-bank-card-status?id='.$data->id.'">换卡</a>';
+                }
+                return $label;
+            }
+        ]
     ],
 ])
 ?>
@@ -91,6 +102,20 @@ echo GridView::widget([
             }
         });
 
+        $('.update-bank-card-status').on('click', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            if (url) {
+                var xhr = $.get(url, function (data) {
+                    if (data.code == 1) {
+                        alert(data.message)
+                    } else {
+                        alert(data.message)
+                    }
+                    parent.location.href="/user/user/detail?id=<?= $uid ?>&tabClass=<?= $tabClass ?>"
+                })
+            }
+        })
         $('.bank_card_pager ul li').on('click', 'a', function(e) {
             e.preventDefault();
             getBindList($(this).attr('href'));

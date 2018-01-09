@@ -14,7 +14,7 @@ class BankCardController extends BaseController
     /**
      * 银行卡号列表.
      */
-    public function actionList($uid)
+    public function actionList($uid, $tabClass = null)
     {
         $qpay = QpayBinding::find()->where(['uid' => $uid])->all();
         $update = BankCardUpdate::find()->where(['uid' => $uid])->all();
@@ -28,7 +28,11 @@ class BankCardController extends BaseController
             ],
         ]);
 
-        return $this->renderFile('@backend/modules/user/views/bank-card/list.php', ['dataProvider' => $dataProvider, 'uid' => $uid]);
+        return $this->renderFile('@backend/modules/user/views/bank-card/list.php', [
+            'dataProvider' => $dataProvider,
+            'uid' => $uid,
+            'tabClass' =>$tabClass,
+        ]);
     }
 
     /**
@@ -74,6 +78,21 @@ class BankCardController extends BaseController
                 .'返回信息：'.$resp->get('ret_msg');
 
             return ['code' => 1, 'message' => $mess];
+        }
+    }
+
+    //更新客户换卡状态
+    public function actionUpdateBankCardStatus($id)
+    {
+        $status = BankCardUpdate::updateAll([
+            'status' => BankCardUpdate::STATUS_FAIL,
+            'updated_at' => time()
+        ], ['id' => $id]);
+
+        if ($status) {
+            return ['code' => 1, 'message' => '换卡同步成功'];
+        } else {
+            return ['code' => 0, 'message' => '换卡同步失败'];
         }
     }
 }
