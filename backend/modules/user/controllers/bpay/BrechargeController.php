@@ -11,4 +11,9 @@ class BrechargeController extends Controller
     {
         return $this->redirect('/tool/index');
     }
+
+    public function actionFrontend()
+    {
+        return $this->redirect('/lhwt/index');
+    }
 }

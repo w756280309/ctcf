@@ -812,16 +812,44 @@ group by o.uid
         }
 
         //虚拟订单对象
+        $epayUser = EpayUser::find()
+            ->where(['epayUserId' => $lhwtEpayUserId])
+            ->one();
+        $uid = $epayUser->appUserId;
         $order = new OnlineOrder([
             'online_pid' => $loan->id,
             'sn' => OnlineOrder::createSN(),
+            'uid' => $uid,
+            'yield_rate' => $loan->yield_rate,
             'created_at' => time(),
+            'order_money' => $money,
+            'order_time' => time(),
             'paymentAmount' => $money,
+            'status' => 1,
         ]);
 
         //企业用户免密投资
         $ret = $ump->orderCompanyNopass($order, $lhwtEpayUserId);
         if ($ret->isSuccessful()) {
+            $finishRate = bcdiv(bcadd($balance, $money, 2), $loan->money, 2);
+            if (bccomp($finishRate, 1, 2) < 0) {
+                $sql = "update online_product set funded_money=funded_money+:fundedMoney,finish_rate=:finishRate where id=:id";
+                Yii::$app->db->createCommand($sql, [
+                    'fundedMoney' => $money,
+                    'finishRate' => $finishRate,
+                    'id' => $loan->id,
+                ])->execute();
+            } else {
+                $sql = "update online_product set funded_money=funded_money+:fundedMoney,full_time=:fullTime,finish_rate=:finishRate where id=:id";
+                Yii::$app->db->createCommand($sql, [
+                    'fundedMoney' => $money,
+                    'fullTime' => time(),
+                    'finishRate' => $finishRate,
+                    'id' => $loan->id,
+                ])->execute();
+            }
+
+            $order->save(false);
             $successStr = '【投资成功】订单编号：'.$order->sn.'，标的sn：'.$loanSn.'，投资者：立合旺通，投资时间:'.$order->created_at.'，投资金额：'.$money.PHP_EOL;
             Yii::info($successStr, 'recharge_log');
             $this->stdout($successStr);
