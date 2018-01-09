@@ -202,6 +202,7 @@ class UserController extends BaseController
                 ->innerJoinWith('loan')
                 ->where(["$o.uid" => $user->id, "$o.status" => Ord::STATUS_SUCCESS])
                 ->andWhere(["$l.status" => $status])
+                ->andWhere(["$l.is_jixi" => false])
                 ->orderBy("$o.id desc");
 
             $count = $query->count();

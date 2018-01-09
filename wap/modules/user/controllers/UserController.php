@@ -210,6 +210,7 @@ class UserController extends BaseController
                 ->innerJoinWith('loan')
                 ->where(["$o.uid" => $user->id, "$o.status" => Ord::STATUS_SUCCESS])
                 ->andWhere(["$l.status" => [Loan::STATUS_NOW, Loan::STATUS_FULL, Loan::STATUS_FOUND]])
+                ->andWhere(["$l.is_jixi" => false])
                 ->orderBy("$o.id desc");
 
             $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);
