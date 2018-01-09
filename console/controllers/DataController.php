@@ -9,6 +9,7 @@ use common\models\draw\DrawManager;
 use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineFangkuan;
+use common\models\order\OnlineRepaymentRecord;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\promo\Award;
@@ -680,5 +681,37 @@ having orderAsset >= 0";
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
         exit();
+    }
+
+    /**
+     * 截止到某一日期的累计收益金额cache，用户ID为键（DbCache）
+     * 缓存暂定义为1年
+     *
+     * @param string $expireDate 截止日期
+     */
+    public function actionProfitCache($expireDate)
+    {
+        $record = OnlineRepaymentRecord::find()
+                ->select('uid, sum(lixi) as total')
+                ->where(['status' => [
+                    OnlineRepaymentRecord::STATUS_DID,
+                    OnlineRepaymentRecord::STATUS_BEFORE,
+                ]])->andFilterWhere(['<=', 'date(from_unixtime(refund_time))', $expireDate])
+                ->groupBy(['uid'])
+                ->orderBy(['total' => SORT_ASC])
+                ->asArray()
+                ->all();
+
+        $affectedRows = Yii::$app->db->createCommand()
+            ->batchInsert('annual_report', [
+                'user_id',
+                'totalProfit',
+            ], $record)->execute();
+        if ($affectedRows > 0) {
+            $this->stdout('写入累计收益成功,截止日为'.$expireDate);
+            return self::EXIT_CODE_NORMAL;
+        }
+
+        $this->stdout('写入失败');
     }
 }

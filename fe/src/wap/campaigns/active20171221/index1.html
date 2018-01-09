@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>老拉新活动-首页</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="./css/index.css?v=1.2">
+    <script src="../../libs/fastclick.js"></script>
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <script src="../../libs/layer_mobile/layer.js"></script>
+    <script src="../../libs/handlebars-v4.0.10.js"></script>
+    <script src="../../libs/vue.min.js"></script>
+    <style>
+        [v-cloak]{display: none}
+    </style>
+</head>
+<body>
+<div class="flex-content" ref="flexContent" id="app">
+    <input type="hidden" name="promoStatus" value="2">
+    <input type="hidden" name="isLoggedin" value="true">
+    <!--是否投资-->
+    <input type="hidden" name="isInvest" value="0">
+    <!--是否参加了活动-->
+    <!--<input type="hidden" name="isJoin" value="false">-->
+    <!--正常活动规则的弹窗-->
+    <div class="box-top" :class="{'active':Active}">
+        <div class="box-top-mid">
+            <a href="#" class="cue-login"></a>
+            <div @click="closeBox" class="cue-close">
+            </div>
+            <p class="active-state">本次活动最终解释权归温都金服所有</p>
+            <div class="mid-box-contain">
+                <ol>
+                   <li class="clearfix"><span>1、</span><p>活动时间：2017年12月24日至2018年1月8日；</p></li>
+                    <li class="clearfix"><span>2、</span><p>活动期间每邀请1位好友通过微信端注册并完成首投，即可获得18.8元奖励金；</p></li>
+                    <li class="clearfix"><span>3、</span><p>活动期间奖励金限量1000份，单个用户最多获得6份奖励金；</p></li>
+                    <li class="clearfix"><span>4、</span><p>每笔奖励金将立即发放到账户余额，请注意查收。</p></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+     <!--用户充值为0的弹窗-->
+    <div class="box-top box-top2" :class="{'active':Invest}">
+        <div class="box-top-mid">
+            <a href="#" class="cue-login"></a>
+            <div @click="closeBox" class="cue-close">
+            </div>
+            <div class="mid-box-contain">
+                <p class="mid-box-hint">投资后才能开启活动哦！快去投资吧！</p>
+                <a class="get-qualification" href="">获取资格</a>
+            </div>
+        </div>
+    </div>
+    <a @click="callOrder" class="a-bitton-convene">生成我的召集令</a>
+    <a @click="showBg" class="a-nav"><span>活动规则</span></a>
+
+</div>
+<script>
+    window.onload=function(){
+        FastClick.attach(document.body);
+    }
+//    弹窗组件
+    function toastCenter(val, active) {
+        var $alert = $('<div class="error-info" style="display: block; position: fixed;font-size: .4rem;"><div>' + val + '</div></div>');
+        $('body').append($alert);
+        $alert.find('div').width($alert.width());
+        setTimeout(function () {
+            $alert.fadeOut();
+            setTimeout(function () {
+                $alert.remove();
+            }, 200);
+            if (active) {
+                active();
+            }
+        }, 2000);
+    };
+    var that=this;
+//    获取的是字符串类型的true false
+    var promoStatus = $('input[name=promoStatus]').val();
+    var isLoggedin = $('input[name=isLoggedin]').val();
+    var isInvest = $('input[name=isInvest]').val();
+    var isJoin = $('input[name=isJoin]').val();
+//    console.log(isInvest);
+    var app=new Vue({
+      el:'#app',
+//        beforeCreate:function(){
+//
+//        },
+//        created:function(){
+//           this.nextlogin();
+//        },
+        mounted:function(){
+//           判断登录状态及操作
+//            this.showLoginPop();
+ //           判断活动状态及操作
+            this.showPromoStatus();
+        },
+
+      data:{
+          promoStatus:promoStatus,
+          isLoggedin:isLoggedin,
+          isInvest:isInvest,
+//          isJoin:isJoin,
+          Active:false,
+          Invest:false,
+      },
+
+      methods:{
+//         判断登录状态
+          showLoginPop: function() {
+              if (this.isLoggedin === 'true') { //已登录
+                  // 登录后的操作
+
+              } else if (this.isLoggedin === 'false') {
+                  that.toastCenter('未登录');
+              }
+          },
+//          判断活动状态
+          showPromoStatus: function() { //活动状态
+              if (this.promoStatus == 0){ //进行中
+
+                  // 实际操作
+                  return false;
+              } else if (this.promoStatus == 1) {
+                  layer.open({
+                      content: '活动未开始'
+                      ,skin: 'msg'
+                      ,time: 2 //2秒后自动关闭
+                  });
+              } else if (this.promoStatus == 2) {
+                  layer.open({
+                      content: '活动已结束'
+                      ,skin: 'msg'
+                      ,time: 2 //2秒后自动关闭
+                  });
+              }
+          },
+//          点击生成召唤令
+          callOrder:function(){
+              if(this.isLoggedin === 'false'){
+
+              }else if(this.isLoggedin === 'true'){
+
+                  if(this.isInvest>0){
+//                       进入进度页
+//                      发请求改变是否参加过活动的值
+//                      $.ajax({});
+                       history.replaceState(null,'title','./call-up.html');
+                      location.href='call-up.html';
+                  }else{
+//                        未投资的提示去投资,并显示弹窗
+                      this.Invest=true;
+                      this.$refs.flexContent.addEventListener('touchmove',this.bodyScroll,false);
+                  }
+              }
+          },
+//          点击活动详情显示弹窗
+          showBg:function(){
+              this.Active=true;
+              this.$refs.flexContent.addEventListener('touchmove',this.bodyScroll,false);
+          },
+ //          点击关闭按钮关闭弹窗
+          closeBox:function(){
+              this.Active=false;
+              this.Invest=false;
+              this.$refs.flexContent.removeEventListener('touchmove',this.bodyScroll,false);
+          },
+          bodyScroll: function(e){
+              var e=e||window.event;
+              e.preventDefault();
+          },
+//
+      }
+    })
+</script>
+</body>
+</html>

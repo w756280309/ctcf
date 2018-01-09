@@ -15,7 +15,7 @@ use yii\web\JqueryAsset;
 
 $this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js?v=20170306', ['depends' => JqueryAsset::class, 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20180102', ['depends' => WapAsset::class]);
 ?>
 <div class="container">
     <!--invest-title-->
@@ -67,18 +67,20 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
                     <div class="information-content-left">认购日期</div>
                     <div class="information-content-right"><?= $model->orderDate ?></div>
                 </li>
+                <?php if ($model->loan->status != '募集中') : ?>
                 <li>
                     <div class="information-content-left">起息日期</div>
-                    <div class="information-content-right"><?= mb_substr($model->loan->jixi_time, 0, 10) ?></div>
+                    <div class="information-content-right"><?= $model->valueDate ?: date('Y-m-d', strtotime($model->loan->jixi_time)) ?></div>
                 </li>
                 <li>
                     <div class="information-content-left">项目期限</div>
                     <div class="information-content-right"><?= $model->loan->expires . $model->loan->unit ?></div>
                 </li>
                 <li>
-                    <div class="information-content-left">预期收益</div>
+                    <div class="information-content-left"><?php if ($model->loan->status == '收益中') {echo '预期收益';} else if ($model->loan->status == '已还清') {echo '实际收益';} ?></div>
                     <div class="information-content-right"><?= StringUtils::amountFormat3($model->expectedEarn) ?>元</div>
                 </li>
+                <?php endif; ?>
                 <li>
                     <div class="information-content-left">还款方式</div>
                     <div class="information-content-right"><?= Yii::$app->params['refund_method'][$model->loan->repaymentMethod] ?></div>
@@ -115,6 +117,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
         </div>
     </div>
     <?php endif; ?>
+    <?php if ($model->loan->status != '募集中') : ?>
     <div class="row" id="subscription-box">
         <div class="col-xs-12">
             <a href="#" class="subscription-title">
@@ -131,4 +134,5 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20170306', ['d
             </a>
         </div>
     </div>
+    <?php endif;?>
 </div>

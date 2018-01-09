@@ -18,7 +18,6 @@ class AnalyticsHelper
             $pkId = \Yii::$app->params['analytics_pk_'.CLIENT_TYPE.'_id'];
         }
         $gaId = \Yii::$app->params['analytics_ga_id'];
-        $gioId = \Yii::$app->params['analytics_gio_id'];
 
         $_js = <<<JS
 var _paq = _paq || [];
@@ -54,20 +53,6 @@ JS;
     var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
     g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
   })();
-
-var _vds = _vds || [];
-window._vds = _vds;
-(function(){
-    _vds.push(['setAccountId', '$gioId']);
-    (function() {
-        var vds = document.createElement('script');
-        vds.type='text/javascript';
-        vds.async = true;
-        vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(vds, s);
-    })();
-})();
 JS;
 
         $viewObj->registerJs($_js, View::POS_HEAD, 'body_close');

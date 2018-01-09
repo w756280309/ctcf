@@ -205,8 +205,14 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $this->layout = 'normal';
+        $user = Yii::$app->user->getIdentity();
+        if (!is_null($user)) {
+            $totalAssets = $user->jGMoney;
+        } else {
+            $totalAssets = 0;
+        }
         //热门活动
-        $hotActs = Adv::fetchHomeBanners($is_m = 1);
+        $hotActs = Adv::fetchHomeBanners($is_m = 1, $totalAssets);
 
         //开屏图
         $queryKaiping = $this->advQuery()
@@ -223,6 +229,7 @@ class SiteController extends Controller
                 'status' => News::STATUS_PUBLISH,
                 'allowShowInList' => true,
             ])
+            ->andWhere(['<=', 'investLeast', $totalAssets])
             ->orderBy(['news_time' => SORT_DESC])
             ->limit(3)
             ->all();

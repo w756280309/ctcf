@@ -75,7 +75,13 @@ class SiteController extends Controller
         //轮播图展示
         $now = date('Y-m-d H:i:s');
         $type = Adv::TYPE_LUNBO;
-        $adv = Adv::fetchHomeBanners();
+        $user = Yii::$app->user->getIdentity();
+        if (!is_null($user)) {
+            $totalAssets = $user->jGMoney;
+        } else {
+            $totalAssets = 0;
+        }
+        $adv = Adv::fetchHomeBanners($is_m = false, $totalAssets);
         $ic = ItemCategory::tableName();
         $n = News::tableName();
         $c = Category::tableName();
@@ -107,6 +113,7 @@ class SiteController extends Controller
             ->innerJoin($ic, "$n.id = $ic.item_id")
             ->leftJoin($c, "$ic.category_id = $c.id")
             ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => "info"])
+            ->andWhere(['<=', "$n.investLeast", $totalAssets])
             ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC])
             ->limit(5)
             ->all();

@@ -43,7 +43,7 @@ class OrderController extends BaseController
         $coupons = [];
         $validCoupons = [];
 
-        if ($deal->allowUseCoupon) {
+        if ($deal->allowUseCoupon || $deal->allowRateCoupon) {  //修改T857问题
             $validCoupons = UserCoupon::fetchValid($user, null, $deal);
 
 //            if (Yii::$app->session->has('loan_coupon')) {

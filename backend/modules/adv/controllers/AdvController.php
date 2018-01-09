@@ -73,7 +73,6 @@ class AdvController extends BaseController
             && $model->validate()
             && $this->adv($model, $showOnPc)
         ) {
-
             if ($model->showOnPc) {
                 $model->isDisabledInApp = 0;
             }

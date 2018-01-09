@@ -151,6 +151,7 @@ class Award extends ActiveRecord
         $award = self::initNew($user, $promo, $ticket);
         $award->ref_type = self::TYPE_TRANSFER;
         $award->ref_id = $transfer->id;
+        $award->amount = $transfer->amount;
         $award->reward_id = is_null($reward) ? null : $reward->id;
 
         return $award;
@@ -180,5 +181,12 @@ class Award extends ActiveRecord
         }
 
         return $query;
+    }
+
+    public static function findByPromoUser($promo, $user)
+    {
+        return Award::find()
+            ->where(['promo_id' => $promo->id])
+            ->andWhere(['user_id' => $user->id]);
     }
 }

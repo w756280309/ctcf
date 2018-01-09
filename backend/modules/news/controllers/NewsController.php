@@ -95,7 +95,7 @@ class NewsController extends BaseController
                 }
 
                 $model = $this->updateAllowShowInList($model);
-
+                $model->investLeast = $model->investLeast ?: 0;
                 if ($model->save(false)) {
                     return $this->redirect(['index']);
                 }

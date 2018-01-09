@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>老拉新活动-召集进度页</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="./css/call-up.css?v=1.112">
+    <script src="../../libs/fastclick.js"></script>
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <!--<script src="../../libs/handlebars-v4.0.10.js"></script>-->
+    <script src="../../libs/vue.min.js"></script>
+    <!--<script src="../../common/js/weixin-share-tips.js"></script>-->
+    <style>
+        [v-cloak]{display: none}
+    </style>
+</head>
+<body>
+<div class="flex-content" id="app">
+    <!--<input type="hidden" name="isLoggedin" value="true">-->
+    <div id="box-top" :class="{'active':Active}">
+        <div class="box-top-mid">
+            <a href="#" class="cue-login"></a>
+            <div @click="closeBox" class="cue-close">
+            </div>
+            <p class="active-state">本次活动最终解释权归温都金服所有</p>
+            <div class="mid-box-contain">
+                <ol>
+                    <li class="clearfix"><span>1、</span><p>活动时间：2017年12月24日至2018年1月8日；</p></li>
+                    <li class="clearfix"><span>2、</span><p>活动期间每邀请1位好友通过微信端注册并完成首投，即可获得18.8元奖励金；</p></li>
+                    <li class="clearfix"><span>3、</span><p>活动期间奖励金限量1000份，单个用户最多获得6份奖励金；</p></li>
+                    <li class="clearfix"><span>4、</span><p>每笔奖励金将立即发放到账户余额，请注意查收。</p></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <a @click="showBg" class="a-nav"><span>活动规则</span></a>
+    <div class="jackpot-btn">奖池已提取：<span v-cloak v-text="msg"></span>元</div>
+    <p class="msg">每召集1位小伙伴完成首投, </p>
+    <p class="msg">奖池将放入<span>18.8元</span>现金红包哦！</p>
+    <div class="call-progress" id="call-progress">
+        <ul class="ring-bg">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ul class="head-portrait">
+            <li v-for="(item, i) in items" :key="i">
+                <img :src=item.person  alt="">
+            </li>
+            <!--<li><img src="./images/default-avatar.png" alt=""></li>-->
+            <!--<li><img src="" alt=""></li>-->
+            <!--<li><img src="" alt=""></li>-->
+            <!--<li><img src="" alt=""></li>-->
+            <!--<li><img src="" alt=""></li>-->
+            <!--<li><img src="" alt=""></li>-->
+        </ul>
+        <div class="call-progress-tips">小提示：每位用户最多召集6位好友</div>
+    </div>
+    <!--<div @click="callFriend" class="get-friend-btn">召集好友</div>-->
+    <div @click="weixinShare" class="get-friend-btn share">召集好友</div>
+
+    <div v-cloak v-if="isShowMask" @touchstart="removeMask" style="position: fixed;left: 0;bottom:0;width: 100%;height: 100%;background: #000;opacity: 0.6;z-index: 11;" >
+        <div style="position: fixed;left: 0;bottom:0;width: 100%;height: 100%;z-index: 12;text-align: right;">
+            <img style="float: right;width: 80%;" src="./images/share1.png" alt="">
+        </div>
+    </div>
+
+</div>
+<script>
+    window.onload = function () {
+        FastClick.attach(document.body);
+    }
+//        var isLoggedin = $('input[name=isLoggedin]').val();
+    var app = new Vue({
+        el: '#app',
+        created: function () {
+//            发请求获取钱数
+            this.msg = 199.9;
+//            根据获取的数据来判断有没有获取到头像，没获取到就用默认的头像
+            for (var i = 0; i < this.items.length; i++) {
+                if (this.items[i].person == null || undefined || '') {
+                    this.$set(this.items[i], 'person', './images/default-avatar.png');
+                }
+            }
+
+            //console.log(this.items);
+        },
+        mounted:function(){
+//             页面布局优化，针对非移动端
+//          if(window.screen.availWidth){
+//            if(window.screen.availWidth>750){
+//             $('#box-top').css('marginLeft',(window.screen.availWidth-750)/2+'px');
+//             $('.a-nav').css('right',(window.screen.availWidth-750)/2+'px');
+//            }
+//          }
+        },
+        data: {
+            Active: false,
+//            已获取的奖励
+            msg: 11,
+//            登录状态
+//            isLoggedin:isLoggedin,
+            isShowMask:false,
+
+            items: [
+                {person: './images/active-bg.png'},
+                {person: './images/active-index-button.png'},
+                {},
+                {person: null},
+                {person: './images/active-index-button.png'},
+
+            ],
+
+        },
+        methods: {
+            weixinShare:function(){
+                console.log(navigator.userAgent);
+                if(navigator.userAgent.indexOf('MicroMessenger') > -1 ) {
+                    this.isShowMask = true;
+                }
+            },
+            removeMask:function () {
+                this.isShowMask = false;
+            },
+            showBg: function () {
+                this.Active = true;
+                $('.flex-content').bind('touchmove', function (e) {
+                    var e = e || window.event;
+                    e.preventDefault();
+                })
+            },
+            closeBox: function () {
+                this.Active = false;
+                $('.flex-content').unbind('touchmove');
+            }
+        }
+    })
+
+
+</script>
+</body>
+</html>

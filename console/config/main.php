@@ -20,6 +20,17 @@ return [
                 ],
                 [
                     'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'categories' => ['recharge_log'],
+                    'logFile' => '@app/runtime/logs/borrower/recharge'. date('Ymd').'.log',
+                    'maxFileSize' => 1024*2,
+                    'logVars' => ['trace'],
+                    'prefix' => function ($message) {
+                        return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    }
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
                     'levels' => ['trace'],
                     'categories' => ['sms'],
                     'logFile' => '@app/runtime/logs/sms/sms'. date('Ymd').'.log',

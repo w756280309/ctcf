@@ -269,12 +269,28 @@ class UserController extends BaseController
      * 线下理财
      *
      */
-    public function actionMyofforder($page = 1, $backUrl = null)
+    public function actionMyofforder($type = 1, $page = 1, $backUrl = null)
     {
+        if (!in_array($type, ['1', '3'])) {
+            throw $this->ex404();
+        }
+        $type = intval($type);
         $pageSize = 5;
         $user = $this->getAuthedUser();
         if ($user) {
-            $query = OfflineOrder::find()->where(['user_id' => $user->offlineUserId, 'isDeleted' => false]);
+            $query = OfflineOrder::find()
+                ->select('offline_order.*')
+                ->innerJoin('offline_loan', 'offline_loan.id = offline_order.loan_id')
+                ->where(['user_id' => $user->offlineUserId, 'isDeleted' => false]);
+            if ($type == 1) {   //收益中
+                $query->andWhere(['offline_loan.is_jixi' => true])
+                    ->andWhere(['>=', 'offline_loan.finish_date', date('Y-m-d')])
+                    ->orderBy(['offline_loan.finish_date' => SORT_ASC]);
+            } else if ($type == 3) {    //已还清
+                $query->andWhere(['offline_loan.is_jixi' => true])
+                    ->andWhere(['<', 'offline_loan.finish_date', date('Y-m-d')])
+                    ->orderBy(['offline_order.orderDate' => SORT_ASC]);
+            }
             $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);
             $model = $query->offset($pages->offset)->limit($pages->limit)->all();
 
@@ -289,13 +305,14 @@ class UserController extends BaseController
             $message = ($page > $tp) ? '数据错误' : '消息返回';
 
             if (Yii::$app->request->isAjax) {
-                $html = $this->renderFile('@wap/modules/user/views/user/_offline_order_list.php', ['model' => $model]);
+                $html = $this->renderFile('@wap/modules/user/views/user/_offline_order_list.php', ['model' => $model, 'type' => $type]);
                 return ['header' => $header, 'html' => $html, 'code' => $code, 'message' => $message];
             }
             return $this->render('off-order', [
                 'model' => $model,
                 'pages' => $pages,
                 'backUrl' => $backUrl,
+                'type' => $type,
             ]);
         }
     }

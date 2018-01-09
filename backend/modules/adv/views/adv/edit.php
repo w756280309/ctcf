@@ -167,6 +167,13 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                             'onclick' => 'WdatePicker({dateFmt: \'yyyy-MM-dd HH:mm:ss\'})',
                         ]])->textInput() ?>
                 </div>
+                <div class="control-group">
+                    <label class="control-label">最少投资可见（元）</label>
+                    <div class="controls">
+                        <?= $form->field($model, 'investLeast', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '']])->textInput() ?>
+                        <?= $form->field($model, 'investLeast', ['template' => '{error}']) ?>
+                    </div>
+                </div>
             </div>
             <!--普通提交-->
             <div class="form-actions">

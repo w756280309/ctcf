@@ -561,4 +561,14 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
             $plan->save(false);
         }
     }
+    //银行卡号
+    public function getBankCard()
+    {
+        return $this->user->qpay ? $this->user->qpay->card_number : '';
+    }
+    //开户行
+    public function getBankName()
+    {
+        return $this->user->qpay ? $this->user->qpay->bank_name : '';
+    }
 }

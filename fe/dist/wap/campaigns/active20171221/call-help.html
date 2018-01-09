@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>老拉新活动-助力页</title>
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20171221/css/call-help.css?v=1.2">
+    <script src="__FE_BASE_URI__/libs/fastclick.js"></script>
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+    <!--<script src="../../libs/vue.min.js"></script>-->
+</head>
+<body>
+<div class="flex-content" id="app">
+    <input type="hidden" name="isLoggedin" value="false">
+    <div class="msg-help clearfix">
+        <p class="msg-help-character">快来为我助力，即可限时领取<span>专属超级福利</span>！我在这里等你！</p>
+        <img src="__FE_BASE_URI__wap/campaigns/active20171221/images/default-avatar.png" alt="邀请人" title="邀请人" class="person-icon">
+    </div>
+    <ol>
+        <li><p>1、注册即领<span>698元</span>红包</p></li>
+        <li><p>2、首投任意金额领<span>50元</span>超市卡</p></li>
+    </ol>
+    <p class="msg-tips">友情提示：必须通过微信端注册，才能助力成功哦！</p>
+
+    <a class="get-friend-btn">马上去助力</a>
+</div>
+<script>
+    $(function(){
+        FastClick.attach(document.body);
+        var isLoggedin = $('input[name=isLoggedin]').val();
+//        获取头像
+//        $.ajax({
+//            type:'get',
+//            url:'',
+//            dataType:'json',
+//            data:{},
+//            success:function(data){
+//
+//            }
+//        }
+          var data={'src':'./images/glim-login.png'};
+           if (data){
+              $('img.person-icon')[0].src=data.src;
+           }
+           else{
+               $('img.person-icon')[0].src='./images/default-avatar.png';
+           }
+
+
+//        点击助力按钮根据返回值去做跳转
+        var that = this;
+        $('a.get-friend-btn').click(function(){
+            var xhr = $.get('**************');
+            xhr.done(function(res){
+                if(res.code == 4){
+
+                } else if(res.code == 5){
+
+                }
+            });
+            xhr.fail(function(jqXHR){
+                var resp = $.parseJSON(jqXHR.responseText);
+                that.toastCenter(resp);
+            });
+
+        })
+    })
+    //    弹窗组件
+    function toastCenter(val, active) {
+        var $alert = $('<div class="error-info" style="display: block; position: fixed;font-size: .4rem;"><div>' + val + '</div></div>');
+        $('body').append($alert);
+        $alert.find('div').width($alert.width());
+        setTimeout(function () {
+            $alert.fadeOut();
+            setTimeout(function () {
+                $alert.remove();
+            }, 200);
+            if (active) {
+                active();
+            }
+        }, 2000);
+    };
+</script>
+</body>
+</html>

@@ -19,8 +19,15 @@ class NewsController extends Controller
      */
     public function actionIndex($page = 1, $size = 10)
     {
+        $user = Yii::$app->user->getIdentity();
+        if (!is_null($user)) {
+            $totalAssets = $user->jGMoney;
+        } else {
+            $totalAssets = 0;
+        }
         $data = News::find()
             ->where(['status' => News::STATUS_PUBLISH, 'allowShowInList' => true])
+            ->andWhere(['<=', "investLeast", $totalAssets])
             ->orderBy(['news_time' => SORT_DESC]);
 
         $pg = Yii::$container->get('paginator')->paginate($data, $page, $size);
@@ -48,7 +55,15 @@ class NewsController extends Controller
         }
 
         $new = News::findOne($id);
-
+        $user = Yii::$app->user->getIdentity();
+        if (!is_null($user)) {
+            $totalAssets = $user->jGMoney;
+        } else {
+            $totalAssets = 0;
+        }
+        if ($new->investLeast > $totalAssets) {
+            throw $this->ex404();
+        }
         return $this->render('detail', ['new' => $new]);
     }
 }

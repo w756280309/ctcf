@@ -68,6 +68,7 @@ class News extends ActiveRecord
             [['image'], 'string', 'max' => 250],
             [['summary'], 'string', 'max' => 200],
             ['pc_thumb', 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+            [['investLeast'], 'safe'],
         ];
     }
 
@@ -101,6 +102,7 @@ class News extends ActiveRecord
             'pc_thumb' => 'PC缩略图',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
+            'investLeast' => '最少投资可见',
         ];
     }
 

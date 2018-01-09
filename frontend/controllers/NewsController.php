@@ -26,7 +26,12 @@ class NewsController extends Controller
         if (!in_array($type, ['info', 'media', 'notice', 'licai', 'touzi'])) {
             throw $this->ex404();
         }
-
+        $user = Yii::$app->user->getIdentity();
+        if (!is_null($user)) {
+            $totalAssets = $user->jGMoney;
+        } else {
+            $totalAssets = 0;
+        }
         $pageSize = 'media' === $type ? 5 : 10;
 
         $ic = ItemCategory::tableName();
@@ -37,6 +42,7 @@ class NewsController extends Controller
             ->innerJoin($ic, "$n.id = $ic.item_id")
             ->leftJoin($c, "$ic.category_id = $c.id")
             ->where(["$n.status" => News::STATUS_PUBLISH, "$c.key" => $type])
+            ->andWhere(['<=', "$n.investLeast", $totalAssets])
             ->orderBy(["$n.news_time" => SORT_DESC, "$n.id" => SORT_DESC]);
 
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => $pageSize]);
@@ -54,6 +60,15 @@ class NewsController extends Controller
         }
 
         $new = $this->findOr404(News::class, $id);
+        $user = Yii::$app->user->getIdentity();
+        if (!is_null($user)) {
+            $totalAssets = $user->jGMoney;
+        } else {
+            $totalAssets = 0;
+        }
+        if ($new->investLeast > $totalAssets) {
+            throw $this->ex404();
+        }
         $keys = ArrayHelper::getColumn($new->categories, 'key');
 
         if (!in_array($type, $keys)) {
