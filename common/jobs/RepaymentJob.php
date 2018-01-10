@@ -128,7 +128,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
 
                 //发计息短信和确认函短信
                 if (strtotime(date('Y-m-d')) == strtotime($order->valueDate)) {
-                    self::sendJixiSms($order->mobile, $order->user->realName, $order->orderDate, $order->loan->title, $order->valueDate);
+                    self::sendJixiSms($order->mobile, $order->user->realName, $order->orderDate, $order->loan->title, $order->valueDate, $order->affiliator_id);
                 }
             }
             if (empty($repaymentData)) {
@@ -224,7 +224,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
      * @param $loanName     标的名
      * @param $qixiTime     起息日
      */
-    private function sendJixiSms($mobile, $name, $orderDate, $loanName, $qixiTime)
+    private function sendJixiSms($mobile, $name, $orderDate, $loanName, $qixiTime, $affiliator)
     {
         //计息短信
         $message = [
@@ -235,13 +235,14 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
         ];
         $templateId = Yii::$app->params['offline_repayment_sms']['jixi'];
         SmsService::send($mobile, $templateId, $message);
-
-        //确认函短信
-        $message = [
-            $name,
-            $loanName,
-        ];
-        $templateId = Yii::$app->params['offline_repayment_sms']['querenhan'];
-        SmsService::send($mobile, $templateId, $message);
+        if (in_array($affiliator, Yii::$app->params['offline_repayment_sms']['affiliator'])) {
+            //确认函短信
+            $message = [
+                $name,
+                $loanName,
+            ];
+            $templateId = Yii::$app->params['offline_repayment_sms']['querenhan'];
+            SmsService::send($mobile, $templateId, $message);
+        }
     }
 }
