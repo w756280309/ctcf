@@ -315,7 +315,7 @@ and p.isTest = 0)',
                 'sql' => 'select 
 u.real_name 姓名,
 u.safeMobile 手机号,
-from_unixtime(o.refund_time) 到期时间,
+from_unixtime(p.finish_date) 到期时间,
 o.benxi 到期金额,a.name 分销商
 from online_repayment_record o 
 inner join online_product p on o.online_pid = p.id 
