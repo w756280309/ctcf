@@ -159,6 +159,18 @@ class ProductonlineController extends BaseController
 
         return $loan;
     }
+    //基础信息编辑页面提交时处理宽限期和发行方及发行方编号的数据
+    private function exchangeSeniorEditValues(OnlineProduct $loan)
+    {
+        $refund_method = (int) $loan->refund_method;
+        if (OnlineProduct::REFUND_METHOD_DAOQIBENXI !== $refund_method) {   //还款方式只有到期本息,才设置宽限期
+            $loan->kuanxianqi = 0;
+        }
+        if (0 === $loan->issuer) {   //当发行方没有选择时,发行方项目编号为空
+            $loan->issuerSn = null;
+        }
+        return $loan;
+    }
 
     /**
      * 查看标的信息.
@@ -413,7 +425,7 @@ class ProductonlineController extends BaseController
         $model = $this->findOr404(OnlineProduct::class, $id);
         $model->scenario = 'senior_edit';
         $data = Yii::$app->request->post();
-        if ($model->load($data) && $model->validate()) {
+        if ($model->load($data) && ($model = $this->exchangeSeniorEditValues($model)) && $model->validate()) {
             if (!$model->hasErrors()) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
