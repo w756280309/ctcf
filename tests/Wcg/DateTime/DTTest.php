@@ -67,6 +67,18 @@ class DTTest extends YiiAppTestCase
         $this->assertEquals($res->format('Y-m-d'), '2017-12-30');
     }
 
+    public function testAddMonth10()
+    {
+        $res = (new DT('2017-11-11'))->addMonth(13);
+        $this->assertEquals($res->format('Y-m-d'), '2018-12-11');
+    }
+
+    public function testAddMonth11()
+    {
+        $res = (new DT('2017-11-30'))->addMonth(25);
+        $this->assertEquals($res->format('Y-m-d'), '2019-12-30');
+    }
+
     //测试两个日期函数时间差
     public function testDiff1()
     {

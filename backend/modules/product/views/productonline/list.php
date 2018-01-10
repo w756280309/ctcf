@@ -373,7 +373,11 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         | <a href="/product/productonline/quote?id=<?= $val['id'] ?>" class="btn mini green"><i
                                     class="icon-edit"></i> 引用</a>
                         | <a href="/product/productonline/edit?id=<?= $val['id'] ?>" class="btn mini green"><i
-                                    class="icon-edit"></i> 编辑</a>
+                                        class="icon-edit"></i> 编辑</a>
+                        <?php if ($userAuthSeniorEdit) { ?>
+                            | <a href="/product/productonline/senior-edit?id=<?= $val['id'] ?>" class="btn mini green"><i
+                                        class="icon-edit"></i>基础信息编辑</a>
+                        <?php } ?>
                         <?php if ($isHide) : ?>
                             | <a href="javascript:hideLoan('<?= $val->id ?>', '<?= $val->title ?>')"
                                  class="btn mini red"><i class="icon-minus-sign"></i> 还原</a>

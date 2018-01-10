@@ -24,7 +24,7 @@ class SqlExportJob extends Job
         }
         $itemType = array_values($itemType);
 
-        if ('export_referral_user_info' === $paramKey && !empty($queryParams['campaignSource'])) {
+        if (('export_referral_user_info' === $paramKey || 'export_referral_user_count' === $paramKey) && !empty($queryParams['campaignSource'])) {
             $campaignSource = trim($queryParams['campaignSource'], ',');
             unset($queryParams['campaignSource']);
             $campaignArr = explode(',', $campaignSource);

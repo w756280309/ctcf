@@ -190,7 +190,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
         <li>封闭期：本产品从购买日至2019年10月31日属封闭期，投资者在封闭期内不得赎回理财产品。</li>
         <li>提前赎回：封闭期过后，投资者可在<?= RedeemHelper::formatRedemptionPeriods($deal->redemptionPeriods) ?>期间预约提前赎回；预约成功后，<?= RedeemHelper::formatRedemptionPaymentDates($deal->redemptionPaymentDates) ?>当日为投资者兑付所有投资本金及收益。赎回不收取任何手续费。</li>
         <li>到期自动兑付：如投资者不提前赎回，产品从购买日起算，满3年后，自动兑付所有投资本金及收益，收益率高于提前赎回利率。具体收益详见收益说明。</li>
-        <li>付息方式说明：购买后，每自然年6月30日，12月30日按照提前赎回利率支付收益。若投资者未申请提前赎回，将在2019年12月30日补足所有差额收益。</li>
+        <li>付息方式说明：购买后，每自然年6月30日，12月30日按照提前赎回利率支付收益。若投资者未申请提前赎回，将在产品到期日补足所有差额收益。</li>
     </ol>
 </div>
 <?php } ?>
@@ -270,7 +270,13 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     <div class="row huankuang">
         <div class="col-xs-1"></div>
         <div class="col-xs-10">
-            <?=  Yii::$app->params['deal_status'][$deal->status] ?>
+            <?php
+                if ($deal->status == 5 || ($deal->is_jixi && in_array($deal->status, ['3', '7']))) {
+                    echo '收益中';
+                } else {
+                    echo Yii::$app->params['deal_status'][$deal->status];
+                }
+            ?>
             <?php
                 if (1 === $deal->status) {
                     $start = Yii::$app->functions->getDateDesc($deal->start_date);

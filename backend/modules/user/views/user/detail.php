@@ -391,7 +391,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
 
     $('.bind_nav').click(function () {
         if (!$('#bind_card_list').html()) {
-            getBindList('/user/bank-card/list?uid=<?= $normalUser->id?>');
+            getBindList('/user/bank-card/list?uid=<?= $normalUser->id?>&tabClass=bind_nav');
         }
     });
 
