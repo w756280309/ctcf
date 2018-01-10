@@ -36,19 +36,37 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20180102', ['d
                         <?php if ($fromTransfer && $asset) { ?>
                             <a href='/credit/note/new?asset_id=<?= $asset['id'] ?>' class="credit-right-title credit-red">转让</a>
                         <?php } else { ?>
-                            <?php if (5 === $product->status) { ?>
+                            <?php if (5 === $product->status || ($product->is_jixi && in_array($product->status, ['3', '7']))) { ?>
                             <!--还款中-已还清-募集中-文字颜色-->
-                            <div class="invest-right-title invest-orange"><?= Yii::$app->params['deal_status'][$product->status] ?></div>
+                            <div class="invest-right-title invest-orange"><?php
+                                if ($product->status == 5 || ($product->is_jixi && in_array($product->status, ['3', '7']))) {
+                                    echo '收益中';
+                                } else {
+                                    echo Yii::$app->params['deal_status'][$product->status];
+                                }
+                                ?></div>
                             <!--还款中-已还清-募集中-图片-->
                             <img src="<?= ASSETS_BASE_URI ?>images/licai-huang.png" alt="">
                             <?php } elseif (6 === $product->status) { ?>
                             <!--还款中-已还清-募集中-文字颜色-->
-                            <div class="invest-right-title invest-gray"><?= Yii::$app->params['deal_status'][$product->status] ?></div>
+                            <div class="invest-right-title invest-gray"><?php
+                                if ($product->status == 5 || ($product->is_jixi && in_array($product->status, ['3', '7']))) {
+                                    echo '收益中';
+                                } else {
+                                    echo Yii::$app->params['deal_status'][$product->status];
+                                }
+                                ?></div>
                             <!--还款中-已还清-募集中-图片-->
                             <img src="<?= ASSETS_BASE_URI ?>images/licai-hui.png" alt="">
                             <?php } else { ?>
                             <!--还款中-已还清-募集中-文字颜色-->
-                            <div class="invest-right-title invest-red"><?= Yii::$app->params['deal_status'][$product->status] ?></div>
+                            <div class="invest-right-title invest-red"><?php
+                                if ($product->status == 5 || ($product->is_jixi && in_array($product->status, ['3', '7']))) {
+                                    echo '收益中';
+                                } else {
+                                    echo Yii::$app->params['deal_status'][$product->status];
+                                }
+                                ?></div>
                             <!--还款中-已还清-募集中-图片-->
                             <img src="<?= ASSETS_BASE_URI ?>images/licai-jian.png" alt="">
                             <?php } ?>
@@ -79,7 +97,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20180102', ['d
                     <div class="rate-steps-notes">因为该项目的累计投资金额已达<?= StringUtils::amountFormat2($totalFund) ?>元，本订单享受年化率<?= StringUtils::amountFormat2($rate) ?>%</div>
                 </li>
                 <?php } } ?>
-                <?php if (in_array($product->status, [2, 3, 7])) { ?>
+                <?php if (in_array($product->status, [2, 3, 7]) && !$product->is_jixi) { ?>
                 <li>
                     <div class="information-content-left">本金</div>
                     <div class="information-content-right"><?= StringUtils::amountFormat2($deal->order_money) ?>元</div>
@@ -96,7 +114,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20180102', ['d
                     <div class="information-content-left">还款方式</div>
                     <div class="information-content-right"><?= Yii::$app->params['refund_method'][$deal->refund_method] ?></div>
                 </li>
-                <?php } elseif (5 === $product->status) { ?>
+                <?php } elseif (5 === $product->status || ($product->is_jixi && in_array($product->status, ['3', '7']))) { ?>
                 <li>
                     <div class="information-content-left">本金</div>
                     <div class="information-content-right"><?= StringUtils::amountFormat2(bcdiv($asset['amount'], 100 , 2)) ?>元</div>

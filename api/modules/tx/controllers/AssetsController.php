@@ -173,14 +173,14 @@ class AssetsController extends Controller
             if (!empty($assets)) {
                 $loansId = ArrayHelper::getColumn($assets, 'loan_id');
 
-                $loanQuery = Loan::find()
-                    ->where(['id' => $loansId]);
+                $loanQuery = Loan::find();
 
                 if (1 === $type) {
-                    $loanQuery->andWhere(['status' => 5]); //查询还款中项目
+                    $loanQuery->andWhere(['status' => 5])->orWhere(['is_jixi' => true, 'status' => ['3', '7']]); //查询还款中项目
                 } elseif (3 === $type) {
                     $loanQuery->andWhere(['status' => [5, 6]]); //查询已还清项目
                 }
+                $loanQuery->andWhere(['id' => $loansId]);
                 $loans = $loanQuery->asArray()->all();
                 $loans = ArrayHelper::index($loans, 'id');
             }

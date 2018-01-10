@@ -270,7 +270,13 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     <div class="row huankuang">
         <div class="col-xs-1"></div>
         <div class="col-xs-10">
-            <?=  Yii::$app->params['deal_status'][$deal->status] ?>
+            <?php
+                if ($deal->status == 5 || ($deal->is_jixi && in_array($deal->status, ['3', '7']))) {
+                    echo '收益中';
+                } else {
+                    echo Yii::$app->params['deal_status'][$deal->status];
+                }
+            ?>
             <?php
                 if (1 === $deal->status) {
                     $start = Yii::$app->functions->getDateDesc($deal->start_date);

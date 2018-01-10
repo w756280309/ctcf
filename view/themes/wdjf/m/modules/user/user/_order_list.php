@@ -14,15 +14,23 @@ use common\utils\StringUtils;
             <?php } ?>
             <?php
                 $loanStatus = (int) $val['loan']['status'];
-                if (!in_array($loanStatus, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) {
+                if ($type == 2) {
                     $classname = 'column-title-rg';
-                } elseif (OnlineProduct::STATUS_HUAN === $loanStatus) {
+                } elseif ($type == 1) {
                     $classname = 'column-title-rg2';
                 } else {
                     $classname = 'column-title-rg1';
                 }
             ?>
-            <div class="loan-status <?= $classname ?>"><?=Yii::$app->params['deal_status'][$loanStatus]?></div>
+            <div class="loan-status <?= $classname ?>"><?php
+                if ($type === 1) {
+                    echo '收益中';
+                } else if ($type === 3) {
+                    echo '已还清';
+                } else {
+                    echo Yii::$app->params['deal_status'][$loanStatus];
+                }
+                ?></div>
         </div>
 
         <div class="row loan-info">
@@ -71,7 +79,7 @@ use common\utils\StringUtils;
                     </p>
                 <?php } ?>
             </div>
-            <?php if (in_array($loanStatus, [OnlineProduct::STATUS_NOW, OnlineProduct::STATUS_FULL, OnlineProduct::STATUS_FOUND])) { ?>
+            <?php if ($type == 2) { ?>
                 <div class="col-xs-4 loan-info2">
                     <p class="info-val"><?php $loan = $loan === null ? new OnlineProduct($val['loan']) : $loan; ?><?= $loan->getProgressForDisplay() ?>%</p>
                     <p class="info-label">募集进度</p>
@@ -88,7 +96,7 @@ use common\utils\StringUtils;
                         }
                     ?>
                     <p class="info-val"><?= StringUtils::amountFormat3($profit) ?>元</p>
-                    <p class="info-label"><?= (OnlineProduct::STATUS_OVER === $loanStatus) ? "实际收益" : "预期收益" ?></p>
+                    <p class="info-label"><?= ($type === 3) ? "实际收益" : "预期收益" ?></p>
                 </div>
             <?php } ?>
         </div>
