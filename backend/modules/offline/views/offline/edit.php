@@ -2,7 +2,9 @@
 
 $this->title = '编辑线下数据客户信息';
 use yii\widgets\ActiveForm;
+use yii\web\YiiAsset;
 
+$this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
@@ -75,8 +77,15 @@ use yii\widgets\ActiveForm;
             <div class="control-group">
                 <label class="control-label">银行卡账号</label>
                 <div class="controls">
-                    <?= $form->field($model, 'bankCardNo', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->textInput() ?>
+                    <?= $form->field($model, 'bankCardNo', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '', 'maxlength' => 19,]])->textInput() ?>
                     <?= $form->field($model, 'bankCardNo', ['template' => '{error}']); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">认购金额（万元）</label>
+                <div class="controls">
+                    <?= $form->field($model, 'money', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->textInput() ?>
+                    <?= $form->field($model, 'money', ['template' => '{error}']); ?>
                 </div>
             </div>
             <div class="control-group">
@@ -86,7 +95,27 @@ use yii\widgets\ActiveForm;
                     <?= $form->field($model, 'apr', ['template' => '{error}']); ?>
                 </div>
             </div>
-
+            <div class="control-group">
+                <label class="control-label">认购日期</label>
+                <div class="controls">
+                    <?= $form->field($model, 'orderDate', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'onclick' => "WdatePicker({dateFmt:'yyyy-MM-dd'})", 'placeholder' => '']])->textInput() ?>
+                    <?= $form->field($model, 'orderDate', ['template' => '{error}']); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">起息日</label>
+                <div class="controls">
+                    <?= $form->field($model, 'valueDate', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'onclick' => "WdatePicker({dateFmt:'yyyy-MM-dd'})", 'placeholder' => '']])->textInput() ?>
+                    <?= $form->field($model, 'valueDate', ['template' => '{error}']); ?>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">渠道</label>
+                <div class="controls">
+                    <?= $form->field($model, 'affiliator_id', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->dropDownList($affiliators,['prompt'=>'请选择']) ?>
+                    <?= $form->field($model, 'affiliator_id', ['template' => '{error}']); ?>
+                </div>
+            </div>
             <div class="form-actions">
                 <button type="button" class="btn blue" id="submit_btn"><i class="icon-ok"></i> 提交</button>
                 <a href="/offline/offline/list" class="btn">取消</a>

@@ -34,7 +34,8 @@ class OfflineOrder extends ActiveRecord
         return [
             'confirm' => ['valueDate'],
             'edit' => ['realName', 'accBankName', 'bankCardNo','mobile', 'apr'],
-            'default' => ['affiliator_id', 'loan_id',  'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo', 'apr'],
+            'default' => ['affiliator_id', 'loan_id',  'mobile', 'money', 'orderDate', 'created_at', 'user_id', 'idCard', 'accBankName', 'bankCardNo', 'apr', 'valueDate'],
+            'is_jixi' => ['accBankName', 'bankCardNo'], //确认计息后只可以修改银行卡信息
         ];
     }
 
@@ -45,7 +46,8 @@ class OfflineOrder extends ActiveRecord
             [['user_id', 'affiliator_id', 'loan_id', 'created_at'], 'integer'],
             [['realName', 'accBankName', 'bankCardNo','mobile'], 'required', 'on' => 'edit'],
             ['mobile', 'string', 'max' => 20],
-            [['idCard', 'bankCardNo'], 'string', 'max' => 30],
+            [['idCard'], 'string', 'max' => 30],
+            [['bankCardNo'], 'string', 'min' => 16, 'max' => 19],
             [['idCard'], CnIdCardValidator::className()],
             ['money', 'number'],
             [['orderDate', 'valueDate'], 'safe'],
@@ -125,4 +127,5 @@ class OfflineOrder extends ActiveRecord
     {
         return OfflineRepaymentPlan::find()->where(['order_id' => $this->id])->sum('lixi');
     }
+
 }
