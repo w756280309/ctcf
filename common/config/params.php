@@ -254,4 +254,6 @@ return [
         'code' => env('UDESK_CODE'),
         'link' => env('UDESK_LINK'),
     ],
+    //网银充值’黑名单‘，不再发送奖励，用户id组成的数组
+    'online-bank-blacklist' => [],
 ];

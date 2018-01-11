@@ -65,6 +65,10 @@ class P171213Controller extends BaseController
         //判断活动状态
         $promoStatus = null;
         $user = $this->getAuthedUser();
+        //已经提前领取过的用户，不再发放奖励
+        if (in_array($user->id, Yii::$app->params['online-bank-blacklist'])) {
+            return $this->getErrorByCode(self::ERROR_CODE_NO_TICKET);
+        }
         try {
             $promo->isActive($user);
         } catch (\Exception $e) {
