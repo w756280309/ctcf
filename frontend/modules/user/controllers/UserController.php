@@ -2,6 +2,7 @@
 
 namespace frontend\modules\user\controllers;
 
+use common\models\offline\OfflineOrder;
 use common\models\order\OnlineOrder as Ord;
 use common\models\order\OnlineRepaymentPlan as Plan;
 use common\models\product\OnlineProduct as Loan;
@@ -262,5 +263,43 @@ class UserController extends BaseController
             'tj' => $tj,
             'stats' => $stats,
         ]);
+    }
+
+    /**
+     * @param int $page
+     * @param int $type ['1' => '收益中', '2' => '募集中', '3' => '已还清']
+     * @return mixed
+     */
+    public function actionMyofforder($type = 1)
+    {
+        if (!in_array($type, ['1', '3'])) {
+            throw $this->ex404();
+        }
+        $type = intval($type);
+        $user = $this->getAuthedUser();
+        $query = OfflineOrder::find()
+            ->select('offline_order.*')
+            ->innerJoin('offline_loan', 'offline_order.loan_id = offline_loan.id')
+            ->where(['offline_order.user_id' => $user->offlineUserId, 'offline_order.isDeleted' => false]);
+        if ($type == 1) {
+            $query->andWhere(['offline_loan.is_jixi' => true])
+                ->andWhere(['>=', 'offline_loan.finish_date', date('Y-m-d')]);
+        } else if ($type == 3) {
+            $query->andWhere(['offline_loan.is_jixi' => true])
+                ->andWhere(['<', 'offline_loan.finish_date', date('Y-m-d')]);
+        } else {
+            $query->andWhere(['offline_loan.is_jixi' => false]);
+        }
+        $query->orderBy("created_at desc");
+        $count = $query->count();
+        $pageSize = 10;
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $pageSize]);
+        $models = $query->offset($pages->offset)->limit($pages->limit)->all();
+        return $this->render('myofforder', [
+            'models' => $models,
+            'pages' => $pages,
+            'count' => $count,
+            'type' => $type,
+            ]);
     }
 }
