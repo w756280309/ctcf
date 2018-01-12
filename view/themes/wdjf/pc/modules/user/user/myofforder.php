@@ -33,7 +33,7 @@ use common\models\offline\OfflineRepaymentPlan;
         <div class="list-single">
             <a class="a_first <?= 1 === $type ? 'select' : '' ?>" href="/user/user/myofforder">收益中的项目</a>
 <!--            <a class="a_second --><?//= 2 === $type ? 'select' : '' ?><!--" href="/user/user/myofforder?type=2">募集中的项目</a>-->
-            <a class="a_third <?= 3 === $type ? 'select' : '' ?>" href="/user/user/myofforder?type=3">已还清的项目</a>
+            <a class="a_second <?= 3 === $type ? 'select' : '' ?>" href="/user/user/myofforder?type=3">已还清的项目</a>
         </div>
         <div class="display_number">
             <p class="p_right">共计：<span><?= $count ?></span>笔</p>
@@ -69,7 +69,7 @@ use common\models\offline\OfflineRepaymentPlan;
             <?php foreach ($models as $key => $model) : ?>
                 <tr class="tr-click">
                 <?php if (1 === $type) : ?>
-                    <td><?= $model->loan->title ?></td>
+                    <td class="text-align-lf pl-box-10"><?= $model->loan->title ?></td>
                     <td class="text-align-rg"><?= date('Y-m-d', strtotime($model->loan->finish_date)) ?></td>
                     <td class="text-align-rg"><?= bcmul($model->apr, 100, 2) . '%' ?></td>
                     <td class="text-align-rg"><?= bcmul($model->money, 10000, 2) ?></td>
@@ -83,7 +83,7 @@ use common\models\offline\OfflineRepaymentPlan;
                     </td>
                 <?php endif; ?>
                     <?php if (2 === $type) : ?>
-                        <td><?= $model->loan->title ?></td>
+                        <td class="text-align-lf pl-box-10"><?= $model->loan->title ?></td>
                         <td class="text-align-rg"><?= $model->loan->expires . $model->loan->unit ?></td>
                         <td class="text-align-rg"><?= bcmul($model->apr, 100, 2) . '%' ?></td>
                         <td class="text-align-rg"><?= bcmul($model->money, 10000, 2) ?></td>
@@ -91,7 +91,7 @@ use common\models\offline\OfflineRepaymentPlan;
                         <td class="text-align-rg"><?= OfflineRepaymentPlan::find()->where(['order_id' => $model->id])->sum('lixi'); ?></td>
                     <?php endif; ?>
                     <?php if (3 === $type) : ?>
-                        <td><?= $model->loan->title ?></td>
+                        <td class="text-align-lf pl-box-10"><?= $model->loan->title ?></td>
                         <td class="text-align-rg"><?= date('Y-m-d', strtotime($model->loan->finish_date)) ?></td>
                         <td class="text-align-rg"><?= bcmul($model->apr, 100, 2) . '%' ?></td>
                         <td class="text-align-rg"><?= bcmul($model->money, 10000, 2) ?></td>
