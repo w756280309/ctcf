@@ -256,4 +256,5 @@ return [
     ],
     //网银充值’黑名单‘，不再发送奖励，用户id组成的数组
     'online-bank-blacklist' => [],
+    'piwik_auth_key' => env('PIWIK_TOKEN_AUTH')
 ];
