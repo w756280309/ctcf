@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>演唱会门票活动</title>
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20180111/css/index.css?v=1.1">
+    <!--<link rel="stylesheet" href="../../libs/layer_mobile/need/layer.css">-->
+    <script src="__FE_BASE_URI__/libs/fastclick.js"></script>
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+    <script src="__FE_BASE_URI__/libs/iscroll.js"></script>
+    <script src="__FE_BASE_URI__/libs/vue.min.js"></script>
+    <script src="__FE_BASE_URI__/libs/axios.min.js"></script>
+    <style>
+        [v-cloak] {
+            display: none
+        }
+    </style>
+</head>
+<body>
+<input type="hidden" name="promoStatus" value="0">
+<input type="hidden" name="isLoggedin" value="true">
+<div class="flex-contant" ref="flexContent" id="app">
+    <div class="contain-part1">
+        <div class="top-nav"></div>
+        <div class="part1-msg">
+            <p>活动期间累计年化投资：</p>
+            <p>排行第1名，送价值<span>1680</span>元门票<i>2</i>张；</p>
+            <p>排行第2名-第5名，送价值<span>880</span>元门票<i>2</i>张；</p>
+            <p>排行第6名-第15名，送价值<span>680</span>元门票<i>2</i>张；</p>
+        </div>
+        <a @click="goInvite" class="go-invest">去投资</a>
+        <div class="pop-ranking">
+            <div class="pop-ranking-nav"></div>
+            <div class="pop-ranking-contain">
+                <dl>
+                    <dt class="clearfix">
+                        <span class="fl">用户ID</span>
+                        <span class="fr">实时年化投资额(元)</span>
+                    </dt>
+                    <dd class="clearfix pop-ranking-red">
+                        <span class="fl phone-card"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-yellow">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-yellow">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-yellow">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-yellow">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-orange">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-orange">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-orange">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-orange">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-orange">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-orange">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-orange">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-orange">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                    <dd class="clearfix pop-ranking-orange">
+                        <span class="fl"></span>
+                        <span class="fl">150****1123</span>
+                        <span class="fr">9999999.99</span>
+                    </dd>
+                </dl>
+
+            </div>
+            <div class="pop-ranking-bottom"></div>
+        </div>
+        <p class="part1-suggestion">注：排行榜数据每5分钟更新一次。</p>
+    </div>
+    <div class="contain-part2">
+        <div class="top-nav"></div>
+        <p class="part2-msg">活动期间年化投资每累计<span>5万</span>，获得1次抽奖机会</p>
+        <div class="clearfix fr-mygift">
+            <span @click="showPrizeList" class="fr part-mygift">我的奖品>>
+            </span>
+        </div>
+        <div class="rotate-prize">
+            <div class="get-prize-bg">
+                <div class="get-prize-rotate" ref="rotateBox">
+                </div>
+                <img @click="getPrizeButton" src="__FE_BASE_URI__wap/campaigns/active20180111/images/get-prize.png" alt="">
+            </div>
+        </div>
+        <p>剩余次数：<span v-cloak v-text="msg"></span>次</p>
+        <a @click="goInvite" class="go-invest">去投资</a>
+    </div>
+    <div v-cloak :class="{'hide-prize':getPrize}" class="get-prizes">
+        <div class="box-top-mid">
+            <div @click="closeList" class="cue-close">
+            </div>
+            <p class="get-prize-msg">恭喜您获得了</p>
+            <p class="get-prize-msg-word" v-clock>{{prizeKind}}</p>
+            <div class="get-prize-kind">
+                <img :src="prizeKindUrl" alt="奖品">
+            </div>
+            <a @click="closeList" class="prize-button">收下礼品</a>
+        </div>
+    </div>
+    <div v-cloak :class="{'hide-prize':getPrizeList}" class="get-prizes-list">
+        <div class="box-top-mid">
+            <div @click="closeList" class="cue-close">
+            </div>
+            <p class="get-prize-msg">奖品列表</p>
+            <div id="wrapper">
+                <ul>
+                    <li>
+                        <div class="fl prize-list-one">
+                            <img src="__FE_BASE_URI__wap/campaigns/active20180111/images/prize-kind/supper-card.png" alt="奖品">
+                        </div>
+                        <div class="fr prize-list-one-msg">
+                            <span>50元超市卡</span>
+                            <span>中奖时间2017年8月10日</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="fl prize-list-one">
+                            <img src="__FE_BASE_URI__wap/campaigns/active20180111/images/prize-kind/red-envelopes.png" alt="奖品">
+                        </div>
+                        <div class="fr prize-list-one-msg">
+                            <span>50元超市卡</span>
+                            <span>中奖时间2017年8月10日</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="fl prize-list-one">
+                            <img src="__FE_BASE_URI__wap/campaigns/active20180111/images/prize-kind/cash-coupon36.png" alt="奖品">
+                        </div>
+                        <div class="fr prize-list-one-msg">
+                            <span>50元超市卡</span>
+                            <span>中奖时间2017年8月10日</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="fl prize-list-one">
+                            <img src="__FE_BASE_URI__wap/campaigns/active20180111/images/prize-kind/supper-card.png" alt="奖品">
+                        </div>
+                        <div class="fr prize-list-one-msg">
+                            <span>50元超市卡</span>
+                            <span>中奖时间2017年8月10日</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="contain-part3">
+        <div class="top-nav"></div>
+        <p>活动开启后，将选取<span>8位</span>注册手机号后4位最接近1.19日15:00收盘时上证指数后4位的新用户（完成注册实名的时间为1.15日0点-1.19日12:00），各获得价值680元门票1张！</p>
+        <p>例：1.19日当天上证指数1234.56，则注册手机号后4位数的大小最接近3456的<span>8位</span>用户为幸运用户。</p>
+        <div v-cloak v-if="lastPart" class="active-state-before">
+            <div v-clock v-if="loginRegister" class="active-state clearfix">
+                <div class="fl go-register"><a>去注册</a></div>
+                <div class="fr go-register"><a @click="invistFirend">邀请好友参加</a></div>
+
+            </div>
+            <a v-clock v-else class="go-invest">邀请好友参加</a>
+            <p class="last-rink-msg">注：中奖名单将于1月19日17:00在本页面公布。</p>
+        </div>
+        <div v-cloak v-else class="active-state-now">
+            <h5>中奖名单：</h5>
+            <div class="active-state-phone clearfix">
+                <span>150****1123</span>
+                <span>150****1123</span>
+                <span>150****1123</span>
+                <span>150****1123</span>
+                <span>150****1123</span>
+                <span>150****1123</span>
+                <span>150****1123</span>
+                <span>150****1123</span>
+            </div>
+        </div>
+
+    </div>
+    <p class="last-p-tips">本活动最终解释权归温都金服所有</p>
+</div>
+
+<script>
+    $(function () {
+        var promoStatus = $('input[name=promoStatus]').val();
+        var isLoggedin = $('input[name=isLoggedin]').val();
+        FastClick.attach(document.body);
+        initScroll();
+
+        function initScroll() {
+            var myScroll;
+            intervalTime = setInterval(function () {
+                var resultContentH = $("#wrapper ul").height();
+                if (resultContentH > 0) {  //判断数据加载完成的条件随便加的
+                    clearInterval(intervalTime);
+                    myScroll = new iScroll('wrapper', {
+                        vScrollbar: false,
+                    });
+                }
+            }, 1);
+        };
+
+        function toastCenter(val, active) {
+            var $alert = $('<div class="error-info" style="display: block; position: fixed;font-size: .4rem;"><div>' + val + '</div></div>');
+            $('body').append($alert);
+            $alert.find('div').width($alert.width());
+            setTimeout(function () {
+                $alert.fadeOut();
+                setTimeout(function () {
+                    $alert.remove();
+                }, 200);
+                if (active) {
+                    active();
+                }
+            }, 2000);
+        };
+        var myapp = new Vue({
+            el: "#app",
+            created: function () {
+                if (this.isLoggedin == 'true') {
+                    this.loginRegister = false;
+                } else if (this.isLoggedin == 'false') {
+                    this.loginRegister = true;
+                };
+                axios.get('/promotion/p180115/draw?key=promo_180115')
+                    .then(function(response){
+                        this.msg=response.msg;
+                    })
+                    .catch(function(err){
+                        toastCenter(err);
+                    })
+            },
+            mounted: function () {
+
+            },
+            data: {
+                // 获得的奖品
+                prizeKind:'',
+                // 奖品链接
+                prizeKindUrl:"./images/prize-kind/supper-card.png",
+                // 最后5点的状态
+                lastPart: true,
+                // 活动状态
+                promoStatus: promoStatus,
+                // 是否登录
+                isLoggedin: isLoggedin,
+                // 每一个奖品的角度
+                rotate: 0,
+                // 最终角度
+                rotatetotal: 0,
+                // 显示获得某一个奖品弹窗
+                getPrize: false,
+                // 显示获得所有的奖品弹窗
+                getPrizeList: false,
+                // 抽奖次数
+                msg: 2,
+                // 根据登陆状态的值判断下面注册邀请好友相关按钮显示隐藏
+                loginRegister: !true,
+                // 对于点击判断的一个参照
+                flag:true,
+                // 前期没有后台数据拿来模拟的一个数值，后期会删掉
+                rote:1,
+            },
+            methods: {
+                 // 点击邀请好友
+                invistFirend:function(){
+                    if (this.isLoggedin == 'true') {
+                        location.href='';
+                    } else if (this.isLoggedin == 'false') {
+                        location.href='/site/login';
+                    };
+                },
+                //去投资
+                goInvite: function () {
+                    if (this.promoStatus == 1) {
+                        toastCenter('活动未开始');
+                    } else if (this.promoStatus == 2) {
+                        toastCenter('活动已结束');
+                    } else if (this.promoStatus == 0) {
+                        location.href = ""
+                    }
+                },
+                // 点击奖品列表展示
+                showPrizeList: function () {
+                    // this.getPrize=false;
+                    if (this.promoStatus == 1) {
+                        toastCenter('活动未开始');
+                    } else if (this.promoStatus == 2) {
+                        this.$refs.flexContent.addEventListener('touchmove', this.bodyScroll, false);
+                    } else if (this.promoStatus == 0) {
+                        this.getPrizeList = true;
+                        this.$refs.flexContent.addEventListener('touchmove', this.bodyScroll, false);
+                    }
+
+                },
+                //抽奖
+                getPrizeButton: function () {
+                    if (this.promoStatus == 1){
+                        toastCenter('活动未开始');
+                    } else if (this.promoStatus == 2) {
+                        toastCenter('活动已结束');
+                    } else if (this.promoStatus == 0&&this.isLoggedin=='true'&&this.msg>0) {
+                        //真正抽奖代码
+                        /*
+                        if(this.flag){
+                            this.flag=false;
+                            axios.get('/promotion/p180115/draw?key=promo_180115')
+                                .then(function(response){
+                                    this.msg=response.msg;
+                                    axios.get('/promotion/p180115/draw?key=promo_180115')
+                                        .then(function(response){
+                                            if (response.code == 0) {
+                                                switch (response.ticket.sn) {
+                                                    case 1:
+                                                        this.rotate = 22;
+                                                        break;
+                                                    case 2:
+                                                        this.rotate = 67;
+                                                        break;
+                                                    case 3:
+                                                        this.rotate = 112;
+                                                        break;
+                                                    case 4:
+                                                        this.rotate = 157;
+                                                        break;
+                                                    case 5:
+                                                        this.rotate = 202;
+                                                        break;
+                                                    case 6:
+                                                        this.rotate = 247;
+                                                        break;
+                                                    case 7:
+                                                        this.rotate = 292;
+                                                        break;
+                                                    case 8:
+                                                        this.rotate = 337;
+                                                        break;
+                                                    default:
+                                                        break;
+                                                };
+                                                this.prizeKind=response.ticket.tit;
+                                                this.prizeKindUrl=response.ticket.url;
+                                                this.rotatetotal = 2160 + this.rotate +(this.rotatetotal-(this.rotatetotal%2160));
+                                                this.$refs.rotateBox.style.transform = 'rotate(' + this.rotatetotal + 'deg)';
+                                                this.rotate = 0;
+                                                this.$refs.rotateBox.addEventListener("webkitTransitionEnd",this.myTransEnd,false);
+                                                this.$refs.rotateBox.addEventListener("transitionend",this.myTransEnd,false);
+                                            } else {
+                                                toastCenter(response.message);
+                                            }
+                                        })
+                                        .catch(
+                                            function(){
+                                                myapp.flag=true;
+                                            }
+                                        )
+                                })
+                                .catch(function(){
+                                    myapp.flag=true;
+                                });
+
+                            // .catch(function (err) {
+                            //     console.log(err);
+                            // });
+                        }
+
+                        */
+                        //模拟代码
+                        if(this.flag==true){
+                            this.flag=false;
+                            console.log(this);
+                            // this.rotatetotal = 2160 + this.rotate + this.rotatetotal ;
+                            this.rotatetotal = 2160 + (this.rote*45+22) +(this.rotatetotal-(this.rotatetotal%2160)) ;
+                            this.$refs.rotateBox.style.transform = 'rotate(' + this.rotatetotal + 'deg)';
+                            this.rote = this.rote+1;
+                            this.$refs.rotateBox.addEventListener("webkitTransitionEnd", this.myTransEnd);
+                            this.$refs.rotateBox.addEventListener("transitionend",this.myTransEnd);
+                            this.$refs.flexContent.addEventListener('touchmove', this.bodyScroll, false);
+                        }
+                        // this.rotatetotal = 2160 + this.rotate + this.rotatetotal;
+                        // this.$refs.rotateBox.style.transform = 'rotate(' + this.rotatetotal + 'deg)';
+
+                        // $('.get-prize-rotate').css('transform','rotate('+this.rotatetotal+'deg)');
+                    }else if (this.promoStatus == 0&&this.isLoggedin=='true'&&this.msg==0){
+                        toastCenter('没有抽奖次数');
+                    }else if(this.promoStatus == 0&&this.isLoggedin=='false'){
+                        toastCenter('未登录');
+                    }
+                },
+                myTransEnd:function(){
+                  this.flag=true;
+                  this.getPrize=true;
+                  // console.log(this.flag);
+                },
+                // 关闭奖品列表展示
+                closeList: function () {
+                    this.getPrize = false;
+                    this.getPrizeList = false;
+                    this.$refs.flexContent.removeEventListener('touchmove', this.bodyScroll, false);
+                },
+                bodyScroll: function (e) {
+                    var e = e || windew.event;
+                    e.preventDefault();
+                }
+            }
+        })
+    })
+</script>
+</body>
+</html>

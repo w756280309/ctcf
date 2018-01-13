@@ -5,9 +5,13 @@ namespace console\controllers;
 
 use common\models\promo\DuoBao;
 use common\models\promo\PromoLotteryTicket;
+use common\models\promo\PromoService;
+use common\models\promo\Reward;
+use common\models\user\User;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 
 /**
  * 活动定时任务类
@@ -231,6 +235,49 @@ class PromoController extends Controller
             $userList = $model->getAwardUserList();
             Yii::info('[command][promo/send-double-eleven-coupon] 活动期间，　共有'.count($userList).'个用户预约了加息券', 'command');
             $model->sendAwardToUsers($userList);
+        }
+    }
+
+    /**
+     * 注册送演唱会门票活动发奖 -- 仅用一次
+     *
+     * @param integer $index          上证指数
+     * @param integer $limitCount     发奖人数
+     * @param bool    $allowPerformed 是否执行发奖操作（插入award表）
+     *
+     * @throws \Exception
+     */
+    public function actionAward180119($index, $limitCount, $allowPerformed = false)
+    {
+        $promo = RankingPromo::findOne(['key' => 'promo_180119']);
+        if (null === $promo) {
+            throw new \Exception('活动不存在');
+        }
+        $reward = Reward::fetchOneBySn('180119_G880');
+        if (null === $reward) {
+            throw new \Exception('活动奖品不存在');
+        }
+
+        //得到获奖的用户信息
+        $promoClass = new $promo->promoClass($promo);
+        $userInfo = $promoClass->getUserInfoByCompositeIndex($index, $limitCount);
+
+        //输出中奖用户信息数组
+        $this->stdout('接下来为待执行的获奖用户信息数组'.PHP_EOL);
+        print_r($userInfo);
+
+        if ($allowPerformed) {
+            $this->stdout('-----开始发奖-----'.PHP_EOL);
+            $num = 0;
+            $userIds = ArrayHelper::getColumn($userInfo, 'id');
+            $users = User::find()
+                ->where(['in', 'id', $userIds])
+                ->all();
+            foreach ($users as $user) {
+                PromoService::award($user, $reward, $promo);
+                $num++;
+            }
+            $this->stdout('共插入'.$num.'条数据');
         }
     }
 }
