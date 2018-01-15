@@ -21,14 +21,13 @@ class Promo180115 extends BasePromo
     public function getAwardPool(User $user, \DateTime $dateTime)
     {
         $originPool = [
-            '180115_G880' => '0.1',
+            '180115_G880' => '0.05',
             '180115_R5' => '0.15',
-            '180115_P66' => '0.2',
+            '180115_P66' => '0.35',
             '180115_G50' => '0.01',
             '180115_R3' => '0.12',
             '180115_C36' => '0.12',
-            '180115_P88' => '0.2',
-            '180115_G680' => '0.1',
+            '180115_P88' => '0.20',
         ];
         $rewardSns = Reward::find()
             ->select('sn')
