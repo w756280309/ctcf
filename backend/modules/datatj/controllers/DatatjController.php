@@ -632,14 +632,13 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         $channelData = ArrayHelper::getColumn($piwikData, 'label');
         //查询时间段内各渠道注册人数及注册购买总金额
         $registerData = Yii::$app->db->createCommand('SELECT 
-          u.campaign_source AS campaign_source,
+          campaign_source AS campaign_source,
           count(u.id) AS registerUserCount,
-          sum(o.order_money) as registerOrderMoneySum
+          sum(ui.investTotal) AS registerOrderMoneySum 
           FROM user u 
-          INNER JOIN online_order o 
-          ON o.uid = u.id
-          WHERE o.status = 1 
-          AND DATE(FROM_UNIXTIME(u.created_at)) 
+          LEFT JOIN user_info ui
+          ON ui.user_id = u.id
+          WHERE DATE(FROM_UNIXTIME(u.created_at)) 
           BETWEEN :startDate 
           AND :endDate
           GROUP BY campaign_source', [
@@ -660,8 +659,8 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             BETWEEN :startDate 
             AND :endDate
             GROUP BY u.campaign_source', [
-                'startDate' => $startDate,
-                'endDate' => $endDate,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
         ])->queryAll();
         $orderData = ArrayHelper::index($orderData, 'campaign_source');
         $campaignSource = array_keys($orderData);
@@ -669,9 +668,11 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         $campaignSource =array_merge($campaignSource, $piwikCampaignSource);
         $campaignSource = array_unique($campaignSource);
         $allData = [];
+        $nbVisitsArray = [];
         foreach ($campaignSource as $campaign) {
             $allData[$campaign]['label'] = $campaign;
             $nbVisits = count($piwikData[$campaign]) ? $piwikData[$campaign]['nb_visits'] : 0;
+            $nbVisitsArray[] = $nbVisits;
             $allData[$campaign]['nb_visits'] = $nbVisits;
             $allData[$campaign]['registerOrderMoneySum'] = count($registerData[$campaign]) ? $registerData[$campaign]['registerOrderMoneySum'] : 0;
             $allData[$campaign]['orderMoneySum'] = count($orderData[$campaign]) ? $orderData[$campaign]['orderMoneySum'] : 0;
@@ -686,6 +687,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
                 $allData[$campaign]['orderConversionRate'] = $orderCount/$nbVisits*100;
             }
         }
+        array_multisort($nbVisitsArray, SORT_DESC, $allData);
         if (strlen($label) !== 0) {
             $label = str_replace('，', ',', $label);
             $labelArray = explode(',', $label);
@@ -696,6 +698,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             unset($allData);
             $allData = $newData;
         }
+
         $totalCount = count($allData);
         $dataProvider = new ArrayDataProvider([
             'allModels' => $allData,
