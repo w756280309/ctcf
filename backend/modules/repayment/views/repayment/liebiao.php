@@ -65,6 +65,7 @@ $bc = new BcRound();
                             <span class="title">应还款本息：<?=$total_bx?>元</span>
                         </td>
                         <td>
+                            <span class="title">加息金额：<?= $couponsAmount ?></span>
                         </td>
                         <td>
                         </td>
