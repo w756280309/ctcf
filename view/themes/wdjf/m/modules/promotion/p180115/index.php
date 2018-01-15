@@ -27,7 +27,7 @@ $this->title = '门票好礼三重奏';
             <p>排行第6名至第15名，送价值<span>680</span>元门票<i>2</i>张；</p>
         </div>
         <a @click="goInvite" class="go-invest">去投资</a>
-        <?php if (!empty($rankingList)) { ?>}
+        <?php if (!empty($rankingList)) { ?>
         <div class="pop-ranking">
             <div class="pop-ranking-nav"></div>
             <div class="pop-ranking-contain">
