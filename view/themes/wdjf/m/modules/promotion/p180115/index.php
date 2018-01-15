@@ -4,7 +4,7 @@ $this->title = '门票好礼三重奏';
 ?>
 
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20180111/css/index.css?v=1.111121211">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20180111/css/index.css?v=1.2121">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
@@ -26,8 +26,9 @@ $this->title = '门票好礼三重奏';
             <p>排行第2名至第5名，送价值<span>880</span>元门票<i>2</i>张；</p>
             <p>排行第6名至第15名，送价值<span>680</span>元门票<i>2</i>张；</p>
         </div>
-        <a @click="goInvite" class="go-invest">去投资</a>
-        <?php if (!empty($rankingList)) { ?>}
+        <a @click="goInvite" class="go-invest go-invest1">去投资</a>
+        <p class="part1-suggestion-p">累计年化投资额相同时，最先达到该金额的排在前面</p>
+        <?php if (!empty($rankingList)) { ?>
         <div class="pop-ranking">
             <div class="pop-ranking-nav"></div>
             <div class="pop-ranking-contain">
@@ -125,8 +126,8 @@ $this->title = '门票好礼三重奏';
     </div>
     <div class="contain-part3">
         <div class="top-nav"></div>
-        <p>活动开启后，将选取<span>8位</span>注册手机号后4位最接近1.19日15:00收盘时上证指数后4位的新用户（完成<i class="name-red">注册实名</i>的时间为1.15日0点-1.19日12:00），各获得价值680元门票1张！</p>
-        <p>例：1.19日当天上证指数1234.56，则注册手机号后4位数的大小最接近3456的<span>8位</span>用户为幸运用户。</p>
+        <p>活动开启后，将选取<span>8位</span>注册手机号后4位最接近1月19日15:00收盘时上证指数后4位的新用户（完成<i class="name-red">注册实名</i>的时间为1月15日00:00-1月19日12:00），各获得价值680元门票1张！</p>
+        <p>例：1月19日当天上证指数1234.56，则注册手机号后4位数的大小最接近3456的<span>8位</span>用户为幸运用户。</p>
         <?php if (empty($registerMobileList)) { ?>
             <div class="active-state-before">
                 <div v-clock v-if="loginRegister" class="active-state clearfix">
