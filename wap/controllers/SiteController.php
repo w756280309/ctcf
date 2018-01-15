@@ -568,6 +568,8 @@ class SiteController extends Controller
                  */
                 if (Yii::$app->session->has('resourceOwnerId')) {
                     $openId = Yii::$app->session->get('resourceOwnerId');
+                    //绑定渠道
+                    PushController::bindQD($user, $openId);
                     //绑定微信
                     try {
                         SocialConnect::connect($user, $openId, SocialConnect::PROVIDER_TYPE_WECHAT);
@@ -610,9 +612,6 @@ class SiteController extends Controller
                     } catch (\Exception $e) {
                         return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];
                     }
-
-                    //绑定渠道
-                    PushController::bindQD($user, $openId);
                 }
 
                 return ['code' => 1, 'message' => '注册成功', 'tourl' => $tourl];
