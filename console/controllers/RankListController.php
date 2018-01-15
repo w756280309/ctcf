@@ -50,10 +50,9 @@ inner join user u
 where date(from_unixtime(o.order_time)) >= :startDate 
     and date(from_unixtime(o.order_time)) <= :endDate 
     and o.status = 1
-    and u.annualInvestment > 0 
 group by u.id 
 order by annual desc, 
-    oid desc 
+    oid asc 
 limit :num";
                 $res = $db->createCommand($sql, [
                     'startDate' => $this->startDate,
