@@ -995,6 +995,31 @@ class Client
     }
 
     /**
+     * 商户(温都金服)手续费账户 - 流水查询
+     * 注意：开始时间和结束时间只能是相差30天
+     *
+     * @params string $startDate 查询开始时间
+     * @params string $endDate   查询结束时间
+     * @params int    $pageNum   页码数
+     *
+     * @return Response
+     */
+    public function orgFee($startDate, $endDate, $pageNum = 1)
+    {
+        $data = [
+            'service' => 'transeq_search',
+            'account_id' => $this->merchantId,
+            'account_type' => '02',
+            'acc_category' => '02',
+            'start_date' => $startDate, //查询开始日期
+            'end_date' => $endDate,     //查询结束日期
+            'page_num' => $pageNum,     //每页条数
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 生成流水串号.
      *
      * @param type $prefix
