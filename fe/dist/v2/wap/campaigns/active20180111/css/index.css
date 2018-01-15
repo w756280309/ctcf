@@ -70,7 +70,16 @@
     color: #fff;
     display: block
 }
-
+.flex-contant .contain-part1 a.go-invest1{
+    margin: .21333333rem auto 0.2rem;
+}
+.part1-suggestion-p{
+    color: red;
+    height: .90666667rem;
+    line-height: .90666667rem;
+    text-align: center;
+    font-size: .30666667rem;
+}
 .flex-contant .contain-part1 div.pop-ranking {
     position: relative;
     font-size: .4rem
