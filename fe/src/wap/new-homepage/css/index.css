@@ -166,13 +166,75 @@ body {
   font-size: 0.32rem;
   color: #7cbaf3;
 }
-.flex-content .bids-box .bids-box-bidlist {
-  padding: 0.58666667rem 0.4rem 0;
+
+/*20171226修改开始*/
+.flex-content .bids-box .bids-box-bidlist{
+  background-color: #fff;
+  padding: .58666667rem .4rem 0;
+  box-sizing: border-box
+}
+.bids-box-bidlist ul{
+  text-align: center;
+  width:9.2rem;
+}
+.bids-box-bidlist ul li.forums-part{
+  height:4.0533333rem;
+  margin-bottom:0.29333333rem;
+  width:33.3%;
+  float:left;
+}
+.bids-box-bidlist ul li.forums-part a{
+  height:4.0533333rem;
+  width:2.86666666rem;
+  -webkit-border-radius: 0.06666667rem;
+  -moz-border-radius: 0.06666667rem;
+  border-radius: 0.06666667rem;
+  -webkit-box-shadow: 0 0.08rem 0.24rem rgba(196,160,160,0.26);
+  -moz-box-shadow: 0 0.08rem 0.24rem rgba(196,160,160,0.26);
+  box-shadow: 0 0.08rem 0.24rem rgba(196,160,160,0.26);
+  position:relative;
+}
+.bids-box-bidlist ul li:nth-child(3n+1).forums-part a{
+  float: left;
+}
+.bids-box-bidlist ul li:nth-child(3n+2).forums-part a{
+  margin:0 auto;
+  display:inline-block;
+}
+.bids-box-bidlist ul li:nth-child(3n).forums-part a{
+  float: right;
+}
+.bids-box-bidlist ul li.forums-part a span{
   box-sizing: border-box;
+  position:absolute;
+  left:0;
+  width:100%;
+  text-align: center;
 }
-.flex-content .bids-box .bids-box-bidlist li img {
-  width: 100%;
+.bids-box-bidlist ul li.forums-part a span:nth-child(1){
+  font-size:0.3066666rem;
+  line-height:0.3866666rem;
+  top:0.8133333rem;
+
 }
+.bids-box-bidlist ul li.forums-part a span:nth-child(2){
+  top:1.586666666rem;
+  font-size:0.373333333rem;
+  line-height:0.37333333rem;
+  color:#4E545A;
+}
+.bids-box-bidlist ul li.forums-part a span:nth-child(3){
+  font-size:0.57333333rem;
+  line-height: 0.57333333rem;
+  color:#FC615C;
+  top:2.30666666rem;
+}
+.bids-box-bidlist ul li.forums-part a span:nth-child(4){
+  top:3.15999999rem;
+  font-size:0.3066666rem;
+  line-height:0.3066666rem;
+}
+
 .flex-content .reading-box {
   width: 100%;
   padding: 0.57333333rem 0.4rem 0;
@@ -226,7 +288,7 @@ body {
   height: 0.94666667rem;
   line-height: 0.94666667rem;
   font-size: 0.34666667rem;
-  color: #7cbaf3;
+  color: #538feb;
   text-align: center;
 }
 .flex-content .data-box {
@@ -247,7 +309,8 @@ body {
   height: 3.44rem;
   padding-top: 0.45333333rem;
   text-align: center;
-  background-color: #8da1b4;
+  background: url("../images/bg_databox.png") no-repeat;
+  background-size: 100% 100%;
   box-sizing: border-box;
 }
 .flex-content .data-box .data-box-show .data-box-show-line1 {
@@ -274,8 +337,7 @@ body {
   margin: 0.32rem auto 0;
   line-height: 0.86666667rem;
   font-size: 0.37333333rem;
-  background-color: #99abbc;
-  color: #e5f2ff;
+  color: #fff;
   text-align: center;
 }
 .flex-content .data-box .data-box-show .data-box-show-line3 span {
@@ -299,7 +361,7 @@ body {
 .flex-content .phone-box {
   display: block;
   width: 100%;
-  padding: 0.4rem 0;
+  padding: 0.66666667rem 0 0.50666667rem;
   background-color: #fff;
   box-sizing: border-box;
   color: #4e545a;
@@ -331,4 +393,51 @@ body {
 }
 .swiper-pagination-bullet-active {
   background: #fff;
+}
+
+.flex-content .phone-box .phone-box-title{
+  padding-left:0.42666667rem;
+  font-size:0.48rem;
+  height:0.48rem;
+  line-height:0.48rem;
+  color: #4e545a;
+  text-align: left;
+  margin-bottom:0.4rem;
+}
+.flex-content .phone-box .phone-box-links{
+  padding:0 0.26666667rem;
+}
+.flex-content .phone-box .phone-box-links a{
+  display: block;
+  width:49.7%;
+  height:2.586rem;
+}
+.flex-content .phone-box .phone-box-links a img{
+  width: 100%;
+}
+.flex-content .phone-box .phone-box-address{
+  height:0.34666667rem;
+  line-height:0.34666667rem;
+  font-size:0.34666667rem;
+  color: #4e545a;
+  text-align: center;
+  margin-top:0.3rem;
+}
+.flex-content .logo-box {
+  width: 100%;
+  padding:0.52rem 0 0.49333333rem;
+  background-color: #fff;
+  margin: 0.29333333rem 0 ;
+}
+.flex-content .logo-box img{
+  display: block;
+  height:0.42666667rem;
+  margin:0 auto 0.24rem;
+}
+.flex-content .logo-box p{
+  height: 0.34666667rem;
+  line-height: 0.34666667rem;
+  font-size: 0.34666667rem;
+  color: #4e545a;
+  text-align: center;
 }
