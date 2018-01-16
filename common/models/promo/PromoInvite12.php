@@ -5,9 +5,11 @@ namespace common\models\promo;
 
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
+use common\models\mall\PointRecord;
 use common\models\order\OnlineOrder;
 use common\models\user\User;
 use common\service\AccountService;
+use common\service\PointsService;
 use common\service\SmsService;
 use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
@@ -131,40 +133,49 @@ class PromoInvite12
                                 }
                             }
                         }
-                        //前三次投资给邀请者发现金红包
-                        if (in_array($order->id, $orderIds)) {
-                            $money = round($order->order_money / 1000, 1);
-                            //判断邀请者是否有过投资
-                            $record = OnlineOrder::find()->where(['status' => 1, 'uid' => $user->id])->count();
-                            if ($money > 0 && $record > 0) {
-                                $moneyRecord = AccountService::userTransfer($user, $money);
-                                if ($moneyRecord) {
-                                    $mess = $mess ? $mess . '和' . $money . '元现金红包' : $money . '元现金红包';
-                                    $cashAmount = $money;
-                                    $moneyRecordId = $moneyRecord->id;
+                        $record = OnlineOrder::find()->where(['status' => 1, 'uid' => $user->id])->count();
+                        if ($record > 0) { //线上有过投资，返现金
+                            //前三次投资给邀请者发现金红包
+                            if (in_array($order->id, $orderIds)) {
+                                $money = round($order->order_money / 1000, 1);
+                                //判断邀请者是否有过投资
+                                if ($money > 0) {
+                                    $moneyRecord = AccountService::userTransfer($user, $money);
+                                    if ($moneyRecord) {
+                                        $mess = $mess ? $mess . '和' . $money . '元现金红包' : $money . '元现金红包';
+                                        $cashAmount = $money;
+                                        $moneyRecordId = $moneyRecord->id;
+                                    }
                                 }
                             }
-                        }
-                        //写发奖记录
-                        if (!empty($couponAmount) && !empty($userCouponId) && isset($userCoupon)) {
-                            $award = Award::couponAward($user, $promo, $userCoupon);
-                            $award->save(false);
-                        }
-                        if (!empty($cashAmount) && !empty($moneyRecordId) && isset($moneyRecord)) {
-                            $award = Award::cashAward($user, $promo, $moneyRecord);
-                            $award->save(false);
-                        }
+                            //写发奖记录
+                            if (!empty($couponAmount) && !empty($userCouponId) && isset($userCoupon)) {
+                                $award = Award::couponAward($user, $promo, $userCoupon);
+                                $award->save(false);
+                            }
+                            if (!empty($cashAmount) && !empty($moneyRecordId) && isset($moneyRecord)) {
+                                $award = Award::cashAward($user, $promo, $moneyRecord);
+                                $award->save(false);
+                            }
 
-                        //发短信
-                        if ($mess) {
-                            $templateId = \Yii::$app->params['sms']['invite_bonus'];
-                            $message = [
-                                $order->user->getMobile(),//被邀请者的手机号
-                                $mess,
-                            ];
-                            SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
+                            //发短信
+                            if ($mess) {
+                                $templateId = \Yii::$app->params['sms']['invite_bonus'];
+                                $message = [
+                                    $order->user->getMobile(),//被邀请者的手机号
+                                    $mess,
+                                ];
+                                SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
+                            }
+                        } else if ($orderIds[0] === $order->id) {   //首投送积分
+                            $pointRecord = new PointRecord([
+                                'ref_type' => PointRecord::TYPE_ONLINEINVITE_REWARD,
+                                'ref_id' => $order->id,
+                                'remark' => '邀请奖励积分',
+                                'incr_points' => bcdiv(bcmul($order->order_money, 6), 1000),
+                            ]);
+                            $res = PointsService::addUserPoints($pointRecord, false, $user);
                         }
-
                         $transaction->commit();
                         \Yii::info("[user_invite] 用户[{$user->id}] 邀请好友投资，订单ID {$order->id}，获取奖励 $mess", 'user_log');
                     } catch (\Exception $e) {
