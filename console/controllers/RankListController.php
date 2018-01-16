@@ -47,6 +47,7 @@ inner join user u
 where date(from_unixtime(o.order_time)) >= :startDate 
     and date(from_unixtime(o.order_time)) <= :endDate 
     and o.status = 1
+    and u.safeMobile is not null
 group by u.id 
 ";
             $res = $db->createCommand($sql, [
