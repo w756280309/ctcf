@@ -15,8 +15,7 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/kindeditor-all-min.js', ['depen
 $this->registerJsFile('/vendor/kindeditor/4.1.11/lang/zh-CN.js', ['depends' => 'yii\web\YiiAsset']);
 $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['depends' => 'yii\web\YiiAsset']);
 
-$readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
-$disabled = $model->online_status ? ['disabled' => 'disabled'] : [];
+$refundMethodStatus = $model->refund_method !== 1 ? ['readonly' => 'readonly'] : [];
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
@@ -88,11 +87,17 @@ $disabled = $model->online_status ? ['disabled' => 'disabled'] : [];
                 <div class="control-group">
                     <label class="control-label">项目宽限期</label>
                     <div class="controls">
+                        <?php
+                            $kuanxianqi_input_option = array_merge([
+                                'autocomplete' => 'off',
+                                'placeholder' => '默认0天'],
+                                $refundMethodStatus)
+                        ?>
                     <?=
                         $form->field($model, 'kuanxianqi', ['template' => '{input}'])->hiddenInput(['value' => 0, 'id' => 'kuanxianqi_hide'])->label(false)
                     ?>
                     <?=
-                        $form->field($model, 'kuanxianqi', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '默认0天']])->textInput(['class' => 'm-wrap span6'])
+                        $form->field($model, 'kuanxianqi', ['template' => '<div class="input-append">{input}<span class="add-on">(天)</span></div>{error}', 'inputOptions' => $kuanxianqi_input_option])->textInput(['class' => 'm-wrap span6'])
                     ?>
                     </div>
                 </div>
@@ -109,7 +114,8 @@ $disabled = $model->online_status ? ['disabled' => 'disabled'] : [];
                             'autocomplete' => 'off',
                             'class' => 'chosen-with-diselect span6',
                             'onchange' => 'changeIssueName(this)',
-                        ], $disabled);
+                            'disabled' => 'disabled'
+                        ]);
                         ?>
                         <?=
                             $form->field($model, 'issuer', [
@@ -157,11 +163,6 @@ $disabled = $model->online_status ? ['disabled' => 'disabled'] : [];
     $(function() {
         var $productForm = $('#product_product_form');
         var $submit = $productForm.find('button[type=submit]');
-        var originalBorrower = $("#onlineproduct-issuer option:selected").text();
-        originalBorrower = originalBorrower.replace(/(^\s*)|(\s*$)/g,"");
-        if(parseInt($("#onlineproduct-refund_method").val())===1){
-            $('#onlineproduct-kuanxianqi').removeAttr('readonly');
-        }
         KindEditor.ready(function(K) {
             K.create('#company', {
                 cssPath: '/vendor/kindeditor/4.1.11/plugins/code/prettify.css',

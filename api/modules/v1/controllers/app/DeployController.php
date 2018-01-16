@@ -34,12 +34,12 @@ class DeployController extends Controller
         ];
 
         if ('ios' === $clienttype) {
-            if ($versionCode < 16) {
+            if ($versionCode < 17) {
                 $content = [
                     'old_updatetype' => 2,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
-                    'updatedesc' => '优化产品购买流程，修复适配问题',  //新版本更新说明
-                    'versioncode' => '16',   //新版本版本号
-                    'versionname' => '1.7.2', //新版本版本名称
+                    'updatedesc' => '导航更加清爽流畅，新增门店理财查看',  //新版本更新说明
+                    'versioncode' => '17',   //新版本版本号
+                    'versionname' => '1.8', //新版本版本名称
                     'downloadurl' => 'https://itunes.apple.com/us/app/wen-dou-jin-fu/id1107540109?mt=8',   //新版本下载地址
                 ];
             }

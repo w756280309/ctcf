@@ -19,6 +19,8 @@ use common\models\offline\OfflineUserManager;
 use common\models\product\OnlineProduct;
 use common\utils\ExcelUtils;
 use common\utils\SecurityUtils;
+use Wcg\Xii\Crm\Model\Activity;
+use Wcg\Xii\Crm\Model\CrmOrder;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
@@ -216,17 +218,29 @@ class OfflineController extends BaseController
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $order->isDeleted = true;
+                if (!$order->save(false)) {
+                    throw new \Exception('线下订单删除失败');
+                }
                 //修改标的修改记录
                 $log = AdminLog::initNew($order);
-                if ($order->save(false) && $log->save(false)) {
-                    //如果存在计息日，才需要更新积分和累计年化投资额
-                    if (false !== strtotime($order->valueDate)) {
-                        //更新积分和累计年化投资额
-                        $this->updatePointsAndAnnual($order, PointRecord::TYPE_OFFLINE_ORDER_DELETE);
-                    }
-                    $transaction->commit();
-                    return ['code' => 1, 'message' => '删除成功'];
+                if (!$log->save(false)) {
+                    throw new \Exception('线下订单记录失败');
                 }
+
+                //更新积分和累计年化投资额
+                $this->updatePointsAndAnnual($order, PointRecord::TYPE_OFFLINE_ORDER_DELETE);
+
+                //删除crm_order
+                if ($order->sn) {
+                    $crmOrder = CrmOrder::findOne(['offline_order_sn' => $order->sn]);
+                    if (!is_null($crmOrder)) {
+                        CrmOrder::deleteAll(['offline_order_sn' => $order->sn]);
+                        //删除activity
+                        Activity::deleteAll(['ref_type' => 'offline_order', 'ref_id' => $crmOrder->id]);
+                    }
+                }
+                $transaction->commit();
+                return ['code' => 1, 'message' => '删除成功'];
             } catch (\Exception $ex) {
                 $transaction->rollBack();
                 return ['code' => 0, 'message' => $ex->getMessage()];
@@ -248,10 +262,11 @@ class OfflineController extends BaseController
             $order->andWhere(["$o.id" => $request['id']]);
         }
         $model = $order->one();
-        //$model->setScenario('edit');
         $model->realName = $model->user->realName;
+        $affiliators = Affiliator::allAffiliators();
         return $this->render('edit',[
             'model' => $model,
+            'affiliators' => $affiliators,
         ]);
     }
 
@@ -266,11 +281,14 @@ class OfflineController extends BaseController
         $post = Yii::$app->request->post();
         $transaction = Yii::$app->db->beginTransaction ();
         $order = $this->findOr404(OfflineOrder::class, $post['OfflineOrder']['id']);
+        //标的已经计息，不得修改
+        if ($order->loan->is_jixi) {
+            $order->scenario = 'is_jixi';
+            //return $this->redirect('list?loan_id=' . $order->loan->id);
+        }
         $offUser = $this->findOr404(OfflineUser::class,['idCard' => $order->idCard]);
         try {
-
             if ($order->load($post) && $order->validate()) {
-                $res = $order->save();
                 if (!$order->save()) {
                     throw new \Exception('用户信息更新失败!');
                 }
@@ -282,6 +300,18 @@ class OfflineController extends BaseController
             }
             if (!$offUser->save()) {
                 throw new \Exception('用户真实姓名信息更新失败!');
+            }
+            //同步crm里面的认购记录
+            $crmOrder = CrmOrder::findOne(['offline_order_sn' => $order->sn]);
+            if (!is_null($crmOrder)) {
+                $crmOrder->mobile = $order->mobile;
+                $crmOrder->bankName = $order->accBankName;
+                $crmOrder->bankCard = $order->bankCardNo;
+                $crmOrder->orderDate = $order->orderDate;
+                $crmOrder->money = bcmul($order->money, 10000);
+                $crmOrder->apr = $order->apr;
+                $crmOrder->channel = $order->affiliator_id;
+                $crmOrder->save(false);
             }
             $transaction->commit();
         } catch ( \Exception $e ) {

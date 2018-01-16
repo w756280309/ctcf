@@ -52,6 +52,7 @@ class RepaymentController extends BaseController
         $total_lixi = 0;
         $total_origin_lixi = 0;
         $total_bx = 0;
+        $couponsAmount = 0;
         bcscale(14);
         $bcround = new BcRound();
         $qimodel = null;
@@ -65,14 +66,15 @@ class RepaymentController extends BaseController
             if (!$repayment) {
                 return ['result' => 0, 'message' => '还款信息不存在'];
             }
+            $order = OnlineOrder::findOne($val['order_id']);
+            $orderBonusProfit = $order->getBonusProfit();
+            $couponsAmount += $orderBonusProfit;
             $total_origin_lixi = bcadd($total_origin_lixi, $val['lixi'], 14);
             $val['origin_lixi'] = max($val['lixi'], 0.01);
-            //当没有还过款时候才从新计算利息
+            //当没有还过款时候才重新计算利息
             $payed = $repayment->isRefunded;
             if ($isRefreshCalcLiXi) {
                 if (!$payed) {
-                    $order = OnlineOrder::findOne($val['order_id']);
-                    $orderBonusProfit = $order->getBonusProfit();
                     if ($orderBonusProfit > 0) {
                         $val['lixi'] = max(0.01, $bcround->bcround(bcadd($orderBonusProfit, bcdiv(bcmul($days, bcsub($val['lixi'], $orderBonusProfit, 14), 14), $deal->expires, 14), 14), 2));
                     } else {
@@ -88,7 +90,8 @@ class RepaymentController extends BaseController
             $total_bx = bcadd($total_bj, $total_lixi, 14);
             $qimodel[$val['qishu']][] = $val;
         }
-
+        $totalQishu = count($qimodel);
+        $couponsAmount /= $totalQishu;
         //应还款人数
         $count = OnlineRepaymentPlan::find()->select('uid')->where(['online_pid' => $pid])->groupBy('uid')->count();
 
@@ -97,6 +100,7 @@ class RepaymentController extends BaseController
             'yhbj' => $bcround->bcround($total_bj, 2),
             'yhlixi' => $bcround->bcround($total_lixi, 2),
             'total_bx' => $bcround->bcround($total_bx, 2),
+            'couponsAmount' => $bcround->bcround($couponsAmount, 2),
             'total_origin_lixi' => $bcround->bcround($total_origin_lixi, 2),
             'deal' => $deal,
             'model' => $qimodel,

@@ -11,7 +11,7 @@ use common\utils\StringUtils;
 ?>
 
 <!--账户总资产-->
-<input id="property-value" type="hidden" value="<?= StringUtils::amountFormat3($user->lendAccount->totalFund) ?>">
+<input id="property-value" type="hidden" value="<?= StringUtils::amountFormat3($user->totalAssets) ?>">
 <!--可用余额-->
 <input id="AvlBal" type="hidden" value="<?= $user->lendAccount->available_balance ?>">
 <!--理财资产-->
@@ -69,6 +69,13 @@ use common\utils\StringUtils;
                     <i>冻结资金</i>
                     <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                     <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->freeze_balance) ?></i>元
+                    <div class="property-tishi" style="left: -20px;">投资资金在项目未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
+                </li>
+                <li class="grayFont">
+                    <div class="property-point redBg"></div>
+                    <i>门店理财</i>
+                    <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
+                    <i class="redFont"><?= StringUtils::amountFormat3($user->offline->totalAssets) ?></i>元
                     <div class="property-tishi" style="left: -20px;">投资资金在项目未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                 </li>
             </ul>

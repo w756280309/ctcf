@@ -83,12 +83,14 @@ class ToolController extends Controller
                 'njj' => '7601209',//测试环境只有一个账号
                 'lhwt' => '7601209',//测试环境只有一个账号
                 'jmc' => '7601209',//测试环境只有一个账号
+                'hzyx' => '7601209',//测试环境只有一个账号
             ];
         } else {
             $ePayUserIdList = [
                 'njj' => '7302209',//正式环境（南京交）在联动ID
                 'lhwt' => '7301209',//正式环境（立合旺通）在联动ID  转账流程已测试 正式转账已成功
                 'jmc' => '7303209',//正式环境（居莫愁）在联动ID
+                'hzyx' => '7305209', // 杭州越翔
             ];
         }
 
@@ -858,6 +860,46 @@ group by o.uid
             $failStr = '【投资失败】订单编号：'.$order->sn.'，标的sn：'.$loanSn.'，投资者：立合旺通，投资时间:'.$order->created_at.'，投资金额：'.$money.PHP_EOL;
             Yii::info($failStr, 'recharge_log');
             $this->stdout($failStr);
+        }
+    }
+
+    public function actionOrgFee($startDate, $endDate)
+    {
+        $file = Yii::getAlias('@app/runtime/orgFee'.$startDate.'-'.$endDate.'csv');
+        $ump = Yii::$container->get('ump');
+        if (false === strtotime($startDate) || false === strtotime($endDate)) {
+            throw new \Exception('日期格式不对');
+        }
+        $startDateTime = new \DateTime($startDate);
+        $endDateTime = new \DateTime($endDate);
+
+        $days = $endDateTime->diff($startDateTime)->days;
+        $num = ceil($days / 30);
+
+        for ($i = 1; $i <= $num; $i++) {
+            //首次查询日期为开始日期，然后每次开始日期+30天，结束日期在开始日期的及基础上再加30天
+            $dueStartDateTime = 1 === $i ? $startDateTime : $startDateTime->add((new \DateInterval('P31D')));
+            $dueCloneDateTime = clone $dueStartDateTime;
+            $dueEndDateTime = $dueCloneDateTime->add((new \DateInterval('P30D')));
+            $dueEndDateTime = $dueEndDateTime >= $endDateTime ? $endDateTime : $dueEndDateTime;
+
+            $dueStartDate = $dueStartDateTime->format('Ymd');
+            $dueEndDate = $dueEndDateTime->format('Ymd');
+            $this->stdout($dueStartDate.'-'.$dueEndDate.'开始查询'.PHP_EOL);
+            $response = $ump->orgFee($dueStartDate, $dueEndDate, 1);
+            if ($response->isSuccessful()) {
+                $totalNum = $response->get('total_num');
+                $pageNum = ceil($totalNum / 10);
+                for ($j = 1; $j <= $pageNum; $j++) {
+                    $responseByPage = $ump->orgFee($dueStartDate, $dueEndDate, $pageNum);
+                    $transDetail = $responseByPage->get('trans_detail');
+                    $transDetail = str_replace('|', PHP_EOL, $transDetail);
+                    $transDetail = str_replace(',', "\t", $transDetail);
+                    file_put_contents($file, $transDetail.PHP_EOL, FILE_APPEND);
+                    sleep(1);
+                }
+                $this->stdout($dueStartDate.'-'.$dueEndDate.'执行查询完毕，共计'.$totalNum.'条'.PHP_EOL);
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ use common\lib\user\UserStats;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\stats\Perf;
+use common\models\stats\Piwik;
 use common\models\user\User;
 use yii\bootstrap\Html;
 use yii\data\ActiveDataProvider;
@@ -609,6 +610,110 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         }
 
         return $this->render('platform_rate', $fileData);
+    }
+    //统计渠道用户注册及投资转化率信息
+    public function actionChannelUserInfo($startDate = null, $endDate = null, $label = null)
+    {
+        $startDate = $startDate ? date('Y-m-d', strtotime($startDate)) : null;
+        $endDate = $startDate ? date('Y-m-d', strtotime($endDate)) : null;
+        if (empty($startDate) || false === strtotime($startDate)) {
+            $startDate = date('Y-m-01');
+        }
+        if (empty($endDate) || false === strtotime($endDate)) {
+            if (date('d') === '01') {
+                $endDate = date('Y-m-d');
+            } else {
+                $endDate = date('Y-m-d', strtotime('-1 day'));
+            }
+        }
+        $pageSize = 10;
+        //从piwik中获取各渠道商名称及页面访问数量
+        $piwikData = Piwik::getChannelUserNum($startDate, $endDate);
+        $channelData = ArrayHelper::getColumn($piwikData, 'label');
+        //查询时间段内各渠道注册人数及注册购买总金额
+        $registerData = Yii::$app->db->createCommand('SELECT 
+          campaign_source AS campaign_source,
+          count(u.id) AS registerUserCount,
+          sum(ui.investTotal) AS registerOrderMoneySum 
+          FROM user u 
+          LEFT JOIN user_info ui
+          ON ui.user_id = u.id
+          WHERE DATE(FROM_UNIXTIME(u.created_at)) 
+          BETWEEN :startDate 
+          AND :endDate
+          GROUP BY campaign_source', [
+            'startDate' => $startDate,
+            'endDate' => $endDate
+        ])->queryAll();
+        $registerData = ArrayHelper::index($registerData, 'campaign_source');
+        //查询时间段内各渠道购买订单数量及订单总额
+        $orderData = Yii::$app->db->createCommand('SELECT 
+            u.campaign_source AS campaign_source, 
+            count(o.id) AS orderCount,
+            sum(o.order_money) AS orderMoneySum
+            FROM online_order o 
+            INNER JOIN user u 
+            ON o.uid = u.id
+            WHERE o.status = 1 
+            AND DATE(FROM_UNIXTIME(o.created_at)) 
+            BETWEEN :startDate 
+            AND :endDate
+            GROUP BY u.campaign_source', [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
+        $orderData = ArrayHelper::index($orderData, 'campaign_source');
+        $campaignSource = array_keys($orderData);
+        $piwikCampaignSource = array_keys($piwikData);
+        $campaignSource =array_merge($campaignSource, $piwikCampaignSource);
+        $campaignSource = array_unique($campaignSource);
+        $allData = [];
+        $nbVisitsArray = [];
+        foreach ($campaignSource as $campaign) {
+            $allData[$campaign]['label'] = $campaign;
+            $nbVisits = count($piwikData[$campaign]) ? $piwikData[$campaign]['nb_visits'] : 0;
+            $nbVisitsArray[] = $nbVisits;
+            $allData[$campaign]['nb_visits'] = $nbVisits;
+            $allData[$campaign]['registerOrderMoneySum'] = count($registerData[$campaign]) ? $registerData[$campaign]['registerOrderMoneySum'] : 0;
+            $allData[$campaign]['orderMoneySum'] = count($orderData[$campaign]) ? $orderData[$campaign]['orderMoneySum'] : 0;
+            $registerUserCount = count($registerData[$campaign]) ? $registerData[$campaign]['registerUserCount'] : 0;
+            $orderCount = count($orderData[$campaign]) ? $orderData[$campaign]['orderCount'] : 0;
+            $allData[$campaign]['registerUserCount'] = $registerUserCount;
+            $allData[$campaign]['orderCount'] = $orderCount;
+            $allData[$campaign]['registerConversionRate'] = 0;
+            $allData[$campaign]['orderConversionRate'] = 0;
+            if ($nbVisits) {
+                $allData[$campaign]['registerConversionRate'] = $registerUserCount/$nbVisits*100;
+                $allData[$campaign]['orderConversionRate'] = $orderCount/$nbVisits*100;
+            }
+        }
+        array_multisort($nbVisitsArray, SORT_DESC, $allData);
+        if (strlen($label) !== 0) {
+            $label = str_replace('，', ',', $label);
+            $labelArray = explode(',', $label);
+            $newData = [];
+            foreach ($labelArray as $labelValue) {
+                $newData[$labelValue] = $allData[$labelValue];
+            }
+            unset($allData);
+            $allData = $newData;
+        }
+
+        $totalCount = count($allData);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $allData,
+            'pagination' => [
+                'pageSize' => $pageSize
+            ]
+        ]);
+        $pages = new Pagination(['totalCount' => $totalCount, 'pageSize' => $pageSize]);
+        return $this->render('channel_user_info', [
+            'dataProvider' => $dataProvider,
+            'pages' => $pages,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'label' => $label,
+        ]);
     }
 //新手标人数统计页面
     public function actionXinshoutj($startDate = null, $endDate = null)

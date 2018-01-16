@@ -121,4 +121,22 @@ class Affiliator extends ActiveRecord
 
         return $affiliatorIds;
     }
+
+    /**
+     * 按 key => value  返回所有分销商
+     * ['id' => ''name]
+     */
+    public static function allAffiliators()
+    {
+        $array = self::find()
+            ->select(['id', 'name'])
+            ->where(['isDel' => false])
+            ->asArray()
+            ->all();
+        $affiliators = [];
+        foreach ($array as $v) {
+            $affiliators[$v['id']] = $v['name'];
+        }
+        return $affiliators;
+    }
 }

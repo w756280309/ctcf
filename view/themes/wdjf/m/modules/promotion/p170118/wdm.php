@@ -96,7 +96,7 @@ $config = json_decode($promo->config, true);
             <p class="f15">股东背景</p>
             <ul>
                 <li></li>
-                <li><img  data-original="<?= FE_BASE_URI ?>wap/wendumao/images/shareholde_01.png" alt=""><img  data-original="<?= FE_BASE_URI ?>wap/wendumao/images/shareholde_02.png" alt=""></li>
+                <li><img  data-original="<?= FE_BASE_URI ?>wap/wendumao/images/shareholde_01.png" alt=""></li>
             </ul>
         </div>
 
