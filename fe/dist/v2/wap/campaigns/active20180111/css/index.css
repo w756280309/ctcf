@@ -569,3 +569,95 @@ i.name-red{
     color: #FA3F32;
     font-style: normal;
 }
+
+.flex-contant .goto-login {
+    display: none;
+    background-color: rgba(12, 7, 5, .7);
+    position: fixed;
+    top: 0;
+    z-index: 11;
+    max-width: 750px;
+    height: 100vh;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.flex-contant .goto-login .box-top-mid {
+    width: 9.2rem;
+    height: 9.76rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    background: url(../images/prize-box-bg.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    /*padding-top: 1.5rem;*/
+    padding-left: 0.8rem;
+    padding-right: 0.5rem;
+}
+.flex-contant .goto-login .box-top-mid .go-login-title{
+    font-size: .75rem;
+    height: 1.69333333rem;
+    line-height: .90666667rem;
+    padding-top: .78666667rem;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    text-align: center;
+    color:#C18C2D;
+}
+
+.flex-contant .goto-login .box-top-mid .cue-close {
+    position: absolute;
+    width: .90666667rem;
+    height: .90666667rem;
+    background: url(../images/prize-close.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    right: 0;
+    top: -1.33333333rem
+}
+.flex-contant .goto-login .box-top-mid .box-cover{
+    background-color: #FFFBEF;
+    width: 100%;
+    height: 7rem;
+}
+
+.flex-contant .goto-login .box-top-mid p.no-login-msg {
+    color: #C18C2D;
+    font-size:0.49rem;
+    padding-top: 0.65rem;
+}
+.flex-contant .goto-login .box-top-mid .have-login-msg{
+    color: #999;
+    font-size: 0.42rem;
+    position: absolute;
+    bottom: 2.66666667rem;
+    right: 1.0rem;
+
+}
+.flex-contant .goto-login .box-top-mid .have-login-msg a{
+    color:red;
+}
+.flex-contant .goto-login .box-top-mid a.go-invite {
+    position: absolute;
+    bottom: 1.06666667rem;
+    left: .98666667rem;
+    width: 7.25333333rem;
+    height: 1.32rem;
+    line-height: 1.17333333rem;
+    text-align: center;
+    color: #fff;
+    font-size: .46666667rem;
+    background: url(../images/prize-get-button.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%
+}

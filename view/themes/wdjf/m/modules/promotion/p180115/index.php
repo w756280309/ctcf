@@ -4,7 +4,7 @@ $this->title = '门票好礼三重奏';
 ?>
 
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20180111/css/index.css?v=1.2121">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20180111/css/index.css?v=1.27">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
@@ -81,6 +81,20 @@ $this->title = '门票好礼三重奏';
         </div>
         <p>剩余次数：<span v-cloak>{{msg}}</span>次</p>
         <a @click="goInvite" class="go-invest">去投资</a>
+    </div>
+<!--     为登陆框-->
+    <div v-cloak :class="{'hide-prize':noLogin}" class="goto-login">
+
+        <div class="box-top-mid">
+            <div @click="closeList" class="cue-close">
+            </div>
+            <p class="go-login-title">注册有礼</p>
+            <div class="box-cover">
+                <p class="no-login-msg">活动期间（1月15日00:00-1月19日12:00）完成注册实名，即可抽取<span style="color:red">8位</span>幸运用户获得<span style="color:red;">680元门票</span>大奖！</p>
+                <p class="have-login-msg">已有账号?<a href="/site/login" class="have-login-msg-a">登录</a></p>
+                <a href="/site/signup" class="go-invite">注册抽门票</a>
+            </div>
+        </div>
     </div>
     <div v-cloak :class="{'hide-prize':getPrize}" class="get-prizes">
         <div class="box-top-mid">
@@ -207,7 +221,12 @@ $this->title = '门票好礼三重奏';
                 }
             },
             mounted: function () {
-
+                if (this.isLoggedin == 'true') {
+                    this.noLogin = false;
+                } else if (this.isLoggedin == 'false'&&this.promoStatus == 0) {
+                    this.noLogin = true;
+                    this.$refs.flexContent.addEventListener('touchmove', this.bodyScroll, false);
+                }
             },
             data: {
                 // 获得的奖品
@@ -229,6 +248,8 @@ $this->title = '门票好礼三重奏';
                 getPrize: false,
                 // 显示获得所有的奖品弹窗
                 getPrizeList: false,
+                //未登录弹窗
+                noLogin:false,
                 // 抽奖次数
                 msg: '<?= $activeTicketCount ?>',
                 //奖品
@@ -446,6 +467,7 @@ $this->title = '门票好礼三重奏';
                 closeList: function () {
                     this.getPrize = false;
                     this.getPrizeList = false;
+                    this.noLogin=false;
                     this.$refs.flexContent.removeEventListener('touchmove', this.bodyScroll, false);
                 },
                 bodyScroll: function (e) {
