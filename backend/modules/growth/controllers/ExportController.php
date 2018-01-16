@@ -322,12 +322,12 @@ inner join online_product p on o.online_pid = p.id
 inner join user u on u.id = o.uid 
 left join user_affiliation ua on ua.user_id = o.uid 
 left join affiliator a on a.id = ua.affiliator_id 
-where date(from_unixtime(o.refund_time)) >= :startDate 
-and date(from_unixtime(o.refund_time)) <= :endDate 
+where date(from_unixtime(p.finish_date)) >= :startDate 
+and date(from_unixtime(p.finish_date)) <= :endDate 
 and o.status in (1,2) 
 and p.is_xs = 1 
 and p.isTest = 0 
-order by o.refund_time asc',
+order by p.finish_date asc',
                 'params' => [
                     'startDate' => [//参数列表， key 是参数名， 不可为空
                         'name' => 'startDate',//参数名
