@@ -137,7 +137,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		<div class='bids-box-bidlist'>
 			<ul class="clearfix">
 				<li class="forums-part">
-					<a href="https://m.wenjf.com/deal/deal/index" class="forums-part-contant">
+					<a href="/deal/deal/index" class="forums-part-contant">
 						<span>“期限灵活”</span>
 						<span>期限30天</span>
 						<span>5.6%</span>
@@ -145,7 +145,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 					</a>
 				</li>
 				<li class="forums-part">
-					<a href="https://m.wenjf.com/deal/deal/index" class="forums-part-contant">
+					<a href="/deal/deal/index" class="forums-part-contant">
 						<span>“兼顾灵活和收益”</span>
 						<span>期限60天</span>
 						<span>6.0%</span>
@@ -153,7 +153,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 					</a>
 				</li>
 				<li class="forums-part">
-					<a href="https://m.wenjf.com/deal/deal/index" class="forums-part-contant">
+					<a href="/deal/deal/index" class="forums-part-contant">
 						<span>“兼顾灵活和收益”</span>
 						<span>期限90天</span>
 						<span>6.2%</span>
@@ -161,7 +161,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 					</a>
 				</li>
 				<li class="forums-part">
-					<a href="https://m.wenjf.com/deal/deal/index" class="forums-part-contant">
+					<a href="/deal/deal/index" class="forums-part-contant">
 						<span>“收益稳健”</span>
 						<span>期限180天</span>
 						<span>6.8%</span>
@@ -169,7 +169,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 					</a>
 				</li>
 				<li class="forums-part">
-					<a href="https://m.wenjf.com/deal/deal/index" class="forums-part-contant">
+					<a href="/deal/deal/index" class="forums-part-contant">
 						<span>“领跑收益”</span>
 						<span>期限365天</span>
 						<span>7.2-8.0%</span>
@@ -177,7 +177,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 					</a>
 				</li>
 				<li class="forums-part">
-					<a href="https://m.wenjf.com/deal/deal/index" class="forums-part-contant">
+					<a href="/deal/deal/index" class="forums-part-contant">
 						<span>“领跑收益”</span>
 						<span>期限730天</span>
 						<span>8-8.8%</span>
