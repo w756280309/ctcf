@@ -2,6 +2,7 @@
 
 namespace common\models\offline;
 
+use common\models\user\User;
 use yii\db\ActiveRecord;
 use \Zii\Model\CoinsTrait;
 use \Zii\Model\LevelTrait;
@@ -88,5 +89,11 @@ class OfflineUser extends ActiveRecord
             ->andWhere(['>', 'offline_loan.finish_date', date('Y-m-d H:i:s')])
             ->leftJoin('offline_loan', 'offline_loan.id = offline_order.loan_id')
             ->sum('offline_order.money') * 10000;
+    }
+
+    //获取关联的线上账户
+    public function getOnline()
+    {
+        return User::findOne($this->onlineUserId);
     }
 }

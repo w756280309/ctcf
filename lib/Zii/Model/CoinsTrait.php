@@ -2,6 +2,7 @@
 
 namespace Zii\Model;
 
+use common\models\offline\OfflineUser;
 use common\models\user\User;
 
 trait CoinsTrait
@@ -14,8 +15,10 @@ trait CoinsTrait
     public function getCoins()
     {
         $amount = $this->annualInvestment;
-        if ($this Instanceof User && $this->offline) {
+        if ($this instanceof User && $this->offline) {  //线上
             $amount = bcadd($this->offline->annualInvestment, $this->annualInvestment, 2);
+        } else if ($this instanceof OfflineUser && $this->online) {   //线下
+            $amount = bcadd($this->online->annualInvestment, $this->annualInvestment, 2);
         }
         return bcdiv($amount, 10000, 0);
     }

@@ -115,7 +115,8 @@ class OfflineController extends BaseController
             'orders' => $orders,
             'user' => $user,
             'ref_type' => $ref_type,
-            'tabClass' => $tabClass
+            'tabClass' => $tabClass,
+            'user' => $user,
         ]);
     }
 
@@ -159,7 +160,8 @@ class OfflineController extends BaseController
         if (null === ($user = OfflineUser::findOne($user_id))) {
             return ['code' => 1, 'message' => '找不到该用户'];
         }
-        if ($user->points < $points) {
+        $userPoints = $user->online ? $user->online->points : $user->points;
+        if ($userPoints < $points) {
             return ['code' => 1, 'message' => '积分不足'];
         }
         $transaction = Yii::$app->db->beginTransaction();

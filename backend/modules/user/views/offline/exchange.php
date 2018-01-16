@@ -67,7 +67,7 @@ $this->title = '兑换商品';
             <div class="control-group">
                 <label class="control-label">积分数量</label>
                 <div class="controls currentPoint">
-                    <?= $user->points ?>
+                    <?= $user->online ? $user->online->points : $user->points ?>
                 </div>
             </div>
             <div class="control-group">
