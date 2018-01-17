@@ -184,7 +184,8 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
             <div class="detail_font">会员资金详情</div>
             <table class="table table-condensed">
                 <tr>
-                    <td><span>资产总额（元）</span><?= StringUtils::amountFormat2($userAccount->getTotalFund()) ?></td>
+                    <td><span>官网理财（元）</span><?= StringUtils::amountFormat2($userAccount->getTotalFund()) ?></td>
+                    <td><span>门店理财（元）</span><?= StringUtils::amountFormat2($normalUser->offline ? $normalUser->offline->totalAssets : 0) ?></td>
                     <td><span>理财资产（元）</span><?= StringUtils::amountFormat2($userAccount->investment_balance) ?></td>
                     <td><span>冻结资金（元）</span><?= StringUtils::amountFormat2($userAccount->freeze_balance) ?></td>
                     <td><span>可用余额（元）</span><?= StringUtils::amountFormat2($userAccount->available_balance) ?></td>
