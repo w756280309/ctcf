@@ -91,4 +91,29 @@ class RedeemHelper
 
         return rtrim($formatRedemptionPaymentDates, $tail);
     }
+
+    /**
+     * 根据赎回开放时间段获取封闭期
+     * - 当存在多个时段时，返回null
+     *
+     * @param string $redemptionPeriods 赎回开放时间段
+     *
+     * @return \DateTime|null
+     */
+    public static function getClosedPeriodExpireTime($redemptionPeriods)
+    {
+        if (!self::checkRedemptionPeriods($redemptionPeriods)) {
+            return null;
+        }
+
+        $redemptionPeriods = explode(PHP_EOL, $redemptionPeriods);
+        if (count($redemptionPeriods) > 1) {
+            return null;
+        }
+
+        $redemptionPeriods = explode(',', $redemptionPeriods[0]);
+        $redemptionStartTime = $redemptionPeriods[0];
+
+        return (new \DateTime($redemptionStartTime))->modify('-1 day');
+    }
 }

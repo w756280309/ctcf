@@ -26,6 +26,11 @@ class LoanHelper
             return StringUtils::amountFormat2($baseRate);
         }
 
+        //todo - 临时代码，对于可主动赎回的标的利率暂定写死为9.5，因为当前库中未记录此字段
+        if ($loan->isRedeemable) {
+            $topRate = 9.5;
+        }
+
         if (null !== $loan->jiaxi) {
             $topRate = bcsub($topRate, $loan->jiaxi, 2);
         }
