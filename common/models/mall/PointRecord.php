@@ -33,7 +33,6 @@ class PointRecord extends ActiveRecord
 
     const TYPE_LOAN_ORDER = 'loan_order';   //购买标的
     const TYPE_POINT_ORDER = 'point_order'; //积分兑换
-    const TYPE_ONLINEINVITE_REWARD = 'online_invite_reward';    //线上邀请奖励
     const TYPE_POINT_ORDER_FAIL = 'point_order_fail';//积分订单失败退款积分
     const TYPE_OFFLINE_BUY_ORDER = 'offline_loan_order'; //线下购买标的
     const TYPE_OFFLINE_POINT_ORDER = 'offline_point_order'; //线下积分兑换
@@ -120,7 +119,6 @@ class PointRecord extends ActiveRecord
             self::TYPE_OFFLINE_INVITE_REWARD => '线下邀请奖励',
             self::TYPE_OFFLINE_INVITE_RESET => '线下邀请人取消投资',
             self::TYPE_ACCOUNT_MERGE => '账号合并',
-            self::TYPE_ONLINEINVITE_REWARD => '邀请奖励',
         ];
         return isset($name[$type]) ? $name[$type] : '';
     }
