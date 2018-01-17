@@ -20,6 +20,7 @@ class OpenAccountJob extends Job
         if (is_null($openAccount)) {
             throw new \Exception('没有找到开户记录');
         }
+
         /**
          * @var User $user
          * @var OpenAccount $openAccount
@@ -31,8 +32,14 @@ class OpenAccountJob extends Job
             $openAccount->save();
         } catch (\Exception $e) {
             \Yii::info('开户Job日志 ump_log user_identify_fail user_id: ' . $user->id . ';message:' . $e->getMessage(), 'umplog');
-            if ($e->getCode() !== 1 || empty($e->getMessage())) {
-                $openAccount->message = '系统繁忙，请稍后重试！';
+            $code = $e->getCode();
+            if (1 !== $code || empty($e->getMessage())) {
+                if (101 === $code) {
+                    $openAccount->code = $code;
+                    $openAccount->message = $e->getMessage();
+                } else {
+                    $openAccount->message = '系统繁忙，请稍后重试！';
+                }
             } else {
                 $openAccount->message = $e->getMessage();
             }
