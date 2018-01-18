@@ -245,6 +245,7 @@ class FenxiaoController extends BaseController
             ->select(["$affName.id", "name", "trackCode"])
             ->from($affName)
             ->innerJoin($affCamName, "$affName.id = $affCamName.affiliator_id")
+            ->where(["$affName.isDel" => false])
             ->createCommand()
             ->queryAll();
 

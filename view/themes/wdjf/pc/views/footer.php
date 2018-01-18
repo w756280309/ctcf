@@ -27,7 +27,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
 <!--        </div>-->
         <div class="footer-five-copyright">Copyright ©温州温都金融信息服务股份有限公司<br>浙ICP证 B2-20170056号 浙ICP备 16003187号-1 浙公网安备 33030202000311号</div>
         <div class="footer-first-ma">
-            <img src="<?= ASSETS_BASE_URI ?>images/ma-new.png" alt="">
+            <div class="wap-app">
+                <img src="<?= ASSETS_BASE_URI ?>images/ma-new.png" alt="">
+            </div>
             <div>访问手机wap版</div>
         </div>
     </div>
@@ -41,7 +43,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
             <div class="about-left">
                 <div class="about-img">
                     <p>官方微信</p>
-                    <img src="<?= ASSETS_BASE_URI ?>images/weixin.png" alt="">
+                    <div class="weixin">
+                        <img src="<?= ASSETS_BASE_URI ?>images/weixin.png" alt="">
+                    </div>
                 </div>
             </div>
         </a>
@@ -119,5 +123,12 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
             }
         };
     })
+    //现代金报
+    var source = Cookies.get('campaign_source');
+    if (source == 'nbxdjb') {
+        $('.weixin').html('<img src="<?= ASSETS_BASE_URI ?>images/weixin-xdjb.png" alt="">');
+        $('.wap-app').html('<img src="<?= ASSETS_BASE_URI ?>images/ma-new-xdjb.png" alt="">');
+        document.title = '现代金报-温都金服[官网]-温州报业传媒旗下理财平台';
+    }
 </script>
 

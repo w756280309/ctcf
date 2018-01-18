@@ -66,6 +66,9 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 	}
 </style>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/new-homepage/css/index.css?v=180101">
+<div>
+    <img class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" width="100%" alt="">
+</div>
 <div class="flex-content">
     <?php if (!empty($hotActs)) { ?>
 			<div class="banner-box swiper-container">
