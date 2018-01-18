@@ -125,8 +125,8 @@ class OfflineController extends Controller
         foreach ($models as $model) {
             //计算一天的利息
             $lixi = bcdiv(bcmul(bcmul($model->order->money, 10000), $model->order->apr), 365, 2);
-            $model->lixi = $model->qishu == 4 ? bcadd($model->lixi, $lixi, 2) : bcdiv($model->lixi, $lixi, 2);
-            $model->benxi = $model->qishu == 4 ? bcadd($model->benxi, $lixi, 2) : bcdiv($model->benxi, $lixi, 2);
+            $model->lixi = $model->qishu == 4 ? bcadd($model->lixi, $lixi, 2) : bcsub($model->lixi, $lixi, 2);
+            $model->benxi = $model->qishu == 4 ? bcadd($model->benxi, $lixi, 2) : bcsub($model->benxi, $lixi, 2);
             if ($model->save(false)) {
                 $num ++;
             }
