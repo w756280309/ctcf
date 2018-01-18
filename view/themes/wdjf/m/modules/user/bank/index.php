@@ -53,7 +53,10 @@ $this->showViewport = false;
             <input type="tel" id="card_no" name="QpayBinding[card_number]" onkeyup="this.value=this.value.replace(/\D/g,'');" class="lf f14" placeholder="请输入银行储蓄卡卡号" autocomplete="off">
         </div>
     </form>
-    <p class="f13 limitMoney"><a href="/user/userbank/bankxiane"><img src="<?= FE_BASE_URI ?>wap/tie-card/img/icon_02.png" alt=""> 限额提醒</a></p>
+    <p class="f13 limitMoney">
+        <span class="lf" style="color: #ff6058">目前仅支持添加一张银行卡</span>
+        <a href="/user/userbank/bankxiane"><img src="<?= FE_BASE_URI ?>wap/tie-card/img/icon_02.png" alt=""> 限额提醒</a>
+    </p>
 
     <a class="instant instantSpecial f18" href="javascript:void(0)" id="bind_btn">绑 卡</a>
 

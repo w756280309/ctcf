@@ -790,9 +790,18 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     //用户开户逻辑
     public function setIdentity(OpenAccount $openAccount)
     {
+        //判断当前实名的身份证号在本平台是否已经被实名了
+        $idCard = $openAccount->encryptedIdCard;
+        $authUser = User::find()
+            ->where(['safeIdCard' => $idCard])
+            ->one();
+        if (null !== $authUser) {
+            throw new \Exception('身份证号不能在平台重复开户', 101);
+        }
+
         $this->real_name = Yii::$app->functions->removeWhitespace($openAccount->getName());//去除所有空格
         $this->idcard = $openAccount->getIdCard();
-        $this->safeIdCard = $openAccount->encryptedIdCard;
+        $this->safeIdCard = $idCard;
         $this->birthdate = date('Y-m-d', strtotime(substr($openAccount->getIdCard(), 6, 8)));
         try {
             $resp = Yii::$container->get('ump')->register($this, $openAccount->sn);
@@ -834,14 +843,6 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             $transaction->rollBack();
             throw new \Exception($ex->getMessage(), $ex->getCode());
         }
-
-        /*//关闭实名送抽奖机会调用
-        if ($flag) {
-            try {
-                PromoService::addTicket($this, 'identity');
-            } catch (\Exception $ex) {
-            }
-        }*/
     }
 
     /**

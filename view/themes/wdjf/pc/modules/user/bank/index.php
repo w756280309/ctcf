@@ -37,7 +37,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
                 <input id="bank_name" type="hidden" name='QpayBinding[bank_name]'>
                 <br>
                 <p class="error-ins error" id="error"></p>
-                <p class="error-ins">提示：绑定银行卡为快捷卡，将作为唯一充值、提现银行卡</p>
+                <p class="error-ins">提示：目前仅支持添加一张储蓄卡，将作为唯一充值、提现银行卡</p>
             </div>
         </div>
         <input class="bind-btn" type="submit" value="绑定">
