@@ -4,6 +4,7 @@ namespace console\controllers;
 
 use common\lib\user\UserStats;
 use common\models\offline\OfflineLoan;
+use common\models\offline\OfflineRepaymentPlan;
 use common\models\offline\OfflineUser;
 use common\utils\ExcelUtils;
 use Wcg\Xii\Crm\Model\OfflineOrder;
@@ -99,5 +100,37 @@ class OfflineController extends Controller
         if (!$action) {
             $this->stdout('总记录：'.$total.'条。'.PHP_EOL.'匹配成功数量：'.$successNum.'条。'.PHP_EOL.'匹配失败数量：'.bcsub($total, $successNum).'条。' . PHP_EOL);
         }
+    }
+
+    /**
+     * 2018-01-18
+     * 用于修复【宁富2号三都国资第六期】的2018-06-20  期和 2018-09-18
+     * 的还款计划
+     */
+    public function actionUpdateOfflineRepayment($loanId = 67, $action = false)
+    {
+        //取出所有需要修改的还款计划
+        $models = OfflineRepaymentPlan::find()
+            ->where([
+                'loan_id' => $loanId,
+                'qishu' => ['4', '5'],
+            ])
+            ->andWhere(['not in', 'uid', ['484']])  //郑金华除外
+            ->all();
+        if (!$action) {
+            $this->stdout('共有数据：'.count($models).'条需要修复。');
+            die;
+        }
+        $num = 0;
+        foreach ($models as $model) {
+            //计算一天的利息
+            $lixi = bcdiv(bcmul(bcmul($model->order->money, 10000), $model->order->apr), 365, 2);
+            $model->lixi = $model->qishu == 4 ? bcadd($model->lixi, $lixi) : bcdiv($model->lixi, $lixi);
+            $model->benxi = $model->qishu == 4 ? bcadd($model->benxi, $lixi) : bcdiv($model->benxi, $lixi);
+            if ($model->save(false)) {
+                $num ++;
+            }
+        }
+        $this->stdout('共修复数据：'.$num.'条。');
     }
 }
