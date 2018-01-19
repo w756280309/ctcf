@@ -139,7 +139,7 @@ $this->title = '温都金服_绑定服务号';
             return false;
         }
 
-        var reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+        var reg = /^0?1\d{10}$/;
         if (!reg.test(mobile)) {
             toastCenter('手机号格式错误');
             return false;

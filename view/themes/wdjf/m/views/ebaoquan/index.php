@@ -23,7 +23,7 @@ AnalyticsHelper::registerTo($this);
         <meta name="csrf-token" content="bUJodzlZTEpVO1pDDzs2OwYxKyQIbSg.AjcEOQhhAysVNwcFQ209Ig==">
         <?php $this->head() ?>
         <link href="/promo/1605/yibaoquan/css/index.css?v=&lt;?php echo time() ?&gt;" rel="stylesheet">
-        <script src="/promo/1605/choujiang/js/520.js"></script>
+        <script src="/promo/1605/choujiang/js/520.js?v=20180118"></script>
         <script type="text/javascript">
             $(function () {
                 hmsr();

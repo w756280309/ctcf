@@ -6,7 +6,7 @@ function validateForm()
         return '手机号不能为空';
     }
 
-    var reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+    var reg = /^0?1\d{10}$/;
     if (!reg.test(phone)) {
         return '手机号格式错误';
     }

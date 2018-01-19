@@ -58,7 +58,7 @@ $this->title = '预约申请单';
                return;
            }
            //验证手机号
-           var partern = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+           var partern = /^0?1\d{10}$/;
            if (!partern.test($('#mobile').val())) {
                toast('手机号格式错误');
                return;

@@ -92,7 +92,7 @@ class OfflineProduct extends ActiveRecord {
             [['category_id'], 'integer', 'on' => ['create', 'update']],
             [['title', 'sn', 'category_id', 'money','home_status','end_time','special_type_title','contact','contact_mobile', 'creator_id'], 'required', 'on' => ['create_special']],
             //[['special_type'], 'in', 'range' => array(1, 2),'message'=>"请选择类型", 'on' => ['create_special']],
-             ['contact_mobile','match','pattern'=>'/^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/','message'=>'手机号格式错误', 'on' => ['create_special']],
+             ['contact_mobile','match','pattern'=>'/^1\d{10}$/','message'=>'手机号格式错误', 'on' => ['create_special']],
         ];
     }
 

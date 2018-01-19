@@ -5,7 +5,7 @@ use common\view\AnalyticsHelper;
 wap\assets\WapAsset::register($this);
 AnalyticsHelper::registerTo($this);
 $this->registerCssFile(ASSETS_BASE_URI . 'promo/1605/choujiang/css/520.css?v=20150', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/520.js', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
+$this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/520.js?v=20180118', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);//加载来源统计记录代码
 $this->registerJsFile('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
 $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/weixin.js?v=20160519');//加载来源统计记录代码
 ?>
