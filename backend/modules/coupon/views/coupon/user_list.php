@@ -118,6 +118,12 @@ use yii\grid\GridView;
             },
         ],
         [
+            'label' => '使用时间',
+            'value' => function ($data) {
+                return $data->isUsed ? date('Y-m-d H:i', $data->order->created_at) : '---';
+            },
+        ],
+        [
             'label' => '发券操作员',
             'format' => 'html',
             'value' => function ($data) {
