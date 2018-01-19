@@ -42,7 +42,7 @@ class OfflineLoan extends ActiveRecord
             ['jixi_time', 'string', 'max' => 255],
             ['unit', 'string', 'max' => 20],
             ['repaymentMethod', 'integer'],
-            ['paymentDay', 'integer', 'max' => 30],
+            ['paymentDay', 'integer', 'max' => 31],
         ];
     }
 
