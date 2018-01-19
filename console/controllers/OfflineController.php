@@ -7,6 +7,7 @@ use common\models\offline\OfflineLoan;
 use common\models\offline\OfflineRepaymentPlan;
 use common\models\offline\OfflineUser;
 use common\utils\ExcelUtils;
+use Wcg\Math\Bc;
 use Wcg\Xii\Crm\Model\OfflineOrder;
 use yii\console\Controller;
 
@@ -123,10 +124,11 @@ class OfflineController extends Controller
         }
         $num = 0;
         foreach ($models as $model) {
-            //计算一天的利息
-            $lixi = bcdiv(bcmul(bcmul($model->order->money, 10000, 2), $model->order->apr, 2), 365, 2);
-            $model->lixi = $model->qishu == 4 ? bcmul(183, $lixi, 2) : bcmul(89, $lixi, 2);
-            $model->benxi = bcadd($model->benjin, $model->lixi, 2);
+            //计算利息
+            $days = $model->qishu == 4 ? 183 : 89;
+            //本金*利率*天数/365
+            $model->lixi = Bc::round(bcdiv(bcmul(bcmul(bcmul($model->order->money, 10000, 14), $model->order->apr, 14), $days, 14), 365, 14), 2);
+            $model->benxi = Bc::round(bcadd($model->benjin, $model->lixi, 14), 2);
             if ($model->save(false)) {
                 $num ++;
             }
