@@ -104,6 +104,16 @@ class OfflineOrder extends ActiveRecord
         return $this->hasOne(OfflineUser::className(), ['id' => 'user_id']);
     }
 
+    public function getOnlineUser()
+    {
+        $user = null;
+        if (null !== ($user = $this->user)) {
+            $user = $user->onlineUser;
+        }
+
+        return $user;
+    }
+
     /**
      * 根据订单计算年化投资金额.
      */
@@ -128,4 +138,8 @@ class OfflineOrder extends ActiveRecord
         return OfflineRepaymentPlan::find()->where(['order_id' => $this->id])->sum('lixi');
     }
 
+    public function getOrder_time()
+    {
+        return strtotime($this->orderDate);
+    }
 }

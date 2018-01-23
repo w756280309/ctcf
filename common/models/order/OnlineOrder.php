@@ -571,4 +571,9 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     {
         return $this->user->qpay ? $this->user->qpay->bank_name : '';
     }
+
+    public function getOnlineUser()
+    {
+        return $this->getUser();
+    }
 }

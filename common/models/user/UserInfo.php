@@ -205,6 +205,72 @@ class UserInfo extends ActiveRecord
     }
 
     /**
+     * 计算某个人一段时间内的线下累计年化金额
+     * 注意：对于订单的审核时间也做了限制
+     *
+     * @param int    $userOrId  user表ID
+     * @param string $startDate 开始日期
+     * @param string $endDate   结束日期
+     *
+     * @return int
+     */
+    public static function calcOfflineAnnualInvest($userOrId, $startDate, $endDate)
+    {
+        $db = \Yii::$app->db;
+        $sql = "select 
+sum(truncate((if(p.repaymentMethod > 1, o.money*p.expires*10000/12, o.money*p.expires*10000/365)), 2)) as annual
+from offline_order o 
+inner join offline_loan p 
+    on o.loan_id = p.id 
+inner join offline_user u 
+    on u.id = o.user_id 
+where date(o.orderDate) >= :startDate 
+    and date(o.orderDate) <= :endDate 
+    and o.isDeleted = 0 
+    and date(from_unixtime(o.created_at)) >= :startDate 
+    and date(from_unixtime(o.created_at)) <= :endDate 
+    and u.onlineUserId = :userId";
+
+        return (int) $db->createCommand($sql, [
+            'userId' => $userOrId,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryScalar();
+    }
+
+    /**
+     * 计算某个人一段时间内的线下累计投资金额
+     * 注意：对于订单的审核时间也做了限制
+     *
+     * @param int    $userId    User表ID
+     * @param string $startTime 开始时间
+     * @param string $endTime   结束时间
+     *
+     * @return int
+     */
+    public static function calcOfflineInvest($userId, $startTime, $endTime)
+    {
+        $db = \Yii::$app->db;
+        $sql = "select 
+sum(money*10000) 
+from offline_order o 
+inner join offline_user u 
+    on o.user_id = u.id 
+where o.user_id = :userId 
+    and o.isDeleted = false 
+    and o.orderDate >= :startTime 
+    and o.orderDate <= :endTime 
+    and from_unixtime(o.created_at) >= :startTime 
+    and from_unixtime(o.created_at) <= :endTime";
+
+        return (int) $db->createCommand($sql, [
+            'userId' => $userId,
+            'startTime' => $startTime,
+            'endTime' => $endTime,
+        ])->queryScalar();
+    }
+
+    /**
      * 累计投资额（包含转让）
      *
      * @return string
