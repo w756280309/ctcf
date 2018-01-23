@@ -96,4 +96,9 @@ class OfflineUser extends ActiveRecord
     {
         return User::findOne($this->onlineUserId);
     }
+
+    public function getOnlineUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'onlineUserId']);
+    }
 }
