@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../common/css/base.min.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <title>理财列表页</title>
+    <script src="../libs/jquery-1.11.1.min.js"></script>
+    <script src="../libs/jquery.pagination.js"></script>
+</head>
+<body>
+<div class="ctcf-container">
+    <div class="main">
+        <ul class="product-nav clear-fix fz18">
+            <li class="lf active-nav-product">理财列表</li>
+            <li class="lf">转让列表</li>
+        </ul>
+        <div class="financial-product-list">
+            <ul class="financial-list">
+                <!--预告期-->
+                <li class="financial-preview-period">
+                    <a>
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-light-orange">预告期</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <!--立即投资-->
+                <li class="financial-investment">
+                    <a href="">
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-orange">立即投资</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <!--已售罄-->
+                <li class="financial-not">
+                    <a href="">
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-gray">已售罄</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <!--收益中-->
+                <li class="financial-income">
+                    <a href="">
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-orange">收益中</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <!--已还清-->
+                <li class="financial-period-off">
+                    <a href="">
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号111111111111</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-gray">已还清</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="financial-preview-period">
+                    <a>
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-light-orange">预告期</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="financial-preview-period">
+                    <a>
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-light-orange">预告期</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="financial-preview-period">
+                    <a>
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-light-orange">预告期</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="financial-preview-period">
+                    <a>
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-light-orange">预告期</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="financial-preview-period">
+                    <a>
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-light-orange">预告期</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="financial-preview-period">
+                    <a>
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-light-orange">预告期</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="financial-preview-period">
+                    <a>
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-light-orange">预告期</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="financial-preview-period">
+                    <a>
+                        <div class="product-top-part">
+                            <!--新手专享角标-->
+                            <i class="sup-icon"></i>
+                            <div class="product-title">
+                                <h5 class="fz18">楚天智选034号</h5>
+                                <span class="fz14">专享体验</span>
+                                <span class="fz14">灵活稳健</span>
+                            </div>
+                        </div>
+                        <div class="product-bottom-part clear-fix">
+                            <div class="interest-rate">
+                                <div class="rate-top-part fz28">
+                                    <span class="fz42">9</span>%
+                                </div>
+                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                            </div>
+                            <div class="term-rate">
+                                <div class="term-top-part fz18">
+                                    <span class="fz30">7</span>天
+                                </div>
+                                <div class="term-bottom-part fz14">项目期限</div>
+                            </div>
+                            <div class="mode-style fz14">
+                                <div class="mode-top-part">起投金额<span class="fz18">100000元</span></div>
+                                <div class="mode-bottom-part">计息方式<span class="fz16">到期本息</span></div>
+                            </div>
+                            <div class="raise-mode">
+                                <div class="raise-top-part">募集总额<span class="fz18">2000万元</span></div>
+                                <div class="raise-bottom-part">剩余可投<span class="fz18">20000000</span>
+                                    <div class="speed-raise">
+                                        <i></i>
+                                    </div>
+                                    <div class="speed-raise-number fz14">67%</div>
+                                </div>
+                            </div>
+                            <div class="btn-check">
+                                <div class="btn-light-orange">预告期</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        // $('.financial-list').pagination(5
+        // );
+    })
+</script>
+</body>
+</html>
