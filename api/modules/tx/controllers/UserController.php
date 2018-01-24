@@ -36,12 +36,18 @@ class UserController extends Controller
         if (strtotime($startDate) === false) {
             $startDate = '2016-04-19';
         }
-
+        $orgUser = User::find()
+            ->select('id')
+            ->where(['type' => User::USER_TYPE_PERSONAL])
+            ->andWhere('safeMobile is null')
+            ->asArray()
+            ->column();
         //获得转让与非转让的user_ids
         $userQuery = Order::find()
             ->select(['uid as user_id', 'sum(order_money) as totalInvest'])
             ->where(['status' => Order::STATUS_SUCCESS])
             ->andWhere(['>=', 'date(from_unixtime(created_at))', $startDate])
+            ->andWhere(['not in', 'uid', $orgUser])
             ->groupBy('uid')
             ->orderBy(['totalInvest' => SORT_DESC]);
 
@@ -49,6 +55,7 @@ class UserController extends Controller
             ->select(['user_id', 'sum(principal / 100) as totalInvest'])
             ->where(['status' => CreditOrder::STATUS_SUCCESS])
             ->andWhere(['>=', 'createTime', $startDate])
+            ->andWhere(['not in', 'user_id', $orgUser])
             ->groupBy('user_id')
             ->orderBy(['totalInvest' => SORT_DESC]);
 
