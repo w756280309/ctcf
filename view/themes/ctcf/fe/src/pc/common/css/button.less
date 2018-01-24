@@ -1,0 +1,54 @@
+@import "./css-constant";
+
+.btn-gray {
+  width: @width-s;
+  height: @height-s;
+  line-height: @height-s;
+  text-align: center;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+  background-color: @light-gray-d5;
+}
+.btn-orange {
+  width: @width-s;
+  height: @height-s;
+  line-height: @height-s;
+  text-align: center;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+  background-color: @orange;
+  -webkit-box-shadow: 0 2px 8px rgba(255,103,7,.6);
+  -moz-box-shadow: 0 2px 8px rgba(255,103,7,.6);
+  box-shadow: 0 2px 8px rgba(255,103,7,.6);
+  &:hover {
+    background-color: @orange-strong;
+    -webkit-box-shadow: 0 2px 8px rgba(255,83,45,.6);
+    -moz-box-shadow: 0 2px 8px rgba(255,83,45,.6);
+    box-shadow: 0 2px 8px rgba(255,83,45,.6);
+  }
+}
+.btn-light-orange {
+  width: @width-s;
+  height: @height-s;
+  line-height: @height-s;
+  text-align: center;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+  background-color: #ffb485;
+}
+.btn-yellow {
+  width: @width-l;
+  height: @height-l;
+  line-height: @height-l;
+  text-align: center;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+  background-color: @yellow;
+  &:hover {
+    background-color: @yellow-strong;
+  }
+}

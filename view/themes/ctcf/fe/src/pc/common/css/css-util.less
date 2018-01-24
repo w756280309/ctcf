@@ -1,0 +1,43 @@
+//css自定工具类   version1.0
+//说明：对于每次修改 说明修改内容 + 修改版本号累计叠加
+
+/** 字体大小 **/
+.fz(@x){
+  font-size:@x;
+}
+
+/** 字体颜色 **/
+.cl(@x){
+  color: @x;
+}
+
+/** 背景颜色 **/
+.bgc(@x){
+  background-color: @x;
+}
+
+/** margin值 **/
+.mgt(@x){
+  margin-top: @x;
+}
+.mgl(@x){
+  margin-left: @x;
+}
+.mgr(@x){
+  margin-right: @x;
+}
+.mgb(@x){
+  margin-bottom: @x;
+}
+
+/** :hover **/
+.hover(@x,@y){
+  color: @x;
+  &:hover {
+    color: @y;
+  }
+}
+
+
+
+/**********************我是分割线*************************/
