@@ -145,10 +145,12 @@
   .recommend {
     height:325px;
     ul {
-      li {
+      li.special {
         width:260px;
         height:325px;
         background-color: #fff;
+        -webkit-transition: all 0.2s linear 0s;
+        transition: all 0.2s linear 0s;
         .title {
           padding-top:20px;
           line-height: 1;
@@ -240,4 +242,11 @@
       }
     }
   }
+}
+
+.ctcf-container .recommend ul li.special:hover {
+  -webkit-box-shadow: 0 1px 10px rgba(0,0,0,.17);
+  -moz-box-shadow: 0 1px 10px rgba(0,0,0,.17);
+  box-shadow: 0 1px 10px rgba(0,0,0,.17);
+  transform: translate3D(0,-2px,0);
 }
