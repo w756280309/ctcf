@@ -96,22 +96,21 @@ class PushController extends Controller
     //绑定微信扫码用户的渠道
     public static function bindQD($user, $openId)
     {
-        if (is_null(UserAffiliation::findOne(['user_id' => $user->id]))) {
-            $redis = Yii::$app->redis;
-            $affiliator_id = $redis->hget('wechat-push', $openId);
-            if ($affiliator_id) {
-                $affiliator = Affiliator::findOne($affiliator_id);
-                $affiliate_cam = AffiliateCampaign::findOne(['affiliator_id' => $affiliator->id]);
+        $redis = Yii::$app->redis;
+        $affiliator_id = $redis->hget('wechat-push', $openId);
+        if ($affiliator_id) {
+            $affiliator = Affiliator::findOne($affiliator_id);
+            $affiliate_cam = AffiliateCampaign::findOne(['affiliator_id' => $affiliator->id]);
+            $model = UserAffiliation::findOne(['user_id' => $user->id]);
+            if (is_null($model)) {
                 $model = new UserAffiliation();
-                $model->user_id = $user->id;
-                $model->trackCode = $affiliate_cam->trackCode;
-                $model->affiliator_id = $affiliator->id;
-                if ($model->save()) {
-                    $redis->hdel('wechat-push', $openId);
-                }
             }
-        } else {
-            //throw new \Exception('用户[$user->id]已经绑定渠道');
+            $model->user_id = $user->id;
+            $model->trackCode = $affiliate_cam->trackCode;
+            $model->affiliator_id = $affiliator->id;
+            if ($model->save()) {
+                $redis->hdel('wechat-push', $openId);
+            }
         }
     }
 
