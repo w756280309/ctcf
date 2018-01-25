@@ -15,6 +15,7 @@ use common\models\offline\OfflineRepaymentPlan;
 use common\models\offline\OfflineUserManager;
 use common\models\order\OnlineRepaymentPlan;
 use common\service\SmsService;
+use Wcg\Math\Bc;
 use yii\base\Object;
 use yii\queue\Job;
 use Yii;
@@ -104,9 +105,8 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                     if ($term == count($amountData) && strtotime($loan->jixi_time) > strtotime($order->valueDate) && !is_null($order->valueDate)) {
                         $plan->yuqi_day = bcdiv(bcsub(strtotime($loan->jixi_time), strtotime($order->valueDate)), bcmul(24, 3600));
                         //todo
-                        $plan->tiexi = bcdiv(bcmul($plan->yuqi_day, bcmul($order->money * 10000, $order->apr)), 365 , 2);
-                        $amount = bcadd($amount, $plan->tiexi, 2);
-                        //$value['principal'] = bcadd($value['interest'], $plan->tiexi);
+                        $plan->tiexi = Bc::round(bcdiv(bcmul($plan->yuqi_day, bcmul($order->money * 10000, $order->apr, 14), 14), 365 , 14), 2);
+                        $amount = Bc::round(bcadd($amount, $plan->tiexi, 14), 2);
                     }
                     if (!$plan->save()) {
                         throw new \Exception('还款计划（repayment_plan）保存失败');
