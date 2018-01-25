@@ -3,12 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../common/css/base.min.css">
+    <link rel="stylesheet" href="../common/css/ctcf-com.min.css">
     <link rel="stylesheet" href="css/index.min.css">
     <title>理财列表页</title>
     <script src="../libs/jquery-1.11.1.min.js"></script>
     <script src="../libs/jquery.pagination.js"></script>
 </head>
 <body>
+<!--header start-->
+<div class="ctcf-header">
+    <div class="top-bar clear-fix">
+        <div class="lf f14">
+            <span class="header-hover mgr20 pointer erweima">
+                <img class="mgr7" src="../index/images/icon_01.png" alt="">
+                <i>官方微信</i>
+                <img class="hidden pst" src="../index/images/weixin@2x.png" alt="">
+            </span>
+            <span class="header-hover pointer erweima">
+                <img class="mgr7" src="../index/images/icon_02.png" alt="">
+                <i>官方微博</i>
+                <img class="hidden pst" src="../index/images/weibo@2x.png" alt="">
+            </span>
+        </div>
+        <!--已登录  hidden做了隐藏-->
+        <div class="rg fz14  hidden">
+            <ul class="clear-fix">
+                <li class="lf"><a class="header-hover" href="">您好！150******54</a></li>
+                <li class="lf"><a class="pd15 border-r1 header-hover" href="">退出登录</a></li>
+                <li class="lf">
+                    <a class="pd15 border-r1 header-hover erweima" href="javascript:void(0);"><img class="mgr7" src="../index/images/icon_03.png" alt="">下载APP<img class="hidden pst" src="../index/images/weixin@2x.png" alt=""></a>
+                </li>
+                <li class="lf"><a class="pd15 border-r1 header-hover" href="">帮助</a></li>
+                <li class="lf header-hover pdl15">客服热线：400-966-7850</li>
+            </ul>
+        </div>
+        <!--未登录-->
+        <div class="rg fz14">
+            <ul class="clear-fix">
+                <li class="lf"><a class="pd15 border-r1 header-hover" href="">免费注册</a></li>
+                <li class="lf"><a class="pd15 border-r1 header-hover" href="">登录</a></li>
+                <li class="lf">
+                    <a class="pd15 border-r1 header-hover erweima" href="javascript:void(0);"><img class="mgr7" src="../index/images/icon_03.png" alt="">下载APP<img class="hidden pst" src="../index/images/weixin@2x.png" alt=""></a>
+                </li>
+                <li class="lf"><a class="pd15 border-r1 header-hover" href="">帮助</a></li>
+                <li class="lf header-hover pdl15">客服热线：400-966-7850</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+<div class="ctcf-nav">
+    <div class="nav-bar clear-fix">
+        <div class="lf"><a href=""><img src="../index/images/logo.png" alt=""></a></div>
+        <div class="rg fz16">
+            <ul class="clear-fix">
+                <li class="lf mgr18"><a class="nav-active" href="">首页</a></li>
+                <li class="lf mgr18"><a href="">我要理财</a></li>
+                <li class="lf mgr18"><a href="">安全保障</a></li>
+                <li class="lf mgr18"><a href="">帮助中心</a></li>
+                <li class="lf"><a href="">新手引导</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--header end-->
+
 <div class="ctcf-container">
     <div class="main">
         <ul class="product-nav clear-fix fz18">
@@ -750,9 +809,9 @@
 
         </div>
     </div>
-
 </div>
-<div class="footer">
+<!--footer start-->
+<div class="ctcf-footer">
     <div class="footer-top">
         <div class="ctcf-container clear-fix">
             <dl class="about-ct fz14 lf">
@@ -776,15 +835,15 @@
             </div>
             <ul class="clear-fix rg">
                 <li class="lf">
-                    <img alt="">
+                    <img src="../index/images/weixin@2x.png" alt="">
                     <span class="fz14">下载APP</span>
                 </li>
                 <li class="lf">
-                    <img alt="">
+                    <img src="../index/images/weixin@2x.png" alt="">
                     <span class="fz14">官方微信</span>
                 </li>
                 <li class="rg">
-                    <img alt="">
+                    <img src="../index/images/weibo@2x.png" alt="">
                     <span class="fz14">官方微博</span>
                 </li>
             </ul>
@@ -795,6 +854,7 @@
         <p>鄂ICP备15002057号</p>
     </div>
 </div>
+<!--footer end-->
 <script>
     $(function(){
         // $('.financial-list').pagination(5
