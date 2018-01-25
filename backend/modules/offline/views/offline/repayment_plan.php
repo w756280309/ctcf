@@ -88,7 +88,7 @@ $bc = new BcRound();
                     <br>
                     本期应还款本金：<?= $repayment->principal ?>（元）
                     本期应还款利息：<?= $repayment->interest ?>（元）
-                    <?php if($repayment->term == count($model->repayments)) echo '贴息：' . $repayment->loan->tiexi . '（元）'; ?>
+                    <?php if(strtotime($repayment->dueDate) == strtotime($model->finish_date)) echo '贴息：' . $repayment->loan->tiexi . '（元）'; ?>
                     <img src="/image/you.png" class="jiantou<?= $key ?>" onclick="tableShow('.jiantou<?= $key ?>')" data="<?= $key ?>" alt="" style="position: absolute; right: 30px; height:20px; width: 20px;">
                 </td>
             </tr>
