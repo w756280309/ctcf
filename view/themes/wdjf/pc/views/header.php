@@ -10,7 +10,7 @@ $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
 <div id="header-top-box">
     <div class="header-top-box">
         <div class="header-top-left">
-            <span><a href="/site/appdownload">手机客户端</a></span><i>|</i><span>客服热线：<?= Yii::$app->params['platform_info.contact_tel'] ?>(8:30~20:00)</span>
+            <span><a href="/site/appdownload">手机客户端</a></span><i>|</i><span>客服热线：<?= Yii::$app->params['platform_info.contact_tel'] ?> (8:30-20:00 节假日不休息)</span>
         </div>
         <?php if (Yii::$app->user->isGuest) { ?>
             <div class="header-top-right" id="header-before-login">
