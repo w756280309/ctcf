@@ -17,6 +17,7 @@ class Promo171228 extends BasePromo
             return false;
         }
         $user = $order->user;
+        $loan = $order->loan;
         $startTime = new \DateTime($this->promo->startTime);
         $endTime = new \DateTime($this->promo->endTime);
 
@@ -24,6 +25,11 @@ class Promo171228 extends BasePromo
         $registerTime = new \DateTime(date('Y-m-d H:i:s', $user->created_at));
         if ($registerTime > $endTime || $registerTime < $startTime) {
             throw new \Exception('非活动期间注册用户');
+        }
+
+        //判断是否为新手标，新手标不参与此活动
+        if ($loan->is_xs) {
+            throw new \Exception('新手标不参与此活动');
         }
 
         //判断是否是首次投资
