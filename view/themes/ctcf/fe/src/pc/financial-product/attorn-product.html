@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="../common/css/base.min.css">
     <link rel="stylesheet" href="../common/css/ctcf-com.min.css">
     <link rel="stylesheet" href="css/index.min.css">
+    <link rel="stylesheet" href="../common/css/page-com.min.css">
     <title>转让列表页</title>
     <script src="../libs/jquery-1.11.1.min.js"></script>
     <script src="../libs/jquery.pagination.js"></script>
@@ -183,7 +184,11 @@
                     </a>
                 </li>
             </ul>
+            <div id="prjlistPage" style="">
+                <div id="projectListPagination" class="pagination ">
 
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -233,10 +238,56 @@
     </div>
 </div>
 <!--footer end-->
+
 <script>
+    //初始化函数 参数num_entries为数据总量  pageSize为每一页显示的条数
+    function initPagination (num_entries) {
+        var pageIndex1 = 0;     //页面索引初始值
+        var pageSize = 5;     //每页显示条数初始化，修改显示条数，
+        $("#projectListPagination").pagination(num_entries, {
+            num_edge_entries: 1,        //两侧首尾分页条目数
+            num_display_entries: 4,    //连续分页主体部分分页条目数
+            callback: PageCallback,
+            items_per_page: pageSize,  //显示条数
+            current_page: pageIndex1,   //当前页索引
+            prev_show: false,    //是否总是显示上一页按钮
+            prev_text: '上一页',       //下一页按钮里text
+            next_text: '下一页'       //下一页按钮里text
+        });
+    }
+    //翻页调用
+    function PageCallback(pageindex1, jq){
+//        InitTable(pageindex1,0);
+    }
+    //请求数据
+    //    InitTable(1,1);
+    //    function InitTable(pageindex1, flag){
+    //        var page_Num = parseInt(pageindex1)+1;
+    //
+    //        $.ajax({
+    //            type: "get",
+    //            url: '',
+    //            data:{},
+    //            dataType: 'json',
+    //            success:function (data) {
+    //请求成功后填入数据
+    //            }
+    //        })
+    //
+    //    }
+    initPagination(100)
+</script>
+<script>
+
     $(function(){
-        // $('.financial-list').pagination(5
-        // );
+        $('h5.product-top-title').each(function(i,item){
+            console.log(this);
+            if(this.innerHTML.length>25){
+                var tpl=this.innerHTML;
+                var title=tpl.substr(0,25);
+                this.innerHTML=title+'...';
+            }
+        })
     })
 </script>
 </body>

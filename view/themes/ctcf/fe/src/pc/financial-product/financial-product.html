@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="../common/css/base.min.css">
     <link rel="stylesheet" href="../common/css/ctcf-com.min.css">
     <link rel="stylesheet" href="css/index.min.css">
+    <link rel="stylesheet" href="../common/css/page-com.min.css">
     <title>理财列表页</title>
     <script src="../libs/jquery-1.11.1.min.js"></script>
     <script src="../libs/jquery.pagination.js"></script>
@@ -306,6 +307,7 @@
                         </div>
                     </a>
                 </li>
+
                 <li class="financial-investment">
                     <a>
                         <div class="product-top-part">
@@ -407,94 +409,94 @@
 
         <!----------------------------------分页开始----------------------------------->
 
-        <style>
-            #prjlistPage{
-                width:100%;
-                height: 130px;
-                background: #f3f3f3;
-                margin: auto;
-                text-align:center;
-            }
-            .pagination{
-                height: 80px;
-                line-height: 80px;
-                /*margin:0 auto;*/
-                /*padding:24px 0;*/
-                /*text-align: center;*/
-                display: inline-block;
-            }
-            .prePage,.nextPage{
-                /*width:20px;*/
-                /*height:20px;*/
-                /*border: 1px solid #999;*/
-                /*border-radius: 3px;*/
-                font-size: 18px;
-                /*line-height: 20px;*/
-            }
-            /*上一页*/
-            .pagination a.prePage,.pagination span.prePage{
-                margin-right: 25px;
-                color:#aab2bd;
-            }
-            /*下一页*/
-            .pagination a.nextPage,.pagination span.nextPage{
-                margin-left: 25px;
-            }
-            .pagination .prePage:link,.pagination .prePage:visited{
-                color:#aab2bd;
-            }
-            .pagination .nextPage:link,.pagination .nextPage:visited{
-                color:#aab2bd;
-            }
-            .pagination a:link,.pagination a:visited{
-                color:#aab2bd;
-            }
-            .pagination a:hover,.pagination a:active{
-                color:#fff;
-                background-color:#FF6802;
-                border-color: #FF6802;
-            }
-            .pages_new{
-                width:22px;
-                height:22px;
-                border:1px solid #999;
-                border-radius: 3px;
-                font-size: 14px;
-                line-height: 20px;
-                text-align: center;
-            }
-            .pagination a,.pagination span{
-                float: left;
-                margin-right: 8px;
-                text-decoration: none;
-                line-height: 22px;
-            }
-            .pagination .nextPage{margin-right: 0;}
-            .pagination span{color: #999;}
-            .current_new{
-                width:22px;
-                height:22px;
-                border:0;
-                border-radius: 3px;
-                font-size: 14px;
-                line-height: 22px;
-                text-align: center;
-                background-color:#FF6802;
+        <!--<style>-->
+            <!--#prjlistPage{-->
+                <!--width:100%;-->
+                <!--height: 80px;-->
+                <!--background: #f3f3f3;-->
+                <!--margin: auto;-->
+                <!--text-align:center;-->
+            <!--}-->
+            <!--.pagination{-->
+                <!--height: 80px;-->
+                <!--line-height: 80px;-->
+                <!--/*margin:0 auto;*/-->
+                <!--/*padding:24px 0;*/-->
+                <!--/*text-align: center;*/-->
+                <!--display: inline-block;-->
+            <!--}-->
+            <!--.prePage,.nextPage{-->
+                <!--/*width:20px;*/-->
+                <!--/*height:20px;*/-->
+                <!--/*border: 1px solid #999;*/-->
+                <!--/*border-radius: 3px;*/-->
+                <!--font-size: 18px;-->
+                <!--/*line-height: 20px;*/-->
+            <!--}-->
+            <!--/*上一页*/-->
+            <!--.pagination a.prePage,.pagination span.prePage{-->
+                <!--margin-right: 25px;-->
+                <!--color:#aab2bd;-->
+            <!--}-->
+            <!--/*下一页*/-->
+            <!--.pagination a.nextPage,.pagination span.nextPage{-->
+                <!--margin-left: 25px;-->
+            <!--}-->
+            <!--.pagination .prePage:link,.pagination .prePage:visited{-->
+                <!--color:#aab2bd;-->
+            <!--}-->
+            <!--.pagination .nextPage:link,.pagination .nextPage:visited{-->
+                <!--color:#aab2bd;-->
+            <!--}-->
+            <!--.pagination a:link,.pagination a:visited{-->
+                <!--color:#aab2bd;-->
+            <!--}-->
+            <!--.pagination a:hover,.pagination a:active{-->
+                <!--color:#fff;-->
+                <!--background-color:#FF6802;-->
+                <!--border-color: #FF6802;-->
+            <!--}-->
+            <!--.pages_new{-->
+                <!--width:22px;-->
+                <!--height:22px;-->
+                <!--border:1px solid #999;-->
+                <!--border-radius: 3px;-->
+                <!--font-size: 14px;-->
+                <!--line-height: 20px;-->
+                <!--text-align: center;-->
+            <!--}-->
+            <!--.pagination a,.pagination span{-->
+                <!--float: left;-->
+                <!--margin-right: 8px;-->
+                <!--text-decoration: none;-->
+                <!--line-height: 22px;-->
+            <!--}-->
+            <!--.pagination .nextPage{margin-right: 0;}-->
+            <!--.pagination span{color: #999;}-->
+            <!--.current_new{-->
+                <!--width:22px;-->
+                <!--height:22px;-->
+                <!--border:0;-->
+                <!--border-radius: 3px;-->
+                <!--font-size: 14px;-->
+                <!--line-height: 22px;-->
+                <!--text-align: center;-->
+                <!--background-color:#FF6802;-->
 
-            }
-            .pagination .first,.pagination .last{
-                border:1px solid #bababa;
-                border-radius: 3px;
-                font-size: 14px;
-                line-height: 25px;
-                text-align: center;
-                width:64px;
-                height:25px;
-            }
-            .pagination .current_new{
-                color:#fff;
-            }
-        </style>
+            <!--}-->
+            <!--.pagination .first,.pagination .last{-->
+                <!--border:1px solid #bababa;-->
+                <!--border-radius: 3px;-->
+                <!--font-size: 14px;-->
+                <!--line-height: 25px;-->
+                <!--text-align: center;-->
+                <!--width:64px;-->
+                <!--height:25px;-->
+            <!--}-->
+            <!--.pagination .current_new{-->
+                <!--color:#fff;-->
+            <!--}-->
+        <!--</style>-->
 
         <script>
             //初始化函数 参数num_entries为数据总量  pageSize为每一页显示的条数
