@@ -17,7 +17,7 @@ $this->registerCss(".about-qq2{
             <div class="footer-five-address">公司地址：温州市鹿城区飞霞南路657号保丰大楼四层</div>
         </div>
         <div class="footer-five-tel">客服电话：<span class="kfdh"><?= Yii::$app->params['platform_info.contact_tel'] ?></span><span style="border-right:none;padding-left: 8px;margin-right: 8px;">客服QQ：1430843929</span></div>
-        <div class="footer-five-tel">客服时间：8:30-20:00（节假日不休息）</div>
+        <div class="footer-five-tel">客服时间：8:30-20:00</div>
 <!--        <div class="footer-five-partner footer-clearfix"><i>合作伙伴：</i>-->
 <!--            <ul>-->
 <!--                <li style="border-left: 0;padding-left: 0;">温州日报</li>-->
