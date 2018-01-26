@@ -89,7 +89,7 @@ function validateFormForSms()
     }
 
     var tel = $('#phone').val();
-    reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+    reg = /^0?1\d{10}$/;
     if (!reg.test(tel)) {
         $('#phone').addClass('error-border');
         $('.phone-box .popUp').html('手机号格式错误');

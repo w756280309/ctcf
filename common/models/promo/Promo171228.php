@@ -2,9 +2,7 @@
 
 namespace common\models\promo;
 
-use common\models\order\OnlineOrder;
-use common\models\thirdparty\SocialConnect;
-use common\models\user\User;
+use common\models\offline\OfflineOrder;
 use Yii;
 
 class Promo171228 extends BasePromo
@@ -12,9 +10,14 @@ class Promo171228 extends BasePromo
     private $maxPullCashCount = 6;
     private $rewardSn = 'R_18.8';
 
-    public function doAfterSuccessLoanOrder(OnlineOrder $order)
+    public function doAfterSuccessLoanOrder($order)
     {
+        //todo 暂不支持线下
+        if ($order instanceof OfflineOrder) {
+            return false;
+        }
         $user = $order->user;
+        $loan = $order->loan;
         $startTime = new \DateTime($this->promo->startTime);
         $endTime = new \DateTime($this->promo->endTime);
 
@@ -22,6 +25,11 @@ class Promo171228 extends BasePromo
         $registerTime = new \DateTime(date('Y-m-d H:i:s', $user->created_at));
         if ($registerTime > $endTime || $registerTime < $startTime) {
             throw new \Exception('非活动期间注册用户');
+        }
+
+        //判断是否为新手标，新手标不参与此活动
+        if ($loan->is_xs) {
+            throw new \Exception('新手标不参与此活动');
         }
 
         //判断是否是首次投资

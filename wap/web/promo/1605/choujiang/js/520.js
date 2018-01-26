@@ -12,7 +12,7 @@ $(function() {
         }
 
         //验证手机号
-        var regphone = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+        var regphone = /^0?1\d{10}$/;
         if (!regphone.test(tel)) {
             toast('手机号格式错误');
             return;

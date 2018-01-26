@@ -548,7 +548,7 @@ class Client
             'service' => 'project_transfer',
             'notify_url' => $this->clientOption['host']['api'] . "notify/payment/backend",
             'order_id' => $pay->getTxSn(),
-            'mer_date' => date('Ymd', $pay->getTxDate()),
+            'mer_date' => date('Ymd'),
             'project_id' => $pay->getLoanId(),
             'serv_type' => '05',//贴现
             'trans_action' => '01',

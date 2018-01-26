@@ -11,7 +11,7 @@ use yii\grid\GridView;
         兑换商品
     </a>
 
-    <a class="btn green" href="/user/point/add?userId=<?= $id ?>&tabClass=<?= $tabClass ?>&isOffline=1">
+    <a class="btn green" href="<?= $user->online ? '/user/point/add?userId='.$user->online->id.'&tabClass='.$tabClass.'&isOffline=0&backUrl='. urlencode(Yii::$app->request->hostInfo.'/user/offline/detail?id='.$id) : '/user/point/add?userId='.$id.'&tabClass='.$tabClass.'&isOffline=1' ?>">
         发放积分
     </a>
 </div>

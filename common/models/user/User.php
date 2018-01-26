@@ -1149,6 +1149,13 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         if ($this->offline) {
             $balance += $this->offline->totalAssets;
         }
+        $setUserAssets = Yii::$app->params['partial_user_assets'];
+        $mobile = SecurityUtils::decrypt($this->safeMobile);
+        foreach ($setUserAssets as $v) {
+            if ($v['mobile'] == $mobile) {
+                $balance = $v['money'] > $balance ? $v['money'] : $balance;
+            }
+        }
         return $balance;
     }
 

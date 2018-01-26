@@ -363,7 +363,7 @@ class UserController extends BaseController
 
         $plan = null;
         $hkDate = null;
-        if (in_array($product->status, [Loan::STATUS_HUAN, Loan::STATUS_OVER])) {
+        if ($product->jixi_time) {
             $cond = ['online_pid' => $asset['loan_id'], 'uid' => $this->getAuthedUser()->id];
             if (!empty($asset['note_id'])) {
                 $cond['asset_id'] = $asset['id'];

@@ -78,6 +78,7 @@ $this->loadAuthJs = false;
                 <li><span>待还款金额（元）</span><?= StringUtils::amountFormat3($ret['wait']) ?></li>
             </ul>
             <ul class="breadcrumb_detail">
+                <li><span>联动商户号：</span><?= $epayUserID ?></li>
                 <li id="ump"><span>联动账户余额（元）</span><label></label></li>
             </ul>
             <ul class="breadcrumb_detail">

@@ -20,7 +20,7 @@ $this->share = new Share([
 </style>
 <div class="flex-content" id="app">
     <div id="box-top" :class="{'active':Active}">
-        <div class="box-top-mid">
+        <div class="box-top-mid" style="background: url(<?= FE_BASE_URI ?>wap/campaigns/active20171221/images/shade-contain2-new.png) 0 0 no-repeat;background-size: 100% 100%;height: 10.48rem;">
             <a class="cue-login"></a>
             <div @click="closeBox" class="cue-close">
             </div>
@@ -28,10 +28,10 @@ $this->share = new Share([
             <div class="mid-box-contain">
                 <ol>
                     <li class="clearfix"><span>1、</span><p>活动时间：2018年1月8日至2018年1月20日；</p></li>
-                    <li class="clearfix"><span>2、</span><p>活动期间每邀请1位好友通过微信端注册并完成首投，即可获得18.8元奖励金；</p></li>
+                    <li class="clearfix"><span>2、</span><p>活动期间每邀请1位好友通过微信端注册并完成首投（不含新手标及转让），即可获得18.8元奖励金；</p></li>
                     <li class="clearfix"><span>3、</span><p>活动期间奖励金限量1000份，单个用户最多获得6份奖励金；</p></li>
                     <li class="clearfix"><span>4、</span><p>每笔奖励金将立即发放到账户余额，请注意查收；</p></li>
-                    <li class="clearfix"><span>5、</span><p>本活动仅限投资用户（不含转让）参与。</p></li>
+                    <li class="clearfix"><span>5、</span><p>本活动仅限投资用户（不含新手标及转让）参与。</p></li>
                 </ol>
             </div>
         </div>

@@ -2,6 +2,8 @@
 
 namespace wap\modules\promotion\controllers;
 
+use common\models\order\OnlineOrder;
+use common\models\product\OnlineProduct;
 use common\models\promo\Award;
 use common\models\promo\Callout;
 use common\models\promo\CalloutResponder;
@@ -58,10 +60,14 @@ class P171228Controller extends BaseController
 
         //投资状态判断，若未投资，则提示投资用户才可添加
         $isInvested = false;
-        $info = $user->info;
-        if (null !== $info) {
-            $isInvested = $info->getTotalInvestMoney() > 0;
-        }
+        $o = OnlineOrder::tableName();
+        $p = OnlineProduct::tableName();
+        $order = OnlineOrder::find()
+            ->innerJoinWith('loan')
+            ->where(["$o.uid" => $user->id, "$o.status" => 1])
+            ->andWhere(["$p.is_xs" => false])
+            ->one();
+        $isInvested = null !== $order;
         if (!$isInvested) {
             return $this->getErrorByCode(self::ERROR_CODE_NEVER_GOT_TICKET);
         }

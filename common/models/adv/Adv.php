@@ -244,6 +244,7 @@ class Adv extends ActiveRecord
             'status' => self::STATUS_HIDDEN,
             'del_status' => self::DEL_STATUS_SHOW,
             'showOnPc' => false,
+            'investLeast' => 0.00,
             'created_at' => time(),
         ]);
     }

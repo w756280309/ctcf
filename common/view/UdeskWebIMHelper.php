@@ -33,7 +33,7 @@ class UdeskWebIMHelper
            ud({
                 "code": '$udeskCode',
                 "link": '$udeskLink',
-                "mode": "inner",
+                "mode": 'inner',
                 "color": "#FF0000",
                 "pos_flag": "crb",
                 "session_key": '$session_key',

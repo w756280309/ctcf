@@ -592,6 +592,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
         $ret = $uabc->getReturnInfo($id);
         $product = $uabc->getProduct($id);
         $ua = $user->borrowAccount;  //获取融资用户账户信息
+        $epayUserID = $user->epayUser->epayUserId;
         $userAff = null;
         $userYuE = $ua['available_balance'];
 
@@ -606,6 +607,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'rzMoneyTotal' => $product['sum'],
             'ret' => $ret,
             'orgUser' => $user,
+            'epayUserID' => $epayUserID,
         ]);
     }
 

@@ -7,6 +7,7 @@ use common\models\code\GoodsType;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\mall\PointRecord;
+use common\models\offline\OfflineOrder;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\transfer\Transfer;
@@ -19,7 +20,8 @@ use Yii;
 class PromoService
 {
     /**
-     * 获取对指定用户有效的活动[查找所有活动，活动是否有效在具体调用方法中自行判断]
+     * 获取对指定用户有效的活动[查找所有活动，活动是否有效在具体调用方法中自行判断
+     *
      * @return array
      * @throws \Exception
      */
@@ -36,6 +38,8 @@ class PromoService
     }
 
     /**
+     * 给用户添加抽奖机会
+     *
      * @param User $user 用户对象
      * @param $ticketSource string  抽奖机会来源
      * @throws \Exception
@@ -57,6 +61,7 @@ class PromoService
 
     /**
      * 给被被邀请者送代金券
+     *
      * @param User $user
      * @throws \Exception
      */
@@ -76,11 +81,12 @@ class PromoService
     }
 
     /**
-     * 标的订单完成之后的活动逻辑
-     * @param OnlineOrder $order
+     * 线上标的订单完成之后的活动逻辑
+     *
+     * @param OnlineOrder|OfflineOrder $order 订单对象
      * @throws \Exception
      */
-    public static function doAfterSuccessLoanOrder(OnlineOrder $order)
+    public static function doAfterSuccessLoanOrder($order)
     {
         $promos = self::getActivePromo();
         foreach ($promos as $promo) {
@@ -97,7 +103,8 @@ class PromoService
 
     /**
      * 标的确认计息之后的活动统一调用逻辑
-     * @param OnlineOrder $order
+     *
+     * @param OnlineOrder $order 线上订单对象
      * @throws \Exception
      */
     public static function doAfterLoanJixi(OnlineProduct $loan)
@@ -117,7 +124,8 @@ class PromoService
 
     /**
      * 绑卡后统一调用逻辑
-     * @param User $user
+     *
+     * @param User $user 用户对象
      * @throws \Exception
      */
     public static function doAfterBindCard(User $user)
@@ -158,9 +166,9 @@ class PromoService
     /**
      * 抽奖方法
      *
-     * @param RankingPromo   $promo     活动
-     * @param User           $user      用户
-     * @param null|\DateTime $joinTime  活动参与时间
+     * @param RankingPromo $promo 活动
+     * @param User $user 用户
+     * @param null|\DateTime $joinTime 活动参与时间
      *
      * @return PromoLotteryTicket
      * @throws \Exception
@@ -172,7 +180,7 @@ class PromoService
         }
         $promoClass = $promo->promoClass;
 
-        if(!class_exists($promoClass)) {
+        if (!class_exists($promoClass)) {
             throw new \Exception('活动类未找到');
         }
         $promoModel = new $promoClass($promo);
@@ -182,7 +190,7 @@ class PromoService
             $promo->isActive($user, strtotime($joinTime->format('Y-m-d H:i:s')));
 
             //判断是否登录
-            if(is_null($user)) {
+            if (is_null($user)) {
                 throw new NotActivePromoException($promo, '用户未登录', 3);
             }
 
@@ -220,9 +228,11 @@ class PromoService
     }
 
     /**
-     * @param User                    $user
-     * @param Reward                  $reward
-     * @param null|RankingPromo       $promo
+     * 给活动参与用户发奖
+     *
+     * @param User $user
+     * @param Reward $reward
+     * @param null|RankingPromo $promo
      * @param null|PromoLotteryTicket $ticket
      *
      * @return bool
@@ -234,7 +244,7 @@ class PromoService
         if (!reward::decStoreBySn($reward->sn)) {
             throw new \Exception('0002:抽奖失败，请联系客服!');
         }
-        switch($reward->ref_type) {
+        switch ($reward->ref_type) {
             case Reward::TYPE_COUPON:
                 $couponType = CouponType::findOne($reward->ref_id);
                 if (null === $couponType) {
@@ -391,18 +401,31 @@ class PromoService
     /**
      * 是否为发生在活动中的订单
      *
-     * @param OnlineOrder  $order 订单
+     * @param OnlineOrder $order 订单
      * @param RankingPromo $promo 活动
      *
      * @return bool
      * @throws \Exception
      */
-    private static function orderIsInPromo(OnlineOrder $order, $promo)
+    private static function orderIsInPromo($order, $promo)
     {
-        if (OnlineOrder::STATUS_SUCCESS !== $order->status) {
-            return false;
+        if ($order instanceof OnlineOrder) {
+            if (OnlineOrder::STATUS_SUCCESS !== $order->status) {
+                return false;
+            }
+            $user = $order->user;
+        } else {
+            //todo 临时代码 - 判断活动开始时间是18年1月22日之前的活动且为线下订单，则跳过此活动，以免奖励重复
+            $startTime = new \DateTime($promo->startTime);
+            if ($startTime < (new \DateTime('2018-01-22 00:00:00'))) {
+                return false;
+            }
+            if ($order->isDeleted || $order->created_at > strtotime($promo->endTime) || $order->created_at < strtotime($promo->startTime)) {
+                return false;
+            }
+            $user = $order->onlineUser;
         }
-        $user = $order->user;
+
         if (null === $user) {
             return false;
         }

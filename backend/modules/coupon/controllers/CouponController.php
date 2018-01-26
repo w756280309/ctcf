@@ -218,6 +218,7 @@ class CouponController extends BaseController
         $type = Yii::$app->request->get('type');
         $query = UserCoupon::find()
             ->innerJoinWith('couponType')
+            ->joinWith('order')
             ->joinWith('admin')
             ->where(['user_id' => $uid]);
         if ($isUsed == 2) {

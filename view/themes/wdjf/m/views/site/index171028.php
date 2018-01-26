@@ -66,6 +66,9 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 	}
 </style>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/new-homepage/css/index.css?v=180101">
+<div>
+    <img class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" width="100%" alt="">
+</div>
 <div class="flex-content">
     <?php if (!empty($hotActs)) { ?>
 			<div class="banner-box swiper-container">
@@ -234,7 +237,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 			<p id="btn_udesk_im" class="lf"><img
 					src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_phone_one.png" alt=""></p>
 			<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>" class="rg"><img
-					src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_phone_two.png" alt=""></a>
+					src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_phone_three.png" alt=""></a>
 		</div>
 		<p class="phone-box-address">地址：温州市鹿城区飞霞南路657号保丰大楼四层</p>
 	</div>

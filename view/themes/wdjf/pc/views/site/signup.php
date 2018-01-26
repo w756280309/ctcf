@@ -7,7 +7,7 @@ use yii\captcha\Captcha;
 $this->title = '注册';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/register/register.css', ['depends' => FrontAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20170307', ['depends' => FrontAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20180118', ['depends' => FrontAsset::class]);
 
 ?>
 

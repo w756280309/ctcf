@@ -24,6 +24,11 @@ class BaseController extends Controller
 
     use HelpersTrait;
 
+    /**
+     * 抽奖Action
+     *
+     * @return array|mixed
+     */
     public function actionDraw()
     {
         //判断活动参数
@@ -83,6 +88,11 @@ class BaseController extends Controller
         }
     }
 
+    /**
+     * 活动奖品列表
+     *
+     * @return array
+     */
     public function actionAwardList()
     {
         $key = Yii::$app->request->get('key');
@@ -185,7 +195,13 @@ class BaseController extends Controller
         $view->params['promoStatus'] = $promoStatus;
     }
 
-    //根据用户I
+    /**
+     * 获取微信头像和昵称
+     *
+     * @param string $id 微信OpenId
+     *
+     * @return array
+     */
     public function getWxInfo($id)
     {
         $data = [
@@ -209,6 +225,13 @@ class BaseController extends Controller
         return $data;
     }
 
+    /**
+     * 批量获取微信信息
+     *
+     * @param array $openIds 微信OpenId集合
+     *
+     * @return array
+     */
     public function getWxsInfo(Array $openIds)
     {
         $data = [];

@@ -5,9 +5,11 @@ namespace common\models\promo;
 
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
+use common\models\mall\PointRecord;
 use common\models\order\OnlineOrder;
 use common\models\user\User;
 use common\service\AccountService;
+use common\service\PointsService;
 use common\service\SmsService;
 use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
@@ -164,7 +166,6 @@ class PromoInvite12
                             ];
                             SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
                         }
-
                         $transaction->commit();
                         \Yii::info("[user_invite] 用户[{$user->id}] 邀请好友投资，订单ID {$order->id}，获取奖励 $mess", 'user_log');
                     } catch (\Exception $e) {

@@ -15,7 +15,7 @@ class PointController extends BaseController
     /**
      * 发放积分.
      */
-    public function actionAdd($userId, $tabClass = null, $isOffline = 0, $backUrl = false)
+    public function actionAdd($userId, $tabClass = null, $isOffline = 0, $backUrl = null)
     {
         $points =  $isOffline ? OfflineUser::findOne($userId) : User::findOne($userId);
         if (empty($points->id) || !in_array($isOffline, ['0', '1'])) {

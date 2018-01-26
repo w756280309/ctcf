@@ -60,7 +60,7 @@
             $('#phone').addClass('error-border');
             return false;
         }
-        var reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+        var reg = /^0?1\d{10}$/;
         if (!reg.test($('#phone').val())) {
             phone_err.show();
             phone_err.html('手机号格式错误');
