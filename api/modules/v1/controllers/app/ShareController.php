@@ -4,6 +4,8 @@ namespace api\modules\v1\controllers\app;
 
 use api\modules\v1\controllers\Controller;
 use common\models\adv\Share;
+use common\models\adv\ShareLog;
+use common\models\app\AccessToken;
 use Yii;
 
 /**
@@ -50,6 +52,58 @@ class ShareController extends Controller
             'status' => empty($data) ? 'fail' : 'success',
             'message' => $message,
             'data' => $data,
+        ];
+    }
+
+    /**
+     * App分享到微信朋友圈/微信好友回调接口
+     * @param $shareUrl   分享url
+     * @param $scene    分享场景 session/聊天   timeline/朋友圈
+     * @param null $idempotencyKey  用于排重的幂等键，同值请求只会被记为一次分享，建议UUID值
+     * @return array  回传给APP的分享结果
+     */
+    public function actionLog($shareUrl, $scene, $idempotencyKey = null)
+    {
+        $user = Yii::$app->user;
+        if (!$user) {
+            return [
+                'status' => 'fail', //程序级别成功失败
+                'message' => '找不到用户',
+                'data' => null,
+            ];
+        }
+        $now = date("Y-m-d", time());
+        $ipAddress = Yii::$app->request->getUserIP();
+        //todo 此处的shareLog只是针对后期的填子游戏活动做的判断，其他页面分享需要按照shareUrl不同做出判断，目前没有需求
+        $shareLog = ShareLog::find()
+            ->where([
+                'uid' => $user->id,
+                'shareUrl' => $shareUrl,
+                'createdAt' => $now,
+                'scene' => $scene,
+            ])->one();
+
+        if ($shareLog) {
+            return [
+                'status' => 'fail', //程序级别成功失败
+                'message' => '分享成功，无需再次分享',
+                'data' => null,
+            ];
+        }
+        $newShareLog = new ShareLog();
+        $newShareLog->shareUrl = $shareUrl;
+        $newShareLog->scene = $scene;
+        $newShareLog->uid = $user->id;
+        $newShareLog->ipAddress = $ipAddress;
+        $newShareLog->createdAt = $now;
+        $newShareLog->save(false);
+        return [
+            'status' => 'success',
+            'message' => '成功',
+            'data' => [
+                'result' => 'success',
+                'msg' => '成功'      //业务级别成功失败
+            ],
         ];
     }
 }
