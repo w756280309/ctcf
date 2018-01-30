@@ -3,6 +3,7 @@
 use common\models\code\GoodsType;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
+use yii\grid\GridView;
 
 $this->title = '商品列表';
 
@@ -68,47 +69,56 @@ $this->title = '商品列表';
             </form>
         </div>
         <!--search end -->
-        <div class="portlet-body">
-            <table class="table table-striped table-bordered table-advance table-hover">
-                <thead>
-                <tr>
-                    <th class="valign-middle">商品名称</th>
-                    <th class="valign-middle">商品编号</th>
-                    <th class="valign-middle">兑换码数量</th>
-                    <th class="valign-middle">创建时间</th>
-                    <th style="width: 30%" class="valign-middle"><center>操作</center></th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($model as $good) : ?>
-                    <tr>
-                        <td class="valign-middle"><?= Html::encode($good['name']) ?></td>
-                        <th class="valign-middle">
-        <?= (int) $good['type'] === GoodsType::TYPE_COUPON ? GoodsType::getSnForDuiBa($good['sn']) : $good['sn'] ?>
-                        </th>
-                        <td class="valign-middle"><?= $good['total'] ?></td>
-                        <td class="valign-middle"><?= $good['createdAt'] ?></td>
-                        <td class="valign-middle">
-                            <center>
-                                <a href="/growth/code/list?sn=<?= $good['sn'] ?>" class="btn mini green">
-                                    <i class="icon-edit"></i>查看兑换码列表</a>
-                                <?php if ($good['total'] > 0) { ?>
-                                <a href="/growth/code/export-all?sn=<?= $good['sn'] ?>"
-                                   class="btn mini green"  style="display: none;">
-                                    <i class="icon-edit"></i>导出兑换码TXT</a>
-                                <?php } ?>
-                            </center>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-                <?php if (empty($model)) : ?>
-                    <tr>
-                        <td>暂无数据.</td>
-                    </tr>
-                <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
+            <div class="portlet-body">
+                <?= GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'layout' => '{items}',
+                    'columns' => [
+                        [
+                            'label' => '商品名称',
+                            'value' => function ($data) {
+                                return $data['name'];
+                            },
+                        ],
+                        [
+                            'label' => '商品编号',
+                            'value' => function ($data) {
+                                return (int) $data['type'] === GoodsType::TYPE_COUPON ? GoodsType::getSnForDuiBa($data['sn']) : $data['sn'];
+                            },
+                            'contentOptions' => ['class' => 'left'],
+                            'headerOptions' => ['class' => 'left'],
+                        ],
+                        [
+                            'label' => '注册码数量',
+                            'value' => function ($data) {
+                                return $data['total'] > 0 ? $data['total'] : 0;
+                            },
+                            'contentOptions' => ['class' => 'left'],
+                            'headerOptions' => ['class' => 'left'],
+                        ],
+                        [
+                            'label' => '创建时间',
+                            'value' => function ($data) {
+                                return $data['createdAt'];
+                            },
+                            'contentOptions' => ['class' => 'left'],
+                            'headerOptions' => ['class' => 'left'],
+                        ],
+                        [
+                            'label' => '操作',
+                            'format' => 'html',
+                            'value' => function ($data) {
+                                return '<a href="/growth/code/list?sn=' . $data['sn'] .'" class="btn mini green">
+                                    <i class="icon-edit"></i>查看兑换码列表</a>';
+                            },
+                            'contentOptions' => ['class' => 'left'],
+                            'headerOptions' => ['class' => 'left'],
+                        ],
+
+                    ],
+                    'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
+                ]) ?>
+            </div>
         <div class="pagination" style="text-align:center;">
             <?= LinkPager::widget(['pagination' => $pages]); ?>
         </div>

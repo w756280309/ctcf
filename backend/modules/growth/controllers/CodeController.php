@@ -11,6 +11,7 @@ use common\models\user\User;
 use common\utils\StringUtils;
 use common\utils\TxUtils;
 use Yii;
+use yii\data\SqlDataProvider;
 use yii\data\Pagination;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
@@ -210,41 +211,28 @@ class CodeController extends BaseController
      */
     public function actionGoodsList()
     {
-        $c = Code::tableName();
-        $g = GoodsType::tableName();
-        $query = (new Query())
-            ->select("$g.name, count($c.id) as total, $c.goodsType, $g.createdAt, $g.sn, $g.type")
-            ->from($g)
-            ->leftJoin($c, "$c.goodsType_sn = $g.sn")
-            ->where(['in', "$g.type", [1, 2]]);
-
         $request = Yii::$app->request->get();
-
+        $where = "type in ('1','2')";
+        $pageSize = 10;
         if (isset($request['goods_name']) && !empty($request['goods_name'])) {
-            $query->andWhere(["like", "$g.name", $request["goods_name"]]);
+            $where .= " and goods_type.name like '%".$request['goods_name'] . "%'";
         }
 
         if (isset($request['code']) && !empty($request['code'])) {
-            $codeQuery = Code::find()
-                ->where(['code' => $request['code']])
-                ->select('goodsType_sn');
-
-            $query->andWhere(["$g.sn" => $codeQuery]);
+            $where .= " and code.code = '" . $request['code'] . "'";
         }
-
-        $query->groupBy('sn');
-
-        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '10']);
-        $model = $query->orderBy([
-                "$g.createdAt" => SORT_DESC,
-                "$g.id" => SORT_DESC,
-            ])
-            ->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-
+        $count = Yii::$app->db->createCommand("SELECT COUNT(id)  FROM goods_type where " . $where)->queryScalar();
+        $dataProvider = new SqlDataProvider([
+            'sql' => "SELECT `code`.total,goods_type.name,goods_type.createdAt,goods_type.type,goods_type.sn from 
+(select name, createdAt,sn,type from goods_type where " . $where . " group by sn order by id desc) as goods_type left join (select goodsType_sn,count(id) as total from code group by goodsType_sn) as code on `code`.goodsType_sn = goods_type.sn",
+            'totalCount' => $count,
+            'pagination' => [
+                'pageSize' => $pageSize,
+            ]
+        ]);
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $pageSize]);
         return $this->render('goods-list', [
-            'model' => $model,
+            'dataProvider' => $dataProvider,
             'pages' => $pages,
             'request' => $request,
         ]);
