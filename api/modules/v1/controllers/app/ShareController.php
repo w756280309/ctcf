@@ -74,22 +74,7 @@ class ShareController extends Controller
         }
         $now = date("Y-m-d", time());
         $ipAddress = Yii::$app->request->getUserIP();
-        //todo 此处的shareLog只是针对后期的填子游戏活动做的判断，其他页面分享需要按照shareUrl不同做出判断，目前没有需求
-        $shareLog = ShareLog::find()
-            ->where([
-                'uid' => $user->id,
-                'shareUrl' => $shareUrl,
-                'createdAt' => $now,
-                'scene' => $scene,
-            ])->one();
-
-        if ($shareLog) {
-            return [
-                'status' => 'fail', //程序级别成功失败
-                'message' => '分享成功，无需再次分享',
-                'data' => null,
-            ];
-        }
+        //todo 此位置需要根据活动添加判断逻辑
         $newShareLog = new ShareLog();
         $newShareLog->shareUrl = $shareUrl;
         $newShareLog->scene = $scene;
