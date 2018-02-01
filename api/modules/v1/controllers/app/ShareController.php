@@ -78,7 +78,7 @@ class ShareController extends Controller
         $newShareLog = new ShareLog();
         $newShareLog->shareUrl = $shareUrl;
         $newShareLog->scene = $scene;
-        $newShareLog->uid = $user->id;
+        $newShareLog->userId = $user->id;
         $newShareLog->ipAddress = $ipAddress;
         $newShareLog->createdAt = $now;
         $newShareLog->save(false);
