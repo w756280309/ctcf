@@ -16,11 +16,11 @@ $dotenv->load();
 
 $config = yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/../../common/config/main.php'),
-    require(__DIR__ . '/../config/main.php'),
-    require(__DIR__ . '/../config/main-local.php')
+    require(__DIR__ . '/../config/main.php')
 );
 
 $application = new yii\web\Application($config);
+
 if (!defined('ASSETS_BASE_URI')) {
     define('ASSETS_BASE_URI', Yii::$app->params['m_assets_base_uri']);
 }
@@ -42,4 +42,5 @@ if (!defined('CLIENT_TYPE')) {
 }
 
 require(__DIR__ . '/../../common/config/di.php');
+
 $application->run();
