@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../common/css/ctcf-com.min.css">
     <link rel="stylesheet" href="css/index.min.css">
     <script src="../libs/jquery-1.11.1.min.js"></script>
+    <script src="../libs/handlebars-v4.0.11.js"></script>
     <script src="../libs/jquery.SuperSlide.2.1.1.js"></script>
 </head>
 <body>
@@ -247,54 +248,54 @@
                             <td>起投金额</td>
                             <td>募集进度</td>
                         </tr>
-                        <tr onclick="window.open('http://www.baidu.com');" class="fz14 fz-black">
-                            <td><div class="overflow">温盈金-(2017A温盈金-(2017A温盈金-(2017A</div></td>
-                            <td class="fz-orange-strong"><span class="fz30">8.5<em class="fz18">%</em><i class="fz14">+1%</i></span></td>
-                            <td>3年10个月</td>
-                            <td>12,000元</td>
-                            <td>
-                                <div class="progress">
-                                    <span><i style="width: 30%;"></i></span>&nbsp;30%
-                                </div>
-                            </td>
-                            <td><div class="btn btn-gray f14 fz-white">已售磬</div></td>
-                        </tr>
-                        <tr onclick="window.open('http://www.baidu.com');" class="fz14 fz-black">
-                            <td><div class="overflow">温盈金-(2017A</div></td>
-                            <td class="fz-orange-strong"><span class="fz30">8.5<em class="fz18">%</em>~10<em class="fz18">%</em></span></td>
-                            <td>3年10个月</td>
-                            <td>12,000元</td>
-                            <td>
-                                <div class="progress">
-                                    <span><i style="width: 54%;"></i></span>&nbsp;54%
-                                </div>
-                            </td>
-                            <td><div class="btn btn-orange f14 fz-white">立即投资</div></td>
-                        </tr>
-                        <tr onclick="window.open('http://www.baidu.com');" class="fz14 fz-black">
-                            <td><div class="overflow">温盈金</div></td>
-                            <td class="fz-orange-strong"><span class="fz30">8.5<em class="fz18">%</em></span></td>
-                            <td>3年10个月</td>
-                            <td>12,000元</td>
-                            <td>
-                                <div class="progress">
-                                    <span><i style="width: 0%;"></i></span>&nbsp;0%
-                                </div>
-                            </td>
-                            <td><div class="btn btn-light-orange f14 fz-white">收益中</div></td>
-                        </tr>
-                        <tr onclick="window.open('http://www.baidu.com');" class="fz14 fz-black">
-                            <td><div class="overflow">温盈金-(2017A温盈金-(2017A温盈金-(2017A</div></td>
-                            <td class="fz-orange-strong"><span class="fz30">8.5<em class="fz18">%</em></span></td>
-                            <td>3年10个月</td>
-                            <td>12,000元</td>
-                            <td>
-                                <div class="progress">
-                                    <span><i style="width: 100%;"></i></span>&nbsp;100%
-                                </div>
-                            </td>
-                            <td><div class="btn btn-gray f14 fz-white">已还清</div></td>
-                        </tr>
+                        <!--<tr onclick="window.open('http://www.baidu.com');" class="fz14 fz-black">-->
+                            <!--<td><div class="overflow">温盈金-(2017A温盈金-(2017A温盈金-(2017A</div></td>-->
+                            <!--<td class="fz-orange-strong"><span class="fz30">8.5<em class="fz18">%</em>~10.5<em class="fz18">%</em><i class="fz14">+1%</i></span></td>-->
+                            <!--<td>3年10个月</td>-->
+                            <!--<td>12,000元</td>-->
+                            <!--<td>-->
+                                <!--<div class="progress">-->
+                                    <!--<span><i style="width: 30%;"></i></span>&nbsp;30%-->
+                                <!--</div>-->
+                            <!--</td>-->
+                            <!--<td><div class="btn btn-gray f14 fz-white">已售磬</div></td>-->
+                        <!--</tr>-->
+                        <!--<tr onclick="window.open('http://www.baidu.com');" class="fz14 fz-black">-->
+                            <!--<td><div class="overflow">温盈金-(2017A</div></td>-->
+                            <!--<td class="fz-orange-strong"><span class="fz30">8.5<em class="fz18">%</em>~10<em class="fz18">%</em></span></td>-->
+                            <!--<td>3年10个月</td>-->
+                            <!--<td>12,000元</td>-->
+                            <!--<td>-->
+                                <!--<div class="progress">-->
+                                    <!--<span><i style="width: 54%;"></i></span>&nbsp;54%-->
+                                <!--</div>-->
+                            <!--</td>-->
+                            <!--<td><div class="btn btn-orange f14 fz-white">立即投资</div></td>-->
+                        <!--</tr>-->
+                        <!--<tr onclick="window.open('http://www.baidu.com');" class="fz14 fz-black">-->
+                            <!--<td><div class="overflow">温盈金</div></td>-->
+                            <!--<td class="fz-orange-strong"><span class="fz30">8.5<em class="fz18">%</em></span></td>-->
+                            <!--<td>3年10个月</td>-->
+                            <!--<td>12,000元</td>-->
+                            <!--<td>-->
+                                <!--<div class="progress">-->
+                                    <!--<span><i style="width: 0%;"></i></span>&nbsp;0%-->
+                                <!--</div>-->
+                            <!--</td>-->
+                            <!--<td><div class="btn btn-light-orange f14 fz-white">收益中</div></td>-->
+                        <!--</tr>-->
+                        <!--<tr onclick="window.open('http://www.baidu.com');" class="fz14 fz-black">-->
+                            <!--<td><div class="overflow">温盈金-(2017A温盈金-(2017A温盈金-(2017A</div></td>-->
+                            <!--<td class="fz-orange-strong"><span class="fz30">8.5<em class="fz18">%</em></span></td>-->
+                            <!--<td>3年10个月</td>-->
+                            <!--<td>12,000元</td>-->
+                            <!--<td>-->
+                                <!--<div class="progress">-->
+                                    <!--<span><i style="width: 100%;"></i></span>&nbsp;100%-->
+                                <!--</div>-->
+                            <!--</td>-->
+                            <!--<td><div class="btn btn-gray f14 fz-white">已还清</div></td>-->
+                        <!--</tr>-->
                     </table>
                 </div>
             </li>
@@ -484,7 +485,103 @@
         </div>
     </div>
 </div>
+<script id="entry-template" type="text/x-handlebars-template">
+    {{#each data}}
+    <tr onclick="window.open('{{link}}');" class="fz14 fz-black">
+        <td><div class="overflow">{{title}}</div></td>
+        <td class="fz-orange-strong"><span class="fz30">{{dealRate}}<em class="fz18">{{#if dealRateTo}}%</em>~{{dealRateTo}}{{/if}}<em class="fz18">%</em><i class="fz14">{{#if jiaxi}}+{{jiaxi}}%{{/if}}</i></span></td>
+        <td>{{duration}}</td>
+        <td>{{startMoney}}元</td>
+        <td>
+            <div class="progress">
+                <span><i style="width:{{progress}}%;"></i></span>&nbsp;{{progress}}%
+            </div>
+        </td>
+        {{#status1 status}}
+        <td><div class="btn btn-light-orange f14 fz-white">预告期</div></td>
+        {{/status1}}
+        {{#status2 status}}
+        <td><div class="btn btn-orange f14 fz-white">立即投资</div></td>
+        {{/status2}}
+        {{#status3 status}}
+        <td><div class="btn btn-gray f14 fz-white">已售罄</div></td>
+        {{/status3}}
+        {{#status5 status}}
+        <td><div class="btn btn-light-orange f14 fz-white">收益中</div></td>
+        {{/status5}}
+        {{#status6 status}}
+        <td><div class="btn btn-gray f14 fz-white">已还清</div></td>
+        {{/status6}}
+    </tr>
+    {{/each}}
+</script>
 <script>
+    Handlebars.registerHelper("status1", function (status,options) {
+        if (status == 1) {
+            return options.fn(this);
+        } else {
+            return options.inverse(this);
+        }
+    });
+    Handlebars.registerHelper("status2", function (status,options) {
+        if (status == 2) {
+            return options.fn(this);
+        } else {
+            return options.inverse(this);
+        }
+    });
+    Handlebars.registerHelper("status3", function (status,options) {
+        if (status == 3) {
+            return options.fn(this);
+        } else {
+            return options.inverse(this);
+        }
+    });
+    Handlebars.registerHelper("status5", function (status,options) {
+        if (status == 5) {
+            return options.fn(this);
+        } else {
+            return options.inverse(this);
+        }
+    });
+    Handlebars.registerHelper("status6", function (status,options) {
+        if (status == 6) {
+            return options.fn(this);
+        } else {
+            return options.inverse(this);
+        }
+    });
+    /*渲染列表开始*/
+    $.ajax({
+        type: "GET",
+        url: "",
+        data: "",
+        success: function(data){
+            var source   = document.getElementById("entry-template").innerHTML;
+            var template = Handlebars.compile(source);
+            var context  = {
+                data:data.data
+            };
+            var html = template(context);
+            Handlebars.registerHelper("jiaxi", function (jiaxi,options) {
+                if (!jiaxi) {
+                    return options.fn(this);
+                } else {
+                    return options.inverse(this);
+                }
+            });
+            Handlebars.registerHelper("dealRateTo", function (dealRateTo,options) {
+                if (!dealRateTo) {
+                    return options.fn(this);
+                } else {
+                    return options.inverse(this);
+                }
+            });
+            $(".finance-list table tbody").append(html);
+        }
+    });
+    /*渲染列表结束*/
+
     $(function(){
         $(window).scroll(function(){
             if($(this).scrollTop()>100){
