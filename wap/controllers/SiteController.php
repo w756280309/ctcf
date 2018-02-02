@@ -662,10 +662,14 @@ class SiteController extends Controller
             return ['code' => 1, 'message' => '图形验证码输入错误'];
         }
 
-        if (1 === (int) $type) {
-            //使用加密后的手机号去验证是否重复
-            $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($phone)]);
-            if (null !== $user) {
+        //使用加密后的手机号去验证是否重复
+        $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($phone)]);
+        if (null !== $user) {
+            if ($user->isLocked()) {
+                return ['code' => 1, 'message' => '该用户已被锁定'];
+            }
+
+            if (1 === (int) $type) {
                 return ['code' => 1, 'message' => '此手机号已经注册'];
             }
         }
