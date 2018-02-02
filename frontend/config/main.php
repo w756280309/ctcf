@@ -70,6 +70,15 @@ return [
                 ],
             ],
         ],
+        'view' => [
+            'class' => 'common\view\WapView',
+            'theme' => [
+                'pathMap' => [
+                    '@app/views' => '@view/themes/'.$_ENV['BW_APP'].'/pc/views',
+                    '@app/modules' => '@view/themes/'.$_ENV['BW_APP'].'/pc/modules',
+                ],
+            ]
+        ],
     ],
     'modules' => [
         'user' => [
