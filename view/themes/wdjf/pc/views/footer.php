@@ -4,12 +4,20 @@ use common\view\UdeskWebIMHelper;
 UdeskWebIMHelper::init($this);
 $this->registerCssFile(ASSETS_BASE_URI.'css/footer.css?v=20171208', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCss(".about-qq2{
+		text-align: left;
+		padding-left:30px;
+		width: 300px;
+		background-position: 329px 0;
+	}");
 ?>
-
 <div class="footer-section footer-section5 footer-fp-auto-height footer-fp-section footer-fp-table">
     <div class="footer-five-box" style="height: 200px">
-        <div class="footer-five-address">公司地址：温州市鹿城区飞霞南路657号保丰大楼四层</div>
-        <div class="footer-five-tel">客服电话：<span><?= Yii::$app->params['platform_info.contact_tel'] ?></span><span style="padding-left: 8px;margin-right: 8px;">客服QQ：1430843929</span>客服时间：8:30-20:00（周一至周日）</div>
+        <div class="company_address">
+            <div class="footer-five-address">公司地址：温州市鹿城区飞霞南路657号保丰大楼4-5层</div>
+        </div>
+        <div class="footer-five-tel">客服电话：<span class="kfdh"><?= Yii::$app->params['platform_info.contact_tel'] ?></span><span style="border-right:none;padding-left: 8px;margin-right: 8px;">客服QQ：1430843929</span></div>
+        <div class="footer-five-tel">客服时间：8:30-20:00</div>
 <!--        <div class="footer-five-partner footer-clearfix"><i>合作伙伴：</i>-->
 <!--            <ul>-->
 <!--                <li style="border-left: 0;padding-left: 0;">温州日报</li>-->
@@ -50,12 +58,14 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
             </div>
         </a>
         <a href="javascript:;" class="about-img3 message" style="background: url(<?= ASSETS_BASE_URI ?>images/about-tel-balck.jpg) no-repeat ;background-size: 40px 40px;background-position: 0 0 ">
-            <span class="about-qq message1">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?></span>
+            <div id="about-tel">
+                <span class="about-qq message1">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?></span>
+            </div>
         </a>
         <a href="javascript:;" class="about-img4 message">
             <span id="btn_udesk_im" style="width: 250px; color:white;" class="about-line message1">在线客服</span>
         </a>
-        <a href="javascript:;" class="about-img5">
+        <a href="javascript:;" class="about-img5" id="app-download">
             <div class="about-app">
                 <div class="aboutApp-img">
                     <p>扫一扫<br/>下载温都金服APP</p>
@@ -122,13 +132,19 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/clipboard.min.js', ['depends' => 'fron
 
             }
         };
+        //现代金报
+        var source = Cookies.get('campaign_source');
+        if (source == 'nbxdjb') {
+            $('.weixin').html('<img src="<?= ASSETS_BASE_URI ?>images/weixin-xdjb.png" alt="">');
+            $('.wap-app').html('<img src="<?= ASSETS_BASE_URI ?>images/ma-new-xdjb.png" alt="">');
+            document.title = '现代金报-温都金服[官网]-温州报业传媒旗下理财平台';
+            $('#app-download').hide();
+            $('.header-top-left').html("<span>客服热线：0574-87633136 / <?= Yii::$app->params['platform_info.contact_tel'] ?> (8:30-20:00)</span>");
+            $('.company_address').html("<div class=\"footer-five-address\">公司地址：宁波书城广场书香文化园“书香门第”创意设计街区D4（宁波服务网点）</div>\n" +
+                "        <div class=\"footer-five-tel\" style=\"text-indent: 5em\">温州市鹿城区飞霞南路657号保丰大楼4-5层</div>");
+            $('.kfdh').html("0574-87633136 / <?= Yii::$app->params['platform_info.contact_tel'] ?>");
+            $('#about-tel').html("<span class=\"about-qq about-qq2 message1\">客服电话：0574-87633136 / <?= Yii::$app->params['platform_info.contact_tel'] ?></span>");
+        }
     })
-    //现代金报
-    var source = Cookies.get('campaign_source');
-    if (source == 'nbxdjb') {
-        $('.weixin').html('<img src="<?= ASSETS_BASE_URI ?>images/weixin-xdjb.png" alt="">');
-        $('.wap-app').html('<img src="<?= ASSETS_BASE_URI ?>images/ma-new-xdjb.png" alt="">');
-        document.title = '现代金报-温都金服[官网]-温州报业传媒旗下理财平台';
-    }
 </script>
 

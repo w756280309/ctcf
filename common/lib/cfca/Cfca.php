@@ -2,6 +2,7 @@
 
 namespace common\lib\cfca;
 
+use GuzzleHttp\Client;
 use PayGate\Cfca\Message\RequestInterface;
 use PayGate\Cfca\Message\Response;
 use SimpleXMLElement;
@@ -9,13 +10,16 @@ use Yii;
 
 class Cfca
 {
+    private $institutionId;
     private $apiUrl;
     private $clientKeyPath;
     private $clientKeyExportPass;
     private $cfcaCertPath;
+    private $guzzle;
 
     public function __construct()
     {
+        $this->institutionId = Yii::$app->params['cfca']['institutionId'];
         $this->apiUrl = Yii::$app->params['cfca']['apiUrl'];
         $this->clientKeyPath = Yii::$app->params['cfca']['clientKeyPath'];
         $this->clientKeyExportPass = Yii::$app->params['cfca']['clientKeyExportPass'];
@@ -81,25 +85,11 @@ class Cfca
 
     private function post($url, array $data = [])
     {
-        $options = [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_USERAGENT => 'institution',
-            CURLOPT_CONNECTTIMEOUT => 120,
-            CURLOPT_TIMEOUT => 120,
-            CURLOPT_POST => 1,
-            CURLOPT_POSTFIELDS => $data,
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_SSL_VERIFYPEER => false,
-        ];
+        $res = $this->getGuzzle()->request('POST', $url, [
+            'form_params' => $data,
+        ]);
 
-        $ch = curl_init($url);
-        curl_setopt_array($ch, $options);
-
-        $content = curl_exec($ch);
-
-        curl_close($ch);
-
-        return $content;
+        return $res->getBody()->getContents();
     }
 
     private function verifyResponse($content)
@@ -111,6 +101,7 @@ class Cfca
             throw new \RuntimeException('Failed base64 decoding response message.');
         }
 
+        $sign = trim($sign);
         $bSign = hex2bin($sign);
 
         $cert = $this->readFile($this->cfcaCertPath);
@@ -119,5 +110,16 @@ class Cfca
         }
 
         return new Response($decoded);
+    }
+
+    protected function getGuzzle()
+    {
+        if (null === $this->guzzle) {
+            $this->guzzle = new Client([
+                'timeout' => 30, // 设置请求超时为30秒
+            ]);
+        }
+
+        return $this->guzzle;
     }
 }

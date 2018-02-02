@@ -57,4 +57,9 @@ class Response
     {
         return 2000 === $this->code;
     }
+
+    public function __toString()
+    {
+        return $this->text;
+    }
 }
