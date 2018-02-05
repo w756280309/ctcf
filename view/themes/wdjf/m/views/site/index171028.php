@@ -239,7 +239,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 			<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>" class="rg"><img
 					src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_phone_three.png" alt=""></a>
 		</div>
-		<p class="phone-box-address">地址：温州市鹿城区飞霞南路657号保丰大楼四层</p>
+		<p class="phone-box-address">地址：温州市鹿城区飞霞南路657号保丰大楼4-5层</p>
 	</div>
 	<div class="logo-box">
 		<img src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_wdlogo.png" alt="">

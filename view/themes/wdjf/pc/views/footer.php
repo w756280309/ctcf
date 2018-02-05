@@ -14,7 +14,7 @@ $this->registerCss(".about-qq2{
 <div class="footer-section footer-section5 footer-fp-auto-height footer-fp-section footer-fp-table">
     <div class="footer-five-box" style="height: 200px">
         <div class="company_address">
-            <div class="footer-five-address">公司地址：温州市鹿城区飞霞南路657号保丰大楼四层</div>
+            <div class="footer-five-address">公司地址：温州市鹿城区飞霞南路657号保丰大楼4-5层</div>
         </div>
         <div class="footer-five-tel">客服电话：<span class="kfdh"><?= Yii::$app->params['platform_info.contact_tel'] ?></span><span style="border-right:none;padding-left: 8px;margin-right: 8px;">客服QQ：1430843929</span></div>
         <div class="footer-five-tel">客服时间：8:30-20:00</div>
@@ -139,9 +139,9 @@ $this->registerCss(".about-qq2{
             $('.wap-app').html('<img src="<?= ASSETS_BASE_URI ?>images/ma-new-xdjb.png" alt="">');
             document.title = '现代金报-温都金服[官网]-温州报业传媒旗下理财平台';
             $('#app-download').hide();
-            $('.header-top-left').html("<span>客服热线：0574-87633136 / <?= Yii::$app->params['platform_info.contact_tel'] ?> (8:30-20:00 节假日不休息)</span>");
+            $('.header-top-left').html("<span>客服热线：0574-87633136 / <?= Yii::$app->params['platform_info.contact_tel'] ?> (8:30-20:00)</span>");
             $('.company_address').html("<div class=\"footer-five-address\">公司地址：宁波书城广场书香文化园“书香门第”创意设计街区D4（宁波服务网点）</div>\n" +
-                "        <div class=\"footer-five-tel\" style=\"text-indent: 5em\">温州市鹿城区飞霞南路657号保丰大楼四层</div>");
+                "        <div class=\"footer-five-tel\" style=\"text-indent: 5em\">温州市鹿城区飞霞南路657号保丰大楼4-5层</div>");
             $('.kfdh').html("0574-87633136 / <?= Yii::$app->params['platform_info.contact_tel'] ?>");
             $('#about-tel').html("<span class=\"about-qq about-qq2 message1\">客服电话：0574-87633136 / <?= Yii::$app->params['platform_info.contact_tel'] ?></span>");
         }

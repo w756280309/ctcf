@@ -22,8 +22,8 @@ class OfflineLoan extends ActiveRecord
     {
         return [
             'confirm' => ['jixi_time'],
-            'default' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate', 'repaymentMethod', 'paymentDay'],
-            'edit' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate', 'repaymentMethod', 'paymentDay'],
+            'default' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate', 'repaymentMethod', 'paymentDay', 'isCustomRepayment'],
+            'edit' => ['sn', 'title',  'expires', 'unit', 'jixi_time', 'yield_rate', 'repaymentMethod', 'paymentDay', 'isCustomRepayment'],
             'addexcel' => ['title',  'expires', 'unit', 'jixi_time', 'yield_rate'],
         ];
     }
@@ -60,6 +60,7 @@ class OfflineLoan extends ActiveRecord
             'finish_date' => '到期日',
             'repaymentMethod' => '还款方式',
             'paymentDay' => '固定还款日',
+            'isCustomRepayment' => '是否自定义还款',
         ];
     }
 
@@ -114,7 +115,7 @@ class OfflineLoan extends ActiveRecord
             $this->repaymentMethod, //还款方式
             $this->expires,     //项目期限
             $this->paymentDay,  //固定还款日
-            null
+            $this->isCustomRepayment  //是否自定义还款
         );
     }
 

@@ -1909,6 +1909,7 @@
                 "xls",
                 "xlsx"
             ],
+            "abandoned": "phpoffice/phpspreadsheet",
             "time": "2015-05-01T07:00:55+00:00"
         },
         {
@@ -2894,7 +2895,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git",
-                "reference": "b747b6bd8064d4ef7348f8953f81ddd4e8cc9ecf"
+                "reference": "a477546173cf5debb4ca4bfc117fa791921a764b"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -2918,7 +2919,7 @@
             ],
             "description": "工具库",
             "homepage": "http://dx.wangcaigu.cn/diffusion/WCGLIBS/",
-            "time": "2018-01-24T11:52:27+00:00"
+            "time": "2018-02-02T08:06:08+00:00"
         },
         {
             "name": "yiisoft/yii2",

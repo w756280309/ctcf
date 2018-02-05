@@ -10,3 +10,10 @@ Yii::setAlias('api', dirname(dirname(__DIR__)).'/api');
 Yii::setAlias('lock', dirname(dirname(__DIR__)).'/console/runtime/lock');
 Yii::setAlias('view', dirname(dirname(__DIR__)).'/view');
 Yii::setAlias('fe', dirname(dirname(__DIR__)).'/fe');
+
+// 引入 dotenv
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/../../');
+$dotenv->load();
+
+// 检查：必须设置BW_APP环境变量
+$dotenv->required('BW_APP');

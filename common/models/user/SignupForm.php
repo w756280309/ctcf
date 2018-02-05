@@ -5,7 +5,6 @@ namespace common\models\user;
 use common\lib\validator\LoginpassValidator;
 use common\models\affiliation\AffiliateCampaign;
 use common\models\affiliation\AffiliationManager;
-use common\models\affiliation\Affiliator;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\growth\AppMeta;
@@ -69,6 +68,9 @@ class SignupForm extends Model
             if (empty($re)) {
                 $this->addError($attribute, '该手机号未注册过');
             } else {
+                if ($re->isLocked()) {
+                    $this->addError($attribute, '该用户已被锁定');
+                }
                 return true;
             }
         } else {

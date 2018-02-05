@@ -3,8 +3,7 @@
 $params = array_merge(
     require(__DIR__.'/../../common/config/params.php'),
     require(__DIR__.'/../../common/config/params-local.php'),
-    require(__DIR__.'/params.php'),
-    require(__DIR__.'/params-local.php')
+    require(__DIR__.'/params.php')
 );
 
 return [
@@ -78,10 +77,17 @@ return [
             'errorAction' => 'site/error',
         ],
         'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-
             'class' => \common\components\WebRequest::className(),
             'enableCookieValidation' => false,
+        ],
+        'view' => [
+            'class' => 'common\view\WapView',
+            'theme' => [
+                'pathMap' => [
+                    '@app/views' => '@view/themes/'.$_ENV['BW_APP'].'/m/views',
+                    '@app/modules' => '@view/themes/'.$_ENV['BW_APP'].'/m/modules',
+                ],
+            ],
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
