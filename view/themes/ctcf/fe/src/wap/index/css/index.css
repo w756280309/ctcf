@@ -435,7 +435,7 @@ ul.bids-box-bidlist li a .bid-main-msg .bid-about-data p{
 
 .flex-content .phone-box .phone-box-number img {
   position: relative;
-  top: -2px;
+  /*top: -2px;*/
   width: .4rem;
   margin-right: .18666667rem;
   vertical-align: middle
