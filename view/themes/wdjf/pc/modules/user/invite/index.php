@@ -86,17 +86,17 @@ use common\utils\StringUtils;
             <div style="clear: both"></div>
         </div>
         <div class="page-title">
-            <span class="active">邀请列表</span>
-            <span class="">活动规则</span>
+            <span class="active">活动规则</span>
+            <span class="">邀请列表</span>
         </div>
 
         <!-- 邀请详情 -->
-        <div class="active-box invite-record" >
+        <div class="active-box invite-record hide" >
             <?= $this->renderFile('@frontend/modules/user/views/invite/_list.php', ['model' => $model, 'data' => $data, 'pages' => $pages]) ?>
         </div>
 
         <!-- 活动规则 -->
-        <div class="active-box rule hide">
+        <div class="active-box rule">
             <p><span>活动开始时间：2016年12月10日</span></p>
             <br/>
             <p><span>活动规则：</span></p>
@@ -175,8 +175,8 @@ use common\utils\StringUtils;
             $('.page-title span').each(function() {$(this).removeClass('active')});
             $('.page-title span').eq(index).addClass('active');
 
-            $('.active-box').each(function() {$(this).addClass('hide')});
-            $('.active-box').eq(index).removeClass('hide');
+            $('.active-box').each(function() {$(this).removeClass('hide')});
+            $('.active-box').eq(index).addClass('hide');
         });
 
         $('.invite-record').on('click', 'a', function (e) {

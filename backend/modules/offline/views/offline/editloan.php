@@ -55,6 +55,7 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['de
                     <?= $form->field($model, 'sn', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4']])->textInput() ?>
                     <?= $form->field($model, 'sn', ['template' => '{error}']); ?>
                     <?= $form->field($model, 'id', ['template' => '{input}'])->hiddenInput() ?>
+                    <input type="hidden" name="backUrl" value="<?= $backUrl ?>">
                 </div>
             </div>
             <div class="control-group">
@@ -100,7 +101,13 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['de
                     <?= $form->field($model, 'paymentDay', ['template' => '{error}']); ?>
                 </div>
             </div>
-
+            <div class="control-group">
+                <label class="control-label">是否自定义还款</label>
+                <div class="controls">
+                    <?=  $form->field($model, 'isCustomRepayment')->checkbox($model->isCustomRepayment ? ['checked' => true] : [])->label(false)?>
+                    <?= $form->field($model, 'isCustomRepayment', ['template' => '{error}']); ?>
+                </div>
+            </div>
             <div class="form-actions">
                 <button type="button" class="btn blue" id="submit_btn"><i class="icon-ok"></i> 提交</button>
                 <a href="/offline/offline/loanlist" class="btn">取消</a>
