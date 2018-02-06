@@ -1,7 +1,7 @@
 <?php
 $this->title = '邀请好友';
 
-$this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=20161210', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=20180206', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css?v=20161208', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
@@ -123,8 +123,8 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
         <div class="title-box">
             <div class="inv-title clearfix">
                 <!--被选中添加selected类-->
-                <span class="selected">邀请列表</span>
-                <span>活动规则</span>
+                <span class="selected">活动规则</span>
+                <span>邀请列表</span>
             </div>
         </div>
         <!--邀请列表-->
