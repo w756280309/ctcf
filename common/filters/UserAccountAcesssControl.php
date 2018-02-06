@@ -3,6 +3,7 @@
 namespace common\filters;
 
 use common\models\app\AccessToken;
+use common\models\user\User;
 use Yii;
 use yii\base\ActionFilter;
 
@@ -19,7 +20,7 @@ class UserAccountAcesssControl extends ActionFilter
 
             if ($token) {
                 $accessToken = AccessToken::isEffectiveToken($token);
-                if (false !== $accessToken) {
+                if (false !== $accessToken && !is_null($accessToken->user) && $accessToken->user->status && !$accessToken->user->is_soft_deleted) {
                     Yii::$app->user->setIdentity($accessToken->user);
                     if (date('Y-m-d') !== substr($accessToken->updateTime, 0, 10)) {
                         $accessToken->expireTime = strtotime('+30 day');//延长有效期30天
@@ -31,7 +32,7 @@ class UserAccountAcesssControl extends ActionFilter
         } else {
             $user = Yii::$app->user->identity;
 
-            if (null !== $user && 0 === $user->status) {
+            if (!is_null($user) && (User::STATUS_DELETED === $user->status || $user->is_soft_deleted) ) {
                 Yii::$app->user->logout();
 
                 if (Yii::$app->request->isAjax) {
