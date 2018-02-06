@@ -112,7 +112,7 @@ class LoginForm extends Model
 
                 return false;
             }
-        } elseif (User::STATUS_DELETED === $this->user->status) {
+        } elseif (User::STATUS_DELETED === $this->user->status || $this->user->is_soft_deleted) {
             if (User::USER_TYPE_PERSONAL === $userType) {
                 $this->addError('phone', '该用户已被锁定');
 
