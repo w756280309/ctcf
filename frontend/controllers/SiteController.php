@@ -474,8 +474,13 @@ class SiteController extends Controller
         }
 
         $user = User::findOne(['safeMobile' => SecurityUtils::encrypt($phone)]);
-        if (1 === $type && null !== $user) {
-            return ['code' => 1, 'key' => 'phone', 'message' => '该手机号码已经注册'];
+        if (null !== $user) {
+            if ($user->isLocked()) {
+                return ['code' => 1, 'key' => 'phone', 'message' => '该用户已被锁定'];
+            }
+            if (1 === $type) {
+                return ['code' => 1, 'key' => 'phone', 'message' => '该手机号码已经注册'];
+            }
         }
 
         if (2 === $type && null === $user) {
