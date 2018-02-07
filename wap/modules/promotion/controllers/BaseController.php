@@ -10,6 +10,7 @@ use common\models\user\UserInfo;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\web\Controller;
+use yii\web\View;
 
 class BaseController extends Controller
 {
@@ -253,5 +254,23 @@ class BaseController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * 将要返回的信息在页面中生成为一个JSON对象
+     *
+     * @param array $data 待返回页面的信息数组
+     *
+     * @return void
+     */
+    public function renderJsInView(Array $data = [])
+    {
+        $data = json_encode($data);
+        $view = Yii::$app->view;
+        $js = <<<JS
+var dataStr = '$data';
+var dataJson = eval('(' + dataStr + ')');
+JS;
+        $view->registerJs($js, View::POS_HEAD);
     }
 }

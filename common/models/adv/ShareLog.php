@@ -2,14 +2,14 @@
 
 namespace common\models\adv;
 
-use yii\behaviors\TimestampBehavior;
+use common\models\user\User;
 use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "share_log".
  *
  * @property integer $id            ID
- *  @propertyinteger $uid           分享的用户id
+ * @property integer $uid           分享的用户id
  * @property string  $shareUrl      分享url
  * @property string  $scene         分享场景  session/聊天  timeline/朋友圈
  * @property string  $createdAt     分享日期
@@ -53,5 +53,29 @@ class ShareLog extends ActiveRecord
             'ipAddress' => 'ip地址',
             'created_at' => 'Created At',
         ];
+    }
+
+    /**
+     * 根据配置获得一条分享记录
+     *
+     * @param User $user 用户对象
+     * @param string $scene 场景
+     * @param string $urlLike shareUrl查询匹配条件
+     * @param null|\DateTime $shareLogTime
+     *
+     * @return null|ActiveRecord
+     */
+    public static function fetchByConfig(User $user, $scene, $urlLike, $shareLogTime = null)
+    {
+        if (null === $shareLogTime) {
+            $shareLogTime = new \DateTime();
+        }
+
+        return ShareLog::find()
+            ->where(['userId' => $user->id])
+            ->andWhere(['scene' => $scene])
+            ->andWhere(['like', 'shareUrl', $urlLike])
+            ->andWhere(['createdAt' => $shareLogTime->format('Y-m-d')])
+            ->one();
     }
 }
