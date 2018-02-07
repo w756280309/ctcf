@@ -21,7 +21,7 @@ $this->title = '登录';
 
     <div class="row sm-height">
         <div class="col">
-            <input id="pass" class="login-info" name="LoginForm[password]" maxlength="20" type="password" placeholder="请输入密码" autocomplete="off" />
+            <input id="pass" class="login-info" name="LoginForm[password]" maxlength="16" type="password" placeholder="请输入密码" autocomplete="off" />
         </div>
     </div>
 

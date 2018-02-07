@@ -20,7 +20,7 @@
             </div>
             <div class="password-box">
                 <label for="password">登录密码</label>
-                <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" autocomplete="off"/>
+                <input id="password" name="LoginForm[password]" type="password" maxlength="16" placeholder="请输入密码" autocomplete="off"/>
                 <div style="clear: both"></div>
                 <div class="popUp pass_err">密码不能为空</div>
             </div>
