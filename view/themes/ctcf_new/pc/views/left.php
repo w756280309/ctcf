@@ -2,7 +2,7 @@
 
 use frontend\assets\FrontAsset;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/left.css', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/left.css', ['depends' => FrontAsset::class]);
 $action = Yii::$app->controller->action->getUniqueId();
 
 ?>

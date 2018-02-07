@@ -1,6 +1,6 @@
 <?php
 $this->registerJsFile(ASSETS_BASE_URI . 'js/useraccount/deposit.js');
-$this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/useraccount/chargedeposit.css?v=1.0');
 $this->title = '开户';
 ?>
 

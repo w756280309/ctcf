@@ -3,7 +3,7 @@
 $this->title = '注册成功';
 
 ?>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>pc/signup-consult/css/index.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/signup-consult/index.css?v=1.5">
 
 <div class="signup-consult">
     <div class="consult-content">

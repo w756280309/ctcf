@@ -1,5 +1,5 @@
 <?php
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/usercenter.css?v=1.1', ['depends' => 'frontend\assets\FrontAsset']);
 $action = Yii::$app->controller->action->getUniqueId();
 ?>
 <?php $this->beginContent('@frontend/views/layouts/main.php'); ?>

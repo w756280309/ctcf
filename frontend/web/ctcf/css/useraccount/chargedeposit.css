@@ -1,0 +1,317 @@
+.charge-box {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+}
+
+.charge-box .charge-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.charge-box .charge-header .charge-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url("../../../images/useraccount/background-icon.png") no-repeat 0 0;
+    float: left;
+}
+
+.charge-box .charge-header .charge-header-font {
+    font-size: 16px;
+    color: #464648;
+}
+
+.charge-box .charge-content {
+    line-height: 180px;
+}
+
+.charge-box .charge-content span {
+    color: #6e6e72;
+    font-size: 18px;
+    padding-left: 60px;
+    padding-right: 40px;
+    float: left;
+}
+
+.charge-box .charge-content a {
+    background-color: #f44336;
+    color: #fff;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 67px;
+    float: left;
+    margin-top: 72px;
+}
+
+.charge-explain {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+    margin-top: 20px;
+    padding-left: 60px;
+    padding-bottom: 40px;
+}
+
+.charge-explain .charge-explain-title {
+    padding-top: 36px;
+    padding-bottom: 13px;
+    font-size: 16px;
+    color: #464648;
+    font-weight: bold;
+}
+
+.charge-explain .charge-explain-content span {
+    float: left;
+    font-size: 12px;
+}
+
+.charge-explain .charge-explain-content .span-left {
+    color: #6e6e72;
+}
+
+.charge-explain .charge-explain-content .span-right {
+    display: block;
+    width: 550px;
+    color: #99999d;
+}
+
+.deposit-box {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+}
+
+.deposit-box .deposit-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.deposit-box .deposit-header .deposit-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url("../../../images/useraccount/background-icon.png") no-repeat -43px 0;
+    float: left;
+}
+
+.deposit-box .deposit-header .deposit-header-font {
+    font-size: 16px;
+    color: #464648;
+}
+
+.deposit-box .deposit-content-left {
+    float: left;
+    margin-top: 42px;
+    line-height: 40px;
+}
+
+.deposit-box .deposit-content-right {
+    float: left;
+}
+
+.deposit-box .deposit-content-link {
+    background-color: #ff6707;
+    color: #fff;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 67px;
+    float: left;
+    margin-top: 72px;
+}
+
+.deposit-box .deposit-inflow {
+    width: 408px;
+    padding-left: 51px;
+    margin-bottom: 19px;
+    position: relative;
+}
+
+.deposit-box .deposit-inflow .inflow-type {
+    color: #464648;
+    padding-right: 6px;
+}
+
+.deposit-box .deposit-inflow input {
+    height: 18px;
+    width: 218px;
+    padding: 11px 0 11px 20px;
+    border: 1px solid #e4e4e8;
+}
+
+/*border三角形提示信息*/
+.tip_pop {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 370px;
+    font-size: 12px;
+    line-height: 36px;
+    zoom: 1;
+    color: #464648;
+    z-index: 99;
+}
+
+.tip_pop .tip_pop-en {
+    position: relative;
+    background-color: #f9e5e4;
+    border: 1px solid #edc2c0;
+    border-radius: 2px;
+    padding: 2px 14px;
+    zoom: 1;
+    _display: inline
+}
+
+.tip_pop .tip_pop-border {
+    position: absolute;
+    z-index: 10;
+    left: -125px;
+    top: 29px;
+}
+
+.tip_pop .tip_pop-border em {
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: -16px;
+    left: 119px;
+    border-style: solid;
+    border-width: 6px 6px 6px 0;
+    border-color: rgba(0, 0, 0, 0);
+    border-color: transparent \0;
+    _border-color: tomato;
+    _filter: chroma(color=tomato);
+    border-right-color: #edc2c0;
+}
+
+.tip_pop .tip_pop-border span {
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: -16px;
+    left: 120px;
+    border-style: solid;
+    border-width: 6px 6px 6px 0;
+    border-color: rgba(0, 0, 0, 0);
+    border-color: transparent \0;
+    _border-color: tomato;
+    _filter: chroma(color=tomato);
+    border-right-color: #f9e5e4;
+}
+
+.tip_pop .tip_pop-content {
+    word-break: keep-all;
+    padding-left: 10px;
+}
+
+.tip_pop-content-icon {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background: url("../../../images/useraccount/background-icon.png") no-repeat 0 -59px;
+    float: left;
+    margin-top: 16px;
+}
+
+.result-pop {
+    width: 412px;
+    position: fixed;
+    left: 50%;
+    top: 30%;
+    margin-left: -200px;
+    border: 1px solid #e4e4e8;
+    z-index: 1001;
+    background-color: #fff;
+}
+
+.result-pop .result-pop-hender {
+    font-size: 16px;
+    font-weight: bold;
+    color: #464648;
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #efeff3;
+    text-indent: 17px;
+}
+
+.result-pop .result-pop-content {
+    padding: 36px 30px 8px;
+    color: #6e6e72;
+    line-height: 16px;
+}
+
+.result-pop .result-pop-phone {
+    font-size: 12px;
+    color: #bababf;
+    padding-left: 30px;
+}
+
+.result-pop .link-confirm {
+    background-color: #f44336;
+    color: #fff;
+    display: block;
+    height: 40px;
+    width: 191px;
+    text-align: center;
+    line-height: 40px;
+    margin: 40px auto 20px;
+    cursor: pointer;
+}
+
+/* 错误提示信息样式 */
+.err-info {
+    padding-left: 4rem;
+    color: #f44336;
+    display: none;
+}
+
+.list-single {
+    color: #555;
+    font-size: 16px;
+    line-height: 16px;
+    width: 100%;
+    height: 36px;
+    position: relative;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.list-single a {
+    position: absolute;
+    top: 10px;
+    color: #99999d;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.list-single a.select {
+    color: #f44336;
+    padding-bottom: 9px;
+    border-bottom: 2px solid #f44336;
+}
+
+.list-single .a_first {
+    left: 0;
+}
+
+.list-single .a_second {
+    left: 162px;
+}
+
+.bindCard-box .bindCard-single {
+    padding-left: 70px !important;
+}
+
+.bindCard-box .bindCard-already {
+    padding-left: 70px !important;
+}
+
+.recharge-note {
+    margin-top: -24px;
+    color: #f44336;
+    margin-left: 70px;
+}

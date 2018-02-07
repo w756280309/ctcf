@@ -1,7 +1,7 @@
 <?php
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/help/operation.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/help/left_nav.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/help/left_nav.css?v=1.4', ['depends' => 'frontend\assets\FrontAsset']);
 
 $action = Yii::$app->controller->action->getUniqueId();
 
