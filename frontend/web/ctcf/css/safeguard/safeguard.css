@@ -1,0 +1,110 @@
+/*  安全保障 页面  */
+.safeguard-box {
+    width: 100%;
+    background: #fff;
+}
+.safeguard-box .safeguard-banner {
+    width:100%;
+    min-width: 1057px;
+    background: #3388e5;
+}
+.safeguard-box .safeguard-banner .banner {
+    margin:0 auto;
+    width:1000px;
+    height:346px;
+    background: url('../../images/safeguard/safeguard-banner-new.png') no-repeat center center;
+}
+.safeguard-box .safeguard-container {
+    width:100%;
+    min-width: 1057px;
+    background: #fff;
+}
+.safeguard-box .safeguard-container .safeguard-container-box {
+    margin:0 auto;
+    width:1000px;
+}
+.safeguard-box .safeguard-container .safeguard-container-box .safeguard-icons {
+    margin:36px 82px 0 82px;
+}
+.safeguard-box .safeguard-icons ul.icons {
+    margin:0 auto;
+    /*background: red;*/
+    overflow:hidden;
+}
+.safeguard-box .safeguard-icons ul.icons li {
+    float: left;
+    margin-right: 41px;
+    width:178px;
+    height:226px;
+}
+.safeguard-box .safeguard-icons ul.icons li.last {
+    margin-right: 0!important;
+}
+.safeguard-box .safeguard-icons ul.icons li a {
+    width:178px;
+    height: 184px;
+    display: block;
+    cursor: pointer;
+    text-align: center;
+    line-height: 184px;
+}
+.safeguard-box .safeguard-icons ul.icons li.active {
+    background: url('../../../images/safeguard/safeguard-icons-hover.png') no-repeat -1px 2px;
+}
+.safeguard-box .safeguard-icons ul.icons li a:hover {
+    background: url('../../../images/safeguard/safeguard-icons-hover.png') no-repeat -1px 2px;
+}
+.safeguard-box .safeguard-icons ul.icons li a img {
+    border:none;
+}
+.safeguard-box .safeguard-icons ul.icons li p {
+    width:100%;
+    height:42px;
+    line-height:42px;
+    text-align: center;
+    font-size: 18px;
+    color:#3e3a39;
+}
+.safeguard-box .safeguard-icons .arrow {
+    margin:0 auto;
+    height:122px;
+    background: url('../../../images/safeguard/safeguard-arrow-icon.png') no-repeat center center;
+}
+.safeguard-box .safeguard-icons .safetxt {
+    width:100%;
+}
+.safeguard-box .safeguard-icons .safetxt .safetxt-icon {
+    padding-left: 6px;
+    padding-bottom: 5em;
+}
+.safeguard-box .safeguard-icons .safetxt .safetxt-icon h3 {
+    height:32px;
+    line-height:32px;
+    font-size: 18px;
+    font-weight: bold;
+    color:#262323;
+}
+.safeguard-box .safeguard-icons .safetxt .safetxt-icon h4 {
+    margin-top: 25px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    color:#262323;
+}
+.safeguard-box .safeguard-icons .safetxt p {
+    line-height: 30px;
+    font-size: 14px;
+    color:#3e3a39;
+}
+.safeguard-box .safeguard-icons .safetxt .p-padding-lf {
+    padding-left: 30px;
+}
+.safeguard-box .safeguard-icons .safetxt .p-margin-top {
+    margin-top: 30px;
+}
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}

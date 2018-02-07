@@ -5,7 +5,7 @@ $this->extraKeywords = '平台安全';
 
 ?>
 
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/safeguard.css?v=170811">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/safeguard/safeguard.css?v=1.5">
 
 <div class="safeguard-box clearfix">
     <div class="safeguard-banner">
@@ -15,10 +15,10 @@ $this->extraKeywords = '平台安全';
         <div class="safeguard-container-box">
             <div class="safeguard-icons">
                 <ul class="icons">
-                    <li class="active"><a href="javascript:;"><img src="../images/safeguard/safeguard-icon1.png" alt="专业合规"></a><p>专业合规</p></li>
-                    <li class=""><a href="javascript:;"><img src="../images/safeguard/safeguard-icon2.png" alt="风控先进"></a><p>风控先进</p></li>
-                    <li class=""><a href="javascript:;"><img src="../images/safeguard/safeguard-icon3.png" alt="信息安全"></a><p>信息安全</p></li>
-                    <li class="last"><a href="javascript:;"><img src="../images/safeguard/safeguard-icon4.png" alt="数据安全"></a><p>数据安全</p></li>
+                    <li class="active"><a href="javascript:;"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/safeguard/safeguard-icon1.png" alt="专业合规"></a><p>专业合规</p></li>
+                    <li class=""><a href="javascript:;"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/safeguard/safeguard-icon2.png" alt="风控先进"></a><p>风控先进</p></li>
+                    <li class=""><a href="javascript:;"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/safeguard/safeguard-icon3.png" alt="信息安全"></a><p>信息安全</p></li>
+                    <li class="last"><a href="javascript:;"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/safeguard/safeguard-icon4.png" alt="数据安全"></a><p>数据安全</p></li>
                     <div class="clear"></div>
                 </ul>
                 <p class="arrow"></p>
