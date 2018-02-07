@@ -140,7 +140,7 @@ JSFILE
                     <?php } elseif (OnlineProduct::STATUS_FULL === $val->status || OnlineProduct::STATUS_FOUND === $val->status) { ?>
                         <span class="btn btn-gray f14 fz-white">已售罄</span>
                     <?php } elseif (OnlineProduct::STATUS_HUAN === $val->status) { ?>
-                        <span class="btn btn-gray f14 fz-white">收益中</span>
+                        <span class="btn btn-light-orange f14 fz-white">收益中</span>
                     <?php } elseif (OnlineProduct::STATUS_OVER === $val->status) { ?>
                         <span class="btn btn-gray f14 fz-white">已还清</span>
                     <?php } ?>
@@ -167,14 +167,13 @@ JSFILE
                 </div>
                 <div class="finance-list">
                     <table>
-                        <tr class="fz16 fz-gray">
+                        <tr class="fz16 fz-gray" height="69">
                             <td>产品名称</td>
                             <td>预期年化利率</td>
                             <td class="special">期限</td>
                             <td>起投金额</td>
                             <td>募集进度</td>
                         </tr>
-
                     </table>
                 </div>
             </li>
@@ -301,7 +300,7 @@ JSFILE
     {{#each data}}
     <tr onclick="window.open('{{link}}');" class="fz14 fz-black">
         <td><div class="overflow">{{title}}</div></td>
-        <td class="fz-orange-strong"><span class="fz30">{{dealRate}}<em class="fz18">{{#if dealRateTo}}%</em>~{{dealRateTo}}{{/if}}<em class="fz18">%</em><i class="fz14">{{#if jiaxi}}+{{jiaxi}}%{{/if}}</i></span></td>
+        <td class="fz-orange-strong"><span class="fz30">{{dealRate}}<em class="fz18">%</em><i class="fz14">{{#if jiaxi}}+{{jiaxi}}%{{/if}}</i></span></td>
         <td>{{duration}}</td>
         <td>{{startMoney}}元</td>
         <td>
@@ -343,7 +342,7 @@ JSFILE
         }
     });
     Handlebars.registerHelper("status3", function (status,options) {
-        if (status == 3) {
+        if (status == 3 || status == 7) {
             return options.fn(this);
         } else {
             return options.inverse(this);
@@ -368,27 +367,25 @@ JSFILE
         type: "GET",
         url: "/site/fixed",
         success: function(data){
-            var source   = document.getElementById("entry-template").innerHTML;
-            var template = Handlebars.compile(source);
-            var context  = {
-                data:JSON.parse(data)
-            };
-            var html = template(context);
-            Handlebars.registerHelper("jiaxi", function (jiaxi,options) {
-                if (!jiaxi) {
-                    return options.fn(this);
-                } else {
-                    return options.inverse(this);
-                }
-            });
-            Handlebars.registerHelper("dealRateTo", function (dealRateTo,options) {
-                if (!dealRateTo) {
-                    return options.fn(this);
-                } else {
-                    return options.inverse(this);
-                }
-            });
-            $(".finance-list table tbody").append(html);
+            if (data.code == 0) {
+                var source   = document.getElementById("entry-template").innerHTML;
+                var template = Handlebars.compile(source);
+                var context  = {
+                    data:data.data
+                };
+                var html = template(context);
+                Handlebars.registerHelper("jiaxi", function (jiaxi,options) {
+                    if (!jiaxi) {
+                        return options.fn(this);
+                    } else {
+                        return options.inverse(this);
+                    }
+                });
+                $(".finance-list table tbody").append(html);
+            } else {
+                var html = "<tr><td class='fz18' colspan='5' height='300'>"+data.message+"</td></tr>";
+                $(".finance-list table tbody").append(html);
+            }
         }
     });
     /*渲染列表结束*/

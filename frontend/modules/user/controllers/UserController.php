@@ -270,9 +270,9 @@ class UserController extends BaseController
      * @param int $type ['1' => '收益中', '2' => '募集中', '3' => '已还清']
      * @return mixed
      */
-    public function actionMyofforder($type = 1)
+    public function actionMyofforder($type = 2)
     {
-        if (!in_array($type, ['1', '3'])) {
+        if (!in_array($type, ['1', '3', '2'])) {
             throw $this->ex404();
         }
         $type = intval($type);
@@ -287,7 +287,7 @@ class UserController extends BaseController
         } else if ($type == 3) {
             $query->andWhere(['offline_loan.is_jixi' => true])
                 ->andWhere(['<', 'offline_loan.finish_date', date('Y-m-d')]);
-        } else {
+        } else if ($type == 2){
             $query->andWhere(['offline_loan.is_jixi' => false]);
         }
         $query->orderBy("created_at desc");
