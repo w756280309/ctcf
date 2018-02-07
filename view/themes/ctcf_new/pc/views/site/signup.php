@@ -6,8 +6,8 @@ use yii\captcha\Captcha;
 
 $this->title = '注册';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/register/register.css', ['depends' => FrontAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20180118', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/register/register.css?v=20180213', ['depends' => FrontAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/register/register.js?v=20180120', ['depends' => FrontAsset::class]);
 
 ?>
 
@@ -63,7 +63,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20180118', ['de
         </div>
     <?php ActiveForm::end(); ?>
     <div class="register-image">
-        <img alt="" src="<?= ASSETS_BASE_URI ?>images/new_banner.png">
+        <img alt="" src="<?= ASSETS_BASE_URI ?>ctcf/images/register/new_banner.png">
     </div>
 </div>
 <div class="clear"></div>
