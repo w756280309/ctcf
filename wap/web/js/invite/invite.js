@@ -1,4 +1,6 @@
 $(function(){
+    $('.invite-list').hide();
+    $('.rule-box').show();
     $('.bottom-box .inv-title span').on('click',function(){
         var index=$('.bottom-box .inv-title span').index(this);
         $('.bottom-box .inv-title span').removeClass('selected');
@@ -6,10 +8,10 @@ $(function(){
         $('.rule-box').hide();
         if(index==0){
             $('.bottom-box .inv-title span').eq(0).addClass('selected');
-            $('.invite-list').show();
+            $('.rule-box').show();
         }else if(index==1){
             $('.bottom-box .inv-title span').eq(1).addClass('selected');
-            $('.rule-box').show();
+            $('.invite-list').show();
         }
     });
     $('.invite-btn').on('click',function(){

@@ -58,8 +58,8 @@ use yii\captcha\Captcha;
                 <input id="yanzhengma" type="tel" name="SignupForm[sms]" maxlength="6" placeholder="请输入短信验证码" AUTOCOMPLETE="off"><input type="button" value="获取验证码" id="yzm">
             </div>
             <div class="password">
-                <input id="pass" type="password" name="" maxlength="20" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off" onblur="this.type='password'">
-                <input id="pass2" type="hidden" name="SignupForm[password]" maxlength="20" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
+                <input id="pass" type="password" name="" maxlength="16" placeholder="请输入6到16位的密码" AUTOCOMPLETE="off" onblur="this.type='password'">
+                <input id="pass2" type="hidden" name="SignupForm[password]" maxlength="16" placeholder="请输入6到16位的密码" AUTOCOMPLETE="off">
                 <img alt="eye-close" src="<?= FE_BASE_URI ?>wap/wendumao/images/eye-close.png">
             </div>
             <div class="contract">

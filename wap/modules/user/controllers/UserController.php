@@ -270,9 +270,9 @@ class UserController extends BaseController
      * 线下理财
      *
      */
-    public function actionMyofforder($type = 1, $page = 1, $backUrl = null)
+    public function actionMyofforder($type = 2, $page = 1, $backUrl = null)
     {
-        if (!in_array($type, ['1', '3'])) {
+        if (!in_array($type, ['1', '3', '2'])) {
             throw $this->ex404();
         }
         $type = intval($type);
@@ -288,6 +288,9 @@ class UserController extends BaseController
                     ->orderBy(['offline_loan.finish_date' => SORT_ASC]);
             } else if ($type == 3) {    //已还清
                 $query->andWhere(['<', 'offline_loan.finish_date', date('Y-m-d')])
+                    ->orderBy(['offline_order.orderDate' => SORT_ASC]);
+            } else if ($type == 2) {    //待成立
+                $query->andWhere(['is_jixi' => false])
                     ->orderBy(['offline_order.orderDate' => SORT_ASC]);
             }
             $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $pageSize]);

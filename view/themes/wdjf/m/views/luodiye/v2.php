@@ -47,7 +47,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                         <input id="sms" type="tel" class="input-common" name="SignupForm[sms]" placeholder="请输入手机验证码" maxlength="6" AUTOCOMPLETE="off">
                         <span class="get-imgCode code-special" id="yzm_refresh">获取验证码</span>
                     </div>
-                    <input id="password" type="password" class="input-common" name="SignupForm[password]" maxlength="20" placeholder="请输入密码(6-20位字母和数字组合)" AUTOCOMPLETE="off">
+                    <input id="password" type="password" class="input-common" name="SignupForm[password]" maxlength="16" placeholder="请输入密码(6-20位字母和数字组合)" AUTOCOMPLETE="off">
                     <input type="button" name="sign-up-mobile" id="final-submit" class="btn" value="立即领取">
                 </div>
 
