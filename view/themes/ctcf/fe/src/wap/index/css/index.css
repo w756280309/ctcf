@@ -42,7 +42,7 @@ body {
   -webkit-border-radius: 0.10666667rem;
   -moz-border-radius: 0.10666667rem;
   border-radius: 0.10666667rem;
-  z-index: 1000;
+  z-index: 10;
   -webkit-box-shadow: 0 0.0566667rem 8px 0.006667rem #F0E5DE;
   -moz-box-shadow: 0 0.0566667rem 8px 0.006667rem #F0E5DE;
   box-shadow: 0 0.0566667rem 8px 0.006667rem #F0E5DE;
@@ -73,7 +73,7 @@ body {
   color: #4e545a;
   background-color: #fff;
   text-align: center;
-  z-index: 1001;
+  z-index: 11;
 }
 .flex-content .newbid-box .newbid-insideBox .newbid-insideBox-shouyiNum {
   color: #fc615c;
@@ -107,7 +107,7 @@ body {
   font-size: 0.5rem;
   border: 1px solid #FF6700;
   border-radius: 0.53333333rem;
-  z-index: 1001;
+  z-index: 11;
 }
 .flex-content .newbid-box .newbid-insideBox .newbid-insideBox-register {
   left: 0.33333333rem;

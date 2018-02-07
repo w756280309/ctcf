@@ -9,13 +9,25 @@
 	<link rel="stylesheet" href="../common/css/footer171028.css">
 	<link rel="stylesheet" href="../libs/swiper/swiper-3.4.2.min.css">
 	<link rel="stylesheet" href="css/index.css">
-	<script  src="../libs/lib.flexible3.js"></script>
-	<script  src="../libs/jquery-1.12.4.min.js"></script>
+	<link rel="stylesheet" href="./mask/css/mask.min.css">
+	<script src="../libs/lib.flexible3.js"></script>
+	<script src="../libs/jquery-1.12.4.min.js"></script>
 	<script src="../libs/swiper/swiper-3.4.2.min.js"></script>
-	<script  src="../libs/fastclick.js"></script>
+	<script src="../libs/fastclick.js"></script>
+	<script src="./mask/js/mask.js"></script>
 </head>
 <body>
 <div class="flex-content">
+	<!--弹窗-->
+	<div class="mask-no-invest">
+		<div class="popup-box">
+			<div class="popup-box-top"></div>
+			<i class="close-box"></i>
+			<p class="popup-box-msg"><span>888元</span>红包已经发放到账户中心，请至”账户中心-优惠券”中查看</p>
+			<p class="popup-box-btn">查看红包</p>
+		</div>
+	</div>
+
 	<!--banner-->
 	<div class="banner-box swiper-container">
 		<div class="swiper-wrapper">
@@ -112,7 +124,7 @@
 					</div>
 					<div class="bid-main-msg clearfix">
 						<div class="lf bid-about-rate">
-							<p class="bid-rate-number">8.3<span>%</span><i>+0.5%</i></p>
+							<p class="bid-rate-number">10.3~11.2<span>%</span><i>+0.5%</i></p>
 							<p class="bid-rate-msg">预期年化收益</p>
 						</div>
 						<div class="lf bid-about-data">
@@ -211,8 +223,9 @@
 <script>
 	$(function () {
     var bannerSwiper = new Swiper('.banner-box', {
-      autoplay: 4000,//可选选项，自动滑动
-	    loop:true,
+      autoplay: 3000,//可选选项，自动滑动
+	  speed: 500,
+	  loop:true,
       pagination : '.swiper-pagination',
       autoplayDisableOnInteraction: false
     })
