@@ -163,35 +163,50 @@ class SiteController extends Controller
      */
     public function actionFixed()
     {
-        //推荐区展示
-        $loans = OnlineProduct::getRecommendLoans(7, true);
+        try {
+            //推荐区展示
+            $loans = OnlineProduct::getRecommendLoans(7, true);
 
-        $result = [];
-        foreach ($loans as $key => $val) {
-            if (!in_array($key, [0, 1, 2])) {
-                $temp = [];
-                $temp['link'] = '/deal/deal/detail?sn='.$val->sn;
-                $temp['title'] = $val->title;
-                $dealRate = LoanHelper::getDealRate($val);
-                if (strpos($dealRate, '～')) {
-                    $arr = explode('～', $dealRate);
-                    $temp['dealRate'] = $arr[0];
-                    $temp['dealRateTo'] = $arr[1];
-                } else {
-                    $temp['dealRate'] = $dealRate;
-                    $temp['dealRateTo'] = '';
+            $result = [];
+            foreach ($loans as $key => $val) {
+                if (!in_array($key, [0, 1, 2])) {
+                    $temp = [];
+                    $temp['link'] = '/deal/deal/detail?sn='.$val->sn;
+                    $temp['title'] = $val->title;
+                    $temp['dealRate'] = LoanHelper::getDealRate($val);
+                    $temp['jiaxi'] = !empty($val->jiaxi) ? doubleval($val->jiaxi) : '';
+                    $duration = $val->getDuration();
+                    $temp['duration'] = $duration['value'].$duration['unit'];
+                    $temp['startMoney'] = StringUtils::amountFormat2($val->start_money);
+                    $temp['progress'] = $val->getProgressForDisplay();
+                    $temp['status'] = $val->status;
+                    $result[] = $temp;
                 }
-                $temp['jiaxi'] = !empty($val->jiaxi) ? doubleval($val->jiaxi) : '';
-                $duration = $val->getDuration();
-                $temp['duration'] = $duration['value'].$duration['unit'];
-                $temp['startMoney'] = StringUtils::amountFormat2($val->start_money);
-                $temp['progress'] = $val->getProgressForDisplay();
-                $temp['status'] = $val->status;
-                $result[] = $temp;
             }
-        }
 
-        return json_encode($result);
+            if (0 === count($result)) {
+                return [
+                    'code' => 1,
+                    'message' => '没有数据',
+                    'status' => 'fail',
+                    'data' => null,
+                ];
+            } else {
+                return [
+                    'code' => 0,
+                    'message' => '成功',
+                    'status' => 'success',
+                    'data' => $result,
+                ];
+            }
+        } catch (Exception $e) {
+            return [
+                'code' => 2,
+                'message' => '失败',
+                'status' => 'exception',
+                'data' => null,
+            ];
+        }
     }
 
     /**
