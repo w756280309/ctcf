@@ -128,7 +128,7 @@
     width: 81px;
     height: 38px;
     text-align: center;
-    line-height: 40px;
+    line-height: 38px;
     cursor: pointer;
     background: #ff6707;
     color: #fff;
@@ -160,10 +160,9 @@
 }
 .resign-bottom a {
     float: left;
-    color: #46669f;
+    color: #419bf9;
 }
 .resign-bottom a:hover {
-    color: #0c4a7f;
     text-decoration: underline;
 }
 .resign-btn-box {
@@ -196,10 +195,9 @@
     margin-left: 70px;
 }
 .login-btn a {
-    color: #46669f;
+    color: #419bf9;
 }
 .login-btn a:hover {
-    color: #0c4a7f;
     text-decoration: underline;
 }
 .grayBack {
