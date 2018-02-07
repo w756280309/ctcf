@@ -54,7 +54,7 @@ $(function() {
 JS;
 
 $this->registerJs($_js, View::POS_END, 'body_close');
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/chargedeposit.css?v=1.0');
 $this->registerCssFile(ASSETS_BASE_URI.'css/frontend.css?v=20160829');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mytrade.css?v=20160720');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcardalready.css');

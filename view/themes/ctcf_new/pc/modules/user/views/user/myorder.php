@@ -1,7 +1,7 @@
 <?php
 $this->title = '我的理财';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mytrade.css?v=20160804', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/mytrade.css?v=20160809', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/my_trade.js', ['depends' => 'frontend\assets\FrontAsset']);
 

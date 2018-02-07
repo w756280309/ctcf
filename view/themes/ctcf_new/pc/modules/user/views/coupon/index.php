@@ -7,7 +7,7 @@ use frontend\assets\FrontAsset;
 $this->title = '我的代金券';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => FrontAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/mycoupon.css?v=161024', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/mycoupon.css?v=161026', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/JPlaceholder.js', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/couponcode.js', ['depends' => FrontAsset::class]);
 

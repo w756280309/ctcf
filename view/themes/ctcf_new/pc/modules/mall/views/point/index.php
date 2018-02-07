@@ -8,7 +8,7 @@ use frontend\assets\FrontAsset;
 $this->title = '我的积分';
 
 $this->registerCssFile(FE_BASE_URI.'pc/common/css/base.css', ['depends' => FrontAsset::class]);
-$this->registerCssFile(FE_BASE_URI.'pc/my_point/css/index.css?v=1.0', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/my_point/index.css?v=1.2', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => FrontAsset::class]);
 
 ?>
