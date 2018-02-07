@@ -29,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <input id="yzm" class="yzm yzm-normal" name="yzm" value="获取验证码" type="button">
     </div>
     <div class="col-xs-9 col">
-        <input id="pass" class="login-info" name="SignupForm[password]" maxlength="20" type="password"
-               placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
+        <input id="pass" class="login-info" name="SignupForm[password]" maxlength="16" type="password"
+               placeholder="请输入6到16位的密码" AUTOCOMPLETE="off">
     </div>
     <div class="col-xs-3 col border-bottom login-eye">
         <img src="<?= ASSETS_BASE_URI ?>images/eye-close.png" width="26" height="20" alt=" 闭眼">
