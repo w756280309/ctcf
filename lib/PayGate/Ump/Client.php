@@ -1145,7 +1145,6 @@ class Client
 
                 $xpath = new \DOMXpath($doc);
                 $nodes = $xpath->query('//meta[@name="MobilePayPlatform"]');
-
                 if (0 === $nodes->length) {
                     throw new \Exception('Meta element not found.');
                 } elseif ($nodes->length > 1) {
@@ -1255,5 +1254,26 @@ class Client
         }
 
         return base64_encode(CryptoUtils::encrypt($data, $this->umpCertPath));
+    }
+
+    /**
+     * 解绑
+     */
+    public function unBind($uid, $account_id)
+    {
+        $data = [
+            'service' => 'mer_unbind_agreement',    //接口名称
+            'charset' => $this->charset,
+            'res_format' => 'HTML',
+            'mer_id' => $this->merchantId,
+            'ret_url' => $this->hostInfo . "/user/bank/unbind-result",     //页面跳转同步通知页面路径
+            'version' => '4.0',     //版本号，定值
+            'user_id' => $uid,      //资金账户托管平台的用户号
+            'account_id' => $account_id,    //资金账户托管平台的账户号
+            'user_unbind_agreement_list' => 'ZKJP0700',     //用户需解约的协议列表信息
+        ];
+        $params = $this->buildQuery($data);
+
+        return $this->apiUrl.'?'.$params;
     }
 }

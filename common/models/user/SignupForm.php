@@ -43,7 +43,7 @@ class SignupForm extends Model
             [
                 'password',
                 'string',
-                'length' => [6, 20],
+                'length' => [6, 16],
 
             ],
             //验证密码格式 不能是纯数字，或是纯字母

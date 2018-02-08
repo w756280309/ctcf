@@ -3,14 +3,14 @@
 $this->title = '登录';
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login.css">
-<script src="<?= ASSETS_BASE_URI ?>js/login/login.js"></script>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/login/login.css?v=1.6">
+<script src="<?= ASSETS_BASE_URI ?>ctcf/js/login/login.js?v=1.0"></script>
 
 <div class="login-box">
     <div class="login-content">
         <div class="login-inner">
             <div class="login-ad">
-                <img alt="" src="<?= ASSETS_BASE_URI ?>images/fiveadvantage.jpg">
+                <img alt="" src="<?= ASSETS_BASE_URI ?>ctcf/images/login/fiveadvantage.png">
             </div>
             <div class="login-right">
                 <h3>登录</h3>
@@ -42,7 +42,7 @@ $this->title = '登录';
                             <div class="login-check">
                                 <input type="hidden" class="agree" name="agree" value="no">
                                 <span>
-                                     <input type="checkbox" name="remember" tabindex="3">
+                                     <input class="member" type="checkbox" name="remember" tabindex="3">
                                 </span>
                                 记住用户名
                             </div>

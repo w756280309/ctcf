@@ -1,0 +1,291 @@
+/*  安全中心 页面  */
+.safecenter-box {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+}
+.safecenter-box .safecenter-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+.safecenter-box .safecenter-header .safecenter-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url('../../../images/useraccount/safecenter-icon.png') no-repeat 0 0;
+    float: left;
+}
+.safecenter-box .safecenter-header .safecenter-header-font {
+    font-size: 16px;
+    color: #464648;
+}
+.safecenter-box .safecenter-content {
+    margin-right:40px;
+    padding-bottom: 18px;
+}
+.safecenter-box .safecenter-content .safecenter-tel {
+    padding-left: 48px;
+    height: 66px;
+    line-height: 66px;
+    font-size: 16px;
+    color:#878d95;
+    border-bottom: 1px solid #efeff3;
+}
+.safecenter-box .safecenter-content .safecenter-content-info {
+    padding-left: 48px;
+    font-size: 16px;
+    color:#6e6e72;
+    border-bottom: 1px solid #efeff3;
+}
+.safecenter-box .safecenter-content .safecenter-content-info .info-box {
+    height:66px;
+}
+.safecenter-box .safecenter-content .safecenter-content-info .info {
+    float: left;
+    padding-top: 18px;
+}
+.safecenter-box .info-icon i {
+    margin-right: 14px;
+    margin-top: 5px;
+    width:20px;
+    height:18px;
+    display: inline-block;
+}
+.safecenter-box .info-id i {
+    background: url('../../../images/useraccount/safecenter-icon.png') -94px 0 no-repeat;
+}
+.safecenter-box .info-phone i {
+    background: url('../../../images/useraccount/safecenter-icon.png') -26px 0 no-repeat;
+}
+.safecenter-box .info-card i {
+    background: url('../../../images/useraccount/safecenter-icon.png') -50px 0 no-repeat;
+}
+.safecenter-box .info-login-code i,.safecenter-box .info-pay-code i {
+    background: url('../../../images/useraccount/safecenter-icon.png') -73px 0 no-repeat;
+}
+
+.safecenter-box .info-name {
+    width:276px;
+}
+.safecenter-box .info-name h4 {
+    height:24px;
+    font-size:14px;
+    color:#434a54;
+}
+.safecenter-box .info-name p {
+    font-size:12px;
+    color:#aab2bd;
+}
+.safecenter-box .info-person p {
+    padding-top: 10px;
+    width:252px;
+    font-size:12px;
+    color:#6e6e72;
+}
+.safecenter-box .info-btn {
+    float: right;
+    padding-top: 28px;
+    width:148px;
+    font-size:12px;
+    color:#6e6e72;
+}
+.safecenter-box .info-btn i {
+    float: left;
+    margin-right:4px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+.safecenter-box .info-btn .blue {
+    background: url('../../../images/useraccount/safecenter-icon.png') -116px 0 no-repeat;
+}
+.safecenter-box .info-btn .red {
+    background: url('../../../images/useraccount/safecenter-icon.png') -132px 0 no-repeat;
+}
+.safecenter-box .info-btn span {
+    float: left;
+    height:16px;
+    line-height:16px;
+    font-size:12px;
+    display: inline-block;
+}
+.safecenter-box a.bunding,.safecenter-box a.join {
+    float: right;
+    margin-right: 26px;
+    width:28px;
+    height:16px;
+    line-height:16px;
+    text-align: left;
+    font-size:12px;
+    color:#419bf9;
+    display: inline-block;
+    cursor: pointer;
+}
+.safecenter-box a.renzheng {
+    margin-right: 0;
+    width:54px;
+}
+.safecenter-box .revise {
+    padding-left: 0!important;
+    border-bottom:1px solid #f00;
+}
+.safecenter-box .revise .revise-info-box,.safecenter-box .pay .revise-info-box{
+    padding-left: 48px;
+    height:66px;
+}
+.revise-container {
+    margin: 0 12px 20px 0;
+    padding-left: 48px;
+    padding-bottom: 20px;
+    background: #fff;
+    border-top: 1px solid #efeff3;
+}
+.safecenter-box .revise .revise-login-code {
+    padding:28px 0 28px 40px;
+    background: #f9f9fa;
+}
+.safecenter-box .revise .revise-login-code .revise-login-bag {
+    height:40px;
+}
+.safecenter-box .revise .revise-login-code .revise-login-bag span {
+    margin-right: 12px;
+    height:40px;
+    line-height:40px;
+    color:#464648;
+    font-size: 14px;
+    display: inline-block;
+}
+.safecenter-box .revise .revise-login-code  .input-code {
+    padding-left: 12px;
+    width:250px;
+    height:38px;
+    line-height:38px;
+    font-size: 14px;
+    border:1px solid #e4e4e8;
+    background: #fff;
+}
+.safecenter-box .revise .revise-login-code  input::-webkit-input-placeholder {
+    color:#d5d5d8
+} 
+.safecenter-box .revise .revise-login-code  input:-moz-placeholder {
+     color:#d5d5d8
+} 
+.safecenter-box .revise .revise-login-code  input::-moz-placeholder {
+      color:#d5d5d8
+} 
+.safecenter-box .revise .revise-login-code  input:-ms-input-placeholder {
+       color:#d5d5d8
+ }
+.safecenter-box .revise .revise-login-code .error-border {
+    border:1px solid #f44336;
+}
+.safecenter-box .revise .revise-login-code .error {
+    padding: 6px 0 6px 55px;
+    height:16px;
+    font-size: 12px;
+    color:#f44336;
+}
+.safecenter-box .revise .revise-login-code .yzm-txt {
+    float: left;
+    margin-right: 12px;
+    height:40px;
+    line-height:40px;
+    color:#464648;
+    font-size: 14px;
+    display: inline-block;
+}
+.safecenter-box .revise .revise-login-code .input-yzm-code {
+    float: left;
+    padding-left: 12px;
+    width:150px;
+    height:38px;
+    line-height:38px;
+    font-size: 14px;
+    border:1px solid #e4e4e8;
+    background: #fff;
+}
+.safecenter-box .revise .revise-login-code .yzm {
+    margin-left:10px;
+    width:90px;
+    height:40px;
+    line-height:40px;
+    font-size: 14px;
+    text-align: center;
+    background: #d6d6d6;
+    display: inline-block;
+    cursor: pointer;
+}
+.safecenter-box .a-submit {
+    margin: 15px 0 0 55px;
+    width:90px;
+    height:28px;
+    line-height:28px;
+    font-size: 14px;
+    text-align: center;
+    color:#fff;
+    background:#f44336;
+    display: block;
+    cursor: pointer;
+}
+.safecenter-box .a-submit:hover {
+    background: #d43125;
+}
+.safecenter-box .pay {
+    padding-left: 0!important;
+    border-bottom:none!important;
+}
+.safecenter-box .pay .pay-code {
+    padding: 36px 0 10px 40px;
+    background: #f9f9fa;
+}
+.safecenter-box .pay .pay-code .pay-bag {
+    float: left;
+    width:450px;
+    height:60px;
+}
+.safecenter-box .pay .pay-code .pay-bag p {
+    line-height: 14px;
+    font-size: 12px;
+    color:#6e6e72;
+}
+.safecenter-box .pay .pay-code .p-bloder {
+    height: 18px;
+    line-height: 18px!important;
+    font-size: 13px;
+    font-weight: bold;
+}
+.safecenter-box .pay-submit {
+    float: left;
+    margin: 15px 0 0 20px;
+    width:118px;
+    height:28px;
+    line-height:28px;
+    font-size: 14px;
+    text-align: center;
+    color:#fff;
+    background:#f44336;
+    display: block;
+}
+.safecenter-box .pay-submit:hover {
+    background: #d43125;
+}
+.safecenter-box .pay-txt {
+    padding-top:20px;
+    width:586px;
+    height:76px;
+}
+.safecenter-box .pay-txt p {
+    line-height:15px;
+    font-size: 12px;
+}
+.safecenter-box .pay-txt .p-tip {
+    color:#f44336;
+}
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}

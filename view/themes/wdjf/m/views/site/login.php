@@ -21,8 +21,8 @@ $this->title = '登录';
 
     <div class="row sm-height">
         <div class="col">
-            <input id="pass" style="width: 75%;" class="login-info lf" name="" maxlength="20" type="password" placeholder="请输入密码" autocomplete="off" onfocus="this.type='password'"/>
-            <input id="pass2" style="width: 75%;" class="login-info lf" name="LoginForm[password]" maxlength="20" type="hidden"/>
+            <input id="pass" style="width: 75%;" class="login-info lf" name="" maxlength="16" type="password" placeholder="请输入密码" autocomplete="off" onfocus="this.type='password'"/>
+            <input id="pass2" style="width: 75%;" class="login-info lf" name="LoginForm[password]" maxlength="16" type="hidden"/>
             <div class="col-xs-3 col border-bottom login-eye password lf">
                 <img src="<?= ASSETS_BASE_URI ?>images/eye-close.png" width="26" height="20" alt=" 闭眼">
             </div>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0baccecede2095e204822f8754795aee",
+    "content-hash": "1724a7b81f960f8202de6a2f40d7adae",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -218,7 +218,7 @@
             "version": "v2.0.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/yiisoft/jquery-pjax.git",
+                "url": "git@github.com:yiisoft/jquery-pjax.git",
                 "reference": "60728da6ade5879e807a49ce59ef9a72039b8978"
             },
             "dist": {

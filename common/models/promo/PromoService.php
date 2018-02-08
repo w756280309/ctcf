@@ -308,7 +308,7 @@ class PromoService
      *
      * @return bool|string
      */
-    protected static function openLottery(array $awardPool)
+    public static function openLottery(array $awardPool)
     {
         //验证$awardPool是否为空，为空返回false
         if (empty($awardPool)) {

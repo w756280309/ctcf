@@ -14,13 +14,13 @@ $this->title = '修改登录密码';
     <div class="row sm-height border-bottom">
             <div class="col-xs-3 safe-txt text-align-ct">原密码</div>
             <div class="col-xs-9 safe-lf text-align-lf">
-                <input type="password" id="password" class="change-input" name="EditpassForm[password]" maxlength="20" placeholder="请输入原密码">
+                <input type="password" id="password" class="change-input" name="EditpassForm[password]" maxlength="16" placeholder="请输入原密码">
             </div>
         </div>
         <div class="row sm-height border-bottom">
             <div class="col-xs-3 safe-txt text-align-ct">新密码</div>
             <div class="col-xs-7 safe-lf text-align-lf">
-                <input type="password" id="new_pass" class="change-input" placeholder="请输入6到20位的新密码" name="EditpassForm[new_pass]" maxlength="20">
+                <input type="password" id="new_pass" class="change-input" placeholder="请输入6到16位的新密码" name="EditpassForm[new_pass]" maxlength="16">
             </div>
             <div class="col-xs-2 eye text-align-ct col">
                 <img src="<?= ASSETS_BASE_URI ?>images/eye-close.png"  align="absmiddle" alt=" 闭眼" >

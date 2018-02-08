@@ -1,8 +1,8 @@
 <?php
 $this->title = '找回密码';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/register/register.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20180118', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/register/register.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/register/register.js?v=20180118', ['depends' => 'frontend\assets\FrontAsset']);
 
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;

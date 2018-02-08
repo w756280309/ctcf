@@ -33,7 +33,7 @@
         height:52px;
         line-height:52px;
         display: block;
-        background-color: #f44336;
+        background-color: #ff6707;
         text-align: center;
     }
     .clearfix:after {

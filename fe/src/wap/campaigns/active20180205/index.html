@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="format-detection" content="telphone=no, email=no"/>
+	<title>title</title>
+	<link rel="stylesheet" href="../../common/css/wenjfbase.css">
+	<link rel="stylesheet" href="./css/index.css?v=1.2">
+	<script src="../../libs/fastclick.js"></script>
+	<script src="../../libs/lib.flexible3.js"></script>
+	<script src="../../libs/jquery-1.11.1.min.js"></script>
+	<script src="../../libs/vue.min.js"></script>
+	<style>
+		[v-cloak] {
+			display: none
+		}
+	</style>
+</head>
+<body>
+<div class="flex-content">
+	<div class="top-part">
+		<div class="top-text top-ready" style="display: none">
+			<p class="line-one">活动时间：2018.2.5~2.9，每天都能来玩！</p>
+			<p class="line-two">查看奖励：完成游戏即可抽取红包，奖励即时发放到账，请到“账户”-“<a href="#">优惠券</a>”中查看。</p>
+		</div>
+		<div class="top-text top-questions">
+			<p class="question-text">问题：唐朝被当做门神的两位武将是尉迟恭和谁？</p>
+			<span class="question-process"><span>1</span>/3</span>
+		</div>
+	</div>
+	<div class="bottom-part">
+		<div class="bottom-ready" style="display: none">
+			<ul class="letter-list clearfix" style="margin-bottom: 0.32rem;">
+				<li>每</li>
+				<li>日</li>
+				<li>填</li>
+				<li>字</li>
+			</ul>
+			<ul class="letter-list clearfix">
+				<li>狂</li>
+				<li>撒</li>
+				<li>红</li>
+				<li>包</li>
+			</ul>
+			<div class="btn-start"></div>
+			<p class="show-rules">活动规则</p>
+		</div>
+		<div class="bottom-play" style="display: block;">
+			<ul class="play-answer-list">
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+			<ul class="play-choice-list clearfix">
+				<li><span class="single-letter">恭</span></li>
+				<li><span class="single-letter">贺</span></li>
+				<li><span class="single-letter">新</span></li>
+				<li><span class="single-letter">春</span></li>
+				<li><span class="single-letter">齐</span></li>
+				<li><span class="single-letter">尉</span></li>
+				<li><span class="single-letter">玺</span></li>
+				<li><span class="single-letter">必</span></li>
+				<li><span class="single-letter">勒</span></li>
+				<li><span class="single-letter">叔</span></li>
+				<li><span class="single-letter">清</span></li>
+				<li><span class="single-letter">乐</span></li>
+				<li><span class="single-letter">平</span></li>
+				<li><span class="single-letter">秦</span></li>
+				<li><span class="single-letter">满</span></li>
+				<li><span class="single-letter">宝</span></li>
+				<li><span class="single-letter">安</span></li>
+				<li><span class="single-letter">喜</span></li>
+				<li><span class="single-letter">迟</span></li>
+				<li class="btn-submit"></li>
+			</ul>
+		</div>
+		<div class="bottom-result" style="display:none;">
+			<p class="result-answer">正确答案：<span>除夕</span></p>
+			<img src="images/pic_result_wrong.png" alt="" class="result-picture result-picture-wrong" style="display: none">
+			<img src="images/pic_result_true.png" alt="" class="result-picture result-picture-true">
+			<div class="result-btn">下一题(3)</div>
+		</div>
+	</div>
+</div>
+<div class="mask" style="display: none"></div>
+<!--规则弹窗-->
+<div class="popup pop-rules " style="display: none">
+	<img class="close" src="images/pic_close.png" alt="">
+	<p class="rules-title">活动规则</p>
+	<ul class="rules-list">
+		<li>活动时间：2018.2.5至2.9；</li>
+		<li>填字游戏玩法：<br>在页面下方文字区点击相应文字，填满上方答案区空格，再点击“提交”，即可提交答案进入下一题；<br>如果填错文字，可以点击答案区填错的文字，即可完成删除。</li>
+		<li>每轮填字游戏有3道题，答对越多，获得奖励的几率越高哦！欢迎您邀请亲朋好友协力参与，抢走大红包！</li>
+		<li>活动期间每位用户每天最多有2次免费游戏机会，其中第2次游戏机会必须分享本活动到朋友圈才能获得；</li>
+		<li>活动期间每天的游戏机会将在次日0点重置，请当日使用完；</li>
+		<li>活动期间，每天2次游戏机会用完后，可以次日至本活动页继续参与游戏；</li>
+		<li>本次活动虚拟奖品将立即发放到账，实物奖品将在7个工作日内与您联系。</li>
+	</ul>
+</div>
+<!--玩法弹窗-->
+<div class="popup pop-method" style="display: none">
+	<img class="close" src="images/pic_close.png" alt="">
+	<img src="images/pic_method.png" alt="" class="method-pic">
+	<div class="method-close"></div>
+</div>
+<!--没机会提示弹窗-->
+<div class="popup-small pop-nochance" style="display: none">
+	<img class="close" src="images/pic_close.png" alt="">
+	<div class="popup-small-btn no-change-btn"></div>
+</div>
+<!--分享弹窗-->
+<div class="popup-small pop-share" style="display: none">
+	<img class="close" src="images/pic_close.png" alt="">
+	<div class="popup-small-btn share-btn"></div>
+</div>
+<!--结果弹窗-->
+<div class="popup-small pop-result" style="display: none">
+	<img class="close" src="images/pic_close.png" alt="">
+	<img src="images/pic_money_3.png" alt="" class="result-pic">
+	<span class="result-number">3</span>
+	<div class="result-btns clearfix">
+		<div class="lf"></div>
+		<div class="rg"></div>
+	</div>
+</div>
+<script>
+  $(function () {
+    var boolClick = true;
+    //关闭弹窗
+    $("img.close,.method-close,.no-change-btn").on("click", function () {
+      $(this).parent().hide();
+      $(".mask").hide();
+    })
+    //重新开始
+    $(".pop-result img.close,.pop-result .rg").on("click", function () {
+      console.log("重新开始")
+    })
+    //分享
+    $(".pop-result .lf,.pop-share .share-btn").on("click", function () {
+      console.log("分享")
+    })
+    //点击备选字
+    $(".flex-content").on("click", ".single-letter", function () {
+      if (boolClick) {
+        boolClick = false
+        var _this = $(this);
+        //索引值
+        var _index = _this.parent().index();
+        //内容
+        var letterNow = $(this).html();
+        $.each($(".play-answer-list li"), function (index, value) {
+          if (value.innerHTML == "") {
+            //赋内容值 索引值 清除原位置内容
+            var position = $(this).offset();
+            var positionOld = _this.offset();
+            _this.css({"position": "fixed","top": positionOld.top,"left": positionOld.left})
+            _this.animate({'top': (position.top + 5) + 'px', 'left': (position.left + 5) + 'px'}, 'slow', function () {
+              _this.remove()
+              value.innerHTML = "<span data-xulie='" + _index + "'>" + letterNow + "</span>"
+              setTimeout(function () {
+                boolClick = true
+              },1000)
+              return false
+            })
+          }
+        })
+      }
+    })
+
+
+    //清除答案
+    $(".play-answer-list li").on("click", function () {
+      //获取索引
+      var xulie = $(this).children().data("xulie");
+      var content = $(this).children().html();
+      $(".play-choice-list li:eq(" + xulie + ")").append("<span class='single-letter'>" + content + "</span>")
+      $(this).children().remove();
+    })
+    //提交答案
+    $(".btn-submit").on("click", function () {
+      if(boolClick){
+        var answer = [];
+        $.each($(".play-answer-list li>span"), function (index, value) {
+          answer.push(value.innerHTML)
+        })
+        alert(answer)
+      }
+    })
+  })
+</script>
+</body>
+</html>
