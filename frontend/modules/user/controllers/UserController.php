@@ -270,7 +270,7 @@ class UserController extends BaseController
      * @param int $type ['1' => '收益中', '2' => '募集中', '3' => '已还清']
      * @return mixed
      */
-    public function actionMyofforder($type = 2)
+    public function actionMyofforder($type = 1)
     {
         if (!in_array($type, ['1', '3', '2'])) {
             throw $this->ex404();
