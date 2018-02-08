@@ -63,6 +63,7 @@
     },
     "repositories":[
         { "type": "vcs", "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git" },
-        { "type": "vcs", "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/DINGNOTIFY/dingnotify.git" }
+        { "type": "vcs", "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/DINGNOTIFY/dingnotify.git" },
+        { "type": "composer", "url": "https://asset-packagist.org" }
     ]
 }
