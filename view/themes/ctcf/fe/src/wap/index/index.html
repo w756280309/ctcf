@@ -62,10 +62,9 @@
 
 	<!--已登陆注册-->
 	<div class="mask-login-invest">
-
 		<div class="popup-box">
 			<i class="close-box"></i>
-			<div class="urgrade-swiper-contain">
+			<div class="urgrade-swiper-contain swiper-no-swiping">
 				<ul class="swiper-wrapper" id="upgrade-sweper">
 					<li class="swiper-slide upgrade_explain">
 						<h5>尊敬的用户，您好：</h5>
@@ -113,10 +112,10 @@
 								</div>
 							</div>
 						</div>
-						<u>补偿规则</u>
+						<u class="get-prize-rules">补偿规则</u>
 						<div class="upgrade-updata-btn clearfix">
-							<a class="lf" href="#">查看红包</a>
-							<a class="rg" href="#">逛逛积分商城</a>
+							<a class="check-get-prize lf" href="#">查看红包</a>
+							<a class="go-to-store rg" href="#">逛逛积分商城</a>
 						</div>
 					</li>
 				</ul>
@@ -331,14 +330,7 @@
     })
 
 
-		var aboutus= new Swiper('.urgrade-swiper-contain', {
-		    spaceBetween:100,
-            initialSlide :1,
-            speed: 500,
-            loop:false,
-            pagination : '.swiper-pagination',
-            autoplayDisableOnInteraction: false,
-        })
+
 
 		//footer部分
 		$(".footer-nav a").click(function () {
