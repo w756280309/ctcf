@@ -7,7 +7,7 @@ use yii\captcha\Captcha;
 
 $this->title = '安全中心';
 
-foreach (['useraccount/safecenter.css?v=1.2'] as $cssFile) {
+foreach (['useraccount/safecenter.css?v=1.4'] as $cssFile) {
     $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/'.$cssFile, ['depends' => 'frontend\assets\FrontAsset']);
 }
 $mobile = StringUtils::obfsMobileNumber($user->mobile);
