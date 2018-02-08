@@ -15,7 +15,11 @@ use common\action\user\BankUpdateVerifyAction;
 use common\action\user\BankVerifyAction;
 use common\models\bank\BankCardUpdate;
 use common\models\bank\BankManager;
+use common\models\growth\AppMeta;
+use common\models\user\UserBank;
 use common\service\BankService;
+use PayGate\Ump\Client;
+use Yii;
 
 class BankController extends BaseController
 {
@@ -67,10 +71,56 @@ class BankController extends BaseController
         if (null !== $bankcardUpdate && BankCardUpdate::STATUS_ACCEPT !== $bankcardUpdate->status) {
             $bankcardUpdate = null;
         }
-
+        //是否允许解绑
+        $isUnbind = false;
+        $user = $this->getAuthedUser();
+        $white = AppMeta::find()
+            ->select('value')
+            ->where(['key' => 'unbind_white'])
+            ->scalar();
+        if (in_array($user->id, explode(',', $white))) {
+            $isUnbind = true;
+        }
         return $this->render('card', [
             'userBank' => $userBank,
-            'bankcardUpdate' => $bankcardUpdate
+            'bankcardUpdate' => $bankcardUpdate,
+            'isUnbind' => $isUnbind,
         ]);
+    }
+
+    //解绑银行卡
+    public function actionUnbind()
+    {
+        $user = $this->getAuthedUser();
+        $white = AppMeta::find()
+            ->select('value')
+            ->where(['key' => 'unbind_white'])
+            ->scalar();
+        if (in_array($user->id, explode(',', $white))) {
+            $data = BankService::checkKuaijie($user);
+            if (!is_null($user) && 0 === $data['code']) {  //满足解绑条件
+                return $this->redirect(\Yii::$container->get('ump')->unbind($user->epayUser->epayUserId, $user->epayUser->accountNo));
+            }
+        } else {
+            throw $this->ex404();
+        }
+    }
+
+    //解绑结果页面
+    public function actionUnbindResult()
+    {
+        $data = Yii::$app->request->get();
+        if (Yii::$container->get('ump')->verifySign($data)
+            && '0000' === $data['ret_code']
+            && 'mer_unbind_agreement_notify' === $data['service']) {
+            //删除userBank
+            $user = $this->getAuthedUser();
+            UserBank::deleteAll(['uid' => $user->id]);
+            //返回成功页
+            $result = ['code' => 1, '解绑成功'];
+        } else {
+            $result = ['code' => 0, '解绑失败'];
+        }
+        return $this->render('unbind-result', ['result' => $result]);
     }
 }
