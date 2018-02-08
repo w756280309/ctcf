@@ -1,7 +1,7 @@
 <?php
 
 $this->title = '资金托管账户';
-$this->registerCssFile('/css/useraccount/accountentrust.css');
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/accountentrust.css?v=1.0');
 use common\utils\SecurityUtils;
 $idCard = SecurityUtils::decrypt($user->safeIdCard);
 

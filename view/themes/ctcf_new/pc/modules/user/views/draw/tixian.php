@@ -1,8 +1,8 @@
 <?php
     $this->title = '提现';
 
-    $this->registerCssFile('/css/useraccount/bindcardalready.css');
-    $this->registerCssFile('/css/useraccount/chargedeposit.css');
+    $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/bindcardalready.css?v=1.1');
+    $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/chargedeposit.css?v=1.0');
 
     use common\utils\StringUtils;
 
