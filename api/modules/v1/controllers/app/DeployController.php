@@ -34,23 +34,23 @@ class DeployController extends Controller
         ];
 
         if ('ios' === $clienttype) {
-            if ($versionCode < 17) {
+            if ($versionCode < 18) {
                 $content = [
                     'old_updatetype' => 2,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
-                    'updatedesc' => '导航更加清爽流畅，新增门店理财查看',  //新版本更新说明
-                    'versioncode' => '17',   //新版本版本号
-                    'versionname' => '1.8', //新版本版本名称
+                    'updatedesc' => '优化了好友分享功能，优化页面显示效果',  //新版本更新说明
+                    'versioncode' => '18',   //新版本版本号
+                    'versionname' => '1.9', //新版本版本名称
                     'downloadurl' => 'https://itunes.apple.com/us/app/wen-dou-jin-fu/id1107540109?mt=8',   //新版本下载地址
                 ];
             }
         } else {
-            if ($versionCode < 17) {
+            if ($versionCode < 18) {
                 $content = [
                     'old_updatetype' => 2,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
-                    'updatedesc' => '导航更加清爽流畅，新增门店理财查看',  //新版本更新说明
-                    'versioncode' => '17',   //新版本版本号
-                    'versionname' => '1.8', //新版本版本名称
-                    'downloadurl' => 'https://dapp.wenjf.com/wjf_v1.8.apk',   //新版本下载地址, android 不支持 http 向 https 的跳转，协议必须严格匹配
+                    'updatedesc' => '优化了好友分享功能，优化页面显示效果',  //新版本更新说明
+                    'versioncode' => '18',   //新版本版本号
+                    'versionname' => '1.9', //新版本版本名称
+                    'downloadurl' => 'https://dapp.wenjf.com/wjf_v1.9.apk',   //新版本下载地址, android 不支持 http 向 https 的跳转，协议必须严格匹配
                 ];
             }
         }
