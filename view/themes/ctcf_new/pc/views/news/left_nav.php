@@ -1,6 +1,6 @@
 <?php
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/news/left_nav.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/help/left_nav.css', ['depends' => 'frontend\assets\FrontAsset']);
 
 $action = Yii::$app->controller->action->getUniqueId();
 

@@ -20,14 +20,14 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                     <div class="section">
                         <div class="number">1</div>
                         <span class="focus">国资</span><span>背景</span>
-                        <p>隶属温州报业传媒旗下，国资平台，可信赖；</p>
+                        <p>隶属湖北日报新媒体集团旗下理财平台；</p>
                     </div>
 
                     <div class="section">
                         <div class="number">2</div>
                         <span class="focus">股东</span><span>强势</span>
-                        <p>温州报业传媒有限公司，</p>
-                        <p>系温州日报报业集团全资子公司；</p>
+                        <p>湖北日报传媒有限公司，</p>
+                        <p>系湖北荆楚网络科技股份有限公司、湖北新海天投资有限公司投资；</p>
 <!--                        <p>南京金融资产交易中心，</p>-->
 <!--                        <p>省级金融主管部门审批的合规平台；</p>-->
                     </div>
@@ -50,7 +50,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                     <div class="section">
                         <div class="number">5</div>
                         <span class="focus">灵活</span><span>便捷</span>
-                        <p>网上有平台，线下有门店，温都金服在您身边</p>
+                        <p>网上有平台，线下有门店，楚天财富在您身边</p>
                         <p>千元起投，手机操作，随时随地实现财富增值。</p>
                     </div>
                 </div>

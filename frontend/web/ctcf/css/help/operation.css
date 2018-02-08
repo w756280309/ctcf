@@ -1,0 +1,91 @@
+/*操作*/
+.help-box {
+    background-color: #fff;
+    border: 1px solid #efeff3;
+}
+
+.help-box .help-header {
+    font-size: 20px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    color: #161616;
+}
+
+.help-box .help-header span {
+    font-size: 20px;
+    color: #dcdcdc;
+}
+
+.help-box .kong-width {
+    padding: 0 30px 30px;
+    line-height: 30px;
+    font-size: 14px;
+    line-height: 25px;
+    color: #595757;
+}
+
+.help-box .kong-width p {
+    margin: 1em 0;
+}
+
+.help-box .kong-width .single-tuchu {
+    color: #161616;
+    font-size: 16px;
+}
+
+.help-box table {
+    border: 1px solid #161616;
+    width: 100%;
+}
+
+.help-box tr td {
+    border: 1px solid #161616;
+    text-align: center;
+    font-size: 16px;
+    height: 40px;
+}
+
+/*安全*/
+.single h1 {
+    font-size: 18px;
+    font-weight: normal;
+    padding-bottom: 10px;
+}
+
+.single h2 {
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 50px;
+}
+
+.single .single-title {
+    color: #161616;
+    font-size: 16px;
+}
+
+/*背景*/
+.background-box .kong-width .single-tuchu {
+    margin: 2em 0 1em;
+}
+
+.heip-title {
+    font-size: 20px;
+    text-indent: 50px;
+    line-height: 50px;
+}
+
+.about-header{
+    border-bottom: 1px solid #efeff3;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+}
+
+.about-header .about-header-font{
+    color: #464648;
+    font-size: 16px;
+}
+.about-header-margin{
+    margin-bottom: 33px;
+}
