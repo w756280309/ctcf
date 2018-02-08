@@ -5,7 +5,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/register/registerserver.css', ['depe
 ?>
 
 <div class="server-box">
-    <h3 class="server-top">楚天财富网站服务协议</h3>
+    <h3 class="server-top">楚天财富站服务协议</h3>
     <div class="server-content">
         <p>本网站（网址：www.hbctcf.com）由楚天财富（武汉）金融服务有限公司负责运营（以下“本网站”均指网站及楚天财富（武汉）金融服务有限公司）。在您注册成为本网站用户前请务必仔细阅读以下条款。若您一旦注册，则表示您同意接受本网站的服务并受以下条款的约束。若您不接受以下条款，请您立即停止注册或主动停止使用本网站的服务。</p>
         <h5>一、 本协议的签署和修订</h5>
