@@ -47,9 +47,9 @@ use yii\captcha\Captcha;
             <div class="text-single password-box">
                 <div class="text-border">
                     <?php if (preg_match("/MSIE/", $_SERVER["HTTP_USER_AGENT"])) { ?>
-                        <input class="text-entry" id="password" name="SignupForm[password]" maxlength="20" type="password" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
+                        <input class="text-entry" id="password" name="SignupForm[password]" maxlength="16" type="password" placeholder="请输入6到16位的密码" AUTOCOMPLETE="off">
                     <?php } else { ?>
-                        <input class="text-entry" id="password" name="SignupForm[password]" maxlength="20" onfocus="this.type='password'" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
+                        <input class="text-entry" id="password" name="SignupForm[password]" maxlength="16" onfocus="this.type='password'" placeholder="请输入6到16位的密码" AUTOCOMPLETE="off">
                     <?php } ?>
                 </div>
                 <p class="tip-error popUp password-err"></p>

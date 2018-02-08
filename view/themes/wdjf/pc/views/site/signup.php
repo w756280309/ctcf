@@ -40,9 +40,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/register/register.js?v=20180118', ['de
             <div class="password-box">
                 <label for="password">登录密码</label>
                 <?php if (preg_match("/MSIE/", $_SERVER["HTTP_USER_AGENT"])) { ?>
-                    <input id="password" name="SignupForm[password]" maxlength="20" type="password" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
+                    <input id="password" name="SignupForm[password]" maxlength="16" type="password" placeholder="请输入6到16位的密码" AUTOCOMPLETE="off">
                 <?php } else { ?>
-                    <input id="password" name="SignupForm[password]" maxlength="20" onfocus="this.type='password'" placeholder="请输入6到20位的密码" AUTOCOMPLETE="off">
+                    <input id="password" name="SignupForm[password]" maxlength="16" onfocus="this.type='password'" placeholder="请输入6到16位的密码" AUTOCOMPLETE="off">
                 <?php } ?>
                 <div style="clear: both"></div>
                 <div class="popUp password-err"></div>

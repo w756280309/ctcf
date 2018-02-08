@@ -135,9 +135,9 @@ $mobile = StringUtils::obfsMobileNumber($user->mobile);
                     <div class="revise-login-bag">
                         <span>新密码</span>
                         <?php if (preg_match("/MSIE/", $_SERVER["HTTP_USER_AGENT"])) { ?>
-                            <input type="password" id="new_pass" class="input-code" name="EditpassForm[new_pass]" placeholder="请输入6-20位的新密码" maxlength="20" autocomplete="off">
+                            <input type="password" id="new_pass" class="input-code" name="EditpassForm[new_pass]" placeholder="请输入6-20位的新密码" maxlength="16" autocomplete="off">
                         <?php } else { ?>
-                            <input onfocus="this.type='password'" id="new_pass" class="input-code" name="EditpassForm[new_pass]" placeholder="请输入6-20位的新密码" maxlength="20" autocomplete="off">
+                            <input onfocus="this.type='password'" id="new_pass" class="input-code" name="EditpassForm[new_pass]" placeholder="请输入6-20位的新密码" maxlength="16" autocomplete="off">
                         <?php } ?>
                     </div>
                     <p class="error new_pass_err"></p>

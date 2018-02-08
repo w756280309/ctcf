@@ -33,3 +33,10 @@ $this->backUrl = '/system/system/safecenter';
     <div class="col-xs-3"></div>
 </div>
 <?php } ?>
+<?php if ($isUnbind) : ?>
+<div class="row" style="margin-top: 5%">
+    <div class="col-xs-3"></div>
+    <div class="col-xs-6 apply-exchange-en"><a class="apply-exchange" href="/user/bank/unbind">解绑银行卡</a></div>
+    <div class="col-xs-3"></div>
+</div>
+<?php endif; ?>

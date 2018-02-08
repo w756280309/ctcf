@@ -25,7 +25,7 @@ $this->title = '登录';
                         </div>
                         <div class="password-box">
                             <label for="password">登录密码</label>
-                            <input id="password" name="LoginForm[password]" type="password" maxlength="20" placeholder="请输入密码" autocomplete="off" tabindex="2">
+                            <input id="password" name="LoginForm[password]" type="password" maxlength="16" placeholder="请输入密码" autocomplete="off" tabindex="2">
                             <div style="clear: both"></div>
                             <div class="popUp"></div>
                         </div>
