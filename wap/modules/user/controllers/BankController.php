@@ -96,7 +96,7 @@ class BankController extends BaseController
             ->select('value')
             ->where(['key' => 'unbind_white'])
             ->scalar();
-        if (in_array($user->id, explode(',', $white))) {
+        if (!is_null($user) && in_array($user->id, explode(',', $white))) {
             $data = BankService::checkKuaijie($user);
             if (!is_null($user) && 0 === $data['code']) {  //满足解绑条件
                 return $this->redirect(\Yii::$container->get('ump')->unbind($user->epayUser->epayUserId, $user->epayUser->accountNo));
@@ -115,7 +115,12 @@ class BankController extends BaseController
             && 'mer_unbind_agreement_notify' === $data['service']) {
             //删除userBank
             $user = $this->getAuthedUser();
-            UserBank::deleteAll(['uid' => $user->id]);
+            if (!is_null($user)) {
+                $userBank = UserBank::findOne(['uid' => $user->id]);
+                if (!is_null($userBank)) {
+                    $userBank->delete();
+                }
+            }
             //返回成功页
             $result = ['code' => 1, '解绑成功'];
         } else {
