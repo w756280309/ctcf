@@ -195,15 +195,14 @@
     -moz-box-sizing: content-box;
 }
 .invest-false .invest-content .buy-txt i {
-    /*float: left;*/
     width:36px;
     height:38px;
-    background:url('../../../images/deal/false_icon.png') 0 10px no-repeat;
+    background:url('../../../images/deal/false_icon.png') 0 0 no-repeat;
     display: inline-block;
     text-align: center;
+    vertical-align: middle;
 }
 .invest-false .invest-content .buy-txt span {
-    /*float: left;*/
     height:38px;
     line-height:38px;
 }
