@@ -1,0 +1,192 @@
+.bindCard-box {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+}
+
+.bindCard-box .bindCard-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.bindCard-box .bindCard-header .bindCard-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url("../../../images/useraccount/background-icon.png") no-repeat -90px 0;
+    float: left;
+}
+
+.bindCard-box .bindCard-header .bindCard-header-font {
+    font-size: 16px;
+    color: #434a54;
+}
+
+.bindCard-box .bindCard-content {
+    color: #434a54;
+    padding-left: 70px;
+}
+
+.bindCard-box .bindCard-content .bindCard-content-header {
+    font-weight: bold;
+    line-height: 56px;
+}
+
+.bindCard-box .bindCard-content {
+    padding: 20px 30px;
+}
+
+.bindCard-box .bindCard-content .single-left {
+    padding-right: 20px;
+    float: left;
+    line-height: 44px;
+    color: #aab2bd;
+}
+
+.bindCard-box .bindCard-content .single-right {
+    font-weight: bold;
+}
+
+.bindCard-box .bindCard-single {
+    padding-bottom: 11px;
+    padding-left: 52px;
+}
+
+.bindCard-box .bindCard-single .single-left {
+    line-height: 1.5;
+}
+
+.bindCard-box .bindCard-already {
+    padding-left: 52px;
+}
+
+.bindCard-box .bindCard-already .single-div {
+    cursor: pointer;
+    display: block;
+    float: left;
+    width: 230px;
+    height: 44px;
+    line-height: 44px;
+    border: 1px solid #e3e3e3;
+    background-color: #efeff3;
+}
+
+.bindCard-box .bindCard-already .single-icon {
+    display: block;
+    float: left;
+}
+
+.bindCard-box .bindCard-already .single-icon-img {
+    margin: 0 10px;
+    vertical-align: middle;
+}
+
+.bindCard-box .bindCard-already .single-number {
+    padding-left: 12px;
+}
+
+.bindCard-box .bindCard-already .link-changeCard {
+    color: #419bf9;
+    margin-left: 20px;
+    line-height: 44px;
+}
+
+.bindCard-box .bindCard-yet {
+    padding-left: 52px;
+    margin-bottom: 50px;
+    float: left;
+}
+
+.bindCard-box .bindCard-yet .single-div {
+    cursor: pointer;
+    display: block;
+    float: left;
+    width: 230px;
+    height: 44px;
+    line-height: 44px;
+    border: 1px solid #e3e3e3;
+    background-color: #efeff3;
+}
+
+.bindCard-box .bindCard-yet .add-icon {
+    width: 16px;
+    height: 16px;
+    margin-top: 14px;
+    margin-right: 9px;
+    padding-left: 12px;
+    background: url("../../../images/useraccount/background-icon.png") no-repeat 12px -95px;
+    float: left;
+}
+
+.bindCard-box .bindCard-yet .link-font {
+    color: #419bf9
+}
+
+.bindCard-box .link-en {
+    width: 140px;
+    height: 28px;
+    padding: 30px 0 40px 70px;
+}
+
+.bindCard-box .link-charge {
+    float: left;
+    display: block;
+    width: 65px;
+    height: 28px;
+    line-height: 28px;
+    color: #fff;
+    background-color: #ff6707;
+    text-align: center;
+}
+.bindCard-box .link-charge:hover {
+    float: left;
+    display: block;
+    width: 65px;
+    height: 28px;
+    line-height: 28px;
+    color: #fff;
+    background-color: #ff532d;
+    text-align: center;
+}
+.bindCard-box .link-withdraw {
+    float: right;
+    display: block;
+    width: 65px;
+    height: 28px;
+    line-height: 28px;
+    color: #fff;
+    background-color: #bababf;
+    text-align: center;
+}
+.bindCard-box .link-withdraw:hover{
+    float: right;
+    display: block;
+    width: 65px;
+    height: 28px;
+    line-height: 28px;
+    color: #fff;
+    background-color: #808081;
+    text-align: center;
+}
+.charge-explain {
+    border-top: 1px solid #e3e3e3;
+    background-color: #fff;
+    padding-left: 60px;
+    padding-bottom: 40px;
+}
+
+.charge-explain .charge-explain-title {
+    padding-top: 36px;
+    padding-bottom: 20px;
+    font-size: 16px;
+    color: #434a54;
+    font-weight: bold;
+}
+
+.charge-explain .charge-explain-content {
+    font-size: 12px;
+    color: #878d95;
+}
+.bindCard-box .bindCard-already .no-pointer{cursor: default;}

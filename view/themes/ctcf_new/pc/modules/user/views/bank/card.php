@@ -1,8 +1,8 @@
 <?php
 $this->title = '我的银行卡';
 
-$this->registerCssFile('/css/useraccount/bindcardalready.css');
-$this->registerCssFile('/css/useraccount/chargedeposit.css');
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/bindcardalready.css');
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/chargedeposit.css');
 
 use common\models\bank\BankCardUpdate;
 ?>

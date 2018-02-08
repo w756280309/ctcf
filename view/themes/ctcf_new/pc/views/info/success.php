@@ -1,12 +1,12 @@
 <?php
 $this->title = $info['title'];
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/chargedeposit.css?v=1.1');
 
 use yii\helpers\Html;
 $jumpUrl = Html::encode($info['jumpUrl']);
 ?>
 
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/info/success.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/info/success.css?v=1.3">
 
 <div class="invest-box clearfix">
     <div class="invest-container">
@@ -16,7 +16,7 @@ $jumpUrl = Html::encode($info['jumpUrl']);
                 <?php if ($source == 'tixian') { ?>
                     <div style="text-align: center">工作日下午五点前提现当天到账</div>
                     <div style="text-align: center">工作日下午五点后提现下一个工作日到账</div>
-                    <div style="color:#af2e33; text-align: center">如遇节假日，到账时间将顺延到下个工作日哦！</div>
+                    <div style="color:#ff6707; text-align: center">如遇节假日，到账时间将顺延到下个工作日哦！</div>
                 <?php } ?>
                 <p class="buy-txt-tip"><?= $info['firstFuTitle'] ?></p>
                 <?php if ($info['linkType'] === 1 || $info['linkType'] === 3) { ?>

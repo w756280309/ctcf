@@ -1,0 +1,93 @@
+/* 资金托管账户 页面  */
+.accountentrust-box {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+}
+.accountentrust-box .accountentrust-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+.accountentrust-box .accountentrust-header .accountentrust-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url('../../../images/useraccount/accountentrust-icon.png') no-repeat 0 0;
+    float: left;
+}
+.accountentrust-box .accountentrust-header .accountentrust-header-font {
+    font-size: 16px;
+    color: #434a54;
+}
+.accountentrust-box .accountentrust-content {
+    padding-top: 28px;
+    margin-right:40px;
+    padding-bottom: 18px;
+}
+.accountentrust-box .accountentrust-content .accountentrust {
+    padding-left: 42px;
+    height: 34px;
+    line-height: 34px;
+    font-size: 14px;
+    color:#434a54;
+}
+.accountentrust-box .accountentrust-content .accountentrust span {
+    margin-left:8px;
+    margin-right:18px;
+    font-size: 14px;
+    color:#aab2bd;
+    display: inline-block;
+}
+.accountentrust-box .accountentrust-content .accountentrust i {
+    font-size: 14px;
+    font-weight: bolder;
+    color:#434a54;
+}
+.accountentrust-box .accountentrust-content .accountentrust .red-num {
+    color:#ff6707;
+}
+.accountentrust-box .accountentrust-content .tuoguan {
+    margin:28px 0 20px 42px;
+    padding-left: 8px;
+    height:52px;
+    line-height:52px;
+    font-size: 14px;
+    font-weight: bolder;
+    color:#434a54;
+    border-bottom: 1px solid #efeff3;
+}
+.accountentrust-box .accountentrust-content .tuoguan-img {
+    margin: 0 0 16px 50px;
+    padding-left: 256px;
+    height: 54px;
+    line-height:66px;
+    font-size: 14px;
+    color:#434a54;
+    background: url('../../../images/useraccount/liandongyoushi.png') no-repeat 0 0;
+}
+.accountentrust-box .accountentrust-content a.login-liandong {
+    float: right;
+    margin-right: 8px;
+    margin-top: 14px;
+    padding: 0 54px;
+    height:40px;
+    line-height:40px;
+    color:#fff;
+    font-size: 14px;
+    text-align: center;
+    background: #ff6707;
+    display: inline-block;
+    cursor: pointer;
+}
+.accountentrust-box .accountentrust-content a.login-liandong:hover {
+    background: #ff532d;
+}
+
+
+
+
+
+
+
