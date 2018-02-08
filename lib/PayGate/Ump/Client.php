@@ -1259,14 +1259,14 @@ class Client
     /**
      * 解绑
      */
-    public function unBind($uid, $account_id)
+    public function unBind($uid, $account_id, $url)
     {
         $data = [
             'service' => 'mer_unbind_agreement',    //接口名称
             'charset' => $this->charset,
             'res_format' => 'HTML',
             'mer_id' => $this->merchantId,
-            'ret_url' => $this->hostInfo . "/user/bank/unbind-result",     //页面跳转同步通知页面路径
+            'ret_url' => $this->hostInfo . $url,     //页面跳转同步通知页面路径
             'version' => '4.0',     //版本号，定值
             'user_id' => $uid,      //资金账户托管平台的用户号
             'account_id' => $account_id,    //资金账户托管平台的账户号
