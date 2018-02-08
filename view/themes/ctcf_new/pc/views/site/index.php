@@ -2,7 +2,7 @@
 
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css', ['depends' => 'frontend\assets\CtcfFrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css?v=1.1', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 //$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery-1.11.1.min.js', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery.SuperSlide.2.1.1.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/handlebars-v4.0.11.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);

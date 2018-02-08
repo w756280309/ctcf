@@ -13,7 +13,7 @@ $this->title = '项目详情';
 $this->registerJsFile(ASSETS_BASE_URI.'js/detail.js?v=170720');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/deallist.css?v=161124');
-$this->registerCssFile(ASSETS_BASE_URI.'css/deal/detail.css?v=1704141221');
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/deal/detail.css?v=1704141230');
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
@@ -272,7 +272,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                     <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
                 <?php } ?>
 
-                <p style="padding-bottom: 0.5em; font-size: 12px; color: #bababf;">*理财非存款，产品有风险，投资须谨慎</p>
+                <p style="padding-bottom: 0.5em; font-size: 12px; color: #aab2bd;">*理财非存款，产品有风险，投资须谨慎</p>
             </div>
         </div>
     </div>
