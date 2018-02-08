@@ -5,7 +5,7 @@ use yii\helpers\Html;
 
 ?>
 
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/info/fail.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/info/fail.css?v=1.1">
 
 <div class="invest-box clearfix">
     <div class="invest-container">
