@@ -3,9 +3,11 @@
 $this->title = Yii::$app->params['pc_page_title'];
 
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css?v=1.1', ['depends' => 'frontend\assets\CtcfFrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/mask/mask.min.css?v=1.1', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 //$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery-1.11.1.min.js', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery.SuperSlide.2.1.1.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/handlebars-v4.0.11.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/mask/mask.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
 
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
@@ -404,3 +406,113 @@ JSFILE
     })
 </script>
 
+<input type="hidden" name="isLoggedin" value="false">
+<input type="hidden" name="isInvest" value="false">
+<!--已登陆未投资-->
+<div class="mask-no-invest">
+    <div class="popup-box">
+        <div class="popup-box-top"></div>
+        <i class="close-box"></i>
+        <p class="popup-box-msg"><span>888元</span>红包已经发放到账户中心，请至”账户中心-优惠券”中查看</p>
+        <div class="red-racket">
+            <span>18元</span>
+            <span>20元</span>
+            <span>30元</span>
+            <span>80元</span>
+            <span>150元</span>
+            <span>220元</span>
+            <span>380元</span>
+        </div>
+        <p class="popup-box-btn">查看红包</p>
+    </div>
+</div>
+<!-- 未登陆提示-->
+<div class="mask-prize-hint">
+    <div class="popup-box">
+        <div class="popup-box-top"></div>
+        <i class="close-box"></i>
+        <div class="prize_user_box">
+            <a class="prize_user_new clearfix" href="#">
+                <img class="lf" src="<?= ASSETS_BASE_URI ?>ctcf/images/mask/prize_user_new.png" alt="">
+                <div class="rg">
+                    <p class="user-login-msg">新用户登录</p>
+                    <p class="user-login-prize">送您<span>888元</span>红包</p>
+                </div>
+            </a>
+            <a class="prize_user_old clearfix" href="#">
+                <img class="lf" src="<?= ASSETS_BASE_URI ?>ctcf/images/mask/prize_user_old1.png" alt="">
+                <div class="rg">
+                    <p class="user-login-msg">老用户登录</p>
+                    <p class="user-login-prize">送您补偿红包</p>
+                </div>
+            </a>
+        </div>
+        <p class="popup-box-btn">点击领取</p>
+    </div>
+</div>
+<!--已登陆已投资-->
+<div class="mask-login-invest">
+    <div class="popup-box">
+        <i class="close-box"></i>
+        <div class="urgrade-swiper-contain swiper-no-swiping">
+            <ul class="swiper-wrapper clear-fix" id="upgrade-sweper">
+                <li class="swiper-slide upgrade_explain">
+                    <h5>尊敬的用户，您好：</h5>
+                    <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史投资额，特发放了豪华补偿礼包，敬请收下！</p>
+                    <table>
+                        <tr>
+                            <th>累计年华投资金额（万元）</th>
+                            <th>补偿红包</th>
+                            <th>补偿积分</th>
+                        </tr>
+                        <tr>
+                            <td>0＜X＜20</td>
+                            <td>188元</td>
+                            <td>188</td>
+                        </tr>
+                        <tr>
+                            <td>20≤X＜50</td>
+                            <td>268元</td>
+                            <td>388</td>
+                        </tr>
+                        <tr>
+                            <td>≥50</td>
+                            <td>480元</td>
+                            <td>588</td>
+                        </tr>
+                    </table>
+                    <a class="check-login-invest">查看我的升级红包</a>
+                </li>
+                <li class="swiper-slide upgrade-updata">
+                    <h5>您获得的升级礼包</h5>
+                    <div class="upgrade-updata-contain">
+                        <div class="updata-top-part">
+                            <span>18元</span>
+                            <span>50元</span>
+                            <span>120元</span>
+                        </div>
+                        <div class="updata-mid-part">共得<span>188元</span>红包</div>
+                        <div class="updata-bottom-part clearfix">
+                            <div class="lf bottom-jf-prize">
+                                <i></i>
+                            </div>
+                            <div class="rg">
+                                <p>188积分</p>
+                                <p>可以兑换超多礼品</p>
+                            </div>
+                        </div>
+                    </div>
+                    <u class="get-prize-rules">补偿规则</u>
+                    <div class="upgrade-updata-btn clearfix">
+                        <a class="check-get-prize lf" href="#">查看红包</a>
+                        <a class="go-to-store rg" href="#">逛逛积分商城</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="swiper-pagination">
+            <span class="swiper-span-active"></span>
+            <span class="last-pagination-span"></span>
+        </div>
+    </div>
+</div>
