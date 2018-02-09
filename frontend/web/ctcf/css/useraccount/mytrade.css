@@ -110,6 +110,7 @@
 
 .myCoupon-box table td {
     height: 60px;
+    color: #878d95;
 }
 
 .myCoupon-box table .text-first {
@@ -131,11 +132,7 @@
 }
 
 .myCoupon-box table a {
-    color: #46669f;
-}
-
-.myCoupon-box table a:hover {
-    color: #46669f;
+    color: #419bf9;
 }
 
 .myCoupon-box .tip-cursor {

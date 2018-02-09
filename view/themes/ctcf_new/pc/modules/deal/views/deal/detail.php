@@ -13,7 +13,7 @@ $this->title = '项目详情';
 $this->registerJsFile(ASSETS_BASE_URI.'js/detail.js?v=170720');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/deal/deallist.css?v=161124');
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/deal/detail.css?v=1704141230');
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/deal/detail.css?v=1704140101');
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
@@ -485,8 +485,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
         var sn = "<?= $deal->sn ?>";
         var csrf = "<?= Yii::$app->request->csrfToken ?>";
         var money = $this.val();
-
-        money = money.replace(/^[^0-9]+/, '');
+        if(!!money){money = money.replace(/^[^0-9]+/, '');}
         if (!$.isNumeric(money)) {
             money = 0;
         }
