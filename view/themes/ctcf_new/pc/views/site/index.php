@@ -2,7 +2,7 @@
 
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css?v=1.1', ['depends' => 'frontend\assets\CtcfFrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css?v=1.2', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/mask/mask.min.css?v=1.3', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 //$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery-1.11.1.min.js', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery.SuperSlide.2.1.1.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
@@ -199,7 +199,7 @@ JSFILE
                             <img class="mgr12 w4" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_08.png" alt="">
                             网站流程如何操作？
                         </span>
-                        <span class="rg">></span>
+                        <span class="rg header-hover">></span>
                     </a>
                 </li>
                 <li>
@@ -208,7 +208,7 @@ JSFILE
                             <img class="mgr12 w4" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_08.png" alt="">
                             为什么在楚天财富投资是安全的？
                         </span>
-                        <span class="rg">></span>
+                        <span class="rg header-hover">></span>
                     </a>
                 </li>
                 <li>
@@ -217,7 +217,7 @@ JSFILE
                             <img class="mgr12 w4" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_08.png" alt="">
                             了解楚天财富。
                         </span>
-                        <span class="rg">></span>
+                        <span class="rg header-hover">></span>
                     </a>
                 </li>
                 <li>
@@ -226,7 +226,7 @@ JSFILE
                             <img class="mgr12 w4" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_08.png" alt="">
                             资产品种都有哪些？特点和优势是什么？
                         </span>
-                        <span class="rg">></span>
+                        <span class="rg header-hover">></span>
                     </a>
                 </li>
                 <li>
@@ -235,7 +235,7 @@ JSFILE
                             <img class="mgr12 w4" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_08.png" alt="">
                             如何联系我们？
                         </span>
-                        <span class="rg">></span>
+                        <span class="rg header-hover">></span>
                     </a>
                 </li>
             </ul>
@@ -255,7 +255,7 @@ JSFILE
                                 <img class="mgr12 w4" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_08.png" alt="">
                                 <?= $val->title ?>
                             </span>
-                            <span class="rg">></span>
+                            <span class="rg header-hover">></span>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -276,7 +276,7 @@ JSFILE
                                 <img class="mgr12 w4" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_08.png" alt="">
                                 <?= $val->title ?>
                             </span>
-                            <span class="rg">></span>
+                            <span class="rg header-hover">></span>
                         </a>
                     </li>
                 <?php endforeach; ?>
