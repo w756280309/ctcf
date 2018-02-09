@@ -3,7 +3,7 @@ $this->title = '邀请好友';
 
 frontend\assets\FrontAsset::register($this);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/invitefriends.css?v=20160805');
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/invitefriends.css?v=20160806');
 
 use common\utils\StringUtils;
 ?>
