@@ -1,0 +1,106 @@
+.guide {
+    display: block;
+    height: 1.06666667rem;
+    line-height: 1.06666667rem;
+    background-color: #ffefd1;
+    padding: 0 .53333333rem;
+    font-size: .34666667rem;
+    overflow: hidden
+}
+
+.guide img {
+    display: inline-block;
+    vertical-align: sub
+}
+
+.guide span {
+    color: #ff6122
+}
+
+.guide img:first-child {
+    height: .44rem;
+    margin-right: .24rem
+}
+
+.guide img:last-child {
+    height: .34666667rem;
+    margin-top: .36rem
+}
+
+.mask-no-invest {
+    background-color: rgba(12, 7, 5, .6);
+    height: 100vh;
+    margin: 0 auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    position: fixed;
+    z-index: 100000
+}
+
+.mask-no-invest div.popup-box {
+    width: 7.46666667rem;
+    height: 9.06666667rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background: url(../../images/user/guide_bg.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%
+}
+
+.mask-no-invest div.popup-box .popup-box-top {
+    background: url(../../images/user/login_no_top2.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    width: 8.2rem;
+    height: 3.61333333rem;
+    position: absolute;
+    left: -.4rem;
+    top: -.85rem
+}
+
+.mask-no-invest div.popup-box i.close-box {
+    width: .88rem;
+    height: .88rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: url(../../images/user/close.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%
+}
+
+.mask-no-invest div.popup-box div.red-racket {
+    width: 6.3rem;
+    margin: 0 auto;
+    text-align: left;
+    font-size: .34666667rem;
+    color: #fff;
+    line-height: .56rem;
+    margin-top: 4.6rem
+}
+
+.mask-no-invest div.popup-box a.popup-box-btn {
+    display: block;
+    background-color: #fec620;
+    height: 1.06666667rem;
+    line-height: 1.06666667rem;
+    width: 5.33333333rem;
+    margin: 0 auto;
+    -webkit-border-radius: .53333333rem;
+    -moz-border-radius: .53333333rem;
+    border-radius: .53333333rem;
+    -webkit-box-shadow: 0 .04rem .06666667rem #e0592f;
+    -moz-box-shadow: 0 .04rem .06666667rem #e0592f;
+    box-shadow: 0 .04rem .06666667rem #e0592f;
+    text-align: center;
+    font-size: .42666667rem;
+    color: #bc4c02;
+    margin-top: .93333333rem
+}

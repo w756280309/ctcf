@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>账户中心</title>
+    <meta name="csrf-param" content="_csrf">
+    <meta name="csrf-token" content="SCzuDrkYRjs1VOYJoiqXeWanl7ScPZONddXsivnvRS4EexOZJ8VB9pB8xkagufBrPo3VwdywV8jAXIVPtRMtqA==">
+    <meta name="keywords" content="温都金服,温金服,温州报业传媒理财,报纸理财,温州理财,温都理财,">
+    <style>             #btn_udesk_im{
+        width: 100%;
+        text-align: center;
+        margin:0 auto;
+        font-size: 14px;
+        color: #000;
+        cursor: pointer;
+    }
+    #btn_udesk_im img{
+        width: 20px;
+        height:20px;
+        margin-right: 5px;
+        margin-bottom: 3px;
+    }</style>
+    <script src="https://static.wenjf.com/m/js/jquery.min.js"></script>
+    <script src="https://static.wenjf.com/v2/res/js/js.cookie.js"></script>
+    <script src="https://static.wenjf.com/v2/res/js/lib.js?v=20170503"></script>
+    <script type="text/javascript">        (function(a,h,c,b,f,g){a["UdeskApiObject"]=f;a[f]=a[f]||function(){(a[f].d=a[f].d||[]).push(arguments)};g=h.createElement(c);g.async=1;g.charset="utf-8";g.src=b;c=h.getElementsByTagName(c)[0];c.parentNode.insertBefore(g,c)})(window,document,"script",'//assets-cli.udesk.cn/im_client/js/udeskApi.js',"ud");
+    ud({
+        "code": '1j2359d0',
+        "link": '//wenjf.udesk.cn/im_client/?web_plugin_id=34255',
+        "mode": 'inner',
+        "color": "#FF0000",
+        "pos_flag": "crb",
+        "session_key": 'WDJF000015597',
+        "language": "zh-cn",
+        "onlineText": "联系客服，在线咨询",
+        "offlineText": "客服下班，请留言",
+        "targetSelector": "#btn_udesk_im",
+        "manualInit": false,
+        "selector": "",
+        "panel": {                 //会话面板配置参数
+            "css": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+            }
+        },
+        "customer":{
+            "nonce": '4f1e9b3bea8693b9',
+            "signature": '159BEC7BEDC9F95CB416D24527EA9ED9034158EC',
+            'timestamp': '1518140618000',
+            "web_token": 'WDJF000015597',
+            "c_name": '秦雄(WDJF000015597)',
+        }
+    });
+    var _paq = _paq || [];
+    _paq.push(['setDomains', [
+        'mp.weixinbridge.com',
+        'open.weixin.qq.com',
+        'pay.soopay.net'
+    ]]);_paq.push(['setUserId', '15605']);_paq.push(['setCustomDimension', 1, 'yes']);  _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+        var u="//d.wendujf.com/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', '2']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();</script>        <script type="text/javascript">
+    $(function () {
+        hmsr();
+        addToken();
+    });
+</script>
+</head>
+<body>
+<input name="feBaseUrl" type="hidden" value="https://static.wenjf.com/v2/">
+<input name="isLoggedin" type="hidden" value="true">
+<link rel="stylesheet" href="https://static.wenjf.com/v2/wap/common/css/wenjfbase.css?v=20170906">
+<link rel="stylesheet" href="https://static.wenjf.com/v2/wap/common/css/activeComHeader.css?v=20170906">
+<link rel="stylesheet" href="https://static.wenjf.com/v2/wap/ucenter/css/homePage.css?v=20170629">
+<script src="https://static.wenjf.com/v2/libs/fastclick.js"></script>
+<script src="https://static.wenjf.com/v2/libs/lib.flexible3.js"></script>
+<script src="https://static.wenjf.com/m/js/common.js"></script>
+
+<!--新增link开始-->
+<link rel="stylesheet" href="css/guide.min.css">
+<!--新增link结束-->
+
+<div class="UtopTitle f18 flex-content">
+    <a class="f14" href="/user/checkin">签到</a>
+    账户中心
+    <a class="f14" href="/system/system/setting">设置</a>
+</div>
+
+<div id="login">
+    <div class="top_one flex-content"></div>
+    <!--新增tips引导提示开始-->
+    <a href="" class="guide flex-content clearfix">
+        <img src="images/guide_01.png" alt="">
+        <span >资金托管全面升级，请先进行实名认证和绑卡</span>
+        <img class="rg" src="images/guide_point.png" alt="">
+    </a>
+    <!--新增tips引导提示结束-->
+    <div class="remain flex-content"></div>
+
+    <div class="youihui flex-content clearfix">
+        <a href="/user/coupon/list" class="my_youhui lf youhui1">
+            <img src="https://static.wenjf.com/v2/wap/ucenter/images/coupon.png" alt="">
+            <div class="youhui_content f12">
+                <p class="line_two">我的代金券 (元)</p>
+            </div>
+        </a>
+        <a href="/mall/point" class="my_youhui rg youhui2">
+            <img src="https://static.wenjf.com/v2/wap/ucenter/images/coins.png" alt="">
+            <div class="youhui_content f12">
+                <p class="line_two">我的积分</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<ul class="options flex-content f15">
+    <li class="ops clearfix">
+        <a href="/user/user/myorder" class="clearfix">
+            <div class="lf"style="background-position: 0 0">我的理财</div>
+            <div class="rg">
+                <span class="f15" id="licai" style="color: #ff0000"></span>
+                <img src="https://static.wenjf.com/v2/wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+    <li class="ops clearfix">
+        <a href="/user/user/mingxi" class="clearfix">
+            <div class="lf" style="background-position: 0 -0.506rem">交易明细</div>
+            <div class="rg">
+                &nbsp;<img src="https://static.wenjf.com/v2/wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+    <li class="ops clearfix" style="border: none">
+        <a href="/credit/trade/assets" class="clearfix">
+            <div class="lf" style="background-position: 0 -1.012rem">我的转让</div>
+            <div class="rg">
+                &nbsp;<img src="https://static.wenjf.com/v2/wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+</ul>
+<a href="/user/user/myofforder">
+    <div class="out_ops flex-content">
+        <div class="lf f15"style="background-position: 0 0">门店理财</div>
+        <div class="rg">
+            <span class="f15" id="off_licai" style="color: #ff0000"></span>
+            <img src="https://static.wenjf.com/v2/wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+        </div>
+    </div>
+</a>
+<a href="/user/invite">
+    <div class="out_ops flex-content">
+        <div class="lf f15" style="background-position: 0 -1.518rem">邀请好友</div>
+        <div class="rg f15">
+            &nbsp;<img src="https://static.wenjf.com/v2/wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+        </div>
+    </div>
+</a>
+<a href="/risk/risk/">
+    <div class="out_ops flex-content">
+        <div class="lf f15 test">风险测评</div>
+        <div class="rg f15">
+            <span class="f11" style="color:#8c8c8c" >积极型</span>
+            <img src="https://static.wenjf.com/v2/wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+        </div>
+    </div>
+</a>
+<ul class="options flex-content f15" style="margin-top: 8px;">
+    <li class="ops clearfix">
+        <a href="javascript:void(0)" id="btn_udesk_im" class="clearfix">
+            <div class="lf f15" style="background:url(https://static.wenjf.com/v2/wap/new-homepage/images/online-servic-red.png) no-repeat;background-size: 21% 100%;background-position: 0 0">在线客服</div>
+            <div class="rg f15">
+                &nbsp;<img src="https://static.wenjf.com/v2/wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+    <li class="ops clearfix">
+        <a href="/site/help" class="clearfix">
+            <div class="lf f15" style="background-position: 0 -2.03rem">帮助中心</div>
+            <div class="rg f15">
+                &nbsp;<img src="https://static.wenjf.com/v2/wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </a>
+    </li>
+</ul>
+
+<a href="tel:400-101-5151">
+    <p class="customer_service f15">客服电话：400-101-5151</p>
+    <p class="customer_service f15">（8:30-20:00）</p>
+</a>
+
+<!--footer-->
+<div style="height: 50px;"></div>
+<style>
+    .navbar-fixed-bottom{bottom:0;margin-bottom:0;border-width:1px 0 0}
+    .navbar-fixed-bottom{position:fixed;right:0;left:0;z-index:1030}
+    .footer{height:50px;background:#fff;box-shadow:0 2px 5px #888}
+    .footer-title{width:33.3333333%;float:left;height:100%;text-align:center}
+    .footer-inner{display:block;height:100%;margin:0 auto;cursor:pointer}
+    .footer-inner1{display:block;height:100%;margin:0 auto;cursor:pointer}
+    .footer-inner2{display:block;height:100%;margin:0 auto;cursor:pointer}
+    .footer-title .shouye{display:block;width:30px;height:30px;margin:0 auto;background:url(/images/footer2.png) no-repeat -145px -3px;background-size:200px;font-size:18px}
+    .special-bar .shouye {background:url(/images/footer2.png) no-repeat -145px -57px;background-size:200px;}
+    .footer-title .licai{display:block;width:30px;height:30px;margin:0 auto;background:url(/images/footer2.png) no-repeat -113px -3px;background-size:200px;font-size:18px}
+    .special-bar .licai {background:url(/images/footer2.png) no-repeat -113px -57px;background-size:200px;}
+    .footer-title .zhanghu{display:block;width:30px;height:30px;margin:0 auto;background:url(/images/footer2.png) no-repeat -81px -3px;background-size:200px;font-size:18px}
+    .special-bar .zhanghu {background:url(/images/footer2.png) no-repeat -81px -57px;background-size:200px;}
+    .footer-title span img{width:26px}
+    .nav-bar{font-size:14px;line-height:1.5}
+    .special-bar {  color: rgb(244, 67, 54);  }
+</style>
+<div class="navbar-fixed-bottom footer">
+    <div class="footer-title">
+        <div class="footer-inner">
+            <a href="/#t=1" class="nav-bar"><span class="shouye"></span>首页</a>
+        </div>
+    </div>
+    <div class="footer-title">
+        <div class="footer-inner1">
+            <a href="/deal/deal/index" class="nav-bar"><span class="licai"></span>理财</a>
+        </div>
+    </div>
+    <div class="footer-title">
+        <div class="footer-inner2">
+            <a class="nav-bar special-bar" href="/user/user" style="color: rgb(244, 67, 54)"><span class="zhanghu"></span>账户</a>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        FastClick.attach(document.body);
+
+        var xhr = $.get('/user/user/is-login');
+        xhr.done(function(data) {
+            if ('undefined' !== typeof data.html) {
+                $('#login').html(data.html);
+                adaptive();
+            }
+
+            if ('undefined' !== typeof data.sumLicai && data.sumLicai) {
+                $('#licai').html(WDJF.numberFormat(data.sumLicai, true));
+                $('#licai').after('元');
+            }
+            $('#off_licai').html(WDJF.numberFormat(data.off_licai, true));
+            $('#off_licai').after('元');
+        });
+    });
+
+    function tixian()
+    {
+        var xhr = $.get('/user/user/check-kuaijie', function (data) {
+            if (data.code) {
+                toastCenter(data.message, function() {
+                    if (data.tourl) {
+                        location.href = data.tourl;
+                    }
+                });
+            } else {
+                location.href='/user/userbank/tixian';
+            }
+        });
+
+        xhr.fail(function () {
+            toastCenter('系统繁忙,请稍后重试!');
+        });
+    }
+
+    function recharge()
+    {
+        var xhr = $.get('/user/user/check-kuaijie', function (data) {
+            if (data.code) {
+                toastCenter(data.message, function() {
+                    if (data.tourl) {
+                        location.href = data.tourl;
+                    }
+                });
+            } else {
+                location.href='/user/userbank/recharge';
+            }
+        });
+
+        xhr.fail(function () {
+            toastCenter('系统繁忙,请稍后重试!');
+        });
+    }
+
+    function adaptive()
+    {
+        if(document.body.clientWidth < 376 && String($('#zonge').html()).length > 13) {
+            $('#zonge, #shouyi').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth < 376 && String($('#shouyi').html()).length > 13) {
+            $('#shouyi, #zonge').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth < 376 && String($('#keyong').html()).length > 10) {
+            $('#keyong').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth < 376 && String($('#daijin').html()).length > 6) {
+            $('#daijin, #jifen').removeClass('f24').addClass('f20');
+        }
+        if(document.body.clientWidth < 376 && String($('#jifen').html()).length > 6) {
+            $('#daijin, #jifen').removeClass('f24').addClass('f20');
+        }
+    }
+
+</script>
+
+
+
+<!--新增弹框开始-->
+<div class="mask-no-invest">
+    <div class="popup-box">
+        <div class="popup-box-top"></div>
+        <i class="close-box"></i>
+        <div class="red-racket f13">
+            请先实名认证激活托管账户，激活后，用户资金只存在于第三方的托管账户，平台无法碰触，保证安全。
+        </div>
+        <a href="" class="popup-box-btn f16">立即前往激活账户</a>
+    </div>
+</div>
+<script>
+    $(function () {
+        $(".close-box").on("click",function(){
+            $(".mask-no-invest").hide();
+        })
+    })
+</script>
+<!--新增弹框结束-->
+</body>
+</html>

@@ -11,7 +11,7 @@ $this->title="如何用电脑大额充值";
     <h3 class="nav-title m-width">如何使用电脑大额充值页</h3>
     <div class="step1">
         <h5 class="m-width">第1步</h5>
-        <p class="m-width">电脑浏览器输入网址<span>（www.wenjf.com）</span></p>
+        <p class="m-width">电脑浏览器输入网址<span>（www.hbctcf.com）</span></p>
         <p class="m-width">登录后，点击进入【我的账户】</p>
         <div>
             <img src="<?= FE_BASE_URI ?>wap/recharge/large-recharge/images/bg-step1.png" alt="">
