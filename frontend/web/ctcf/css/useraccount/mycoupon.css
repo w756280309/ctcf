@@ -189,7 +189,7 @@
 .code-box label {
     float: left;
     padding-left:34px;
-    width: 42px;
+    width: 76px;
     text-align: right;
     font-size: 14px;
     line-height: 40px;
@@ -199,7 +199,7 @@
 
 .code-box .coupon-code {
     float: left;
-    width: 232px;
+    width: 262px;
     height: 38px;
     line-height: 38px;
     padding: 0 15px;
@@ -220,8 +220,11 @@
     line-height: 30px;
     display: inline-block;
     color: #fff;
-    background: rgb(244, 67, 54);
+    background: #ff6707;
     cursor: pointer;
+}
+.couponcode-box .code-bottom a:hover {
+    background-color: #ff532d;
 }
 
 .code-content .refer {
