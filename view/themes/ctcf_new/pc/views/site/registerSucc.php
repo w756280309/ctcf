@@ -3,13 +3,13 @@
 $this->title = '注册成功';
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/signup-consult/index.css?v=1.5">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/signup-consult/index.css?v=1.6">
 
 <div class="signup-consult">
     <div class="consult-content">
         <div class="consult-top"><span class="icon"></span>恭喜您注册成功！</div>
         <ol class="ucenter">
-            <li><span class="active-txt">698元</span>代金券已经发放至您的账户中心</li>
+            <li><span class="active-txt">888元</span>代金券已经发放至您的账户中心</li>
             <li><span class="color-txt">开通资金托管</span>账户后即可使用</li>
         </ol>
         <div class="box">

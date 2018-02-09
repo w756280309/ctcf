@@ -19,7 +19,7 @@ $this->title = '温都金服注册成功页面';
         <p>恭喜您注册成功！</p>
     </div>
     <ul class="registerlist f15">
-        <li>• 698元代金券已经发放至您的账户中心</li>
+        <li>• 888元红包已经发放至您的账户中心</li>
         <li>• 开通资金托管账户后即可使用</li>
     </ul>
     <?php if(!empty($affArr)) {?>

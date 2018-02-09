@@ -2,9 +2,9 @@
 
 $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
 if ($fromNb) {
-    $this->title = '现代金报-温都金服';
+    $this->title = '现代金报-楚天财富';
 } else {
-    $this->title = '温都金服';
+    $this->title = '楚天财富';
 }
 
 $this->params['breadcrumbs'][] = $this->title;
@@ -60,13 +60,12 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 	.data-box-show .data-box-show-line3{
 		line-height:0.6rem;
 		height:0.6rem;
-		background-color: rgba(256,256,256,0.3);
 	}
 	.data-box-show .data-box-show-line3 span{
 		font-weight: 800;
 	}
 </style>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=180208">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=180209">
 <div>
     <img class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" width="100%" alt="">
 </div>
@@ -92,7 +91,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 			<span class="newbid-insideBox-title">新手专享</span>
 			<p class="newbid-insideBox-shouyiNum">10%</p>
 			<p class="newbid-insideBox-shouyiTxt">预期年化收益</p>
-			<img src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_newbid_1.png" class="newbid-insideBox-pic">
+			<img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/pic_newbid.png" class="newbid-insideBox-pic">
 			<a href="/site/signup" class="newbid-insideBox-register">注册</a>
 			<a href="/site/login" class="newbid-insideBox-login">登录</a>
 		</div>
@@ -156,7 +155,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
                     </div>
                     <div class="bid-main-msg clearfix">
                         <div class="lf bid-about-rate">
-                            <p class="bid-rate-number">5.6～10.2<span>%</span><i>+0.5%</i></p>
+                            <p class="bid-rate-number">5.6~10.2<span>%</span><i>+0.5%</i></p>
                             <p class="bid-rate-msg">预期年化收益</p>
                         </div>
                         <div class="lf bid-about-data">
@@ -227,9 +226,20 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 			<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>" class="rg"><img
 					src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/pic_phone_three.png" alt=""></a>
 		</div>
-		<p class="phone-box-address">地址：武汉市东湖路181号楚天文化创意产业园<br/>8号楼1层</p>
+		<p class="phone-box-address">地址：武汉市武昌区东湖路181号楚天文化创意产业园<br/>8号楼1层</p>
 	</div>
+    <div class="aboutus-box swiper-container">
+        <div class="swiper-wrapper">
+            <a href="/site/h5?wx_share_key=h5" class="swiper-slide">
+                <img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/with_us.png" alt="">
+            </a>
+            <a href="/news/detail?type=info&id=383" class="swiper-slide">
+                <img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/with_safegread.png" alt="" >
+            </a>
+        </div>
+    </div>
 </div>
+
 <?php if (!defined('IN_APP') && $this->showBottomNav) { ?>
     <?= $this->renderFile('@wap/views/layouts/footer.php') ?>
 <?php } ?>

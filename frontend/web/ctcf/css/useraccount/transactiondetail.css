@@ -45,6 +45,7 @@
 
 .transactionDetail-box table td {
     height: 60px;
+    color: #878d95;
 }
 
 .transactionDetail-box .td-back-color {
@@ -52,15 +53,15 @@
 }
 
 .transactionDetail-box .color-green {
-    color: #0cff00;
+    color: #0ac401;
 }
 
 .transactionDetail-box .color-red {
-    color: #ff0000;
+    color: #ff532d;
 }
 
 .transactionDetail-box .color-blue {
-    color: #46669f;
+    color: #419bf9;
 }
 
 .transactionDetail-box table .table-text-left {

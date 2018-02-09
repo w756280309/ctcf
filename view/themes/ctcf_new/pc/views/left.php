@@ -29,7 +29,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                 <li class="<?= in_array($action, ['mall/point/index', 'mall/point/rules']) ? 'selected' : '' ?>"><a href="/mall/point"><span class="star"></span>我的积分</a></li>
                 <li class="<?= 'user/invite/index' === $action ? 'selected' : '' ?>"><a href="/user/invite/"><span class="star"></span>邀请好友</a></li>
                 <li class="<?= 'user/user/mingxi' === $action ? 'selected' : '' ?>"><a href="/user/user/mingxi"><span class="star"></span>交易明细</a></li>
-                <li class="<?= 'user/user/myofforder' === $action ? 'selected' : '' ?>"><a href="/user/user/myofforder"><span class="star"></span>门店理财</a></li>
+<!--                <li class="--><?//= 'user/user/myofforder' === $action ? 'selected' : '' ?><!--"><a href="/user/user/myofforder"><span class="star"></span>门店理财</a></li>-->
             </ul>
         </li>
         <li class="nav-title"><span>账户管理</span></li>

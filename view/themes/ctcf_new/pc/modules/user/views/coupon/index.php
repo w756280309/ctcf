@@ -7,7 +7,7 @@ use frontend\assets\FrontAsset;
 $this->title = '我的代金券';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => FrontAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/mycoupon.css?v=161026', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/mycoupon.css?v=161030', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/JPlaceholder.js', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/couponcode.js', ['depends' => FrontAsset::class]);
 
@@ -107,7 +107,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/couponcode.js', ['depends'
         <div class="code-txt"><p>恭喜您获得了<span id="success-refer"></span></p></div>
     </div>
     <div class="code-bottom">
-        <a id="code_submit_button" tabindex="2" style="background: rgb(244, 67, 54);">立即兑换</a>
+        <a id="code_submit_button" tabindex="2">立即兑换</a>
     </div>
     <input type="text" style="display:none" />
     </form>

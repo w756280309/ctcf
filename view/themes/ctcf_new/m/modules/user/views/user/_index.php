@@ -44,7 +44,11 @@ use common\utils\StringUtils;
         </div>
     <?php } ?>
 </div>
-
+<a href="identity/index" class="guide flex-content clearfix">
+    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/user/guide_01.png" alt="">
+    <span >资金托管全面升级，请先进行实名认证和绑卡</span>
+    <img class="rg" src="<?= ASSETS_BASE_URI ?>ctcf/images/user/guide_point.png" alt="">
+</a>
 <!--登录状态下显示-->
 <?php if (!\Yii::$app->user->isGuest) { ?>
     <div class="remain flex-content">

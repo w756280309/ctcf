@@ -2,8 +2,8 @@
 
 $this->title = $title;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/news/informationlist.css', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css?v=1.1', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/news/informationlist.css', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\widgets\Pager;
 ?>

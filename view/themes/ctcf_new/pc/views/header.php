@@ -70,7 +70,7 @@ $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
         <div class="rg fz16">
             <ul class="clear-fix">
                 <li class="lf mgr18"><a class="<?= 'site/index' === $action ? 'nav-active' : '' ?>" href="/">首页</a></li>
-                <li class="lf mgr18"><a class="<?= 'licai/indexx' === $action ? 'nav-active' : '' ?>" href="/licai/">我要理财</a></li>
+                <li class="lf mgr18"><a class="<?= 'licai/index' === $action || 'licai/notes' === $action ? 'nav-active' : '' ?>" href="/licai/">我要理财</a></li>
                 <li class="lf mgr18"><a class="<?= 'safeguard/index' === $action ? 'nav-active' : '' ?>" href="/safeguard/">安全保障</a></li>
                 <li class="lf mgr18"><a class="<?= 'helpcenter/operation' === $action ? 'nav-active' : '' ?>" href="/helpcenter/operation/">帮助中心</a></li>
                 <li class="lf"><a class="<?= 'guide/index' === $action ? 'nav-active' : '' ?>" href="/guide/">新手引导</a></li>
