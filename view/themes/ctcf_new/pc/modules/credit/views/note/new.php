@@ -6,8 +6,8 @@ use yii\web\JqueryAsset;
 
 $this->title = '发起转让';
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/transfer.css?v=20161027', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/transfer.css?v=20161001', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfer.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/login/login_form.js', ['depends' => JqueryAsset::class]);

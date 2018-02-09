@@ -61,7 +61,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/leadpage/leadpage.js?v=20160708', ['de
         <p class="tip-font">进入【账户】，<span>点击【充值】</span>，按照指引完成绑卡和充值</p>
         <a class="container-left"></a>
         <div class="container-center">
-            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/leadpage/display_3.png" width="649" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/leadpage/display_3.png?v=1.0" width="649" alt="">
         </div>
         <a class="container-right"></a>
     </div>
