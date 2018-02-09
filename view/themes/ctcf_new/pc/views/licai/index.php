@@ -8,7 +8,7 @@ use frontend\assets\CtcfFrontAsset;
 
 $this->title = '我要理财';
 
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/financial.min.css?v=1.0', ['depends' => CtcfFrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/financial.min.css?v=1.1', ['depends' => CtcfFrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/pagination.min.css', ['depends' => CtcfFrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery.pagination.js', ['depends' => CtcfFrontAsset::class, 'position' => 1]);
 
