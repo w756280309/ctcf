@@ -71,12 +71,9 @@
 }
 .invest-box .invest-container-box .invest-centent .invest-ct-lf .invest-ct-lf-content {
     background: url(../../images/deal/buy_bg.png) no-repeat left bottom;
-    /*background-size: 290px 190px;*/
-    position: relative;
-    bottom: -20px;
 }
 .invest-box .invest-container-box .invest-centent .invest-ct-lf .invest-ct-lf-content .txt-box {
-    min-height:190px;
+    min-height:210px;
 }
 
 .invest-box .invest-centent .invest-ct-lf .invest-ct-lf-title .percentage {

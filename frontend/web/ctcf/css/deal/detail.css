@@ -359,12 +359,14 @@ table.earnings-tips tr td{
 }
 .piD-left span {
     padding-left:34%;
+    color: #434a54;
 }
 .piD-right {
     text-align: right;
 }
 .piD-right span {
     padding-right:34%;
+    color: #434a54;
 }
 /*pR-box*/
 .pR-box {

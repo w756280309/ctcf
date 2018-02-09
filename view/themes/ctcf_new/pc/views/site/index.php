@@ -3,7 +3,7 @@
 $this->title = Yii::$app->params['pc_page_title'];
 
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css?v=1.2', ['depends' => 'frontend\assets\CtcfFrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/mask/mask.min.css?v=1.3', ['depends' => 'frontend\assets\CtcfFrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/mask/mask.min.css?v=1.6', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 //$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery-1.11.1.min.js', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery.SuperSlide.2.1.1.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/handlebars-v4.0.11.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
@@ -406,8 +406,8 @@ JSFILE
     })
 </script>
 
-<input type="hidden" name="isLoggedin" value="true">
-<input type="hidden" name="isInvest" value="true">
+<input type="hidden" name="isLoggedin" value="false">
+<input type="hidden" name="isInvest" value="false">
 <!--已登陆未投资-->
 <div class="mask-no-invest">
     <div class="popup-box">
@@ -423,7 +423,7 @@ JSFILE
             <span>220元</span>
             <span>380元</span>
         </div>
-        <p class="popup-box-btn">查看红包</p>
+        <a href="" class="popup-box-btn">查看红包</a>
     </div>
 </div>
 <!-- 未登陆提示-->
@@ -432,14 +432,14 @@ JSFILE
         <div class="popup-box-top"></div>
         <i class="close-box"></i>
         <div class="prize_user_box">
-            <a class="prize_user_new clearfix" href="#">
+            <a class="prize_user_new clearfix" href="javascript:void(0)">
                 <img class="lf" src="<?= ASSETS_BASE_URI ?>ctcf/images/mask/prize_user_new.png" alt="">
                 <div class="rg">
                     <p class="user-login-msg">新用户登录</p>
                     <p class="user-login-prize">送您<span>888元</span>红包</p>
                 </div>
             </a>
-            <a class="prize_user_old clearfix" href="#">
+            <a class="prize_user_old clearfix" href="javascript:void(0)">
                 <img class="lf" src="<?= ASSETS_BASE_URI ?>ctcf/images/mask/prize_user_old1.png" alt="">
                 <div class="rg">
                     <p class="user-login-msg">老用户登录</p>
@@ -447,7 +447,7 @@ JSFILE
                 </div>
             </a>
         </div>
-        <p class="popup-box-btn">点击领取</p>
+        <a href="" class="popup-box-btn">点击领取</a>
     </div>
 </div>
 <!--已登陆已投资-->
@@ -503,10 +503,7 @@ JSFILE
                         </div>
                     </div>
                     <u class="get-prize-rules">补偿规则</u>
-                    <div class="upgrade-updata-btn clearfix">
-                        <a class="check-get-prize lf" href="#">查看红包</a>
-                        <a class="go-to-store rg" href="#">逛逛积分商城</a>
-                    </div>
+                    <a class="check-get-prize" href="#">查看红包</a>
                 </li>
             </ul>
         </div>

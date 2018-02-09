@@ -4,7 +4,7 @@ use common\utils\StringUtils;
 use common\view\LoanHelper;
 
 $this->title = '确认订单';
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/deal/buy.css?v=20161110');
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/deal/buy.css?v=20161113');
 
 ?>
 <!-- invest BUY start-->
