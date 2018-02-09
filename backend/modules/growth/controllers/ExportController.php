@@ -388,6 +388,45 @@ group by u.campaign_source',
                 'itemLabels' => ['分销渠道', '注册人数', '购买人数', '购买金额'],
                 'itemType' => ['string', 'string', 'string', 'string'],
             ],
+            'export_nbxdjb_finish' => [
+                'key' => 'export_nbxdjb_finish',
+                'title' => '现代金报客户到期名单导出',
+                'content' => '现代金报客户到期名单导出',
+                'sql' => 'select 
+u.real_name 姓名,
+u.safeMobile 联系方式,
+p.title 产品名称,
+p.expires 产品期限,
+p.refund_method 单位,
+pl.benxi 到期金额
+from online_repayment_plan pl
+inner join user u on pl.uid = u.id 
+inner join online_product p on pl.online_pid = p.id
+inner join (select online_pid,max(qishu) mq from online_repayment_plan group by online_pid) d on d.online_pid = pl.online_pid 
+inner join user_affiliation as a on a.user_id = u.id
+where d.mq = pl.qishu
+and a.trackCode = \'nbxdjb\'
+and date(from_unixtime(p.finish_date)) >= :startDate 
+and date(from_unixtime(p.finish_date)) <= :endDate',
+                'params' => [
+                    'startDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'startDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d'),//参数的默认值
+                        'title' => '开始日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'endDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'endDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('+30 day')),//参数的默认值
+                        'title' => '结束日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['姓名', '联系方式', '产品名称', '产品期限', '单位', '到期金额'],
+                'itemType' => ['string', 'string', 'string', 'string', 'string', 'string'],
+            ],
         ];
         parent::init();
     }
