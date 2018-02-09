@@ -270,7 +270,7 @@ class UserController extends BaseController
      * 线下理财
      *
      */
-    public function actionMyofforder($type = 2, $page = 1, $backUrl = null)
+    public function actionMyofforder($type = 1, $page = 1, $backUrl = null)
     {
         if (!in_array($type, ['1', '3', '2'])) {
             throw $this->ex404();

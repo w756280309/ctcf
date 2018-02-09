@@ -44,9 +44,13 @@ var wxShare = {
         if (version.ios || version.iPad || version.iPhone) {
           //苹果设备
           window.webkit.messageHandlers.share.postMessage(shareObj);
+          $.get('/promotion/p180207/add-share?scene=timeline&shareUrl='+encodeURIComponent(location.href), function (data) {
+          });
         } else if (version.android) {
           //android 设备,四个参数位置不可颠倒
           window.shareAction.share(params.title, params.des, params.link, params.imgUrl);
+          $.get('/promotion/p180207/add-share?scene=timeline&shareUrl='+encodeURIComponent(location.href), function (data) {
+          });
         } else {
           //其它
           wxShare.popShare();
