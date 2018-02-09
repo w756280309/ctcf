@@ -18,7 +18,7 @@ if ($isLuodiye) {
 
     $share = new Share([
         'title' => '送你一个红包，快打开看看！',
-        'description' => '温州报业传媒旗下理财平台，国资背景，稳健好收益。',
+        'description' => '湖北日报新媒体集团旗下理财平台，国资背景，稳健好收益。',
         'url' => $host.'luodiye',
         'imgUrl' => ('/' === ASSETS_BASE_URI ? $host : ASSETS_BASE_URI).'images/wechat/0926.jpg',
     ]);
