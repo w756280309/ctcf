@@ -10,17 +10,17 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/footer.min.css', ['depends' => 
         <div class="ctcf-container clear-fix">
             <dl class="about-ct fz14 lf">
                 <dt class="fz16">关于楚天财富</dt>
-                <dd><a class="footer-hover" href="/helpcenter/about/">公司简介</a></dd>
-                <dd><a class="footer-hover" href="/news/index?type=info">新闻动态</a></dd>
-                <dd><a class="footer-hover" href="/jobs/">加入我们</a></dd>
+                <dd><a class="footer-hover" href="/helpcenter/about/">关于我们</a></dd>
+                <dd><a class="footer-hover" href="/helpcenter/advantage/">平台优势</a></dd>
                 <dd><a class="footer-hover" href="/helpcenter/contact/">联系我们</a></dd>
+                <dd><a class="footer-hover" href="/jobs/">加入我们</a></dd>
             </dl>
             <dl class="help-ct fz14 lf">
                 <dt class="fz16">帮助中心</dt>
-                <dd><a class="footer-hover" href="/site/signup">注册登录</a></dd>
-                <dd><a class="footer-hover" href="">开通资金托管</a></dd>
-                <dd><a class="footer-hover" href="">绑卡充值</a></dd>
-                <dd><a class="footer-hover" href="">投资提现</a></dd>
+                <dd><a class="footer-hover" href="/helpcenter/operation/">注册登录</a></dd>
+                <dd><a class="footer-hover" href="/helpcenter/operation?type=1">开通资金托管</a></dd>
+                <dd><a class="footer-hover" href="/helpcenter/operation?type=2">绑卡充值</a></dd>
+                <dd><a class="footer-hover" href="/helpcenter/operation?type=3">投资提现</a></dd>
             </dl>
             <div class="phone-service fz16 lf">
                 <p class="phone-service-msg">客服电话</p>
