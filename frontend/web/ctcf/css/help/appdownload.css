@@ -1,0 +1,54 @@
+/*  app下载页面  */
+.appdownload-box {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    width: 100%;
+    background-color: #f4f4f7;
+}
+.appdownload-box .appdownload-container {
+    margin:0 auto;
+    width:1000px;
+    border:1px solid #e6e6e6;
+}
+.appdownload-box .appdownload-container .appdownload-content {
+    height:478px;
+    background: #fff url('../../images/help/phone.png') no-repeat 104px 53px;
+}
+.appdownload-box .appdownload-container .appdownload-content .rg {
+    margin-top:104px;
+    margin-right:100px;
+    width: 402px;
+    height:350px;
+    background: url('../../images/help/title.png') no-repeat 0 0;
+ }
+.appdownload-box .appdownload-container .appdownload-content .rg p {
+    margin-top: 52px;
+    height:36px;
+    line-height:28px;
+    text-align: center;
+    color:#6f6e73;
+    font-size: 16px;
+}
+.appdownload-box .appdownload-container .appdownload-content .rg .app-img {
+    margin:0 auto;
+    width:163px;
+}
+.appdownload-box .appdownload-container .appdownload-content .rg a.download {
+    margin:23px auto;
+    width:242px;
+    height:40px;
+    line-height:40px;
+    font-size: 14px;
+    color:#fff;
+    text-align: center;
+    display: block;
+    background: #f44336;
+    cursor: pointer;
+}
+.appdownload-box .appdownload-container .appdownload-content .rg a.download:hover {
+    background: #d43125;
+}
+
+
+
+

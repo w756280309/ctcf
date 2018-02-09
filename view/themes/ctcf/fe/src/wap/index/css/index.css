@@ -1,0 +1,506 @@
+body {
+  background-color: #f6f6f6;
+}
+.flex-content {
+  padding-bottom: 1.21333333rem;
+}
+.flex-content .banner-box {
+  width: 100%;
+  height: 4.65333333rem;
+  box-sizing: border-box;
+}
+.flex-content .banner-box a {
+  display: block;
+}
+.flex-content .banner-box a img {
+  width: 100%;
+  height: 100%;
+}
+/*banner第几页小圆点提示*/
+.flex-content .swiper-pagination-bullet{
+  width:0.14666rem;
+  height:0.14666rem;
+  margin:0 0.106666rem!important;
+}
+.swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction{
+  bottom:0.333333rem;
+}
+.flex-content .swiper-pagination-bullet-active {
+  background: #fff;
+}
+
+/*新手专享*/
+.flex-content .newbid-box {
+  /*display: none;*/
+  position: relative;
+  top: -0.28rem;
+  width: 9.2rem;
+  padding-top: 1.05333333rem;
+  padding-bottom: 0.56rem;
+  margin: 0 auto 0.3rem;
+  background-color: #fff;
+  -webkit-border-radius: 0.10666667rem;
+  -moz-border-radius: 0.10666667rem;
+  border-radius: 0.10666667rem;
+  z-index: 10;
+  -webkit-box-shadow: 0 0.0566667rem 8px 0.006667rem #F0E5DE;
+  -moz-box-shadow: 0 0.0566667rem 8px 0.006667rem #F0E5DE;
+  box-shadow: 0 0.0566667rem 8px 0.006667rem #F0E5DE;
+
+}
+.flex-content .newbid-box .newbid-insideBox {
+  position: relative;
+  width: 8.69333333rem;
+  height: 5.17333333rem;
+  margin: 0 auto 1.26666667rem;
+  padding-top: 0.62666667rem;
+  /*border: 1px solid #ffb5b1;*/
+  box-sizing: border-box;
+}
+.flex-content .newbid-box .newbid-insideBox .newbid-insideBox-title {
+  background: url(../images/new_person_bg.png) 0 0.1rem no-repeat;
+  -webkit-background-size: 100%;
+  background-size: 100%;
+  position: absolute;
+  top: -5%;
+  left: 50%;
+  margin-left: -1.74rem;
+  display: inline-block;
+  width: 3.48rem;
+  font-size: 0.5rem;
+  height: 0.6rem;
+  line-height: 0.6rem;
+  color: #4e545a;
+  background-color: #fff;
+  text-align: center;
+  z-index: 11;
+}
+.flex-content .newbid-box .newbid-insideBox .newbid-insideBox-shouyiNum {
+  color: #fc615c;
+  font-size: 0.96rem;
+  height: 0.96rem;
+  line-height: 0.96rem;
+  text-align: center;
+}
+.flex-content .newbid-box .newbid-insideBox .newbid-insideBox-shouyiTxt {
+  color: #9ea0a4;
+  font-size: 0.36rem;
+  height: 0.36rem;
+  line-height: 0.36rem;
+  text-align: center;
+  margin-top: 0.12rem;
+}
+.flex-content .newbid-box .newbid-insideBox .newbid-insideBox-pic {
+  display: block;
+  width: 7.06666667rem;
+  margin: 0.71794872rem auto 0;
+}
+.flex-content .newbid-box .newbid-insideBox a {
+  position: absolute;
+  bottom: 0;
+  display: block;
+  width: 3.86666667rem;
+  height: 0.96rem;
+  margin-bottom: -0.57333333rem;
+  line-height: 0.96rem;
+  text-align: center;
+  font-size: 0.5rem;
+  border: 1px solid #FF6700;
+  border-radius: 0.53333333rem;
+  z-index: 11;
+}
+.flex-content .newbid-box .newbid-insideBox .newbid-insideBox-register {
+  left: 0.33333333rem;
+  color: #fff;
+  background-color: #FF6700;
+}
+.flex-content .newbid-box .newbid-insideBox .newbid-insideBox-login {
+  right: 0.33333333rem;
+  color: #ff6058;
+  background-color: #fff;
+}
+.flex-content .newbid-box > p {
+  font-size: 0.32rem;
+  line-height: 0.46666667rem;
+  text-align: center;
+}
+.flex-content .newbid-box .newbid-wendu-link a {
+  color: #7cbaf3;
+}
+.flex-content .newbid-box .newbid-wendu-txt {
+  color: #9ea0a4;
+}
+/*nav入口*/
+.flex-content .links-box {
+  width: 100%;
+  height: 2.6666667rem;
+  border-bottom: 1px solid #f2f2f2;
+  background-color: #fff;
+}
+.flex-content .links-box a {
+  position: relative;
+  display: block;
+  width: 25%;
+  height: 100%;
+}
+.flex-content .links-box a .links-box-iconJifen{
+  position: absolute;
+  top:0.292rem;
+  right:0.2266rem;
+  display: block;
+  width:0.786rem;
+  height:0.48rem;
+  background: url("../images/icon_jifen.png") no-repeat;
+  background-size: contain;
+  z-index: 10;
+}
+.flex-content .links-box a img {
+  position: absolute;
+  left: 50%;
+  top:0.56rem;
+  display: block;
+  width:0.9rem;
+  height: 0.9rem;
+  margin-left: -0.45rem;
+}
+.flex-content .links-box a img.notice-last-img{
+  width: 0.72rem;
+  margin-left: -0.36rem;
+}
+.flex-content .links-box a p {
+  position: absolute;
+  width: 100%;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  font-size: 0.4rem;
+  color: #4e545a;
+  text-align: center;
+  bottom: 0.52rem;
+}
+/*nav入口结束*/
+
+/*理财专区开始*/
+.flex-content .bids-box{
+  margin-top: 0.29333333rem;
+  background-color: #fff;
+  padding:0 0.4rem;
+  /*padding-right: 0.4rem;*/
+}
+.flex-content .bids-box h5.bids-box-title{
+ 
+  height: 1.413333rem;
+  line-height: 1.4133333rem;
+  font-size:0.48rem;
+  color:#434a54;
+  font-weight: 400;
+  border-bottom:1px #f1f1f1 solid;
+}
+.flex-content .bids-box ul.bids-box-bidlist{
+
+}
+ul.bids-box-bidlist li{
+
+}
+ul.bids-box-bidlist li a{
+  display:block;
+  border-bottom:1px #f1f1f1 solid;
+}
+ul.bids-box-bidlist li a .bid-title{
+  font-size: 0px;
+}
+ul.bids-box-bidlist li a .bid-title .bid-title-h6{
+  line-height: 1.46666666rem;
+  font-size:0.4rem;
+  height: 1.1466666rem;
+  color:#434a54;
+  font-weight: 400;
+  /*最长长度控制*/
+  white-space:nowrap;
+  width: 8.3rem;
+  overflow: hidden;
+  text-overflow:ellipsis;
+}
+ul.bids-box-bidlist li a .bid-title span{
+  height: 0.533333rem;
+  line-height: 0.5333333rem;
+  color:#c8a561;
+  display: inline-block;
+  border:1px solid #c8a561;
+  font-size:0.32rem;
+  padding-left: 0.186666rem;
+  padding-right: 0.186666rem;
+  -webkit-border-radius: 0.1066666rem;
+  -moz-border-radius: 0.1066666rem;
+  border-radius: 0.1066666rem;
+}
+ul.bids-box-bidlist li a .bid-title span~span{
+  margin-left: 0.2666666rem;
+}
+ul.bids-box-bidlist li a .bid-main-msg{
+  height: 2.56rem;
+  overflow: hidden;
+}
+/*利率*/
+ul.bids-box-bidlist li a .bid-main-msg .bid-about-rate{
+  width:50%;
+  height: 100%;
+}
+ul.bids-box-bidlist li a .bid-main-msg .bid-about-rate p.bid-rate-number{
+  display: inline-block;
+  margin-top:0.5066666rem;
+  height: 0.7733333rem;
+  line-height: 0.7733333rem;
+  color:#ff6707;
+  font-size: 0.693333rem;
+  position: relative;
+}
+ul.bids-box-bidlist li a .bid-main-msg .bid-about-rate p.bid-rate-number span{
+  font-size:0.42666667rem;
+  /*display: inline-block;*/
+  /*vertical-align: bottom;*/
+}
+ul.bids-box-bidlist li a .bid-main-msg .bid-about-rate p.bid-rate-number i{
+  /*禁止换行*/
+  white-space:nowrap;
+  position: absolute;
+  right:-1.0rem;
+  top:-0.35rem;
+  font-style: normal;
+  font-size: 0.373333rem;
+  width: 1.16rem;
+}
+ul.bids-box-bidlist li a .bid-main-msg .bid-about-rate p.bid-rate-msg{
+  height: 0.893333333rem;
+  line-height: 0.8933333rem;
+  font-size:0.3466666rem;
+}
+/*期限*/
+ul.bids-box-bidlist li a .bid-main-msg .bid-about-data{
+  width:50%;
+  height: 100%;
+}
+ul.bids-box-bidlist li a .bid-main-msg .bid-about-data span{
+  display: inline-block;
+  margin-top:0.5066666rem;
+  height: 0.7733333rem;
+  line-height: 0.7733333rem;
+  color:#434a54;
+  font-size: 0.3733333rem;
+}
+ul.bids-box-bidlist li a .bid-main-msg .bid-about-data span i{
+  font-style: normal;
+}
+ul.bids-box-bidlist li a .bid-main-msg .bid-about-data p{
+  height: 0.893333333rem;
+  line-height: 0.8933333rem;
+  font-size:0.3466666rem;
+}
+
+
+
+.flex-content .bids-box .bids-box-more{
+  display: block;
+  width: 100%;
+  height: 0.94666667rem;
+  line-height: 0.94666667rem;
+  font-size: 0.34666667rem;
+  color: #538feb;
+  text-align: center;
+}
+
+/*理财专区结束*/
+/*平台动态开始*/
+.flex-content .reading-box {
+  width: 100%;
+  padding: 0.57333333rem 0.4rem 0;
+  margin: 0.24rem 0 0.29333333rem;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+.flex-content .reading-box .reading-box-title {
+  color: #4e545a;
+  font-size: 0.5rem;
+  height: 0.46666667rem;
+  line-height: 0.46666667rem;
+  margin-bottom: 0.38666667rem;
+}
+.flex-content .reading-box .reading-box-list li {
+  width: 100%;
+  padding: 0.25rem 0;
+  box-sizing: border-box;
+  border-bottom: 1px solid #eee;
+}
+.flex-content .reading-box .reading-box-list li a {
+  display: block;
+}
+.flex-content .reading-box .reading-box-list li .reading-box-list-til {
+  font-size: 0.37333333rem;
+  color: #4e545a;
+}
+.flex-content .reading-box .reading-box-list li .reading-box-list-des {
+  font-size: 0.32rem;
+  margin-top: 0.1133333rem;
+}
+.flex-content .reading-box .reading-box-list li .reading-box-list-des .lf {
+  display: inline-block;
+  width: 1.69333333rem;
+  height: 0.46666667rem;
+  line-height: 0.46666667rem;
+  background-color: #FFB377;
+  text-align: center;
+  color: #fff;
+}
+.flex-content .reading-box .reading-box-list li .reading-box-list-des .rg {
+  display: inline-block;
+  color: #9ea0a4;
+}
+.flex-content .reading-box .reading-box-list li:first-child {
+  border-top: 1px solid #eee;
+}
+.flex-content .reading-box .reading-box-more {
+  display: block;
+  width: 100%;
+  height: 0.94666667rem;
+  line-height: 0.94666667rem;
+  font-size: 0.34666667rem;
+  color: #538feb;
+  text-align: center;
+}
+
+/*平台数据部分*/
+.flex-content .data-box {
+  width: 100%;
+  padding: 0.57333333rem 0.4rem 0.37333333rem;
+  background-color: #fff;
+  box-sizing: border-box;
+  margin-bottom:0.29333rem;
+}
+.flex-content .data-box .data-box-title {
+  color: #4e545a;
+  font-size: 0.5rem;
+  height: 0.46666667rem;
+  line-height: 0.46666667rem;
+  margin-bottom: 0.46666667rem;
+}
+.flex-content .data-box .data-box-show {
+  width: 100%;
+  height: 3.2rem;
+  padding-top: 0.45333333rem;
+  text-align: center;
+  background: url("../images/bg_databox.png") no-repeat;
+  background-size: 100% 100%;
+  box-sizing: border-box;
+}
+.flex-content .data-box .data-box-show .data-box-show-line1 {
+  height: 0.37333333rem;
+  line-height: 0.37333333rem;
+  margin-bottom: 0.37333333rem;
+  font-size: 0.37333333rem;
+  color: #fff;
+  text-align: center;
+}
+.flex-content .data-box .data-box-show .data-box-show-line2 {
+  height: 0.94rem;
+  line-height: 0.94rem;
+  font-size: 0.37333333rem;
+  color: #fff;
+  text-align: center;
+}
+.flex-content .data-box .data-box-show .data-box-show-line2 span {
+  font-size: 0.69333333rem;
+}
+.flex-content .data-box .data-box-show .data-box-show-line3 {
+  /*width: 6.05333333rem;*/
+  height: 0.9333333rem;
+  margin: 0.08rem auto 0;
+  line-height: 0.9333333rem;
+  font-size: 0.37333333rem;
+  color: #fff;
+  text-align: center;
+}
+.flex-content .data-box .data-box-show .data-box-show-line3 span {
+  color: #fff;
+}
+
+ /*服务中心开始*/
+.flex-content .phone-box {
+  display: block;
+  width: 100%;
+  padding: .66666667rem 0 .50666667rem;
+  background-color: #fff;
+  box-sizing: border-box;
+  color: #4e545a;
+  text-align: center
+}
+
+.flex-content .phone-box .phone-box-number img {
+  position: relative;
+  /*top: -2px;*/
+  width: .4rem;
+  margin-right: .18666667rem;
+  vertical-align: middle
+}
+
+
+.flex-content .phone-box .phone-box-address {
+  margin-top: .2rem;
+  /*height: .34666667rem;*/
+  line-height: .34666667rem;
+  font-size: .34666667rem
+}
+
+
+
+
+.flex-content .phone-box .phone-box-title {
+  padding-left: .42666667rem;
+  font-size: .48rem;
+  height: .48rem;
+  line-height: .48rem;
+  color: #4e545a;
+  text-align: left;
+  margin-bottom: .4rem
+}
+
+.flex-content .phone-box .phone-box-links {
+  padding: 0 .26666667rem
+}
+
+.flex-content .phone-box .phone-box-links p,.flex-content .phone-box .phone-box-links a {
+  width: 49.7%;
+}
+
+.flex-content .phone-box .phone-box-links p img,.flex-content .phone-box .phone-box-links a img {
+  width: 100%
+}
+
+.flex-content .phone-box .phone-box-address {
+
+  line-height: .50666667rem;
+  font-size: .34666667rem;
+  color: #4e545a;
+  text-align: center;
+  margin-top: .3rem
+}
+
+/*服务中心结束*/
+
+
+
+/*关于我们*/
+.flex-content .aboutus-box {
+  width: 100%;
+  height: 2.78666667rem;
+  /*line-height: 2.78666667rem;*/
+  padding: 0 0.4rem;
+}
+.flex-content .aboutus-box a {
+  display: inline-block;
+  width: 4.38666667rem;
+  height: 1.86666667rem;
+  margin-top: 0.46rem;
+}
+.flex-content .aboutus-box a img {
+  width: 100%;
+  height: 100%;
+}
