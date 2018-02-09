@@ -17,7 +17,7 @@ $this->title = '玩填字 赢红包';
     }
 </script>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script src="<?= FE_BASE_URI ?>libs/wxShare.js?v=1"></script>
+<script src="<?= FE_BASE_URI ?>libs/wxShare.js?v=20180208-1"></script>
 <style>
     .flex-content .bottom-part .bottom-play .play-choice-list li {
         width: 13.995%;
@@ -413,7 +413,7 @@ $this->title = '玩填字 赢红包';
         };
 
         wxShare.TimelineSuccessCallBack = function () {
-            $.get('/promotion/p180207/add-share?scene=timeline&shareUrl='+location.href, function (data) {
+            $.get('/promotion/p180207/add-share?scene=timeline&shareUrl='+encodeURIComponent(location.href), function (data) {
             });
         }
         wxShare.setParams(shareData.title, shareData.des, shareData.link, shareData.imgUrl, shareData.appId);
