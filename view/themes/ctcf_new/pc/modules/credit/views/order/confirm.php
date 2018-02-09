@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 $this->title = '确认订单';
-$this->registerCssFile(ASSETS_BASE_URI . 'css/credit/creditpay.css');
+$this->registerCssFile(ASSETS_BASE_URI .'ctcf/css/credit/creditpay.css?v=1.6');
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => \yii\web\JqueryAsset::class]);
 ?>
 <div class="credit-box clearfix">

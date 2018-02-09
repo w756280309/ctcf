@@ -1,14 +1,14 @@
 <?php
 $this->title= "订单处理中";
 
-$this->registerCssFile(ASSETS_BASE_URI . 'css/deal/buy.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/deal/buy.css?v=1.0');
 ?>
 <div class="invest-box clearfix">
     <div class="invest-container">
         <div class="invest-container-box invest-success">
             <div class="invest-content">
                 <p class="buy-txt"><span>订单处理中……</span></p>
-                <p class="buy-txt-tip">遇到问题请联系客服，电话：<?= Yii::$app->params['platform_info.contact_tel'] ?> <a href="javascript:void(0)" onclick="location.replace('/user/user/myorder')" class="bind-close1">查看订单</a></p>
+                <p class="buy-txt-tip">遇到问题请联系客服，电话：<?= Yii::$app->params['platform_info.contact_tel'] ?> <a href="javascript:void(0)" onclick="location.replace('/user/user/myorder')" class="bind-close1" style="color:#419bf9;">查看订单</a></p>
             </div>
         </div>
     </div>
