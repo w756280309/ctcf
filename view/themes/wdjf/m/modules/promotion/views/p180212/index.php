@@ -8,7 +8,7 @@ $this->title = '全民年货节';
 <script src="<?= FE_BASE_URI ?>libs/vue.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <div class="flex-content" id="app">
-    <img class="banner" src="<?= FE_BASE_URI ?>wap/campaigns/active20180206/images/banner_01.png" alt="">
+    <img class="banner" src="<?= FE_BASE_URI ?>wap/campaigns/active20180206/images/banner_01_new.png" alt="">
     <img class="banner" src="<?= FE_BASE_URI ?>wap/campaigns/active20180206/images/banner_02.png" alt="">
     <img class="banner" src="<?= FE_BASE_URI ?>wap/campaigns/active20180206/images/banner_03.png" alt="">
     <img class="banner" src="<?= FE_BASE_URI ?>wap/campaigns/active20180206/images/banner_04.png" alt="">
