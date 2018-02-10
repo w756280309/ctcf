@@ -15,6 +15,9 @@ return [
     'language' => 'zh-CN',
     'homeurl' => '/site/index/',
     'components' => [
+        'request' => [
+            'enableCookieValidation' => false,
+        ],
         'view' => [
             'class' => 'common\view\BackendView',
         ],
