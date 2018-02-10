@@ -14,6 +14,9 @@ return [
     'language' => 'zh-CN',
     'controllerNamespace' => 'borrower\controllers',
     'components' => [
+        'request' => [
+            'enableCookieValidation' => false,
+        ],
         'user' => [
             'identityClass' => 'common\models\user\User',
             'enableAutoLogin' => true,
@@ -32,7 +35,6 @@ return [
             'errorAction' => 'site/error',
         ],
     ],
-
     'modules' => [
         'user' => [
             'class' => 'app\modules\user\Module',
