@@ -9,9 +9,11 @@ UdeskWebIMHelper::init($this);
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/homePage.css?v=20170629">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/user/guide.min.css">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
+
 
 <?php if (!defined('IN_APP')) { ?>
     <div class="UtopTitle f18 flex-content">
@@ -23,11 +25,9 @@ UdeskWebIMHelper::init($this);
 
 <div id="login">
     <div class="top_one flex-content"></div>
-
     <?php if (!\Yii::$app->user->isGuest) { ?>
         <div class="remain flex-content"></div>
     <?php } ?>
-
     <div class="youihui flex-content clearfix">
         <a href="/user/coupon/list" class="my_youhui lf youhui1">
             <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coupon.png" alt="">
@@ -120,7 +120,7 @@ UdeskWebIMHelper::init($this);
 
 <a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>">
     <p class="customer_service f15">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?></p>
-    <p class="customer_service f15">（8:30-20:00）</p>
+    <p class="customer_service f15">（9:00-20:00）</p>
 </a>
 
 <!--footer-->
@@ -206,4 +206,23 @@ UdeskWebIMHelper::init($this);
         }
     }
 
+</script>
+
+<div class="mask-no-invest">
+    <div class="popup-box">
+        <div class="popup-box-top"></div>
+        <i class="close-box"></i>
+        <div class="red-racket f13">
+            请先实名认证激活托管账户，激活后，用户资金只存在于第三方的托管账户，平台无法碰触，保证安全。
+        </div>
+        <a href="identity/index" class="popup-box-btn f16">立即前往激活账户</a>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $(".close-box").on("click",function(){
+            $(".mask-no-invest").hide();
+        })
+    })
 </script>

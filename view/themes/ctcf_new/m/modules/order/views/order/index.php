@@ -195,9 +195,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends
                     <p class="daijin-none-content">参与平台活动和关注平台动态</p>
                     <p class="daijin-none-content">将有机会获得代金券哦！</p>
                     <div class="daijin-none-link">
-                        <p><img src="<?= FE_BASE_URI ?>wap/rate-coupon/bid-page/images/icon_phone.png" alt="">客服电话：400-101-5151
+                        <p><img src="<?= FE_BASE_URI ?>wap/rate-coupon/bid-page/images/icon_phone.png" alt="">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?>
                         </p>
-                        <p>(8:30-20:00)</p>
+                        <p>(9:00-20:00)</p>
                     </div>
                 </div>
             </div>

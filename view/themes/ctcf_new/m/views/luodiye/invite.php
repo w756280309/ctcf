@@ -31,7 +31,7 @@ if ($isLuodiye) {
 <div class="row transform-box">
     <div class="col-xs-12 transform-front-box">
         <div class="logo-back">
-            <img src="<?= ASSETS_BASE_URI ?>images/invite/logo-back.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/invite/logo_back.png" alt="">
         </div>
         <div class="front-font">
             <?php if ($isLuodiye) { ?>
@@ -64,8 +64,8 @@ if ($isLuodiye) {
     </div>
 </div>
 <div class="row description-box">
-    <p class="description-header"><span>什么是温都金服？</span></p>
-    <p class="description-content">温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金，安享稳健收益。</p>
+    <p class="description-header"><span>什么是楚天财富？</span></p>
+    <p class="description-content">楚天财富（武汉）金融服务有限公司简称“楚天财富”，隶属湖北日报新媒体集团下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金，安享稳健收益。</p>
 </div>
 <!--<div class="row production-box">-->
 <!--    <p class="production-header">精品理财</p>-->

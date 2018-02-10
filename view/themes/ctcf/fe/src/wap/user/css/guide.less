@@ -1,0 +1,99 @@
+.guide {
+  display: block;
+  height: 80/75rem;
+  line-height: 80/75rem;
+  background-color: #ffefd1;
+  padding:0 40/75rem;
+  font-size:26/75rem;
+  overflow: hidden;
+  img {
+    display: inline-block;
+    vertical-align: sub;
+  }
+  span {
+    color: #ff6122;
+  }
+  img:first-child {
+    height:33/75rem;
+    margin-right: 18/75rem;
+  }
+  img:last-child {
+    height:26/75rem;
+    margin-top: 27/75rem;
+  }
+}
+@q:75rem;
+.mask-no-invest{
+  //display: none;
+  background-color: rgba(12,7,5,0.6);
+  height: 100vh;
+  //max-width: 750px;
+  margin: 0 auto;
+  left:0;
+  top:0;
+  right:0;
+  position: fixed;
+  z-index: 100000;
+  div.popup-box{
+    width: 560/@q;
+    height: 680/@q;
+    position:absolute;
+    left:50%;
+    top:50%;
+    -webkit-transform:translate(-50%,-50%);
+    -moz-transform:translate(-50%,-50%);
+    -ms-transform:translate(-50%,-50%);
+    -o-transform:translate(-50%,-50%);
+    transform:translate(-50%,-50%);
+    background:url(../images/guide_bg.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    .popup-box-top{
+      background: url(../images/login_no_top2.png) 0 0 no-repeat;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      width: 615/@q;
+      height: 271/@q;
+      position: absolute;
+      left:-0.4rem;
+      top:-0.85rem;
+    }
+    i.close-box{
+      width: 66/@q;
+      height: 66/@q;
+      position: absolute;
+      top:0;
+      right:0;
+      background: url(../images/close.png) 0 0 no-repeat;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+    }
+    div.red-racket{
+      width:6.3rem;
+      margin:0 auto;
+      text-align: left;
+      font-size: 26/@q;
+      color: #fff;
+      line-height: 42/@q;
+      margin-top: 345/@q;
+    }
+    a.popup-box-btn{
+      display: block;
+      background-color: #fec620;
+      height: 80/@q;
+      line-height: 80/@q;
+      width: 400/@q;
+      margin: 0 auto;
+      -webkit-border-radius: 40/@q;
+      -moz-border-radius: 40/@q;
+      border-radius: 40/@q;
+      -webkit-box-shadow: 0 3/@q 5/@q #e0592f;
+      -moz-box-shadow: 0 3/@q 5/@q #e0592f;
+      box-shadow: 0 3/@q 5/@q #e0592f;
+      text-align: center;
+      font-size: 32/@q;
+      color:#bc4c02;
+      margin-top: 70/75rem;
+    }
+  }
+}
