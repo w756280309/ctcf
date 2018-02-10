@@ -98,7 +98,7 @@ class SmsService
                      */
                     $aliSms = Yii::$container->get('alisms');
                     $sn = TxUtils::generateSn('AliSms');
-                    $signName = '温都金服';
+                    $signName = $_ENV['BW_SMS_SIGN'];
                     if ($aliSms->send($sn, $phone, $signName, $templateId, $message)) {
                         $user = new User([
                             'id' => 0,
