@@ -272,7 +272,7 @@ trait ContractTrait
                     }
                 }
 
-                $creditTemplate = $this->renderFile('@common/views/credit_contract_template.php', [
+                $creditTemplate = $this->renderFile('@common/views/credit_contract_template_wdjf.php', [
                     'contractNum' => $queue->getNum(),
                     'sellerName' => $user->real_name,
                     'sellerIdCard' => $user->idcard,
@@ -311,7 +311,7 @@ trait ContractTrait
     //获取未被加载的转让协议模板
     private function getCreditContractTemplate()
     {
-        $content = $this->renderFile('@common/views/credit_contract_template.php', [
+        $content = $this->renderFile('@common/views/credit_contract_template_'.$_ENV['BW_APP'].'.php', [
             'contractNum' => '',
             'sellerName' => '',
             'sellerIdCard' => '',
