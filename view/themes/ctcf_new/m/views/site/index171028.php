@@ -65,7 +65,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		font-weight: 800;
 	}
 </style>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=180209">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=1801111">
 <div>
     <img class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" width="100%" alt="">
 </div>
@@ -222,9 +222,9 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		<p class="phone-box-title">服务中心</p>
 		<div class="phone-box-links clearfix">
 			<p id="btn_udesk_im" class="lf"><img
-					src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/pic_phone_one.png" alt=""></p>
+					src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/go_refer.png" alt=""></p>
 			<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>" class="rg"><img
-					src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/pic_phone_three.png" alt=""></a>
+					src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/go_phone.png" alt=""></a>
 		</div>
 		<p class="phone-box-address">地址：武汉市武昌区东湖路181号楚天文化创意产业园<br/>8号楼1层</p>
 	</div>

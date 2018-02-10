@@ -7,7 +7,7 @@ $this->title = '注册';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/loginsign.css?v=20170906">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/signup/loginsign.css?v=20180210113">
 <script  src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/luodiye/js/luodiye.js?v=20180118"></script>
 
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <button id="signup-btn" class="btn-common btn-normal" type="submit" value="注册">注册</button>
         </div>
         <div class="col-xs-3"></div>
-        <div class="col-xs-12" style="text-align: center;"><p>已有账号 <a href="/site/login" style="color: #f44336;">登录</a></p></div>
+        <div class="col-xs-12" style="text-align: center;"><p>已有账号 <a href="/site/login" style="color: #ff6707;">登录</a></p></div>
 
 </div>
 
