@@ -272,7 +272,7 @@ trait ContractTrait
                     }
                 }
 
-                $creditTemplate = $this->renderFile('@common/views/credit_contract_template_wdjf.php', [
+                $creditTemplate = $this->renderFile('@common/views/credit_contract_template_'.$_ENV['BW_APP'].'.php', [
                     'contractNum' => $queue->getNum(),
                     'sellerName' => $user->real_name,
                     'sellerIdCard' => $user->idcard,
