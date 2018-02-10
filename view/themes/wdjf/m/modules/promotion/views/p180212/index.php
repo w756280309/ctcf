@@ -15,7 +15,7 @@ $this->title = '全民年货节';
     <img class="banner" src="<?= FE_BASE_URI ?>wap/campaigns/active20180206/images/banner_05.png" alt="">
     <img class="banner" src="<?= FE_BASE_URI ?>wap/campaigns/active20180206/images/banner_06.png" alt="">
     <img class="banner" src="<?= FE_BASE_URI ?>wap/campaigns/active20180206/images/banner_07.png" alt="">
-    <img class="banner" src="<?= FE_BASE_URI ?>wap/campaigns/active20180206/images/banner_08.png" alt="">
+    <img class="banner" src="<?= FE_BASE_URI ?>wap/campaigns/active20180206/images/banner_08_new.png" alt="">
     <div class="presents">
         <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https%3A%2F%2Fgoods.m.duiba.com.cn%2Fmobile%2FappItemDetail%3FappItemId%3D1790825"></a>
         <a href="/site/app-download?redirect=/mall/portal/guest?dbredirect=https%3A%2F%2Fgoods.m.duiba.com.cn%2Fmobile%2FappItemDetail%3FappItemId%3D1790741"></a>
