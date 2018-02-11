@@ -34,7 +34,7 @@
         </div>
         <div class="bindCard-single" style="margin-top: 10px;">
             <span class="single-left" style="line-height: 34px;">可提现金额</span>
-            <span class="single-right" style="line-height: 34px;font-size: 20px;font-weight: bold;color: #f44336;"><?= StringUtils::amountFormat2($user_acount->available_balance) ?></span>元
+            <span class="single-right" style="line-height: 34px;font-size: 20px;font-weight: bold;color: #f44336;"><?= $user_acount->available_balance ?></span>元
         </div>
         <form method="post" class="cmxform" id="form" action="/user/draw/tixian" data-to="1">
             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
