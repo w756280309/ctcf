@@ -1,5 +1,5 @@
 <?php
-$this->title="楚天财富网注册协议";
+$this->title="楚天财富注册协议";
 ?>
 
 <style>

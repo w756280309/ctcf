@@ -70,14 +70,14 @@
         width: 30px;
         height: 30px;
         margin: 0 auto;
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_home.png) no-repeat 0px 0px;
-        background-size: 100% 100%;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_home.png) no-repeat center center;
+        background-size: 80% 80%;
         font-size: 18px
     }
 
     .special-bar .shouye {
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_home2.png) no-repeat 0px 0px;
-        background-size: 100% 100%;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_home2.png) no-repeat center center;
+        background-size: 80% 80%;
     }
 
     .footer-title .licai {
@@ -85,14 +85,14 @@
         width: 30px;
         height: 30px;
         margin: 0 auto;
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_list.png) no-repeat 0px 0px;
-        background-size: 100% 100%;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_list.png) no-repeat center center;
+        background-size: 80% 80%;
         font-size: 18px
     }
 
     .special-bar .licai {
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_list2.png) no-repeat 0px 0px;
-        background-size:100% 100%;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_list2.png) no-repeat center center;
+        background-size: 80% 80%;
     }
 
     .footer-title .zhanghu {
@@ -100,14 +100,14 @@
         width: 30px;
         height: 30px;
         margin: 0 auto;
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_account.png) no-repeat 0px 0px;
-        background-size: 100% 100%;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_account.png) no-repeat center center;
+        background-size: 80% 80%;
         font-size: 18px
     }
 
     .special-bar .zhanghu {
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_account2.png) no-repeat 0px 0px;
-        background-size: 100% 100%;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_account2.png) no-repeat center center;
+        background-size: 80% 80%;
     }
 
     .footer-title span img {

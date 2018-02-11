@@ -2,7 +2,7 @@
 $this->title = '邀请好友';
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=20180206', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css?v=20161208', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/invite/invite.css?v=2018121011', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
 use common\models\adv\Share;
@@ -31,8 +31,7 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
 <div style="clear: both;"></div>
 <div class="row banner-box">
     <div class="col-xs-12">
-        <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner6.png" alt="">
-        <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner5.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/invite/invite_banner.png" style="width:100%" alt="">
     </div>
 </div>
 <!--invite-box-->
