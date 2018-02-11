@@ -8,7 +8,7 @@ $backUrl = 'success' === $ret ? '/user/user' : '/user/bank';
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/tie-card/css/operate.css?v=20170906">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/tie-card/operate.css?v=20170906">
 <script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/pop.js?v=2"></script>
 

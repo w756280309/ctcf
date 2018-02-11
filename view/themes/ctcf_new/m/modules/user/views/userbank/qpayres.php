@@ -2,7 +2,7 @@
 $this->title = ('success' === $ret) ? "充值成功" : "充值失败";
 $this->backUrl = false;
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/setting.css?v=1.1">
 
 <div class="row" id='bind-box'>
     <div class="col-xs-12">

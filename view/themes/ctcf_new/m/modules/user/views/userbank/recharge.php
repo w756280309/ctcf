@@ -12,7 +12,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
 }
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css?v=20171208"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/chongzhi.css?v=20171213"/>
 <script src="<?= ASSETS_BASE_URI ?>js/layer.js?v=1"></script>
 <!--银行卡-->
 <div class="row bank-card">
@@ -22,7 +22,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
             <?= $user_bank->bank_name ?>
             <span style="font-size: 12px;">(限额<?= StringUtils::amountFormat1('{amount}{unit}', $bank['singleLimit']) ?>/笔，<?= StringUtils::amountFormat1('{amount}{unit}', $bank['dailyLimit']) ?>/日)</span>
         </div>
-        <div class="bank-content2">
+        <div class="bank-content2" style="color: #aab2bd;">
             尾号<?= $user_bank->card_number?substr($user_bank->card_number, -4):"" ?> 储蓄卡
             </br>银行预留手机号 <?= substr_replace(Yii::$app->user->identity->mobile,'****',3,-4); ?>
         </div>
@@ -60,7 +60,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
         <div class="note">
             <ul>
                 <li class="li-title">温馨提示</li>
-                <li style="color: #c9944e">手机充值不能超过<?= StringUtils::amountFormat1('{amount}{unit}', $bank['dailyLimit']) ?>每日限额，可以用电脑登录网站（www.wenjf.com）进行大额充值。<a href="/user/userbank/refer" style="color: #7cbaf3;">[查看详情]</a></li>
+                <li style="color: #ff6707">手机充值不能超过<?= StringUtils::amountFormat1('{amount}{unit}', $bank['dailyLimit']) ?>每日限额，可以用电脑登录网站（www.wenjf.com）进行大额充值。<a href="/user/userbank/refer" style="color: #419bf9;">[查看详情]</a></li>
                 <li>为保障安全，连续3次充值失败，24小时内将无法通过手机充值。</li>
                 <li>客服电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?>。</li>
             </ul>

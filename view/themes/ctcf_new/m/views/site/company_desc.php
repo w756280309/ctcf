@@ -16,7 +16,7 @@ AnalyticsHelper::registerTo($this);
             <meta charset="UTF-8">
             <meta name="format-detection" content="telephone=no" />
             <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0,user-scalable=no"/>
-            <title>温都金服 - 温都报业传媒旗下理财平台</title>
+            <title>楚天财富 - 武汉报业传媒旗下理财平台</title>
             <?= Html::csrfMetaTags() ?>
             <?php $this->head() ?>
             <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/animate/animate.min.css?v=20161124">
@@ -26,6 +26,24 @@ AnalyticsHelper::registerTo($this);
             <script src="<?= FE_BASE_URI ?>libs/pageslider/zepto_modify.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/pageslider/PageSlider.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>res/js/js.cookie.js"></script>
+            <style>
+
+
+                .page-loading .page-loading-title1{
+                    width: 100%;
+                    height: 1.02rem;
+                    margin: 0 auto;
+                    background: url(<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/first-title.png) no-repeat left top;
+                    background-size: 100% 100%;
+                }
+                /*.page-loading .page-loading-wendu {*/
+                /*    width: 6.74666666rem;*/
+                /*    height: 9.746666666rem;*/
+                /*    margin: 0 auto 0;*/
+                /*    background: url(*/<?//= ASSETS_BASE_URI ?>/*ctcf/images/h5-180211/six-fg-new.png) no-repeat left top;*/
+                /*    background-size: 100% 100%;*/
+                /*}*/
+            </style>
             <script>
                 $(document).ready(function() {
                     FastClick.attach( document.body );
@@ -92,8 +110,8 @@ AnalyticsHelper::registerTo($this);
         <?php $this->beginBody() ?>
         <div class="page page-loading" data-lock-next="true" data-lock-prev="true">
                 <div class="top-empt-loading"></div>
-                <div class="page-loading-title"></div>
-                <div class="page-loading-wendu"></div>
+                <div class="page-loading-title1"></div>
+<!--                <div class="page-loading-wendu"></div>-->
                 <div class="page-loading-jindubg">
                         <div class="page-redloading-wrap">
                                 <div class="page-redloading"></div>
@@ -104,11 +122,14 @@ AnalyticsHelper::registerTo($this);
         <div class="page-wrap">
                 <div class="page page1" data-lock-prev="true"  style="-webkit-overflow-scrolling: touch;">
                         <div class="page__inner" style="position: relative; height: 100%">
-                                <div class="star"><img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/topstar.png"><img class="star-dot" src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/star-2.png"></div>
-                                <div class="title page1-title"><img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/first-title.png" ></div>
-                                <p class="title-h2"><span >温都金服，隶属温州报业传媒旗下的理财平台</span></p>
+                                <div class="star">
+                                    <img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/topstar.png">
+                                    <img class="star-dot" src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/star-2.png">
+                                </div>
+                                <div class="title page1-title"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/first-title.png" alt=""></div>
+                                <p class="title-h2"><span >隶属湖北日报新媒体集团旗下理财平台</span></p>
                                 <div class="hexagon">
-                                        <img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/six-fg-new.png" alt="六边形">
+                                        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/six-fg-new.png" alt="六边形">
                                         <span class="hexagon-txt" style="top: -23px;left: 26.6%;width: 51%;">平台甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金稳妥，安享稳健收益。</span>
                                 </div>
                                 <div class="arrow"></div>
@@ -137,18 +158,20 @@ AnalyticsHelper::registerTo($this);
                         <div class="page3-title"></div>
                         <div class="padding">
                                 <ul>
-                                        <li><img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img1.png" alt=""></li>
-                                        <li><img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img3.png" alt=""></li>
-                                        <li><img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img5.png" alt=""></li>
-                                        <li><img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img4.png" alt=""></li>
-                                        <li><img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img6.png" alt=""></li>
-                                        <li><img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img2.png" alt=""></li>
+                                        <li><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/ctcf-img1.png" alt=""></li>
+                                        <li><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/ctcf-img2.png" alt=""></li>
+                                        <li><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/ctcf-img3.png" alt=""></li>
+                                        <li><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/ctcf-img4.png" alt=""></li>
+                                        <li><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/ctcf-img5.png" alt=""></li>
+                                        <li><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/ctcf-img6.png" alt=""></li>
+                                        <li><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/ctcf-img7.png" alt=""></li>
+                                        <li><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/ctcf-img8.png" alt=""></li>
                                 </ul>
-                                <div class="third">
-                                        <img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img7.png" alt="">
-                                        <img class="center-img" src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf-img8-new.png" alt="">
-                                        <img src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/wdjf_img9_new.png" alt="">
-                                </div>
+<!--                                <div class="third">-->
+<!--                                        <img src="--><?//= FE_BASE_URI ?><!--wap/campaigns/h5-161114/img/wdjf-img7.png" alt="">-->
+<!--                                        <img class="center-img" src="--><?//= FE_BASE_URI ?><!--wap/campaigns/h5-161114/img/wdjf-img8-new.png" alt="">-->
+<!--                                        <img src="--><?//= FE_BASE_URI ?><!--wap/campaigns/h5-161114/img/wdjf_img9_new.png" alt="">-->
+<!--                                </div>-->
                         </div>
                         <div class="arrow"></div>
                 </div>
@@ -171,17 +194,17 @@ AnalyticsHelper::registerTo($this);
                 <div class="page page6" >
                         <div class="page6-title page-title title-top"></div>
                         <h3 class="h3 h3-top">公司地址 :</h3>
-                        <p class="h3-txt h3-bottom">温州市鹿城区飞霞南路657号保丰大楼四层</p>
+                        <p class="h3-txt h3-bottom">武汉市武昌区东湖路181号楚天文化创意产业园 8号楼1层</p>
                         <h3 class="h3 h3-top">工作时间 :</h3>
-                        <p class="h3-txt h3-bottom">8:30-17:30（周一至周五）</p>
+                        <p class="h3-txt h3-bottom">9:00-17:30（周一至周五）</p>
                         <h3 class="h3 h3-top">客服电话 : </h3>
-                        <p class="h3-txt colorC h3-bottom"><?= Yii::$app->params['platform_info.contact_tel'] ?>/0577-55599998（8:30-20:00）</p>
+                        <p class="h3-txt colorC h3-bottom"><?= Yii::$app->params['platform_info.contact_tel'] ?>（9:00-22:00）</p>
                         <a href="/deal/deal/index" class="invited">立即理财</a>
                         <div class="code-txt">
                             <span class="left-code-txt"><i class="aline"></i>关注微信公众号<i class="aline"></i></span>
                         </div>
                         <div class="qrcode">
-                            <img width="40%"  src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/weixin1.png" alt="qrcode">
+                            <img width="40%"  src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/weixin1.png" alt="qrcode">
                         </div>
                 </div>
         </div>
