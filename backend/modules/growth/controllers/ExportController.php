@@ -398,6 +398,7 @@ u.safeMobile 联系方式,
 p.title 产品名称,
 p.expires 产品期限,
 p.refund_method 单位,
+p.finish_date 到期日,
 pl.benxi 到期金额
 from online_repayment_plan pl
 inner join user u on pl.uid = u.id 
@@ -424,8 +425,8 @@ and date(from_unixtime(p.finish_date)) <= :endDate',
                         'isRequired' => true,//是否必要参数, 默认都是必要参数
                     ],
                 ],
-                'itemLabels' => ['姓名', '联系方式', '产品名称', '产品期限', '单位', '到期金额'],
-                'itemType' => ['string', 'string', 'string', 'string', 'string', 'string'],
+                'itemLabels' => ['姓名', '联系方式', '产品名称', '产品期限', '单位', '到期日', '到期金额'],
+                'itemType' => ['string', 'string', 'string', 'string', 'string', 'date', 'string'],
             ],
         ];
         parent::init();
