@@ -63,6 +63,7 @@ class SqlExportJob extends Job
             } else if ('export_nbxdjb_finish' === $paramKey) {
                 $item['联系方式'] = SecurityUtils::decrypt($item['联系方式']);
                 $item['单位'] = $item['单位'] > 1 ? '月' : '天';
+                $item['到期日'] = date('Y-m-d', $item['到期日']);
             }
 
             $item = array_values($item);
