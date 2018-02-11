@@ -115,7 +115,7 @@
     }
 
     .nav-bar {
-        font-size: 14px;
+        font-size: 12px;
         line-height: 1.5
     }
 

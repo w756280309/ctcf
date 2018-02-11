@@ -58,7 +58,7 @@ body {
   box-sizing: border-box;
 }
 .flex-content .newbid-box .newbid-insideBox .newbid-insideBox-title {
-  background: url(../images/new_person_bg.png) 0 0.1rem no-repeat;
+  background: url(../../images/new-homepage/new_person_bg.png) 0 0.1rem no-repeat;
   -webkit-background-size: 100%;
   background-size: 100%;
   position: absolute;
@@ -386,7 +386,7 @@ ul.bids-box-bidlist li a .bid-main-msg .bid-about-data p{
   height: 3.2rem;
   padding-top: 0.45333333rem;
   text-align: center;
-  background: url("../images/bg_databox.png") no-repeat;
+  background: url("../../images/new-homepage/bg_databox.png") no-repeat;
   background-size: 100% 100%;
   box-sizing: border-box;
 }
