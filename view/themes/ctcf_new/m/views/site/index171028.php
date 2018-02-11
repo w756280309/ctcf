@@ -185,7 +185,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
                 </a>
             </li>
         </ul>
-        <a href="#" class="bids-box-more">查看更多</a>
+        <a href="/deal/deal/index" class="bids-box-more">查看更多</a>
 	</div>
     <?php if (!empty($news)) { ?>
 <!--        平台动态-->
@@ -233,7 +233,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
             <a href="/site/h5?wx_share_key=h5" class="swiper-slide">
                 <img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/with_us.png" alt="">
             </a>
-            <a href="/news/detail?type=info&id=383" class="swiper-slide">
+            <a href="/safeguard/index" class="swiper-slide">
                 <img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/with_safegread.png" alt="" >
             </a>
         </div>

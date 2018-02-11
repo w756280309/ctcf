@@ -3,8 +3,6 @@
 namespace app\controllers;
 
 use common\controllers\HelpersTrait;
-use common\models\news\News;
-use Yii;
 use yii\web\Controller;
 
 /**
@@ -12,23 +10,21 @@ use yii\web\Controller;
  */
 class SafeguardController extends Controller
 {
+    use HelpersTrait;
     /**
      * 安全保障列表页.
      */
     public function actionIndex()
     {
-
-
         return $this->render('index');
     }
 
     /**
      * 安全保障数据安全页.
      */
-    public function actionSafeRegard()
+    public function actionDataRegard()
     {
-
-        return $this->render('safe-regard');
+        return $this->render('data-regard');
     }
 
     /**
@@ -36,7 +32,6 @@ class SafeguardController extends Controller
      */
     public function actionInformationRegard()
     {
-
         return $this->render('information-regard');
     }
 
@@ -45,7 +40,6 @@ class SafeguardController extends Controller
      */
     public function actionMajorRegard()
     {
-
         return $this->render('major-regard');
     }
 
@@ -54,7 +48,6 @@ class SafeguardController extends Controller
      */
     public function actionRiskRegard()
     {
-
         return $this->render('risk-regard');
     }
 }
