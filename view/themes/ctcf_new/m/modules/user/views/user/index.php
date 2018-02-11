@@ -10,7 +10,7 @@ UdeskWebIMHelper::init($this);
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
 <!--<link rel="stylesheet" href="--><?//= FE_BASE_URI ?><!--wap/ucenter/css/homePage.css?v=20170629">-->
 <!--<link rel="stylesheet" href="--><?//= ASSETS_BASE_URI ?><!--ctcf/common/ucenter/css/homePage.css?v=20180210">-->
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/ucenter/homePage.css?v=20180210212">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/ucenter/homePage.css?v=2018021021211">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/user/guide.min.css">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>

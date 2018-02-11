@@ -67,46 +67,46 @@
 
     .footer-title .shouye {
         display: block;
-        width: 30px;
+        width: 35px;
         height: 30px;
         margin: 0 auto;
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_home.png) no-repeat center center;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/shouye/icon_index.png) no-repeat center center;
         background-size: 80% 80%;
         font-size: 18px
     }
 
     .special-bar .shouye {
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_home2.png) no-repeat center center;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/shouye/icon_index2.png) no-repeat center center;
         background-size: 80% 80%;
     }
 
     .footer-title .licai {
         display: block;
-        width: 30px;
+        width: 35px;
         height: 30px;
         margin: 0 auto;
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_list.png) no-repeat center center;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/shouye/icon_invest.png) no-repeat center center;
         background-size: 80% 80%;
         font-size: 18px
     }
 
     .special-bar .licai {
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_list2.png) no-repeat center center;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/shouye/icon_invest2.png) no-repeat center center;
         background-size: 80% 80%;
     }
 
     .footer-title .zhanghu {
         display: block;
-        width: 30px;
+        width: 35px;
         height: 30px;
         margin: 0 auto;
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_account.png) no-repeat center center;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/shouye/icon_footer_account.png) no-repeat center center;
         background-size: 80% 80%;
         font-size: 18px
     }
 
     .special-bar .zhanghu {
-        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/icon_footer_account2.png) no-repeat center center;
+        background: url(<?= ASSETS_BASE_URI ?>ctcf/images/shouye/icon_footer_account2.png) no-repeat center center;
         background-size: 80% 80%;
     }
 
@@ -137,9 +137,9 @@
     <div class="footer-title">
         <div class="footer-inner1">
             <?php if($uniqueActionId === 'deal/deal/index') {?>
-                <a href="/deal/deal/index" class="nav-bar special-bar"><span class="licai"></span>投资</a>
+                <a href="/deal/deal/index" class="nav-bar special-bar"><span class="licai"></span>理财</a>
             <?php } else {?>
-                <a href="/deal/deal/index" class="nav-bar"><span class="licai"></span>投资</a>
+                <a href="/deal/deal/index" class="nav-bar"><span class="licai"></span>理财</a>
             <?php }?>
         </div>
     </div>

@@ -20,7 +20,7 @@ AnalyticsHelper::registerTo($this);
             <?= Html::csrfMetaTags() ?>
             <?php $this->head() ?>
             <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/animate/animate.min.css?v=20161124">
-            <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/css/index.css?v=20171031">
+            <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/h5-180211/index.css?v=2018021211">
             <script src="<?= FE_BASE_URI ?>libs/lib.flexible2.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/fastclick.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/pageslider/zepto_modify.js?v=20161124"></script>
@@ -31,7 +31,7 @@ AnalyticsHelper::registerTo($this);
 
                 .page-loading .page-loading-title1{
                     width: 100%;
-                    height: 1.02rem;
+                    height: 0.93rem;
                     margin: 0 auto;
                     background: url(<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/first-title.png) no-repeat left top;
                     background-size: 100% 100%;
@@ -111,7 +111,7 @@ AnalyticsHelper::registerTo($this);
         <div class="page page-loading" data-lock-next="true" data-lock-prev="true">
                 <div class="top-empt-loading"></div>
                 <div class="page-loading-title1"></div>
-<!--                <div class="page-loading-wendu"></div>-->
+                <div class="page-loading-wendu">隶属湖北日报新媒的体集团旗下的理财平台</div>
                 <div class="page-loading-jindubg">
                         <div class="page-redloading-wrap">
                                 <div class="page-redloading"></div>
@@ -127,7 +127,7 @@ AnalyticsHelper::registerTo($this);
                                     <img class="star-dot" src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/star-2.png">
                                 </div>
                                 <div class="title page1-title"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/first-title.png" alt=""></div>
-                                <p class="title-h2"><span >隶属湖北日报新媒体集团旗下理财平台</span></p>
+                                <p class="title-h2"><span >隶属湖北日报新媒体集团旗下的理财平台</span></p>
                                 <div class="hexagon">
                                         <img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/six-fg-new.png" alt="六边形">
                                         <span class="hexagon-txt" style="top: -23px;left: 26.6%;width: 51%;">平台甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金稳妥，安享稳健收益。</span>

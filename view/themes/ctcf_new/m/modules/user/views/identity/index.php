@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use common\view\UdeskWebIMHelper;
+use common\models\user\User;
 
 $this->title = '实名认证';
 $this->showViewport = false;
@@ -40,14 +41,25 @@ $this->showViewport = false;
 
     <form method="post" class="cmxform" id="form" action="/user/identity/verify" data-to="1">
         <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
-        <div class="name clearfix">
-            <label for="name" class="f15 lf">真实姓名</label>
-            <input type="text" class="lf f14" id="real_name" name='User[real_name]' placeholder="请输入本人姓名">
-        </div>
-        <div class="creidtCard clearfix">
-            <label for="creidtCard" class="f15 lf">身份证号</label>
-            <input type="text" class="lf f14" id="idcard" name='User[idcard]' placeholder="请输入本人身份证号码">
-        </div>
+        <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->idcard_status == User::IDCARD_STATUS_PASS) { ?>
+            <div class="name clearfix">
+                <label for="name" class="f15 lf">真实姓名</label>
+                <input type="text" class="lf f14" id="real_name" name='User[real_name]' value="<?php Yii::$app->user->identity->real_name ?>" placeholder="请输入本人姓名">
+            </div>
+            <div class="creidtCard clearfix">
+                <label for="creidtCard" class="f15 lf">身份证号</label>
+                <input type="text" class="lf f14" id="idcard" name='User[idcard]' value="<?php Yii::$app->user->identity->safeIdCard ?>" placeholder="请输入本人身份证号码">
+            </div>
+        <?php } else { ?>
+            <div class="name clearfix">
+                <label for="name" class="f15 lf">真实姓名</label>
+                <input type="text" class="lf f14" id="real_name" name='User[real_name]' placeholder="请输入本人姓名">
+            </div>
+            <div class="creidtCard clearfix">
+                <label for="creidtCard" class="f15 lf">身份证号</label>
+                <input type="text" class="lf f14" id="idcard" name='User[idcard]' placeholder="请输入本人身份证号码">
+            </div>
+        <?php } ?>
     </form>
 
     <a class="instant f18" id="idcardbtn" href="javascript:void(0)">立 即 认 证</a>

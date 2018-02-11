@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-xs-12 form-bottom">
             <input id="xieyi" class="xieyi lf" type="checkbox" checked="checked"/>
-            <div class="div-xieyi"> 我已经阅读并同意<a href="/site/xieyi">《网站服务协议》</a></div>
+            <div class="div-xieyi" style="color: #419bf9;"> 我已经阅读并同意<a href="/site/xieyi"  style="color: #419bf9;">《网站服务协议》</a></div>
         </div>
         <?php $form->end(); ?>
         <div class="col-xs-3"></div>
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <button id="signup-btn" class="btn-common btn-normal" type="submit" value="注册">注册</button>
         </div>
         <div class="col-xs-3"></div>
-        <div class="col-xs-12" style="text-align: center;"><p>已有账号 <a href="/site/login" style="color: #ff6707;">登录</a></p></div>
+        <div class="col-xs-12" style="text-align: center;"><p>已有账号 <a href="/site/login" style="color: #419bf9;">登录</a></p></div>
 
 </div>
 

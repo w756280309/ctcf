@@ -127,7 +127,7 @@ $this->registerMetaTag([
         </div>
         <div class="col-xs-4 footer-title">
             <div class="footer-inner1">
-                <a href="/deal/deal/index"><span class="licai"></span>理财</a>
+                <a href="/deal/deal/index"><span class="licai"></span>touzi</a>
             </div>
         </div>
         <div class="col-xs-4 footer-title">

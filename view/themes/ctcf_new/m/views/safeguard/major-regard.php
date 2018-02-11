@@ -3,7 +3,6 @@ use wap\assets\WapAsset;
 $this->title = '专业合规';
 
 ?>
-<link href="<?= ASSETS_BASE_URI ?>ctcf/css/common/base.css" rel="stylesheet">
 <!-- 主体 -->
 <div class="padding-contain">
     <div class="major-title-msg">

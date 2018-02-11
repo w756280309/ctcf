@@ -1,12 +1,12 @@
 <?php
 
 $this->hideHeaderNav = true;
-$this->title = '温都金服注册成功页面';
+$this->title = '楚天财富注册成功页面';
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/register/css/registerSucc.css?v=20170906">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/register/registerSucc.css?v=20170907">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 
@@ -19,8 +19,8 @@ $this->title = '温都金服注册成功页面';
         <p>恭喜您注册成功！</p>
     </div>
     <ul class="registerlist f15">
-        <li>• 888元红包已经发放至您的账户中心</li>
-        <li>• 开通资金托管账户后即可使用</li>
+        <li>• <i style="color: #ff6707;font-style: normal;">888元</i>红包已经发放至您的账户中心</li>
+        <li>• <i style="color: #ff532d;font-style: normal;">开通资金托管</i>账户后即可使用</li>
     </ul>
     <?php if(!empty($affArr)) {?>
     <div class="registerselect f15">

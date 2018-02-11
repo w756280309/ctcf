@@ -108,16 +108,16 @@
     <!-- 主体 -->
     <!-- banner  -->
     <div class="ico">
-        <img src="<?= ASSETS_BASE_URI ?>images/system/ico.png" alt="国资平台，值得信赖" >
-    </div>楚天
+        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/advantages/ico.png" alt="国资平台，值得信赖" >
+    </div>
     <!-- 主体 -->
     <div class="about-content row">
         <div class="line">
-            <div class="head-line ico"><span>—————</span>楚天金服五大优势<span>—————</span></div>
+            <div class="head-line ico"><span>—————</span>楚天财富五大优势<span>—————</span></div>
         </div>
 
         <p class="h-first"><a href="javascript:;" class="number">1</a><span>国资</span>背景</p>
-        <p class="suojin">隶属于湖北日报传媒集团，国资平台，可信赖；</p>
+        <p class="suojin">隶属湖北日报新媒体集团旗下的理财平台，国资平台，可信赖；</p>
         <p class="h-num"><a href="javascript:;" class="number">2</a><span>股东</span>强势</p>
         <p class="suojin">湖北日报传媒有限公司，</p>
         <p class="suojin">系湖北荆楚网络科技股份有限公司、湖北新海天投资有限公司投资</p>

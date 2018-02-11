@@ -40,7 +40,7 @@ html, body {
     width: .66rem;
     height: .36rem;
     margin-left: -.33rem;
-    background: url(../img/arrow.png?__inline) no-repeat;
+    background: url(../../images/h5-180211/arrow.png?__inline) no-repeat;
     background-size: 100% 100%;
     opacity: 0;
     z-index: 1122299992
@@ -216,7 +216,7 @@ html, body {
 }
 
 .page-loading {
-    background: url(../img/page-loading-bg.png?__inline) no-repeat left top;
+    background: url(../../images/h5-180211/page-loading-bg.png?__inline) no-repeat left top;
     background-size: 100% 100%;
     width: 100%;
     height: 100%;
@@ -234,23 +234,26 @@ html, body {
     width: 3rem;
     height: 1.02rem;
     margin: 0 auto;
-    background: url(../img/page-loading-title.png?__inline) no-repeat left top;
+    background: url(../../images/h5-180211/page-loading-title.png?__inline) no-repeat left top;
     background-size: 100% 100%
 }
 
 .page-loading .page-loading-wendu {
     width: 5.95rem;
-    height: .51rem;
+    line-height: .51rem;
     margin: .78rem auto 0;
-    background: url(../img/page-loading-wendu.png?__inline) no-repeat left top;
-    background-size: 100% 100%
+    text-align: center;
+    font-size: 0.3rem;
+    color:#ccc;
+    /*background: url(../../images/h5-180211/page-loading-wendu.png?__inline) no-repeat left top;*/
+    /*background-size: 100% 100%*/
 }
 
 .page-loading .page-loading-jindubg {
     width: 5.92rem;
     height: .31rem;
     margin: 2.65rem auto 0;
-    background: url(../img/page-loading-jindubg.png?__inline) no-repeat left top;
+    background: url(../../images/h5-180211/page-loading-jindubg.png?__inline) no-repeat left top;
     background-size: 100% 100%;
     position: relative
 }
@@ -325,7 +328,7 @@ html, body {
 }
 
 .page4 {
-    background: url(../img/page4-bg.png?__inline) no-repeat left top;
+    background: url(../../images/h5-180211/h5_part_bg.jpg) no-repeat left top;
     background-size: 100% 100%
 }
 
@@ -337,7 +340,7 @@ html, body {
 }
 
 .page4 .page4-title {
-    background: url(../img/page4-title.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page4-title.png?__inline) no-repeat left bottom;
     background-size: 100% 100%
 }
 
@@ -353,32 +356,31 @@ html, body {
 }
 
 .page4 .page4-content li:nth-child(1) {
-    background: url(../img/page4-content1.png?__inline) no-repeat left top;
-    width: 4.8rem;
+    background: url(../../images/h5-180211/advantage1.png) no-repeat left top;
+    width: 5.8rem;
     background-size: 100% 100%;
     position: relative
 }
 
 .page4 .page4-content li:nth-child(2) {
-    background: url(../img/page4-content2-new.png?__inline) no-repeat left top;
-    width: 6.23rem;
+    background: url(../../images/h5-180211/advantage2.png) no-repeat left top;
+    width: 3.63rem;
     background-size: 100% 100%
 }
 
 .page4 .page4-content li:nth-child(3) {
-    background: url(../img/page4-content3-new.png?__inline) no-repeat left top;
-    width: 5.4rem;
+    background: url(../../images/h5-180211/advantage3.png) no-repeat left top;
     background-size: 100% 100%
 }
 
 .page4 .page4-content li:nth-child(4) {
-    background: url(../img/page4-content4.png?__inline) no-repeat left top;
+    background: url(../../images/h5-180211/page4-content4.png?__inline) no-repeat left top;
     width: 5.38rem;
     background-size: 100% 100%
 }
 
 .page4 .page4-content li:nth-child(5) {
-    background: url(../img/page4-content5.png?__inline) no-repeat left top;
+    background: url(../../images/h5-180211/page4-content5.png?__inline) no-repeat left top;
     width: 5.09rem;
     background-size: 100% 100%
 }
@@ -424,12 +426,12 @@ html, body {
 }
 
 .page5 {
-    background: url(../img/page5-bg.png?__inline) no-repeat left top;
+    background: url(../../images/h5-180211/h5_part_bg.jpg) no-repeat left top;
     background-size: 100% 100%
 }
 
 .page5 .page5-title {
-    background: url(../img/page5-title.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page5-title.png?__inline) no-repeat left bottom;
     background-size: 100% 100%
 }
 
@@ -437,13 +439,13 @@ html, body {
     width: 5.59rem;
     height: 5.59rem;
     margin: 0 auto;
-    background: url(../img/page5-center.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page5-center.png?__inline) no-repeat left bottom;
     background-size: 100% 100%;
     position: relative
 }
 
 .page5 .page5-content .page5-center-br {
-    background: url(../img/page5-center-br.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page5-center-br.png?__inline) no-repeat left bottom;
     background-size: 100% 100%;
     position: absolute;
     bottom: -.02rem;
@@ -458,7 +460,7 @@ html, body {
 }
 
 .page5 .page5-content .page5-center-s {
-    background: url(../img/page5-center-s.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page5-center-s.png?__inline) no-repeat left bottom;
     background-size: 100% 100%;
     position: absolute;
     top: .86rem;
@@ -475,7 +477,7 @@ html, body {
 }
 
 .page5 .page5-content .page5-center-b {
-    background: url(../img/page5-center-b.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page5-center-b.png?__inline) no-repeat left bottom;
     background-size: 100% 100%;
     position: absolute;
     bottom: .88rem;
@@ -492,7 +494,7 @@ html, body {
 }
 
 .page5 .page5-content .page5-content1 {
-    background: url(../img/page5-content1.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page5-content1.png?__inline) no-repeat left bottom;
     background-size: 100% 100%;
     width: 1.3rem;
     height: 2.545rem;
@@ -507,7 +509,7 @@ html, body {
     right: -.24rem;
     width: 2.08rem;
     height: 2.54rem;
-    background: url(../img/page5-content2.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page5-content2.png?__inline) no-repeat left bottom;
     background-size: 100% 100%
 }
 
@@ -517,7 +519,7 @@ html, body {
     left: .07rem;
     width: 1.82rem;
     height: 2.54rem;
-    background: url(../img/page5-content3.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page5-content3.png?__inline) no-repeat left bottom;
     background-size: 100% 100%
 }
 
@@ -527,7 +529,7 @@ html, body {
     right: -.38rem;
     width: 1.82rem;
     height: 2.54rem;
-    background: url(../img/page5-content4.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page5-content4.png?__inline) no-repeat left bottom;
     background-size: 100% 100%
 }
 
@@ -552,23 +554,23 @@ html, body {
 }
 
 .page6 {
-    background: url(../img/page6-bg.png?__inline) no-repeat left top;
+    background: url(../../images/h5-180211/h5_part_bg.jpg) no-repeat left top;
     background-size: 100% 100%;
     -moz-background-size: 100% 100%;
     -ms-background-size: 100% 100%;
     -o-background-size: 100% 100%;
     -webkit-background-size: 100% 100%;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/page6-bg.png', sizingMethod='scale')
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/h5-180211/page6-bg.png', sizingMethod='scale')
 }
 
 .page6 .page6-title {
-    background: url(../img/page6-title.png?__inline) no-repeat left bottom;
+    background: url(../../images/h5-180211/page6-title.png?__inline) no-repeat left bottom;
     background-size: 100% 100%;
     -moz-background-size: 100% 100%;
     -ms-background-size: 100% 100%;
     -o-background-size: 100% 100%;
     -webkit-background-size: 100% 100%;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/page6-title.png', sizingMethod='scale')
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/h5-180211/page6-title.png', sizingMethod='scale')
 }
 
 @-webkit-keyframes page-title {
@@ -1093,7 +1095,7 @@ html, body {
 .page1 {
     width: 100%;
     height: 100%;
-    background: url(../img/first-bg.png?__inline);
+    background: url(../../images/h5-180211/h5_part_bg.jpg);
     background-size: 100% 100%;
     overflow: hidden
 }
@@ -1101,7 +1103,7 @@ html, body {
 .page2 {
     width: 100%;
     height: 100%;
-    background: url(../img/page2-bg.png?__inline);
+    background: url(../../images/h5-180211/page2-bg.png?__inline);
     background-size: 100% 100%;
     overflow: hidden
 }
@@ -1111,7 +1113,7 @@ html, body {
     height: 100%;
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
-    background: url(../img/page3-bg.png?__inline);
+    background: url(../../images/h5-180211/h5_part_bg.jpg);
     background-size: 100% 100%;
     overflow: hidden
 }
@@ -1228,7 +1230,7 @@ html, body {
     text-align: center;
     width: 2.1rem;
     height: 1.08rem;
-    background: url(../img/page2-title.png?__inline) no-repeat 0 0;
+    background: url(../../images/h5-180211/page2-title.png?__inline) no-repeat 0 0;
     background-size: contain
 }
 
@@ -1278,7 +1280,7 @@ html, body {
 .page21 {
     width: 100%;
     height: 100%;
-    background: url(../img/page21-bg.png?__inline);
+    background: url(../../images/h5-180211/page21-bg.png?__inline);
     background-size: 100% 100%;
     overflow: hidden
 }
@@ -1288,7 +1290,7 @@ html, body {
     text-align: center;
     width: 2.1rem;
     height: 1.08rem;
-    background: url(../img/page21-title.png?__inline) no-repeat 0 0;
+    background: url(../../images/h5-180211/page21-title.png?__inline) no-repeat 0 0;
     background-size: contain
 }
 
@@ -1328,7 +1330,7 @@ html, body {
     text-align: center;
     width: 2.1rem;
     height: 1.08rem;
-    background: url(../img/page3-title.png?__inline) no-repeat 0 0;
+    background: url(../../images/h5-180211/page3-title.png?__inline) no-repeat 0 0;
     background-size: contain
 }
 
