@@ -51,7 +51,7 @@ use common\utils\StringUtils;
             <div class="link-en">
                 <input type="submit" class="link-charge" value="充值" id="rechargebtn" />
             </div>
-            <p class="recharge-note">* 充值所需费用由温都垫付</p>
+            <p class="recharge-note">* 充值所需费用由楚天垫付</p>
         </form>
         <!------------------已绑卡结束------------------>
         <?php } elseif ($binding) { ?>
@@ -90,7 +90,7 @@ use common\utils\StringUtils;
     <div class="charge-explain">
         <p class="charge-explain-title">温馨提示：</p>
         <ul>
-            <li>投资人充值手续费由温都金服垫付；</li>
+            <li>投资人充值手续费由楚天财富垫付；</li>
             <li>最低充值金额应大于等于1元；</li>
             <li>为保障安全，连续3次因余额不足导致充值失败，快捷充值通道将被锁定24小时，请核实后交易；</li>
             <li>如果快捷充值通道已被锁定，可先选择网银充值；</li>
