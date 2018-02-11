@@ -14,6 +14,8 @@ $this->showBottomNav = true;
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
 use common\view\UdeskWebIMHelper;
+use common\view\LoanHelper;
+use common\utils\StringUtils;
 
 UdeskWebIMHelper::init($this);
 
@@ -124,69 +126,35 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		</a>
 	</div>
 <!--    理财专区-->
+    <?php if ($loans) { ?>
 	<div class="bids-box">
         <h5 class="bids-box-title clearfix"><span class="lf">推荐理财</span></h5>
         <ul class="bids-box-bidlist clearfix">
+            <?php foreach ($loans as $val) { ?>
             <li>
-                <a href="#">
+                <a href="/deal/deal/detail?sn=<?= $val->sn ?>">
                     <div class="bid-title">
-                        <h6 class="bid-title-h6">武汉大型国资航运企业优质项目78号-3</h6>
+                        <h6 class="bid-title-h6"><?= $val->title ?></h6>
                         <span>银企合作</span>
                         <span>稳健增长</span>
                     </div>
                     <div class="bid-main-msg clearfix">
                         <div class="lf bid-about-rate">
-                            <p class="bid-rate-number">8.3<span>%</span><i>+0.5%</i></p>
+                            <p class="bid-rate-number"><?= LoanHelper::getDealRate($val) ?><span>%</span><?php if (!empty($val->jiaxi)) { ?><i>+<?= doubleval($val->jiaxi) ?>%</i><?php } ?></p>
                             <p class="bid-rate-msg">预期年化收益</p>
                         </div>
                         <div class="lf bid-about-data">
-                            <span>期限&nbsp;&nbsp;<i>321天</i></span>
-                            <p>1,000元起投</p>
+                            <span>期限&nbsp;&nbsp;<i><?php $ex = $val->getDuration() ?><?= $ex['value']?><?= $ex['unit']?></i></span>
+                            <p><?= StringUtils::amountFormat2($val->start_money) ?>元起投</p>
                         </div>
                     </div>
                 </a>
             </li>
-            <li>
-                <a href="#">
-                    <div class="bid-title">
-                        <h6 class="bid-title-h6">武汉大型国资航运企业优质项目78号武汉大型国资航运企业优质国资企业</h6>
-                        <span>银企合作</span>
-                        <span>稳健增长</span>
-                    </div>
-                    <div class="bid-main-msg clearfix">
-                        <div class="lf bid-about-rate">
-                            <p class="bid-rate-number">5.6~10.2<span>%</span><i>+0.5%</i></p>
-                            <p class="bid-rate-msg">预期年化收益</p>
-                        </div>
-                        <div class="lf bid-about-data">
-                            <span>期限&nbsp;&nbsp;<i>321天</i></span>
-                            <p>1,000元起投</p>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <div class="bid-title">
-                        <h6 class="bid-title-h6">武汉大型国资航运企业优质项目78号-3</h6>
-                        <span>银企合作</span>
-                        <span>稳健增长</span>
-                    </div>
-                    <div class="bid-main-msg clearfix">
-                        <div class="lf bid-about-rate">
-                            <p class="bid-rate-number">10.3~11.2<span>%</span><i>+0.5%</i></p>
-                            <p class="bid-rate-msg">预期年化收益</p>
-                        </div>
-                        <div class="lf bid-about-data">
-                            <span>期限&nbsp;&nbsp;<i>12个月54天</i></span>
-                            <p>1,000元起投</p>
-                        </div>
-                    </div>
-                </a>
-            </li>
+            <?php } ?>
         </ul>
         <a href="/deal/deal/index" class="bids-box-more">查看更多</a>
 	</div>
+    <?php } ?>
     <?php if (!empty($news)) { ?>
 <!--        平台动态-->
 			<div class="reading-box">
@@ -213,7 +181,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		<div class="data-box-show">
 			<p class="data-box-show-line1">平台已安全运营</p>
 			<p class="data-box-show-line2">
-				<span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-05-20'))->days ?></span>天</p>
+				<span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2018-01-20'))->days ?></span>天</p>
 			<p class="data-box-show-line3" style="width: auto;display: inline-block;padding: 0 .306rem">历史兑付率<span id="totalRefundAmount"></span></p>
 		</div>
 	</div>
