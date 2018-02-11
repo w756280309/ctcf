@@ -349,7 +349,7 @@
     left: 50%;
     top: 50%;
     width: 343px;
-    height: 150px;
+    height: 153px;
     margin-left: -172px;
     margin-top: -78px;
     background: #fff;
@@ -363,7 +363,7 @@
 .confirmBox-top {
     padding: 15px 17px;
     border-bottom: 1px solid #ccc;
-    height:45px;
+    height:75px;
     text-align: center;
 }
 .confirmBox-bottom {
@@ -374,7 +374,7 @@
 }
 .confirmBox-left {
     float: left;
-    width: 171px;
+    width: 170px;
     color: #000000;
     border-right: 1px solid #ccc;
     cursor: pointer;

@@ -98,6 +98,9 @@ return [
         'risk' => [
             'class' => 'Wcg\Xii\Risk\Module',
         ],
+        'ctcf' => [
+            'class' => 'frontend\modules\ctcf\Module',
+        ],
     ],
     'params' => $params,
     'as AjaxJsonFormat' => [

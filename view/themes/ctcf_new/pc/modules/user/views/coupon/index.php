@@ -98,7 +98,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/couponcode.js', ['depends'
                 <div class="popUp code_err"></div>
             </div>
             <div style="width: 100%">
-                <p class="refer">*兑换码一般从温都金服宣传页、合作网站等获得</p>
+                <p class="refer">*兑换码一般从楚天财富宣传页、合作网站等获得</p>
                 <p class="refer">*必须在有效期内兑换代金券，过期无法兑换</p>
             </div>
     </div>

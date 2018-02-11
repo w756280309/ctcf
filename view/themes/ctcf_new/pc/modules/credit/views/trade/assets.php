@@ -9,7 +9,7 @@ use frontend\assets\FrontAsset;
 use yii\web\JqueryAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/usercenter.css', ['depends' => FrontAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/transfering.css?v=161029', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/transfering.css?v=161031', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', ['depends' => JqueryAsset::class]);
 ?>
