@@ -3,9 +3,11 @@ namespace common\models\promo;
 
 use common\exception\NotActivePromoException;
 use common\models\mall\PointRecord;
+use common\models\offline\OfflineOrder;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use common\utils\TxUtils;
 use wap\modules\promotion\models\RankingPromo;
 
@@ -58,7 +60,28 @@ class FirstOrderPoints
                 if (is_null($firstOrder) || $firstOrder->id !== $order->id) {
                     return false;
                 }
-
+                //当前身份证号的其他账户是否有过投资
+                $otherOnorder = OnlineOrder::find()
+                    ->innerJoin('user', 'user.id = online_order.uid')
+                    ->where(['user.safeIdCard' => $user->safeIdCard])
+                    ->andWhere(['!=', 'user.id', $user->id])
+                    ->andWhere(['<=', 'online_order.order_time', $order->order_time])
+                    ->count();
+                if ($otherOnorder > 0) {
+                    return false;
+                }
+                //在这之前线下是否有投资
+                $oldOffOrder = OfflineOrder::find()
+                    ->innerJoin("offline_user", "offline_user.id = offline_order.user_id")
+                    ->where([
+                        'offline_order.isDeleted' => false,
+                        'offline_user.idCard' => SecurityUtils::decrypt($order->user->safeIdCard),
+                    ])
+                    ->andWhere(['<', 'offline_order.created_at', $order->order_time])
+                    ->count();
+                if ($oldOffOrder > 0) {
+                    return false;
+                }
                 //活动期间首次投资而且是O2O渠道注册用户
                 if ($user->isO2oRegister()) {
                     return false;

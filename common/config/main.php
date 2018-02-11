@@ -1,6 +1,11 @@
 <?php
 
 return [
+    // 以 https://asset-packagist.org/ 为源安装的前端资源包需要指定路径
+    'aliases' => [
+        '@bower' => '@vendor/bower-asset',
+        '@npm'   => '@vendor/npm-asset',
+    ],
     'timeZone' => 'Asia/Shanghai',
     'vendorPath' => dirname(dirname(__DIR__)).'/vendor',
     //'runtimePath'=>'@common/runtime',

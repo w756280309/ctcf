@@ -3,8 +3,7 @@
 $this->title = '我要理财';
 
 $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/attorn.min.css', ['depends' => 'frontend\assets\CtcfFrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/pagination.min.css', ['depends' => 'frontend\assets\CtcfFrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery.pagination.js', ['depends' => frontend\assets\CtcfFrontAsset::class, 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/pagination.css', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 
 use common\utils\StringUtils;
 use common\widgets\Pager;
@@ -117,11 +116,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                 <!--转让完成-->
             </ul>
             <?php if (!empty($notes)) { ?>
-                <div id="prjlistPage" style="">
-                    <div id="projectListPagination" class="pagination ">
-
-                    </div>
-                </div>
+                <center><?= Pager::widget(['pagination' => $pages])?></center>
             <?php } else { ?>
                 <p class="yet_show">暂无转让项目</p>
             <?php } ?>
@@ -129,44 +124,6 @@ $action = Yii::$app->controller->action->getUniqueId();
         </div>
     </div>
 </div>
-<script>
-    //初始化函数 参数num_entries为数据总量  pageSize为每一页显示的条数
-    function initPagination (num_entries) {
-        var pageIndex1 = 0;     //页面索引初始值
-        var pageSize = 5;     //每页显示条数初始化，修改显示条数，
-        $("#projectListPagination").pagination(num_entries, {
-            num_edge_entries: 1,        //两侧首尾分页条目数
-            num_display_entries: 4,    //连续分页主体部分分页条目数
-            callback: PageCallback,
-            items_per_page: pageSize,  //显示条数
-            current_page: pageIndex1,   //当前页索引
-            prev_show: false,    //是否总是显示上一页按钮
-            prev_text: '上一页',       //下一页按钮里text
-            next_text: '下一页'       //下一页按钮里text
-        });
-    }
-    //翻页调用
-    function PageCallback(pageindex1, jq){
-//        InitTable(pageindex1,0);
-    }
-    //请求数据
-    //    InitTable(1,1);
-    //    function InitTable(pageindex1, flag){
-    //        var page_Num = parseInt(pageindex1)+1;
-    //
-    //        $.ajax({
-    //            type: "get",
-    //            url: '',
-    //            data:{},
-    //            dataType: 'json',
-    //            success:function (data) {
-    //请求成功后填入数据
-    //            }
-    //        })
-    //
-    //    }
-    initPagination(100)
-</script>
 <script>
 
     $(function(){

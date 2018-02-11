@@ -34,20 +34,20 @@ class OfflinePointManager
             try {
                 $points = self::getOrderPoints($order, $type);
 
-                //更新线下账户积分
-                self::updateOfflinePoints($order, $type, $user, $points);
-
-                //更新线上积分
-                if ($user->onlineUserId) {
-                    $online_user = User::findOne($order->user->onlineUserId);
-                    if ($online_user) {
-                        self::updateOnlinePoint($online_user, $points, $order->id, $type);
-                    }
-                }
+                //更新账户积分
+                self::doUpdatePoints($order, $points, $type);
 
                 if ($type != PointRecord::TYPE_OFFLINE_POINT_ORDER) {
                     //是否首投&存在邀请人
                     $isFirst = self::isFirst($order);
+                    /**
+                     * 首投奖励
+                     * 大于等于50000，奖励3500积分
+                     * 其余奖励1400积分
+                     */
+                    if ($isFirst == 0) {
+                        self::sendFirstAward($order, PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1);
+                    }
 
                     //邀请人
                     $acount = Account::findOne($user->crmAccount_id);
@@ -62,7 +62,6 @@ class OfflinePointManager
                             $invite_type = $points > 0 ? PointRecord::TYPE_OFFLINE_INVITE_REWARD : PointRecord::TYPE_OFFLINE_INVITE_RESET;
                             self::sendPointsInviter($inviter, $order->money, $order->id, $invite_type);
                         }
-
                     }
                 }
                 $transaction->commit();
@@ -113,26 +112,12 @@ class OfflinePointManager
             $points = $order->points;
         } else {
             $points = max(1, ceil(bcdiv(bcmul($order->annualInvestment, 6, 14), 1000, 2)));
-
-            //是否存在线上账户
-            if ($order->user->onlineUserId) {
-                $online_user = User::findOne($order->user->onlineUserId);
-                if ($online_user) {
-                    $points = ceil($points * self::multiple($online_user));
-                }
-            }
-            if ($type != PointRecord::TYPE_OFFLINE_POINT_ORDER) {
-                //新用户首投赠送1400积分
-                $isFirst = self::isFirst($order);
-                if ($isFirst == 0) {
-                    $points = bcadd($points, 1400, 2);
-                }
-            }
+            //不同等级奖励
+            $points = ceil($points * self::multiple($order->user));
         }
         if (in_array($type, PointRecord::getDecrType())) {
             $points = 0 - $points;
         }
-
         return (int) $points;
     }
     /**
@@ -146,7 +131,6 @@ class OfflinePointManager
         if (in_array($type, PointRecord::getDecrType())) {
             $points = bcsub(0, $points);
         }
-
         //更新积分
         $res = \Yii::$app->db->createCommand("UPDATE `offline_user` SET `points` = `points` + :points WHERE `id` = :userId", ['points' => $points, 'userId' => $user->id])->execute();
         if (!$res) {
@@ -182,7 +166,7 @@ class OfflinePointManager
     }
 
     //更新线上用户积分
-    private function updateOnlinePoint(User $user, $points, $orderid, $type)
+    private function updateOnlinePoint(User $user, $points, $orderId, $type)
     {
         $res = \Yii::$app->db->createCommand("UPDATE `user` SET `points` = `points` + :points WHERE `id` = :userId", ['points' => $points, 'userId' => $user->id])->execute();
         $user->refresh();
@@ -191,7 +175,7 @@ class OfflinePointManager
                 'sn' => TxUtils::generateSn('OFF'),
                 'user_id' => $user->id,
                 'ref_type' => $type,
-                'ref_id' => $orderid,
+                'ref_id' => $orderId,
                 'final_points' => $user->points,
                 'remark' => PointRecord::getTypeName($type),
                 'isOffline' => false,
@@ -212,7 +196,7 @@ class OfflinePointManager
     }
 
     //根据用户等级获得相应的积分倍数
-    Public static function multiple(User $user)
+    Public static function multiple(OfflineUser $user)
     {
         switch ($user->level) {
             case 0:
@@ -249,8 +233,6 @@ class OfflinePointManager
     public static function isFirst(OfflineOrder $order)
     {
         $user = $order->user;
-        $off_count_orders = 0;
-        $on_count_orders = 0;
         //线下账户是否有过投资
         $off_count_orders = OfflineOrder::find()->where([
             'idCard' => $user->idCard,
@@ -258,26 +240,95 @@ class OfflinePointManager
             ->andWhere(['<', 'created_at', $order->created_at])
             ->count();
         //线上账户投资
-        $online_users = User::find()
-            ->select('id')
-            ->where(['safeIdCard' => SecurityUtils::encrypt($user->idCard)])
-            ->asArray()
-            ->all();
-        $arr = array_column($online_users, 'id');
-        if (!empty($arr)) {
-            $on_count_orders = OnlineOrder::find()->where(['in', 'uid', $arr])->andWhere(['status' => 1])->count();
-        }
-        return bcadd($off_count_orders, $on_count_orders);
+        $on_count_orders = OnlineOrder::find()
+            ->innerJoin('user', 'user.id = online_order.uid')
+            ->where([
+                'user.safeIdCard' => SecurityUtils::encrypt($user->idCard),
+                'online_order.status' => 1,])
+            ->andWhere(['<', 'online_order.created_at', $order->created_at])
+            ->count();
+        return bcadd($off_count_orders, $on_count_orders, 0);
 
     }
     //被邀请人前三次投资，给邀请人返现
-    public static function fanxian(OfflineUser $user, $money)
+    private function fanxian(OfflineUser $user, $money)
     {
         if ($user->onlineUserId) {
             $online_user = User::findOne($user->onlineUserId);
             if ($online_user && $online_user->annualInvestment) {
                 //返现
                 AccountService::userTransfer($online_user, bcmul($money, 10));
+            }
+        }
+    }
+
+    //首投奖励
+    private function sendFirstAward(OfflineOrder $order, $type)
+    {
+        if (self::isFirst($order) == 0) {
+            if (bcmul($order->money, 10000) >= 50000) {
+                $points = 3500;
+            } else {
+                $points = 1400;
+            }
+            self::doUpdatePoints($order, $points, $type);
+        }
+    }
+
+    //更新账户积分
+    private function doUpdatePoints($order, $points, $type)
+    {
+        $user = $order->user;
+        //更新线下
+        $res = \Yii::$app->db->createCommand(
+            "UPDATE `offline_user` SET `points` = `points` + :points WHERE `id` = :userId",
+            ['points' => $points, 'userId' => $user->id]
+        )->execute();
+        if (!$res) {
+            throw new \Exception('线下账户积分更新失败');
+        }
+        $user->refresh();
+        $record = PointRecord::initOfflineRecord($order, $type);
+        if ($points > 0) {
+            $record->incr_points = $points;
+        } else {
+            $record->decr_points = abs($points);
+        }
+        $res = $record->save();
+        if (!$res) {
+            throw new \Exception('线下账户积分流水更新失败');
+        }
+        //更新线上
+        $onlineUser = $user->online;
+        if (!is_null($onlineUser)) {
+            $res = \Yii::$app->db->createCommand(
+                "UPDATE `user` SET `points` = `points` + :points WHERE `id` = :userId",
+                ['points' => $points, 'userId' => $onlineUser->id]
+            )->execute();
+            if (!$res) {
+                throw new \Exception('线上账户积分更新失败');
+            }
+            $onlineUser->refresh();
+            $record = new PointRecord([
+                'sn' => TxUtils::generateSn('OFF'),
+                'user_id' => $onlineUser->id,
+                'ref_type' => $type,
+                'ref_id' => $order->id,
+                'final_points' => $onlineUser->points,
+                'remark' => PointRecord::getTypeName($type),
+                'recordTime' => date('Y-m-d H:i:s'),
+                'isOffline' => false,
+                'offGoodsName' => isset($order->offGoodsName) ? $order->offGoodsName : $order->loan->title,
+                'userLevel' => $onlineUser->level,
+            ]);
+            if ($points > 0) {
+                $record->incr_points = $points;
+            } else {
+                $record->decr_points = abs($points);
+            }
+            $res = $record->save();
+            if (!$res) {
+                throw new \Exception('线上账户积分流水更新失败');
             }
         }
     }

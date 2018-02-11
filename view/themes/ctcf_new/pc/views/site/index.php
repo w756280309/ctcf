@@ -165,7 +165,7 @@ JSFILE
             <li class="lf  last clear-fix">
                 <div class="show-more clear-fix">
                     <div class="lf"></div>
-                    <a class="rg fz14 header-hover" href="">更多>></a>
+                    <a class="rg fz14 header-hover" href="/licai/">更多>></a>
                 </div>
                 <div class="finance-list">
                     <table>
