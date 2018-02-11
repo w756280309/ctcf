@@ -10,7 +10,7 @@ $this->showViewport = false;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/tie-card/css/step.css?v=20170906">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/tie-card/step.css?v=20170907">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/pop.js?v=2"></script>
 

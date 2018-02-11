@@ -7,7 +7,7 @@ $this->showViewport = false;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/tie-card/css/step.css?v=20170906">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/tie-card/step.css?v=20170907">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/iscroll.js"></script>
@@ -25,9 +25,9 @@ $this->showViewport = false;
 
     <div class="stepShow">
         <ul class="clearfix stepNum">
-            <li class="lf f15 noBorder"><img class="stepok" src="<?= FE_BASE_URI ?>wap/tie-card/img/ok.png" alt=""></li>
+            <li class="lf f15 noBorder"><img class="stepok" src="<?= ASSETS_BASE_URI ?>ctcf/images/guide-realName/checked.png" alt=""></li>
             <li class="lf line"></li>
-            <li class="lf f15 noBorder"><img class="stepok" src="<?= FE_BASE_URI ?>wap/tie-card/img/ok.png" alt=""></li>
+            <li class="lf f15 noBorder"><img class="stepok" src="<?= ASSETS_BASE_URI ?>ctcf/images/guide-realName/checked.png" alt=""></li>
             <li class="lf line"></li>
             <li class="lf f15 stepNow">3</li>
         </ul>
@@ -54,7 +54,7 @@ $this->showViewport = false;
         </div>
     </form>
     <p class="f13 limitMoney">
-        <span class="lf" style="color: #ff6058">目前仅支持添加一张银行卡</span>
+        <span class="lf" style="color: #ff6707">目前仅支持添加一张银行卡</span>
         <a href="/user/userbank/bankxiane"><img src="<?= FE_BASE_URI ?>wap/tie-card/img/icon_02.png" alt=""> 限额提醒</a>
     </p>
 
