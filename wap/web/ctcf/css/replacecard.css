@@ -1,0 +1,27 @@
+.tixing span a{
+    color: #419bf9;
+    font-size: 14px;
+}
+.notice {
+    float: left;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #419bf9;
+    color: #419bf9;
+    text-align: center;
+    line-height: 14px;
+    border-radius: 50%;
+    font-size: 12px;
+    margin-top: 2px;
+}
+.replacecard-tixin {
+    padding: 0 14px;
+    margin-bottom: 30px;
+}
+.replacecard-tixin .col-xs-12 {
+    padding: 0;
+}
+.replacecard-tixin div {
+    font-size: 12px;
+    color: #ff6707;
+}

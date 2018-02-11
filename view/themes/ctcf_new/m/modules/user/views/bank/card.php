@@ -2,7 +2,7 @@
 $this->title = "我的银行卡";
 $this->backUrl = '/system/system/safecenter';
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/mycard.css?v=20170906"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/mycard.css?v=20170907"/>
 
 <div class="row bank-card" style="margin-bottom: 0!important;">
     <div class="col-xs-2 bank-img"><img src="<?= ASSETS_BASE_URI ?>images/bankicon/<?= $userBank->bank_id ?>.png"></div>

@@ -503,5 +503,5 @@ ul.bids-box-bidlist li a .bid-main-msg .bid-about-data p{
 }
 .flex-content .aboutus-box a img {
   width: 100%;
-  height: 100%;
+  /*height: 100%;*/
 }

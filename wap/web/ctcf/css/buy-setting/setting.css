@@ -1,8 +1,20 @@
+a {
+    text-decoration: none;
+    color: #aab2bd;
+}
+.login-sign-btn input#buybtn {
+    width: 92%;
+    height: 1.06666667rem;
+    line-height: 1.06666667rem;
+    background-color: #ff6707;
+    color: #fff;
+    border-radius: 4px;
+}
 .left-txt {
     padding: 0;
     text-align: left;
     font-size: 15px;
-    color:#434a54;
+    color:#161616;
     padding-left: 2rem;
 }
 .right-txt {
@@ -30,7 +42,6 @@ input.safe-lf {
 }
 .sm-height,.bg-height {
     background:#fff;
-    color: #aab2bd;
 }
 div.headpic {
     padding: 0;
@@ -113,7 +124,7 @@ div.headpic {
     padding-bottom: 10px;
     font-size: 13px;
     color: #fff;
-    background: #ff6707;
+    background: #f44336;
 }
 .produce div {
     height:26px;
@@ -152,7 +163,7 @@ div.headpic {
 }
 .account .active {
     margin:0 auto;
-    color: #ff6707;
+    color: #f44336;
     background:#e8eaf0;
 }
 .account-title{
@@ -160,7 +171,7 @@ div.headpic {
     line-height: 50px;
     font-size:13px;
     color: #fff;
-    background: #ff6707;
+    background: #f44336;
 }
 .account-title img {
     margin: auto 0;
@@ -202,7 +213,7 @@ a.set:visited {
     -webkit-border-radius: 12px;
     -moz-border-radius: 12px;
     border-radius: 12px;
-    background: #ff6707;
+    background: #f44336;
     display: inline-block;
 }
 .member-level-tit .member-level-rg .treasure-line {
@@ -237,7 +248,7 @@ a.set:visited {
     height: 36px;
     line-height: 36px;
     font-size: 18px;
-    color: #ff6707;
+    color: #f44336;
 }
 .shouyi {
     height:0.86666667rem;
@@ -252,7 +263,7 @@ a.set:visited {
     width: 100%;
     text-align: center;
     font-size: 18px;
-    color: #434a54;
+    color: #382f30;
     margin-top: 50px;
 }
 #bind-true .col-xs-12 {
@@ -273,10 +284,10 @@ a.set:visited {
 .daojishi .col-xs-12 div {
     width: 100%;
     text-align: center;
-    color: #434a54;
+    color: #2d363d;
 }
 .daojishi .col-xs-12 div span {
-    color: #ff6707;
+    color: #e08245;
 }
 #bind-close1 .col-xs-4 {
     padding: 0;
@@ -285,7 +296,7 @@ a.set:visited {
 #bind-close1 {
     margin-top: 3rem;
 }
-.bind-close1 {
+div a.bind-close1 {
     display: block;
     width: 100%;
     height: 40px;
@@ -293,11 +304,21 @@ a.set:visited {
     line-height: 40px;
     background: #ff6707;
     color: #fff;
-    border-radius: 6px;
+    border-radius: 0px;
 }
 #bind-close2 .col-xs-4 {
     padding: 0;
     margin-top: 20px;
+}
+.bind-close1 {
+    display: block;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background: #fff;
+    color: #61727a;
+    border-radius: 6px;
 }
 
 a {
@@ -330,11 +351,10 @@ a:hover {
     padding-right: 5px;
     padding-top: 4px;
     text-align: justify;
-    color: #aab2bd;
 }
 #payment-change .col-xs-12{
     padding:0;
-    color: #aab2bd;
+    color: #747474;
     font-size: 14px;
     padding-left: 5px;
     padding-right: 5px;
@@ -344,7 +364,7 @@ a:hover {
 }
 #payment-how .col-xs-12 {
     padding: 0;
-    color: #434a54;
+    color: #2d2d2d;
     font-size:14px;
     background: #fff;
     padding-left: 5px;
@@ -353,7 +373,7 @@ a:hover {
     padding-bottom: 4px;
 }
 #payment-how .col-xs-12 span {
-    color: #ff6707;
+    color: #ea9755;
 }
 #payment-li .col-xs-12 {
     padding: 0;
@@ -364,7 +384,7 @@ a:hover {
 #payment-li .col-xs-12 div {
     font-size: 12px;
     text-align: justify;
-    color: #aab2bd;
+    color: #636363;
 }
 .ht {
     text-align: center;
@@ -378,12 +398,12 @@ a:hover {
     margin-top: 0px;
 }
 .yuqishouyi {
-    color:#ff6707;
+    color:#f44336;
     /*line-height:35px;*/
     font-size:12px;
 }
 .shijizhifu {
-    color:#ff6707;
+    color:#f44336;
     /*line-height:35px;*/
     font-size:12px;
 }
@@ -419,7 +439,7 @@ span.notice {
 /* 正在审核中文字样式 */
 .bing-doing {
     text-align: right;
-    color: #419bf9;
+    color: #337ab7;
 }
 
 .safe-btn {
@@ -492,7 +512,7 @@ span.notice {
     font-size: 14px;
 }
 .customer-layer-popuo .layui-m-layerbtn span[yes] {
-    color: #ff6707;
+    color: #ff6058;
 }
 
 .layui-m-layershade {

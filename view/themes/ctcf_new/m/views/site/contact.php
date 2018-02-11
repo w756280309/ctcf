@@ -1,14 +1,14 @@
 <?php
 $this->title = '联系我们';
 
-$this->registerCssFile(ASSETS_BASE_URI . 'css/contact.css');
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/linkman/contact.css?v=1.2');
 ?>
 
 <div class="container relation" >
     <!-- 主体 -->
     <!-- banner  -->
     <div class="ico">
-        <img src="<?= ASSETS_BASE_URI ?>images/relation-ico.png" alt="楚天金服地图" >
+        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/linkman/ico.png" alt="楚天金服地图" >
     </div>
     <!-- 主体 -->
     <div class="about-content row">

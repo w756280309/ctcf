@@ -5,7 +5,7 @@ $this->backUrl = '/system/system/setting';
 use common\utils\SecurityUtils;
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160613">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/setting.css?v=20160614">
 
 <a class="row sm-height border-bottom margin-top block" href="/site/editpass">
     <div class="col-xs-5 safe-txt text-align-lf">修改登录密码</div>
@@ -64,12 +64,12 @@ use common\utils\SecurityUtils;
         <?php if ($closeWin) : ?>
             <form method="post" class="cmxform" action="/site/logout">
                 <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
-                <input class="btn-common btn-normal safe-btn" type="submit" value="安全退出">
+                <input style="color: #ff6707;border: 1px solid #ff6707;" class="btn-common btn-normal safe-btn" type="submit" value="安全退出">
             </form>
         <?php else : ?>
             <form method="post" class="cmxform" action="/site/logout">
                 <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
-                <input class="btn-common btn-normal safe-btn" type="submit" value="安全退出">
+                <input style="color: #ff6707;border: 1px solid #ff6707;" class="btn-common btn-normal safe-btn" type="submit" value="安全退出">
             </form>
         <?php endif; ?>
     </div>

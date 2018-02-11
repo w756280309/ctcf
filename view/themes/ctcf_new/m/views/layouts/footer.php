@@ -18,6 +18,9 @@
     /*.footer-title span img{width:26px}*/
     /*.nav-bar{font-size:14px;line-height:1.5}*/
     /*.special-bar {  color: rgb(244, 67, 54);  }*/
+    a.special-bar{
+        color: #ff6707 !important;
+    }
     .navbar-fixed-bottom {
         bottom: 0;
         margin-bottom: 0;
@@ -146,7 +149,7 @@
     <div class="footer-title">
         <div class="footer-inner2">
             <?php if($uniqueActionId === 'user/user/index') {?>
-                <a class="nav-bar special-bar" href="/user/user" style="color: rgb(244, 67, 54)"><span class="zhanghu"></span>账户</a>
+                <a class="nav-bar special-bar" href="/user/user"><span class="zhanghu"></span>账户</a>
             <?php } else {?>
                 <a class="nav-bar" href="/user/user"><span class="zhanghu"></span>账户</a>
             <?php }?>
