@@ -263,7 +263,7 @@ a.set:visited {
     width: 100%;
     text-align: center;
     font-size: 18px;
-    color: #382f30;
+    color: #434a54;
     margin-top: 50px;
 }
 #bind-true .col-xs-12 {
@@ -284,7 +284,7 @@ a.set:visited {
 .daojishi .col-xs-12 div {
     width: 100%;
     text-align: center;
-    color: #2d363d;
+    color: #878d95;
 }
 .daojishi .col-xs-12 div span {
     color: #e08245;
@@ -517,4 +517,7 @@ span.notice {
 
 .layui-m-layershade {
     background-color: rgba(0, 0, 0, .1)
+}
+div a.contact-tel{
+    color:#878d95;
 }

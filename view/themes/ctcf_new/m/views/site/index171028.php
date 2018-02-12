@@ -67,11 +67,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		font-weight: 800;
 	}
 </style>
-<<<<<<< HEAD
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=1801111">
-=======
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=1802121112">
->>>>>>> 91240621578987773717ec00b23141353f901be0
 <div>
     <img class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" width="100%" alt="">
 </div>
@@ -186,7 +182,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 			<p class="data-box-show-line1">平台已安全运营</p>
 			<p class="data-box-show-line2">
 				<span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-06-06'))->days ?></span>天</p>
-			<p class="data-box-show-line3" style="width: auto;display: inline-block;padding: 0 .306rem">历史兑付率<span id="totalRefundAmount"></span></p>
+			<p class="data-box-show-line3" style="width: auto;display: inline-block;padding: 0 .306rem">历史兑付率<span>100%</span></p>
 		</div>
 	</div>
 <!--    服务中心-->

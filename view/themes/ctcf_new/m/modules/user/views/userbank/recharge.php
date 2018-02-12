@@ -44,7 +44,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
             <span class="trans" ></span>
         </div>
     </div>
-    <p class="formula">手机充值超过<span class="formula-money"></span>每日限额，您可以用电脑登录温都金服官网（www.wenjf.com）充值<a class="a-formula">[查看详情]</a></p>
+    <p class="formula">手机充值超过<span class="formula-money"></span>每日限额，您可以用电脑登录楚天财富官网（www.hbctcf.com）充值<a class="a-formula">[查看详情]</a></p>
 
     <!--提交按钮-->
     <div class="row">
@@ -60,7 +60,9 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
         <div class="note">
             <ul>
                 <li class="li-title">温馨提示</li>
-                <li style="color: #ff6707">手机充值不能超过<?= StringUtils::amountFormat1('{amount}{unit}', $bank['dailyLimit']) ?>每日限额，可以用电脑登录网站（www.wenjf.com）进行大额充值。<a href="/user/userbank/refer" style="color: #419bf9;">[查看详情]</a></li>
+                <li style="color: #ff6707">手机充值不能超过<?= StringUtils::amountFormat1('{amount}{unit}', $bank['dailyLimit']) ?>每日限额，可以用电脑登录网站（www.hbctcf.com）进行大额充值。
+                    <a href="/user/userbank/refer" style="color: #419bf9;">[查看详情]</a>
+                </li>
                 <li>为保障安全，连续3次充值失败，24小时内将无法通过手机充值。</li>
                 <li>客服电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?>。</li>
             </ul>

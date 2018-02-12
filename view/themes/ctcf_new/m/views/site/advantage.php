@@ -108,7 +108,7 @@
     <!-- 主体 -->
     <!-- banner  -->
     <div class="ico">
-        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/advantages/ico.png" alt="国资平台，值得信赖" >
+        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/advantages/advantage1.jpg" alt="国资平台，值得信赖" >
     </div>
     <!-- 主体 -->
     <div class="about-content row">

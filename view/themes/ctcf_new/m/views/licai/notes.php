@@ -7,7 +7,7 @@ $this->showBottomNav = true;
 $this->hideHeaderNav = HttpUtils::isWeixinRequest();
 $this->backUrl = false;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=20161223', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/list-tag/creditlist.css?v=201802', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/TouchSlide.1.1.js', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.classyloader.js', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/credit_page.js?v=171109', ['depends' => 'wap\assets\WapAsset']);

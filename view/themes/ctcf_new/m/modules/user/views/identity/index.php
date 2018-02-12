@@ -88,6 +88,13 @@ if (err === '1') {
     });
 }
 
+$(function () {
+    $.get('/ctcf/user/get-name-and-card', function (data) {
+       $('#real_name').val(data.real_name);
+       $("#idcard").val(data.idCard)
+    })
+})
+
 <?php
 /**
  * @var \common\models\user\OpenAccount $lastRecord

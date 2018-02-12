@@ -14,31 +14,31 @@ $this->title="如何用电脑大额充值";
         <p class="m-width">电脑浏览器输入网址<span>（www.hbctcf.com）</span></p>
         <p class="m-width">登录后，点击进入【我的账户】</p>
         <div>
-            <img src="<?= FE_BASE_URI ?>wap/recharge/large-recharge/images/bg-step1.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/recharge/chongzhi-step1.png" alt="">
         </div>
     </div>
     <div class="step2">
         <h5 class="m-width">第2步</h5>
         <p class="m-width">点击【充值】</p>
         <div>
-            <img src="<?= FE_BASE_URI ?>wap/recharge/large-recharge/images/bg-step2.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/recharge/chongzhi-step2.png" alt="">
         </div>
     </div>
     <div class="step3">
         <h5 class="m-width">第3步</h5>
         <p class="m-width">选择银行（以农行举例），输入充值金额</p>
         <div>
-            <img src="<?= FE_BASE_URI ?>wap/recharge/large-recharge/images/bg-step3.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/recharge/chongzhi-step3.png" alt="">
         </div>
     </div>
     <div class="step4">
         <h5 class="m-width">第4步</h5>
         <p class="m-width">根据银行的引导步骤进行网银充值 </p>
         <div>
-            <img class="last-step-image" src="<?= FE_BASE_URI ?>wap/recharge/large-recharge/images/bg-step4.png" alt="">
+            <img class="last-step-image" src="<?= ASSETS_BASE_URI ?>ctcf/images/recharge/chongzhi-step4.png" alt="">
         </div>
     </div>
     <div class="footer">
-        温都金服小助手
+         楚天财富小助手
     </div>
 </div>

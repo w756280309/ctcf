@@ -298,3 +298,7 @@ input::-webkit-input-placeholder {
 #card_no {
     margin-top: 10px;
 }
+#tixianbtn{
+    color:#ff6707;
+    border-color: #ff6707;
+}

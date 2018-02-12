@@ -1,8 +1,8 @@
 <?php
 $this->title="提现";
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/recharge/bind.css?v=1.11"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/recharge/recharge.css?v=1.2"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/recharge/bind.css?v=1.111"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/recharge/recharge.css?v=1.21"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tixian.css"/>
 
     <!--银行卡-->
