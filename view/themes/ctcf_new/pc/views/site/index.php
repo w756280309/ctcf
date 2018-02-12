@@ -3,11 +3,11 @@
 $this->title = Yii::$app->params['pc_page_title'];
 
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css?v=1.5', ['depends' => 'frontend\assets\CtcfFrontAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/mask/mask.min.css?v=1.6', ['depends' => 'frontend\assets\CtcfFrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/mask/mask.min.css?v=1.67', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 //$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery-1.11.1.min.js', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery.SuperSlide.2.1.1.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/handlebars-v4.0.11.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/mask/mask.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
+//$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/mask/mask.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
 
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
@@ -393,6 +393,23 @@ JSFILE
     /*渲染列表结束*/
 
     $(function(){
+        // 升级奖励
+        $('.check-login-invest').on('click',function(){
+            $('.swiper-wrapper').stop().animate({left:-350},500,'swing',swiperCallback1);
+        });
+        function swiperCallback1(){
+            $('.mask-login-invest').find('.close-box').css('display','block');
+            $('.swiper-pagination').find('span').toggleClass('swiper-span-active');
+        }
+        // 活动规则
+        $('u.get-prize-rules').on('click',function(){
+            $('.swiper-wrapper').stop().animate({left:0},500,'swing',swiperCallback2);
+        });
+        function swiperCallback2(){
+            $('.mask-login-invest').find('.close-box').css('display','none');
+            $('.swiper-pagination').find('span').toggleClass('swiper-span-active');
+        }
+
         $(window).scroll(function(){
             if($(this).scrollTop()>100){
                 $(".tool-box").fadeIn();
@@ -403,19 +420,59 @@ JSFILE
         jQuery(".banner").slide({mainCell:".bd ul",effect:"fold",autoPlay:true,trigger:"click",delayTime:1000,interTime:5000});
 
         jQuery(".txtScroll-top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"topLoop",autoPlay:true,pnLoop:false});
+
+        $.ajax({
+            type: "GET",
+            url: "ctcf/site/pop-type",
+            success: function(data){
+                if (data == 0) {
+
+                } else if (data == 1) {
+                    $('.mask-prize-hint').css('display','block').find('i.close-box').on('click',function(){
+                        $('.mask-prize-hint').css('display','none');
+                    });
+                } else if (data == 2) {
+                    $('.mask-no-invest').css('display','block').find('i.close-box').on('click',function(){
+                        $('.mask-no-invest').css('display','none');
+                    });
+                } else if (data == 3) {
+                    $('.updata-top-part').html("<span>8元</span><span>30元</span><span>80元</span>");
+                    $('.updata-bottom-rg').html("<p>188积分</p><p>可以兑换超多礼品</p>");
+                    $('.mask-login-invest').css('display','block').find('i.close-box').on('click',function(){
+                        $('.mask-login-invest').css('display','none');
+                    });
+                } else if (data == 4) {
+                    $('.updata-top-part').html("<span>8元</span><span>30元</span><span>80元</span><span>150元</span>");
+                    $('.updata-bottom-rg').html("<p>388积分</p><p>可以兑换超多礼品</p>");
+                    $('.mask-login-invest').css('display','block').find('i.close-box').on('click',function(){
+                        $('.mask-login-invest').css('display','none');
+                    });
+                } else if (data == 5) {
+                    $('.updata-top-part').html("<span>30元</span><span>80元</span><span>150元</span><span>220元</span>");
+                    $('.updata-bottom-rg').html("<p>588积分</p><p>可以兑换超多礼品</p>");
+                    $('.mask-login-invest').css('display','block').find('i.close-box').on('click',function(){
+                        $('.mask-login-invest').css('display','none');
+                    });
+                }
+                $.ajax({
+                    type:'get',
+                    url:'ctcf/site/after-pop',
+                });
+            }
+        });
     })
 </script>
 
-<input type="hidden" name="isLoggedin" value="false">
-<input type="hidden" name="isInvest" value="false">
+<!--<input type="hidden" name="isLoggedin" value="false">-->
+<!--<input type="hidden" name="isInvest" value="false">-->
 <!--已登陆未投资-->
 <div class="mask-no-invest">
     <div class="popup-box">
         <div class="popup-box-top"></div>
-        <i class="close-box"></i>
+        <i class="close-box" id="close"></i>
         <p class="popup-box-msg"><span>888元</span>红包已经发放到账户中心，请至”账户中心-优惠券”中查看</p>
         <div class="red-racket">
-            <span>18元</span>
+            <span>8元</span>
             <span>20元</span>
             <span>30元</span>
             <span>80元</span>
@@ -423,7 +480,7 @@ JSFILE
             <span>220元</span>
             <span>380元</span>
         </div>
-        <a href="" class="popup-box-btn">查看红包</a>
+        <a href="/user/coupon/" class="popup-box-btn">查看红包</a>
     </div>
 </div>
 <!-- 未登陆提示-->
@@ -447,7 +504,7 @@ JSFILE
                 </div>
             </a>
         </div>
-        <a href="" class="popup-box-btn">点击领取</a>
+        <a href="/user/coupon/" class="popup-box-btn">点击领取</a>
     </div>
 </div>
 <!--已登陆已投资-->
@@ -461,7 +518,7 @@ JSFILE
                     <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史投资额，特发放了豪华补偿礼包，敬请收下！</p>
                     <table>
                         <tr>
-                            <th>累计年华投资金额（万元）</th>
+                            <th>累计年化投资金额（万元）</th>
                             <th>补偿红包</th>
                             <th>补偿积分</th>
                         </tr>
@@ -487,23 +544,20 @@ JSFILE
                     <h5>您获得的升级礼包</h5>
                     <div class="upgrade-updata-contain">
                         <div class="updata-top-part">
-                            <span>18元</span>
-                            <span>50元</span>
-                            <span>120元</span>
+
                         </div>
                         <div class="updata-mid-part">共得<span>188元</span>红包</div>
                         <div class="updata-bottom-part clearfix">
                             <div class="lf bottom-jf-prize">
                                 <i></i>
                             </div>
-                            <div class="rg">
-                                <p>188积分</p>
-                                <p>可以兑换超多礼品</p>
+                            <div class="updata-bottom-rg">
+
                             </div>
                         </div>
                     </div>
                     <u class="get-prize-rules">补偿规则</u>
-                    <a class="check-get-prize" href="#">查看红包</a>
+                    <a class="check-get-prize" href="/user/coupon/">查看红包</a>
                 </li>
             </ul>
         </div>

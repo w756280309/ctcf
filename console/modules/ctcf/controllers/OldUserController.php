@@ -5,14 +5,11 @@ namespace console\modules\njfae\controllers;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\mall\PointRecord;
-use common\models\tx\CreditNote;
-use common\models\tx\CreditOrder;
-use common\models\tx\Loan;
-use common\models\tx\Order;
 use common\models\user\User;
 use common\models\user\UserInfo;
 use common\service\PointsService;
 use yii\console\Controller;
+use Yii;
 
 class OldUserController extends Controller
 {
@@ -30,16 +27,20 @@ class OldUserController extends Controller
                 if ($annualInvest > 0 && $annualInvest < 20) {
                     $couponArray = Yii::$app->params['old_user_invested_level_1_coupon'];
                     $point = Yii::$app->params['old_user_invested_level_1_point'];
+                    $popType = 3;
                 } elseif ($annualInvest >= 20 && $annualInvest < 50) {
                     $couponArray = Yii::$app->params['old_user_invested_level_2_coupon'];
                     $point = Yii::$app->params['old_user_invested_level_2_point'];
+                    $popType = 4;
                 } elseif ($annualInvest >= 50) {
                     $couponArray = Yii::$app->params['old_user_invested_level_3_coupon'];
                     $point = Yii::$app->params['old_user_invested_level_3_point'];
+                    $popType = 5;
                 }
             } else {
                 $couponArray = Yii::$app->params['sign_up_coupon'];
                 $point = 0;
+                $popType = 2;
             }
             //发代金券
             $couponTypes = CouponType::findAll(['sn' => $couponArray]);
@@ -65,9 +66,9 @@ class OldUserController extends Controller
             }
             //设置弹窗标识,一年后过期
             $redis = Yii::$app->redis_session;
-            if (!$redis->hexists('oldUserRewardPop', $user->id)) {
-                $redis->hset('oldUserRewardPop', $user->id, true);
-                $redis->expire('oldUserRewardPop', 365 * 24 * 3600);
+            if (!$redis->exists('oldUserRewardPop_' . $user->id)) {
+                $redis->set('oldUserRewardPop_' . $user->id, $popType);
+                $redis->expire('oldUserRewardPop_' . $user->id, 365 * 24 * 3600);
             }
         }
     }

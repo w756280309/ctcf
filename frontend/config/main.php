@@ -97,6 +97,7 @@ return [
         ],
         'risk' => [
             'class' => 'Wcg\Xii\Risk\Module',
+            'layout' => '@app/modules/user/views/layouts/main.php',
         ],
         'ctcf' => [
             'class' => 'frontend\modules\ctcf\Module',
