@@ -47,7 +47,7 @@ if (7 === $level) {
 ?>
 
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/memberlevel/css/index.css?v=1.18">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/user/user-grade.css?v=1.23">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>

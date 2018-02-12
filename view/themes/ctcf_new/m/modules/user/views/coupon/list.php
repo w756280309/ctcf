@@ -246,7 +246,7 @@ $this->title = '优惠券';
 			<p class="warning"></p>
 			<a class="btn-exchange">立即兑换</a>
 			<p class="tips">请在有效期内使用兑换码，过期将无法使用</p>
-			<p class="tips tips-last">兑换码通过温都金服宣传页、合作网站的活动所得</p>
+			<p class="tips tips-last">兑换码通过楚天财富宣传页、合作网站的活动所得</p>
 		</div>
 	</div>
 </div>
@@ -268,21 +268,21 @@ $this->title = '优惠券';
     // 规则
     $('.btn-rules .a-rule').on('click', function () {
       $('.draw-coupon-box').show();
-      $('body').on('touchmove', eventTarget, false);
+      $('.container').on('touchmove', eventTarget, false);
     });
     $('.draw-coupon-box .draw-close').on('click', function () {
       $('.draw-coupon-box').hide();
-      $('body').off('touchmove');
+      $('.container').off('touchmove');
     });
 
     // 兑换
     $('.btn-rules .a-exchange').on('click', function () {
       $('.coupon-box').show();
-      $('body').on('touchmove', eventTarget, false);
+      $('.container').on('touchmove', eventTarget, false);
     });
     $('.coupon-box .draw-close').on('click', function () {
       $('.coupon-box').hide();
-      $('body').off('touchmove');
+      $('.container').off('touchmove');
     });
     $(".coupon-box .btn-exchange").on("click", function () {
       var code = $(".coupon-box .exchange-input input").val();

@@ -2,7 +2,8 @@
 use wap\assets\WapAsset;
 
 $this->title = '风控先进';
-
+$this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/libs/lib.flexible3.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/safeguard/major.min.css');
 ?>
 <link href="<?= ASSETS_BASE_URI ?>ctcf/css/common/base.css" rel="stylesheet">
 <!-- 主体 -->

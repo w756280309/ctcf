@@ -1,7 +1,8 @@
 <?php
 use wap\assets\WapAsset;
 $this->title = '数据安全';
-
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/safeguard/major.min.css');
+$this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/libs/lib.flexible3.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
 ?>
 <link href="<?= ASSETS_BASE_URI ?>ctcf/css/common/base.css" rel="stylesheet">
 <!-- 主体 -->

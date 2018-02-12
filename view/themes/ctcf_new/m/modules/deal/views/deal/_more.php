@@ -11,7 +11,7 @@ use yii\helpers\Html;
     <?php $isActive = !in_array($deal->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]) || $deal->end_date < time(); ?>
     <a class="row col" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
         <?php if ($deal->is_xs) { ?>
-        <div class="newer" ><img src="<?= ASSETS_BASE_URI ?>images/newer.png" alt="新手专享"></div>
+        <div class="newer" ><img src="<?= ASSETS_BASE_URI ?>ctcf/images/new-icon/newer_icons.png" alt="新手专享"></div>
         <?php } ?>
         <div class="col-xs-12 col-sm-12 col-txt">
             <div class="row clearfix credit-num">

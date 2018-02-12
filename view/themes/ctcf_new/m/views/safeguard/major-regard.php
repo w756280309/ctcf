@@ -1,6 +1,8 @@
 <?php
 use wap\assets\WapAsset;
 $this->title = '专业合规';
+$this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/libs/lib.flexible3.js', ['depends' => 'yii\web\YiiAsset','position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/safeguard/major.min.css');
 
 ?>
 <!-- 主体 -->

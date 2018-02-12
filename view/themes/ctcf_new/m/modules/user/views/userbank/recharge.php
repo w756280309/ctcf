@@ -141,7 +141,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
                 message = '本次充值超过单笔'+singleLimitUnit+'限额，建议您分多笔进行充值';
             }
             layer.open({
-                title: ['温馨提示', 'background-color: #ff6058; color:#fff;']
+                title: ['温馨提示', 'background-color: #ff6707; color:#fff;']
                 ,content: message
                 ,shadeClose:false
                 ,className: 'customer-layer-popuo'

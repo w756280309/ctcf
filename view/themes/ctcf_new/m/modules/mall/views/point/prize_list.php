@@ -24,7 +24,7 @@ $this->title = '兑换记录';
     <?php } ?>
 
     <div class="exchange-record">
-        <a href="/mall/portal/record" class="tips">暂显示4月21日起兑换的代金券，全部记录可前往积分商城查询</a>
+        <a href="/mall/portal/record" class="tips">暂显示兑换的代金券，全部记录可前往积分商城查询</a>
         <?php if (!empty($vouchers)) { ?>
             <ul id="exchange-list">
                 <?= $this->render('_prize_list', ['vouchers' => $vouchers]) ?>

@@ -317,12 +317,11 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
             }
         }
     <?php } ?>
-
     $(function() {
         $('.tabs div').click(function() {
             var index = $('.tabs div').index(this);
-            $('.tabs div').css({background:'#ffffff',color:'#f34a54'}); //303030
-            $('.tabs div').eq(index).css({background:'#f34a54',color:'#ffffff'});
+            $('.tabs div').css({background:'#ffffff',color:'#434a54'}); //303030
+            $('.tabs div').eq(index).css({background:'#ff6707',color:'#ffffff'});
             if(index==1){
                 $('.tab-conten').css({display:'none'});
                 $('.touzi-box').css({display:'block'});

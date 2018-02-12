@@ -8,7 +8,7 @@ $this->title = '资产总览';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/myIncome.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/ucenter/myIncome.css?v=201802123">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/zepto.min.js"></script>
 <script type="text/javascript">

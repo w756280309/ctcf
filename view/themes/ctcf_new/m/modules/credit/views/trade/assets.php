@@ -2,7 +2,7 @@
 $this->title = '我的转让';
 $this->backUrl = '/user/user';
 
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/assets/transfer_list.css?v=2018021011', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/assets/transfer_list.css?v=20180210111', ['depends' => 'wap\assets\WapAsset']);
 ?>
 <script type="text/javascript">
     var url = '/credit/trade/assets?type=<?= $type ?>';

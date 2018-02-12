@@ -13,7 +13,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/myProperty.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/ucenter/myProperty.css?v=201802121">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/zepto.min.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/echarts.common.min.js"></script>

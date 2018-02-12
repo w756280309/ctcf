@@ -141,7 +141,7 @@ if (isset($cookies['pointPopUp'])) {
     <?php if ('success' === $ret) { ?>
 			<a href="/user/checkin" class="qiandao-box"><img
 					src="<?= ASSETS_BASE_URI ?>images/bg_qiandao.png" alt=""></a>
-			<a href="<?= !defined('IN_APP') ? '/system/system/setting' : 'javascript:void(0)' ?>" style="display: block"><img src="<?= ASSETS_BASE_URI ?>images/bg_bind.png" alt="" class="bind-box"></a>
+			<a href="<?= !defined('IN_APP') ? '/system/system/setting' : 'javascript:void(0)' ?>" style="display: block"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/buy-success/bg_bind_jf.png" alt="" class="bind-box"></a>
     <?php } else { ?>
 			<div>遇到问题请联系客服，电话：<a class="contact-tel"
 			                     href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>

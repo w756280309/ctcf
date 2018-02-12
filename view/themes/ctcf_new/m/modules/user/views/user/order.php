@@ -7,7 +7,7 @@ $this->backUrl = $backUrl ? $backUrl : '/user/user';
 $back = $backUrl ? urlencode(Yii::$app->request->hostInfo.$backUrl) : '';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/bind.css?v=1', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/licai/licai.css?v=201802101', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/licai/licai.css?v=20180210111111', ['depends' => WapAsset::class]);
 
 ?>
 <script type="text/javascript">
