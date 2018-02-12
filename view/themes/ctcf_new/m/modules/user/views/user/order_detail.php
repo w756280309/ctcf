@@ -14,7 +14,7 @@ use yii\web\JqueryAsset;
 
 $this->registerJsFile(ASSETS_BASE_URI .'js/fastclick.js', ['position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/touzixiangqing.js?v=20170306', ['depends' => JqueryAsset::class, 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20180102', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI .'ctcf/css/details-list/touzixiangqing.css?v=2018010211111', ['depends' => WapAsset::class]);
 ?>
 
 <div class="container">

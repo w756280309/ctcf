@@ -78,7 +78,7 @@ $this->share = $share;
                 <li><span>●</span> 12月10日亲子活动</li>
                 <li><span>●</span> 12月19日-12月25日圣诞活动等</li>
             </ul>
-            <p class="special">投资者如需参加，请拨打客服热线：<a href="tel:400-101-5151">400-101-5151</a></p>
+            <p class="special">投资者如需参加，请拨打客服热线：<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></p>
         </div>
     </div>
     <div class="backactive">

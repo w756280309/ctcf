@@ -1,0 +1,131 @@
+/*公共样式*/
+html {
+    font-size: 62.5%;
+}
+input.btn-normal{
+    color: #ff6707;
+    background: #e7eaf1;
+    border: 1px solid #ff6707;
+}
+@media screen and (min-width: 320px) {
+    html {font-size: 87.5%;}
+}
+
+@media screen and (min-width: 360px) {
+    html {font-size: 100%;}
+}
+
+@media screen and (min-width: 400px) {
+    html {font-size: 112.5%;}
+}
+
+@media screen and (min-width: 440px) {
+    html {font-size: 125%;}
+}
+
+@media screen and (min-width: 480px) {
+    html {font-size: 137.5%;}
+}
+
+@media screen and (min-width: 640px) {
+    html {font-size: 150%;}
+}
+@media screen and (min-width: 750px) {
+    html {font-size: 175%;}
+}
+.col-xs-1,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9,.col-xs-10,.col-xs-11,.col-xs-12{
+    padding-left:0;
+    padding-right:0;
+}
+.font-32{
+     font-size:1.14rem;
+ }
+.font-26{
+    font-size:0.93rem;
+}
+.common_color{
+    color: #f34d42;
+}
+.common-pad{
+    padding-left:20px;
+}
+.nav-height {
+    height: 2.9rem;
+    line-height: 2.9rem;
+}
+.padding-left-20{
+    padding-left:20px;
+}
+body{
+    color: #7c7c7c;
+}
+.title{
+    font-size: 1.3rem;
+}
+.nav-height img {
+    height: 1.5rem!important;
+}
+.produce{
+    font-size:0.86rem;
+    line-height: 1.5rem;
+    background: #ff6707;
+    color: #fff;
+    padding-bottom:1rem;
+}
+.first-line {
+    font-size: 1rem;
+    line-height: 1.3rem;
+    width: 86%;
+}
+.col{
+    padding-left:20px;
+}
+.surplus{
+    font-size:1rem;
+    line-height:2.3rem;
+    margin-top: 0;
+}
+.surplus a{
+    font-size:0.86rem;
+    color: #007aff;
+}
+.surplus a.rg{
+    padding-right: 10px;
+}
+.font-32{
+    color: #161616;
+}
+.money_yuan{
+    padding-left:1.3rem;
+    padding-right: 10px;
+}
+.sm-height{
+    height:3.6rem;
+    line-height:3.6rem;
+    background: #fff;
+}
+#money{
+    padding-left:20px;
+    height: 1.8rem;
+    top: 0.9rem;
+    line-height: 1.8rem;
+}
+#buybtn{
+    font-size:1.3rem;
+    height:2.6rem;
+    border-radius: 2.6rem;
+}
+.empty_div{
+    height:2.6rem;
+}
+.shouyi{
+    font-size:0.86rem;
+    line-height:1.5rem;
+}
+.login-sign-btn{
+    margin-top: 4rem;
+}
+.bottom_center{
+    font-size:0.86rem;
+    margin-top: -5px;
+}

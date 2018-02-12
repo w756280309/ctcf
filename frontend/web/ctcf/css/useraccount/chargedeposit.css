@@ -35,6 +35,34 @@
     padding-right: 40px;
     float: left;
 }
+.charge-box .charge-content_primary_user{
+    padding-bottom: 20px;
+}
+.charge-box .charge-content_primary_user p{
+    padding-left: 60px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
+    font-weight: bolder;
+    color: #6e6e72;
+}
+.charge-box .charge-content_primary_user span{
+    width: 57.5%;
+    color: #6e6e72;
+    font-size: 18px;
+    padding-left: 60px;
+    padding-right: 40px;
+    float: left;
+}
+.charge-box .charge-content_primary_user a{
+    background-color: #ff6707;
+    color: #fff;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 67px;
+    float: left;
+}
 
 .charge-box .charge-content a {
     background-color: #ff6707;

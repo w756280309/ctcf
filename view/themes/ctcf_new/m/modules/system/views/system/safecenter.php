@@ -5,7 +5,7 @@ $this->backUrl = '/system/system/setting';
 use common\utils\SecurityUtils;
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/setting.css?v=20160614">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/setting.css?v=20180212">
 
 <a class="row sm-height border-bottom margin-top block" href="/site/editpass">
     <div class="col-xs-5 safe-txt text-align-lf">修改登录密码</div>

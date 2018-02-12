@@ -217,7 +217,7 @@ $this->title = '优惠券';
 	<div class="draw-coupon-box">
 		<div class="coupon-pops">
 			<img src="<?= FE_BASE_URI ?>wap/rate-coupon/account-coupon/images/draw-close.png" class="draw-close" alt="关闭按钮">
-			<h4>优惠券规则</h4>
+			<h4 style="color:#ff6707;">优惠券规则</h4>
 			<ul>
 				<li class="rule-title">规则概述</li>
 				<li>理财卡券只适用于部分标的，其中转让标不可使用，同一项目代金券和加息券不可叠加使用。</li>
@@ -229,7 +229,7 @@ $this->title = '优惠券';
 				<li>1、一次投资使用1张加息券，使用后项目在加息时间内获得额外年化收益。</li>
 				<li>2、加息券不可叠加使用，也不与其他卡券叠加使用。</li>
 				<li>3、通过加息券获得的收益将随项目最后一期本息一期回到您的账户；项目中途转让将不享受任何加息券带来的收益。</li>
-				<li class="tel-bottom">详情咨询：400-101-5151</li>
+				<li class="tel-bottom">详情咨询：<?= Yii::$app->params['platform_info.contact_tel'] ?></li>
 			</ul>
 		</div>
 	</div>

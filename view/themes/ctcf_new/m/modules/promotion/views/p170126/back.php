@@ -29,7 +29,7 @@ if ($user && !($user->id % 2)) {
 
     <a class="f15 invest" href="<?= $toUrl ?>">去理财</a>
 
-    <p class="f12">客服热线：<a class="f15" href="tel:400-101-5151">400-101-5151</a>(8:30~20:00)</p>
+    <p class="f12">客服热线：<a class="f15" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>(8:30~20:00)</p>
 </div>
 
 <script>

@@ -2,6 +2,9 @@ a {
     text-decoration: none;
     color: #aab2bd;
 }
+div.produce{
+    background-color: #ff6707;
+}
 .login-sign-btn input#buybtn {
     width: 92%;
     height: 1.06666667rem;
@@ -119,12 +122,12 @@ div.headpic {
     padding-left: 0.61333333rem;
     margin-top:0.32rem;
 }
-.produce {
+div.produce {
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 13px;
     color: #fff;
-    background: #f44336;
+    background: #ff6707;
 }
 .produce div {
     height:26px;

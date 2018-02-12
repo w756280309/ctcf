@@ -6,7 +6,7 @@ use common\view\UdeskWebIMHelper;
 $this->title = '购买';
 $this->backUrl = '/credit/note/detail?id='.$respData['id'];
 UdeskWebIMHelper::init($this);
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/order.css?v=20161226', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/buy-setting/order.css?v=201800212', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
 
