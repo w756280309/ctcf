@@ -1,0 +1,268 @@
+.myCoupon-box {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+}
+
+.myCoupon-box .myCoupon-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.myCoupon-box .myCoupon-header .myCoupon-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url("../../../images/useraccount/background-icon.png") no-repeat -181px 0;
+    float: left;
+}
+
+.myCoupon-box .myCoupon-header .myCoupon-header-font {
+    font-size: 16px;
+    color: #434a54;
+}
+
+.myCoupon-box .myCoupon-content {
+    color: #464648;
+    padding: 0 20px 20px;
+    position: relative;
+}
+
+.myCoupon-box .display_number {
+    padding: 0 11px;
+    height: 45px;
+    line-height: 45px;
+    color: #6e6e72;
+}
+
+.myCoupon-box .display_number .p_left {
+    padding-right: 89px;
+    float: left
+}
+
+.myCoupon-box .display_number .p_right {
+    float: left
+}
+
+.myCoupon-box .display_number span {
+    color: #f44336;
+    padding-right: 3px
+}
+
+.myCoupon-box .display_number a {
+    cursor: pointer;
+    margin-top: 9px;
+    line-height: 28px;
+    display: block;
+    float: right;
+    padding: 0 18px;
+    color: #fff;
+    background-color: #ff6707;
+}
+
+.myCoupon-box .display_number a:hover {
+    background-color: #ff532d;
+}
+
+.myCoupon-box table {
+    width: 100%;
+    font-size: 12px;
+}
+
+.myCoupon-box table th {
+    height: 50px;
+    background-color: #e4e4e8;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.myCoupon-box table td {
+    text-align: left;
+    height: 60px;
+}
+
+.myCoupon-box table td.table-text-number {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.myCoupon-box .color-red {
+    color: #f44336;
+}
+
+.myCoupon-box .already-use {
+    color: #99999d;
+}
+
+.myCoupon-box .table-kong {
+    height: 60px;
+    margin-top: 60px;
+}
+
+.myCoupon-box .without-font {
+    position: absolute;
+    top: 172px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    font-size: 18px;
+    color: #99999d;
+}
+.myCoupon-box .td-back-color {
+    background-color: #efeff3;
+}
+
+.myCoupon-header .couponcode {
+    margin-right: 30px;
+    cursor: pointer;
+    margin-top: 11px;
+    line-height: 28px;
+    display: block;
+    float: right;
+    padding: 0 18px;
+    color: #fff;
+    background-color: #ff6707;
+}
+
+.code-mark {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    opacity: 0.6;
+    z-index: 10000000000000;
+    display: none;
+}
+
+.couponcode-box {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 25%;
+    width: 402px;
+    margin-left: -201px;
+    z-index: 10000000000001;
+    background: #fff;
+    border: 1px solid #efeff3;
+}
+
+.couponcode-box .code-top {
+    width: 387px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    color: #464648;
+    padding-left: 15px;
+    border-bottom: 1px solid #efeff3;
+    margin-bottom: 20px;
+}
+
+.couponcode-box .close {
+    float: right;
+    margin-right: 16px;
+    margin-top: 12px;
+    cursor: pointer;
+}
+
+.couponcode-box .code-content {
+    width: 360px;
+    margin: 0 auto;
+}
+
+.couponcode-box .code-content .code-box {
+    position: relative;
+    width: 100%;
+    height: 70px;
+}
+
+.code-box .code_err {
+    padding-left: 84px;
+    padding-top: 10px;
+    color: rgb(244, 67, 54);
+}
+
+.code-box label {
+    float: left;
+    padding-left:34px;
+    width: 76px;
+    text-align: right;
+    font-size: 14px;
+    line-height: 40px;
+    color: #464648;
+    margin-right: 10px;
+}
+
+.code-box .coupon-code {
+    float: left;
+    width: 262px;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 15px;
+    outline: none;
+    border: 1px solid #e4e4e8;
+}
+
+.couponcode-box .code-bottom {
+    width:100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.couponcode-box .code-bottom a {
+    width: 150px;
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+    color: #fff;
+    background: #ff6707;
+    cursor: pointer;
+}
+.couponcode-box .code-bottom a:hover {
+    background-color: #ff532d;
+}
+
+.code-content .refer {
+    padding-left:34px;
+    color: #464648;
+}
+
+.couponcode-box .code-success {
+    display: none;
+    width: 360px;
+    margin: 0 auto;
+    text-align: center;
+    color: #464648;
+    font-size: 30px;
+}
+
+.couponcode-box .code-success .code-box i {
+    width: 36px;
+    height: 38px;
+    background: url('../../../images/deal/success_icon.png') 0 10px no-repeat;
+    display: inline-block;
+    text-align: center;
+}
+
+.couponcode-box .code-success .code-txt {
+    width: 100%;
+    font-size: 14px;
+    color: #464648;
+    height: 42px;
+    line-height: 42px;
+}
+
+.couponcode-box .code-success .code-info {
+    height: 70px;
+}
+
+.coupon-name {
+    text-align: center !important;
+}
+
+

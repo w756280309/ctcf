@@ -233,11 +233,14 @@ class SiteController extends Controller
             ->orderBy(['news_time' => SORT_DESC])
             ->limit(3)
             ->all();
+        //推荐区展示
+        $loans = OnlineProduct::getRecommendLoans(3, true);
 
         return $this->render('index171028', [
             'hotActs' => $hotActs,
             'news' => $news,
             'kaiPing' => $queryKaiping,
+            'loans' => $loans,
         ]);
     }
 

@@ -108,19 +108,19 @@
     <!-- 主体 -->
     <!-- banner  -->
     <div class="ico">
-        <img src="<?= ASSETS_BASE_URI ?>images/system/ico.png" alt="国资平台，值得信赖" >
+        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/advantages/advantage1.jpg" alt="国资平台，值得信赖" >
     </div>
     <!-- 主体 -->
     <div class="about-content row">
         <div class="line">
-            <div class="head-line ico"><span>—————</span>温都金服五大优势<span>—————</span></div>
+            <div class="head-line ico"><span>—————</span>楚天财富五大优势<span>—————</span></div>
         </div>
 
         <p class="h-first"><a href="javascript:;" class="number">1</a><span>国资</span>背景</p>
-        <p class="suojin">隶属温州报业传媒旗下，国资平台，可信赖；</p>
+        <p class="suojin">隶属湖北日报新媒体集团旗下的理财平台，国资平台，可信赖；</p>
         <p class="h-num"><a href="javascript:;" class="number">2</a><span>股东</span>强势</p>
-        <p class="suojin">温州报业传媒有限公司，</p>
-        <p class="suojin">系温州日报报业集团全资子公司；</p>
+        <p class="suojin">湖北日报传媒有限公司，</p>
+        <p class="suojin">系湖北荆楚网络科技股份有限公司、湖北新海天投资有限公司投资</p>
 <!--        <p class="suojin">南京金融资产交易中心，</p>-->
 <!--        <p class="suojin">省级金融主管部门审批的合规平台；</p>-->
         <p class="h-num"><a href="javascript:;" class="number">3</a><span>专业</span>稳健</p>
@@ -131,7 +131,7 @@
         <p class="suojin">主流金融机构产品、优质政府平台类产品、</p>
         <p class="suojin">优质供应链金融产品，期限多样，收益可观；</p>
         <p class="h-num"><a href="javascript:;" class="number">5</a><span>灵活</span>便捷</p>
-        <p class="suojin">网上有平台，线下有门店，温都金服在您身边</p>
+        <p class="suojin">网上有平台，线下有门店，楚天财富在您身边</p>
         <p class="suojin">千元起投，手机操作，随时随地实现财富增值。</p>
     </div>
 

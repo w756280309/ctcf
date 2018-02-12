@@ -58,7 +58,7 @@ body {
   box-sizing: border-box;
 }
 .flex-content .newbid-box .newbid-insideBox .newbid-insideBox-title {
-  background: url(../../images/shouye/new_person_bg.png) 0 0.1rem no-repeat;
+  background: url(../../images/new-homepage/new_person_bg.png) 0 0.1rem no-repeat;
   -webkit-background-size: 100%;
   background-size: 100%;
   position: absolute;
@@ -76,7 +76,7 @@ body {
   z-index: 11;
 }
 .flex-content .newbid-box .newbid-insideBox .newbid-insideBox-shouyiNum {
-  color: #fc615c;
+  color: #ff6707;
   font-size: 0.96rem;
   height: 0.96rem;
   line-height: 0.96rem;
@@ -116,7 +116,7 @@ body {
 }
 .flex-content .newbid-box .newbid-insideBox .newbid-insideBox-login {
   right: 0.33333333rem;
-  color: #ff6058;
+  color: #ff6707;
   background-color: #fff;
 }
 .flex-content .newbid-box > p {
@@ -150,7 +150,7 @@ body {
   display: block;
   width:0.786rem;
   height:0.48rem;
-  background: url("../../images/shouye/icon_jifen.png") no-repeat;
+  background: url("../../images/new-homepage/icon_jifen.png") no-repeat;
   background-size: contain;
   z-index: 10;
 }
@@ -187,7 +187,7 @@ body {
   /*padding-right: 0.4rem;*/
 }
 .flex-content .bids-box h5.bids-box-title{
- 
+
   height: 1.413333rem;
   line-height: 1.4133333rem;
   font-size:0.48rem;
@@ -222,7 +222,6 @@ ul.bids-box-bidlist li a .bid-title .bid-title-h6{
 }
 ul.bids-box-bidlist li a .bid-title span{
   height: 0.533333rem;
-  line-height: 0.5333333rem;
   color:#c8a561;
   display: inline-block;
   border:1px solid #c8a561;
@@ -468,10 +467,12 @@ ul.bids-box-bidlist li a .bid-main-msg .bid-about-data p{
 
 .flex-content .phone-box .phone-box-links p,.flex-content .phone-box .phone-box-links a {
   width: 49.7%;
+  height: 2.587rem;
 }
 
 .flex-content .phone-box .phone-box-links p img,.flex-content .phone-box .phone-box-links a img {
-  width: 100%
+  width: 100%;
+  height:100%;
 }
 
 .flex-content .phone-box .phone-box-address {
@@ -496,11 +497,11 @@ ul.bids-box-bidlist li a .bid-main-msg .bid-about-data p{
 }
 .flex-content .aboutus-box a {
   display: inline-block;
-  width: 4.38666667rem;
+  width: 4.41666667rem!important;
   height: 1.86666667rem;
   margin-top: 0.46rem;
 }
 .flex-content .aboutus-box a img {
   width: 100%;
-  height: 100%;
+  /*height: 100%;*/
 }

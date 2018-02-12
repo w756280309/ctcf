@@ -2,7 +2,7 @@
 $this->title = '邀请好友';
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=20180206', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI . 'css/invite/invite.css?v=20161208', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/invite/invite.css?v=2018121011', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
 use common\models\adv\Share;
@@ -31,8 +31,7 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
 <div style="clear: both;"></div>
 <div class="row banner-box">
     <div class="col-xs-12">
-        <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner6.png" alt="">
-        <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/invite/banner5.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/invite/invite_banner.png" style="width:100%" alt="">
     </div>
 </div>
 <!--invite-box-->
@@ -146,10 +145,10 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
 
         <!--活动规则-->
         <div class="rule-box">
-            <div class="inv-title"><b>活动开始时间：2016年12月10日</b></div>
+            <div class="inv-title"><b>活动开始时间：2018年12月10日</b></div>
             <div class="inv-title"><b>活动规则：</b></div>
             <ul>
-                <li>登录温都金服网站，进入“我的账户”；</li>
+                <li>登录楚天财富网站，进入“我的账户”；</li>
                 <li>点击“邀请好友”可以看到邀请好友活动，通过微信或者链接进行邀请；</li>
                 <li>当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励；</li>
                 <li>邀请人在邀请好友之前必须在平台投资过，有投资记录才能参与现金返现活动，发放奖励现金时，以"角"为单位取整，采用四舍五入；</li>

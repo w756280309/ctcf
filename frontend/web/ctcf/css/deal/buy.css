@@ -1,0 +1,266 @@
+/*  购买页面  */
+.invest-box {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    width: 100%;
+    background-color: #f4f4f7;
+}
+.invest-box .invest-container {
+    margin:0 auto;
+    width:1000px;
+    border:1px solid #e6e6e6;
+}
+.invest-box .invest-container .invest-container-box {
+    background: #fff;
+    border-top:5px solid #ff6707;
+}
+.invest-box .invest-container .invest-container-box .invest-top {
+    padding: 21px 0;
+    width:100%;
+    height:58px;
+    line-height:16px;
+    background: #efeff3;
+}
+.invest-box .invest-top .invest-top-title {
+    margin-left:30px;
+    width:600px;
+    font-size: 16px;
+    color:#464648;
+    font-weight: 500;
+}
+.invest-box .invest-top .invest-top-tip {
+    margin-right:50px;
+    width:300px;
+    font-size: 14px;
+    color:#464648;
+    /*background: green;*/
+ }
+.invest-box .invest-top input[type=checkbox]{
+    width:14px;
+    height: 14px;
+    border:1px solid #bababf;
+    background: #fff!important;
+}
+.invest-box .invest-top .invest-top-tip span {
+    color:#aab2bd;
+}
+.invest-box .invest-top .invest-top-tip i {
+    color:#6e6e72;
+}
+.invest-box a.check {
+    padding-left: 14px;
+    text-decoration: none;
+    color:#419bf9;
+    cursor: pointer;
+}
+
+.invest-box .invest-container-box .invest-centent {
+    background: #fff;
+}
+.invest-box .invest-container-box .invest-centent .invest-ct-lf {
+    width:628px;
+    float: left;
+}
+.invest-box .invest-container-box .invest-centent .invest-ct-lf .invest-ct-lf-title {
+    margin: 40px 0 0 30px;
+    padding-bottom: 30px;
+    width: 516px;
+    height: 20px;
+    line-height: 20px;
+    border-bottom: 1px solid #e6e6e6;
+}
+.invest-box .invest-container-box .invest-centent .invest-ct-lf .invest-ct-lf-content {
+    background: url(../../images/deal/buy_bg.png) no-repeat left bottom;
+}
+.invest-box .invest-container-box .invest-centent .invest-ct-lf .invest-ct-lf-content .txt-box {
+    min-height:210px;
+}
+
+.invest-box .invest-centent .invest-ct-lf .invest-ct-lf-title .percentage {
+    padding-left: 21px;
+    width: 228px;
+    font-size: 14px;
+    color: #aab2bd;
+}
+
+.invest-box .invest-centent .invest-ct-lf .invest-ct-lf-title .time {
+    padding-left: 21px;
+    width: 228px;
+    font-size: 14px;
+    color: #aab2bd;
+}
+
+.invest-box .percentage span.nums,.invest-box .time span.nums  {
+    padding-left: 18px;
+    font-size:18px;
+    color:#ff532d;
+    display: inline-block;
+    position: relative;
+}
+.other-nums {
+    position: absolute;
+    top: -13px;
+    right: -40px;
+    padding-left: 6px;
+    font-size:14px;
+    color:#ff6707;
+}
+
+.invest-box .invest-container-box .invest-centent .invest-ct-rg {
+    margin-right: 50px;
+    padding-top: 32px;
+    width:320px;
+    padding-bottom: 20px;
+}
+.invest-box .invest-container-box .invest-centent .invest-ct-rg .sum {
+    height:14px;
+    line-height:14px;
+    color: #aab2bd;
+    font-size: 14px;
+}
+.invest-box .invest-ct-rg span.lf-span {
+    width:80px;
+    height:14px;
+    line-height:14px;
+    color: #aab2bd;
+    font-size: 14px;
+    text-align: right;
+    display: inline-block;
+}
+.invest-box .invest-ct-rg i.rg-i {
+    float: right;
+    /*width:150px;*/
+    height:14px;
+    line-height:14px;
+    color: #ff6707;
+    font-size: 14px;
+    text-align: right;
+    display: inline-block;
+}
+.invest-box .invest-ct-rg .sum i.rg-i {
+    color:#ff6707;
+}
+.invest-box .invest-ct-rg .reduce {
+    height: 60px;
+    line-height: 60px;
+}
+.invest-box .invest-ct-rg .reduce i.rg-i  {
+    color:#6e6e72;
+    line-height: 60px;
+}
+.invest-box .invest-ct-rg .real-invest {
+    margin-top: 30px;
+    width: 308px;
+    border: 1px solid #ff6707;
+}
+.invest-box .invest-ct-rg .real-invest .real-money {
+    padding: 23px 12px 27px 0;
+    height: 74px;
+    line-height: 24px;
+    font-size:24px;
+    color: #ff6707;
+    text-align: right;
+}
+.invest-box .invest-ct-rg .real-invest .real-money span {
+    line-height: 24px;
+    font-size: 14px;
+    color: #aab2bd;
+}
+.invest-box .invest-ct-rg .real-invest .real-money i {
+    color:#bababf;
+}
+.invest-box .invest-ct-rg .real-invest a.buy {
+    height:40px;
+    line-height:40px;
+    color:#fff;
+    font-size: 14px;
+    text-align: center;
+    background: #ff6707;
+    display: block;
+    cursor: pointer;
+}
+.invest-box .invest-ct-rg .real-invest a.buy:hover {
+    background: #ff532d;
+}
+
+
+/*  购买成功页面  */
+
+.invest-box .invest-container .invest-success {
+    height:342px;
+}
+.invest-success .invest-content {
+    margin:137px auto;
+    width:310px;
+    height:80px;
+}
+.invest-success .invest-content .buy-txt {
+    height:38px;
+    line-height:38px;
+    color:#464648;
+    font-size: 30px;
+    overflow: hidden;
+}
+.invest-success .invest-content .buy-txt i {
+    float: left;
+    width:36px;
+    height:38px;
+    background:url('../../../images/deal/success_icon.png') 0 4px no-repeat;
+    display: inline-block;
+    text-align: center;
+}
+.invest-success .invest-content .buy-txt span {
+    float: left;
+    height:38px;
+    line-height:38px;
+}
+.invest-success .invest-content .buy-txt-tip {
+    height:34px;
+    line-height:34px;
+    font-size: 12px;
+    color:#99999c;
+    text-align: center;
+}
+.invest-success .invest-content .buy-txt-tip .a-close {
+    cursor: pointer;
+    color:#419bf9;
+}
+
+/*  购买失败页面  */
+.invest-box .invest-container .invest-false  {
+    height:342px;
+}
+.invest-false .invest-content {
+    margin:137px auto;
+    width:310px;
+    height:80px;
+}
+.invest-false .invest-content .buy-txt {
+    margin:0 auto;
+    width: 190px;
+    height:38px;
+    line-height:38px;
+    color:#464648;
+    font-size: 30px;
+    overflow: hidden;
+}
+.invest-false .invest-content .buy-txt i {
+    float: left;
+    width:36px;
+    height:38px;
+    background:url('../../../images/deal/false_icon.png') 0 4px no-repeat;
+    display: inline-block;
+    text-align: center;
+}
+.invest-false .invest-content .buy-txt span {
+    float: left;
+    height:38px;
+    line-height:38px;
+}
+.invest-false .invest-content .buy-txt-tip {
+    height:34px;
+    line-height:34px;
+    font-size: 12px;
+    color:#99999c;
+    text-align: center;
+}

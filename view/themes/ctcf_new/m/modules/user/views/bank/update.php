@@ -2,8 +2,8 @@
 $this->title = '换卡申请';
 $this->backUrl = '/user/bank/card';
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css?v=20160406"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/replacecard.css?v=20160428"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/bind.css?v=20160407"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/replacecard.css?v=20160429"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/swiper.min.css"/>
 <script src="<?= ASSETS_BASE_URI ?>js/swiper.min.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/bind.js"></script>
@@ -74,7 +74,7 @@ $this->backUrl = '/user/bank/card';
     <div class="row">
         <div class="col-xs-3"></div>
         <div class="col-xs-6 login-sign-btn">
-            <input id="bindbankbtn" class="btn-common btn-normal" name="signUp" type="submit" value="下一步" >
+            <input style="color: #ff6707;border: 1px solid #ff6707;" id="bindbankbtn" class="btn-common btn-normal" name="signUp" type="submit" value="下一步" >
         </div>
         <div class="col-xs-3"></div>
     </div>

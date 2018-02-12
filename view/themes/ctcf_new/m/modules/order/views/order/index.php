@@ -28,7 +28,7 @@ JS
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/order.js?v=20171108', ['depends' => YiiAsset::class]);
 
-$this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=20180211', ['depends' => WapAsset::class]);
 
 
 ?>
@@ -91,8 +91,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends
         <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->dizeng_money) ?>元</div>
     </div>
     <div class="row surplus margin-top">
-        <div class="lf" style="width: 31%;color:#a3a4a6;">可用余额</div>
-        <div class="lf" style="width: 51%;color: #4e545a"><?= StringUtils::amountFormat3($user->lendAccount->available_balance) ?>
+        <div class="lf" style="width: 31%;color:#aab2bd;">可用余额</div>
+        <div class="lf" style="width: 51%;color: #434a54;"><?= StringUtils::amountFormat3($user->lendAccount->available_balance) ?>
             元
         </div>
         <div class="lf" style="width: 14%;" onclick="location.href('/user/userbank/recharge')"><a
@@ -135,7 +135,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends
 	          <input id="buybtn" class="btn-common btn-normal" type="submit" value="购买">
         </div>
         <div class="row" style="margin: 0.533rem auto .5rem;">
-            <center><a style="text-align: left;padding-left: 0.613rem;" class="col-xs-12 lf" href="/order/order/agreement?id=<?= $deal->id ?>">我已阅读并同意<span style="color: #007aff">《产品合同》</span></a></center>
+            <center><a style="text-align: left;padding-left: 0.613rem;" class="col-xs-12 lf" href="/order/order/agreement?id=<?= $deal->id ?>">我已阅读并同意<span style="color: #419bf9">《产品合同》</span></a></center>
         </div>
     </form>
 
@@ -147,7 +147,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends
             <span class="x-confirm">确定</span>
         </div>
     </div>
-<p id="btn_udesk_im" style="margin-bottom: 1rem;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
+<p id="btn_udesk_im" style="color:#434a54;margin-bottom: 1rem;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
     <div class="mask2" style="display: none"></div>
     <div class="coupon-box" style="display: none">
         <div class="coupon-box-title clearfix">
@@ -195,9 +195,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends
                     <p class="daijin-none-content">参与平台活动和关注平台动态</p>
                     <p class="daijin-none-content">将有机会获得代金券哦！</p>
                     <div class="daijin-none-link">
-                        <p><img src="<?= FE_BASE_URI ?>wap/rate-coupon/bid-page/images/icon_phone.png" alt="">客服电话：400-101-5151
+                        <p><img src="<?= FE_BASE_URI ?>wap/rate-coupon/bid-page/images/icon_phone.png" alt="">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?>
                         </p>
-                        <p>(8:30-20:00)</p>
+                        <p>(9:00-20:00)</p>
                     </div>
                 </div>
             </div>
@@ -214,9 +214,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends
                     <p class="daijin-none-content">参与平台活动和关注平台动态</p>
                     <p class="daijin-none-content">将有机会获得加息券哦！</p>
                     <div class="daijin-none-link">
-                        <p><img src="<?= FE_BASE_URI ?>wap/rate-coupon/bid-page/images/icon_phone.png" alt="">客服电话：400-101-5151
+                        <p><img src="<?= FE_BASE_URI ?>wap/rate-coupon/bid-page/images/icon_phone.png" alt="">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?>
                         </p>
-                        <p>(8:30-20:00)</p>
+                        <p>(9:00-20:00)</p>
                     </div>
                 </div>
             </div>

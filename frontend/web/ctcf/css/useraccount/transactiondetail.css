@@ -1,0 +1,105 @@
+.transactionDetail-box {
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+}
+
+.transactionDetail-box .transactionDetail-header {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    border-bottom: 1px solid #efeff3;
+}
+
+.transactionDetail-box .transactionDetail-header .transactionDetail-header-icon {
+    width: 20px;
+    height: 15px;
+    margin-top: 18px;
+    margin-right: 10px;
+    background: url("../../../images/useraccount/background-icon.png") no-repeat -135px 0;
+    float: left;
+}
+
+.transactionDetail-box .transactionDetail-header .transactionDetail-header-font {
+    font-size: 16px;
+    color: #434a54;
+}
+
+.transactionDetail-box .transactionDetail-content {
+    background-color: #fff;
+    color: #434a54;
+    padding: 20px 19px;
+    position: relative;
+}
+
+.transactionDetail-box table {
+    width: 100%;
+    font-size: 12px;
+}
+
+.transactionDetail-box table th {
+    height: 50px;
+    background-color: #e4e4e8;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.transactionDetail-box table td {
+    height: 60px;
+    color: #878d95;
+}
+
+.transactionDetail-box .td-back-color {
+    background-color: #efeff3;
+}
+
+.transactionDetail-box .color-green {
+    color: #0ac401;
+}
+
+.transactionDetail-box .color-red {
+    color: #ff532d;
+}
+
+.transactionDetail-box .color-blue {
+    color: #419bf9;
+}
+
+.transactionDetail-box table .table-text-left {
+    text-align: left;
+    text-indent: 21px;
+}
+
+.transactionDetail-box table .table-text-right p {
+    text-align: left;
+    text-indent: 22px;
+    width: 245px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.transactionDetail-box .table-link {
+    display: block;
+    text-align: left;
+    text-indent: 22px;
+    width: 245px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor:pointer;
+}
+
+.transactionDetail-box .table-kong {
+    height: 60px;
+    margin-top: 60px;
+}
+
+.transactionDetail-box .without-font {
+    position: absolute;
+    top: 216px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    font-size: 18px;
+    color: #99999d;
+}

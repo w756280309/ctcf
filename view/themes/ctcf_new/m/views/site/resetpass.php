@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class=" position">
         <input id="yanzhengma" class="login-info" name="SignupForm[sms]" maxlength="6" type="tel"
                placeholder="请输入短信验证码" AUTOCOMPLETE="off">
-        <input id="yzm" class="yzm yzm-normal" name="yzm" value="获取验证码" type="button">
+        <input id="yzm" class="yzm yzm-normal" name="yzm" value="获取验证码" type="button" style="background: #ff6707;border: 1px solid #ff6707;">
     </div>
     <div class="col-xs-9 col">
         <input id="pass" class="login-info" name="" maxlength="16" type="password"
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="clear form-bottom">&nbsp;</div>
     <div class="col-xs-3"></div>
     <div class="col-xs-6 login-sign-btn">
-        <input id="signup-btn" class="btn-common btn-normal" name="signUp" type="button" value="确认重置"
+        <input style="color: #ff6707;border: 1px solid #ff6707;" id="signup-btn" class="btn-common btn-normal" name="signUp" type="button" value="确认重置"
                onclick="subsignup()">
     </div>
     <div class="col-xs-3"></div>

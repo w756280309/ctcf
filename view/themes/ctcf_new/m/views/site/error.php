@@ -37,7 +37,7 @@ $this->registerCss("
         margin: 0 auto;
         text-align: center;
         border-radius: 8px;
-        background-color: #f1453d;
+        background-color: #ff6707;
         color: #fff;
     }
 ");

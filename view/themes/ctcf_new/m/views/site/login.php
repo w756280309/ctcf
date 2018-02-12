@@ -48,14 +48,14 @@ $this->title = '登录';
     <div class="form-bottom">&nbsp;</div>
     <div class="col-xs-3"></div>
     <div class="col-xs-6 login-sign-btn">
-        <button id="login-btn" class="btn-common btn-normal" name="start" value="登录" >登录</button>
+        <button style="color: #ff6707;border: 1px solid #ff6707;" id="login-btn" class="btn-common btn-normal" name="start" value="登录" >登录</button>
     </div>
     <div class="col-xs-6 login-sign-btn reg_forget_area">
-        <a  href="/site/signup" align="center" >注册账号</a>
+        <a style="color: #419bf9;" href="/site/signup" align="center" >注册账号</a>
         &emsp;
         |
         &emsp;
-        <a href="/site/resetpass" align="center" >忘记密码</a>
+        <a style="color: #419bf9;" href="/site/resetpass" align="center" >忘记密码</a>
     </div>
     <div class="col-xs-3"></div>
 

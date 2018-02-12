@@ -7,7 +7,7 @@ $this->showViewport = false;
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/tie-card/css/step.css?v=20170906">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/tie-card/step.css?v=20170907">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>wap/common/js/pop.js?v=2"></script>
 
@@ -22,7 +22,7 @@ $this->showViewport = false;
 
     <div class="stepShow">
         <ul class="clearfix stepNum">
-            <li class="lf f15 noBorder"><img class="stepok" src="<?= FE_BASE_URI ?>wap/tie-card/img/ok.png" alt=""></li>
+            <li class="lf f15 noBorder"><img class="stepok" src="<?= ASSETS_BASE_URI ?>ctcf/images/guide-realName/checked.png" alt=""></li>
             <li class="lf line"></li>
             <li class="lf f15 stepNow">2</li>
             <li class="lf line"></li>

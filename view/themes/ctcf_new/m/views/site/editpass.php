@@ -4,7 +4,7 @@ use yii\captcha\Captcha;
 
 $this->title = '修改登录密码';
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160422">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/setting.css?v=20160422">
 <style>
     .sm-height {  line-height: 47px; }
 </style>
@@ -12,13 +12,13 @@ $this->title = '修改登录密码';
     <?php $form = ActiveForm::begin(['id' => 'editpassform', 'action' => '/site/editpass', 'options' => ['class' => 'cmxform']]); ?>
     <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
     <div class="row sm-height border-bottom">
-            <div class="col-xs-3 safe-txt text-align-ct">原密码</div>
+            <div class="col-xs-3 safe-txt text-align-ct" style="color: #434a54;">原密码</div>
             <div class="col-xs-9 safe-lf text-align-lf">
                 <input type="password" id="password" class="change-input" name="EditpassForm[password]" maxlength="16" placeholder="请输入原密码">
             </div>
         </div>
         <div class="row sm-height border-bottom">
-            <div class="col-xs-3 safe-txt text-align-ct">新密码</div>
+            <div class="col-xs-3 safe-txt text-align-ct" style="color: #434a54;">新密码</div>
             <div class="col-xs-7 safe-lf text-align-lf">
                 <input type="password" id="new_pass" class="change-input" placeholder="请输入6到16位的新密码" name="EditpassForm[new_pass]" maxlength="16">
             </div>
@@ -27,7 +27,7 @@ $this->title = '修改登录密码';
             </div>
         </div>
         <div class="row sm-height border-bottom">
-            <div class="col-xs-3 safe-txt text-align-ct">验证码</div>
+            <div class="col-xs-3 safe-txt text-align-ct" style="color: #434a54;">验证码</div>
             <div class="col-xs-5 safe-lf" style="padding-right: 0;">
                 <input type="text" id="sms" class="change-input" placeholder="请输入验证码" name="EditpassForm[verifyCode]" maxlength="4" >
             </div>
@@ -40,7 +40,7 @@ $this->title = '修改登录密码';
         <div class="row login-sign-btn">
             <div class="col-xs-3"></div>
             <div class="col-xs-6 text-align-ct">
-                <input id="editpassbtn"  class="btn-common btn-normal" style="margin-top:40px; background: #F2F2F2" type="button" value="确认重置">
+                <input style="margin-top:40px; background: #F2F2F2;color: #ff6707;border: 1px solid #ff6707;" id="editpassbtn"  class="btn-common btn-normal" type="button" value="确认重置">
             </div>
             <div class="col-xs-3"></div>
         </div>

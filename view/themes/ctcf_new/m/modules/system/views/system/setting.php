@@ -6,7 +6,7 @@ $this->backUrl = '/user/user';
 $mobile = $model->mobile;
 $muri = ASSETS_BASE_URI;
 ?>
-<link rel="stylesheet" href="<?= $muri ?>css/setting.css">
+<link rel="stylesheet" href="<?= $muri ?>ctcf/css/setting.css?v=1.0">
 <script src="/js/jquery.min.js"></script>
 <script src="/layer/layer.js"></script>
 <style>
@@ -69,7 +69,7 @@ $muri = ASSETS_BASE_URI;
 <div class="row">
     <div class="row bg-height border-bottom">
         <div class="col-xs-4 left-txt">用户头像</div>
-        <div class="col-xs-6 ">
+        <div class="col-xs-6 " style="color: #aab2bd;">
             ID:<?= $mobile ?>
         </div>
         <div class="col-xs-2 headpic">
@@ -86,7 +86,7 @@ $muri = ASSETS_BASE_URI;
         <div class="col-xs-4 col-sm-3 left-txt">微信绑定</div>
         <div class="col-xs-6 col-sm-7"></div>
         <div class="col-xs-7 arrow bind" sign="<?= !is_null($social) ? 1 : 0 ?>" style="padding-right: 0;">
-            <?= !is_null($social) ? '<span style="color:grey;float: right;">(点击解除绑定)已绑定</span>' : '<span style="color:#7cbaf3;float: right;">去绑定</span>' ?>
+            <?= !is_null($social) ? '<span style="color:grey;float: right;">(点击解除绑定)已绑定</span>' : '<span style="color:#419bf9;float: right;">去绑定</span>' ?>
         </div>
         <div class="col-xs-1 col-sm-1 "></div>
     </a>

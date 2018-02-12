@@ -32,7 +32,7 @@ if (isset($cookies['pointPopUp'])) {
 		height: 0.37333333rem;
 		line-height: 0.37333333rem;
 		font-size: 0.37333333rem;
-		color: #4e545a;
+		color: #434a54;
 		text-align: center;
 		margin-bottom: 1.13333333rem;
 	}
@@ -58,11 +58,11 @@ if (isset($cookies['pointPopUp'])) {
 
 	.top-part #bind-button a.lf {
 		background-color: #fff;
-		color: #ff6058;
+		color: #ff6707;
 	}
 
 	.top-part #bind-button a.rg {
-		background-color: #ff6058;
+		background-color: #ff6707;
 		color: #fff;
 	}
 
@@ -87,7 +87,7 @@ if (isset($cookies['pointPopUp'])) {
 
 	.bottom-part div {
 		font-size: 0.3333rem;
-		color: #4e545a;
+		color: #434a54;
 		text-align: center;
 	}
 

@@ -55,7 +55,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
     </div>
     <div class="rule_box" style="padding-top: 0.5rem;">
         <?= $taps ? '<p class="rule_top f15">热烈庆祝温都金服成立一周年！</p>' : '' ?>
-        <p class="rule_top f15" style="color: #f44336; display: <?= $fromNb ? "none" : "block"?>">关注温都金服公众号（wendujinfu），绑定账户送积分啦！</p>
+        <p class="rule_top f15" style="color: #f44336; display: <?= $fromNb ? "none" : "block"?>">关注楚天财富公众号（hbctcf），绑定账户送积分啦！</p>
         <p class="rule_top f15">每天签到2积分，<?= $taps ? '5月签到积分直升3倍起！' : '7天后增至5积分。' ?></p>
         <p class="rule_top f15">连续签到可得代金券！</p>
         <p class="rule_title f15">签到规则</p>
@@ -91,9 +91,6 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
                 <td><span class="org">50元</span>代金券</td>
             </tr>
         </table>
-        <?php if (!defined('IN_APP')) { ?>
-            <p class="djq_deadline f13"><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf">使用APP签到更方便，点击<font color="#0080ff">立即下载</font></a></p>
-        <?php } ?>
     </div>
 </div>
 

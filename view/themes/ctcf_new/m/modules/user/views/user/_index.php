@@ -1,13 +1,13 @@
 <?php
 
 use common\utils\StringUtils;
-
+use common\models\user\User;
 
 ?>
 <div class="top_one flex-content">
     <?php if (\Yii::$app->user->isGuest) { ?>
         <div id="statu_one" style="padding-top: 1.173rem;">
-            <p class="award f24">注册就送<span class="f27" style="font-weight: 500;">698元</span>专享红包</p>
+            <p class="award f24">注册就送<span class="f27" style="font-weight: 500;">888元</span>专享红包</p>
             <div class="buttons">
                 <a href="/site/signup" class="button f17 lf">注 册</a>
                 <a href="/site/login?next=<?= urlencode(Yii::$app->request->hostInfo.'/user/user') ?>" class="button f17 rg">登 录</a>
@@ -44,7 +44,13 @@ use common\utils\StringUtils;
         </div>
     <?php } ?>
 </div>
-
+<?php if (!Yii::$app->user->isGuest && !$isBindCard) {?>
+<a href="identity/index" class="guide flex-content clearfix">
+    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/user/guide_01.png" alt="">
+    <span >资金托管全面升级，请先进行实名认证和绑卡</span>
+    <img class="rg" src="<?= ASSETS_BASE_URI ?>ctcf/images/user/guide_point.png" alt="">
+</a>
+<?php } ?>
 <!--登录状态下显示-->
 <?php if (!\Yii::$app->user->isGuest) { ?>
     <div class="remain flex-content">
@@ -61,7 +67,7 @@ use common\utils\StringUtils;
 
 <div class="youihui flex-content clearfix">
     <a href="/user/coupon/list" class="my_youhui lf youhui1">
-        <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coupon.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/ucenter/m_coupon.png" alt="">
         <div class="youhui_content f12">
             <?php if (!\Yii::$app->user->isGuest) { ?>
                 <p class="line_one f24" id="daijin"><?= $countCoupon?></p>
@@ -70,7 +76,7 @@ use common\utils\StringUtils;
         </div>
     </a>
     <a href="/mall/point" class="my_youhui rg youhui2">
-        <img src="<?= FE_BASE_URI ?>wap/ucenter/images/coins.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/ucenter/m_jifen.png" alt="">
         <div class="youhui_content f12">
             <?php if (!\Yii::$app->user->isGuest) { ?>
                 <p class="line_one f24" id="jifen"><?= isset($user->points) ? StringUtils::amountFormat2($user->points) : '0' ?></p>

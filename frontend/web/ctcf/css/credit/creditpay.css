@@ -1,0 +1,273 @@
+/*  购买页面  */
+.credit-box {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    width: 100%;
+    background-color: #f4f4f7;
+}
+.credit-box .credit-container {
+    margin:0 auto;
+    width:1000px;
+    border:1px solid #e6e6e6;
+}
+.credit-box .credit-container .credit-container-box {
+    background: #fff;
+    border-top: 5px solid #ff6707;
+}
+.credit-box .credit-container .credit-container-box .credit-top {
+    padding: 21px 0;
+    width:100%;
+    height:58px;
+    line-height:16px;
+    background: #efeff3;
+}
+.credit-box .credit-top .credit-top-title {
+    margin-left:30px;
+    width:650px;
+    font-size: 16px;
+    color:#434a54;
+    font-weight: 500;
+}
+.credit-box .credit-top .credit-top-tip {
+    margin-right:50px;
+    width:240px;
+    font-size: 14px;
+    color:#434a54;
+}
+.credit-box .credit-top input[type=checkbox]{
+    width:14px;
+    height: 14px;
+    margin-right: 6px;
+    border:1px solid #bababf;
+    background: #fff!important;
+}
+.credit-box .credit-top .credit-top-tip span {
+    color:#99999d;
+}
+.credit-box .credit-top .credit-top-tip i {
+    color:#6e6e72;
+}
+.credit-box a.check {
+    padding-left: 14px;
+    text-decoration: none;
+    color:#419bf9;
+    cursor: pointer;
+}
+
+.credit-box .credit-container-box .credit-centent {
+    background: #fff;
+}
+.credit-box .credit-container-box .credit-centent .credit-ct-lf {
+    width:628px;
+    float: left;
+}
+.credit-box .credit-container-box .credit-centent .credit-ct-lf .credit-ct-lf-title {
+    margin: 40px 0 0 30px;
+    color: #434a54;
+}
+.credit-box .credit-container-box .credit-centent .credit-ct-lf .credit-ct-lf-title p {
+    padding-bottom: 30px;
+    height: 50px;
+    line-height: 20px;
+    border-bottom: 1px solid #e6e6e6;
+}
+.credit-box .credit-container-box .credit-centent .credit-ct-lf .credit-ct-lf-content {
+    clear: both;
+    background: url(../../images/deal/buy_bg.png) no-repeat left bottom;
+}
+.credit-box .credit-container-box .credit-centent .credit-ct-lf .credit-ct-lf-content .txt-box {
+    min-height:210px;
+}
+.credit-box .credit-centent .credit-ct-lf .credit-ct-lf-title .percentage{
+    padding-left: 2px;
+    font-size: 14px;
+}
+.credit-box .credit-centent .credit-ct-lf .credit-ct-lf-title .time {
+    padding-right: 18px;
+    width: 190px;
+    font-size: 14px;
+    text-align: center;
+}
+.credit-box .credit-centent .credit-ct-lf .credit-ct-lf-title .discount {
+    width: 114px;
+}
+.credit-box .time span.nums {
+    padding-left: 18px;
+    font-size: 18px;
+    color: #ff6707;
+    display: inline-block;
+}
+.credit-box .percentage span.nums {
+    float: right;
+    padding-left: 18px;
+    padding-right: 18px;
+    font-size: 18px;
+    color: #ff6707;
+    display: inline-block;
+    text-align: right;
+}
+.credit-box .discount span.nums {
+    padding-left: 18px;
+    padding-right: 0;
+    font-size: 18px;
+    color: #ff6707;
+    display: inline-block;
+}
+.other-nums {
+    padding-left: 6px;
+    font-size:14px;
+    color:#ff6707;
+}
+.credit-box .credit-container-box .credit-centent .credit-ct-rg {
+    margin-right: 50px;
+    padding-top: 32px;
+    width:320px;
+}
+.credit-box .credit-container-box .credit-centent .credit-ct-rg .sum {
+    height:14px;
+    line-height:14px;
+    color: #99999d;
+    font-size: 14px;
+}
+.credit-box .credit-ct-rg span.lf-span {
+    width:80px;
+    height:14px;
+    line-height:14px;
+    color: #434a54;
+    font-size: 14px;
+    text-align: right;
+    display: inline-block;
+}
+.credit-box .credit-ct-rg i.rg-i {
+    float: right;
+    height:14px;
+    line-height:14px;
+    color: #ff6707;
+    font-size: 14px;
+    text-align: right;
+    display: inline-block;
+}
+.credit-box .credit-ct-rg .sum i.rg-i {
+    color:#ff6707;
+}
+.credit-box .credit-ct-rg .reduce {
+    height: 60px;
+    line-height: 60px;
+}
+.credit-box .credit-ct-rg .reduce i.rg-i  {
+    color:#6e6e72;
+    line-height: 60px;
+}
+.credit-box .credit-ct-rg .real-credit {
+    margin-top: 30px;
+    width: 308px;
+    border: 1px solid #ff6707;
+}
+.credit-box .credit-ct-rg .real-credit .real-money {
+    padding: 23px 12px 27px 0;
+    height: 24px;
+    line-height: 24px;
+    font-size:24px;
+    color: #ff6707;
+    text-align: right;
+}
+.credit-box .credit-ct-rg .real-credit .real-money span {
+    line-height: 24px;
+    font-size: 14px;
+    color: #99999d;
+}
+.credit-box .credit-ct-rg .real-credit .real-money i {
+    color:#bababf;
+}
+.credit-box .credit-ct-rg .real-credit a.buy {
+    height:40px;
+    line-height:40px;
+    color:#fff;
+    font-size: 14px;
+    text-align: center;
+    background: #ff6707;
+    display: block;
+    cursor: pointer;
+}
+.credit-box .credit-ct-rg .real-credit a.buy:hover {
+    background: #ff532d;
+}
+/*  购买成功页面  */
+.credit-box .credit-container .credit-success {
+    height:342px;
+}
+.credit-success .credit-content {
+    margin:137px auto;
+    width:320px;
+    height:80px;
+}
+.credit-success .credit-content .buy-txt {
+    height:38px;
+    line-height:38px;
+    color:#434a54;
+    font-size: 30px;
+    overflow: hidden;
+}
+.credit-success .credit-content .buy-txt i {
+    float: left;
+    width:36px;
+    height:38px;
+    background:url('../../images/deal/success_icon.png') 0 4px no-repeat;
+    display: inline-block;
+    text-align: center;
+}
+.credit-success .credit-content .buy-txt span {
+    float: left;
+    height:38px;
+    line-height:38px;
+}
+.credit-success .credit-content .buy-txt-tip {
+    height:34px;
+    line-height:34px;
+    font-size: 12px;
+    color:#99999c;
+    text-align: center;
+}
+.credit-success .credit-content .buy-txt-tip .a-close {
+    cursor: pointer;
+    color:#419bf9;
+}
+
+/*  购买失败页面  */
+.credit-box .credit-container .credit-false  {
+    height:342px;
+}
+.credit-false .credit-content {
+    margin:137px auto;
+    width:310px;
+    height:80px;
+}
+.credit-false .credit-content .buy-txt {
+    margin:0 auto;
+    width: 190px;
+    height:38px;
+    line-height:38px;
+    color:#434a54;
+    font-size: 30px;
+    overflow: hidden;
+}
+.credit-false .credit-content .buy-txt i {
+    float: left;
+    width:36px;
+    height:38px;
+    background:url('../../images/deal/buy_bg.png') 0 4px no-repeat;
+    display: inline-block;
+    text-align: center;
+}
+.credit-false .credit-content .buy-txt span {
+    float: left;
+    height:38px;
+    line-height:38px;
+}
+.credit-false .credit-content .buy-txt-tip {
+    height:34px;
+    line-height:34px;
+    font-size: 12px;
+    color:#99999c;
+    text-align: center;
+}

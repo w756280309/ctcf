@@ -1,8 +1,8 @@
 <?php
 $this->title="提现";
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/chongzhi.css"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/recharge/bind.css?v=1.111"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/recharge/recharge.css?v=1.21"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/tixian.css"/>
 
     <!--银行卡-->
@@ -45,7 +45,7 @@ $this->title="提现";
                     $drawFreeLimit = Yii::$app->params['draw_free_limit'];
                     $restDrawCount = $drawFreeLimit - $user_acount->user->getDrawCount();
                 ?>
-                <span>(每月有<?= $drawFreeLimit ?>次免费发起提现的机会，本月您还有<?= $restDrawCount > 0 ? $restDrawCount : 0 ?>次免费机会，之后每笔收取<?= Yii::$app->params['drawFee'] ?>元手续费)</span>
+                <span class="tixian-msg">(每月有<?= $drawFreeLimit ?>次免费发起提现的机会，本月您还有<?= $restDrawCount > 0 ? $restDrawCount : 0 ?>次免费机会，之后每笔收取<?= Yii::$app->params['drawFee'] ?>元手续费)</span>
             </div>
             <div class="hidden-xs col-sm-1"></div>
         </div>
