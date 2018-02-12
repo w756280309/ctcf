@@ -28,7 +28,7 @@ JS
 
 $this->registerJsFile(ASSETS_BASE_URI . 'js/order.js?v=20171108', ['depends' => YiiAsset::class]);
 
-$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=20180211', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=2018021111', ['depends' => WapAsset::class]);
 
 
 ?>
@@ -241,7 +241,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
             <li>加息券不可叠加使用，也不与其他卡券叠加使用。</li>
             <li>通过加息券获得的收益将随项目最后一期本息一期回到您的账户；项目中途转让将不享受任何加息券带来的收益。</li>
         </ul>
-        <p class="rules-phone">详情咨询：400-101-5151</p>
+        <p class="rules-phone">详情咨询：<?= Yii::$app->params['platform_info.contact_tel'] ?></p>
     </div>
     <input type="hidden" id="selectedCouponAmount" value="0">
     <input type="hidden" id="selectedCouponCount" value="0">

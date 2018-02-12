@@ -1,7 +1,9 @@
 <?php
 
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/chargedeposit.css?v=1.0');
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/chargedeposit.css?v=1.1');
 $this->title = $title;
+$userId = Yii::$app->user->id;
+$userStyle = Yii::$app->db->createCommand("select * from user_old where userId=".$userId)->queryOne();
 ?>
 
 <div class="charge-box">
@@ -11,11 +13,20 @@ $this->title = $title;
             <?= $title ?>
         </span>
     </div>
+    <?php if (!$userStyle) { ?>
     <div class="charge-content">
         <span>开通联动优势资金托管账户，享资金安全保障</span>
         <a style="cursor: pointer;" onclick="location.href='/user/identity'">立即开通</a>
         <div class="clear"></div>
     </div>
+    <?php } else { ?>
+    <div class="charge-content_primary_user">
+        <p>尊敬的用户</p>
+        <span>资金托管账户全面升级！请实名认证激活托管账户，激活后，用户资金只存在与第三方托管账户，平台无法碰触，保证资金安全</span>
+        <a style="cursor: pointer;" onclick="location.href='/user/identity'">立即开通</a>
+        <div class="clear"></div>
+    </div>
+    <?php } ?>
 </div>
 <div class="charge-explain">
     <p class="charge-explain-title">为什么要开通第三方资金托管账户？</p>

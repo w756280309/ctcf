@@ -1,7 +1,7 @@
 <?php
 $this->title = ("success" === $ret) ? "购买成功" : "购买失败";
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160331">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/buy-setting/setting.css?v=20160331">
 
 <div class="row" id='bind-box'>
     <div class="col-xs-12">

@@ -1,6 +1,6 @@
 <?php
 
-namespace wap\modules\ctcf\controllers;
+namespace frontend\modules\ctcf\controllers;
 
 use common\service\BankService;
 use yii\web\Controller;

@@ -4,7 +4,7 @@ $this->title = '积分规则';
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/point/css/index.css">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/point/index.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 
 <section>
@@ -13,7 +13,7 @@ $this->title = '积分规则';
         <ul>
             <li><img src="<?= FE_BASE_URI ?>wap/point/img/icon_01.png" alt="">怎么获得积分</li>
             <li>认购理财产品：</li>
-            <li>从2017年1月1日起，认购楚天财富理财产品（新手专享标、理财计划、转让的项目不参加）均会产生积分：</li>
+            <li>从2018年1月1日起，认购楚天财富理财产品（新手专享标、理财计划、转让的项目不参加）均会产生积分：</li>
             <li style="text-indent: 1em;">1. 当理财年化金额达到1000元可累计6分，即积分=年化投资金额*6/1000，不足1积分的按1积分计算；</li>
             <li style="text-indent: 1em;">2. 投资理财产品后，相应的积分将会打入您的积分账户中；</li>
             <li style="text-indent: 1em;">3. 年化投资额是根据您投资项目的期限来算的，年化投资额=投资金额*项目期限/365。</li>

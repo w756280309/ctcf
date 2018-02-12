@@ -65,7 +65,7 @@ $this->registerJs('forceReload_V2();');
 
             <div class="intro-footer clearfix">
                 <ul class="lf">
-                    <li><?= Yii::$app->params['platform_info.contact_tel'] ?><span>（8:30～20:00）</span></li>
+                    <li><?= Yii::$app->params['platform_info.contact_tel'] ?><span>（9:00～20:00）</span></li>
                     <li>地址：温州市鹿城区飞霞南路<br>657号保丰大楼四层</li>
                     <li>*理财非存款 产品有风险 投资须谨慎</li>
                 </ul>

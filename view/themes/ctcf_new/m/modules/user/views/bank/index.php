@@ -97,6 +97,11 @@ $this->showViewport = false;
     $(function() {
         FastClick.attach(document.body);
 
+        $.get('/ctcf/user/get-card-number', function (data) {
+            $("#card_no").val(data.cardNumber);
+            $("#card_no").trigger('blur');
+        })
+
         var err = '<?= $data['code'] ?>';
         var mess = '<?= $data['message'] ?>';
         var tourl = '<?= $data['tourl'] ?>';

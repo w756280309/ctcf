@@ -40,7 +40,7 @@ $this->title = '11月理财节';
             <p class="down-txt"><span v-cloak v-if="appointmentId == false">选择预约温盈恒系列标，能获得更高价值加息券哦！</span></p>
             <!-- 立即预约 -->
             <a class="btn-order now-order" @click="nowOrder"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/btn-now-order.png" alt="立即预约"></a>
-            <p class="tel">电话预约：400-101-5151</p>
+            <p class="tel">电话预约：<?= Yii::$app->params['platform_info.contact_tel'] ?></p>
         </div>
         <div class="order-after order"  :class="[ orderPop == '1' ? 'show': '']">
             <h4 class="result-title">恭喜您预约成功，<br>获得加息券一张！</h4>

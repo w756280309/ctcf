@@ -321,8 +321,8 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     $(function() {
         $('.tabs div').click(function() {
             var index = $('.tabs div').index(this);
-            $('.tabs div').css({background:'#ffffff',color:'#f34334'}); //303030
-            $('.tabs div').eq(index).css({background:'#f34334',color:'#ffffff'});
+            $('.tabs div').css({background:'#ffffff',color:'#f34a54'}); //303030
+            $('.tabs div').eq(index).css({background:'#f34a54',color:'#ffffff'});
             if(index==1){
                 $('.tab-conten').css({display:'none'});
                 $('.touzi-box').css({display:'block'});

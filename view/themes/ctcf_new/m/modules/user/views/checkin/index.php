@@ -54,7 +54,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
         <?php } ?>
     </div>
     <div class="rule_box" style="padding-top: 0.5rem;">
-        <?= $taps ? '<p class="rule_top f15">热烈庆祝温都金服成立一周年！</p>' : '' ?>
+        <?= $taps ? '<p class="rule_top f15">热烈庆祝楚天财富成立一周年！</p>' : '' ?>
         <p class="rule_top f15" style="color: #f44336; display: <?= $fromNb ? "none" : "block"?>">关注楚天财富公众号（hbctcf），绑定账户送积分啦！</p>
         <p class="rule_top f15">每天签到2积分，<?= $taps ? '5月签到积分直升3倍起！' : '7天后增至5积分。' ?></p>
         <p class="rule_top f15">连续签到可得代金券！</p>

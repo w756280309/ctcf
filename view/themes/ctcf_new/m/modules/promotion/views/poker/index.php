@@ -129,7 +129,7 @@ $this->registerJs('forceReload_V2();');
                         <li>开奖时间：每周一上午10点</li>
                         <li>中奖规则<br>一等奖：用户抽奖码与系统公布号码完全一致，即获奖（如果当期没有任何用户号码完全一致，系统将在幸运奖用户中，选取投资最早的用户作为一等奖得主）。<br>幸运奖：黑桃卡片数字和系统公布的黑桃幸运数字一致即可中奖。</li>
                         <li>卡片点亮秘诀<br>黑桃卡片：幸运卡片，进入活动页面即可点亮；<br>红桃卡片：登录即可点亮；<br>梅花卡片：签到即可点亮；<br>方块卡片：任意投资即可点亮（活动期间尽早投资可能有惊喜哦）。</li>
-                        <li>积分奖励将立即发放到您的账户，实物奖励将在中奖后7个工作日内联系发放，如有疑问请联系客服电话400-101-5151。</li>
+                        <li>积分奖励将立即发放到您的账户，实物奖励将在中奖后7个工作日内联系发放，如有疑问请联系客服电话<?= Yii::$app->params['platform_info.contact_tel'] ?>。</li>
 
                         <div class="last_li">播种一个行动，收获一个惊喜，中奖不靠人品，因为我们是有算法的：<i v-on:click="showRegular" class="regular_tips">号码生成规则<span :class="{rot180:isShowRegular}">>></span></i></div>
                         <div class="regular_detail" v-if="isShowRegular">

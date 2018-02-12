@@ -68,4 +68,11 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/chargedeposit.css')
     if (m == 1) {
         mianmi();
     }
+
+    $(function () {
+        $.get('/ctcf/user/get-card-number', function (data) {
+            $("#card_no").val(data.cardNumber);
+            $("#card_no").trigger('blur');
+        })
+    })
 </script>

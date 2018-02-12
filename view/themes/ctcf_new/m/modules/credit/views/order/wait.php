@@ -1,7 +1,7 @@
 <?php
 $this->title= "订单处理中";
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/setting.css?v=20160331">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/buy-setting/setting.css?v=201802111">
 
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
@@ -13,7 +13,7 @@ $this->title= "订单处理中";
 </div>
 <div class="row daojishi" id='bind-close1'>
     <div class="col-xs-12 page_padding">
-        <div>遇到问题请联系客服，电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></div>
+        <div>遇到问题请联系客服，电话：<a style="color: #aab2bd;" class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></div>
     </div>
     <div class="col-xs-4"></div>
     <div class="col-xs-4">

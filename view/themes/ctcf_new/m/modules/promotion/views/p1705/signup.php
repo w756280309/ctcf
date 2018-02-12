@@ -82,7 +82,7 @@ use yii\captcha\Captcha;
             <div class="clearfix">
                 <img class="lf"  src="<?= FE_BASE_URI ?>wap/luodiye/images/icon_03.png" alt="">
                 <p class="lf">
-                    <a class="f15" href="tel:400-101-5151" style="line-height:0.6266667rem;">400-101-5151</a>
+                    <a class="f15" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>" style="line-height:0.6266667rem;"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>
                     <span class="f12" style="line-height:0.56rem;">工作时间：8:30~20:00</span>
                 </p>
             </div>

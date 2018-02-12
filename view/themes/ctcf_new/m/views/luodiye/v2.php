@@ -122,9 +122,10 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
             <p class="tips">*本次活动最终解释权归温都金服所有与苹果公司无关</p>
             <ul class="clearfix">
                 <li class="lf">
-                    <p>400-101-5151</p>
-                    <p>（8:30~20:00）</p>
-                    <p class="overflowHidden">地址：温州市鹿城区飞霞南路657号保丰大楼四层</p>
+                    <p><?= Yii::$app->params['platform_info.contact_tel'] ?></p>
+                    <p>（9:00~20:00）</p>
+                    <p class="overflowHidden">地址：武汉市武昌区东湖路181号楚天文化创意产业园
+                        8号楼1层</p>
                 </li>
                 <li class="rg"><img data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/erweima.png" alt=""></li>
             </ul>

@@ -17,7 +17,7 @@ $nowTime = new \DateTime();
 $endTime = new \DateTime($respData['endTime']);
 $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css?v=20161217', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/details-list/detail.css?v=20180217111111', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJs('var remainTime = '.strtotime($isClosed ? 'now' : $respData['endTime']).';', 1);
 $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends' => 'wap\assets\WapAsset']);
 
