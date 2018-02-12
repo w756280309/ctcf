@@ -1,0 +1,29 @@
+.container .list-title {
+    text-align: center;
+    background: #fff;
+    position: relative;
+    top:0;
+    width:100%;
+}
+.container .list-title-top {
+    top:0;
+    height: 45px;
+    background: #fff;
+    z-index: 20;
+    box-shadow: 0 2px 10px #888;
+    -moz-box-shadow: 0 2px 10px #888;
+    -webkit-box-shadow: 0 2px 10px #888;
+}
+.container .cre-title {
+    padding: 10px 0;
+    color:#434a54;
+    font-size: 16px;
+    display: inline-block;
+}
+.container .active-cre-title {
+    color:#ff6707;
+    border-bottom:1px solid #ff6707;
+}
+.container .cre-title:hover {
+    color:#ff6707;
+}

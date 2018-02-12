@@ -69,6 +69,15 @@ return [
                 ],
             ],
         ],
+        'view' => [
+            'class' => 'common\view\WapView',
+            'theme' => [
+                'pathMap' => [
+                    '@app/views' => '@view/themes/'.$_ENV['BW_APP'].'/pc/views',
+                    '@app/modules' => '@view/themes/'.$_ENV['BW_APP'].'/pc/modules',
+                ],
+            ]
+        ],
     ],
     'modules' => [
         'user' => [
@@ -88,6 +97,9 @@ return [
         ],
         'risk' => [
             'class' => 'Wcg\Xii\Risk\Module',
+        ],
+        'ctcf' => [
+            'class' => 'frontend\modules\ctcf\Module',
         ],
     ],
     'params' => $params,

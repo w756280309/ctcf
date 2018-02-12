@@ -1,0 +1,34 @@
+.about-box1 {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e3e3e3;
+    width: 798px;
+}
+.about-box1 .about-header {
+    border-bottom: 1px solid #efeff3;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+}
+.about-box1 .about-header .about-header-font {
+    color: #464648;
+    font-size: 16px;
+}
+.about-box1 .about-content {
+    padding: 20px;
+    overflow: hidden;
+}
+.about-box1 .about-content p {
+    color: #6e6e72;
+    margin-bottom: 15px;
+    text-indent: 30px;
+}
+.about-box1 .about-content .zizhi {
+    color: #161616;
+    font-size: 16px;
+    text-align: center;
+}
+
+.about-box1 .about-content .business-license img {
+    display: block;
+    margin: 0 auto;
+}
