@@ -70,6 +70,7 @@ return [
         'roundabout_redpacket' => 138632, //现金红包已发到指定账户上的通知短信
         'birthday_coupon' => 141156,//用户生日给用户发送代金券
         'debx_repay' => 177805,//等额本息还款
+        'transfer_all_success' => '',   //全部转让成功
     ],
 
     'platform_info.contact_tel' => '',             //客服电话

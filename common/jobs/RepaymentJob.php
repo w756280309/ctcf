@@ -167,6 +167,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                             bcadd($plan->benxi, $plan->tiexi, 2),
                             substr($order->bankCardNo, -4),
                             $order->accBankName,
+                            Yii::$app->params['platform_info.contact_tel'], //客服电话
                         ];
                         //最后一期
                         $templateId = Yii::$app->params['offline_repayment_sms']['fuxi_last'];
@@ -232,6 +233,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
             $orderDate,
             $loanName,
             $qixiTime,
+            Yii::$app->params['platform_info.contact_tel'], //客服电话
         ];
         $templateId = Yii::$app->params['offline_repayment_sms']['jixi'];
         SmsService::send($mobile, $templateId, $message);
@@ -240,6 +242,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
             $message = [
                 $name,
                 $loanName,
+                Yii::$app->params['platform_info.contact_tel'], //客服电话
             ];
             $templateId = Yii::$app->params['offline_repayment_sms']['querenhan'];
             SmsService::send($mobile, $templateId, $message);

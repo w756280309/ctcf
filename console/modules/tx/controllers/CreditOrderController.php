@@ -1008,7 +1008,7 @@ class CreditOrderController extends Controller
     {
         return (new SmsMessage())->initNew(
             $user,
-            118096,
+            Yii::$app->params['sms']['transfer_all_success'], //全部转让成功短信模板
             [
                 $creditNote->createTime,
                 bcdiv($creditNote->amount, 100, 2),
