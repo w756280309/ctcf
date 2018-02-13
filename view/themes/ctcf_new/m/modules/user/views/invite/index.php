@@ -1,7 +1,7 @@
 <?php
 $this->title = '邀请好友';
 
-$this->registerJsFile(ASSETS_BASE_URI . 'js/invite/invite.js?v=20180206', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/invite/invite.js?v=20180206', ['depends' => 'yii\web\JqueryAsset', 'position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/invite/invite.css?v=2018121011', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
@@ -11,10 +11,10 @@ use common\view\WxshareHelper;
 $host = Yii::$app->params['clientOption']['host']['wap'];
 
 $share = new Share([
-    'title' => '好友送您50元代金券，温都金服理财，亲测靠谱！',
-    'description' => '新手专享，预期年化收益率10%，注册更有698元红包送！',
+    'title' => '好友送您50元红包，楚天财富理财，安全可靠！',
+    'description' => '新手专享，预期年化收益率高至10%，注册更有888元代金券送！',
     'url' => $host.'luodiye/invite?code='.$user->usercode,
-    'imgUrl' => (ASSETS_BASE_URI === '/' ? $host : ASSETS_BASE_URI).'promo/1608/images/invite/icon.jpg',
+    'imgUrl' => (ASSETS_BASE_URI === '/' ? $host : ASSETS_BASE_URI).'ctcf/images/promo/share_weixin.jpg',
 ]);
 
 WxshareHelper::registerTo($this, $share);
@@ -145,7 +145,7 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
 
         <!--活动规则-->
         <div class="rule-box">
-            <div class="inv-title"><b>活动开始时间：2018年12月10日</b></div>
+            <div class="inv-title"><b>活动开始时间：2018年1月1日</b></div>
             <div class="inv-title"><b>活动规则：</b></div>
             <ul>
                 <li>登录楚天财富网站，进入“我的账户”；</li>

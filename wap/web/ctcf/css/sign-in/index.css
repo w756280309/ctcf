@@ -1,0 +1,303 @@
+body {
+    background-color: #ddd
+}
+
+i {
+    font-style: normal
+}
+.head_part {
+    height: 3.56rem;
+    background: url(../../images/sign-in/top_bg_qiandao.png) no-repeat;
+    background-size: 100% 100%;
+    position: relative
+}
+
+.head_part .jilu_link {
+    position: absolute;
+    display: block;
+    width: 1.92rem;
+    height: .613rem;
+    line-height: .64rem;
+    top: .346rem;
+    right: .266rem;
+    background-color: #ff8f71;
+    color: #fff;
+    text-align: center;
+    border-radius: .266rem
+}
+
+.schedule_box {
+    background-color: #fff;
+    position: relative;
+    padding-top: 1.24rem;
+    padding-bottom: 1.546rem
+}
+
+.schedule_box .schedule_bar {
+    width: 100%;
+    height: .3rem;
+    border-top: 1px solid #ff5031;
+    border-bottom: 1px solid #ff5031
+}
+
+.schedule_box .schedule_bar .lf {
+    display: block;
+    height: 100%
+}
+
+.schedule_box .schedule_bar .jindu_one {
+    background-color: #fb4733;
+    width: .9333rem;
+    border-right: 1px solid #fff
+}
+
+.schedule_box .schedule_bar .jindu_two {
+    width: 40%;
+    background: -webkit-linear-gradient(to right, #fb4733 0, #ff782e 100%);
+    background: -moz-linear-gradient(to right, #fb4733 0, #ff782e 100%);
+    background: -ms-linear-gradient(to right, #fb4733 0, #ff782e 100%);
+    background: -o-linear-gradient(to right, #fb4733 0, #ff782e 100%);
+    background: linear-gradient(to right, #fb4733 0, #ff782e 100%);
+    background-image: -moz-linear-gradient(right, #f44336, #ff772e);
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #f44336), color-stop(1, #ff782e));
+    border-top-right-radius: 9px;
+    border-bottom-right-radius: 9px
+}
+
+.schedule_box .days {
+    display: inline-block;
+    background: url(../../images/sign-in/day_bg.png) no-repeat;
+    background-size: contain;
+    width: .8rem;
+    height: .75rem;
+    position: absolute;
+    top: 1.8rem;
+    color: #ff782e;
+    text-align: center;
+    padding-top: .27rem
+}
+
+.schedule_box .yuans {
+    width: .826rem;
+    height: 1rem;
+    position: absolute;
+    top: .24rem
+}
+
+.schedule_box .sticker {
+    position: absolute;
+    display: block;
+    width: 1px;
+    height: .3rem;
+    background-color: #fff;
+    top: 1.253rem;
+    z-index: 100
+}
+
+.schedule_box .jieduan1 {
+    left: 2.32rem
+}
+
+.schedule_box .jieduan2 {
+    left: 4.4rem
+}
+
+.schedule_box .jieduan3 {
+    right: 1%
+}
+
+.qiandao_button {
+    width: 100%;
+    height: 1.6rem;
+    background-color: #fff;
+    text-align: center
+}
+
+.qiandao_button .qiandao_btn {
+    display: block;
+    height: 1.0666rem;
+    line-height: 1.0666rem;
+    width: 4.56rem;
+    margin: 0 auto;
+    text-align: center;
+    color: #fff
+}
+
+.qiandao_button .btn1 {
+    background: url(../../images/sign-in/btn_1.png) no-repeat;
+    background-size: contain
+}
+
+.qiandao_button .btn2 {
+    background: url(../../images/sign-in/btn_2.png) no-repeat;
+    background-size: contain
+}
+
+.rule_box {
+    margin-top: .2667rem;
+    background-color: #fff;
+    padding-bottom: .573rem
+}
+
+.rule_box .rule_title {
+    text-align: center;
+    color: #333;
+    padding-top: .533rem
+}
+
+.rule_box img {
+    display: block;
+    width: 9.36rem;
+    height: .306rem;
+    margin: 0 auto
+}
+
+.rule_box .rule_content {
+    padding-left: .533rem;
+    padding-right: .533rem;
+    color: #666;
+    padding-bottom: .826rem
+}
+
+.rule_box .rule_content li {
+    line-height: .67rem;
+    margin-top: .32rem;
+    list-style-type: decimal;
+    margin-left: .533rem
+}
+
+.rule_box .djq_deadline {
+    color: #666;
+    margin-top: .533rem;
+    padding-left: .533rem
+}
+
+.rule_box table {
+    width: 8.93rem;
+    margin: .4rem auto 0;
+    padding-bottom: .533rem;
+    border-collapse: collapse
+}
+
+.rule_box table tr th {
+    color: #333
+}
+
+.rule_box table tr td {
+    color: #666
+}
+
+.rule_box table tr td .org {
+    color: #f1453d
+}
+
+.rule_box table tr td, .rule_box table tr th {
+    height: .8rem;
+    line-height: .8rem;
+    border: 1px solid #999;
+    text-align: center
+}
+
+.rule_box .rule_top {
+    padding-left: .533rem;
+    padding-right: .533rem;
+    color: #666
+}
+
+.mask {
+    display: none
+}
+
+.pomp {
+    width: 6.4rem;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: none;
+    -webkit-border-radius: .26666667rem;
+    -moz-border-radius: .26666667rem;
+    border-radius: .26666667rem;
+    z-index: 1000001;
+    background-color: #fff;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    text-align: center;
+    padding: .9333333rem .666667rem .76rem
+}
+
+.pomp img {
+    width: 7.3866667rem;
+    position: absolute;
+    top: -.45rem;
+    left: -.49333333rem
+}
+
+.pomp-time {
+    line-height: 1.5rem;
+    color: #b9622b;
+    font-size: .4rem;
+    position: relative
+}
+
+.pomp-time i:first-child {
+    content: '';
+    width: .85333333rem;
+    background-color: #b9622b;
+    height: 1px;
+    display: block;
+    position: absolute;
+    top: .72rem;
+    left: 0
+}
+
+.pomp-time i:last-child {
+    content: '';
+    width: .85333333rem;
+    background-color: #b9622b;
+    height: 1px;
+    display: block;
+    position: absolute;
+    top: .72rem;
+    right: 0
+}
+
+.pomp-points {
+    color: #666;
+    font-size: .4rem
+}
+
+.pomp-points span {
+    font-size: .64rem;
+    color: #f44336
+}
+
+.pomp a {
+    width: 100%;
+    line-height: .9333333rem;
+    background-color: #f44336;
+    text-align: center;
+    color: #fff;
+    display: block;
+    margin: .4533333rem auto 0;
+    font-size: .4533333rem;
+    border-radius: .1333333333rem
+}
+
+.boundWeixin {
+    margin-top: .33333333rem
+}
+
+.boundWeixin p:first-child {
+    color: #f44336;
+    line-height: .866667rem;
+    font-size: .3733333rem;
+    text-align: center
+}
+
+.boundWeixin p:last-child {
+    color: #666;
+    line-height: .4rem;
+    font-size: .32rem;
+    text-align: center
+}

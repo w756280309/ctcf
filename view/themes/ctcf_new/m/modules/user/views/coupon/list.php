@@ -9,7 +9,7 @@ $this->title = '优惠券';
 	<link rel="stylesheet" href="http://view.wendujf.com/css/base.css?v=20170907">
 	<script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 	<script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
-	<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/common/rate-coupon/account-coupon/css/index.css?v=1.5">
+	<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/account-coupon/index.css?v=1802131">
 	<style>
 		.list {
 			-webkit-overflow-scrolling: touch;

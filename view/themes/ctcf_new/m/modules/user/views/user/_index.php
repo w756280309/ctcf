@@ -45,7 +45,7 @@ use common\models\user\User;
     <?php } ?>
 </div>
 <?php if (!Yii::$app->user->isGuest && !$isBindCard) {?>
-<a href="identity/index" class="guide flex-content clearfix">
+<a href="javascript:void(0)" onclick="certification('no_popup')" class="guide flex-content clearfix">
     <img src="<?= ASSETS_BASE_URI ?>ctcf/images/user/guide_01.png" alt="">
     <span >资金托管全面升级，请先进行实名认证和绑卡</span>
     <img class="rg" src="<?= ASSETS_BASE_URI ?>ctcf/images/user/guide_point.png" alt="">

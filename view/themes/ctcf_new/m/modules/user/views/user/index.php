@@ -211,6 +211,25 @@ UdeskWebIMHelper::init($this);
             toastCenter('系统繁忙,请稍后重试!');
         });
     }
+    
+    function certification(popup) {
+        if (popup == 'has_popup') {
+            $(".mask-no-invest").hide();
+        }
+        var xhr = $.get('/user/user/check-kuaijie', function (data) {
+            if (data.code) {
+                toastCenter(data.message, function() {
+                    if (data.tourl) {
+                        location.href = data.tourl;
+                    }
+                });
+            }
+        });
+
+        xhr.fail(function () {
+            toastCenter('系统繁忙,请稍后重试!');
+        });
+    }
 
     function adaptive()
     {
@@ -240,7 +259,7 @@ UdeskWebIMHelper::init($this);
         <div class="red-racket f13">
             请先实名认证激活托管账户，激活后，用户资金只存在于第三方的托管账户，平台无法碰触，保证安全。
         </div>
-        <a href="identity/index" class="popup-box-btn f16">立即前往激活账户</a>
+        <a href="javascript:void(0)" onclick="certification('has_popup')" class="popup-box-btn f16">立即前往激活账户</a>
     </div>
 </div>
 <?php } ?>

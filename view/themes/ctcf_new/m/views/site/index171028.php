@@ -68,9 +68,9 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 	}
 </style>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=1802121112">
-<div>
-    <img class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" width="100%" alt="">
-</div>
+<!--<div>-->
+<!--    <img class="channel hide" src="--><?//= FE_BASE_URI ?><!--wap/index/images/channel.png" width="100%" alt="">-->
+<!--</div>-->
 <div class="flex-content">
     <?php if (!empty($hotActs)) { ?>
 			<div class="banner-box swiper-container">
@@ -181,7 +181,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		<div class="data-box-show">
 			<p class="data-box-show-line1">平台已安全运营</p>
 			<p class="data-box-show-line2">
-				<span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-06-06'))->days ?></span>天</p>
+				<span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2015-06-05'))->days ?></span>天</p>
 			<p class="data-box-show-line3" style="width: auto;display: inline-block;padding: 0 .306rem">历史兑付率<span>100%</span></p>
 		</div>
 	</div>
@@ -213,32 +213,32 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 <?php } ?>
 <div class="mask" style="display: none"></div>
 <!--新增首页弹框1-->
-<div class="first-popover" style="display: none">
-	<img class="popover-bg" src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/popover_01.png" alt="">
+<!--<div class="first-popover" style="display: none">
+	<img class="popover-bg" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/new-homepage/popover_01.png" alt="">
 	<div class="popover-ctn">
-		<img class="popover-close" src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/popover-close.png" alt="">
+		<img class="popover-close" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/new-homepage/popover-close.png" alt="">
 		<p class="popover-title">价值698元代金券<br>已发到您的账户</p>
 		<p class="popover-detail">你也可以在账户-代金券中,查看奖励</p>
 		<a class="btn_01" href="/user/coupon/list">查看详情</a>
 		<a class="btn_02" href="javascript:void(0)">去投资 领取160元超市卡</a>
 	</div>
-</div>
+</div>-->
 
 <!--新增首页弹框2-->
-<div class="second-popover" style="display: none">
-	<img class="popover-close" src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/popover-close_01.png" alt="">
+<!--<div class="second-popover" style="display: none">
+	<img class="popover-close" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/new-homepage/popover-close_01.png" alt="">
 	<p class="popover-title">投资前先开通资金托管账户</p>
 	<p class="popover-detail">开通账户送积分，投资还有更多超市卡等你拿</p>
 	<a class="popover-btn" href="/user/identity">马上去开通</a>
-</div>
+</div>-->
 
 <!--对应的弹框的js-->
-<script>
+<!--<script>
   $('.popover-close').on('click', function () {
     $('.first-popover,.second-popover').hide();
     $('.mask').hide();
   })
-</script>
+</script>-->
 <?php if (null !== $kaiPing && $kaiPing->media) { ?>
 	<div class="mask hide"></div>
 

@@ -8,7 +8,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/sign-in/index.css?v=201802121">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/sign-in/index.css?v=2018021211">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 
@@ -104,7 +104,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
         <?php if (!$isBindWx) { ?>
         <p>绑定微信额外送10积分啦！</p>
         <?php } ?>
-        <p>关注温都金服微信公众号，<br>点击“绑定账户”即可</p>
+        <p>关注楚天财富微信公众号，<br>点击“绑定账户”即可</p>
     </div>
     <a href="javascript:void(0);">确认</a>
 </div>

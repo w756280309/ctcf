@@ -1,6 +1,6 @@
 <?php
 
-$this->title = "温州报业传媒旗下理财平台";
+$this->title = "楚天财富";
 $this->params['breadcrumbs'][] = $this->title;
 $this->headerNavOn = true;
 
@@ -18,7 +18,7 @@ if ($isLuodiye) {
 
     $share = new Share([
         'title' => '送你一个红包，快打开看看！',
-        'description' => '湖北日报新媒体集团旗下理财平台，国资背景，稳健好收益。',
+        'description' => '湖北日报新媒体集团旗下的理财平台，国资背景，稳健好收益。',
         'url' => $host.'luodiye',
         'imgUrl' => ('/' === ASSETS_BASE_URI ? $host : ASSETS_BASE_URI).'images/wechat/0926.jpg',
     ]);
@@ -35,7 +35,7 @@ if ($isLuodiye) {
         </div>
         <div class="front-font">
             <?php if ($isLuodiye) { ?>
-                <p>新手标698元红包等你拿</p>
+                <p>新手标888元红包等你拿</p>
                 <p>预期年化收益率10%</p>
             <?php } else { ?>
                 <p>好友邀请送好礼</p>
@@ -84,7 +84,7 @@ if ($isLuodiye) {
 <!--    </div>-->
 <!--</div>-->
 <div class="row choose-box">
-    <h3>为什么选择温都金服？</h3>
+    <h3>为什么选择楚天财富？</h3>
     <div class="choose-content">
         <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose_new.png" alt="">
         <img src="<?= ASSETS_BASE_URI ?>images/luodiye/why-wdjf-new.png" alt="">

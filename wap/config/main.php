@@ -141,6 +141,7 @@ return [
         ],
         'risk' => [
             'class' => 'Wcg\Xii\Risk\Module',
+            'layout' => 'risk',
         ],
         'wechat' => [
             'class' => 'app\modules\wechat\Module',

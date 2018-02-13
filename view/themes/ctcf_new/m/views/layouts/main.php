@@ -62,7 +62,7 @@ $this->registerMetaTag([
     <?php if (!defined('IN_APP') && !$this->hideHeaderNav) { ?>
         <?php if ($this->headerNavOn) { ?>
             <header class="row head-title">
-                <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/logo.png" alt="logo"></div>
+                <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/promo/ctcf_logo.png" alt="logo"></div>
                 <div class="logo_tit"><?= Html::encode($this->title) ?></div>
             </header>
         <?php } else { ?>

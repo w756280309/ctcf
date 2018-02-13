@@ -9,7 +9,7 @@ $this->backUrl = $backUrl ? $backUrl : '/?_mark='.time();
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css??v=20170906">
 <!--<link rel="stylesheet" href="--><?//= FE_BASE_URI ?><!--wap/point/css/index.css?v=20170714-v">-->
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/common/point/css/index.css?v=2017071421-v">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/account-coupon/jf-point.css?v=18021311">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 
 <div class="shoptop">

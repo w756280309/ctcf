@@ -9,7 +9,7 @@ $this->showBottomNav = true;
 $this->hideHeaderNav = HttpUtils::isWeixinRequest();
 $this->backUrl = false;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=2017041332', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/list-tag/creditlist.css?v=2018021311', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/list-tag/list_tag.css', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/TouchSlide.1.1.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/jquery.classyloader.js', ['depends' => JqueryAsset::class, 'position' => 1]);

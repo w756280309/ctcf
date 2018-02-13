@@ -111,7 +111,7 @@ AnalyticsHelper::registerTo($this);
         <div class="page page-loading" data-lock-next="true" data-lock-prev="true">
                 <div class="top-empt-loading"></div>
                 <div class="page-loading-title1"></div>
-                <div class="page-loading-wendu">隶属湖北日报新媒的体集团旗下的理财平台</div>
+                <div class="page-loading-wendu">隶属湖北日报新媒体集团旗下的理财平台</div>
                 <div class="page-loading-jindubg">
                         <div class="page-redloading-wrap">
                                 <div class="page-redloading"></div>
