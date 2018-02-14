@@ -11,10 +11,10 @@ use common\view\WxshareHelper;
 $host = Yii::$app->params['clientOption']['host']['wap'];
 
 $share = new Share([
-    'title' => '好友送您50元红包，楚天财富理财，安全可靠！',
-    'description' => '新手专享，预期年化收益率高至10%，注册更有888元代金券送！',
+    'title' => '我在楚天财富投资啦，也送你888元福利，拿去花',
+    'description' => '楚天财富隶属湖北日报新媒体集团旗下理财平台，平台稳健运行3年，投资更放心',
     'url' => $host.'luodiye/invite?code='.$user->usercode,
-    'imgUrl' => (ASSETS_BASE_URI === '/' ? $host : ASSETS_BASE_URI).'ctcf/images/promo/share_weixin.jpg',
+    'imgUrl' => (ASSETS_BASE_URI === '/' ? $host : ASSETS_BASE_URI).'ctcf/images/promo/share_weixin1.jpg',
 ]);
 
 WxshareHelper::registerTo($this, $share);

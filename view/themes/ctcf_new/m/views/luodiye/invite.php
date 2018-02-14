@@ -17,10 +17,10 @@ if ($isLuodiye) {
     $host = Yii::$app->params['clientOption']['host']['wap'];
 
     $share = new Share([
-        'title' => '送你一个红包，快打开看看！',
-        'description' => '湖北日报新媒体集团旗下的理财平台，国资背景，稳健好收益。',
+        'title' => '我在楚天财富投资啦，也送你888元福利，拿去花',
+        'description' => '楚天财富隶属湖北日报新媒体集团旗下理财平台，平台稳健运行3年，投资更放心',
         'url' => $host.'luodiye',
-        'imgUrl' => ('/' === ASSETS_BASE_URI ? $host : ASSETS_BASE_URI).'images/wechat/0926.jpg',
+        'imgUrl' => ('/' === ASSETS_BASE_URI ? $host : ASSETS_BASE_URI).'ctcf/images/promo/share_weixin1.jpg',
     ]);
 
     WxshareHelper::registerTo($this, $share);

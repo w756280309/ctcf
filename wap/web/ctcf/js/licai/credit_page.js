@@ -5,6 +5,9 @@ $(function() {
     $('.footer-inner2 a').css({color: '#8c8c8c'});
     $('.footer-inner1 a').css({color: '#f44336'});
 
+
+    $('.footer-inner1 .licai').css({background: 'url("/ctcf/images/shouye/icon_invest2.png") no-repeat center center / 29px'});
+
     canvasToCircle();
 
     function canvasToCircle(){

@@ -4,7 +4,7 @@ use wap\assets\WapAsset;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
-$this->title = '温州报业传媒旗下理财平台';
+$this->title = '湖北日报新媒体集团旗下理财平台';
 $this->params['breadcrumbs'][] = $this->title;
 $this->hideHeaderNav = true;
 $inApp = defined('IN_APP');
@@ -20,12 +20,12 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
     <div class="row">
         <div class="col-xs-12 col-sm-12">
             <header class="row head-title head-title1">
-                <div class="logo logo1 col-xs-12 col-sm-12"><a href="/?_mark=1612"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/logo-new.png" alt="logo"></a></div>
-                <div class="logo_tit logo_tit1">温州报业传媒旗下理财平台</div>
+                <div class="logo logo1 col-xs-12 col-sm-12"><a href="/?_mark=1612"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/logo-new.png" alt="logo"></a></div>
+                <div class="logo_tit logo_tit1">湖北日报新媒体集团旗下理财平台</div>
             </header>
             <div class="row banner-box">
                 <div class="col-xs-12">
-                    <img src="<?= ASSETS_BASE_URI ?>images/luodiye/banner_new.jpg" alt="">
+                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/invite/banner_new.png" alt="">
                     <div class="banner-bottom"></div>
                     <ul class="banner-bottom-wrap">
                         <li><img src="<?= ASSETS_BASE_URI ?>images/luodiye/lingxing.png"><span>国资平台</span></li>
@@ -85,8 +85,8 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
             <?php $form->end(); ?>
 
             <div class="row description-box">
-                <p class="description-header"><span>什么是温都金服？</span></p>
-                <p class="description-content">温州温都金融信息服务股份有限公司简称“温都金服”，隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金，安享稳健收益。</p>
+                <p class="description-header"><span>什么是楚天财富？</span></p>
+                <p class="description-content">楚天财富（武汉）金融服务有限公司简称楚天财富，是由湖北日报新媒体集团发起设立的、具有国资背景的、专业从事财富管理平台和互联网金融服务平台，以专业的风控能力、丰富的理财产品、强大的网络技术能力，提供安全、便捷、可靠的网上理财服务。</p>
             </div>
 <!--            <div class="row production-box">-->
 <!--                <p class="production-header">精品理财</p>-->
@@ -105,7 +105,7 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
 <!--                </div>-->
 <!--            </div>-->
             <div class="row choose-box">
-                <h3>为什么选择温都金服？</h3>
+                <h3>为什么选择楚天财富？</h3>
                 <div class="choose-content">
                     <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose_new.png" alt="">
                     <img src="<?= ASSETS_BASE_URI ?>images/luodiye/why-wdjf-new.png" alt="">

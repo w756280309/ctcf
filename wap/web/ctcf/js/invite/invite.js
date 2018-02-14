@@ -20,10 +20,10 @@ $(function(){
         var host = window.location.host.toLocaleLowerCase();
         if(host.substr(0,4)==='app.') {
             //分享四要素(标题+描述+链接地址+图标地址)
-            var title = '好友送您50元代金券，楚天财富，亲测靠谱！';
-            var des = '新手专享，预期年化收益率10%，注册更有888元红包送！';
+            var title = '我在楚天财富投资啦，也送你888元福利，拿去花';
+            var des = '楚天财富隶属湖北日报新媒体集团旗下理财平台，平台稳健运行3年，投资更放心';
             var linkurl = invite_url;
-            var thumurl = protocol+'//'+host+'/promo/1608/images/invite/icon.jpg';
+            var thumurl = protocol+'//'+host+'/ctcf/images/promo/share_weixin1.jpg';
             var shareObj = {title : title, des:des,linkurl : linkurl, thumurl : thumurl};
             if(browser.versions.ios || browser.versions.iPad || browser.versions.iPhone) {
                 //苹果设备

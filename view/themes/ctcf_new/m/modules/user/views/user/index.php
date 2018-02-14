@@ -265,8 +265,17 @@ UdeskWebIMHelper::init($this);
 <?php } ?>
 <script>
     $(function () {
-        $(".close-box").on("click",function(){
-            $(".mask-no-invest").hide();
-        })
+        if($('.mask-no-invest')){
+           if($('.mask-no-invest').css('display')=='block'){
+               $('body,.mask-no-invest').on('touchmove',function(e){
+                   var e=e||window.event;
+                   e.preventDefault();
+               })
+               $(".close-box").on("click",function(){
+                   $(".mask-no-invest").hide();
+                   $('body,.mask-no-invest').off('touchmove');
+               })
+           }
+        }
     })
 </script>
