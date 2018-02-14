@@ -150,6 +150,9 @@ return [
             'class' => 'wap\modules\ctcf\Module',
         ],
     ],
+    'controllerMap' => [
+        'oldUserRewardPop' => 'common\ctcf\controllers\PopController',
+    ],
     'params' => $params,
     'as requestBehavior' => [
         'class' => \common\components\RequestBehavior::className(),

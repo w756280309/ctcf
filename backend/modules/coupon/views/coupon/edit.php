@@ -51,6 +51,13 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <?= $form->field($model, 'name', ['template' => '{error}']) ?>
                 </div>
             </div>
+            <div class="control-group">
+                <label class="control-label">优惠券sn</label>
+                <div class="controls">
+                    <?= $form->field($model, 'sn', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '优惠券sn']])->textInput() ?>
+                    <?= $form->field($model, 'sn', ['template' => '{error}']) ?>
+                </div>
+            </div>
 
             <div class="control-group">
                 <label class="control-label">代金券面值</label>

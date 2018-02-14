@@ -103,6 +103,9 @@ return [
             'class' => 'frontend\modules\ctcf\Module',
         ],
     ],
+    'controllerMap' => [
+        'oldUserRewardPop' => 'common\ctcf\controllers\PopController',
+    ],
     'params' => $params,
     'as AjaxJsonFormat' => [
         'class' => \common\components\RequestBehavior::className(),

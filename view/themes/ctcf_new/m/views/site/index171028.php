@@ -21,11 +21,13 @@ UdeskWebIMHelper::init($this);
 
 $this->registerCssFile(FE_BASE_URI . "libs/swiper/swiper-3.4.2.min.css");
 $this->registerCssFile(FE_BASE_URI . "wap/common/css/wenjfbase.css?v=171028");
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/mask/mask.min.css?v=1.681');
 $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI . 'libs/fastclick.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(FE_BASE_URI . 'libs/jquery.lazyload.min.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/mask/mask.js?v=1.11111', ['depends' => JqueryAsset::class]);
 ?>
 <style>
 	.pop {
@@ -67,11 +69,134 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		font-weight: 800;
 	}
 </style>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=1802121112">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=18021211121">
 <!--<div>-->
 <!--    <img class="channel hide" src="--><?//= FE_BASE_URI ?><!--wap/index/images/channel.png" width="100%" alt="">-->
 <!--</div>-->
 <div class="flex-content">
+    <div class="mask" style="display: none"></div>
+    <!--新增首页弹框1-->
+    <div class="first-popover" style="display: none">
+        <img class="popover-bg" src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/popover_01.png" alt="">
+        <div class="popover-ctn">
+            <img class="popover-close" src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/popover-close.png" alt="">
+            <p class="popover-title">价值698元代金券<br>已发到您的账户</p>
+            <p class="popover-detail">你也可以在账户-代金券中,查看奖励</p>
+            <a class="btn_01" href="/user/coupon/list">查看详情</a>
+            <a class="btn_02" href="javascript:void(0)">去投资 领取160元超市卡</a>
+        </div>
+    </div>
+
+    <!--新增首页弹框2-->
+    <div class="second-popover" style="display: none">
+        <img class="popover-close" src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/popover-close_01.png" alt="">
+        <p class="popover-title">投资前先开通资金托管账户</p>
+        <p class="popover-detail">开通账户送积分，投资还有更多超市卡等你拿</p>
+        <a class="popover-btn" href="/user/identity">马上去开通</a>
+    </div>
+
+    <!--已登陆未投资弹窗-->
+    <div class="mask-no-invest">
+        <div class="popup-box">
+            <div class="popup-box-top"></div>
+            <i class="close-box"></i>
+            <p class="popup-box-msg"><span>888元</span>红包已经发放到账户中心，请至”账户中心-优惠券”中查看</p>
+            <div class="red-racket">
+                <span>8元</span>
+                <span>20元</span>
+                <span>30元</span>
+                <span>80元</span>
+                <span>150元</span>
+                <span>220元</span>
+                <span>380元</span>
+            </div>
+            <a href="/user/coupon/list/" class="popup-box-btn">查看红包</a>
+        </div>
+    </div>
+    <!--未登录-->
+    <div class="mask-prize-hint">
+        <div class="popup-box">
+            <div class="popup-box-top"></div>
+            <i class="close-box"></i>
+            <div class="prize_user_box">
+                <a class="prize_user_new clearfix">
+                    <img class="lf" src="<?= ASSETS_BASE_URI ?>ctcf/images/mask/prize_user_new.png" alt="">
+                    <div class="rg">
+                        <p class="user-login-msg">新用户登录</p>
+                        <p class="user-login-prize">送您<span>888元</span>红包</p>
+                    </div>
+                </a>
+                <a class="prize_user_old clearfix">
+                    <img class="lf" src="<?= ASSETS_BASE_URI ?>ctcf/images/mask/prize_user_old1.png" alt="">
+                    <div class="rg">
+                        <p class="user-login-msg">老用户登录</p>
+                        <p class="user-login-prize">送您补偿红包</p>
+                    </div>
+                </a>
+            </div>
+            <a href="/user/coupon/list/" class="popup-box-btn">点击领取</a>
+        </div>
+    </div>
+    <!--已登陆已投资-->
+    <div class="mask-login-invest">
+        <div class="popup-box">
+            <i class="close-box"></i>
+            <div class="urgrade-swiper-contain">
+                <ul class="swiper-wrapper" id="upgrade-sweper">
+                    <li class="swiper-slide upgrade_explain">
+                        <h5>尊敬的用户，您好：</h5>
+                        <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史投资额，特发放了豪华补偿礼包，敬请收下！</p>
+                        <table>
+                            <tr>
+                                <th>累计年化投资金额（万元）</th>
+                                <th>补偿红包</th>
+                                <th>补偿积分</th>
+                            </tr>
+                            <tr>
+                                <td>0＜X＜20</td>
+                                <td>188元</td>
+                                <td>188</td>
+                            </tr>
+                            <tr>
+                                <td>20≤X＜50</td>
+                                <td>268元</td>
+                                <td>388</td>
+                            </tr>
+                            <tr>
+                                <td>≥50</td>
+                                <td>480元</td>
+                                <td>588</td>
+                            </tr>
+                        </table>
+                        <a class="check-login-invest">查看我的升级红包</a>
+                    </li>
+                    <li class="swiper-slide upgrade-updata">
+                        <h5>您获得的升级礼包</h5>
+                        <div class="upgrade-updata-contain">
+                            <div class="updata-top-part">
+
+                            </div>
+                            <div class="updata-mid-part">
+
+                            </div>
+                            <div class="updata-bottom-part clearfix">
+                                <div class="lf bottom-jf-prize">
+                                    <i></i>
+                                </div>
+                                <div class="rg updata-bottom-rg">
+
+                                </div>
+                            </div>
+                        </div>
+                        <u class="get-prize-rules">补偿规则</u>
+                        <a href="/user/coupon/list/" class="check-get-prize">查看红包</a>
+                    </li>
+                </ul>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+
     <?php if (!empty($hotActs)) { ?>
 			<div class="banner-box swiper-container">
 				<div class="swiper-wrapper" id="index_banner">

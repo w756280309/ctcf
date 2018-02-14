@@ -33,7 +33,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => Front
             <i class="border"></i>
         </li>
         <li class="top_right">
-            <img src="<?= FE_BASE_URI ?>pc/my_point/images/wechat_img2.png" alt="">
+            <img src="<?= FE_BASE_URI ?>pc/my_point/images/wechat_img_ctcf.png" alt="">
             <ul>
                 <li class="rule_content">PC端暂不支持兑换商品</li>
                 <li class="rule_content">如需兑换请用手机扫描左侧二维码</li>

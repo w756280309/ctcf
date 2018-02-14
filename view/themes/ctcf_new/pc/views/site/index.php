@@ -423,7 +423,7 @@ JSFILE
 
         $.ajax({
             type: "GET",
-            url: "ctcf/site/pop-type",
+            url: "oldUserRewardPop/pop-type",
             success: function(data){
                 if (data == 0) {
 
@@ -437,18 +437,21 @@ JSFILE
                     });
                 } else if (data == 3) {
                     $('.updata-top-part').html("<span>8元</span><span>30元</span><span>80元</span>");
+                    $('.updata-mid-part').html('共得<span>118元</span>红包');
                     $('.updata-bottom-rg').html("<p>188积分</p><p>可以兑换超多礼品</p>");
                     $('.mask-login-invest').css('display','block').find('i.close-box').on('click',function(){
                         $('.mask-login-invest').css('display','none');
                     });
                 } else if (data == 4) {
                     $('.updata-top-part').html("<span>8元</span><span>30元</span><span>80元</span><span>150元</span>");
+                    $('.updata-mid-part').html('共得<span>268元</span>红包');
                     $('.updata-bottom-rg').html("<p>388积分</p><p>可以兑换超多礼品</p>");
                     $('.mask-login-invest').css('display','block').find('i.close-box').on('click',function(){
                         $('.mask-login-invest').css('display','none');
                     });
                 } else if (data == 5) {
                     $('.updata-top-part').html("<span>30元</span><span>80元</span><span>150元</span><span>220元</span>");
+                    $('.updata-mid-part').html('共得<span>480元</span>红包');
                     $('.updata-bottom-rg').html("<p>588积分</p><p>可以兑换超多礼品</p>");
                     $('.mask-login-invest').css('display','block').find('i.close-box').on('click',function(){
                         $('.mask-login-invest').css('display','none');
@@ -456,7 +459,7 @@ JSFILE
                 }
                 $.ajax({
                     type:'get',
-                    url:'ctcf/site/after-pop',
+                    url:'oldUserRewardPop/after-pop',
                 });
             }
         });
@@ -546,7 +549,9 @@ JSFILE
                         <div class="updata-top-part">
 
                         </div>
-                        <div class="updata-mid-part">共得<span>188元</span>红包</div>
+                        <div class="updata-mid-part">
+
+                        </div>
                         <div class="updata-bottom-part clearfix">
                             <div class="lf bottom-jf-prize">
                                 <i></i>

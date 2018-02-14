@@ -1,11 +1,11 @@
 <?php
 
-namespace frontend\modules\ctcf\controllers;
+namespace common\ctcf\controllers;
 
-use frontend\controllers\BaseController;
+use yii\web\Controller;
 use Yii;
 
-class SiteController extends BaseController
+class PopController extends Controller
 {
     /**
      * 首页弹窗类型.
@@ -13,10 +13,10 @@ class SiteController extends BaseController
     public function actionPopType()
     {
         //判断是否登录
-        $user = Yii::$app->user->getIdentity();
-        if (is_null($user)) {
+        if (Yii::$app->user->isGuest) {
             $type = 1;
         } else {
+            $user = Yii::$app->user->getIdentity();
             $redis = Yii::$app->redis_session;
             if ($redis->exists('oldUserRewardPop_' . $user->id)) {
                 $type = $redis->get('oldUserRewardPop_' . $user->id);
@@ -34,8 +34,8 @@ class SiteController extends BaseController
     public function actionAfterPop()
     {
         //判断是否登录
-        $user = Yii::$app->user->getIdentity();
-        if (!is_null($user)) {
+        if (!Yii::$app->user->isGuest) {
+            $user = Yii::$app->user->getIdentity();
             $redis = Yii::$app->redis_session;
             if ($redis->exists('oldUserRewardPop_' . $user->id)) {
                 $redis->del('oldUserRewardPop_' . $user->id);

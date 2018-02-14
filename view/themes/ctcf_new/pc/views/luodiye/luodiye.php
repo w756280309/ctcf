@@ -2,7 +2,7 @@
 
 use frontend\assets\FrontAsset;
 
-$this->title = '温州报业传媒旗下理财平台';
+$this->title = '湖北日报新媒体集团旗下理财平台';
 
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/luodiye/luodiye.css?v=1608015', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/JPlaceholder.js', ['depends' => FrontAsset::class]);
