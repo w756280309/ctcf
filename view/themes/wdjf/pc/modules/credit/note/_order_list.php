@@ -1,6 +1,7 @@
 <?php
 use common\widgets\Pager;
 use common\utils\StringUtils;
+use common\utils\SecurityUtils;
 ?>
 
 <div class="piD-data-box">
@@ -15,7 +16,7 @@ use common\utils\StringUtils;
         <?php foreach ($data as $key => $val) { ?>
             <tr>
                 <td class="piD-th1 piD-center"><span><?= $pages->totalCount - $pages->offset - $key ?></span></td>
-                <td class="piD-th1 piD-left"><span><?= StringUtils::obfsMobileNumber($users[$val['user_id']]['mobile']) ?></span></td>
+                <td class="piD-th1 piD-left"><span><?= StringUtils::obfsMobileNumber(SecurityUtils::decrypt($users[$val['user_id']]['safeMobile'])) ?></span></td>
                 <td class="piD-th3 piD-left"><span><?= $val['createTime'] ?></span></td>
                 <td class="piD-th4 piD-right"><span><?= StringUtils::amountFormat3(bcdiv($val['principal'], 100, 2)) ?></span></td>
                 <td class="piD-th1 piD-center"><span><img src="<?= ASSETS_BASE_URI ?>images/deal/plD-right.png" alt=""></span></td>

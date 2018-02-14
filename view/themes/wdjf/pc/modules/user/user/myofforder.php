@@ -31,8 +31,8 @@ use common\models\offline\OfflineRepaymentPlan;
     </div>
     <div class="myCoupon-content">
         <div class="list-single">
-            <a class="a_first <?= 2 === $type ? 'select' : '' ?>" href="/user/user/myofforder?type=2">待成立的项目</a>
-            <a class="a_second <?= 1 === $type ? 'select' : '' ?>" href="/user/user/myofforder?type=1">收益中的项目</a>
+            <a class="a_first <?= 1 === $type ? 'select' : '' ?>" href="/user/user/myofforder?type=1">收益中的项目</a>
+            <a class="a_second <?= 2 === $type ? 'select' : '' ?>" href="/user/user/myofforder?type=2">待成立的项目</a>
             <a class="a_third <?= 3 === $type ? 'select' : '' ?>" href="/user/user/myofforder?type=3">已还清的项目</a>
         </div>
         <div class="display_number">

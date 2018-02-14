@@ -1,0 +1,226 @@
+.register-box {
+    width: 1000px;
+    margin: 0 auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border: 1px solid #e4e4e8;
+    background: #fff;
+    overflow: hidden;
+}
+.register-top {
+    width: 1000px;
+    height: 50px;
+    font-size: 16px;
+    color: #464648;
+    line-height: 50px;
+    border-bottom: 1px solid #e4e4e8;
+    padding-left: 28px;
+}
+.register-inner {
+    float:left;
+    width: 405px;
+    padding-left: 45px;
+    padding-top: 40px;
+}
+.phone-box {
+    position: relative;
+    width: 100%;
+    height: 70px;
+}
+#phone {
+    float: left;
+    width: 262px;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 15px;
+    outline: none;
+    border: 1px solid #e4e4e8;
+}
+.phone-box label {
+    float: left;
+    width: 76px;
+    text-align: right;
+    font-size: 14px;
+    line-height: 40px;
+    color: #464648;
+    margin-right: 10px;
+}
+.password-box {
+    position: relative;
+    width: 100%;
+    height: 70px;
+}
+.password-box label {
+    float: left;
+    width: 76px;
+    line-height: 40px;
+    text-align: right;
+    font-size: 14px;
+    color: #464648;
+    margin-right: 10px;
+}
+#password {
+    float: left;
+    width: 262px;
+    height: 38px;
+    line-height: 38px;
+    outline: none;
+    padding: 0 15px;
+    border: 1px solid #e4e4e8;
+}
+.verity-box {
+    position: relative;
+    width: 100%;
+    height: 70px;
+}
+#verity {
+    float: left;
+    width: 162px;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 15px;
+    outline: none;
+    border: 1px solid #e4e4e8;
+    margin-right: 18px;
+}
+.verity-box label {
+    float: left;
+    width: 76px;
+    text-align: right;
+    font-size: 14px;
+    line-height: 40px;
+    color: #464648;
+    margin-right: 10px;
+}
+.verity-img {
+    float: left;
+    width: 81px;
+    height: 38px;
+    cursor: pointer;
+}
+.ins-box {
+    /*display: none;*/
+    position: relative;
+    width: 100%;
+    height: 70px;
+}
+#sms {
+    float: left;
+    width: 162px;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 15px;
+    outline: none;
+    border: 1px solid #e4e4e8;
+    margin-right: 18px;
+}
+.ins-box label {
+    float: left;
+    width: 76px;
+    text-align: right;
+    font-size: 14px;
+    line-height: 40px;
+    color: #464648;
+    margin-right: 10px;
+}
+.verity-ins {
+    float: left;
+    width: 81px;
+    height: 38px;
+    text-align: center;
+    line-height: 38px;
+    cursor: pointer;
+    background: #ff6707;
+    color: #fff;
+    font-size: 14px;
+}
+.verity-ins:hover {
+    background-color: #ff532d;
+}
+.popUp {
+    width: 264px;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 86px;
+    font-size: 12px;
+    color: #f44336;
+}
+.resign-bottom {
+    width: 264px;
+    margin-left: 86px;
+    font-size: 14px;
+    color: #99999d;
+}
+.resign-check {
+    float: left;
+    cursor: pointer;
+}
+.resign-check img{
+    margin-right: 10px;
+}
+.resign-bottom a {
+    float: left;
+    color: #419bf9;
+}
+.resign-bottom a:hover {
+    text-decoration: underline;
+}
+.resign-btn-box {
+    position: relative;
+    width: 240px;
+    margin: 0 auto 60px;
+}
+.resign-btn {
+    float: left;
+    width: 240px;
+    height: 40px;
+    background: #ff6707;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.resign-btn:hover {
+    background: #ff532d;
+}
+.error-border {
+    border: 1px solid #f44336!important;
+}
+.login-btn {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #99999d;
+    margin-left: 70px;
+}
+.login-btn a {
+    color: #419bf9;
+}
+.login-btn a:hover {
+    text-decoration: underline;
+}
+.grayBack {
+    background: #bcbbc1 !important;
+    color: #fff !important;
+}
+.re-btn {
+    margin-top: 20px;
+}
+.xieyi-err {
+    display: none;
+}
+.btn {
+    margin-top: 30px;
+}
+.register-image{
+    float: right;
+    margin-top: 40px;
+    margin-right: 34px;
+}
+.agree {
+    width:14px;
+    height:14px;
+    border: 1px solid #bababf;
+    vertical-align: middle;
+}

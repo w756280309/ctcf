@@ -19,6 +19,8 @@ use common\models\user\User;
 use common\service\LoginService;
 use common\service\SmsService;
 use common\utils\SecurityUtils;
+use common\utils\StringUtils;
+use common\view\LoanHelper;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -156,6 +158,56 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * 定期理财.
+     */
+    public function actionFixed()
+    {
+        try {
+            //推荐区展示
+            $loans = OnlineProduct::getRecommendLoans(7, true);
+
+            $result = [];
+            foreach ($loans as $key => $val) {
+                if (!in_array($key, [0, 1, 2])) {
+                    $temp = [];
+                    $temp['link'] = '/deal/deal/detail?sn='.$val->sn;
+                    $temp['title'] = $val->title;
+                    $temp['dealRate'] = LoanHelper::getDealRate($val);
+                    $temp['jiaxi'] = !empty($val->jiaxi) ? doubleval($val->jiaxi) : '';
+                    $duration = $val->getDuration();
+                    $temp['duration'] = $duration['value'].$duration['unit'];
+                    $temp['startMoney'] = StringUtils::amountFormat2($val->start_money);
+                    $temp['progress'] = $val->getProgressForDisplay();
+                    $temp['status'] = $val->status;
+                    $result[] = $temp;
+                }
+            }
+
+            if (0 === count($result)) {
+                return [
+                    'code' => 1,
+                    'message' => '没有数据',
+                    'status' => 'fail',
+                    'data' => null,
+                ];
+            } else {
+                return [
+                    'code' => 0,
+                    'message' => '成功',
+                    'status' => 'success',
+                    'data' => $result,
+                ];
+            }
+        } catch (Exception $e) {
+            return [
+                'code' => 2,
+                'message' => '失败',
+                'status' => 'exception',
+                'data' => null,
+            ];
+        }
+    }
 
     /**
      * 首页统计项.

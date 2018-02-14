@@ -6,7 +6,7 @@
  * Time: 下午6:44
  */
 
-$this->title = "解绑银行卡结果";
+$this->title = $result['message'];
 $this->backUrl = false;
 
 $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
@@ -45,7 +45,7 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
     <div class="row" id='bind-close1'>
         <div class="col-xs-3"></div>
         <div class="col-xs-6">
-            <a href="/user/user/index" class="bind-close1">关闭</a>
+            <a href="/user/user/" class="bind-close1">关闭</a>
         </div>
         <div class="col-xs-3"></div>
     </div>
@@ -57,7 +57,7 @@ $this->registerJsFile('', ['depends' => 'yii\web\YiiAsset', 'position' => 1]);
                 $('.daojishi .col-xs-12 span').html(num + '秒');
                 if (num == 0) {
                     clearInterval(t);
-                    location.href = '/user/user/index';
+                    location.href = '/user/user/';
                 }
             }, 1000);
         })

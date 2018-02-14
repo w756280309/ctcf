@@ -200,20 +200,14 @@ class SignupForm extends Model
 
             //注册即送288元代金券，代金券发送成功后发送短信 - 注册模块5
             $issuedCoupon = false;
-            $regCouponTypes = CouponType::findAll(['sn' => [
-                '0015:10000-20',    //20元，起投1万，有效期30天
-                '0015:20000-30',    //30元，起投2万，有效期30天
-                '0016:1000-8',      //8元，起投1000元，有效期30天
-                '0016:100000-80',   //80元，起投10万，有效期30天
-                '0016:200000-150',  //150元，起投20万，有效期30天
-                '0029:1000000-180', //180元，起投100万，有效期90天
-                '0030:2000000-230', //230元，起投200万，有效期90天
-            ]]);
+            $regCouponTypes = CouponType::findAll(['sn' => Yii::$app->params['sign_up_coupon']]);
             foreach ($regCouponTypes as $regCouponType) {
                 try {
-                    if ('0029:1000000-180' === $regCouponType->sn || '0030:2000000-230' === $regCouponType->sn) {
-                        $ticketKey = 'P698-' . $user->id . '-' . $regCouponType->id;
-                        TicketToken::initNew($ticketKey)->save(false);
+                    if (Yii::$app->params['is_fill_up_coupon']) {
+                        if ('0029:1000000-180' === $regCouponType->sn || '0030:2000000-230' === $regCouponType->sn) {
+                            $ticketKey = 'P698-' . $user->id . '-' . $regCouponType->id;
+                            TicketToken::initNew($ticketKey)->save(false);
+                        }
                     }
                     if (UserCoupon::addUserCoupon($user, $regCouponType)->save()) {
                         $issuedCoupon = true;
@@ -222,13 +216,13 @@ class SignupForm extends Model
                     // do nothing.
                 }
             }
-            if ($issuedCoupon) {
-                $templateId = '155661';
-                $smsConfig = SmsConfig::findOne(['template_id' => $templateId]);
-                if ($smsConfig) {
-                    SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $smsConfig->getConfig(), $user);
-                }
-            }
+//            if ($issuedCoupon) {
+//                $templateId = '155661';
+//                $smsConfig = SmsConfig::findOne(['template_id' => $templateId]);
+//                if ($smsConfig) {
+//                    SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $smsConfig->getConfig(), $user);
+//                }
+//            }
 
             //提交注册模块 - 事务提交
             $transaction->commit();

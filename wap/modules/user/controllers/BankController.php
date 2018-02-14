@@ -16,6 +16,7 @@ use common\action\user\BankVerifyAction;
 use common\models\bank\BankCardUpdate;
 use common\models\bank\BankManager;
 use common\models\growth\AppMeta;
+use common\models\user\User;
 use common\models\user\UserBank;
 use common\service\BankService;
 use PayGate\Ump\Client;
@@ -96,10 +97,11 @@ class BankController extends BaseController
             ->select('value')
             ->where(['key' => 'unbind_white'])
             ->scalar();
-        if (in_array($user->id, explode(',', $white))) {
+        if (!is_null($user) && in_array($user->id, explode(',', $white))) {
             $data = BankService::checkKuaijie($user);
             if (!is_null($user) && 0 === $data['code']) {  //满足解绑条件
-                return $this->redirect(\Yii::$container->get('ump')->unbind($user->epayUser->epayUserId, $user->epayUser->accountNo));
+                return $this->redirect(\Yii::$container->get('ump')->unbind($user->epayUser->epayUserId, $user->epayUser->accountNo,
+                    "/user/bank/unbind-result?token=" . Yii::$app->request->get('token')));
             }
         } else {
             throw $this->ex404();
@@ -107,19 +109,32 @@ class BankController extends BaseController
     }
 
     //解绑结果页面
-    public function actionUnbindResult()
+    public function actionUnbindResult($token = null)
     {
         $data = Yii::$app->request->get();
+        unset($data['token']);
         if (Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']
             && 'mer_unbind_agreement_notify' === $data['service']) {
             //删除userBank
-            $user = $this->getAuthedUser();
-            UserBank::deleteAll(['uid' => $user->id]);
+            if (!$token) {
+                $user = $this->getAuthedUser();
+            } else {
+                $user = User::find()
+                    ->innerJoin('accesstoken', 'accesstoken.uid = user.id')
+                    ->where(['token' => $token])
+                    ->one();
+            }
+            if (!is_null($user)) {
+                $userBank = UserBank::findOne(['uid' => $user->id]);
+                if (!is_null($userBank)) {
+                    $userBank->delete();
+                }
+            }
             //返回成功页
-            $result = ['code' => 1, '解绑成功'];
+            $result = ['code' => 1, 'message' => '解绑成功'];
         } else {
-            $result = ['code' => 0, '解绑失败'];
+            $result = ['code' => 0, 'message' => '解绑失败'];
         }
         return $this->render('unbind-result', ['result' => $result]);
     }

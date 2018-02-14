@@ -1,0 +1,106 @@
+/*我的银行卡*/
+.bank-card {
+    height: 80px;
+    background: #fff;
+    line-height: 80px;
+    margin-top: 10px;
+    margin-bottom: 10px !important;
+}
+.bank-card img {
+    width: 30px;
+}
+.bank-img {
+    text-align: right;
+}
+.bank-content {
+    height: 80px;
+    padding: 0;
+}
+.bank-content div {
+    text-align: left;
+    height: 50%;
+}
+.bank-content1 {
+    line-height: 50px;
+    font-size: 16px;
+    color: #434a54;
+}
+.bank-content2 {
+    line-height: 18px;
+    color: #aab2bd;
+}
+.bank-content .bank-content3 {
+    line-height: 50px;
+    font-size: 16px;
+    color: #aab2bd;
+    text-align: right;
+    padding-right: 15px;
+}
+.bank-content .bank-content4 {
+    line-height: 18px;
+    color: #434a54;
+    text-align: right;
+    padding-right: 15px;
+}
+.mycard-tip {
+    color: #ff6707;
+    padding: 5px 0px 30px;
+}
+.apply-exchange-en {
+    padding: 0;
+}
+.apply-exchange {
+    font-size: 1.7rem;
+    line-height: 3rem;
+    text-align: center;
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    color: #ff6707;
+    border: 1px solid #ff6707;
+    border-radius: 30px;
+    text-decoration: none;
+    cursor: pointer;
+}
+a:active, a:hover, a:visited {
+    text-decoration: none;
+    color: #ff6707;
+}
+/*换卡申请结果*/
+#bind-box .col-xs-12 div {
+    margin-top: 40px;
+    margin-bottom: 30px;
+    color: #000000;
+}
+#bind-true .col-xs-12 img {
+    max-width: 120px;
+    width: 25%;
+}
+.bind-close1 {
+    background: #f2f2f2;
+    font-size: 2rem;
+    margin: 0 auto;
+    height: 3.1rem;
+    line-height: 3rem;
+    color: #ff6707;
+    border: 1px solid #ff6707;
+    border-radius: 30px;
+}
+.daojishi .col-xs-12 {
+    margin-bottom: 20px;
+}
+.daojishi .col-xs-12 div span{color:#ff6707;}
+.daojishi .col-xs-12 div{color:#7c7c7c;}
+.apply-exchange-zhong {
+    font-size: 1.7rem;
+    line-height: 3rem;
+    text-align: center;
+    display: block;
+    width: 95%;
+    margin: 0 auto;
+    color: #999999;
+    border: 1px solid #999999;
+    border-radius: 30px;
+    text-decoration: none;
+    cursor: pointer;
+}

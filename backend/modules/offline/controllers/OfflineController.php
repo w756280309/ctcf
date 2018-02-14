@@ -16,9 +16,7 @@ use common\models\offline\OfflineStats;
 use common\models\offline\OfflinePointManager;
 use common\models\offline\OfflineUser;
 use common\models\offline\OfflineUserManager;
-use common\models\product\OnlineProduct;
 use common\utils\ExcelUtils;
-use common\utils\SecurityUtils;
 use Wcg\Xii\Crm\Model\Activity;
 use Wcg\Xii\Crm\Model\CrmOrder;
 use Yii;
@@ -403,6 +401,7 @@ class OfflineController extends BaseController
     {
         //正式的
         $loan = OfflineLoan::findOne($id);
+        $backUrl = Yii::$app->request->referrer;
         if (!is_null($loan) && $loan->is_jixi == false) {
             //将标的修改为确认计息状态
             $loan->is_jixi = true;
@@ -433,53 +432,12 @@ class OfflineController extends BaseController
                 'action' => 'add',
             ]));
         }
-        return $this->redirect('loanlist');
-//        $this->layout = false;
-//        $refresh = false;
-//        $ofl = OfflineLoan::tableName();
-//        $ofo = OfflineOrder::tableName();
-//        if (empty($id)) {
-//            throw $this->ex404();
-//        }
-//        $model = OfflineLoan::find()->innerJoinWith('order')
-//            ->where(["$ofl.id" => $id , "$ofo.isDeleted" => false])
-//            ->one();
-//        if (null === $model) {
-//            $model = OfflineLoan::find()->where(["$ofl.id" => $id])->one();
-//        }
-//        if (!empty($model->jixi_time)) {
-//            $model->addError('jixi_time', '已有起息日期，不能再次确认');
-//        }
-//        //更新标的表 jixi_time
-//        $model->scenario = 'confirm';
-//        $post = Yii::$app->request->post();
-//        if ($model->load($post)) {
-//            if (empty($model->jixi_time)) {
-//                $model->addError('jixi_time', '起息日期不能为空');
-//            }
-//            if (empty($model->getErrors())) {
-//                $model->save();
-//                $transaction = Yii::$app->db->beginTransaction();
-//                if (null !== $model->order) {
-//                    try {
-//                        $refresh = true;
-//                        foreach ($model->order as $order) {
-//                            $order->scenario = 'confirm';
-//                            if (empty($order->valueDate)) {
-//                                $order->valueDate = $post['OfflineLoan']['jixi_time'];
-//                                $order->save();
-//                                $this->updatePointsAndAnnual($order, PointRecord::TYPE_OFFLINE_BUY_ORDER);
-//                            }
-//                        }
-//                        $transaction->commit();
-//                    } catch (\Exception $ex) {
-//                        $transaction->rollBack();
-//                    }
-//                }
-//            }
-//        }
-//
-//        return $this->render('loanjixi', ['model' => $model, 'refresh' => $refresh]);
+
+        if (!is_null($backUrl)) {
+            return $this->redirect($backUrl);
+        } else {
+            return $this->redirect('loanlist');
+        }
     }
     /**
      * 根据订单和类型更新积分和累计年化投资
@@ -539,9 +497,12 @@ class OfflineController extends BaseController
             if ($post['OfflineLoan']['id']) {
                 $model = OfflineLoan::findOne($post['OfflineLoan']['id']);
             }
-
             if ($model->load($post) && $model->save()) {
-                return $this->redirect('loanlist');
+                if (!is_null($post['backUrl'])) {
+                    return $this->redirect($post['backUrl']);
+                } else {
+                    return $this->redirect('loanlist');
+                }
             }
         }
         return $this->render('addloan' , [
@@ -555,7 +516,7 @@ class OfflineController extends BaseController
     public function actionEditloan()
     {
         $model = new OfflineLoan();
-
+        $backUrl = Yii::$app->request->referrer;
         if ($id = Yii::$app->request->get('id')) {
             $model = $this->findOr404(OfflineLoan::className() , $id);
         }
@@ -565,13 +526,13 @@ class OfflineController extends BaseController
             if ($post['OfflineLoan']['id']) {
                 $model = OfflineLoan::findOne($post['OfflineLoan']['id']);
             }
-
             if ($model->load($post) && $model->save()) {
                 return $this->redirect('loanlist');
             }
         }
         return $this->render('editloan' , [
             'model' => $model,
+            'backUrl' => $backUrl,
         ]);
     }
 

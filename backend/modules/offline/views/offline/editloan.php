@@ -55,6 +55,7 @@ $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['de
                     <?= $form->field($model, 'sn', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4']])->textInput() ?>
                     <?= $form->field($model, 'sn', ['template' => '{error}']); ?>
                     <?= $form->field($model, 'id', ['template' => '{input}'])->hiddenInput() ?>
+                    <input type="hidden" name="backUrl" value="<?= $backUrl ?>">
                 </div>
             </div>
             <div class="control-group">

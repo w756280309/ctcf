@@ -145,6 +145,9 @@ return [
         'wechat' => [
             'class' => 'app\modules\wechat\Module',
         ],
+        'ctcf' => [
+            'class' => 'wap\modules\ctcf\Module',
+        ],
     ],
     'params' => $params,
     'as requestBehavior' => [

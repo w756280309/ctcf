@@ -161,6 +161,7 @@ return [
         'crm' => 'Wcg\Xii\Crm\Module',
         'njfae' => 'console\modules\njfae\Module',
         'tx' => 'console\modules\tx\Module',
+        'ctcf' => 'console\modules\ctcf\Module',
     ],
     'params' => $params,
 ];

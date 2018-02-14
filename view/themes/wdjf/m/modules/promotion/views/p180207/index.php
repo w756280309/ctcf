@@ -8,7 +8,6 @@ $this->title = '玩填字 赢红包';
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/layer_mobile/layer.js"></script>
-<script src="<?= FE_BASE_URI ?>libs/axios.min.js"></script>
 <script>
     var bwAccessToken = false;
     var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));
@@ -18,7 +17,7 @@ $this->title = '玩填字 赢红包';
     }
 </script>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script src="<?= FE_BASE_URI ?>libs/wxShare.js?v=1"></script>
+<script src="<?= FE_BASE_URI ?>libs/wxShare.js?v=20180208-1"></script>
 <style>
     .flex-content .bottom-part .bottom-play .play-choice-list li {
         width: 13.995%;
@@ -245,41 +244,34 @@ $this->title = '玩填字 赢红包';
             } else if (dataJson.promoStatus == 2) {
                 showMsg("活动已结束");
                 return false
-            } else if (dataJson.isLoggedIn == 3) {
+            } else if (dataJson.isLoggedIn == false) {
                 location.href = "/site/login"
             } else {
-                axios.interceptors.request.use(function (config) {
-                    config.headers = {'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded'};
-                    return config;
-                }, function (error) {
-                    // return Promise.reject(error);
-                });
-                axios({
-                    method: "get",
-                    url: "/promotion/p180207/waste?token="+bwAccessToken,
-                })
-                    .then(function (response) {
-                        if (response.data.code == 0) {
-                            initQuestion(quesIndex);
-                            $(".top-ready,.bottom-ready").hide();
-                            $(".top-questions,.bottom-play").show()
-                        }else{
-                            showMsg(response.data.message);
-                            return false;
-                        }
-                    })
-                    .catch(function (error) {
-                        var res = error.response.data;
-                        if(res.code == 5){
-                            $(".pop-nochance").show();
-                            //$('body').on('touchmove', eventTarget, false);
-                        }else if (res.code == 4){
-                            $(".pop-share").show();
-                            //$('body').on('touchmove', eventTarget, false);
-                        }else if (res.code === 3) {
-                            location.href = '/site/login';
-                        }
-                    });
+              $.ajax({
+                url:"/promotion/p180207/waste?token="+bwAccessToken,
+                type:"get",
+                dataType:"json",
+                success:function(res){
+	                if(res.code == 0){
+                    initQuestion(quesIndex);
+                    $(".top-ready,.bottom-ready").hide();
+                    $(".top-questions,.bottom-play").show()
+	                }else{
+                    showMsg(res.data.message);
+                    return false;
+	                }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  var res = jqXHR.responseJSON
+                  if(res.code == 5){
+                    $(".pop-nochance,.mask").show();
+                  }else if(res.code == 4){
+                    $(".pop-share,.mask").show();
+                  }else if(res.code == 3){
+                    location.href = "/site/login"
+                  }
+                }
+              })
             }
         })
         //点击每道题的提交按钮
@@ -307,38 +299,56 @@ $this->title = '玩填字 赢红包';
                     if (answerNow == answerIndex) {
                         correct++;
                     }
-                    //请求接口提交数据
-                    axios.interceptors.request.use(function (config) {
-                        config.headers = {'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded'};
-                        return config;
-                    }, function (error) {
-                    });
-                    //post请求时使用
-                    var params = new URLSearchParams();
-                    params.append('sn', quesCase[2].batchSn);
-                    params.append('correctNum', correct);
-                    params.append('_csrf', '<?= Yii::$app->request->getCsrfToken()?>');
-                    axios({
-                        method: "post",
-                        url: "/promotion/p180207/reply?token="+bwAccessToken,
-                        data: params
+                    $.ajax({
+                      url:"/promotion/p180207/reply?token="+bwAccessToken,
+                      type:"post",
+                      dataType:"json",
+                      data:{
+                        sn:quesCase[2].batchSn,
+                        correctNum:correct,
+                        _csrf:'<?= Yii::$app->request->getCsrfToken()?>'
+                      },
+                      success:function(res){
+                        $(".pop-result .result-pic").attr('src','<?= FE_BASE_URI ?>'+res.path);
+                        $(".pop-result .result-number").html(correct);
+                        $(".mask,.pop-result").show();
+                        boolclk = true;
+                      },
+                      error: function (jqXHR, textStatus, errorThrown) {
+	                      var res = jqXHR.responseJSON
+	                      if(res.code == 5){
+                          $(".pop-nochance,.mask").show();
+	                      }else if(res.code == 4){
+                          $(".pop-share,.mask").show();
+	                      }
+                      }
                     })
-                        .then(function (response) {
-                            $(".pop-result .result-pic").attr('src','<?= FE_BASE_URI ?>'+response.data.path);
-                            $(".pop-result .result-number").html(correct);
-                            $(".mask,.pop-result").show();
-                            boolclk = true;
-                        })
-                        .catch(function (error) {
-                            var res = error.response.data;
-                            if(res.code == 5){
-                                $(".pop-nochance,.mask").show();
-                                //$('body').on('touchmove', eventTarget, false);
-                            }else if (res.code == 4){
-                                $(".pop-share,.mask").show();
-                                //$('body').on('touchmove', eventTarget, false);
-                            }
-                        });
+                    //post请求时使用
+//                    var params = new URLSearchParams();
+//                    params.append('sn', quesCase[2].batchSn);
+//                    params.append('correctNum', correct);
+//                    params.append('_csrf', '//');
+//                    axios({
+//                        method: "post",
+//                        url: "/promotion/p180207/reply?token="+bwAccessToken,
+//                        data: params
+//                    })
+//                        .then(function (response) {
+//                            $(".pop-result .result-pic").attr('src','//'+response.data.path);
+//                            $(".pop-result .result-number").html(correct);
+//                            $(".mask,.pop-result").show();
+//                            boolclk = true;
+//                        })
+//                        .catch(function (error) {
+//                            var res = error.response.data;
+//                            if(res.code == 5){
+//                                $(".pop-nochance,.mask").show();
+//                                //$('body').on('touchmove', eventTarget, false);
+//                            }else if (res.code == 4){
+//                                $(".pop-share,.mask").show();
+//                                //$('body').on('touchmove', eventTarget, false);
+//                            }
+//                        });
                 }
             }
         })
@@ -403,7 +413,7 @@ $this->title = '玩填字 赢红包';
         };
 
         wxShare.TimelineSuccessCallBack = function () {
-            $.get('/promotion/p180207/add-share?scene=timeline&shareUrl='+location.href, function (data) {
+            $.get('/promotion/p180207/add-share?scene=timeline&shareUrl='+encodeURIComponent(location.href), function (data) {
             });
         }
         wxShare.setParams(shareData.title, shareData.des, shareData.link, shareData.imgUrl, shareData.appId);

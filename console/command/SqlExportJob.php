@@ -47,7 +47,6 @@ class SqlExportJob extends Job
         }
         $data = $command->queryAll();
         $exportData[] = $itemLabels;
-        
         foreach ($data as $num => $item) {
             if (isset($item['手机号'])) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
@@ -61,6 +60,10 @@ class SqlExportJob extends Job
                 $item['身份证号'] = SecurityUtils::decrypt($item['身份证号']);
             }  else if ('xs_due_list_export' === $paramKey) {
                 $item['分销商'] = is_null($item['分销商']) ? '官方' : $item['分销商'];
+            } else if ('export_nbxdjb_finish' === $paramKey) {
+                $item['联系方式'] = SecurityUtils::decrypt($item['联系方式']);
+                $item['单位'] = $item['单位'] > 1 ? '月' : '天';
+                $item['到期日'] = date('Y-m-d', $item['到期日']);
             }
 
             $item = array_values($item);

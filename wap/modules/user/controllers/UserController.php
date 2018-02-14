@@ -12,6 +12,8 @@ use common\models\order\OnlineOrder as Ord;
 use common\models\product\OnlineProduct as Loan;
 use common\models\order\OnlineRepaymentPlan as Plan;
 use common\models\order\OrderManager;
+use common\models\user\UserBank;
+use common\models\user\UserBanks;
 use common\service\BankService;
 use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
@@ -129,6 +131,8 @@ class UserController extends BaseController
                 'color' => '#ff0f20',
             ];
         }
+        //判断用户是否绑卡成功
+        $isBindCard = $user->qpay;
 
         return [
             'sumCoupon' => $sumCoupon,
@@ -139,6 +143,7 @@ class UserController extends BaseController
             'sumLicai' => $sumLicai,
             'riskContent' => $riskContent,
             'off_licai' => (!is_null($user) && $user->offline) ? $user->offline->totalAssets : 0,
+            'isBindCard' => $isBindCard,
         ];
     }
 
@@ -270,7 +275,7 @@ class UserController extends BaseController
      * 线下理财
      *
      */
-    public function actionMyofforder($type = 2, $page = 1, $backUrl = null)
+    public function actionMyofforder($type = 1, $page = 1, $backUrl = null)
     {
         if (!in_array($type, ['1', '3', '2'])) {
             throw $this->ex404();
