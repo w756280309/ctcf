@@ -10,4 +10,11 @@ class LandingController extends Controller
     {
         return $this->render('homecoming17');
     }
+
+    public function actionC180214()
+    {
+        $this->layout = '@app/views/layouts/fe';
+
+        return $this->render('c180214_shuangbeijifen');
+    }
 }
