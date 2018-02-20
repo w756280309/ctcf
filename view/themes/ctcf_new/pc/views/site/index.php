@@ -197,7 +197,7 @@ JSFILE
                     <a class="clear-fix" href="/helpcenter/operation/" target="_blank">
                         <span class="lf fz14 fz-gray-strong w250 overflow">
                             <img class="mgr12 w4" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_08.png" alt="">
-                            网站流程如何操作？
+                            网站常见操作问题？
                         </span>
                         <span class="rg header-hover">></span>
                     </a>

@@ -31,7 +31,7 @@ $this->registerJs('forceReload_V2();');
             </li>
         </ul>
         <a class="go-realName" href="/user/identity">立即实名认证</a>
-        <p class="tips">温都金服将严格保密您的个人信息。</p>
+        <p class="tips">楚天财富将严格保密您的个人信息。</p>
     </div>
 </div>
 <div class="mask" style="display: none;"></div>
