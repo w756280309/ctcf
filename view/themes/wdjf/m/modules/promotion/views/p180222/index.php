@@ -9,6 +9,14 @@ $this->title = '答题开宝箱';
 <script src="<?= FE_BASE_URI ?>libs/layer_mobile/layer.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/vue.min.js"></script>
+<script>
+  var bwAccessToken = false;
+  var match = window.location.search.match(new RegExp('[?&]token=([^&]+)(&|$)'));
+  if (match) {
+    var val = decodeURIComponent(match[1].replace(/\+/g, " "));
+    bwAccessToken = encodeURIComponent(val);
+  }
+</script>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/wxShare.js?v=3"></script>
 
@@ -48,7 +56,7 @@ $this->title = '答题开宝箱';
 			<li>活动期间每位用户每天最多有2次免费游戏机会，其中第2次游戏机会必须分享本活动到朋友圈才能获得；</li>
 			<li>活动期间每天的游戏机会将在次日0点重置，请当日使用完；</li>
 			<li>活动期间，每天2次游戏机会用完后，可以次日进入本活动页继续参与游戏；</li>
-			<li>本次活动虚拟奖品将立即发放到账，实物奖品将在7个工作日内与您联系；</li>
+			<li>本次活动虚拟奖品将立即发放到账户，实物奖品将在7个工作日内与您联系；</li>
 			<li>本活动最终解释权归温都金服所有。</li>
 		</ul>
 	</div>
