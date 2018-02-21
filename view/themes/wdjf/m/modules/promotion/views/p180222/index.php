@@ -71,7 +71,7 @@ $this->title = '答题开宝箱';
 		<!--<p class="result-content">哎呀，红包与您擦肩而过~</p>-->
 		<p class="result-content"></p>
 		<div class="result-btns clearfix">
-			<div class="lf share-btn">去分享</div>
+			<div class="lf share-btn" style="cursor: pointer">去分享</div>
 			<div class="rg" @click="reload">再玩一次</div>
 		</div>
 	</div>
@@ -518,6 +518,5 @@ $this->title = '答题开宝箱';
     wxShare.setParams(shareData.title, shareData.des, shareData.link, shareData.imgUrl, shareData.appId);
 
   })
-  Vue.config.devtools = true
 
 </script>
