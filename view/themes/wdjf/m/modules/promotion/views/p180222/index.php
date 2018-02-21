@@ -150,13 +150,7 @@ $this->title = '答题开宝箱';
         questionNow: { //当前的题目
 
         },
-        answerArr: {//答案数组
-          "1": "",
-          "2": "",
-          "3": "",
-          "4": "",
-          "5": ""
-        },
+        answerArr: {},//答案数组
         answerNow: "",//当前答案
         awardList: [ //获奖列表
 
@@ -380,7 +374,7 @@ $this->title = '答题开宝箱';
               success: function (res) {
                 if (res.code == 0) {
                   //把最后一题的答案存入结果对象
-                  that.answerArr[that.questionIndex + 1] = that.answerNow;
+                  that.answerArr[that.questionNow.id] = that.answerNow;
                   $.ajax({
                     url: "/promotion/p180222/finish",
                     type: "post",
@@ -459,7 +453,7 @@ $this->title = '答题开宝箱';
         //进入下一题
         showNext: function () {
           //存入结果对象
-          this.answerArr[this.questionIndex + 1] = this.answerNow;
+          this.answerArr[this.questionNow.id] = this.answerNow;
           //题目序列号++
           this.questionIndex++;
           //渲染题目和按钮
@@ -518,5 +512,7 @@ $this->title = '答题开宝箱';
     wxShare.setParams(shareData.title, shareData.des, shareData.link, shareData.imgUrl, shareData.appId);
 
   })
+  Vue.config.devtools = true
+
 
 </script>
