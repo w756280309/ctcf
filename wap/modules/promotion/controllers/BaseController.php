@@ -3,9 +3,11 @@
 namespace wap\modules\promotion\controllers;
 
 use common\controllers\HelpersTrait;
+use common\models\adv\ShareLog;
 use common\models\promo\PromoLotteryTicket;
 use common\models\promo\PromoService;
 use common\models\thirdparty\SocialConnect;
+use common\models\user\User;
 use common\models\user\UserInfo;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
@@ -272,5 +274,54 @@ var dataStr = '$data';
 var dataJson = eval('(' + dataStr + ')');
 JS;
         $view->registerJs($js, View::POS_HEAD);
+    }
+
+    /**
+     * 检查活动状态及登录状态
+     *
+     * @param null|RankingPromo $promo 活动对象
+     * @param null|User $user 用户对象
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    protected function checkStatus($promo, $user)
+    {
+        if (null === $promo) {
+            throw new \Exception('活动不存在', self::ERROR_CODE_SYSTEM);
+        }
+        $promo->isActive($user);
+        //判断用户状态
+        if (null === $user) {
+            throw new \Exception('用户未登录', self::ERROR_CODE_NOT_LOGIN);
+        }
+
+        return true;
+    }
+
+    /**
+     * 添加分享记录
+     *
+     * @param string $shareUrl 分享URL
+     * @param string $scene 场景
+     *
+     * @return void
+     */
+    public function actionAddShare($shareUrl, $scene)
+    {
+        $user = Yii::$app->user;
+        if (null === $user) {
+            return;
+        }
+
+        $now = date("Y-m-d", time());
+        $ipAddress = Yii::$app->request->getUserIP();
+        $newShareLog = new ShareLog();
+        $newShareLog->shareUrl = $shareUrl;
+        $newShareLog->scene = $scene;
+        $newShareLog->userId = $user->id;
+        $newShareLog->ipAddress = $ipAddress;
+        $newShareLog->createdAt = $now;
+        $newShareLog->save(false);
     }
 }

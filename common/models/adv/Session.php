@@ -16,6 +16,7 @@ class Session extends ActiveRecord
             ['userId', 'integer'],
             ['batchSn', 'string'],
             ['createTime', 'string'],
+            ['answers', 'string'],
         ];
     }
 

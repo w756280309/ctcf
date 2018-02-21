@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="format-detection" content="telphone=no, email=no"/>
+	<title>全民年货节</title>
+	<link rel="stylesheet" href="../../common/css/wenjfbase.css">
+	<link rel="stylesheet" href="css/layout.min.css">
+	<script src="../../libs/lib.flexible3.js"></script>
+	<script src="../../libs/jquery-1.11.1.min.js"></script>
+	<script src="../../libs/vue.min.js"></script>
+	<script src="../../libs/layer_mobile/layer.js"></script>
+	<script src="../../libs/fastclick.js"></script>
+	<style>
+		/*body {*/
+			/*-webkit-text-size-adjust: 100% !important;*/
+		/*}*/
+
+	</style>
+</head>
+<body>
+<div id="app" class="flex-content">
+	<div class="part-ready" v-show="!ifGame">
+		<div class="ready-btn btn-rules" @click="toggleRules"></div>
+		<div class="ready-btn btn-list" @click="toggleAward"></div>
+		<div class="btn-begin" @click="begin"></div>
+	</div>
+	<div class="part-play" v-show="ifGame">
+		<div class="play-countdown">倒计时：<span>20</span></div>
+		<ul class="play-question">
+			<li class="question" style="list-style-type: none">{{questionIndex + 1}}、{{questionNow.content}}请选择：</li>
+		</ul>
+		<ul class="play-answer-list">
+			<li v-for="(value,key) in questionNow.options" @click="flag && selected($event,key)" :data-id="key"><span>{{value}}</span></li>
+		</ul>
+		<div class="play-btn submit" @click="showResult" v-show="ifshowSubmit">查看结果</div>
+		<div class="play-btn next" @click="showNext" v-show="ifshowNext">下一题</div>
+		<div class="play-btn answer" @click="showAnswer" v-show="ifshowAnswer">提交答案</div>
+		<div class="play-btn static" v-show="ifshowStatic">提交答案</div>
+	</div>
+	<!--规则弹窗-->
+	<div class="pops pop-rules" v-show="ifshowRules">
+		<div class="btn-close" @click="toggleRules"></div>
+		<p class="rules-title">活动规则</p>
+		<ul class="rules-list">
+			<li>活动时间：2018.2.22至2.26；</li>
+			<li>每轮答题游戏有5道题，答对越多，获得奖励的几率越高；</li>
+			<li>活动期间每位用户每天最多有2次免费游戏机会，其中第2次游戏机会必须分享本活动到朋友圈才能获得；</li>
+			<li>活动期间每天的游戏机会将在次日0点重置，请当日使用完；</li>
+			<li>活动期间，每天2次游戏机会用完后，可以次日进入本活动页继续参与游戏；</li>
+			<li>本次活动虚拟奖品将立即发放到账，实物奖品将在7个工作日内与您联系；</li>
+			<li>本活动最终解释权归温都金服所有。</li>
+		</ul>
+	</div>
+	<!--结果弹窗-->
+	<div class="pops pop-result" v-show="ifshowResults">
+		<div class="btn-close" @click="reload"></div>
+		<p class="result-title">本轮答题完成,<br> 共答对 <span class="result-num">3</span>道题!</p>
+		<img src="images/pic_award_big.png" alt="" class="result-pic">
+		<!--<p class="result-content">哎呀，红包与您擦肩而过~</p>-->
+		<p class="result-content">恭喜您获得5元代金券~</p>
+		<div class="result-btns clearfix">
+			<div class="lf">去分享</div>
+			<div class="rg" @click="reload">再玩一次</div>
+		</div>
+	</div>
+	<!--分享弹窗-->
+	<div class="pops pop-share" v-show="ifshowShare">
+		<div class="btn-close" @click="toggleShare"></div>
+		<p class="share-content">您没有答题次数了!<br>分享到朋友圈,<br>还能再玩一次哦!</p>
+		<div class="share-btn">立即分享</div>
+		<p class="share-remind">提示:必须分享到朋友圈才有效哦！</p>
+	</div>
+	<!--没有机会弹窗-->
+	<div class="pops pop-nochance" v-show="ifshowNochance">
+		<div class="btn-close" @click="toggleNochance"></div>
+		<p class="share-content">您今天已经用完<br>全部答题次数了哦!<br>明天再来玩吧!</p>
+		<div class="nochance-btn" @click="toggleNochance">我知道了</div>
+		<p class="share-remind">提示:活动期间每天都能来答题哦！</p>
+	</div>
+	<!--获奖列表弹窗-->
+	<div class="pops pop-awards" v-show="ifshowAward">
+		<div class="btn-close" @click="toggleAward"></div>
+		<div class="awards-title">奖品列表</div>
+		<ul class="awards-list">
+			<li class="clearfix" v-for="list in awardList">
+				<div class="lf"></div>
+				<div class="rg">
+					<p class="award-name">{{list.name}}</p>
+					<p class="award-date">中奖时间{{list.awardTime}}</p>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<!--无奖品弹窗-->
+	<div class="pops pop-noawards" v-show="ifshowNoaward">
+		<div class="btn-close" @click="toggleNoaward"></div>
+		<p class="noawards-title">奖品列表</p>
+		<p class="noawards-content" style="margin-bottom: 0.4rem;">您还没有中奖哦!</p>
+		<p class="noawards-content" style="margin-bottom: 0.2rem;">快去答题</p>
+		<p class="noawards-content">再接再厉</p>
+	</div>
+	<div class="mask" v-show="ifshowMask"></div>
+</div>
+<script>
+
+  $(function () {
+    //安卓微信防缩放代码
+    (function() {
+      if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+        handleFontSize();
+      } else {
+        document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+      }
+      function handleFontSize() {
+        // 设置网页字体为默认大小
+        WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+        // 重写设置网页字体大小的事件
+        WeixinJSBridge.on('menu:setfont', function() {
+          WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+        });
+      }
+    })();
+    //假答案
+    var fakeAnswer = [101,201,301,401,501];
+    var model = new Vue({
+      el: '#app',
+      data: {
+        promoStatus : 1, //活动状态
+        isLoggedIn : 0, //登录状态
+        activeTicketCount : 1, //游戏机会
+        questionCase: [ //本轮题库
+          {
+            id: 100,
+            content: "前天你吃了几片药呢？",
+            options: {
+              "100":"A、1片",
+              "101":"B、2片",
+              "102":"C、3片",
+              "103":"D、4片"
+            }
+          },
+          {
+            id: 101,
+            content: "昨天你吃了几片药呢？",
+            options: {
+              "200":"A、1片",
+              "201":"B、2片",
+              "202":"C、3片",
+              "203":"D、4片"
+            }
+          },
+          {
+            id: 102,
+            content: "今天你吃了几片药呢？",
+            options: {
+              "300":"A、1片",
+              "301":"B、2片",
+              "302":"C、3片",
+              "303":"D、4片"
+            }
+          },
+          {
+            id: 103,
+            content: "明天你要吃几片药呢？",
+            options: {
+              "400":"A、1片",
+              "401":"B、2片",
+              "402":"C、3片",
+              "403":"D、4片"
+            }
+          },
+          {
+            id: 104,
+            content: "后天你要吃几片药呢？",
+            options: {
+              "500":"A、1片",
+              "501":"B、2片",
+              "502":"C、3片",
+              "503":"D、4片"
+            }
+          }
+        ],
+	      questionIndex:0, //当前题目的索引值
+	      questionNow:{ //当前的题目
+          id: 100,
+          content: "前天你吃了几片药呢？",
+          options: {
+            "100":"A、1片",
+            "101":"B、2片",
+            "102":"C、3片",
+            "103":"D、4片"
+          }
+	      },
+	      answerArr:{//答案数组
+          "1":"",
+          "2":"",
+          "3":"",
+          "4":"",
+          "5":"",
+	      },
+	      answerNow:"",//当前答案
+	      awardList:[ //获奖列表
+          {
+            "id": 1,
+            "sn": "170828_p_77",
+            "ref_type": "POINT",
+            "ref_amount": "77.00",
+            "name": "77元红包",
+            "awardTime": "2017-10-11 10:55:55"
+          },
+          {
+            "id": 2,
+            "sn": "170828_c_77",
+            "ref_type": "COUPON",
+            "ref_amount": "50.00",
+            "name": "50元红包",
+            "awardTime": "2017-10-11 10:55:55"
+          },
+          {
+            "id": 3,
+            "sn": "170828_c_77",
+            "ref_type": "COUPON",
+            "ref_amount": "60.00",
+            "name": "60元红包",
+            "awardTime": "2017-10-11 10:55:55"
+          },
+          {
+            "id": 4,
+            "sn": "170828_c_77",
+            "ref_type": "COUPON",
+            "ref_amount": "70.00",
+            "name": "70元红包",
+            "awardTime": "2017-10-11 10:55:55"
+          },
+          {
+            "id": 5,
+            "sn": "170828_c_77",
+            "ref_type": "COUPON",
+            "ref_amount": "90.00",
+            "name": "90元红包",
+            "awardTime": "2017-10-11 10:55:55"
+          }
+	      ],
+        ifGame: false,
+        ifshowMask: false, //蒙层显示与否
+        ifshowRules: false, //规则弹窗显示与否
+        ifshowResults: false, //结果弹窗显示与否
+        ifshowShare: false, //分享弹窗显示与否
+        ifshowNochance: false, //没机会弹窗显示与否
+        ifshowAward: false, //奖品列表弹窗显示与否
+        ifshowNoaward:false,//无奖品弹窗显示与否
+	      ifshowSubmit:false,//各个按钮的显隐
+        ifshowNext:false,
+        ifshowAnswer:false,
+        ifshowStatic:true,
+	      flag:true //选项点击事件与否的开关
+      },
+      methods: {
+        //开关奖品弹窗的方法
+        toggleAward: function () {
+          //此处先判断登录状态和活动类型，然后请求列表接口，根据结果显示不同显示
+          this.ifshowMask = !this.ifshowMask;
+          this.ifshowAward = !this.ifshowAward;
+        },
+        //开关规则弹窗的方法
+        toggleRules: function () {
+          this.ifshowMask = !this.ifshowMask;
+          this.ifshowRules = !this.ifshowRules;
+        },
+	      //开关无奖品弹窗的方法
+        toggleNoaward:function () {
+          this.ifshowMask = !this.ifshowMask;
+          this.ifshowNoaward = !this.ifshowNoaward;
+        },
+        //开关分享的方法
+        toggleShare: function () {
+          this.ifshowMask = !this.ifshowMask;
+          this.ifshowShare = !this.ifshowShare;
+        },
+        //开关没机会的方法
+        toggleNochance: function () {
+          this.ifshowMask = !this.ifshowMask;
+          this.ifshowNochance = !this.ifshowNochance;
+        },
+        //开始答题按钮
+        begin: function () {
+          //判断各种状态，都ok后开始
+	        //渲染题目
+	        this.questionNow = this.questionCase[this.questionIndex];
+          this.ifGame = !this.ifGame;
+          countDown();
+        },
+	      //选择一个选项
+        selected:function (event,key) {
+          $(".play-answer-list li").removeClass("bg-selected");
+          $(event.target).closest("li").addClass("bg-selected");
+          this.answerNow = key;
+          if(!!this.answerNow){
+            this.ifshowStatic = false;
+            this.ifshowAnswer = true;
+          }
+        },
+	      //提交答案按钮
+	      showAnswer:function () {
+          var that = this;
+          clearInterval(t);
+          if(this.questionIndex < 4){
+            //只请求submit接口
+
+	          //假如已经请求到了
+//	          以下是ajax回调函数
+	          if(this.answerNow == fakeAnswer[that.questionIndex]){
+	            //正确
+		          $(".play-answer-list li").removeClass();
+		          $.each($(".play-answer-list li"),function () {
+			          if(this.getAttribute("data-id") == that.answerNow){
+			            $(this).addClass("bg-correct-answer")
+			          }
+              })
+		          that.flag = false;
+		          that.ifshowAnswer = false;
+		          that.ifshowStatic = false;
+		          that.ifshowNext = true;
+	          }else if(this.answerNow == ""){
+	            //未选择
+              $(".play-answer-list li").removeClass();
+              $.each($(".play-answer-list li"),function () {
+                if(this.getAttribute("data-id") == fakeAnswer[that.questionIndex]){
+                  $(this).addClass("bg-correct")
+                }else{
+                  $(this).addClass("bg-error")
+                }
+              });
+              that.flag = false;
+              that.ifshowAnswer = false;
+              that.ifshowStatic = false;
+              that.ifshowNext = true;
+	          }else{
+	            //错误
+              $(".play-answer-list li").removeClass();
+              $.each($(".play-answer-list li"),function () {
+                if(this.getAttribute("data-id") == that.answerNow){
+                  $(this).addClass("bg-error-answer")
+                }else if(this.getAttribute("data-id") == fakeAnswer[that.questionIndex]){
+                  $(this).addClass("bg-correct")
+                }
+              });
+              that.flag = false;
+              that.ifshowAnswer = false;
+              that.ifshowStatic = false;
+              that.ifshowNext = true;
+	          }
+          }else{
+            //先后请求submit和finish两个
+
+	          //假装请求都完成了
+            if(this.answerNow == fakeAnswer[that.questionIndex]){
+              //正确
+              $(".play-answer-list li").removeClass();
+              $.each($(".play-answer-list li"),function () {
+                if(this.getAttribute("data-id") == that.answerNow){
+                  $(this).addClass("bg-correct-answer")
+                }
+              })
+              that.flag = false;
+              that.ifshowAnswer = false;
+              that.ifshowStatic = false;
+              that.ifshowSubmit = true;
+            }else if(this.answerNow == ""){
+              //未选择
+              $(".play-answer-list li").removeClass();
+              $.each($(".play-answer-list li"),function () {
+                if(this.getAttribute("data-id") == fakeAnswer[that.questionIndex]){
+                  $(this).addClass("bg-correct-answer")
+                }else{
+                  $(this).addClass("bg-error-answer")
+                }
+              });
+              that.flag = false;
+              that.ifshowAnswer = false;
+              that.ifshowStatic = false;
+              that.ifshowSubmit = true;
+            }else{
+              //错误
+              $(".play-answer-list li").removeClass();
+              $.each($(".play-answer-list li"),function () {
+                if(this.getAttribute("data-id") == that.answerNow){
+                  $(this).addClass("bg-error-answer")
+                }else if(this.getAttribute("data-id") == fakeAnswer[that.questionIndex]){
+                  $(this).addClass("bg-correct-answer")
+                }
+              });
+              that.flag = false;
+              that.ifshowAnswer = false;
+              that.ifshowStatic = false;
+              that.ifshowSubmit = true;
+            }
+            that.ifshowAnswer = false;
+            that.ifshowStatic = false;
+            that.ifshowSubmit = true;
+          }
+        },
+	      //进入下一题
+	      showNext:function () {
+          //存入结果对象
+          this.answerArr[this.questionIndex+1] = this.answerNow;
+		      //题目序列号++
+          this.questionIndex++;
+          //渲染题目和按钮
+		      this.questionNow = this.questionCase[this.questionIndex];
+		      $(".play-answer-list li").removeClass();
+		      this.ifshowStatic = true;
+		      this.ifshowNext = false;
+		      this.ifshowAnswer = false;
+		      //清空答案
+          this.answerNow = "";
+          //放开点击事件 开始新的倒计时
+		      this.flag = true;
+		      countDown();
+        },
+	      //查看结果按钮
+        showResult:function () {
+          this.ifshowResults= !this.ifshowResults;
+          this.ifshowMask= !this.ifshowMask;
+        },
+	      //刷新页面
+	      reload:function () {
+		      location.reload();
+        },
+	      //layer
+	      showMsg:function (msg) {
+          layer.open({
+            content: msg
+            ,skin: 'msg'
+            ,time: 2 //2秒后自动关闭
+          });
+        }
+      }
+    })
+
+    var t;
+    //倒计时函数
+    function countDown() {
+      var second = 20;
+      t = setInterval(function () {
+        $(".play-countdown span").html(second);
+        second--;
+        if(second < 0){
+          //自动提交
+          model.showAnswer()
+          clearInterval(t);
+          second = 20
+        }
+      },1000)
+    }
+  })
+  Vue.config.devtools = true
+
+</script>
+</body>
+</html>
