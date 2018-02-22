@@ -19,7 +19,7 @@ class DrawMessage extends WechatMessage
             'first' => ['尊敬的客户，您申请的提现成功，资金已到达银行卡，请注意查看。', '#000000'],
             'keyword1' => [date('Y-m-d H:i:s', $drawRecord->created_at), '#000000'],
             'keyword2' => [StringUtils::amountFormat3($drawRecord->money).'元', '#000000'],
-            'remark' => ['如有疑问请致电：400-101-5151进行咨询。', '#000000'],
+            'remark' => ['如有疑问请致电：'.Yii::$app->params['platform_info.contact_tel'].'进行咨询。', '#000000'],
         ];
         $this->user = $drawRecord->user;
         $this->templateId = Yii::$app->params['wx.msg_tpl.draw_success'];
