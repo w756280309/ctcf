@@ -97,7 +97,7 @@ use common\utils\StringUtils;
 
         <!-- 活动规则 -->
         <div class="active-box rule">
-            <p><span>活动开始时间：2018年12月10日</span></p>
+            <p><span>活动开始时间：2018年1月1日</span></p>
             <br/>
             <p><span>活动规则：</span></p>
             <p>1. 登录楚天财富网站，进入“我的账户”；</p>
