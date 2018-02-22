@@ -8,7 +8,7 @@ use frontend\assets\CtcfFrontAsset;
 
 $this->title = '我要理财';
 
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/financial.min.css?v=1.1', ['depends' => CtcfFrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/financial.min.css?v=2018022211', ['depends' => CtcfFrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/pagination.css', ['depends' => CtcfFrontAsset::class]);
 
 $action = Yii::$app->controller->action->getUniqueId();
@@ -56,7 +56,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                             </div>
                             <div class="mode-style fz14">
                                 <div class="mode-top-part">起投金额<span class="fz14 fz-black"><?= StringUtils::amountFormat2($val->start_money) ?>元</span></div>
-                                <div class="mode-bottom-part">计息方式<span class="fz14 fz-black"><?= Yii::$app->params['refund_method'][$val->refund_method] ?></span></div>
+                                <div class="mode-bottom-part clear-fix"><u class="lf">计息方式</u><span class="lf fz14 fz-black"><?= Yii::$app->params['refund_method'][$val->refund_method] ?></span></div>
                             </div>
                             <div class="raise-mode">
                                 <div class="raise-top-part">募集总额<span class="fz14 fz-black"><?= StringUtils::amountFormat1('{amount}{unit}', $val->money) ?></span></div>

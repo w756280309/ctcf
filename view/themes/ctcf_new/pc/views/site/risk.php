@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/login/login_pop.css?v=20160711"/>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>pc/common/css/base.css">
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/risk-assessment/index.css?v=1.0">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/risk-assessment/index.css?v=180222">
 
 <div class="login-mark" style="display: none;"></div>
 <div class="loginUp-box" style="display: none;">

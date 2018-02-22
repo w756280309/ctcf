@@ -2,7 +2,7 @@
 
 $this->title = '我要理财';
 
-$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/attorn.min.css', ['depends' => 'frontend\assets\CtcfFrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/attorn.min.css?v=1.111', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/pagination.css', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 
 use common\utils\StringUtils;
