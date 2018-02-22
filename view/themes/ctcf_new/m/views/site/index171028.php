@@ -27,7 +27,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
 $this->registerJsFile(FE_BASE_URI . 'libs/fastclick.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(FE_BASE_URI . 'libs/jquery.lazyload.min.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends' => JqueryAsset::class]);
-$this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/mask/mask.js?v=1.11111', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/mask/mask.js?v=1.11113', ['depends' => JqueryAsset::class]);
 ?>
 <style>
 	.pop {
@@ -130,7 +130,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/mask/mask.js?v=1.11111', ['depe
                     <img class="lf" src="<?= ASSETS_BASE_URI ?>ctcf/images/mask/prize_user_old1.png" alt="">
                     <div class="rg">
                         <p class="user-login-msg">老用户登录</p>
-                        <p class="user-login-prize">送您补偿红包</p>
+                        <p class="user-login-prize">送您升级红包</p>
                     </div>
                 </a>
             </div>
@@ -145,12 +145,12 @@ $this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/mask/mask.js?v=1.11111', ['depe
                 <ul class="swiper-wrapper" id="upgrade-sweper">
                     <li class="swiper-slide upgrade_explain">
                         <h5>尊敬的用户，您好：</h5>
-                        <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史投资额，特发放了豪华补偿礼包，敬请收下！</p>
+                        <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史投资额，特发放了豪华升级礼包，敬请收下！</p>
                         <table>
                             <tr>
                                 <th>累计年化投资金额（万元）</th>
-                                <th>补偿红包</th>
-                                <th>补偿积分</th>
+                                <th>升级红包</th>
+                                <th>升级积分</th>
                             </tr>
                             <tr>
                                 <td>0＜X＜20</td>

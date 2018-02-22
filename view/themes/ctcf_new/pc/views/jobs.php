@@ -15,7 +15,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/news/informationlist.css?v=20160818'
                 <div class="information-header">
                     <span class="information-header-font">招聘岗位</span>
                 </div>
-                <p style="font-size: 16px;min-height: 475px;text-align: center;color: #434a54;padding-top: 100px;">非常抱歉，暂无招聘信息。</p>
+                <p style="font-size: 16px;min-height: 475px;text-align: center;color: #434a54;padding-top: 100px;">暂无招聘信息。</p>
 <!--                <table class="gangwei">-->
 <!--                    <tr class="tr-first">-->
 <!--                        <td width="12%">招聘岗位</td>-->

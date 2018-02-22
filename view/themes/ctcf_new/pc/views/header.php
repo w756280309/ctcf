@@ -66,7 +66,7 @@ $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
 </div>
 <div class="ctcf-nav">
     <div class="nav-bar clear-fix">
-        <div class="lf"><a href="/"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/logo.png" alt=""></a></div>
+        <div class="lf"><a href="/"><img style="width: 368px;" src="<?= ASSETS_BASE_URI ?>ctcf/images/logo.png" alt=""></a></div>
         <div class="rg fz16">
             <ul class="clear-fix">
                 <li class="lf mgr18"><a class="<?= 'site/index' === $action ? 'nav-active' : '' ?>" href="/">首页</a></li>

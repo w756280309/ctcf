@@ -503,7 +503,7 @@ JSFILE
                 <img class="lf" src="<?= ASSETS_BASE_URI ?>ctcf/images/mask/prize_user_old1.png" alt="">
                 <div class="rg">
                     <p class="user-login-msg">老用户登录</p>
-                    <p class="user-login-prize">送您补偿红包</p>
+                    <p class="user-login-prize">送您升级红包</p>
                 </div>
             </a>
         </div>
@@ -518,12 +518,12 @@ JSFILE
             <ul class="swiper-wrapper clear-fix" id="upgrade-sweper">
                 <li class="swiper-slide upgrade_explain">
                     <h5>尊敬的用户，您好：</h5>
-                    <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史投资额，特发放了豪华补偿礼包，敬请收下！</p>
+                    <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史投资额，特发放了豪华升级礼包，敬请收下！</p>
                     <table>
                         <tr>
                             <th>累计年化投资金额（万元）</th>
-                            <th>补偿红包</th>
-                            <th>补偿积分</th>
+                            <th>升级红包</th>
+                            <th>升级积分</th>
                         </tr>
                         <tr>
                             <td>0＜X＜20</td>
@@ -561,7 +561,7 @@ JSFILE
                             </div>
                         </div>
                     </div>
-                    <u class="get-prize-rules">补偿规则</u>
+                    <u class="get-prize-rules">升级规则</u>
                     <a class="check-get-prize" href="/user/coupon/">查看红包</a>
                 </li>
             </ul>

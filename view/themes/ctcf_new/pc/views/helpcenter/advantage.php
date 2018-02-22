@@ -26,7 +26,6 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                     <div class="section">
                         <div class="number">2</div>
                         <span class="focus">股东</span><span>强势</span>
-                        <p>湖北日报传媒有限公司，</p>
                         <p>系湖北荆楚网络科技股份有限公司、湖北新海天投资有限公司投资；</p>
 <!--                        <p>南京金融资产交易中心，</p>-->
 <!--                        <p>省级金融主管部门审批的合规平台；</p>-->
@@ -37,7 +36,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                         <span class="focus">安全</span><span>合规</span>
                         <p>资金全程托管，与平台隔离不被挪用；</p>
                         <p>绑定本人银行卡，提现只进本人账户很安全；</p>
-                        <p>层层风控，安全至上；专业稳健，合法合规；</p>
+                        <p>层层风控，专业稳健，合法合规；</p>
                     </div>
 
                     <div class="section">

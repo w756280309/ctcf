@@ -45,7 +45,7 @@ $this->headerNavOn = true;
 <div class="flex-content">
     <img src="<?= FE_BASE_URI ?>wap/app-download/images/pic_download.png" alt="" class="download-pic">
     <p class="download-content">为了更好的用户体验</p>
-    <p class="download-content">请您通过温都金服App参与活动</p>
+    <p class="download-content">请您通过楚天财富App参与活动</p>
     <p class="download-content">感谢您的理解与支持哦！</p>
     <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf" class="download-button">下载APP</a>
 </div>

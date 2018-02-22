@@ -8,7 +8,7 @@ use common\models\adv\Share;
 use common\view\WxshareHelper;
 use wap\assets\WapAsset;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/luodiye/first.css?v=1.11111', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/invite/activedisplay.css?v=20160810', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js?v=20161013', ['depends' => WapAsset::class]);

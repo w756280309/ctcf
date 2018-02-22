@@ -82,7 +82,7 @@ $(function(){
             }
 
         });
-        clearImmediate(timer);
+        clearTimeout(timer);
     }, 200);
     // 点击查看升级红包显示下一个页面
     $('.check-login-invest').on('click',function(){
