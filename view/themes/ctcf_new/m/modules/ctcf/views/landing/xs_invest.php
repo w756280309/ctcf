@@ -22,14 +22,14 @@ $this->title = '新人首投礼';
         <li class="border-pot"></li>
         <li class="border-pot"></li>
         <li class="title">活动时间：</li>
-        <li class="detail time">2018年2月22日起。</li>
+        <li class="detail time">2018年2月23日起。</li>
         <li class="title">参与活动：</li>
         <li class="detail ">新人注册即可获得<span class="light-txt">888元红包</span>；<br/>新人首次投资任意金额，即可获得<span class="light-txt">1400积分</span>，您可以在积分商城兑换<span class="light-txt">50元超市卡</span>；</li>
         <li class="detail">新人首投<span class="light-txt">≥5万元</span>，奖励将升级为<span class="light-txt">3500积分</span>，可在积分商城兑换<span class="light-txt">160元超市卡</span>；</li>
         <li class="detail time">超市卡每日限量，以兑换的时间先后顺序进行审核发放。</li>
         <li class="title ">领取奖励：</li>
         <li class="detail">完成活动任务后，红包与积分即时发放到账，您可在账户中心查看；</li>
-        <li class="detail time">超市卡将在兑换后的3个工作日内审核发放，如果遇到刷单的情况，公司有权取消活动奖励。如有疑问请联系客服400-966-7850。</li>
+        <li class="detail time">超市卡将在兑换后的3个工作日内审核发放，如果遇到刷单的情况，公司有权取消活动奖励。如有疑问请联系客服<?= Yii::$app->params['platform_info.contact_tel'] ?>。</li>
         <li class="title">公司地址：</li>
         <li class="detail">武汉市东湖路181号楚天文化创意产业园8号楼1层。</li>
         <li class="last-detail clearfix">
