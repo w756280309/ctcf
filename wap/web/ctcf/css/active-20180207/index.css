@@ -1,0 +1,152 @@
+/* 活动 */
+body {
+    background: #c8322a;
+}
+.flex-content .wrap-img {
+    display: block;
+    width: 100%;
+}
+.flex-content .get-detail {
+    margin: 0 auto;
+    padding-bottom: 0.2rem;
+    width: 95.2%;
+    font-size: 0.32rem;
+    color: #737373;
+    background: #ffe1c4;
+    border-radius: 0.13333333rem;
+}
+.flex-content .get-detail .title {
+    padding: 0.28rem 0 0.1rem 0.28rem;
+    line-height: 1;
+    color: #737373;
+    font-size: 0.32rem;
+}
+.flex-content .get-detail .txt {
+    margin: 0.18666667rem auto 0;
+    width: 91.59663866%;
+    height: 1.22666667rem;
+    line-height: 1.22666667rem;
+    font-size: 0.48rem;
+    background-color: #fff;
+    border-radius: 0.04rem;
+}
+.flex-content .get-detail .txt span {
+    padding-left: 0.33333333rem;
+    color: #434343;
+}
+.flex-content .get-detail .txt i {
+    float: right;
+    padding-right: 0.33333333rem;
+    font-style: normal;
+    color: #b4302a;
+}
+.flex-content .get-detail .sm-tips {
+    padding-left: 0.44rem;
+    line-height: 0.85333333rem;
+    color: #ba403a;
+    font-size: 0.32rem;
+}
+.flex-content .common-btn {
+    display: block;
+    width: 88%;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    font-size: 0.56rem;
+    color: #c8322a;
+    text-align: center;
+    background: #f2cd53;
+    letter-spacing: .08rem;
+    border-radius: 0.6rem;
+}
+.flex-content .get-btn {
+    margin: 0.56rem auto 0.90666667rem;
+}
+.flex-content .invite-btn {
+    margin: 0.26666667rem auto 0;
+}
+.flex-content .rule {
+    position: relative;
+    margin: 0.50666667rem auto 0;
+    width: 92%;
+    padding: 0.26666667rem 0.42666667rem;
+    background: #fff;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-box-shadow: 0 1px 1px 1px #8e1a14;
+    -moz-box-shadow: 0 1px 1px 1px #8e1a14;
+    box-shadow: 0 1px 1px 1px #8e1a14;
+}
+.flex-content .rule li {
+    font-size: 0.4rem;
+    line-height: 0.61333333rem;
+}
+.flex-content .rule li.title {
+    color: #c8322a;
+}
+.flex-content .rule li.detail {
+    color: #44454d;
+}
+.flex-content .rule li.detail .light-txt {
+    color: #c8322a;
+}
+.flex-content .rule li.time {
+    padding-bottom: 0.16rem;
+}
+.flex-content .rule li.border-pot {
+    position: absolute;
+    display: block;
+    width: 0.53333333rem;
+    height: 0.53333333rem;
+    background: #c8322a;
+    border-radius: 50%;
+}
+.flex-content .rule li.border-pot:nth-of-type(1) {
+    top: -0.26666667rem;
+    left: -0.26666667rem;
+}
+.flex-content .rule li.border-pot:nth-of-type(2) {
+    top: -0.26666667rem;
+    right: -0.26666667rem;
+}
+.flex-content .rule li.border-pot:nth-of-type(3) {
+    bottom: -0.26666667rem;
+    left: -0.26666667rem;
+}
+.flex-content .rule li.border-pot:nth-of-type(4) {
+    bottom: -0.26666667rem;
+    right: -0.26666667rem;
+}
+.flex-content .rule li.last-detail {
+    height: 2.76rem;
+}
+.flex-content .rule li.last-detail .lf-txt {
+    float: left;
+    width: 62.30031949%;
+}
+.flex-content .rule li.last-detail .lf-txt .weixin {
+    padding-top: 0.38666667rem;
+    line-height: 0.56rem;
+    color: #c8322a;
+    text-align: center;
+    font-size: 0.42666667rem;
+}
+.flex-content .rule li.last-detail .lf-txt .weixin-name {
+    line-height: 0.93333333rem;
+    color: #c8322a;
+    text-align: center;
+    font-size: 0.64rem;
+}
+.flex-content .rule li.last-detail .rg-txt {
+    float: left;
+    width: 32.90734824%;
+}
+.flex-content .rule li.last-detail .rg-txt img {
+    display: block;
+    width: 87.28813559%;
+}
+.flex-content .copy-right {
+    line-height: 0.90666667rem;
+    text-align: center;
+    color: #fff;
+    font-size: 0.29333333rem;
+}
