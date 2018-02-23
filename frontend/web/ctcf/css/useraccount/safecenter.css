@@ -186,6 +186,7 @@
     height:16px;
     font-size: 12px;
     color:#ff6707;
+    box-sizing: content-box;
 }
 .safecenter-box .revise .revise-login-code .yzm-txt {
     float: left;

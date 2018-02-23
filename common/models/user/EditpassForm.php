@@ -26,7 +26,7 @@ class EditpassForm extends Model
         return [
 //            'add' => ['new_pass', 'r_pass'],   //新增交易密码
 //            'edit' => ['password', 'new_pass', 'verifyCode'],  //修改交易密码
-            'edituserpass' => ['password', 'new_pass', 'verifyCode'],  //修改登陆密码
+            'edituserpass' => ['password', 'new_pass', 'verifyCode'],  //修改登录密码
 //            'checktradepwd' => ['password'],   //检查交易密码
         ];
     }
@@ -81,7 +81,7 @@ class EditpassForm extends Model
         if (!$this->hasErrors()) {
             $id = $this->getId();
             if (!$id || !$id->validatePassword($this->password)) {
-                $this->addError($attribute, '原始登陆密码不正确!');
+                $this->addError($attribute, '原始登录密码不正确!');
             }
         }
     }
