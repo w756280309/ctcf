@@ -2,6 +2,7 @@
 
 namespace common\models\user;
 
+use common\event\LoginEvent;
 use common\utils\SecurityUtils;
 use Yii;
 use yii\base\Model;
@@ -112,7 +113,18 @@ class LoginForm extends Model
 
                 return false;
             }
-        } elseif (User::STATUS_DELETED === $this->user->status || $this->user->is_soft_deleted) {
+        }
+
+        $yiiApp = Yii::$app;
+
+        $loginEvent = new LoginEvent([
+            'loginId' => $this->phone,
+            'password' => $this->password,
+            'user' => $this->user,
+        ]);
+        $yiiApp->trigger('bw.user.login.id_hit', $loginEvent);
+       
+        if (User::STATUS_DELETED === $this->user->status || $this->user->is_soft_deleted) {
             if (User::USER_TYPE_PERSONAL === $userType) {
                 $this->addError('phone', '该用户已被锁定');
 
