@@ -15,11 +15,11 @@ $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
                 <i>官方微信</i>
                 <img class="hidden pst" src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin@2x.png" alt="">
             </span>
-            <span class="header-hover pointer erweima">
-                <img class="mgr7" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_02.png" alt="">
+           <!-- <span class="header-hover pointer erweima">
+                <img class="mgr7" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/icon_02.png" alt="">
                 <i>官方微博</i>
-                <img class="hidden pst" src="<?= ASSETS_BASE_URI ?>ctcf/images/weibo@2x.png" alt="">
-            </span>
+                <img class="hidden pst" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/weibo@2x.png" alt="">
+            </span>-->
         </div>
         <!--未登录-->
         <?php if (Yii::$app->user->isGuest) { ?>
@@ -27,13 +27,13 @@ $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
                 <ul class="clear-fix">
                     <li class="lf"><a class="pd15 border-r1 header-hover" href="/site/signup">免费注册</a></li>
                     <li class="lf"><a class="pd15 border-r1 header-hover" href="/site/login">登录</a></li>
-                    <li class="lf">
+                    <!--<li class="lf">
                         <a class="pd15 border-r1 header-hover" href="javascript:void(0);">
                         <span class="erweima">
-                            <img class="mgr7" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_03.png" alt="">下载APP<img class="hidden pst-spec" src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin@2x.png" alt="">
+                            <img class="mgr7" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/icon_03.png" alt="">下载APP<img style="width: 98px;" class="hidden pst-spec" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/weixin@2x.png" alt="">
                         </span>
                         </a>
-                    </li>
+                    </li>-->
                     <li class="lf"><a class="pd15 border-r1 header-hover" href="/helpcenter/operation/">帮助</a></li>
                     <li class="lf header-hover pdl15">客服热线：<?= Yii::$app->params['platform_info.contact_tel'] ?></li>
                 </ul>
@@ -49,13 +49,13 @@ $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
                             <input name="_csrf" type="hidden" value="<?= Yii::$app->request->csrfToken ?>">
                         </form>
                     </li>
-                    <li class="lf">
+                   <!-- <li class="lf">
                         <a class="pd15 border-r1 header-hover" href="javascript:void(0);">
                         <span class="erweima">
-                            <img class="mgr7" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_03.png" alt="">下载APP<img class="hidden pst-spec" src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin@2x.png" alt="">
+                            <img class="mgr7" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/icon_03.png" alt="">下载APP<img class="hidden pst-spec" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/weixin@2x.png" alt="">
                         </span>
                         </a>
-                    </li>
+                    </li>-->
                     <li class="lf"><a class="pd15 border-r1 header-hover" href="/helpcenter/operation/">帮助</a></li>
                     <li class="lf header-hover pdl15">客服热线：<?= Yii::$app->params['platform_info.contact_tel'] ?></li>
                 </ul>

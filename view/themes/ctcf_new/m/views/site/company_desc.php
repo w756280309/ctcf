@@ -6,7 +6,7 @@ use yii\helpers\Html;
 
 WxshareHelper::registerTo($this, $share);
 AnalyticsHelper::registerTo($this);
-
+$this->title = '关于我们';
 ?>
 
 <?php $this->beginPage() ?>
@@ -16,11 +16,11 @@ AnalyticsHelper::registerTo($this);
             <meta charset="UTF-8">
             <meta name="format-detection" content="telephone=no" />
             <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0,user-scalable=no"/>
-            <title>楚天财富 - 武汉报业传媒旗下理财平台</title>
+            <title><?= $this->title ?></title>
             <?= Html::csrfMetaTags() ?>
             <?php $this->head() ?>
             <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/animate/animate.min.css?v=20161124">
-            <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/h5-180211/index.css?v=2018021211">
+            <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/h5-180211/index.css?v=20180223123">
             <script src="<?= FE_BASE_URI ?>libs/lib.flexible2.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/fastclick.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/pageslider/zepto_modify.js?v=20161124"></script>

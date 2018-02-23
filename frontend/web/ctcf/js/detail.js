@@ -1,0 +1,27 @@
+$(function () {
+    $('.plD-btn').on('click', function () {
+        var index = $('.plD-btn').index(this);
+        $('.plD-btn').removeClass('plD-redBorder');
+        $('.plD-btn div').removeClass('plD-redBorder');
+        $('.plD-btn').eq(index).addClass('plD-redBorder');
+        $('.plD-btn div').eq(index).addClass('plD-redBorder');
+        $('.plD-content').hide();
+        $('.plD-content').eq(index).show();
+        if($('.plD-content').eq(index).find('.piD-data-box').height()==0){
+            $('.plD-content').eq(index).find('.not_yet').css('display','block');
+        }
+    });
+    for (var i = 0; i <= $('.piD-data-inner tr').length; i++) {
+        if (i % 2 == 0) {
+            $('.piD-data-inner tr').eq(i).css({background: '#efeff3'});
+        }
+    }
+    $('.dR-money').on('click', function () {
+        $('.dR-tishi-error ').hide();
+    });
+    var dRprogress = $('.dR-progress span').attr('data-progress');
+    $('.dR-progress span').css({width: dRprogress + '%'});
+    $('#coupons').on('click', '.dR-down', function () {
+        $('.dR-quan').stop(true, false).slideToggle();
+    });
+});

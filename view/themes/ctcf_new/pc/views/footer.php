@@ -1,7 +1,7 @@
 <?php
-use common\view\UdeskWebIMHelper;
+//use common\view\UdeskWebIMHelper;
 
-UdeskWebIMHelper::init($this);
+//UdeskWebIMHelper::init($this);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/footer.min.css', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 ?>
 
@@ -28,18 +28,18 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/footer.min.css', ['depends' => 
                 <p class="phone-service-time">(周一到周日 9:00-20:00)</p>
             </div>
             <ul class="clear-fix rg">
-                <li class="lf">
-                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin@2x.png" alt="">
+               <!-- <li class="lf">
+                    <img src="<?/*= ASSETS_BASE_URI */?>ctcf/images/weixin@2x.png" alt="">
                     <span class="fz14">下载APP</span>
-                </li>
+                </li>-->
                 <li class="lf">
                     <img src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin@2x.png" alt="">
                     <span class="fz14">官方微信</span>
                 </li>
-                <li class="rg">
-                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/weibo@2x.png" alt="">
+              <!--  <li class="rg">
+                    <img src="<?/*= ASSETS_BASE_URI */?>ctcf/images/weibo@2x.png" alt="">
                     <span class="fz14">官方微博</span>
-                </li>
+                </li>-->
             </ul>
         </div>
     </div>

@@ -25,7 +25,7 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
             </header>
             <div class="row banner-box">
                 <div class="col-xs-12">
-                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/luodiye/new_person.png" alt="">
+                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/luodiye/new_person1.png" alt="">
                     <div class="banner-bottom"></div>
                     <ul class="banner-bottom-wrap">
                         <li><img src="<?= ASSETS_BASE_URI ?>images/luodiye/lingxing.png"><span>国资平台</span></li>

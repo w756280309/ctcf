@@ -2,7 +2,7 @@
 
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css?v=1.51111', ['depends' => 'frontend\assets\CtcfFrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css?v=1.511131', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/mask/mask.min.css?v=1.67', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 //$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery-1.11.1.min.js', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery.SuperSlide.2.1.1.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
@@ -41,7 +41,7 @@ JSFILE
         <ul>
             <?php foreach ($adv as $val) { ?>
                 <?php if ($val->media) { ?>
-                    <li><a style="width:100%;height:350px;display:block;background:url('<?= UPLOAD_BASE_URI.$val->media->uri ?>') center center no-repeat" href="<?= $val->link ?>" target="_blank"></a></li>
+                    <li><a style="width:100%;height:350px;display:block;background:url('<?= UPLOAD_BASE_URI.$val->media->uri ?>') center center no-repeat;-webkit-background-size:cover;background-size:cover;" href="<?= $val->link ?>" target="_blank"></a></li>
                 <?php } ?>
             <?php } ?>
         </ul>
@@ -286,9 +286,9 @@ JSFILE
     <!--侧边工具栏-->
     <div class="tool-box">
         <div class="tool-bar">
-            <a href="javascript:void(0);" class="app">
-                <img src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin@2x.png" alt="">
-            </a>
+      <!--      <a href="javascript:void(0);" class="app">
+                <img style="width: 98px;" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/weixin@2x.png" alt="">
+            </a>-->
             <a href="javascript:void(0);" class="weiChat">
                 <img src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin@2x.png" alt="">
             </a>

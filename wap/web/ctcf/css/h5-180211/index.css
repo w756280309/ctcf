@@ -363,8 +363,8 @@ html, body {
 }
 
 .page4 .page4-content li:nth-child(2) {
-    background: url(../../images/h5-180211/advantage2.png) no-repeat left top;
-    width: 3.63rem;
+    background: url(../../images/h5-180211/advantage2.png?v=1.1) no-repeat left top;
+    width: 3.93rem;
     background-size: 100% 100%
 }
 
