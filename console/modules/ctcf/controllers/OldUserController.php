@@ -1,6 +1,6 @@
 <?php
 
-namespace console\modules\njfae\controllers;
+namespace console\modules\ctcf\controllers;
 
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
@@ -38,7 +38,7 @@ class OldUserController extends Controller
                     $popType = 5;
                 }
             } else {
-                $couponArray = Yii::$app->params['sign_up_coupon'];
+                $couponArray = Yii::$app->params['old_user_not_invested_coupon'];
                 $point = 0;
                 $popType = 2;
             }
