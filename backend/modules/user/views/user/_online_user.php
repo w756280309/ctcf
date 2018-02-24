@@ -68,6 +68,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                      <?php } else { ?>
                         <a href="/user/user/edit?id=<?= $val['id'] ?>&type=<?= $category ?>" ><span class="label label-success"><i class="icon-edit"></i> 编辑</span></a>
                         <a href="/user/user/detail?id=<?= $val['id'] ?>" ><span class="label label-success"><i class="icon-edit"></i> 查看用户详情</span></a>
+                         <a href="/user/user/soft-delete-org-user?id=<?= $val['id'] ?>" class="soft_delete_org_user"><span class="label label-danger"><i class="icon-minus-sign"></i>删除</span></a>
                     <?php } ?>
                     | <a href="/user/point/add?userId=<?= $val['id'] ?>&backUrl=<?= '/user/user/listt' ?>"><span class="label label-success">给积分</span></a>
                 </center>
@@ -111,5 +112,19 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
             _this.removeClass("isclicked");
         });
     });
+   $('.soft_delete_org_user').on('click', function (e) {
+       e.preventDefault();
+       if (confirm('确定删除')) {
+           var url = $(this).attr('href');
+           $.get(url, function (data) {
+                if (data.status == 'success') {
+                    window.location.reload();
+                } else {
+                    alert(data.msg)
+                }
+           })
+       }
+
+   })
 </script>
 

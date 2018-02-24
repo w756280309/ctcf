@@ -213,6 +213,44 @@ class UserController extends BaseController
         ]);
     }
 
+    /**
+     * 融资会员软删除，即将user表type=2(融资会员)的is_soft_delete设置为1,并且融资会员账户余额等于0时，将其软删除
+     */
+    public function actionSoftDeleteOrgUser($id)
+    {
+        $model = $this->findOr404(User::class, $id);
+        if ($model->type === User::USER_TYPE_ORG && $model->is_soft_deleted === 0) {
+            $ua = $model->borrowAccount;
+            if ($ua['available_balance'] > 0) {
+                $data = [
+                    'status' => 'fail',
+                    'msg' => '融资会员账户余额大于0,不可删除！',
+                ];
+                return $data;
+            }
+            $model->is_soft_deleted = 1;
+            $status = $model->save(false);
+            if ($status) {
+                $data = [
+                    'status' => 'success',
+                    'msg' => '删除成功',
+                ];
+            } else {
+                $data = [
+                    'status' => 'fail',
+                    'msg' => '删除失败',
+                ];
+            }
+            return $data;
+        } else {
+            $data = [
+                'status' => 'fail',
+                'msg' => '非融资会员或已删除'
+            ];
+            return $data;
+        }
+    }
+
     private function validateRequest($request)
     {
         $res = [];
