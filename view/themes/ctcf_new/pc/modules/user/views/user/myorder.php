@@ -38,7 +38,7 @@ table .pr-box-10 {
             </div>
         <?php } else { ?>
             <div class="display_number">
-                <p class="p_left">已还清总金额：<span><?= StringUtils::amountFormat3($stats['repaidAount']) ?></span>元</p>
+                <!--<p class="p_left">已还清总金额：<span><?= StringUtils::amountFormat3($stats['repaidAount']) ?></span>元</p>-->
                 <p class="p_right">共计：<span><?= $tj['count'] ?></span>笔</p>
             </div>
         <?php } ?>
