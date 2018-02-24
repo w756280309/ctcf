@@ -8,7 +8,7 @@ use frontend\assets\CtcfFrontAsset;
 
 $this->title = '我要理财';
 
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/financial.min.css?v=2018022211', ['depends' => CtcfFrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/financial.min.css?v=20180224111', ['depends' => CtcfFrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/pagination.css', ['depends' => CtcfFrontAsset::class]);
 
 $action = Yii::$app->controller->action->getUniqueId();
