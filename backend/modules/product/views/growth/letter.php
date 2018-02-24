@@ -1,6 +1,6 @@
 <?php
-    $assetUrl = Yii::$app->params['pc_assets_base_uri'];
-    $feUrl = Yii::$app->params['fe_base_uri'];
+$assetUrl = Yii::$app->params['pc_assets_base_uri'];
+$feUrl = Yii::$app->params['fe_base_uri'];
 ?>
 
 <!DOCTYPE html>
@@ -81,7 +81,7 @@ $count = count($data);
 if ($count > 0) {
 
     foreach ($data as $key => $value) {
-?>
+        ?>
         <div class="container">
             <img class="confirmation-bg" src="<?= $feUrl ?>pc/confirmation-letter/images/confirmation-bg.png" alt="">
             <div class="inner">
@@ -101,15 +101,15 @@ if ($count > 0) {
                     <li>付息方式：<?= $value['refundMethod']?></li>
                     <li class="special">本产品特此致函确认，并请妥善保管本产品的其他相关文件。</li>
                 </ul>
-                <p class="timer">温州温都金融信息服务股份有限公司<br><?= (new DateTime($value['date']))->format('Y年m月d日')?></p>
-                <img class="stamps" src="<?= $feUrl ?>pc/confirmation-letter/images/stamps.png" />
+                <p class="timer"><?= Yii::$app->params['platform_info.company_name'] ?><br><?= (new DateTime($value['date']))->format('Y年m月d日')?></p>
+                <img class="stamps" src="<?= Yii::$app->params['platform_info.company_seal_176'] ?>" />
             </div>
         </div>
-<?php
+        <?php
         if ($key !== $count - 1) {
-?>
+            ?>
             <div class="pageBreak"></div>
-<?php
+            <?php
         }
     }
 }

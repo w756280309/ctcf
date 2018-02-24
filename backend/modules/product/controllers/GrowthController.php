@@ -10,6 +10,7 @@ use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\tx\CreditOrder;
 use common\models\user\User;
+use Yii;
 
 class GrowthController extends BaseController
 {
@@ -19,9 +20,9 @@ class GrowthController extends BaseController
      */
     public function actionLetter()
     {
-        $orderId = \Yii::$app->request->get('orderId');
-        $isOnline = \Yii::$app->request->get('isOnline');
-        $loanId = \Yii::$app->request->get('loanId');
+        $orderId = Yii::$app->request->get('orderId');
+        $isOnline = Yii::$app->request->get('isOnline');
+        $loanId = Yii::$app->request->get('loanId');
         $date = date('Y-m-d');
         $data = [];
         if ($isOnline) {
@@ -95,7 +96,7 @@ class GrowthController extends BaseController
 
     public function actionOrderCert()
     {
-        $orderId = \Yii::$app->request->get('orderId');
+        $orderId = Yii::$app->request->get('orderId');
 
         if (empty($orderId)) {
             throw $this->ex404();
@@ -116,7 +117,7 @@ class GrowthController extends BaseController
 
     public function actionTransferCert()
     {
-        $orderId = \Yii::$app->request->get('orderId');
+        $orderId = Yii::$app->request->get('orderId');
 
         if (empty($orderId)) {
             throw $this->ex404();
@@ -143,19 +144,23 @@ class GrowthController extends BaseController
         $duration = $loan->getDuration();
         $ebaoquan = $order->fetchBaoQuan();
         if (null === $ebaoquan) {
-            throw $this->ex404();
+            $ebaoquanId = '';
+            $ebaoquanDate = '';
+        } else {
+            $ebaoquanId = $ebaoquan->baoId;
+            $ebaoquanDate = (new \DateTime(date('Y-m-d H:i:s',$ebaoquan->updated_at)));
         }
         $orderInfo = $this->getOrderInfo($order);
         $data = [
-            'ebaoquanId' => $ebaoquan->baoId,
-            'ebaoquanDate' => (new \DateTime(date('Y-m-d H:i:s',$ebaoquan->updated_at))),
+            'ebaoquanId' => $ebaoquanId,
+            'ebaoquanDate' => $ebaoquanDate,
             'userName' => $user->getName(),
             'idcard' => $user->getIdcard(),
             'title' => $order instanceof CreditOrder ? '【转让】 '.$loan->title : $loan->title,
             'duration' => $duration['value'].$duration['unit'],
             'rate' => bcmul($loanOrder->yield_rate, 100, 2) . '%',
             'orderMoney' => $orderInfo['orderMoney'],
-            'refundMethod' => \Yii::$app->params['refund_method'][$loan->getRefundMethod()],
+            'refundMethod' => Yii::$app->params['refund_method'][$loan->getRefundMethod()],
             'orderDate' => $orderInfo['orderDate'],
             'date' => (new \DateTime()),
         ];

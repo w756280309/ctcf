@@ -9,7 +9,7 @@ $feUrl = Yii::$app->params['fe_base_uri'];
 <head>
     <meta charset="UTF-8">
     <title>电子交易资产凭证</title>
-    <link rel="stylesheet" href="https://static.wenjf.com/pc/css/base.css">
+    <link rel="stylesheet" href="<?= $feUrl ?>pc/css/base.css">
     <style>
         .container {
             width:750px;
@@ -179,12 +179,12 @@ $feUrl = Yii::$app->params['fe_base_uri'];
             <span class="left">认购时间</span>：<span class="rig"><?= $data['orderDate']->format('Y年m月d日') ?></span>
         </div>
         <div class="organization">
-            <p class="name">温州温都金融信息服务股份有限公司</p>
-            <p class="time"><?= $data['date']->format('Y') ?><span>年<img class="stamps" src="<?= $feUrl ?>pc/print-product/images/stamps-new.png" /></span><?= $data['date']->format('m月d日') ?></p>
+            <p class="name"><?= Yii::$app->params['platform_info.company_name'] ?></p>
+            <p class="time"><?= $data['date']->format('Y') ?><span>年<img class="stamps" src="<?= Yii::$app->params['platform_info.company_seal_640'] ?>" /></span><?= $data['date']->format('m月d日') ?></p>
         </div>
         <div class="bottom-txt">
-            <div class="content">客服电话：400-101-5151</div>
-            <div class="content">公司地址：温州市鹿城区飞霞南路657号保丰大楼四层
+            <div class="content">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?></div>
+            <div class="content">   公司地址：<?= Yii::$app->params['platform_info.company_address'] ?>
             </div>
         </div>
     </div>
