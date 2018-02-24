@@ -154,7 +154,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
                             </tr>
                             <tr>
                                 <td>0＜X＜20</td>
-                                <td>188元</td>
+                                <td>118元</td>
                                 <td>188</td>
                             </tr>
                             <tr>
