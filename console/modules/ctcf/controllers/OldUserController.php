@@ -17,13 +17,13 @@ class OldUserController extends Controller
      * 未投资过：送888红包
      * 已投资过：根据投资年化总额（购买所有产品都算，包括新手和转让）根据规则补发相应的红包和积分
      */
-    public function actionReward()
+    public function actionReward($startDate = '2000-01-01', $endDate = '2018-02-15')
     {
         $users = User::find()->all();
         foreach ($users as $user) {
             $userInfo = UserInfo::findOne(['user_id' => $user->id]);
-            if ($userInfo->isInvested) {
-                $annualInvest = UserInfo::calcAnnualInvest($user->id, 'Y-m-d', 'Y-m-d') / 10000;
+            if (null !== $userInfo && $userInfo->isInvested) {
+                $annualInvest = UserInfo::calcAnnualInvest($user->id, $startDate, $endDate) / 10000;
                 if ($annualInvest > 0 && $annualInvest < 20) {
                     $couponArray = Yii::$app->params['old_user_invested_level_1_coupon'];
                     $point = Yii::$app->params['old_user_invested_level_1_point'];
@@ -65,11 +65,9 @@ class OldUserController extends Controller
                 }
             }
             //设置弹窗标识,一年后过期
-            $redis = Yii::$app->redis_session;
-            if (!$redis->exists('oldUserRewardPop_' . $user->id)) {
-                $redis->set('oldUserRewardPop_' . $user->id, $popType);
-                $redis->expire('oldUserRewardPop_' . $user->id, 365 * 24 * 3600);
-            }
+            $redis = Yii::$app->redis;
+            $redis->set('oldUserRewardPop_' . $user->id, $popType);
+            $redis->expire('oldUserRewardPop_' . $user->id, 365 * 24 * 3600);
         }
     }
 }

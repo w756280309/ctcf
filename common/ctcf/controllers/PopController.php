@@ -17,7 +17,7 @@ class PopController extends Controller
             $type = 1;
         } else {
             $user = Yii::$app->user->getIdentity();
-            $redis = Yii::$app->redis_session;
+            $redis = Yii::$app->redis;
             if ($redis->exists('oldUserRewardPop_' . $user->id)) {
                 $type = $redis->get('oldUserRewardPop_' . $user->id);
             } else {
@@ -36,7 +36,7 @@ class PopController extends Controller
         //判断是否登录
         if (!Yii::$app->user->isGuest) {
             $user = Yii::$app->user->getIdentity();
-            $redis = Yii::$app->redis_session;
+            $redis = Yii::$app->redis;
             if ($redis->exists('oldUserRewardPop_' . $user->id)) {
                 $redis->del('oldUserRewardPop_' . $user->id);
             }
