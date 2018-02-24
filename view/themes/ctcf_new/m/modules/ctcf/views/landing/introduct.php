@@ -3,7 +3,7 @@
 $this->title = '积分商城介绍';
 ?>
 <link rel="stylesheet" href="/ctcf/css/t1706/base.css">
-<link rel="stylesheet" href="/ctcf/css/t1706/index.min.css">
+<link rel="stylesheet" href="/ctcf/css/t1706/index.min.css?v=1.0">
 <script src="/js/lib.flexible3.js"></script>
 
 <div class="flex-content">
