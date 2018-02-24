@@ -85,7 +85,7 @@ if ($count > 0) {
         <div class="container">
             <img class="confirmation-bg" src="<?= $feUrl ?>pc/confirmation-letter/images/confirmation-bg.png" alt="">
             <div class="inner">
-                <img class="njfae-logo" src="<?= $feUrl ?>pc/confirmation-letter/images/njfae-logo.png" alt="">
+                <img class="njfae-logo" src="<?= Yii::$app->params['platform_info.order_cert_logo'] ?>" alt="">
                 <h4><?= $value['title']?><br>认购确认函</h4>
                 <ul>
                     <li>尊敬的 <?= $value['userName']?>（先生/女士）：</li>

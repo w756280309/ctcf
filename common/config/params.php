@@ -77,8 +77,9 @@ return [
     'platform_info.customer_service_time' => '',   //客服时间
     'platform_info.company_address' => '',   //公司地址
     'platform_info.company_name' => '',   //公司全称
-    'platform_info.company_seal_176' => '/image/ctcf/stamps_176.png',   //公司签章图片-认购确认函
-    'platform_info.company_seal_640' => '/image/ctcf/stamps_640.png',//公司签章图片-交易资产凭证
+    'platform_info.company_seal_176' => '',   //公司签章图片-认购确认函
+    'platform_info.company_seal_640' => '',   //公司签章图片-交易资产凭证
+    'platform_info.order_cert_logo' => '',    //认购协议页面上部logo
     'pc_cat' => [],
 
     'refund_method' => [
