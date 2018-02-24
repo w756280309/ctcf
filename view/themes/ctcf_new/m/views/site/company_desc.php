@@ -111,7 +111,7 @@ $this->title = '关于我们';
         <div class="page page-loading" data-lock-next="true" data-lock-prev="true">
                 <div class="top-empt-loading"></div>
                 <div class="page-loading-title1"></div>
-                <div class="page-loading-wendu">隶属湖北日报新媒体集团旗下的理财平台</div>
+                <div class="page-loading-wendu">系湖北日报新媒体集团旗下公司</div>
                 <div class="page-loading-jindubg">
                         <div class="page-redloading-wrap">
                                 <div class="page-redloading"></div>
@@ -127,10 +127,10 @@ $this->title = '关于我们';
                                     <img class="star-dot" src="<?= FE_BASE_URI ?>wap/campaigns/h5-161114/img/star-2.png">
                                 </div>
                                 <div class="title page1-title"><img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/first-title.png" alt=""></div>
-                                <p class="title-h2"><span >隶属湖北日报新媒体集团旗下的理财平台</span></p>
+                                <p class="title-h2"><span >系湖北日报新媒体集团旗下公司</span></p>
                                 <div class="hexagon">
                                         <img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/six-fg-new.png" alt="六边形">
-                                        <span class="hexagon-txt" style="top: -23px;left: 26.6%;width: 51%;">平台甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金稳妥，安享稳健收益。</span>
+                                        <span class="hexagon-txt" style="top: -23px;left: 26.6%;width: 51%;">平台以专业的风控能力、高效的技术保障为用户提供安全便捷的互联网金融综合信息服务。</span>
                                 </div>
                                 <div class="arrow"></div>
                         </div>

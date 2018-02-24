@@ -28,12 +28,12 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/footer.min.css', ['depends' => 
                 <p class="phone-service-time">(周一到周日 9:00-20:00)</p>
             </div>
             <ul class="clear-fix rg">
-               <!-- <li class="lf">
-                    <img src="<?/*= ASSETS_BASE_URI */?>ctcf/images/weixin@2x.png" alt="">
-                    <span class="fz14">下载APP</span>
-                </li>-->
                 <li class="lf">
-                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin@2x.png" alt="">
+                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/app_download.png" alt="">
+                    <span class="fz14">下载APP</span>
+                </li>
+                <li class="lf">
+                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin_follow.png" alt="">
                     <span class="fz14">官方微信</span>
                 </li>
               <!--  <li class="rg">

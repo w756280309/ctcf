@@ -286,15 +286,15 @@ JSFILE
     <!--侧边工具栏-->
     <div class="tool-box">
         <div class="tool-bar">
-      <!--      <a href="javascript:void(0);" class="app">
-                <img style="width: 98px;" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/weixin@2x.png" alt="">
-            </a>-->
+            <a href="javascript:void(0);" class="app">
+                <img style="width: 98px;" src="<?= ASSETS_BASE_URI ?>ctcf/images/app_download.png" alt="">
+            </a>
             <a href="javascript:void(0);" class="weiChat">
-                <img src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin@2x.png" alt="">
+                <img style="width: 98px;" src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin_follow.png" alt="">
             </a>
-            <a href="javascript:void(0);" class="weibo">
-                <img src="<?= ASSETS_BASE_URI ?>ctcf/images/weibo@2x.png" alt="">
-            </a>
+            <!--<a href="javascript:void(0);" class="weibo">
+                <img src="<?/*= ASSETS_BASE_URI */?>ctcf/images/weibo@2x.png" alt="">
+            </a>-->
         </div>
     </div>
 </div>
