@@ -65,9 +65,9 @@ $this->title = '答题开宝箱';
 		<div class="btn-close" @click="reload"></div>
 		<p class="result-title">本轮答题完成,<br> 共答对 <span class="result-num"></span>道题!</p>
 		<img src="<?= FE_BASE_URI ?>wap/campaigns/T1591/images/pic_award_big.png" alt=""
-		     class="result-pic result-pic-one hide">
+		     class="result-pic result-pic-one" style="display: none">
 		<img src="<?= FE_BASE_URI ?>wap/campaigns/T1591/images/pic_award_no.png" alt=""
-		     class="result-pic result-pic-two hide">
+		     class="result-pic result-pic-two" style="display: none">
 		<!--<p class="result-content">哎呀，红包与您擦肩而过~</p>-->
 		<p class="result-content"></p>
 		<div class="result-btns clearfix">
