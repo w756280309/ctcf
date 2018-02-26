@@ -2,7 +2,7 @@
 
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css?v=1.511132', ['depends' => 'frontend\assets\CtcfFrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/index.min.css?v=1.511132111', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/mask/mask.min.css?v=1.67', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 //$this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery-1.11.1.min.js', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/jquery.SuperSlide.2.1.1.js', ['depends' => 'frontend\assets\CtcfFrontAsset', 'position' => 1]);
@@ -41,7 +41,7 @@ JSFILE
         <ul>
             <?php foreach ($adv as $val) { ?>
                 <?php if ($val->media) { ?>
-                    <li><a style="width:100%;height:350px;display:block;background:url('<?= UPLOAD_BASE_URI.$val->media->uri ?>') center center no-repeat;-webkit-background-size:cover;background-size:cover;" href="<?= $val->link ?>" target="_blank"></a></li>
+                    <li><a style="width:100%;height:340px;display:block;background:url('<?= UPLOAD_BASE_URI.$val->media->uri ?>') center center no-repeat;-webkit-background-size:cover;background-size:cover;" href="<?= $val->link ?>" target="_blank"></a></li>
                 <?php } ?>
             <?php } ?>
         </ul>
@@ -51,7 +51,7 @@ JSFILE
         <!--未登录-->
         <div class="login-box">
             <p class="fz22 fz-white mgt40b30">最高年化收益率</p>
-            <p class="fz60 fz-yellow">12%</p>
+            <p class="fz60 fz-yellow">10%</p>
             <a class="fz18 fz-black btn-yellow mgt28b8" href="/site/signup">立即注册</a>
             <p class="fz14 fz-white">已有账户，立即<a class="fz-yellow" href="/site/login">登录</a></p>
         </div>

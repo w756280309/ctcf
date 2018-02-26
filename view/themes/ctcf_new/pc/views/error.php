@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/base.css">
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/error.css">
     <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/footer.css">
+    <link rel="shortcut icon" href="/ctcf/favicon.ico" type="image/x-icon" />
     <script src="<?= ASSETS_BASE_URI ?>js/jquery-1.8.3.min.js"></script>
     <script src="<?= ASSETS_BASE_URI ?>js/clipboard.min.js"></script>
 </head>
