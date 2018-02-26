@@ -3,7 +3,7 @@
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
-$this->title = '温都金服_绑定服务号';
+$this->title = '楚天财富_绑定服务号';
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">

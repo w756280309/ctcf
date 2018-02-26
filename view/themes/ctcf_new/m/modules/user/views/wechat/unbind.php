@@ -2,7 +2,7 @@
 
 use common\utils\StringUtils;
 
-$this->title = '温都金服_解除绑定';
+$this->title = '楚天财富_解除绑定';
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
