@@ -11,7 +11,7 @@ $this->title = '新人首投礼';
     <div class="get-detail">
         <p class="title">任务详情</p>
         <p class="txt"><span>888元红包</span><i class="get">注册领取</i></p>
-        <p class="txt"><span>50元话费</span><i class="get">首次投资领取</i></p>
+        <p class="txt"><span>50元超市卡</span><i class="get">首次投资领取</i></p>
         <p class="sm-tips">温馨提示：首投≥5万,奖励可升级成160元超市卡哦！</p>
     </div>
     <a href="<?php if (Yii::$app->user->isGuest) { ?>/site/signup<?php } else { ?>/deal/deal/index<?php } ?>" class="common-btn get-btn">直接领取奖励</a>
