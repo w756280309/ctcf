@@ -109,6 +109,7 @@ var poptpl = {
         // $('body').off('click');
         $(".mask,.pop").remove();
         $('body').off('touchmove');
+      $("body,html").css({"overflow":"auto"});
     },
     errorMsg: function (error) {
         $('.popError').html(error);

@@ -30,7 +30,7 @@ class BaseController extends Controller
     /**
      * 抽奖Action
      *
-     * @return array|mixed
+     * @return array
      */
     public function actionDraw()
     {
@@ -61,14 +61,19 @@ class BaseController extends Controller
 
         //没有可用抽奖机会且当天未获得奖品
         $activeTicketExist = null === PromoLotteryTicket::fetchOneActiveTicket($promo, $user);
-        $query = PromoLotteryTicket::findLotteryByPromoId($promo->id)->andWhere(['user_id' => $user->id]);
+        $query = PromoLotteryTicket::findLotteryByPromoId($promo->id)
+            ->andWhere(['user_id' => $user->id]);
         $cQuery = clone $query;
-        if (0 === (int) $cQuery->count()) {
-            return $this->getErrorByCode(self::ERROR_CODE_NEVER_GOT_TICKET);
+        $allTicketCount = (int) $cQuery->count();
+        $extra = ['allTicketCount' => $allTicketCount];
+        if (0 === $allTicketCount) {
+            return $this->getErrorByCode(self::ERROR_CODE_NEVER_GOT_TICKET, $extra);
         }
-        $todayNoTicket = null === $query->andWhere(['date(from_unixtime(created_at))' => date('Y-m-d')])->one();
+        $todayNoTicket = null === $query
+                ->andWhere(['date(from_unixtime(created_at))' => date('Y-m-d')])
+                ->one();
         if ($activeTicketExist && $todayNoTicket) {
-            return $this->getErrorByCode(self::ERROR_CODE_TODAY_NO_TICKET);
+            return $this->getErrorByCode(self::ERROR_CODE_TODAY_NO_TICKET, $extra);
         }
 
         //抽奖
@@ -79,12 +84,13 @@ class BaseController extends Controller
                 'code' => self::STATUS_SUCCESS,
                 'message' => '成功',
                 'ticket' => $ticket->reward,
+                'allTicketCount' => $allTicketCount,
             ];
         } catch (\Exception $e) {
             Yii::trace('奖励活动天天领抽奖失败, 失败原因:'.$e->getMessage().', 用户: '.$user->id);
             $code = $e->getCode();
             if (3 === $code || 4 === $code) {
-                return $this->getErrorByCode($code);
+                return $this->getErrorByCode($code, $extra);
             } else {
                 return $this->getErrorByCode(self::ERROR_CODE_SYSTEM);
             }
@@ -114,15 +120,19 @@ class BaseController extends Controller
         return [];
     }
 
-    protected function getErrorByCode($code)
+    protected function getErrorByCode($code, Array $extra = [])
     {
         Yii::$app->response->statusCode = 400;
         $errors = self::getErrors();
         if (!in_array($code, array_keys($errors))) {
             $code = self::ERROR_CODE_SYSTEM;
         }
+        $errorInfo = $errors[$code];
+        if (!empty($extra)) {
+            $errorInfo = array_merge($errorInfo, $extra);
+        }
 
-        return $errors[$code];
+        return $errorInfo;
     }
 
     protected static function getErrors()
@@ -132,36 +142,43 @@ class BaseController extends Controller
                 'code' => 1,
                 'message' => '活动未开始',
                 'ticket' => null,
+                'allTicketCount' => 0,
             ],
             self::ERROR_CODE_ALREADY_END => [
                 'code' => 2,
                 'message' => '活动已结束',
                 'ticket' => null,
+                'allTicketCount' => 0,
             ],
             self::ERROR_CODE_NOT_LOGIN => [
                 'code' => 3,
                 'message' => '您还没有登录哦！',
                 'ticket' => null,
+                'allTicketCount' => 0,
             ],
             self::ERROR_CODE_NO_TICKET => [
                 'code' => 4,
                 'message' => '您还没有抽奖机会哦！',
                 'ticket' => null,
+                'allTicketCount' => 0,
             ],
             self::ERROR_CODE_TODAY_NO_TICKET => [
                 'code' => 5,
                 'message' => '您今日还没有获得抽奖机会，快去完成任务吧！',
                 'ticket' => null,
+                'allTicketCount' => 0,
             ],
             self::ERROR_CODE_SYSTEM => [
                 'code' => 6,
                 'message' => '系统错误，请刷新重试',
                 'ticket' => null,
+                'allTicketCount' => 0,
             ],
             self::ERROR_CODE_NEVER_GOT_TICKET => [
                 'code' => 7,
                 'message' => '您还未获得过任何抽奖机会哦！',
                 'ticket' => null,
+                'allTicketCount' => 0,
             ],
         ];
     }

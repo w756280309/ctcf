@@ -157,7 +157,7 @@ class BasePromo
         $amount = $this->calcUserAmount($user);
         $allNum = intval($amount / $everyAccumulatedAmount);
         $allNum = $maxTicketCount <= $allNum ? $maxTicketCount : $allNum;
-        $ticketCount = (int)Award::find()
+        $ticketCount = (int) Award::find()
             ->where(['promo_id' => $this->promo->id])
             ->andWhere(['user_id' => $user->id])
             ->count();

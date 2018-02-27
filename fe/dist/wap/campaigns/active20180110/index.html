@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="format-detection" content="telphone=no, email=no"/>
+	<title>砸金蛋赢好礼</title>
+	<link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+	<link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20180110/css/index.css">
+	<link rel="stylesheet" href="__FE_BASE_URI__/common/css/popover.css">
+	<script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+	<script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+	<script src="__FE_BASE_URI__/libs/vue.min.js"></script>
+	<script src="__FE_BASE_URI__/libs/axios.min.js"></script>
+	<script src="__FE_BASE_URI__/common/js/popover.js"></script>
+	<script src="__FE_BASE_URI__/libs/layer_mobile/layer.js"></script>
+	<style type="text/css">
+		[v-cloak] {
+			display: none
+		}
+		.popBtm{
+			width: 100%;
+			padding:0;
+			border-top: 1px solid #ddd;
+			line-height:1.6rem;
+		}
+		.popMiddle {
+			padding: 0.33333333rem 0.4rem ;
+		}
+	</style>
+</head>
+<body>
+<div id="active">
+	<div class="flex-content">
+		<div class="part-one"></div>
+		<div class="part-two">
+			<div class="my-reward"></div>
+			<div class="before-egg ">
+				<img src="__FE_BASE_URI__wap/campaigns/active20180110/images/pic_egg_before.png" alt="" class="golden-egg">
+				<img src="__FE_BASE_URI__wap/campaigns/active20180110/images/hammer.png" alt="" class="hammer">
+			</div>
+			<div class="opened-egg " style="display: none">
+				<img src="__FE_BASE_URI__wap/campaigns/active20180110/images/pic_egg_open.png" alt="">
+			</div>
+			<a class="go-invest"></a>
+		</div>
+		<div class="part-four">
+			<a class="go-invest"></a>
+		</div>
+	</div>
+	<div class="mask" style="display: none"></div>
+	<div class="mask1" style="display: none"></div>
+	<!--去投资-->
+	<div class="pop-goinvest" style="display: none">
+		<p class="pop-goinvest-txt">您还没有投资哦，快去完成<br>投资任务吧！</p>
+		<a class="pop-goinvest-btn" href="/deal/deal/index">去投资</a>
+		<img src="__FE_BASE_URI__wap/campaigns/active20180110/images/pop_close.png" alt="" class="pop-goinvest-close">
+	</div>
+	<!--获奖列表-->
+	<div class="pop-rewardList" style="display: none">
+		<p class="pop-rewardList-title">奖品列表</p>
+		<ul class="pop-rewardList-list">
+			<li class="clearfix">
+				<div class="lf" style="background: url('__FE_BASE_URI__wap/campaigns/active20180110/images/pic_giftlist_5.png') center no-repeat;background-size: 100%"></div>
+				<div class="rg">
+					<p class="gift-name">Iphone X</p>
+					<p class="gift-date">中奖时间2017年8月8日</p>
+				</div>
+			</li>
+			<li class="clearfix">
+				<div class="lf" style="background: url('__FE_BASE_URI__wap/campaigns/active20180110/images/pic_giftlist_2.png') center no-repeat;background-size: 100%"></div>
+				<div class="rg">
+					<p class="gift-name">小米(MI)平板电视</p>
+					<p class="gift-date">中奖时间2017年8月8日</p>
+				</div>
+			</li>
+			<li class="clearfix">
+				<div class="lf"
+				     style="background: url('__FE_BASE_URI__wap/campaigns/active20180110/images/pic_giftlist_3.png') center no-repeat;background-size: 100%"></div>
+				<div class="rg">
+					<p class="gift-name">50元超市卡</p>
+					<p class="gift-date">中奖时间2017年8月8日</p>
+				</div>
+			</li>
+		</ul>
+		<img src="__FE_BASE_URI__wap/campaigns/active20180110/images/pop_close.png" alt="" class="pop-rewardList-close">
+	</div>
+</div>
+
+<script>
+
+	$(function () {
+    $(".pop-goinvest-close").click(function () {
+      $(".mask1,.pop-goinvest").hide();
+      $('body').unbind('touchmove');
+      $("body,html").css({"overflow":"auto"});
+    });
+    $(".pop-rewardList-close").click(function () {
+      $(".mask1,.pop-rewardList").hide();
+      $('body').unbind('touchmove');
+      $("body,html").css({"overflow":"auto"});
+    });
+    $(".hammer,.golden-egg").on("click",function () {
+      $('body').on('touchmove', eventTarget, false);
+      $("body,html").css({"overflow":"hidden"});
+
+      poptpl.popComponent({
+      popBackground: '#fff',
+      popBorder: 0,
+      closeUrl: "images/pop_close.png",
+      btnMsg: "收下礼品",
+      popTopColor: "#333",
+      bgSize: "100% 100%",
+      title: '<p style="font-size:0.72rem;">恭喜您获得了</p><p style="font-size:0.5066667rem;">代金券</p>',
+      popBtmBackground: '#fff',
+      popMiddleHasDiv: true,
+      popBtmColor: '#e01021',
+      contentMsg: "<img style='margin:0.3rem auto 0.5rem;display: block;width: 5rem;' src='images/pic_giftget_5.png' alt=''/>",
+      popBtmBorderRadius: 0,
+      popBtmFontSize: ".50666667rem"
+    }, 'close');
+    })
+
+    $(".my-reward").on("click",function () {
+      $(".mask1,.pop-rewardList").show();
+      $('body').on('touchmove', eventTarget, false);
+      $("body,html").css({"overflow":"hidden"});
+    })
+
+
+//		去投资弹窗
+//    poptpl.popComponent({
+//      popBackground: '#fff',
+//      popBorder: 0,
+//      closeUrl: "images/pop_close.png",
+//      btnMsg: "去投资",
+//      popTopColor: "#fff",
+//      popMiddleHasDiv: true,
+//      popBtmColor: '#e01021',
+//      popBtmBackground: '#fff',
+//      contentMsg: "<p style='text-align: center;color: #999;font-size:0.36rem;line-height: 0.5333rem;'>您没有抽奖机会了，快去完成<br>投资任务吧！</p>",
+//      popBtmBorderRadius: 0,
+//      popBtmFontSize: ".4rem",
+//      btnHref: '/deal/deal/index'
+//    }, 'close');
+
+    //		机会用完弹窗
+//    poptpl.popComponent({
+//      popBackground: '#fff',
+//      popBorder: 0,
+//      closeUrl: "images/pop_close.png",
+//      btnMsg: "我知道了",
+//      popTopColor: "#fff",
+//      popMiddleHasDiv: true,
+//      popBtmColor: '#e01021',
+//      popBtmBackground: '#fff',
+//      contentMsg: "<p style='text-align: center;color: #999;font-size:0.36rem;line-height: 0.5333rem;'>您已经完成全部抽奖了哦<br>去看看其它活动吧！</p>",
+//      popBtmBorderRadius: 0,
+//      popBtmFontSize: ".4rem",
+//    }, 'close');
+
+//		获奖弹窗
+//    poptpl.popComponent({
+//      popBackground: '#fff',
+//      popBorder: 0,
+//      closeUrl: "images/pop_close.png",
+//      btnMsg: "收下礼品",
+//      popTopColor: "#333",
+//      bgSize: "100% 100%",
+//      title: '<p style="font-size:0.72rem;">恭喜您获得了</p><p style="font-size:0.5066667rem;">代金券</p>',
+//      popBtmBackground: '#fff',
+//      popMiddleHasDiv: true,
+//      popBtmColor: '#e01021',
+//      contentMsg: "<img style='margin:0.3rem auto 0.5rem;display: block;width: 5rem;' src='images/pic_giftget_5.png' alt=''/>",
+//      popBtmBorderRadius: 0,
+//      popBtmFontSize: ".50666667rem"
+//    }, 'close');
+  });
+
+
+  var vm = new Vue({
+    el: '#active',
+    data: {
+      ifLogin:"",
+      promoStatus:"",
+
+    },
+    methods: {
+
+    }
+  })
+  function eventTarget(event) {
+    event.preventDefault();
+  }
+</script>
+</body>
+</html>
