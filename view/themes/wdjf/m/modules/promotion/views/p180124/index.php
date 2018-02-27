@@ -29,7 +29,7 @@ $this->title = '砸金蛋赢好礼';
 
 <div id="active">
     <div class="flex-content">
-        <div class="part-one" style="background: url(<?= FE_BASE_URI ?>wap/campaigns/active20180110/images/bg_one_new.png) no-repeat;background-size: 100% 100%;"></div>
+        <div class="part-one" style="background: url(<?= FE_BASE_URI ?>wap/campaigns/active20180110/images/bg_new_one.png) no-repeat;background-size: 100% 100%;"></div>
         <div class="part-two">
             <div @click="showAward()" class="my-reward"></div>
             <div v-cloak class="before-egg" v-if="!ifEggbroken">
