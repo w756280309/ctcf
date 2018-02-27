@@ -9,6 +9,7 @@ use common\service\AccountService;
 use common\utils\SecurityUtils;
 use common\utils\TxUtils;
 use Wcg\Xii\Crm\Model\Account;
+use Yii;
 
 class OfflinePointManager
 {
@@ -33,7 +34,6 @@ class OfflinePointManager
             $transaction = \Yii::$app->db->beginTransaction();
             try {
                 $points = self::getOrderPoints($order, $type);
-
                 //更新账户积分
                 self::doUpdatePoints($order, $points, $type);
 
@@ -45,7 +45,7 @@ class OfflinePointManager
                      * 大于等于50000，奖励3500积分
                      * 其余奖励1400积分
                      */
-                    if ($isFirst == 0) {
+                    if ($isFirst == 0 && $type == PointRecord::TYPE_OFFLINE_BUY_ORDER) {
                         self::sendFirstAward($order, PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1);
                     }
 
@@ -110,10 +110,29 @@ class OfflinePointManager
     {
         if ($type === PointRecord::TYPE_OFFLINE_POINT_ORDER) {
             $points = $order->points;
+        } elseif ($type == PointRecord::TYPE_OFFLINE_ORDER_DELETE) {
+            $model = PointRecord::findOne([
+                'ref_type' => PointRecord::TYPE_OFFLINE_BUY_ORDER,
+                'ref_id' => $order->id,
+            ]);
+            if (!is_null($model)) {
+                $points = $model->incr_points;
+            }
         } else {
             $points = max(1, ceil(bcdiv(bcmul($order->annualInvestment, 6, 14), 1000, 2)));
             //不同等级奖励
             $points = ceil($points * self::multiple($order->user));
+            //线下积分翻倍活动
+            $promo = Yii::$app->params['offline_points'];
+            if ($promo['start'] && $order->orderDate >= $promo['start'] && $promo['number'] > 1) {
+                if ($promo['end']) {
+                    if ($order->orderDate <= $promo['end']) {
+                        $points *= $promo['number'];
+                    }
+                } else {
+                    $points *= $promo['number'];
+                }
+            }
         }
         if (in_array($type, PointRecord::getDecrType())) {
             $points = 0 - $points;
