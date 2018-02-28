@@ -6,6 +6,7 @@ use common\lib\user\UserStats;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\growth\Retention;
+use common\models\promo\TicketToken;
 use common\models\stats\Perf;
 use common\models\user\User;
 use common\models\user\UserInfo;
@@ -146,8 +147,9 @@ class RetentionController extends Controller
     }
 
     /**
-     * 导出指定时间段且当前理财资产为0的客户信息
+     * 导出指定时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户信息
      *
+     * 导出项：用户ID、注册时间、姓名、联系方式、可用余额、投资成功金额、性别，生日，年龄
      * @param string $startDate 开始日期
      * @param string $endDate 结束日期
      *
@@ -155,10 +157,9 @@ class RetentionController extends Controller
      */
     public function actionListExport($startDate, $endDate)
     {
-        //注册时间、姓名、联系方式、可用余额、投资成功金额、性别，生日，年龄
-        //获得指定时间间隔投资且当前理财资产为0的用户信息（包含可用余额大于0的用户）
+        //获得指定时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户信息
         $sql = "select 
-o.uid,u.real_name,u.safeMobile,from_unixtime(u.created_at) createTime,sum(o.order_money) as investMoney,ua.available_balance,u.safeIdCard,u.birthdate
+o.uid,count(o.id) investCount,u.real_name,u.safeMobile,from_unixtime(u.created_at) createTime,sum(o.order_money) as investMoney,ua.available_balance,u.safeIdCard,u.birthdate
 from online_order o 
 inner join user u on u.id = o.uid
 inner join user_account ua on ua.uid = o.uid
@@ -168,7 +169,9 @@ and o.uid not in (
 	select distinct(uid) from online_repayment_plan where status = 0
 )
 and o.status = 1 
-group by o.uid";
+and ua.available_balance <= 0
+group by o.uid
+having investCount > 1";
         $userInfo = Yii::$app->db->createCommand($sql, [
             'startDate' => $startDate,
             'endDate' => $endDate,
@@ -195,12 +198,80 @@ group by o.uid";
             $exportContent[$k]['age'] = $age;
         }
 
-        $file = Yii::getAlias('@app/runtime/retention_'.$startDate.'_'.$endDate .'_'. date('YmdHis').'.xlsx');
+        $file = Yii::getAlias('@app/runtime/Retention_'.$startDate.'_'.$endDate .'_'. date('YmdHis').'.xlsx');
         $exportData[] = ['用户ID', '姓名', '手机号', '注册时间', '投资成功金额', '可用余额', '性别', '生日', '年龄'];
         $exportData = array_merge($exportData, $exportContent);
         $objPHPExcel = UserStats::initPhpExcelObject($exportData);
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
         exit();
+    }
+
+    /**
+     * 指定时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户发放指定代金券
+     *
+     * @param string $startDate 开始日期
+     * @param string $endDate 结束日期
+     *
+     * @return int
+     */
+    public function actionSendCoupon($startDate, $endDate)
+    {
+        //获得指定时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户信息
+        $sql = "select 
+o.uid,count(o.id) investCount
+from online_order o 
+inner join user u on u.id = o.uid
+inner join user_account ua on ua.uid = o.uid
+where date(from_unixtime(o.order_time)) >= '2017-07-17'
+and date(from_unixtime(o.order_time)) <= '2017-12-31'
+and o.uid not in (
+	select distinct(uid) from online_repayment_plan where status = 0
+)
+and o.status = 1 
+and ua.available_balance <= 0
+group by o.uid
+having investCount > 1";
+        $userInfos = Yii::$app->db->createCommand($sql, [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
+
+        //判断是否有符合条件的用户
+        if (empty($userInfos)) {
+            $this->stdout('无符合条件的用户ID集合');
+            return self::EXIT_CODE_ERROR;
+        }
+
+        //获得发送代金券的用户及代金券sn
+        $userIds = ArrayHelper::getColumn($userInfos, 'uid');
+        $users = User::find()
+            ->where(['in', 'id', $userIds])
+            ->all();
+        $couponSns = $this->getCouponSns();
+        $couponTypes = CouponType::find()
+            ->where(['in', 'sn', $couponSns])
+            ->all();
+
+        //发放代金券
+        $this->stdout('共有用户'.count($users).'人待发放优惠券');
+        foreach ($users as $user) {
+            foreach ($couponTypes as $couponType) {
+                $tokenKey = 'retention_'.$user->id.'_'.$couponType->id;
+                TicketToken::initNew($tokenKey)->save(false);
+                UserCoupon::addUserCoupon($user, $couponType)->save(false);
+            }
+        }
+
+        $this->stdout('代金券发放完毕');
+        return self::EXIT_CODE_NORMAL;
+    }
+
+    private function getCouponSns()
+    {
+        return [
+            '180228_retention_100',
+            '180208_retention_500',
+        ];
     }
 }
