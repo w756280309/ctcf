@@ -147,7 +147,7 @@ class RetentionController extends Controller
     }
 
     /**
-     * 导出指定时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户信息
+     * 导出指定注册时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户信息
      *
      * 导出项：用户ID、注册时间、姓名、联系方式、可用余额、投资成功金额、性别，生日，年龄
      * @param string $startDate 开始日期
@@ -159,19 +159,18 @@ class RetentionController extends Controller
     {
         //获得指定时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户信息
         $sql = "select 
-o.uid,count(o.id) investCount,u.real_name,u.safeMobile,from_unixtime(u.created_at) createTime,sum(o.order_money) as investMoney,ua.available_balance,u.safeIdCard,u.birthdate
+o.uid,u.real_name,u.safeMobile,from_unixtime(u.created_at) createTime,sum(o.order_money) as investMoney,ua.available_balance,u.safeIdCard,u.birthdate
 from online_order o 
 inner join user u on u.id = o.uid
 inner join user_account ua on ua.uid = o.uid
-where date(from_unixtime(o.order_time)) >= '2017-07-17'
-and date(from_unixtime(o.order_time)) <= '2017-12-31'
+where date(from_unixtime(u.created_at)) >= :startDate
+and date(from_unixtime(u.created_at)) <= :endDate
 and o.uid not in (
 	select distinct(uid) from online_repayment_plan where status = 0
 )
 and o.status = 1 
-and ua.available_balance <= 0
-group by o.uid
-having investCount > 1";
+and ua.available_balance < 1000
+group by o.uid";
         $userInfo = Yii::$app->db->createCommand($sql, [
             'startDate' => $startDate,
             'endDate' => $endDate,
@@ -208,7 +207,7 @@ having investCount > 1";
     }
 
     /**
-     * 指定时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户发放指定代金券
+     * 指定注册时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户发放指定代金券
      *
      * @param string $startDate 开始日期
      * @param string $endDate 结束日期
@@ -218,20 +217,18 @@ having investCount > 1";
     public function actionSendCoupon($startDate, $endDate)
     {
         //获得指定时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户信息
-        $sql = "select 
-o.uid,count(o.id) investCount
+        $sql = "select o.uid 
 from online_order o 
 inner join user u on u.id = o.uid
 inner join user_account ua on ua.uid = o.uid
-where date(from_unixtime(o.order_time)) >= '2017-07-17'
-and date(from_unixtime(o.order_time)) <= '2017-12-31'
+where date(from_unixtime(u.created_at)) >= :startDate
+and date(from_unixtime(u.created_at)) <= :endDate
 and o.uid not in (
 	select distinct(uid) from online_repayment_plan where status = 0
 )
 and o.status = 1 
-and ua.available_balance <= 0
-group by o.uid
-having investCount > 1";
+and ua.available_balance < 1000
+group by o.uid";
         $userInfos = Yii::$app->db->createCommand($sql, [
             'startDate' => $startDate,
             'endDate' => $endDate,
