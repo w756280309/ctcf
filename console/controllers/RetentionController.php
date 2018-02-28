@@ -2,6 +2,7 @@
 
 namespace console\controllers;
 
+use common\lib\user\UserStats;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\growth\Retention;
@@ -13,6 +14,7 @@ use common\utils\SecurityUtils;
 use Wcg\Growth\Integration\Yii2Module\Model\ReferralSource;
 use Yii;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 use yii\mutex\FileMutex;
 
 class RetentionController extends Controller
@@ -141,5 +143,64 @@ class RetentionController extends Controller
         }
 
         return null !== $referral ? $referral->getReferralURL() : $url;
+    }
+
+    /**
+     * 导出指定时间段且当前理财资产为0的客户信息
+     *
+     * @param string $startDate 开始日期
+     * @param string $endDate 结束日期
+     *
+     * @return int
+     */
+    public function actionListExport($startDate, $endDate)
+    {
+        //注册时间、姓名、联系方式、可用余额、投资成功金额、性别，生日，年龄
+        //获得指定时间间隔投资且当前理财资产为0的用户信息（包含可用余额大于0的用户）
+        $sql = "select 
+o.uid,u.real_name,u.safeMobile,from_unixtime(u.created_at) createTime,sum(o.order_money) as investMoney,ua.available_balance,u.safeIdCard,u.birthdate
+from online_order o 
+inner join user u on u.id = o.uid
+inner join user_account ua on ua.uid = o.uid
+where date(from_unixtime(o.order_time)) >= '2017-07-17'
+and date(from_unixtime(o.order_time)) <= '2017-12-31'
+and o.uid not in (
+	select distinct(uid) from online_repayment_plan where status = 0
+)
+and o.status = 1 
+group by o.uid";
+        $userInfo = Yii::$app->db->createCommand($sql, [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
+
+        //判断是否有符合条件的用户
+        if (empty($userInfo)) {
+            $this->stdout('无符合条件的用户信息');
+            return self::EXIT_CODE_ERROR;
+        }
+
+        $exportContent = [];
+        foreach ($userInfo as $k => $ui) {
+            $exportContent[$k]['uid'] = $ui['uid'];
+            $exportContent[$k]['realName'] = $ui['real_name'];
+            $age = date('Y') - (int) substr($ui['birthdate'], 0, 4);
+            $idCard = SecurityUtils::decrypt($ui['safeIdCard']);
+            $exportContent[$k]['mobile'] = '\''.SecurityUtils::decrypt($ui['safeMobile']);
+            $exportContent[$k]['createTime'] = $ui['createTime'];
+            $exportContent[$k]['investMoney'] = $ui['investMoney'];
+            $exportContent[$k]['availableBalance'] = $ui['available_balance'];
+            $exportContent[$k]['gender'] = intval(substr($idCard, -2, 1) % 2);
+            $exportContent[$k]['birthDate'] = $ui['birthdate'];
+            $exportContent[$k]['age'] = $age;
+        }
+
+        $file = Yii::getAlias('@app/runtime/retention_'.$startDate.'_'.$endDate .'_'. date('YmdHis').'.xlsx');
+        $exportData[] = ['用户ID', '姓名', '手机号', '注册时间', '投资成功金额', '可用余额', '性别', '生日', '年龄'];
+        $exportData = array_merge($exportData, $exportContent);
+        $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
     }
 }
