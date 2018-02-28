@@ -62,7 +62,7 @@ class Miit
         $postData['signValue'] = RSA::sign($postData['summary'], $this->WdjfPrivateKey, OPENSSL_ALGO_MD5);
         $jsonData = json_encode($postData);
         $encrypt = RSA::rsaEncrypt($jsonData, $this->MiitPublicKey);
-        $result = HttpHelper::doRequest($this->MiitGetTicketUrl, ['vafystr' => $encrypt]);
+        $result = self::doRequest($this->MiitGetTicketUrl, ['message' => $encrypt]);
         //处理结果
         $result = json_decode($result, true);
         if ($result && $result['resultCode'] == 1) {
@@ -148,16 +148,16 @@ class Miit
         $data = [
             'idcode' => SecurityUtils::decrypt($user->safeIdCard),
             'ecode' => $EbaoQuan->baoId,
-            'phone' => SecurityUtils::decrypt($user->safeMobile)
+            'phone' => SecurityUtils::decrypt($user->safeMobile),
+            'token' => $this->ticket,
         ];
-        //用工信部的公钥加密
-        $dataEncrypt = RSA::rsaEncrypt(json_encode($data), $this->MiitPublicKey);
-        $post_data = [
-            'contrantData' => $dataEncrypt,
-            'ticket' => $this->ticket,
-        ];
-
-        return $this->MiitGetHetongUrl . '?' . http_build_query($post_data);
+        $res = self::doRequest($this->MiitGetHetongUrl, $data);
+        $res = json_decode($res);
+        if ($res->success == 1) {
+            return $res->info->short_url;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -219,5 +219,19 @@ class Miit
             'key' => $aesKey
         ];
     }
-
+    //用于发送POST请求
+    private static function doRequest($requestUrl, $postData = array()) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $requestUrl);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //禁止直接显示获取的内容 重要
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //不验证证书下同
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); //
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
 }
