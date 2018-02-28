@@ -310,8 +310,8 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
         if (code.isInvestor) {
           if (Cookies.get('showIndexPop')) {
             Cookies.remove('showIndexPop');
-            $('.mask,.first-popover').show();
-            $('.second-popover').hide();
+//            $('.mask,.first-popover').show();
+//            $('.second-popover').hide();
           }
         }
         //判断个人投资总额大于五万时，前端页面显示总金额
