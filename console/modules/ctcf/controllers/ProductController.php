@@ -17,7 +17,7 @@ class ProductController extends Controller
     {
         $onlineProducts = OnlineProduct::find()->all();
         foreach ($onlineProducts as $onlineProduct) {
-            if (strpos($onlineProduct->description, '募集开始时间')) {
+            if (false !== strpos($onlineProduct->sn, 'CTCF-LEGACY')) {
                 $description = '';
                 $description .= '项目名称：' . $onlineProduct->title . '<br><br>';
                 $description .= '项目金额：' . StringUtils::amountFormat1('{amount}{unit}', $onlineProduct->money) . '<br><br>';

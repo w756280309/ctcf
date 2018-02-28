@@ -4,6 +4,7 @@ namespace console\modules\ctcf\controllers;
 
 use common\models\order\OnlineOrder;
 use common\models\tx\UserAsset;
+use common\models\user\User;
 use common\models\user\UserAccount;
 use yii\console\Controller;
 use Yii;
@@ -55,6 +56,15 @@ class UserController extends Controller
             ->groupBy('user_id')
             ->asArray()
             ->all();
+
+        foreach ($userAssets as $k => $v) {
+            $user = User::findOne($v['user_id']);
+            if (false !== strpos($user->username, 'ctcf')) {
+                $userAssets[$k]['profit_balance'] = bcadd($v['profit_balance'], 0, 2);
+            } else {
+                unset($userAssets[$k]);
+            }
+        }
 
         if ($update) {
             foreach ($userAssets as $userAsset) {
