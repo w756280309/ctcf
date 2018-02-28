@@ -24,7 +24,7 @@ class OrderMessage extends WechatMessage
             $order->yield_rate
         );
         $this->data = [
-            'first' => ['尊敬的客户，您于'.date('Y-m-d H:i:s', $order->order_time).'在楚天财富成功投资。', '#000000'],
+            'first' => ['尊敬的客户，您于'.date('Y-m-d H:i:s', $order->order_time).'成功投资。', '#000000'],
             'keyword1' => [$loan->title, '#000000'],
             'keyword2' => [StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2)).'%', '#000000'],
             'keyword3' => [$duration['value'].$duration['unit'], '#000000'],
