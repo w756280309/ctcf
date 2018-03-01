@@ -54,7 +54,7 @@
     float: left;
     width: 262px;
     height: 38px;
-    line-height: 38px;
+    /*line-height: 38px;*/
     padding: 0 15px;
     outline: none;
     border: 1px solid #e4e4e8;
@@ -86,7 +86,7 @@
     float: left;
     width: 262px;
     height: 38px;
-    line-height: 38px;
+    /*line-height: 38px;*/
     outline: none;
     padding: 0 15px;
     border: 1px solid #e4e4e8;

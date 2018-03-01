@@ -3,7 +3,7 @@
 $this->title = '登录';
 
 ?>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/login/login.css?v=1.6">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/login/login.css?v=1.8">
 <script src="<?= ASSETS_BASE_URI ?>ctcf/js/login/login.js?v=1.0"></script>
 
 <div class="login-box">

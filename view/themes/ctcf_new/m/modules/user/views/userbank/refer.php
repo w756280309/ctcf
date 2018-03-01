@@ -6,7 +6,13 @@ $this->title="如何用电脑大额充值";
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/recharge/large-recharge/css/index.css">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/zepto.min.js"></script>
-
+<style>
+    .m-width {
+        padding: 0 .3rem;
+        width:auto;
+        margin:0;
+    }
+</style>
 <div class="contain">
     <h3 class="nav-title m-width">如何使用电脑大额充值页</h3>
     <div class="step1">
