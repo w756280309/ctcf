@@ -96,11 +96,11 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                 <div class="ctn address">
                     <ul  class="clearfix">
                         <li class="lf">
-                            <img data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/address_01.png" alt="">
+                            <img data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/address_02.png" alt="">
                             <p>四楼办公区，一对一的专业理财咨询，为用户提供优质理财服务</p>
                         </li>
                         <li class="rg">
-                            <img class="rg" data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/address_02.png" alt="">
+                            <img class="rg" data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/address_01.png" alt="">
                             <p class="rg">一楼服务大厅,与温州都市报共同提供用户服务窗口</p>
                         </li>
                     </ul>
