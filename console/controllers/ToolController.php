@@ -2,11 +2,14 @@
 
 namespace console\controllers;
 
+use common\models\adminuser\AdminLog;
 use common\models\draw\DrawManager;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
+use common\models\message\RepaymentMessage;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
+use common\models\order\OnlineRepaymentRecord;
 use common\models\payment\PaymentLog;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
@@ -16,9 +19,12 @@ use common\models\user\DrawRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
+use common\service\SmsService;
+use common\utils\SecurityUtils;
 use common\utils\TxUtils;
 use Ding\DingNotify;
 use EasyWeChat\Core\Exception;
+use Lhjx\Noty\Noty;
 use Yii;
 use yii\console\Controller;
 use yii\db\ActiveQuery;
@@ -899,6 +905,461 @@ group by o.uid
                     sleep(1);
                 }
                 $this->stdout($dueStartDate.'-'.$dueEndDate.'执行查询完毕，共计'.$totalNum.'条'.PHP_EOL);
+            }
+        }
+    }
+
+    /**
+     * 新手标不放款直接还款，利息补发仍从融资者账户转入标的账户
+     *
+     * @param int $loanId 新手标ID
+     *
+     * @throws \Exception
+     * @return boolean
+     */
+    public function actionXsRepayment($loanId)
+    {
+        $loan = OnlineProduct::findOne($loanId);
+        $qishu = 1;    //新手标只有1期
+
+        //判断标的是否存在
+        if (null === $loan) {
+            throw new \Exception('标的不存在');
+        }
+
+        //判断标的是否为新手标
+        if (!$loan->is_xs) {
+            throw new \Exception('非新手标不允许直接还款');
+        }
+
+        //判断当前标的状态为已经计息但未放款阶段
+        if (!($loan->is_jixi && !in_array($loan->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER]))) {
+            throw new \Exception('当前标的必须处于已经计息但未放款阶段');
+        }
+
+        //检查还款计划是否存在
+        $plans = OnlineRepaymentPlan::find()
+            ->where(['online_pid' => $loanId])
+            ->andWhere(['status' => OnlineRepaymentPlan::STATUS_WEIHUAN])
+            ->andWhere(['qishu' => $qishu])
+            ->all();
+        if (0 === count($plans)) {
+            throw new \Exception('没有需要还款的项目');
+        }
+
+        //检查还款记录
+        $repayment = Repayment::find()
+            ->where(['loan_id' => $loanId, 'term' => $qishu])
+            ->one();
+        if (null === $repayment) {
+            throw new \Exception('还款信息不存在');
+        }
+
+        /** 第一步：融资者账户补息到标的账户 */
+        //检查融资者用户信息
+        $borrower = $loan->borrower;
+        if (null === $borrower) {
+            throw new \Exception('融资者用户信息不存在');
+        }
+
+        //检查融资者用户账户信息
+        $borrowerAccount = $borrower->borrowAccount;
+        if (null === $borrowerAccount) {
+            throw new \Exception('融资者用户账户信息不存在');
+        }
+
+        //检查融资者对应联动账户信息
+        $borrowerEpayUser = $borrower->epayUser;
+        if (null === $borrowerEpayUser) {
+            throw new \Exception('融资者对应联动账户信息不存在');
+        }
+
+        //判断温都融资者账户余额是否足够
+        $totalFund = $repayment->interest;
+        if (bccomp($totalFund, $borrowerAccount->available_balance, 2) > 0) {
+            throw new \Exception('融资者用户账户余额不足');
+        }
+
+        //当不允许访问联动时候，默认联动测处理成功
+        $ump = Yii::$container->get('ump');
+        if (Yii::$app->params['ump_uat']) {
+            //修改联动标的为还款中状态
+            $resp = Yii::$container->get('ump')->updateLoanState($loan->id, 2);
+            if (!$resp->isSuccessful()) {
+                throw new Exception('联动状态修改失败:' . $resp->get('ret_msg'));
+            }
+
+            //调用联动接口，查看联动标的状态
+            $loanResp = $ump->getLoanInfo($loan->id);
+
+            if (!$loanResp->isSuccessful()) {
+                throw new \Exception($loanResp->get('ret_msg'));
+            }
+            if ('02' === $loanResp->get('project_account_state')) {
+                throw new \Exception('当前联动标的状态为冻结状态');
+            }
+            if ('2' !== $loanResp->get('project_state')) {
+                throw new \Exception('当前联动标的状态不允许此操作');
+            }
+
+            $orgResp = $ump->getMerchantInfo($borrowerEpayUser->epayUserId);
+            if ($orgResp->isSuccessful()) {
+                if ('1' !== $orgResp->get('account_state')) {
+                    throw new \Exception('当前联动端融资者账户状态异常');
+                }
+                //没有还款时候才需要判断融资方信息
+                if (0 > bccomp($orgResp->get('balance'), $totalFund * 100, 2)) {
+                    throw new \Exception('当前联动端融资者余额不足');
+                }
+            } else {
+                throw new \Exception($orgResp->get('ret_msg'));
+            }
+        }
+
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        //新手标不支持加息券，暂不考虑
+        try {
+            //更新还款记录状态
+            $sql = "update repayment set isRepaid=:isRepaid,repaidAt=:repaidAt where id = :repaymentId and isRepaid=false";
+            $updateRepayment = $db->createCommand($sql, [
+                'isRepaid' => true,
+                'repaidAt' => date('Y-m-d H:i:s'),
+                'repaymentId' => $repayment->id,
+            ])->execute();
+            if (!$updateRepayment) {
+                $transaction->rollBack();
+                throw new \Exception('更新还款记录融资账户回款状态失败');
+            }
+
+            //更新温都融资者账户余额
+            $updateBorrowerAccountSql = "update user_account set account_balance=account_balance-:totalRefund,available_balance=available_balance-:totalRefund,drawable_balance=drawable_balance-:totalRefund,out_sum=out_sum+:totalRefund where id=:borrowerAccountId";
+            $updateBorrowerAccount = $db->createCommand($updateBorrowerAccountSql, [
+                'totalRefund' => $totalFund,
+                'borrowerAccountId' => $borrowerAccount->id,
+            ])->execute();
+            if (!$updateBorrowerAccount) {
+                $transaction->rollBack();
+                throw new \Exception('当前融资者账户余额扣款异常');
+            }
+
+            //更新融资者账户资金还款流水记录
+            $borrowerAccount->refresh();
+            $borrowerMoneyRecord = new MoneyRecord([
+                'account_id' => $borrowerAccount->id,
+                'sn' => MoneyRecord::createSN(),
+                'type' => MoneyRecord::TYPE_HUANKUAN,
+                'osn' => '',
+                'uid' => $borrowerAccount->uid,
+                'out_money' => $totalFund,
+                'balance' => $borrowerAccount->available_balance,
+                'remark' => '还款记录ID：'.$repayment->id.',还款总计:'.$totalFund.'元',
+            ]);
+            if (!$borrowerMoneyRecord->save()) {
+                throw new \Exception('还款资金流水记录失败');
+            }
+
+            //新手标皆为到期本息，故直接更新标的为已还清状态
+            $updateLoanSql = "update online_product set status=:status,sort=:sort where id=:loanId and status not in (5, 6)";
+            $updateLoan = $db->createCommand($updateLoanSql, [
+                'status' => OnlineProduct::STATUS_OVER,
+                'sort' => OnlineProduct::SORT_YHK,
+                'loanId' => $loan->id,
+            ])->execute();
+            if (!$updateLoan) {
+                $transaction->rollBack();
+                throw new \Exception('修改标的状态从还款中到已还清错误');
+            }
+
+            if (Yii::$app->params['ump_uat']) {
+                //联动一测融资用户还款利息到标的账户
+                if ($totalFund > 0) {
+                    $hk = $ump->huankuan(
+                        TxUtils::generateSn('HK'),
+                        $loan->id,
+                        $borrowerEpayUser->epayUserId,
+                        $totalFund);
+
+                    if (!$hk->isSuccessful()) {
+                        throw new \Exception($hk->get('ret_code').$hk->get('ret_msg'));
+                    }
+                }
+            }
+            $transaction->commit();
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            throw new \Exception('标的账户放款标的利息失败'. $ex->getMessage());
+        }
+
+        /** 第二步：标的账户返标的利息到投资人账户*/
+        $this->loanRefundToLender($loan, $plans, $repayment->id);
+
+        /** 第三步：更新用户资产回款状态及发送短信消息及微信推送 */
+        //还款短信
+        $userIds = array_unique(ArrayHelper::getColumn($plans, 'uid'));
+        $this->sendRefundSms($loan, $qishu, $userIds);
+
+        //更新资产回款状态（TX）
+        $this->updateAssetRepaidStatus($loan);
+
+        //微信推送给还款成功信息投资者
+        $this->repaySuccessPush($plans, $repayment);
+    }
+
+    /**
+     * 标的账户返款到投资人账户
+     *
+     * @param OnlineProduct $loan        标的
+     * @param array         $plans       还款计划
+     * @param int           $repaymentId 还款记录ID
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    private function loanRefundToLender($loan, $plans, $repaymentId)
+    {
+        //检查融资者返款到账户是否完成，若完成直接返回true，进行下一步
+        $refundRepayment = Repayment::find()
+            ->where(['id' => $repaymentId])
+            ->one();
+        if (true === (bool) $refundRepayment->isRefunded) {
+            return true;
+        }
+
+        //获得剩余本息余额
+        $restBenxi = (float) OnlineRepaymentPlan::find()
+            ->where([
+                'online_pid' => $loan->id,
+                'status' => OnlineRepaymentPlan::STATUS_WEIHUAN
+            ])->andFilterWhere([
+                '<>', 'qishu', $refundRepayment->term,
+            ])->sum('benxi');
+        $isRefreshCalcLiXi = $this->isRefreshCalcLiXi($loan, date('Y-m-d'));
+        $db = Yii::$app->db;
+        $ump = Yii::$container->get('ump');
+        $transaction = $db->beginTransaction();
+        try {
+            foreach ($plans as $plan) {
+                //新建还款记录
+                $lenderRepaymentRecord = new OnlineRepaymentRecord([
+                    'online_pid' => $loan->id,
+                    'order_id' => $plan->order_id,
+                    'order_sn' => OnlineRepaymentRecord::createSN(),
+                    'qishu' => $plan->qishu,
+                    'uid' => $plan->uid,
+                    'lixi' => $plan->lixi,
+                    'benxi' => $plan->benxi,
+                    'benjin' => $plan->benjin,
+                    'benxi_yue' => $restBenxi,
+                    'refund_time' => time(),
+                    'status' => $isRefreshCalcLiXi
+                        ? OnlineRepaymentRecord::STATUS_BEFORE
+                        : OnlineRepaymentRecord::STATUS_DID,
+                ]);
+                $lenderRepaymentRecord->save(false);
+
+                //更新还款状态
+                $plan->status = $isRefreshCalcLiXi
+                    ? OnlineRepaymentPlan::STATUS_TIQIAM
+                    : OnlineRepaymentPlan::STATUS_YIHUAN;
+                $plan->actualRefundTime = date('Y-m-d H:i:s');
+                $plan->save(false);
+
+                //更新投资人账户余额
+                $user = $plan->user;
+                $lendAccount = $user->lendAccount;
+                $updateLendAccountSql = "update user_account set available_balance=available_balance+:benxi,drawable_balance=drawable_balance+:benxi,in_sum=in_sum+:benxi,investment_balance=investment_balance-:benjin,profit_balance=profit_balance+:lixi where id=:lendAccountId";
+                $updateLendAccount = $db->createCommand($updateLendAccountSql, [
+                    'benxi' => $lenderRepaymentRecord->benxi,
+                    'benjin' => $lenderRepaymentRecord->benjin,
+                    'lixi' => $lenderRepaymentRecord->lixi,
+                    'lendAccountId' => $lendAccount->id,
+                ])->execute();
+                if (!$updateLendAccount) {
+                    $transaction->rollBack();
+                    throw new \Exception('投资人还款失败：投资人账户余额更新失败');
+                }
+
+                //添加投资人流水更新
+                $lendAccount->refresh();
+                $lenderMoneyRecord = new MoneyRecord([
+                    'account_id' => $lendAccount->id,
+                    'sn' => MoneyRecord::createSN(),
+                    'type' => null !== $plan->asset_id ? MoneyRecord::TYPE_CREDIT_HUIKUAN : MoneyRecord::TYPE_HUIKUAN,
+                    'osn' => null !== $plan->asset_id ? $plan->asset_id : $plan->sn,
+                    'uid' => $plan->uid,
+                    'in_money' => $lenderRepaymentRecord->benxi,
+                    'balance' => $lendAccount->available_balance,
+                    'remark' => '第'.$plan->qishu.'期'.'本金:'.$lenderRepaymentRecord->benjin.'元;利息:'.$lenderRepaymentRecord->lixi.'元;',
+                ]);
+                $lenderMoneyRecord->save(false);
+
+                //判断是否是联动正式环境，然后返款给投资用户
+                if ($plan->benxi > 0 && Yii::$app->params['ump_uat']) {
+                    //调用联动返款接口,返款给投资用户
+                    $fkResp = $ump->fankuan($plan->sn, $lenderRepaymentRecord->refund_time, $plan->online_pid, $user->epayUser->epayUserId, $plan->benxi);
+                    if (!$fkResp->isSuccessful()) {
+                        $transaction->rollBack();
+                        throw new \Exception($fkResp->get('ret_msg'));
+                    }
+                }
+            }
+            $updateRefundRepaymentSql = "update repayment set isRefunded=:isRefunded,refundedAt=:refundedAt where id = :repaymentId and isRefunded=false";
+            $updateRefundRepayment = $db->createCommand($updateRefundRepaymentSql, [
+                'repaymentId' => $repaymentId,
+                'isRefunded' => true,
+                'refundedAt' => date('Y-m-d H:i:s'),
+            ])->execute();
+            if (!$updateRefundRepayment) {
+                throw new \Exception('更新还款记录失败');
+            }
+            $transaction->commit();
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            throw $ex;
+        }
+    }
+
+    //是否需要重新计息
+    private function isRefreshCalcLiXi(OnlineProduct $deal, $repayDate)
+    {
+        if (!$deal->isAmortized()
+            && $deal->is_jixi
+            && $repayDate >= date('Y-m-d', $deal->jixi_time)
+            && $repayDate < date('Y-m-d', $deal->finish_date)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 发送回款短信
+     *
+     * @param OnlineProduct $loan    标的
+     * @param int           $term    期数
+     * @param array         $userIds 待发送用户ID
+     *
+     * @return bool
+     */
+    private function sendRefundSms($loan, $term, $userIds)
+    {
+        if (empty($userIds)) {
+            return false;
+        }
+
+        $repaymentRecords = OnlineRepaymentRecord::find()
+            ->select("sum(benjin) as benjin, sum(lixi) as lixi, uid")
+            ->where([
+                'online_pid' => $loan->id,
+                'status' => [OnlineRepaymentRecord::STATUS_DID, OnlineRepaymentRecord::STATUS_BEFORE]
+            ])->andWhere([
+                'qishu' => $term
+            ])->andFilterWhere([
+                'in', 'uid', $userIds
+            ])->groupBy('uid')
+            ->asArray()
+            ->all();
+        $lastTerm = (int) Repayment::find()
+            ->where(['loan_id' => $loan->id])
+            ->max('term');
+
+        foreach ($repaymentRecords as $repaymentRecord) {
+            $user = User::findOne($repaymentRecord['uid']);
+            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $loan->refund_method) {
+                //到期本息
+                $templateId = Yii::$app->params['sms']['daoqibenxi'];
+                $message = [
+                    $user->real_name,
+                    $loan->title,
+                    $repaymentRecord['benjin'],
+                    $repaymentRecord['lixi'],
+                    Yii::$app->params['platform_info.contact_tel'],
+                ];
+            } elseif ($lastTerm === $term) {
+                //分期最后一期
+                $templateId = Yii::$app->params['sms']['lfenqihuikuan'];
+                $message = [
+                    $user->real_name,
+                    $loan->title,
+                    $term,
+                    $repaymentRecord['benjin'],
+                    $repaymentRecord['lixi'],
+                    Yii::$app->params['platform_info.contact_tel'],
+                ];
+            } elseif(OnlineProduct::REFUND_METHOD_DEBX === $loan->refund_method) {
+                //等额本息不是最后一期
+                $templateId = Yii::$app->params['sms']['debx_repay'];
+                $message = [
+                    $user->real_name,
+                    $loan->title,
+                    $term,
+                    $repaymentRecord['benjin'],
+                    $repaymentRecord['lixi'],
+                    Yii::$app->params['platform_info.contact_tel'],
+                ];
+            } else {
+                //分期(不是等额本息)不是最后一期
+                $templateId = Yii::$app->params['sms']['fenqihuikuan'];
+                $message = [
+                    $repaymentRecord['real_name'],
+                    $loan->title,
+                    $term,
+                    $repaymentRecord['lixi'],
+                    Yii::$app->params['platform_info.contact_tel'],
+                ];
+            }
+
+            SmsService::send(SecurityUtils::decrypt($user->safeMobile), $templateId, $message, $user);
+        }
+    }
+
+    /**
+     * 更新资产回款状态（TX）
+     *
+     * @param OnlineProduct $loan 标的
+     *
+     * @return array
+     */
+    private function updateAssetRepaidStatus($loan)
+    {
+        $repayment = Repayment::find()
+            ->where(['isRefunded' => false])
+            ->orWhere(['isRepaid' => false])
+            ->andWhere(['loan_id' => $loan->id])
+            ->one();
+        if (null === $repayment) {
+            $response = \Yii::$container->get('txClient')->post('assets/update-repaid-status', [
+                'loan_id' => $loan->id,
+            ], function (\Exception $e) {
+                $code = $e->getCode();
+                if (200 !== $code) {
+                    return false;
+                }
+            });
+            if (!$response) {
+                return [
+                    'result' => 0,
+                    'message' => '更新用户资产回款状态失败'
+                ];
+            }
+        }
+    }
+
+    /**
+     * 微信推送给还款成功信息投资者
+     *
+     * @param array     $plans     还款计划
+     * @param Repayment $repayment 还款信息
+     *
+     * @return void
+     */
+    private function repaySuccessPush($plans, $repayment)
+    {
+        $repayment->refresh();
+        if ($repayment->isRepaid && $repayment->isRefunded) {
+            foreach ($plans as $plan) {
+                Noty::send(new RepaymentMessage($plan));
             }
         }
     }

@@ -1126,12 +1126,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function allowRepayment()
     {
         if (
-            $this->fangkuan
-            && in_array($this->fangkuan->status, [
-                OnlineFangkuan::STATUS_FANGKUAN,
-                OnlineFangkuan::STATUS_TIXIAN_APPLY,
-                OnlineFangkuan::STATUS_TIXIAN_SUCC,
-            ])
+            in_array($this->status, [self::STATUS_HUAN, self::STATUS_OVER])
         ) {
             return true;
         }
