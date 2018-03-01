@@ -12,6 +12,7 @@ use common\utils\SecurityUtils;
 use common\models\order\EbaoQuan;
 //use Wcg\Security\Aes;
 use common\lib\aes\AES;
+use yii\db\Exception;
 
 class Miit
 {
@@ -117,6 +118,9 @@ class Miit
 
             $res = $soapClient->uploadContract(['contractDesc' => $postData, 'contractData' => $contractData]);
             $result = self::returnData($res->return);
+            if ($result['data']['status'] != 1) {
+                throw new Exception('合同上传失败，原因：' . json_encode($result));
+            }
             //实例化 EbaoQuan(调试通过)
             $model = new EbaoQuan();
             $model->type = $type;
@@ -128,7 +132,7 @@ class Miit
             $model->errMessage = $result['data']['status'] == 1 ? '成功' : json_encode($result);//失败的话 就返回的信息保存
             $model->baoId = $ecode;
             $model->preservationTime = str_pad($signTime, 13, '0');
-            $model->save();
+            return $model->save();
         } catch (\Exception $e) {
             \Yii::trace('保权失败,订单ID:'.$order_id.';失败信息'.$e->getMessage());
             throw $e;
