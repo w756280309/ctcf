@@ -39,7 +39,7 @@ $this->registerMetaTag([
         <title><?=  isset($ctitle) ? $ctitle : Html::encode($this->title).' - 温都金服' ?></title>
         <?php $this->head() ?>
         <meta name="baidu-site-verification" content="7YkufMc2UW" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/wdjf/favicon.ico" type="image/x-icon" />
         <script type="text/javascript">
             $(function () {
                 hmsr();

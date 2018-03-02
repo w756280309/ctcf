@@ -15,6 +15,7 @@ $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
                 <i>官方微信</i>
                 <img style="width: 98px" class="hidden pst" src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin_follow.png" alt="">
             </span>
+<!--            <a style="color:#ff6707;" href="http://legacy.hbctcf.com/account/allAssets">老站提现入口</a>-->
            <!-- <span class="header-hover pointer erweima">
                 <img class="mgr7" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/icon_02.png" alt="">
                 <i>官方微博</i>
@@ -25,6 +26,7 @@ $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
         <?php if (Yii::$app->user->isGuest) { ?>
             <div class="rg fz14">
                 <ul class="clear-fix">
+                    <li class="lf"><a class="pd15 border-r1 header-hover" style="color:#ff6707;font-weight: bold;" href="http://legacy.hbctcf.com/account/allAssets" target="_blank">老站提现入口</a></li>
                     <li class="lf"><a class="pd15 border-r1 header-hover" href="/site/signup">免费注册</a></li>
                     <li class="lf"><a class="pd15 border-r1 header-hover" href="/site/login">登录</a></li>
                     <li class="lf">
@@ -42,7 +44,8 @@ $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
         <?php } else { ?>
             <div class="rg fz14">
                 <ul class="clear-fix">
-                    <li class="lf"><a class="header-hover" href="/user/user">您好！<?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></a></li>
+                    <li class="lf"><a class="pd15 border-r1 header-hover" style="color:#ff6707;font-weight: bold" href="http://legacy.hbctcf.com/account/allAssets"  target="_blank">老站提现入口</a></li>
+                    <li class="lf"><a class="header-hover" href="/user/user" style="margin-left:15px">您好！<?= StringUtils::obfsMobileNumber(Yii::$app->user->identity->mobile) ?></a></li>
                     <li class="lf">
                         <a class="pd15 border-r1 header-hover" href="javascript:void(0)" onclick="if(!$(this).hasClass('logout')){$(this).addClass('logout');$('#header-logout').submit();}">退出登录</a>
                         <form method="post" id="header-logout" action="/site/logout">

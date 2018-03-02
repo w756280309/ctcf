@@ -52,7 +52,7 @@ use common\utils\SecurityUtils;
         <div class="col-xs-2 safe-lf col"></div>
         <div class="col-xs-3 safe-lf"></div>
         <div class="col-xs-3 arrow">
-            <a id="bind_card">去绑定</a>
+            <a id="bind_card" style="color: #419bf9">去绑定</a>
         </div>
     </div>
 <?php } ?>

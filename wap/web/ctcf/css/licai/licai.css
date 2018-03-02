@@ -203,8 +203,8 @@ body{
     overflow: hidden;
 }
 .list-title {
-    height: 3.14rem;
-    line-height: 3.14rem;
+    height: 4rem;
+    line-height: 4rem;
     font-size: 1.63rem;
     text-align: center;
     border-bottom: 1px solid #dddddd;
