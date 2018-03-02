@@ -58,20 +58,30 @@ class WechatMenuController extends Controller
             [
                 "type" => "view",
                 "name" => "我要理财",
-                "url" => "https://m.wenjf.com/#t=1"
+                "url" => "https://m.hbctcf.com#t=wx"
             ],
             [
-                "name" => "新人注册",
+                "name" => "福利活动",
                 "sub_button" => [
                     [
                         "type" => "view",
-                        "name" => "注册领豪礼",
-                        "url" => "http://m.wenjf.com/luodiye/v2"
+                        "name" => "注册领红包",
+                        "url" => "https://m.hbctcf.com/ctcf/landing/xs-invest#t=wx"
                     ],
                     [
                         "type" => "view",
-                        "name" => "绑定微信",
-                        "url" => "https://m.wenjf.com/user/wechat/bind"
+                        "name" => "160元超市卡",
+                        "url" => "https://m.hbctcf.com/ctcf/landing/xs-invest#t=wx"
+                    ],
+                    [
+                        "type" => "view",
+                        "name" => "每日签到",
+                        "url" => "https://m.hbctcf.com/user/checkin#t=wx"
+                    ],
+                    [
+                        "type" => "view",
+                        "name" => "账户绑定",
+                        "url" => "https://m.hbctcf.com/user/wechat/bind#t=wx"
                     ],
                 ],
             ],
@@ -79,14 +89,14 @@ class WechatMenuController extends Controller
                 "name" => "关于我们",
                 "sub_button" => [
                     [
-                        "type" => "click",
+                        "type" => "view",
                         "name" => "公司介绍",
-                        "key" => "COMPANYINTRODUC"
+                        "url" => "https://m.hbctcf.com/site/h5?wx_share_key=h5#t=wx"
                     ],
                     [
                         "type" => "view",
                         "name" => "在线客服",
-                        "url" => "https://wenjf.udesk.cn/im_client/?web_plugin_id=34255"
+                        "url" => "https://hbctcf.udesk.cn/im_client/?web_plugin_id=42843#t=wx"
                     ],
                     [
                         "type" => "click",
@@ -96,12 +106,12 @@ class WechatMenuController extends Controller
                     [
                         "type" => "view",
                         "name" => "帮助中心",
-                        "url" => "https://m.wenjf.com/site/help"
+                        "url" => "https://m.hbctcf.com/site/help#t=wx"
                     ],
                     [
                         "type" => "view",
                         "name" => "APP下载",
-                        "url" => "http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf"
+                        "url" => "http://a.app.qq.com/o/simple.jsp?pkgname=com.hb.ctcf#t=wx"
                     ]
                 ],
             ],
