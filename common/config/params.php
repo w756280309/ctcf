@@ -271,4 +271,9 @@ return [
         'end' => null,    //结束日期 例：2012-12-18
         'number' => null, //积分倍数 例：2
     ],
+    //微信公众号推送配置
+    'wechat_push' => [
+        'hello_message' => null,    //欢迎信息
+        'click_message' => [],    //点击公众号菜单的提示信息
+    ]
 ];

@@ -117,22 +117,12 @@ class PushController extends Controller
     //发送欢迎消息
     private function hello($openid)
     {
-        //推送欢迎消息
-        $message = new Text(['content' => '亲！欢迎来到温都金服！
-国资平台，靠谱！优质项目，赚钱！全程监管，放心！
-初次见面，先送您二重好礼略表心意！
-一重注册礼：注册就送698红包！
-二重首投礼：首次投资送最高160元超市卡！
-
-' .'<a href="https://m.wenjf.com/luodiye/v2">领超市卡点这里</a>
-
-' .'<a href="https://m.wenjf.com/user/wechat/bind">账户绑定点这里</a>
-
-' . '<a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&scene=115&__biz=MzI0MTIwOTQxMQ==#wechat_redirect">往期精彩点这里</a>
-
-' . '<a href="https://www.wenjf.com">官方网站</a>'
-        ]);
-        Yii::$container->get('weixin_wdjf')->staff->message($message)->to(strval($openid))->send();
+        $hello = Yii::$app->params['wechat_push']['hello_message'];
+        if (!empty($hello)) {
+            //推送欢迎消息
+            $message = new Text(['content' => $hello]);
+            Yii::$container->get('weixin_wdjf')->staff->message($message)->to(strval($openid))->send();
+        }
     }
     /**
      * 自定义菜单事件的推送
@@ -140,23 +130,12 @@ class PushController extends Controller
     static function sendMessage($key, $openid)
     {
         $key = strval($key);
-        $message = [
-            'COMPANYINTRODUC' => '温州温都金融信息服务股份有限公司简称[温都金服]，是温州报业传媒旗下理财平台，重要股东为温州报业传媒有限公司和南京金融资产交易中心，双方整合自身强大的公信力、受众、行业资源优势，以及专业的风控能力、理财产品采集能力、网络技术能力等，为用户呈现更契合自身需求的理财产品，为用户创造更多的价值，为社会营造诚信良好的金融环境，有效推动普惠金融的发展。',
-            'OPINIONFEEDBACK' => '温都金服上线啦/鼓掌/鼓掌/鼓掌，这是咱们温州自己的金融服务平台，刚刚上线，有什么问题或意见可以告诉我们，好的建议我们会给予一定奖励哟~/呲牙/呲牙/呲牙/握手/握手。请点击左侧键盘，回复内容[意见：+正文]',
-            'CONTACTUS' => '客服电话： 4001015151
-客服工作时间：周一至周日8:30-20:00
-客服QQ：1430843929
-电子邮箱：wzwdjf@sina.com
-工作时间：周一至周六8:30-17:00
-办公地点：温州市鹿城区飞霞南路657号保丰大楼四层
-
-服务体验店地址：
-保丰服务体验店：温州市鹿城区飞霞南路657号保丰大楼一层
-服务体验店工作时间：周一至周六8:30-17:00',
-        ];
+        $message = Yii::$app->params['wechat_push']['click_message'];
         if (array_key_exists($key, $message)) {
             $content = $message[$key];
-            Yii::$container->get('weixin_wdjf')->staff->message($content)->to(strval($openid))->send();
+            if (!empty($content)) {
+                Yii::$container->get('weixin_wdjf')->staff->message($content)->to(strval($openid))->send();
+            }
         }
     }
     //被动回复
