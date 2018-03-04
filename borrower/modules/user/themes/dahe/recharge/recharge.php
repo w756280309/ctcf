@@ -70,7 +70,7 @@ $this->registerJs($_js, View::POS_END, 'body_close');
                 <li><div class="wdjf-label"><span class="fee-info">*</span>充值金额</div> <div class="wdjf-field"><?= $form->field($recharge, 'fund', ['template' => '{input}{error}'])->textInput(); ?></div><span style='margin-left: 5px;'>元</span></li>
                 <li class="wdjf-action">
                     <input class="btn btn-primary" type="submit" value="充值">
-                    <p class="fee-info">* 充值所需费用由大河垫付</p>
+                    <p class="fee-info">* 充值所需费用由平台垫付</p>
                 </li>
             </ul>
             <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
