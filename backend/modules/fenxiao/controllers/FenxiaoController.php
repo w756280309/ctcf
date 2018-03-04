@@ -105,6 +105,7 @@ class FenxiaoController extends BaseController
             'affCode' => $affCam->trackCode,
             'isRecommend' => $aff->isRecommend,
             'isBranch' => $aff->isBranch,
+            'hideSensitiveinfo' => $aff->hideSensitiveinfo,
         ]);
 
         $old = clone $model;
@@ -130,6 +131,7 @@ class FenxiaoController extends BaseController
                 $aff->name = $model->affName;
                 $aff->isRecommend = $model->isRecommend;
                 $aff->isBranch = $model->isBranch;
+                $aff->hideSensitiveinfo = $model->hideSensitiveinfo;
                 if (!empty($model->imageFile)) {
                     $aff->picPath = $model->imageFile;
                 }
