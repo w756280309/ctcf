@@ -95,7 +95,7 @@ if (1 === $promoStatus) {
         <img class="close-btn" src="<?= FE_BASE_URI ?>wap/campaigns/active20170731/images/close.png" alt="">
         <ol>
             <li>活动时间2017年8月10日-8月16日；</li>
-            <li>本次活动面向所有温都金服注册用户；</li>
+            <li>本次活动面向所有楚天财富注册用户；</li>
             <li>
                 <p>活动期间每日完成指定任务，获得对应礼品；</p>
                 <table border="0" cellpadding="0" cellspacing="0">

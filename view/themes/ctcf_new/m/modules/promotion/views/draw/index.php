@@ -8,7 +8,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
 $calloutUser = Yii::$app->session->get('calloutUser');
 $this->share = new Share([
     'title' => '新人免费抽奖，苹果手机、苹果手表不限量！',
-    'description' => '庆祝温都金服交易额突破20亿，海量好礼等你来！',
+    'description' => '庆祝楚天财富交易额突破20亿，海量好礼等你来！',
     'imgUrl' => 'https://static.wenjf.com/upload/link/link1496370729342200.png',
     'url' => null === $user || ($user && $calloutUser && $user->id !== $calloutUser) || ($callout && $callout->responderCount >= 3) ? $currentUrl : $hostInfo.'/promotion/draw/share?ucode='.$user->usercode,
 ]);
@@ -91,7 +91,7 @@ $this->headerNavOn = true;
             <li>活动结束后3个工作日内，工作人员将与您联系确认实物奖品领取相关事宜，请保持通讯畅通；</li>
             <li>活动时间2017年6月3日-6月9日。</li>
         </ol>
-        <p class="remind" style="margin-top: 1rem;">本次活动最终解释权归温都金服所有</p>
+        <p class="remind" style="margin-top: 1rem;">本次活动最终解释权归楚天财富所有</p>
         <p class="remind">所有活动及奖品与苹果公司无关</p>
     </div>
 
@@ -215,7 +215,7 @@ $this->headerNavOn = true;
             $('.wap-share-btn').on('click', function (e) {
                 e.preventDefault;
 
-                notice('浏览器用户请关注温都金服微信公众号“wendujinfu”，在“新手活动”-“拼手气”中参与本次活动。');
+                notice('浏览器用户请关注楚天财富微信公众号“wendujinfu”，在“新手活动”-“拼手气”中参与本次活动。');
             });
         }
     });

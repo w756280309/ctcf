@@ -95,9 +95,9 @@ $this->title = '优惠券';
                                                                 <span class="unable" style="line-height: 1.3rem;">
                                                                     <?php
                                                                     if ($val['loanCategories'] == 1) {
-                                                                        echo '温盈金产品可用';
+                                                                        echo '楚盈金产品可用';
                                                                     } else if ($val['loanCategories'] == 2) {
-                                                                        echo '温盈恒产品可用';
+                                                                        echo '楚盈恒产品可用';
                                                                     } else {
                                                                         echo '正式标产品可用';
                                                                     }
@@ -175,9 +175,9 @@ $this->title = '优惠券';
                                                     <span class="unable">
                                                     <?php
                                                     if ($val['loanCategories'] == 1) {
-                                                        echo '温盈金产品可用';
+                                                        echo '楚盈金产品可用';
                                                     } else if ($val['loanCategories'] == 2) {
-                                                        echo '温盈恒产品可用';
+                                                        echo '楚盈恒产品可用';
                                                     } else if ($val['loanCategories'] == 3) {
                                                         echo '仅用于新手标产品';
                                                     } else {

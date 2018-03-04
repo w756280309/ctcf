@@ -91,7 +91,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
         <ul>
             <li>邀请人可以获得被邀请人前三笔投资<span>0.1%</span>的返现奖励哦！</li>
             <li>比如：被邀请人前三笔累积投资<span>50万元</span>，邀请人可以获得<span>500元</span>现金奖励！</li>
-            <li class="tips">温馨提示：邀请好友前必须在温都金服平台投资过，才能获得奖励哦！</li>
+            <li class="tips">温馨提示：邀请好友前必须在楚天财富平台投资过，才能获得奖励哦！</li>
         </ul>
 
         <?php if (1 === $promoStatus) : ?>
@@ -104,7 +104,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
             <?php endif; ?>
         <?php endif; ?>
 
-        <p>本次活动最终解释权归温都金服所有</p>
+        <p>本次活动最终解释权归楚天财富所有</p>
         <p>所有活动及奖品与苹果公司无关</p>
     </div>
 </div>

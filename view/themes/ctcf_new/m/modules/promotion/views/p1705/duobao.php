@@ -82,7 +82,7 @@ $isLogin = !\Yii::$app->user->isGuest;
         </div>
     <?php } ?>
 
-    <p class="text-align-ct tips">本次活动最终解释权归温都金服所有<br>
+    <p class="text-align-ct tips">本次活动最终解释权归楚天财富所有<br>
         理财非存款 产品有风险 投资须谨慎
     </p>
 </div>

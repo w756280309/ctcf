@@ -39,7 +39,7 @@ $this->title = '积分限时秒杀';
             <li>4. 活动结束后，所有折扣商品全部恢复原积分。</li>
         </ul>
     </div>
-    <p class="copy-right">本次活动最终解释权归温都金服所有</p>
+    <p class="copy-right">本次活动最终解释权归楚天财富所有</p>
     <!--秒杀列表-->
     <div class="prizes-box" :class="[ !!isActive ? 'showed' : '' ]">
         <div class="outer-box">

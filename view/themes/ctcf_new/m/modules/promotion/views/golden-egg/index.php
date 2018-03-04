@@ -4,8 +4,8 @@ use common\models\adv\Share;
 
 $this->title = '30亿狂欢盛宴';
 $this->share = new Share([
-    'title' => '温都金服交易额突破30亿，全民砸金蛋，100%中奖！快来加入狂欢盛宴吧！',
-    'description' => '温都金服，温州报业旗下理财平台，累计交易额突破30亿！',
+    'title' => '楚天财富交易额突破30亿，全民砸金蛋，100%中奖！快来加入狂欢盛宴吧！',
+    'description' => '楚天财富，湖北日报新媒体集团旗下理财平台，累计交易额突破30亿！',
     'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170830/images/wx_share.jpg',
     'url' => Yii::$app->params['clientOption']['host']['wap'].'promotion/golden-egg/',
 ]);
@@ -70,7 +70,7 @@ $this->share = new Share([
                 <li>活动时间2017年9月4日-9月8日；</li>
                 <li>活动期间完成1次任意投资，获得免费砸金蛋的机会 （最多1次），活动结束后失效；</li>
                 <li>
-                    <div>活动期间投资温都金服平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；</div>
+                    <div>活动期间投资楚天财富平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；</div>
                     <table>
                         <tr>
                             <td>累计年化投资金额</td>
@@ -104,7 +104,7 @@ $this->share = new Share([
             </ol>
             <div class="tips">
                 <p>注：年化投资金额=投资金额*项目期限/365</p>
-                <p>本活动最终解释权归温都金服所有</p>
+                <p>本活动最终解释权归楚天财富所有</p>
             </div>
         </div>
     </div>

@@ -16,9 +16,9 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1607/js/smash-golden-eggs.js', ['
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>幸运砸金蛋 - 温都金服</title>
-    <meta name="keywords" content="温都金服,砸金蛋,幸运砸金蛋,PC上线助销">
-    <meta name="description" content="温都金服砸金蛋活动，各种豪礼送不停">
+    <title>幸运砸金蛋 - 楚天财富</title>
+    <meta name="keywords" content="楚天财富,砸金蛋,幸运砸金蛋,PC上线助销">
+    <meta name="description" content="楚天财富砸金蛋活动，各种豪礼送不停">
     <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;"/>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
@@ -160,7 +160,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1607/js/smash-golden-eggs.js', ['
                     <li>代金券奖励当天到账，京东卡奖励客服会在7个工作日内与您联系并发放；</li>
                     <li>抽奖时间截至7月22日，过期未使用的砸蛋机会失效。</li>
                 </ul>
-                <div class="ruler-bottom">注：本活动最终解释权归温都金服所有。</div>
+                <div class="ruler-bottom">注：本活动最终解释权归楚天财富所有。</div>
             </div>
         </div>
     </div>

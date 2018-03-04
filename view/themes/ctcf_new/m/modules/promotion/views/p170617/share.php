@@ -7,7 +7,7 @@ $this->title = '新手抽奖送礼';
 $this->headerNavOn = true;
 $this->share = new Share([
     'title' => '您的好友邀请您为Ta助力，点击一键帮助',
-    'description' => '庆祝温都金服交易额突破20亿，新人免费抽豪礼！',
+    'description' => '庆祝楚天财富交易额突破20亿，新人免费抽豪礼！',
     'imgUrl' => 'https://static.wenjf.com/upload/link/link1496370756253332.png',
     'url' => Yii::$app->request->absoluteUrl,
 ]);
@@ -23,7 +23,7 @@ $this->share = new Share([
 <div class="flex-content">
     <div class="shareBanner">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/share_banner_two.png" alt="">
-        <div class="skewTitle">您的好友<?= StringUtils::obfsMobileNumber($user->getMobile()) ?>正在温都金服抽奖,<br>邀请您接力</div>
+        <div class="skewTitle">您的好友<?= StringUtils::obfsMobileNumber($user->getMobile()) ?>正在楚天财富抽奖,<br>邀请您接力</div>
     </div>
     <div class="content">
         <div class="showTitle">奖品展示</div>
@@ -40,9 +40,9 @@ $this->share = new Share([
         </div>
         <div class="intro">
             <p class="introTitle">
-                关于温都金服
+                关于楚天财富
             </p>
-            <p class="introDetail">温州报业旗下专业理财平台,国资背景、 收益稳健，首投还送50元超市卡。</p>
+            <p class="introDetail">湖北日报新媒体集团旗下专业理财平台,国资背景、 收益稳健，首投还送50元超市卡。</p>
             <div class="clearfix">
                 <dl class="lf">
                     <dt><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/intro_01.png" alt=""></dt>
@@ -64,7 +64,7 @@ $this->share = new Share([
                     <div class="platformListFirst">
                         <img alt="" src="https://static.wenjf.com/v2/wap/index/images/platform_01.png" style="display: inline;">
                         <div class="f15">国资背景</div>
-                        <div class="f14">温州报业传媒旗下</div>
+                        <div class="f14">湖北日报新媒体集团旗下</div>
                     </div>
                 </li>
                 <li class="lf platformList">

@@ -162,7 +162,7 @@ $this->title = '门票好礼三重奏';
             </div>
         <?php } ?>
     </div>
-    <p class="last-p-tips">本活动最终解释权归温都金服所有</p>
+    <p class="last-p-tips">本活动最终解释权归楚天财富所有</p>
 </div>
 <script id="table-template" type="text/x-handlebars-template">
     {{#each this}}

@@ -14,7 +14,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/olywx.js');//加载来源
 <head>
     <meta charset="UTF-8">
     <title>新手迎奥运，投资赢大奖</title>
-    <meta name="keywords" content="温都金服,理财,P2P,奥运,奥运活动,投资奖励">
+    <meta name="keywords" content="楚天财富,理财,P2P,奥运,奥运活动,投资奖励">
     <meta name="description" content="新手迎奥运，投资赢大奖">
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <?= Html::csrfMetaTags() ?>
@@ -123,7 +123,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/olywx.js');//加载来源
                         <span>
                             <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/olympic/icon.png" alt="">
                         </span>
-                        <p>活动期间，未投资过温都金服的用户可选择自己喜爱的运动项目进行助力，单笔成功投资1万元即可获得相应的实物奖励；</p>
+                        <p>活动期间，未投资过楚天财富的用户可选择自己喜爱的运动项目进行助力，单笔成功投资1万元即可获得相应的实物奖励；</p>
                     </li>
                     <li class="clearfix">
                         <span>
@@ -135,7 +135,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1608/js/olywx.js');//加载来源
                         <span>
                             <img src="<?= ASSETS_BASE_URI ?>promo/1608/images/olympic/icon.png" alt="">
                         </span>
-                        <p>在法律允许范围内，本活动最终解释权归温都金服所有；</p>
+                        <p>在法律允许范围内，本活动最终解释权归楚天财富所有；</p>
                     </li>
                     <li class="clearfix">
                         <span>

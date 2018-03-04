@@ -47,5 +47,5 @@ $this->hideHeaderNav = false;
     <div class="picture"><img src="<?= FE_BASE_URI ?>wap/download-page/images/banner_02.png" alt=""></div>
     <div class="picture"><img src="<?= FE_BASE_URI ?>wap/download-page/images/banner_03.png" alt=""></div>
     <a class="link" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf"><img src="<?= FE_BASE_URI ?>wap/download-page/images/btn.png" alt=""></a>
-    <p class="tips">积分商城暂时无法在微信端正常访问，<br>我们建议您下载温都金服APP，以便正常使用。</p>
+    <p class="tips">积分商城暂时无法在微信端正常访问，<br>我们建议您下载楚天财富APP，以便正常使用。</p>
 </div>

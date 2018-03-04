@@ -142,7 +142,7 @@ use common\utils\StringUtils;
                 <li><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/phase_02.png" alt=""></li>
                 <li><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/phase_03.png" alt=""></li>
             </ul>
-            <p class="warn">*如果中奖号码超过奖品名额，最早投资温都金服的用户中奖，活动期间内每人仅限一次获奖机会。</p>
+            <p class="warn">*如果中奖号码超过奖品名额，最早投资楚天财富的用户中奖，活动期间内每人仅限一次获奖机会。</p>
         </div>
 
         <?php if (!empty($boardList)) { ?>
@@ -170,13 +170,13 @@ use common\utils\StringUtils;
     <div class="accept">
         <div class="title">领奖规则</div>
         <ul>
-            <li>1.幸运大奖获奖的用户名单活动结束后次日10点公布在温都金服官网上，温都金服客服人员将会在3个工作日内电话联系用户确认礼品以及领取地点；</li>
-            <li>2.活动期间获奖人员须本人持身份证来温都金服领取；</li>
+            <li>1.幸运大奖获奖的用户名单活动结束后次日10点公布在楚天财富官网上，楚天财富客服人员将会在3个工作日内电话联系用户确认礼品以及领取地点；</li>
+            <li>2.活动期间获奖人员须本人持身份证来楚天财富领取；</li>
             <li>3.活动结束后一周内未领取礼品的视为自动放弃；</li>
-            <li>4.领取地点：温州市鹿城区飞霞南路657号（老党校对面）；</li>
+            <li>4.领取地点：武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层；</li>
             <li>5.未投资过的用户抽中现金红包后，需要首次投资后发放到账户中心，红包有效期20天；</li>
             <li>6.详情可咨询客服热线：<a href="tel:400-101-5151">400-101-5151</a>；</li>
-            <li>7.本活动最终解释权在法律范围内归温都金服（温州温都金融信息服务股份有限公司）所有。</li>
+            <li>7.本活动最终解释权在法律范围内归楚天财富（楚天财富（武汉）金融服务有限公司）所有。</li>
         </ul>
     </div>
     <a class="goindex" href="/<?= !defined('IN_APP') ? '?v='.time() : '' ?>"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goindex.png" alt=""></a>

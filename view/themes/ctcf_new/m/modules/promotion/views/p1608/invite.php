@@ -19,7 +19,7 @@ if (!\Yii::$app->user->isGuest) {
 <head>
     <meta charset="UTF-8">
     <title>邀请好友来挣钱，大把红包轻松拿</title>
-    <meta name="keywords" content="温都金服,邀请好友,邀请,邀请奖励,代金券,现金红包">
+    <meta name="keywords" content="楚天财富,邀请好友,邀请,邀请奖励,代金券,现金红包">
     <meta name="description" content="邀请好友来挣钱，大把红包轻松拿">
     <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;"/>
     <?= Html::csrfMetaTags() ?>
@@ -131,7 +131,7 @@ if (!\Yii::$app->user->isGuest) {
                 <div class="rule-box">
                     <div class="title"><b>活动规则:</b></div>
                     <ul>
-                        <li>登录温都金服网站，进入“我的账户”；</li>
+                        <li>登录楚天财富网站，进入“我的账户”；</li>
                         <li>点击“邀请好友”可以看到邀请好友活动，通过微信或者链接进行邀请；</li>
                         <li>当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励；</li>
                         <li>邀请人在邀请好友之前必须在平台投资过，有投资记录才能参与现金返现活动，发放奖励现金时，以"角"为单位取整，采用四舍五入；</li>

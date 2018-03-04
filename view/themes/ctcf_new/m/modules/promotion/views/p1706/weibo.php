@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '温都金服福利';
+$this->title = '楚天财富福利';
 $this->share = $share;
 
 ?>
@@ -12,9 +12,9 @@ $this->share = $share;
     <img src="<?= FE_BASE_URI ?>wap/campaigns/marketing-weibo/images/bg_banner.jpg" alt="" class="top-banner">
     <!-- 二维码图片修改位置,名字的数字递增即可 -->
     <img src="<?= FE_BASE_URI ?>wap/campaigns/marketing-weibo/images/code/3.png" alt="" class="pic-group">
-    <p class="remind" style="margin-top: 1em;">*本福利由温都金服提供</p>
-    <p class="remind">温都金服，市民身边的财富管家。</p>
-    <p class="remind">由温州报业传媒集团成立的互联网金融平台，提供安</p>
+    <p class="remind" style="margin-top: 1em;">*本福利由楚天财富提供</p>
+    <p class="remind">楚天财富，市民身边的财富管家。</p>
+    <p class="remind">由湖北日报新媒体集团成立的互联网金融平台，提供安</p>
     <p class="remind">全、便捷、可靠的网上理财服务</p>
 
     <div class="rule-box">

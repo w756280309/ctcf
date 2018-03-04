@@ -2,11 +2,11 @@
 
 use common\models\adv\Share;
 
-$this->title = '2017温都金服年报';
+$this->title = '2017楚天财富年报';
 $hostInfo = Yii::$app->params['clientOption']['host']['wap'];
 $this->share = new Share([
     'title' => '这是我的2017年报，快来看看吧！',
-    'description' => '温都金服，市民身边的财富管家',
+    'description' => '楚天财富，市民身边的财富管家',
     'imgUrl' => 'https://static.wenjf.com/upload/link/link1515029207433498.png',
     'url' => $hostInfo.'/promotion/p2017/s1?sc='.$userCode,
 ]);
@@ -45,11 +45,11 @@ $this->share = new Share([
                         </dt>
                         <dd class="lf">
                             <img class="intro_01 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="1s" swiper-animate-delay="0s" src="<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/intro_01.png" alt="">
-                            <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.4s" ><?= $platOnlineDateOut ?>温都平台正式上线</p>
+                            <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.4s" ><?= $platOnlineDateOut ?>楚天平台正式上线</p>
                             <p class="p2 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.4s" >我们在第<?= $platToRegisterDays ?>天相遇了</p>
                             <p class="p3 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="1s" swiper-animate-delay="0.6s"><?= $registerDateOut ?></p>
-                            <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="1s" swiper-animate-delay="0.6s">我来到了温都金服大家庭</p>
-                            <p class="p5 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="1s" swiper-animate-delay="1s">未来，温都金服将继续与您携手同行</p>
+                            <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="1s" swiper-animate-delay="0.6s">我来到了楚天财富大家庭</p>
+                            <p class="p5 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="1s" swiper-animate-delay="1s">未来，楚天财富将继续与您携手同行</p>
                         </dd>
                     </dl>
                 </div>
@@ -72,10 +72,10 @@ $this->share = new Share([
                             <span class="line h40"></span>
                         </dt>
                         <dd class="lf">
-                            <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s">温都金服平台自上线以来</p>
+                            <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s">楚天财富平台自上线以来</p>
                             <p class="p2 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s">已安全运营<?= $platSafeDays ?>天</p>
                             <p class="p3 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s">兑付率100%</p>
-                            <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.4s">未来，温都金服将继续与您携手同行</p>
+                            <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.4s">未来，楚天财富将继续与您携手同行</p>
                         </dd>
                     </dl>
                 </div>
@@ -107,11 +107,11 @@ $this->share = new Share([
                                 <p class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.2s">我开始了第一次理财</p>
                                 <img class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s" src="<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/intro_03.png" alt="">
                             </div>
-                            <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.4s">温都金服平台交易额一直稳步攀升</p>
+                            <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.4s">楚天财富平台交易额一直稳步攀升</p>
                             <p class="p2 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.4s">截至目前：</p>
                             <p class="p3 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.6s">已累计兑付<?= $platRefundAmount ?>亿元</p>
                             <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.6s">为用户赚取收益<?= $platRefundInterest ?>亿元人民币</p>
-                            <p class="p5 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1s">未来，温都金服将继续与您携手同行</p>
+                            <p class="p5 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1s">未来，楚天财富将继续与您携手同行</p>
                         </dd>
                     </dl>
                 </div>
@@ -186,7 +186,7 @@ $this->share = new Share([
                             <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s">周年庆活动获得了广大客户的信赖</p>
                             <p class="p2 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s">与支持</p>
                             <p class="p3 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.2s">单日交易额突破6924万元</p>
-                            <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.6s">未来，温都金服将继续与您携手同行</p>
+                            <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.6s">未来，楚天财富将继续与您携手同行</p>
                         </dd>
                     </dl>
                 </div>
@@ -208,9 +208,9 @@ $this->share = new Share([
                             <span class="line h380"></span>
                         </dt>
                         <dd class="lf">
-                            <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s">自2017年5月温都金服成立“520慈善基金”以来，我已经累计捐献了<span><?= $charityAmount ?></span>元</p>
+                            <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s">自2017年5月楚天财富成立“520慈善基金”以来，我已经累计捐献了<span><?= $charityAmount ?></span>元</p>
                             <img class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="1s" swiper-animate-delay="0s" src="<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/intro_08.png" alt="">
-                            <p class="p2 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.6s">2017.5.20，温都金服520慈善基金正式启动。从当天起，温都金服平台上销售的每一笔“慈善专属产品”，都将按照一定比例捐赠给温州市慈善总会温州都市报分会。</p>
+                            <p class="p2 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.6s">2017.5.20，楚天财富520慈善基金正式启动。从当天起，楚天财富平台上销售的每一笔“慈善专属产品”，都将按照一定比例捐赠给武汉市慈善总会湖北日报分会。</p>
                         </dd>
                     </dl>
                 </div>
@@ -240,7 +240,7 @@ $this->share = new Share([
                             <p class="p2 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.6s">2017年5月，周年庆单日交易额突破6924万元</p>
                             <p class="p3 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1s">2017年11月，首批接入国家级合同保全的金融平台</p>
                             <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1.4s">我们将继续努力奉行“稳健 专业 贴心”的价值观与“安全理财，幸福千万家”的使命</p>
-                            <p class="p5 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1.8s">未来，温都金服将继续与您携手同行</p>
+                            <p class="p5 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1.8s">未来，楚天财富将继续与您携手同行</p>
                         </dd>
                     </dl>
                 </div>
@@ -257,7 +257,7 @@ $this->share = new Share([
                     <div class="extol">
                         <p>让我们携手同行</p>
                         <p>谱写安全合规新篇章</p>
-                        <p>温都金服，有你更温暖</p>
+                        <p>楚天财富，有你更温暖</p>
                     </div>
                     <div class="share-page share">分享给好友</div>
                 </div>

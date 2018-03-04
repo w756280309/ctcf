@@ -13,7 +13,7 @@ $this->share = $share;
     <?php if (!defined('IN_APP')) { ?>
         <div class="header">
             <ul class="clearfix">
-                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">温都金服国资平台</li>
+                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">楚天财富国资平台</li>
                 <li class="rg f13"><a class="" href="/">返回首页</a></li>
             </ul>
         </div>
@@ -36,13 +36,13 @@ $this->share = $share;
     <div class="rule">
         <ol>
             <li class="f14">此活动为限时活动，仅限2017年4月7日至4月9日三天，以认购成功时间为准；</li>
-            <li class="f14">本次活动面向所有温都金服注册用户；</li>
+            <li class="f14">本次活动面向所有楚天财富注册用户；</li>
             <li class="f14">活动期间每投资两万元(不含转让产品)，送积分400分，可兑换积分商城“卫生日专区”对应礼品：蓝月亮洗衣液1kg、妈妈壹选洗手液250ml等；</li>
             <li class="f14">本次活动每位用户最多可以获得2000积分，积分将于投资成功后的三个工作日内发放；</li>
-            <li class="f14">实物礼品仅支持线下领取，领取地址：温州市鹿城区飞霞南路657号保丰大楼4层。</li>
+            <li class="f14">实物礼品仅支持线下领取，领取地址：武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层。</li>
         </ol>
         <a class="a-invest f18" href="/deal/deal/index">去理财</a>
-        <p class="f11 ownership">*本次活动最终解释权归温都金服所有</p>
+        <p class="f11 ownership">*本次活动最终解释权归楚天财富所有</p>
         <div class="bottom-img"></div>
     </div>
 </div>

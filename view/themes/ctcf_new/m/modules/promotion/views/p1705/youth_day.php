@@ -23,7 +23,7 @@ $this->headerNavOn = true;
         <div class="rules-box">
             <ol class="rules-content">
                 <li>活动时间：2017年5月4日-2017年5月7日；</li>
-                <li>本次活动面向所有温都金服注册用户；</li>
+                <li>本次活动面向所有楚天财富注册用户；</li>
                 <li>活动期间累计年化投资（不含转让产品）达到指定额度，即可获得相应礼品；</li>
             </ol>
             <ul class="prize-content">
@@ -61,7 +61,7 @@ $this->headerNavOn = true;
     <div class="part-four">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/Youth-day/images/pic_renwu.png" alt="">
         <a href="/deal/deal/index" class="button-invest">去理财</a>
-        <p class="attention">本次活动最终解释权归温都金服所有</p>
+        <p class="attention">本次活动最终解释权归楚天财富所有</p>
         <p class="attention">理财非存款 产品有风险 投资须谨慎</p>
     </div>
 </div>

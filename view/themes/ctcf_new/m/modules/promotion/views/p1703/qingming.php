@@ -13,7 +13,7 @@ $this->share = $share;
     <?php if (!defined('IN_APP')) { ?>
         <div class="header">
             <ul class="clearfix">
-                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">温都金服国资平台</li>
+                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">楚天财富国资平台</li>
                 <li class="rg f13"><a href="/">返回首页</a></li>
             </ul>
         </div>
@@ -32,8 +32,8 @@ $this->share = $share;
         <img src="<?= FE_BASE_URI ?>wap/campaigns/Qingming-Festival/img/regular.png" alt="">
         <ol class="f14">
             <li class="com">此活动为限时活动，仅限2017年3月30日至4月1日三天，以认购成功时间为准；</li>
-            <li class="com">本次活动面向所有温都金服注册用户；</li>
-            <li class="com">活动期间投资温都金服平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；</li>
+            <li class="com">本次活动面向所有楚天财富注册用户；</li>
+            <li class="com">活动期间投资楚天财富平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；</li>
             <div class="giftsList special">
                 <p class="f12">各款理财产品累计年化金额及对应礼品如下：</p>
                 <table class="tablebox" cellpadding="0" cellspacing="0">
@@ -67,7 +67,7 @@ $this->share = $share;
             </div>
             <li class="com">活动结束后3个工作日内，工作人员将与您联系确认领取奖品事宜，请保持通讯畅通。</li>
             <li class="goInvest special f18"><a href="/deal/deal/index">去理财</a></li>
-            <li class="declear special">*本次活动最终解释权归温都金服所有</li>
+            <li class="declear special">*本次活动最终解释权归楚天财富所有</li>
         </ol>
     </div>
 </div>

@@ -282,9 +282,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
                             if (data.CouponList[i].loanCategories == 3) {
                                 limitTxt = "仅用于新手标产品";
                             } else if (data.CouponList[i].loanCategories == 2) {
-                                limitTxt = " 温盈恒产品可用";
+                                limitTxt = " 楚盈恒产品可用";
                             } else if (data.CouponList[i].loanCategories == 1) {
-                                limitTxt = "温盈金产品可用";
+                                limitTxt = "楚盈金产品可用";
                             } else {
                                 limitTxt = "正式标产品可用";
                             }

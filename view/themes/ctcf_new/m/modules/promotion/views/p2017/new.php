@@ -2,11 +2,11 @@
 
 use common\models\adv\Share;
 
-$this->title = '2017温都金服年报';
+$this->title = '2017楚天财富年报';
 $hostInfo = Yii::$app->params['clientOption']['host']['wap'];
 $this->share = new Share([
     'title' => '这是我的2017年报，快来看看吧！',
-    'description' => '温都金服，市民身边的财富管家',
+    'description' => '楚天财富，市民身边的财富管家',
     'imgUrl' => 'https://static.wenjf.com/upload/link/link1515029207433498.png',
     'url' => $hostInfo.'/promotion/p2017/s2',
 ]);
@@ -18,11 +18,11 @@ $this->share = new Share([
 <div class="flex-content new-share" id="app">
     <div class="new-share-nav">
         <div class="new-nav-contain">
-            <p>至今，温都金服已安全运营<span><?= $platSafeDays ?></span>天</p>
+            <p>至今，楚天财富已安全运营<span><?= $platSafeDays ?></span>天</p>
             <p>已累计兑付<span><?= $platRefundAmount ?></span>亿元</p>
             <p>兑付率达<span>100%</span></p>
             <p>为客户赚取<span><?= $platRefundInterest ?></span>亿元</p>
-            <p>未来，温都金服将继续与您携手同行</p>
+            <p>未来，楚天财富将继续与您携手同行</p>
         </div>
         <a @click="weixinShare" class="new-nav-button share">分享给好友</a>
     </div>

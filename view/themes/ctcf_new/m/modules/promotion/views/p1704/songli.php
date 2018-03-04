@@ -18,8 +18,8 @@ $this->headerNavOn = true;
     <div class="rule">
         <ul>
             <li>1、活动时间2017年4月26日-4月28日，以认购成功时间为准；</li>
-            <li>2、本次活动面向所有温都金服注册用户；</li>
-            <li>3、活动期间投资温都金服平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）。</li>
+            <li>2、本次活动面向所有楚天财富注册用户；</li>
+            <li>3、活动期间投资楚天财富平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）。</li>
         </ul>
     </div>
     <div class="gifts-box">
@@ -55,6 +55,6 @@ $this->headerNavOn = true;
     </div>
 
     <a class="invest" href="/deal/deal/index"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170424/img/btn.png" alt=""></a>
-    <p class="tips">本次活动最终解释权归温都金服所有  &nbsp;&nbsp;&nbsp;理财非存款 产品有风险 投资须谨慎
+    <p class="tips">本次活动最终解释权归楚天财富所有  &nbsp;&nbsp;&nbsp;理财非存款 产品有风险 投资须谨慎
     </p>
 </div>

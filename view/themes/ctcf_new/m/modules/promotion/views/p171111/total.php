@@ -30,7 +30,7 @@ $this->title = '11月理财节';
         <a data-num="2" class="third a-link" :class="[promoStatus[2]] == 0 ? '': 'no-active-link'"></a>
         <img class="hander hander-move" :class="[promoStatus[2]] == 0 ? 'show': ''" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/hander-icon.png" alt="手指">
         <span v-cloak class="no-active-status" :class="[promoStatus[2]] == 0 ? 'active-ing': ''">{{indexActive[2]}}<i class="icon" :class="[promoStatus[2]] == 0 ? 'active-icon': '' "></i></span>
-        <p class="bottom-txt">本活动最终解释权归温都金服所有</p>
+        <p class="bottom-txt">本活动最终解释权归楚天财富所有</p>
     </div>
 
     <!--  喜卡是什么 -->

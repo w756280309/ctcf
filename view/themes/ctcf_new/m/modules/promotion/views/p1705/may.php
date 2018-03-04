@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '温都金服一周年瓜分百万礼品';
+$this->title = '楚天财富一周年瓜分百万礼品';
 $this->share = $share;
 $this->headerNavOn = true;
 

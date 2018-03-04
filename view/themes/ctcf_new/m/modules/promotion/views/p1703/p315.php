@@ -12,7 +12,7 @@ $this->title = '3.15限时专享活动';
     <?php if (!defined('IN_APP')) { ?>
         <div class="header">
             <ul class="clearfix">
-                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">温都金服国资平台</li>
+                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">楚天财富国资平台</li>
                 <li class="rg f13"><a class="" href="/">返回首页</a></li>
             </ul>
         </div>
@@ -30,8 +30,8 @@ $this->title = '3.15限时专享活动';
         <h4 class="f15">活动规则</h4>
         <ol>
             <li class="f14">活动时间：2017年3月15日—3月16日；</li>
-            <li class="f14">本次活动面向所有温都金服用户；</li>
-            <li class="f14">活动期间投资温都金服平台理财产品累计金额达到指定额度，即可获得相应礼品(不含转让产品)；</li>
+            <li class="f14">本次活动面向所有楚天财富用户；</li>
+            <li class="f14">活动期间投资楚天财富平台理财产品累计金额达到指定额度，即可获得相应礼品(不含转让产品)；</li>
             <table class="tab" cellpadding="0" width="100%" cellspacing="0">
                 <tbody>
                 <tr class="f12 tit">
@@ -55,6 +55,6 @@ $this->title = '3.15限时专享活动';
             <li class="f14">活动结束后3个工作日内，工作人员会与您联系确认领取奖品事宜，请保持通讯畅通。</li>
         </ol>
         <a class="a-invest f18" href="/deal/deal/index">去理财</a>
-        <p class="f11 ownership">*本次活动最终解释权归温都金服所有</p>
+        <p class="f11 ownership">*本次活动最终解释权归楚天财富所有</p>
     </div>
 </div>

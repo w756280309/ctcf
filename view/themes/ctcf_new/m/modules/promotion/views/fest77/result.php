@@ -4,7 +4,7 @@ use common\models\adv\Share;
 $this->title = Yii::$app->session->get('resourceOwnerNickName').'的月老签';
 $this->share = new Share([
     'title' => '我抽取了一根月老签，你也来和我一起测缘分，好不好？',
-    'description' => '在温都金服月老祠，抽中专属于你的那枚签',
+    'description' => '在楚天财富月老祠，抽中专属于你的那枚签',
     'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170821/images/wx_share.jpg',
     'url' => Yii::$app->request->hostInfo.'/promotion/fest77/',
 ]);

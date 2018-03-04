@@ -43,7 +43,7 @@ $pageTitle = isset($ctitle) ? $ctitle : Html::encode($this->title);
         <?php } ?>
         <meta name="renderer" content="webkit">
         <meta name="format-detection" content="telephone=no"/>
-        <title><?= '' !== $pageTitle ? $pageTitle : '温都金服活动' ?></title>
+        <title><?= '' !== $pageTitle ? $pageTitle : '楚天财富活动' ?></title>
         <?= Html::csrfMetaTags() ?>
         <?php $this->head(); ?>
         <script type="text/javascript">
@@ -63,7 +63,7 @@ $pageTitle = isset($ctitle) ? $ctitle : Html::encode($this->title);
             <?php if ($showHeaderNav) { ?>
                 <div class="header">
                     <ul class="clearfix">
-                        <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">温都金服 · 国资平台</li>
+                        <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">楚天财富 · 国资平台</li>
                         <li class="rg f13"><a class="" href="/?_mark=<?= time() ?>">返回首页</a></li>
                     </ul>
                 </div>

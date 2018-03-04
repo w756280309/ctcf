@@ -3,7 +3,7 @@ use common\models\adv\Share;
 $this->title = '七夕闯关大作战';
 $this->share = new Share([
     'title' => '我在这里玩答题闯关获得了大红包！快来一起玩吧！',
-    'description' => '温都金服七夕献礼，海量红包、礼品送不停！',
+    'description' => '楚天财富七夕献礼，海量红包、礼品送不停！',
     'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170823/images/wx_share.png',
     'url' => Yii::$app->request->hostInfo.'/promotion/fest-77-in/index',
 ]);
@@ -45,8 +45,8 @@ $this->share = new Share([
         <img class="close-btn" src="<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/close.png" alt="">
         <ol>
             <li>活动时间2017年8月28日-8月31日，以认购成功时间为准；</li>
-            <li>本次活动面向所有温都金服注册用户；</li>
-            <li>活动期间投资温都金服平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；
+            <li>本次活动面向所有楚天财富注册用户；</li>
+            <li>活动期间投资楚天财富平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；
                 <div class="reward-list">
                     <p class="leiji">累计年化金额（元）</p>
                     <p class="lipin">礼品</p>
@@ -78,7 +78,7 @@ $this->share = new Share([
             <li>本次活动礼品将在活动结束后7个工作日内以积分形式发放，用户可以进入积分商城进行兑换。</li>
         </ol>
         <p class="regular-tips">注：年化投资金额=投资金额*项目期限/365</p>
-        <p class="regular-tips">本次活动最终解释权归温都金服所有</p>
+        <p class="regular-tips">本次活动最终解释权归楚天财富所有</p>
     </div>
 </div>
 <script>

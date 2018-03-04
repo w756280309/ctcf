@@ -30,14 +30,14 @@ $this->title = '11月理财节';
                 </div>
                 <div class="select-item input-box clearfix">
                     <label for="">预约标</label>
-                    <span class="item-txt" @click="selectInput" v-cloak v-if="appointmentId == true">温盈恒<i class="bracket">(180天以上）</i></span>
-                    <span class="item-txt" @click="selectInput"  v-cloak v-if="appointmentId == false">温盈金(180天及以下)</span>
+                    <span class="item-txt" @click="selectInput" v-cloak v-if="appointmentId == true">楚盈恒<i class="bracket">(180天以上）</i></span>
+                    <span class="item-txt" @click="selectInput"  v-cloak v-if="appointmentId == false">楚盈金(180天及以下)</span>
                     <img class="down-icon" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/down-icon.png" alt="下拉箭头">
-                    <div class="down-pop" @click="selectBox" v-cloak v-if="appointmentId == false">温盈恒(180天以上)</div>
-                    <div class="down-pop" @click="selectBox" v-cloak v-if="appointmentId == true">温盈金(180天及以下)</div>
+                    <div class="down-pop" @click="selectBox" v-cloak v-if="appointmentId == false">楚盈恒(180天以上)</div>
+                    <div class="down-pop" @click="selectBox" v-cloak v-if="appointmentId == true">楚盈金(180天及以下)</div>
                 </div>
             </div>
-            <p class="down-txt"><span v-cloak v-if="appointmentId == false">选择预约温盈恒系列标，能获得更高价值加息券哦！</span></p>
+            <p class="down-txt"><span v-cloak v-if="appointmentId == false">选择预约楚盈恒系列标，能获得更高价值加息券哦！</span></p>
             <!-- 立即预约 -->
             <a class="btn-order now-order" @click="nowOrder"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/btn-now-order.png" alt="立即预约"></a>
             <p class="tel">电话预约：<?= Yii::$app->params['platform_info.contact_tel'] ?></p>
@@ -51,8 +51,8 @@ $this->title = '11月理财节';
                 </div>
                 <div class="coupon-right rg">
                     <p class="lf-top">加息券-<span>{{rateCoupon.couponLength}}</span>天</p>
-                    <p class="lf-bottom" v-if="rateCoupon.appointmentObjectId == 0">仅限温盈恒<i class="bracket">(180天以上)</i>使用</p>
-                    <p class="lf-bottom" v-else="rateCoupon.appointmentObjectId == 1">仅限温盈金<i class="bracket">(180天及以下)</i>使用</p>
+                    <p class="lf-bottom" v-if="rateCoupon.appointmentObjectId == 0">仅限楚盈恒<i class="bracket">(180天以上)</i>使用</p>
+                    <p class="lf-bottom" v-else="rateCoupon.appointmentObjectId == 1">仅限楚盈金<i class="bracket">(180天及以下)</i>使用</p>
                 </div>
             </div>
             <p class="result-tip">加息券将在11月9日发放到您的账户, 仅限11月9-11日期间使用。</p>
@@ -102,7 +102,7 @@ $this->title = '11月理财节';
             </div>
         </div>
     </div>
-    <p class="last-tips">本活动最终解释权归温都金服所有</p>
+    <p class="last-tips">本活动最终解释权归楚天财富所有</p>
     <div class="prizes-box" :class="[ !!isActive ? 'show' : '' ]">
         <div class="outer-box">
             <img class="pop_close" @click="closePrizeList" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png" alt="">
@@ -142,7 +142,7 @@ $this->title = '11月理财节';
             isVested: '1', //喜卡－投资状态
             appointmentId: true,
             isAppointmented: '0',// 是否预约 1：已预约  0：未预约
-            appointObject: { appointmentObjectId: 0, appointmentObjectName: '温盈恒180天以上'}, // 预约标的
+            appointObject: { appointmentObjectId: 0, appointmentObjectName: '楚盈恒180天以上'}, // 预约标的
             rateCoupon: [{}],
             appointmentTime: '',
             appointmentTimeLast: '1510156800', // 8号24点时间戳
@@ -634,7 +634,7 @@ $this->title = '11月理财节';
                 }, 'close');
             },
             reOrder: function() {
-                this.appointObject =  { appointmentObjectId: 0, appointmentObjectName: '温盈恒180天以上'};
+                this.appointObject =  { appointmentObjectId: 0, appointmentObjectName: '楚盈恒180天以上'};
                 this.orderPop = 0;
                 this.appointmentId = true
             },

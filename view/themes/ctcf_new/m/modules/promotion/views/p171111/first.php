@@ -24,7 +24,7 @@ $this->title = '11月理财节';
                 <a href="/deal/deal/index" class="link">去投资</a>
             </div>
         </div>
-        <p class="last-tips">本活动最终解释权归温都金服所有</p>
+        <p class="last-tips">本活动最终解释权归楚天财富所有</p>
     </div>
 </div>
 <script>

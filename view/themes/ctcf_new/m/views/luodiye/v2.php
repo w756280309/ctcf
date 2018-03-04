@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '温都金服';
+$this->title = '楚天财富';
 
 use yii\web\JqueryAsset;
 $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryAsset::class]);
@@ -59,7 +59,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
         </div>
         <!--介绍-->
         <div class="addwdjf">
-            <p class="des">为什么加入我们-温都金服</p>
+            <p class="des">为什么加入我们-楚天财富</p>
             <div class="first-reason">
                 <p>收益稳健</p>
                 <p>5万元存一年，预期获得收益对比</p>
@@ -74,8 +74,8 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                 </div>
                 <div class="ctn">
                     <dl class="dl-one">
-                        <dt class="dt-com">什么是温都金服？</dt>
-                        <dd>温都金服是隶属温州报业传媒旗下的理财平台。甄选各类权威机构的理财产品。提供银行级理财服务，保障用户资金安全，安享稳定收益。</dd>
+                        <dt class="dt-com">什么是楚天财富？</dt>
+                        <dd>楚天财富是隶属湖北日报新媒体集团旗下的理财平台。甄选各类权威机构的理财产品。提供银行级理财服务，保障用户资金安全，安享稳定收益。</dd>
                     </dl>
                     <dl class="dl-one">
                         <dt class="dt-com m60">股东背景</dt>
@@ -101,7 +101,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                         </li>
                         <li class="rg">
                             <img class="rg" data-original="<?= FE_BASE_URI ?>wap/20170726luodiye/images/address_02.png" alt="">
-                            <p class="rg">一楼服务大厅,与温州都市报共同提供用户服务窗口</p>
+                            <p class="rg">一楼服务大厅,与湖北日报共同提供用户服务窗口</p>
                         </li>
                     </ul>
                 </div>
@@ -119,7 +119,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
         </div>
         <!--底部说明-->
         <div class="bottom-ctn">
-            <p class="tips">*本次活动最终解释权归温都金服所有与苹果公司无关</p>
+            <p class="tips">*本次活动最终解释权归楚天财富所有与苹果公司无关</p>
             <ul class="clearfix">
                 <li class="lf">
                     <p><?= Yii::$app->params['platform_info.contact_tel'] ?></p>

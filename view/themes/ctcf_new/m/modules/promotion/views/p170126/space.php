@@ -23,7 +23,7 @@ $config = json_decode($promo->config, true);
     <?php if (!defined('IN_APP')) { ?>
         <div class="header">
             <ul class="clearfix">
-                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/luodiye/images/logo.png" alt="">温都金服国资平台</li>
+                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/luodiye/images/logo.png" alt="">楚天财富国资平台</li>
                 <li class="rg f13"><a class="" href="/">返回首页</a></li>
             </ul>
         </div>
@@ -63,7 +63,7 @@ $config = json_decode($promo->config, true);
     </div>
 
     <div class="choosereason">
-        <p class="f18 "><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""> 为什么选择国资平台-温都金服 <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""></p>
+        <p class="f18 "><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""> 为什么选择国资平台-楚天财富 <img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_01.png" alt=""></p>
         <span class="reasonone f15">01  收益稳健</span>
         <p class="f13">如果5万元存一年，预期获得收益对比</p>
         <ul>
@@ -84,16 +84,16 @@ $config = json_decode($promo->config, true);
                 <li class="f18 lf">去理财</li>
             </ul>
         </a>
-        <p class="f15 intro"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_02.png" alt=""> 温都金服历史兑付率100%</p>
+        <p class="f15 intro"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_02.png" alt=""> 楚天财富历史兑付率100%</p>
     </div>
 
     <div class="choosereason2">
         <span class="reasonone f15" style="margin-bottom: 0.2666667rem;">02  股东强势 国资背景</span>
         <div class="shareholder">
-            <p class="f15">什么是温都金服？</p>
+            <p class="f15">什么是楚天财富？</p>
             <ul>
                 <li></li>
-                <li class="f15" style="color: #333333;text-align: left;">温都金服是隶属温州报业传媒旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金，安享稳健收益。</li>
+                <li class="f15" style="color: #333333;text-align: left;">楚天财富是隶属湖北日报新媒体集团旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金，安享稳健收益。</li>
             </ul>
         </div>
 
@@ -113,7 +113,7 @@ $config = json_decode($promo->config, true);
                     <div class="platformListFirst">
                         <img data-original="<?= FE_BASE_URI ?>wap/luodiye/images/platform_01.png" alt="">
                         <div class="f15">国资背景</div>
-                        <div class="f14">温州报业传媒旗下</div>
+                        <div class="f14">湖北日报新媒体集团旗下</div>
                     </div>
                 </li>
                 <li class="lf platformList">
@@ -146,7 +146,7 @@ $config = json_decode($promo->config, true);
         <dl class="clearfix">
             <dt class="lf"><img data-original="<?= FE_BASE_URI ?>wap/luodiye/images/leader_01.png" alt=""></dt>
             <dd class="lf" style="margin-top: -0.17rem;font-size: 0.4rem;">
-                温都金服服务中心位于温州市鹿城区飞霞南路保丰大楼一楼温州都市报分类业务处。
+                楚天财富服务中心位于武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层湖北日报分类业务处。
             </dd>
         </dl>
         <dl class="clearfix">
@@ -177,11 +177,11 @@ $config = json_decode($promo->config, true);
             <li class="rg"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/active_04.png" alt="">联合林子贝贝教育中心举办的亲子活动</li>
         </ul>
         <a class="f22" href="#scrolltop">马 上 领 取</a>
-        <p class="f12">*本次活动最终解释权归温都金服所有</p>
+        <p class="f12">*本次活动最终解释权归楚天财富所有</p>
     </div>
 
     <div class="bottomside">
-        <p class="f12 botintro">如有问题请拨打客服电话或关注温都金服公众号</p>
+        <p class="f12 botintro">如有问题请拨打客服电话或关注楚天财富公众号</p>
         <dl>
             <dt style="width: 70%;">
             <div class="clearfix">
@@ -192,7 +192,7 @@ $config = json_decode($promo->config, true);
                 </p>
             </div>
             <div class="f12 netaddress">官网地址：<a href="<?= defined('IN_APP') ? '/' : 'https://www.wenjf.com' ?>">www.wenjf.com</a></div>
-            <div class="f12 address clearfix"><p class="lf">公司地址：</p><p class="specialp lf">温州市鹿城区飞霞南路657号保丰大楼四层</p></div>
+            <div class="f12 address clearfix"><p class="lf">公司地址：</p><p class="specialp lf">武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层</p></div>
             </dt>
             <dd class="erweima f11"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/erweima.png" alt=""><p>微信公众号</p></dd>
         </dl>

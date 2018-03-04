@@ -17,7 +17,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/weixin.js?v=201
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no"/>
-    <title>温都金服 - 仲夏狂欢送现金，最高288元</title>
+    <title>楚天财富 - 仲夏狂欢送现金，最高288元</title>
     <?= Html::csrfMetaTags() ?>
     <?php $this->head() ?>
     <script>
@@ -45,7 +45,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/weixin.js?v=201
             <div class="title_box row">
                 <div class="col-xs-1"></div>
                 <div class="col-xs-10 title_cn">
-                    温都金服正式上线有金喜,理财代金券注册即抽
+                    楚天财富正式上线有金喜,理财代金券注册即抽
                 </div>
                 <div class="col-xs-1"></div>
             </div>
@@ -59,7 +59,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/weixin.js?v=201
                 <div class="col-xs-8 center_box_tip">
                     <?php if (!$endFlag) { ?>
                         <div id="no1" class="hid e">
-                            <p class="tip1">温都金服起航有金喜，看看你能得多少？</p>
+                            <p class="tip1">楚天财富起航有金喜，看看你能得多少？</p>
                             <input type="text" class="input_txt" id="phone" placeholder="请输人手机号" maxlength="11">
                             <input type="button" class="input_btn draw" value="立即抽奖">
                         </div>
@@ -122,7 +122,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/weixin.js?v=201
                     <p class="informations"><span class="five">5</span>代金券等同于现金,与投资本金一并计息，</p>
                     <p class="informations only"><i class="five_only"></i>随项目还款时返还；</p>
                     <p class="informations"><span class="six">6</span>法律许可范围内,本活动最终解释权归</p>
-                    <p class="informations only"><i class="six_only"></i>温都金服所有。</p>
+                    <p class="informations only"><i class="six_only"></i>楚天财富所有。</p>
                 </div>
                 <p class="clear"></p>
             </div>

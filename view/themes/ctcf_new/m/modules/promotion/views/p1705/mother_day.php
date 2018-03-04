@@ -22,7 +22,7 @@ $this->headerNavOn = true;
             <img class="rule-pic" src="<?= FE_BASE_URI ?>wap/campaigns/Mothers-day/images/rule.png" alt="">
             <ol class="rules-content">
                 <li>活动时间：2017年5月10日-2017年5月14日；</li>
-                <li>本次活动面向所有温都金服注册用户；</li>
+                <li>本次活动面向所有楚天财富注册用户；</li>
                 <li>活动期间累计投资（不含转让产品）达到6万元，即可获取价值400积分的大公鸡管家洗衣皂1块；</li>
                 <li>活动期间累计年化投资（不含转让产品）达到指定额度，即可获得相应礼品。</li>
             </ol>
@@ -79,7 +79,7 @@ $this->headerNavOn = true;
         <img src="<?= FE_BASE_URI ?>wap/campaigns/Mothers-day/images/task.png" alt="">
         <a href="/deal/deal/index" class="go-invest">去理财</a>
         <p>注：年化投资金额=投资金额*项目期限/365</p>
-        <p>本次活动最终解释权归温都金服所有</p>
+        <p>本次活动最终解释权归楚天财富所有</p>
         <p>理财非存款 产品有风险 投资须谨慎</p>
     </div>
 </div>

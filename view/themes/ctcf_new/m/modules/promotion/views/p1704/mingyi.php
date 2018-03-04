@@ -15,7 +15,7 @@ $this->headerNavOn = true;
     <div class="part_two"></div>
     <ol class="f13">
         <li class="rules">活动时间：2017年4月20日-2017年4月25日；</li>
-        <li class="rules">本次活动面向所有温都金服注册用户；</li>
+        <li class="rules">本次活动面向所有楚天财富注册用户；</li>
         <li class="rules">活动期间<span class="cu hong">累计年化投资</span>（不含转让产品）达到指定额度，即可获得相应礼品；</li>
     </ol>
     <table class="biaoge f12" cellpadding="0" cellspacing="0">

@@ -15,7 +15,7 @@ $this->headerNavOn = true;
         <img src="<?= FE_BASE_URI ?>wap/campaigns/weixin-bind/images/title_top.png" alt="" class="title-pic">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/weixin-bind/images/pic_erweima.png" alt="" class="erweima">
         <ul class="step-list">
-            <li>首先关注温都金服微信公众号：</li>
+            <li>首先关注楚天财富微信公众号：</li>
             <li>1.长按识别二维码</li>
             <li>2.扫描左侧二维码</li>
             <li>3.搜索微信号"wendujinfu"</li>
@@ -32,6 +32,6 @@ $this->headerNavOn = true;
             <li>各种活动福利及时提醒，好礼通通拿到手！</li>
         </ol>
         <img src="<?= FE_BASE_URI ?>wap/campaigns/weixin-bind/images/word_bind.png" alt="" class="gobind">
-        <p class="remind">最终解释权归温都金服所有</p>
+        <p class="remind">最终解释权归楚天财富所有</p>
     </div>
 </div>

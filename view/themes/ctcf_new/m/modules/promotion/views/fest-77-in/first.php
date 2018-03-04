@@ -4,7 +4,7 @@ $this->title = "七夕闯关大作战";
 
 $this->share = new Share([
     'title' => '我在这里玩答题闯关获得了大红包！快来一起玩吧！',
-    'description' => '温都金服七夕献礼，海量红包、礼品送不停！',
+    'description' => '楚天财富七夕献礼，海量红包、礼品送不停！',
     'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170823/images/wx_share.png',
     'url' => Yii::$app->request->hostInfo.'/promotion/fest-77-in/index',
 ]);

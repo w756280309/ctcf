@@ -18,7 +18,7 @@ if ($user && !($user->id % 2)) {
 <div class="container flex-content">
     <div class="header f16">
         <img src="<?= FE_BASE_URI ?>wap/luodiye/images/tick_01.png" alt="">
-        <p>您已成功注册温都金服</p>
+        <p>您已成功注册楚天财富</p>
         <p>现在投资即可领取</p>
     </div>
     <ul class="liststep f16">

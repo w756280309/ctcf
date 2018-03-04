@@ -34,7 +34,7 @@ $this->registerJs('forceReload_V2();');
 
     <div class="section-two">
         <div class="compare">
-            <p>温都金服平台已安全运营<span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-05-20'))->days ?>天
+            <p>楚天财富平台已安全运营<span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-05-20'))->days ?>天
             <div>
                 <img src="<?= FE_BASE_URI ?>wap/guide/images/compare.png" alt="">
             </div>
@@ -48,8 +48,8 @@ $this->registerJs('forceReload_V2();');
             </div>
             <div class="intro-ctn">
                 <div>
-                    <p class="des">什么是温都金服？</p>
-                    <p class="detail">温都金服是隶属温州报业传媒旗下的理财平台。甄选各类权威机构的理财产品。提供银行级理财服务，保障用户资金安全，安享稳定收益。</p>
+                    <p class="des">什么是楚天财富？</p>
+                    <p class="detail">楚天财富是隶属湖北日报新媒体集团旗下的理财平台。甄选各类权威机构的理财产品。提供银行级理财服务，保障用户资金安全，安享稳定收益。</p>
                 </div>
 
                 <div>
@@ -66,7 +66,7 @@ $this->registerJs('forceReload_V2();');
             <div class="intro-footer clearfix">
                 <ul class="lf">
                     <li><?= Yii::$app->params['platform_info.contact_tel'] ?><span>（9:00～20:00）</span></li>
-                    <li>地址：温州市鹿城区飞霞南路<br>657号保丰大楼四层</li>
+                    <li>地址：武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层</li>
                     <li>*理财非存款 产品有风险 投资须谨慎</li>
                 </ul>
                 <img class="erweima" src="<?= FE_BASE_URI ?>wap/guide/images/erweima.png" alt="">

@@ -19,13 +19,13 @@ if ($user && !($user->id % 2)) {
 <div class="container flex-content">
     <div class="header f16">
         <img src="<?= FE_BASE_URI ?>wap/wendumao/images/tick_01.png" alt="">
-        <p>您已成功注册温都金服</p>
-        <p>现在投资即可领取温都猫充值卡</p>
+        <p>您已成功注册楚天财富</p>
+        <p>现在投资即可领取楚天猫充值卡</p>
     </div>
     <ul class="liststep f16">
         <li><span class="f24 lf">1</span>注册成功</li>
         <li><a class="go-deal" href="<?= $toUrl ?>"><span class="f24 lf">2</span>首次投资1000元即可获得积分</a></li>
-        <li><span class="f24 lf">3</span>前往积分商城兑换温都猫充值卡</li>
+        <li><span class="f24 lf">3</span>前往积分商城兑换楚天猫充值卡</li>
     </ul>
 
     <a class="f15 invest" href="<?= $toUrl ?>">去理财</a>

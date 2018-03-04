@@ -144,7 +144,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                     <li>在活动页面右上角“我的奖品”中可以查看已获得的奖品；</li>
                     <li>活动结束后7个工作日内，工作人员将与您联系确认领取奖品相关事宜，请保持通讯畅通。</li>
                 </ul>
-                <div class="ruler-bottom f12">注：本活动最终解释权归温都金服所有。</div>
+                <div class="ruler-bottom f12">注：本活动最终解释权归楚天财富所有。</div>
                 <div class="remind-bottom f9">理财非存款 产品有风险 投资须谨慎</div>
             </div>
         </div>
@@ -272,7 +272,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                             type: "get",
                             dataType: "json",
                             success: function (data) {
-                                // 温都金服逻辑:   data.code: 101  未登录
+                                // 楚天财富逻辑:   data.code: 101  未登录
                                 //                          102   没有砸蛋机会
                                 //                          200   中奖了
                                 //                          data.type == POINT  积分
@@ -280,7 +280,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                                 //                          data.type == PIKU   实物
                                 //                          400   程序出错
 
-                                //请按照上方逻辑,调整温都金服显示
+                                //请按照上方逻辑,调整楚天财富显示
                                 if (data.code == 101) { //登录后再砸吧
                                     $('.login-inner').html(data.msg);
                                     $('.login-img img').attr({src: cdn+'wap/campaigns/golden-egg/images/nologin.png'});

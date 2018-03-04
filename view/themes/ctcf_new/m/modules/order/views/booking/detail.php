@@ -19,14 +19,14 @@ $this->title = '股权投资';
         <ul class="col-xs-12" style="padding:0 25px; ">
             <li >
                 <div class="color2 p1">
-                    <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">温股投介绍</span></p>
-                    <p>温都金服甄选优秀的股权投资基金管理机构，为市民家庭提供良好的股权投资机会，推出“温股投”系列产品。以私募基金形式，向合资格投资者定向非公开开放。</p>
+                    <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">楚股投介绍</span></p>
+                    <p>楚天财富甄选优秀的股权投资基金管理机构，为市民家庭提供良好的股权投资机会，推出“楚股投”系列产品。以私募基金形式，向合资格投资者定向非公开开放。</p>
                 </div>
             </li>
             <li >
                 <div class="color2 p1">
                     <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">投资方向</span></p>
-                    <p>第一期温股投产品，投向中国一二线城市的优秀青年白领公寓企业，分享中国城市青年租房需求升级的红利。</p>
+                    <p>第一期楚股投产品，投向中国一二线城市的优秀青年白领公寓企业，分享中国城市青年租房需求升级的红利。</p>
                 </div>
             </li>
             <li >
@@ -50,7 +50,7 @@ $this->title = '股权投资';
             <li >
                 <div class="color2 p1 p2">
                     <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">基金管理人</span></p>
-                    <p>正规持牌备案，合法合规运行，投资能力卓越。收房租，好生意。温股投，只投稳妥的股权。有意者，请点击预约登记。专业投资机构将派专人为您服务。</p>
+                    <p>正规持牌备案，合法合规运行，投资能力卓越。收房租，好生意。楚股投，只投稳妥的股权。有意者，请点击预约登记。专业投资机构将派专人为您服务。</p>
                 </div>
             </li>
 

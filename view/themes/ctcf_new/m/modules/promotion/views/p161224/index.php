@@ -135,7 +135,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/161224/js/smash-golden-eggs.js', 
                     <li>代金券奖励当天到账，实物奖励客服会在7个工作日内与您联系并发放；</li>
                     <li>活动时间12月24日-12月26日，过期未使用的砸蛋机会失效。</li>
                 </ul>
-                <div class="ruler-bottom">注：本活动最终解释权归温都金服所有。</div>
+                <div class="ruler-bottom">注：本活动最终解释权归楚天财富所有。</div>
             </div>
         </div>
     </div>

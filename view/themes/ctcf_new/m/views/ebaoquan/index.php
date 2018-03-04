@@ -17,7 +17,7 @@ AnalyticsHelper::registerTo($this);
         <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
         <meta name="renderer" content="webkit">
         <meta name="format-detection" content="telephone=no"/>
-        <title>温都金服 - 数据保全</title>
+        <title>楚天财富 - 数据保全</title>
         <?= Html::csrfMetaTags() ?>
         <meta name="csrf-param" content="_csrf">
         <meta name="csrf-token" content="bUJodzlZTEpVO1pDDzs2OwYxKyQIbSg.AjcEOQhhAysVNwcFQ209Ig==">
@@ -45,13 +45,13 @@ AnalyticsHelper::registerTo($this);
             </div>
             <!--  title-->
             <div class="title_h3">
-                <h3>温都金服交易电子数据保全</h3>
+                <h3>楚天财富交易电子数据保全</h3>
                 <h3 style="margin-top: 10px;">将交易合同锁进保险箱</h3>
             </div>
             <div class="row">
                 <div class="col-xs-12">
                     <p class="content">
-                        温都金服联手易保全电子数据保全中心，为投资者提供交易凭证保全服务，交易凭证（担保函、担保合同等信息）一旦保全，其内容、生成时间等信息将被加密固定，且生成唯一的保全证书供下载。事后任何细微修改，都会导致保全证书函数值变化，有效防止人为篡改。如发生司法纠纷，保全证书持有人，可以通过易保全电子数据保全中心提供的认证证书向法院或仲裁机构提供有效、可靠的证据，从而获得举证的优势地位。
+                        楚天财富联手易保全电子数据保全中心，为投资者提供交易凭证保全服务，交易凭证（担保函、担保合同等信息）一旦保全，其内容、生成时间等信息将被加密固定，且生成唯一的保全证书供下载。事后任何细微修改，都会导致保全证书函数值变化，有效防止人为篡改。如发生司法纠纷，保全证书持有人，可以通过易保全电子数据保全中心提供的认证证书向法院或仲裁机构提供有效、可靠的证据，从而获得举证的优势地位。
                     </p>
                 </div>
             </div>

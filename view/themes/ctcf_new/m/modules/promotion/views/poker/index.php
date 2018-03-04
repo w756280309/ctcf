@@ -144,7 +144,7 @@ $this->registerJs('forceReload_V2();');
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_02.png" alt="">每周签到用户数&nbsp;&nbsp;&nbsp;N2 %13，0=K</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_01.png" alt="">每周投资用户数&nbsp;&nbsp;&nbsp;N3 %13，0=K</div>
                         </div>
-                        <p style="margin-top: 0.3rem;">本活动最终解释权归温都金服所有</p>
+                        <p style="margin-top: 0.3rem;">本活动最终解释权归楚天财富所有</p>
                     </ol>
 
                 </div>

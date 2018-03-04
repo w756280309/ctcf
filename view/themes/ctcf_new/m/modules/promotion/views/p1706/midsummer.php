@@ -24,7 +24,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
         </div>
         <div class="show-hongbao">我的红包</div>
         <a href="/deal/deal/index" class="go-invest">去理财</a>
-        <p class="remind">本次活动最终解释权归温都金服所有</p>
+        <p class="remind">本次活动最终解释权归楚天财富所有</p>
         <p class="remind">理财非存款 产品有风险 投资须谨慎</p>
     </div>
     <div class="mask"></div>

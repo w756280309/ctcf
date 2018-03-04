@@ -33,7 +33,7 @@ $this->share = $share;
               </ul>
         </div>
         <div class="gift2">
-            <p>二重礼：温都金服客户回馈活动</p>
+            <p>二重礼：楚天财富客户回馈活动</p>
             <ul>
                 <li><img  src="<?= ASSETS_BASE_URI ?>promo/1611/images/dot.png" alt="">11月18日观影活动</li>
                 <li><img  src="<?= ASSETS_BASE_URI ?>promo/1611/images/dot.png" alt="">11月19日星巴克咖啡教室</li>
@@ -61,10 +61,10 @@ $this->share = $share;
     </div>
     <div class="footer">
         <ul>
-            <li>公司地址：温州市鹿城区飞霞南路657号保丰大楼四楼</li>
+            <li>公司地址：武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层</li>
             <li>客服电话：<a href="tel:400-101-5151" class="special">400-101-5151</a></li>
             <li>官方网址：www.wenjf.com</li>
-            <li>本活动最终解释权在法律范围内归温都金服所有</li>
+            <li>本活动最终解释权在法律范围内归楚天财富所有</li>
             <li class="special">理财非存款 产品有风险 投资须谨慎</li>
         </ul>
     </div>
@@ -72,7 +72,7 @@ $this->share = $share;
         <ul>
             <li><a id="register" href="/luodiye/signup">马上注册</a></li>
             <li><a href="/deal/deal/index">立即投资</a></li>
-            <li><a style="border:none;" href="/site/h5?wx_share_key=h5">了解温都金服</a></li>
+            <li><a style="border:none;" href="/site/h5?wx_share_key=h5">了解楚天财富</a></li>
         </ul>
     </div>
 </div>

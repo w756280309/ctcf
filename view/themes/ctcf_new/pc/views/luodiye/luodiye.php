@@ -79,7 +79,7 @@ use yii\captcha\Captcha;
 <!--        </div>-->
 <!--        <div class="because-center">-->
 <!--            <div class="because-left">-->
-<!--                <p class="because-header">温盈金</p>-->
+<!--                <p class="because-header">楚盈金</p>-->
 <!--                <p class="because-yuxuan">预期年化利</p>-->
 <!--                <p class="because-number">5.5<span>%</span>-6.5<span>%</span></p>-->
 <!--                <P class="because-time"><span>—</span><span class="time-font">投资期限1-12个月</span><span>—</span></P>-->
@@ -93,7 +93,7 @@ use yii\captcha\Captcha;
 <!--                <a href="/licai/">立即赚钱</a>-->
 <!--            </div>-->
 <!--            <div class="because-right">-->
-<!--                <p class="because-header">温盈宝</p>-->
+<!--                <p class="because-header">楚盈宝</p>-->
 <!--                <p class="because-yuxuan">预期年化利</p>-->
 <!--                <p class="because-number">6.5<span>%</span>-9<span>%</span></p>-->
 <!--                <P class="because-time"><span>—</span><span class="time-font">投资期限1-24个月</span><span>—</span></P>-->

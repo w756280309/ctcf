@@ -19,7 +19,7 @@ use yii\captcha\Captcha;
     <?php if (!defined('IN_APP')) { ?>
         <div class="header">
             <ul class="clearfix">
-                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/luodiye/images/logo.png" alt="">温都金服国资平台</li>
+                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/luodiye/images/logo.png" alt="">楚天财富国资平台</li>
                 <li class="rg f13"><a href="/">返回首页</a></li>
             </ul>
         </div>
@@ -70,7 +70,7 @@ use yii\captcha\Captcha;
     </div>
 
     <div class="bottomside">
-        <p class="f12 botintro">如有问题请拨打客服电话或关注温都金服公众号</p>
+        <p class="f12 botintro">如有问题请拨打客服电话或关注楚天财富公众号</p>
         <dl>
             <dt style="width: 70%;">
             <div class="clearfix">
@@ -81,7 +81,7 @@ use yii\captcha\Captcha;
                 </p>
             </div>
             <div class="f12 netaddress">官网地址：<a href="<?= defined('IN_APP') ? '/' : 'https://www.wenjf.com' ?>">www.wenjf.com</a></div>
-            <div class="f12 address clearfix"><p class="lf">公司地址：</p><p class="specialp lf">温州市鹿城区飞霞南路657号保丰大楼四层</p></div>
+            <div class="f12 address clearfix"><p class="lf">公司地址：</p><p class="specialp lf">武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层</p></div>
             </dt>
             <dd class="erweima f11"><img src="<?= FE_BASE_URI ?>wap/luodiye/images/erweima.png" alt=""><p>微信公众号</p></dd>
         </dl>

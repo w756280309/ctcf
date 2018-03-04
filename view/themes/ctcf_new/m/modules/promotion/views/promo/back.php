@@ -22,7 +22,7 @@ if ($isFromWrm && !$isIdVerified) {
 <div class="container flex-content">
     <div class="header f16">
         <img src="<?= FE_BASE_URI ?>wap/luodiye/images/tick_01.png" alt="">
-        <p>您已成功注册温都金服</p>
+        <p>您已成功注册楚天财富</p>
     </div>
     <ul class="liststep f16">
         <li><span class="f24 lf">1</span>注册成功</li>

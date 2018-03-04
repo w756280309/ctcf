@@ -12,7 +12,7 @@ $this->title = '共植友谊树好礼拿不停';
     <?php if (!defined('IN_APP')) { ?>
         <div class="header">
             <ul class="clearfix">
-                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">温都金服国资平台</li>
+                <li class="lf f16"><img src="<?= FE_BASE_URI ?>wap/wendumao/images/logo.png" alt="">楚天财富国资平台</li>
                 <li class="rg f13"><a class="" href="/">返回首页</a></li>
             </ul>
         </div>
@@ -31,11 +31,11 @@ $this->title = '共植友谊树好礼拿不停';
     <div class="treeContent">
         <dl>
             <dt class="f15 comMargin">活动简介</dt>
-            <dd class="f15">3月11日—3月17日植树节期间，温都金服发起『共植友谊“树”，好礼拿不停，邀好友得金币』活动，邀请好友注册、投资除获得代金券及现金红包外，达到指定标准更将获得足金鸡年生肖金币等黄金豪礼。</dd>
+            <dd class="f15">3月11日—3月17日植树节期间，楚天财富发起『共植友谊“树”，好礼拿不停，邀好友得金币』活动，邀请好友注册、投资除获得代金券及现金红包外，达到指定标准更将获得足金鸡年生肖金币等黄金豪礼。</dd>
         </dl>
         <dl>
             <dt class="f15">参与规则</dt>
-            <dd class="f15">好友在活动期间注册成为温都金服用户，种下一颗投资理财的种子。在未来1年的时间内，好友累计年化投资达到一定金额，我们将送给您以下超值豪礼！</dd>
+            <dd class="f15">好友在活动期间注册成为楚天财富用户，种下一颗投资理财的种子。在未来1年的时间内，好友累计年化投资达到一定金额，我们将送给您以下超值豪礼！</dd>
         </dl>
 
         <table class="tablebox" cellpadding="0" cellspacing="0">

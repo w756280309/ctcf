@@ -72,12 +72,12 @@ if ($isLuodiye) {
 <!--    <div class="licai-img">-->
 <!--        <div class="col-xs-6 licai-img">-->
 <!--            <a href="/deal/deal/index/">-->
-<!--                <img src="--><?//= ASSETS_BASE_URI ?><!--images/luodiye/wyj.png" alt="温盈金">-->
+<!--                <img src="--><?//= ASSETS_BASE_URI ?><!--images/luodiye/wyj.png" alt="楚盈金">-->
 <!--            </a>-->
 <!--        </div>-->
 <!--        <div class="col-xs-6 licai-img">-->
 <!--            <a href="/deal/deal/index/">-->
-<!--                <img src="--><?//= ASSETS_BASE_URI ?><!--images/luodiye/wyb.png" alt="温盈宝">-->
+<!--                <img src="--><?//= ASSETS_BASE_URI ?><!--images/luodiye/wyb.png" alt="楚盈宝">-->
 <!--            </a>-->
 <!--        </div>-->
 <!--        <div class="clear"></div>-->

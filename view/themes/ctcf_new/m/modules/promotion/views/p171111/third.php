@@ -33,7 +33,7 @@ $this->title = '11月理财节';
         <li class="second"><a href="/deal/deal/index"></a></li>
         <li class="third"><a href="/deal/deal/index"></a></li>
     </ul>
-    <p class="last-tips" @click="openGladCard" >本活动最终解释权归温都金服所有</p>
+    <p class="last-tips" @click="openGladCard" >本活动最终解释权归楚天财富所有</p>
     <!-- 喜卡 -->
     <div class="glad-box" :class="[!!beforeGladCard ? 'showed': '' ]">
         <div class="outer-box no-open">

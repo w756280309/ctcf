@@ -18,7 +18,7 @@ $this->title = '好友召集令';
             <a class="cue-login"></a>
             <div @click="closeBox" class="cue-close">
             </div>
-            <p class="active-state">本次活动最终解释权归温都金服所有</p>
+            <p class="active-state">本次活动最终解释权归楚天财富所有</p>
             <div class="mid-box-contain">
                 <ol>
                     <li class="clearfix"><span>1、</span><p>活动时间：2018年1月8日至2018年1月20日；</p></li>

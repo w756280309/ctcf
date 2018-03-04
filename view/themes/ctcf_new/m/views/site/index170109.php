@@ -1,9 +1,9 @@
 <?php
 $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
 if ($fromNb) {
-    $this->title = '现代金报-温都金服';
+    $this->title = '现代金报-楚天财富';
 } else {
-    $this->title = '温都金服';
+    $this->title = '楚天财富';
 }
 
 $this->params['breadcrumbs'][] = $this->title;
@@ -76,7 +76,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                         <p class="number f20" id="totalCharityAount"></p>
                     </div>
                     <div class="charity-content charity-content-rg rg">
-                        <p class="word f12">温州市慈善总会&nbsp;&nbsp;温州都市报分会设立<i class="red-txt">"温都金服慈善公益基金"</i></p>
+                        <p class="word f12">武汉市慈善总会&nbsp;&nbsp;湖北日报分会设立<i class="red-txt">"楚天财富慈善公益基金"</i></p>
                     </div>
                 </div>
                 <div class="charity-bottom">
@@ -278,7 +278,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                     <div class="platformListFirst">
                         <img data-original="<?= FE_BASE_URI ?>wap/index/images/platform_01.png" alt="">
                         <div class="f15">国资背景</div>
-                        <div class="f14">温州报业传媒旗下</div>
+                        <div class="f14">湖北日报新媒体集团旗下</div>
                     </div>
                 </li>
                 <li class="lf platformList">
@@ -311,10 +311,10 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
 
         <div class="address">
             <a class="f14" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><img data-original="<?= FE_BASE_URI ?>wap/index/images/phone.png" alt=""><?= Yii::$app->params['platform_info.contact_tel'] ?></a>
-            <p class="f14">温州市鹿城区飞霞南路657号保丰大楼四层</p>
+            <p class="f14">武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层</p>
         </div>
 
-        <footer class="f11"><span></span>温州报业传媒旗下理财平台<span></span></footer>
+        <footer class="f11"><span></span>湖北日报新媒体集团旗下理财平台<span></span></footer>
         <?php if (!defined('IN_APP') && $this->showBottomNav) { ?>
             <?= $this->renderFile('@wap/views/layouts/footer.php')?>
         <?php } ?>

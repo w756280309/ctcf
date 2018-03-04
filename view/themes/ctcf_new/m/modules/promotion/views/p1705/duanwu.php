@@ -43,7 +43,7 @@ $this->headerNavOn = true;
             <div class="rules-content-box">
                 <ol>
                     <li>活动时间：2017年5月22日-2017年5月30日；</li>
-                    <li>本次活动面向所有温都金服注册用户；</li>
+                    <li>本次活动面向所有楚天财富注册用户；</li>
                     <li>活动期间累计年化投资（不含新手标及转让产品）达到指定额度，即可获得相应礼品。</li>
                 </ol>
                 <table border="0" cellpadding="0" cellspacing="0">
@@ -95,6 +95,6 @@ $this->headerNavOn = true;
             </div>
         </div>
         <a href="/deal/deal/index" class="go_invest"></a>
-        <p class="explain">本次活动最终解释权归温都金服所有</p>
+        <p class="explain">本次活动最终解释权归楚天财富所有</p>
     </div>
 </div>

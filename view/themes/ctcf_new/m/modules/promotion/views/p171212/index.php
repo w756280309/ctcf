@@ -63,7 +63,7 @@ $this->title = '双12狂欢';
 
         </ul>
         <div class="notice">
-            注：因手机端快捷充值限额，大额充值请使用电脑登录温都金服官网(www.wenjf.com)进行网银充值。
+            注：因手机端快捷充值限额，大额充值请使用电脑登录楚天财富官网(www.wenjf.com)进行网银充值。
         </div>
         <p>
             <span>当前账户余额:</span>
@@ -90,7 +90,7 @@ $this->title = '双12狂欢';
 
     </footer>
     <div class="footer-bottom-contain">
-        <p>本活动最终解释权归温都金服所有</p>
+        <p>本活动最终解释权归楚天财富所有</p>
     </div>
 </div>
 <script type="text/template" id="addTicket">
