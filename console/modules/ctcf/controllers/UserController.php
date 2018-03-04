@@ -6,6 +6,7 @@ use common\models\order\OnlineOrder;
 use common\models\tx\UserAsset;
 use common\models\user\User;
 use common\models\user\UserAccount;
+use common\utils\SecurityUtils;
 use yii\console\Controller;
 use Yii;
 
@@ -81,5 +82,36 @@ class UserController extends Controller
             }
             echo $result;
         }
+    }
+
+    /**
+     * 所有用户的手机号、姓名、是否在老站投资过
+     */
+    public function actionInvestlist($update = false)
+    {
+        $posts = Yii::$app->db->createCommand("
+                SELECT user.safeMobile,user.real_name,user.safeIdCard,user.birthdate,IF(invest.isInvested is null,'否','是') as isInvested
+                FROM user
+                LEFT JOIN (SELECT distinct online_order.uid,1 as isInvested
+                FROM online_order
+                INNER JOIN online_product on online_product.id = online_order.online_pid
+                WHERE online_product.sn like 'CTCF-LEGACY-%') as invest
+                ON invest.uid = user.id
+                WHERE user.username like 'ctcf:%'
+                ")
+            ->queryAll();
+        $arr = [];
+        foreach ($posts as $k => $v) {
+            $arr[$k]['mobile'] = empty($v['safeMobile']) ? '' : SecurityUtils::decrypt($v['safeMobile']);
+            $arr[$k]['name'] = $v['real_name'];
+            $arr[$k]['sex'] = empty($v['safeIdCard']) ? '' : (substr(SecurityUtils::decrypt($v['safeIdCard']), 16,1) % 2 == 0 ? '女' : '男');
+            $arr[$k]['birthday'] = $v['birthdate'];
+            $arr[$k]['isInvested'] = $v['isInvested'];
+        }
+        $result = '手机号,姓名,性别,生日,是否在老站投资过' . PHP_EOL;
+        foreach ($arr as $val) {
+            $result .= implode(',', $val) . PHP_EOL;
+        }
+        echo $result;
     }
 }
