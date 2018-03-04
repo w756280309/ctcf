@@ -90,7 +90,7 @@ class UserController extends Controller
     public function actionInvestlist($update = false)
     {
         $posts = Yii::$app->db->createCommand("
-                SELECT user.safeMobile,user.real_name,user.safeIdCard,user.birthdate,IF(invest.isInvested is null,'否','是') as isInvested
+                SELECT user.safeMobile,user.real_name,user.safeIdCard,user.birthdate,user.username,IF(invest.isInvested is null,'否','是') as isInvested
                 FROM user
                 LEFT JOIN (SELECT distinct online_order.uid,1 as isInvested
                 FROM online_order
@@ -102,9 +102,22 @@ class UserController extends Controller
             ->queryAll();
         $arr = [];
         foreach ($posts as $k => $v) {
-            $arr[$k]['mobile'] = empty($v['safeMobile']) ? '' : SecurityUtils::decrypt($v['safeMobile']);
-            $arr[$k]['name'] = $v['real_name'];
-            $arr[$k]['sex'] = empty($v['safeIdCard']) ? '' : (substr(SecurityUtils::decrypt($v['safeIdCard']), 16,1) % 2 == 0 ? '女' : '男');
+            $old_user_id = str_replace('ctcf:', '', $v['username']);
+            $user = Yii::$app->db->createCommand("
+                SELECT user_phone,
+                       real_name,
+                       id_card,
+                       user_age,
+                       user_sex
+                FROM t_safety_certification
+                WHERE id = :id
+                ")
+                ->bindValue(':id', $old_user_id)
+                ->queryOne();
+            $arr[$k]['mobile'] = empty($v['safeMobile']) ? $user['user_phone'] : SecurityUtils::decrypt($v['safeMobile']);
+            $arr[$k]['name'] = empty($v['real_name']) ? $user['real_name'] : $v['real_name'];
+            $id_card = empty($v['safeIdCard']) ? $user['id_card'] : SecurityUtils::decrypt($v['safeIdCard']);
+            $arr[$k]['sex'] = empty($id_card) ? '' : (substr($id_card, 16,1) % 2 == 0 ? '女' : '男');
             $arr[$k]['birthday'] = $v['birthdate'];
             $arr[$k]['isInvested'] = $v['isInvested'];
         }
