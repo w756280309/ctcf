@@ -118,7 +118,7 @@ class UserController extends Controller
             $arr[$k]['name'] = empty($v['real_name']) ? $user['real_name'] : $v['real_name'];
             $id_card = empty($v['safeIdCard']) ? $user['id_card'] : SecurityUtils::decrypt($v['safeIdCard']);
             $arr[$k]['sex'] = empty($id_card) ? '' : (substr($id_card, 16,1) % 2 == 0 ? '女' : '男');
-            $arr[$k]['birthday'] = $v['birthdate'];
+            $arr[$k]['birthday'] = empty($id_card) ? '' : date('Y-m-d', strtotime(substr($id_card, 6,8)));
             $arr[$k]['isInvested'] = $v['isInvested'];
         }
         $result = '手机号,姓名,性别,生日,是否在老站投资过' . PHP_EOL;
