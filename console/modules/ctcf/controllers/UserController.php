@@ -110,9 +110,9 @@ class UserController extends Controller
                        user_age,
                        user_sex
                 FROM t_safety_certification
-                WHERE id = :id
+                WHERE user_id = :user_id
                 ")
-                ->bindValue(':id', $old_user_id)
+                ->bindValue(':user_id', $old_user_id)
                 ->queryOne();
             $arr[$k]['mobile'] = empty($v['safeMobile']) ? $user['user_phone'] : SecurityUtils::decrypt($v['safeMobile']);
             $arr[$k]['name'] = empty($v['real_name']) ? $user['real_name'] : $v['real_name'];
