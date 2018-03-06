@@ -3,11 +3,13 @@
 namespace console\controllers;
 
 
+use common\lib\user\UserStats;
 use common\models\promo\DuoBao;
 use common\models\promo\PromoLotteryTicket;
 use common\models\promo\PromoService;
 use common\models\promo\Reward;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\console\Controller;
@@ -279,5 +281,36 @@ class PromoController extends Controller
             }
             $this->stdout('共插入'.$num.'条数据');
         }
+    }
+
+    /**
+     * 导出某个活动未抽奖的用户信息
+     * 脚本命令：
+     * php yii promo/export-by-id 54
+     */
+    public function actionExportById($promoId)
+    {
+        $sql = 'select u.real_name,u.safeMobile,count(*) total from promo_lottery_ticket p inner join user u on p.user_id=u.id where p.promo_id = :promoId and p.isDrawn = false group by p.user_id';
+        $users = Yii::$app->db->createCommand($sql, [
+            'promoId' => $promoId
+        ])->queryAll();
+        if (empty($users)) {
+            $this->stdout('无用户信息待导出');
+            return self::EXIT_CODE_ERROR;
+        }
+
+        //手机号解密
+        foreach ($users as $k => $user) {
+            $users[$k]['safeMobile'] = SecurityUtils::decrypt($users[$k]['safeMobile']);
+        }
+
+        //导出到console/runtime目录下
+        $title = ['姓名', '手机号', '剩余机会'];
+        array_unshift($users, $title);
+        $file = Yii::getAlias('@app/runtime/lottery_ticket_'.date('YmdHis').'.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($users);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
     }
 }
