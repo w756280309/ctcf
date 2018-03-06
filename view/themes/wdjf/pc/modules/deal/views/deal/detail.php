@@ -280,14 +280,14 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
 <!--mask弹框-->
 <div class="detail-mask"></div>
 <!--确认弹框-->
-<div class="confirmBox">
+<div class="confirmBox" style="height: auto">
     <div class="confirmBox-title">提示</div>
     <div class="confirmBox-top">
         <p></p>
     </div>
     <div class="confirmBox-bottom">
-        <div class="confirmBox-left" onclick="subClose()">关闭</div>
-        <div class="confirmBox-right" onclick="subConfirm()">确认</div>
+        <div style="width: 170px" class="confirmBox-left" onclick="subClose()">关闭</div>
+        <div style="width: 170px" class="confirmBox-right" onclick="subConfirm()">确认</div>
     </div>
 </div>
 
