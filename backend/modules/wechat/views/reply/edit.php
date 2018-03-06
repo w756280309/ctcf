@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="control-group">
                 <label class="control-label">回复内容</label>
                 <div class="controls">
-                    <?= $form->field($model, 'content', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span4','placeholder'=>'回复内容']])->textInput() ?>
+                    <?= $form->field($model, 'content', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span4','placeholder'=>'回复内容']])->textarea() ?>
                     <?= $form->field($model, 'content', ['template' => '{error}']); ?>
                     <?= $form->field($model, 'media', ['template' => '{input}', 'inputOptions'=>['autocomplete'=>"off",'class'=>'m-wrap span4','placeholder'=>'回复内容']])->fileInput() ?>
                     <?= $form->field($model, 'media', ['template' => '{error}']); ?>

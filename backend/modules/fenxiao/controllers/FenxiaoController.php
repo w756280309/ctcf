@@ -315,23 +315,19 @@ class FenxiaoController extends BaseController
         ];
     }
 
-    //生成渠道二维码
-    public function actionCode()
+    //查看二维码
+    public function actionCodeView($id)
     {
-        $id = Yii::$app->request->get('id');
         if (Affiliator::findOne($id)) {
             $res = Yii::$container->get('weixin_wdjf')->qrcode->forever($id);
-            if (Yii::$container->get('weixin_wdjf')->qrcode->url($res->ticket)) {
-                return ['code' => 1, 'ticket' => Yii::$container->get('weixin_wdjf')->qrcode->url($res->ticket)];
+            if (!is_null($res)) {
+                $ticket = Yii::$container->get('weixin_wdjf')->qrcode->url($res->ticket);
+                if (!empty($ticket)) {
+                    return $this->render('code_view', ['ticket' => $ticket]);
+                }
             }
         }
-
-    }
-
-    //查看二维码
-    public function actionCodeView($ticket)
-    {
-        return $this->render('code_view', ['ticket' => $ticket]);
+        return $this->redirect('list');
     }
 
     /**

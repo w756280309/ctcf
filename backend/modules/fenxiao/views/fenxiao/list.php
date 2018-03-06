@@ -79,7 +79,7 @@ use yii\widgets\LinkPager;
                                 <center>
                                     <a href="/fenxiao/fenxiao/edit?id=<?= $val['id'] ?>" class="btn mini green">
                                         <i class="icon-edit"></i> 编辑</a>
-                                    <a href="#" class="btn mini green code" id="<?= $val['affiliator_id'] ?>">
+                                    <a href="/fenxiao/fenxiao/code-view?id=<?= $val['affiliator_id'] ?>" class="btn mini green">
                                         <i class="icon-edit"></i>二维码（公众号）</a>
                                     <a href="/fenxiao/fenxiao/del?id=<?= $val['affiliator_id'] ?>" class="btn mini red ajax_op" op="status" onclick="javascript:return confirm('确认删除？');"><i class="icon-minus-sign"></i>删除
                                     </a>
