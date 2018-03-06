@@ -36,12 +36,13 @@ use yii\data\ArrayDataProvider;
 class ProductonlineController extends BaseController
 {
     /**
-     * 获取全部融资方信息.
+     * 获取未被软删除的全部融资方信息.
      */
     private function orgUserInfo()
     {
         return User::find()
             ->where(['type' => User::USER_TYPE_ORG])
+            ->andWhere(['is_soft_deleted' => 0])
             ->orderBy(['sort' => SORT_DESC])
             ->select('org_name')
             ->indexBy('id')
