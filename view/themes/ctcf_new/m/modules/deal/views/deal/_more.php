@@ -21,7 +21,7 @@ use yii\helpers\Html;
                 <div class="col-xs-2 col-sm-2 col-title"><i class="credit-staus <?= $isActive ? 'credit-staus-over' : '' ?>"><?= ($deal->end_date < time() && in_array($deal->status, [1, 2])) ? '募集结束' : Yii::$app->params['deal_status'][$deal->status] ?></i></div>
 
                 <?php if (!empty($deal->tags) || $deal->pointsMultiple > 1) : ?>
-                    <div class="col-xs-12 col-sm-12 col-tag" style="color: #c8a561">
+                    <div class="col-xs-12 col-sm-12 col-tag">
                         <?= $this->renderFile("@common/views/tags.php", ['loan' => $deal]) ?>
                     </div>
                 <?php endif; ?>
