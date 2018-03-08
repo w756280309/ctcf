@@ -2895,7 +2895,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git",
-                "reference": "49f566af74218d195dd2e381ec1b2a7128f8fa80"
+                "reference": "b66d2491dc9293dffb0fbcc62ee630a47ff09d6c"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -2919,7 +2919,7 @@
             ],
             "description": "工具库",
             "homepage": "http://dx.wangcaigu.cn/diffusion/WCGLIBS/",
-            "time": "2018-02-12T06:31:58+00:00"
+            "time": "2018-03-08T02:35:15+00:00"
         },
         {
             "name": "yiisoft/yii2",
@@ -3362,7 +3362,7 @@
             "version": "v0.11.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:twitter/typeahead.js.git",
+                "url": "https://github.com/twitter/typeahead.js.git",
                 "reference": "588440f66559714280628a4f9799f0c4eb880a4a"
             },
             "dist": {
