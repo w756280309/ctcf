@@ -108,7 +108,7 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
                 <h3>为什么选择楚天财富？</h3>
                 <div class="choose-content">
                     <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose_new.png" alt="">
-                    <img src="<?= ASSETS_BASE_URI ?>images/luodiye/why-wdjf-new.png" alt="">
+                    <img src="<?= ASSETS_BASE_URI ?>images/luodiye/why-wdjf-new.png?v=20180307" alt="">
                 </div>
             </div>
             <a class="link-last" href="/deal/deal/index/">立即认购</a>

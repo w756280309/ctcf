@@ -127,7 +127,7 @@
         <p class="suojin">绑定本人银行卡，提现只进本人账户；</p>
         <p class="suojin">层层风控，专业稳健，合法合规；</p>
         <p class="h-num"><a href="javascript:;" class="number">4</a>产品<span>优质</span></p>
-        <p class="suojin">主流金融机构产品、优质政府平台类产品、</p>
+        <p class="suojin">产品优质，标的小额分散，期限灵活收益稳定，</p>
         <p class="suojin">优质供应链金融产品，期限多样，收益可观；</p>
         <p class="h-num"><a href="javascript:;" class="number">5</a><span>灵活</span>便捷</p>
         <p class="suojin">网上有平台，线下有门店，楚天财富在您身边</p>

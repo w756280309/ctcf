@@ -20,7 +20,7 @@ $this->title = '关于我们';
             <?= Html::csrfMetaTags() ?>
             <?php $this->head() ?>
             <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/animate/animate.min.css?v=20161124">
-            <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/h5-180211/index.css?v=20180223123">
+            <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/h5-180211/index.css?v=20180307">
             <script src="<?= FE_BASE_URI ?>libs/lib.flexible2.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/fastclick.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/pageslider/zepto_modify.js?v=20161124"></script>

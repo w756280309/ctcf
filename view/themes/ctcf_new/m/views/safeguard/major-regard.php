@@ -11,7 +11,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/safeguard/major.min.css');
         <h5>为什么在楚天财富投资是安全的？</h5>
     </div>
     <h6 class="major-title-retract">（1）对接专业机构产品</h6>
-    <p>楚天财富理财的产品主要为各类金融机构产品、优质企业政信类产品，国有平台挂牌金融资产项目，风险更低，且有多重还款进行保障。</p>
+    <p>楚天财富的多款产品，灵活定制，标的分散，风险更低，且有多重还款进行保障。</p>
     <h6 class="major-title-retract">（2）坚持合法合规运营</h6>
     <p>楚天财富恪守银监会、地方金融监管部门及证监会、股转系统的监管要求，上线之初严格要求，坚持合法合规运营。</p>
     <h6 class="major-title-retract">（3）坚持资金与平台分离</h6>

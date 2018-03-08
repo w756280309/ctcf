@@ -136,8 +136,8 @@ use yii\captcha\Captcha;
 
             <div class="choose-single choose-fourth">
                 <div class="single-back"></div>
-                <p>产品优质，金融机</p>
-                <p>构、政府平台类优质产品</p>
+                <p>产品优质，标的小额</p>
+                <p>分散，期限灵活收益稳定</p>
             </div>
         </div>
         <a class="link-last" href="/licai/">立即赚钱</a><br>
