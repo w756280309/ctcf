@@ -275,5 +275,6 @@ return [
     'wechat_push' => [
         'hello_message' => null,    //欢迎信息
         'click_message' => [],    //点击公众号菜单的提示信息
-    ]
+    ],
+    'old_site_visible_user_id' => '',
 ];

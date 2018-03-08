@@ -158,10 +158,12 @@ class InfoController extends Controller
 
     public function actionFail()
     {
+        $fail_firstFuTitle = '如有疑问，请联系客服，电话：'. \Yii::$app->params['platform_info.contact_tel'] .'('. \Yii::$app->params['platform_info.customer_service_time'] .')';
         $source = \Yii::$app->request->get("source");
         $this->paramValid($source);
         $info = $this->config['fail'][$source];
         $info['jumpUrl'] = \Yii::$app->request->get("jumpUrl") ? \Yii::$app->request->get("jumpUrl") : '';
+        $info['firstFuTitle'] = $fail_firstFuTitle;
         return $this->render("fail", ['info' => $info]);
     }
 
