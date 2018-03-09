@@ -3,6 +3,7 @@
 namespace common\models\promo;
 
 use common\models\user\User;
+use Faker\Provider\DateTime;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -110,7 +111,7 @@ class PromoLotteryTicket extends ActiveRecord
     public static function initNew(User $user, RankingPromo $promo, $source = null, \DateTime $expiryTime = null)
     {
         if (null === $expiryTime) {
-            $expiryTime = $promo->endTime;
+            $expiryTime = new \DateTime($promo->endTime);
         }
         return new self([
             'user_id' => $user->id,

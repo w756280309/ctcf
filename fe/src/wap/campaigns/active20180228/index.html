@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>植树节种好礼</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/fastclick.js"></script>
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <script src="../../libs/vue.min.js"></script>
+</head>
+<body>
+
+<div class="flex-content" id="app" v-cloak>
+    <div :class="{bottleFadeIn:isWatering}" class="bottle" alt="a-watering"></div>
+    <div class="banner">
+        <img class="bg" src="images/banner.png" alt="">
+        <ul class="ctn-area">
+            <li class="times rg">已浇水次数：<span v-html="times"></span>次</li>
+            <li @click="draw(3)" class="gifts_01 shake1">
+                <img src="images/gifts_01.png" alt="">
+                <span v-show="!giftsStatus.gift3" class="draw">领取</span>
+                <span v-show="giftsStatus.gift3" class="received">已领取</span>
+            </li>
+            <li @click="draw(5)" class="gifts_02 shake2">
+                <img src="images/gifts_02.png" alt="">
+                <span v-show="!giftsStatus.gift5" class="draw">领取</span>
+                <span v-show="giftsStatus.gift5" class="received">已领取</span>
+            </li>
+            <li @click="draw(1)" class="gifts_03 shake3">
+                <img src="images/gifts_03.png" alt="">
+                <span v-show="!giftsStatus.gift1" class="draw">领取</span>
+                <span v-show="giftsStatus.gift1" class="received">已领取</span>
+            </li>
+            <li @click="draw(7)" class="gifts_04 shake4">
+                <img src="images/gifts_04.png" alt="">
+                <span v-show="!giftsStatus.gift7" class="draw">领取</span>
+                <span v-show="giftsStatus.gift7" class="received">已领取</span>
+            </li>
+            <li @click="draw(2)" class="gifts_05 shake1">
+                <img src="images/gifts_05.png" alt="">
+                <span v-show="!giftsStatus.gift2" class="draw">领取</span>
+                <span v-show="giftsStatus.gift2" class="received">已领取</span>
+            </li>
+            <li @click="draw(6)" class="gifts_06 shake2">
+                <img src="images/gifts_06.png" alt="">
+                <span v-show="!giftsStatus.gift6" class="draw">领取</span>
+                <span v-show="giftsStatus.gift6" class="received">已领取</span>
+            </li>
+            <li @click="draw(4)" class="gifts_07 shake3">
+                <img src="images/gifts_07.png" alt="">
+                <span v-show="!giftsStatus.gift4" class="draw">领取</span>
+                <span v-show="giftsStatus.gift4" class="received">已领取</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="operate">
+        <ul>
+            <li class="clearfix">
+                <dl class="lf">
+                    <dt>
+                        <img @click="getTimes" v-show="!isGet" src="images/get.png" alt="">
+                        <div v-show="isGet" class="obtained">已领取</div>
+                    </dt>
+                    <dd>每日免费浇水</dd>
+                </dl>
+                <dl class="lf">
+                    <dt>
+                        <img @click="weixinShare"  v-show="!isShare" src="images/share.png" alt="">
+                        <div  v-show="isShare" class="obtained">已分享</div>
+                    </dt>
+                    <dd>分享增加次数</dd>
+                </dl>
+                <dl class="lf">
+                    <dt><a href="/deal/deal/index"><img src="images/invest.png" alt=""></a></dt>
+                    <dd>投资增加次数</dd>
+                </dl>
+            </li>
+            <li @click="watering">全部浇水(剩余: <span v-html="residueTimes"></span>次)</li>
+            <li>
+                <p>提示：<br>
+                    1. 分享到朋友圈才能增加1次浇水次数；<br>
+                    2. 年化投资每1万元增加1次浇水次数。</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="regular">
+        <p class="title" @click="showRegular">收起活动规则 <img :class="{rotate:!isShowRegular}" src="images/arrows.png" alt=""></p>
+        <ol v-show="isShowRegular">
+            <li>活动时间：2018.3.12至3.18；</li>
+            <li>
+                <p>活动奖池：</p>
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>完成浇水次数</td>
+                        <td>奖品名称</td>
+                        <td>奖品图片</td>
+                    </tr>
+                    <tr>
+                        <td>2次</td>
+                        <td>3元红包</td>
+                        <td><img src="images/sg_1.png" alt=""></td>
+                    </tr>
+                    <tr>
+                        <td>3次</td>
+                        <td>8元红包</td>
+                        <td><img src="images/sg_2.png" alt=""></td>
+                    </tr>
+                    <tr>
+                        <td>5次</td>
+                        <td>10元红包</td>
+                        <td><img src="images/sg_3.png" alt=""></td>
+                    </tr>
+                    <tr>
+                        <td>8次</td>
+                        <td>20元红包</td>
+                        <td><img src="images/sg_4.png" alt=""></td>
+                    </tr>
+                    <tr>
+                        <td>28次</td>
+                        <td>旺年吉祥物</td>
+                        <td><img src="images/sg_5.png" alt=""></td>
+                    </tr>
+                    <tr>
+                        <td>60次</td>
+                        <td>旺旺大礼包</td>
+                        <td><img src="images/sg_6.png" alt=""></td>
+                    </tr>
+                    <tr>
+                        <td>80次</td>
+                        <td>50元超市卡</td>
+                        <td><img src="images/sg_7.png" alt=""></td>
+                    </tr>
+                </table>
+            </li>
+            <li>活动期间，给树苗浇水达到一定次数，可领取对应礼品，奖励可叠加。<br>比如：活动期间完成浇水80次，即可领走全部礼品。</li>
+            <li>浇水次数怎么获得：<br>
+                ①每天免费领取1次；<br>
+                ②分享到朋友圈自动增加1次；<br>
+                ③年化投资每1万元自动增加1次 (无上限)。
+            </li>
+            <li>获得浇水机会后，需要<i>主动点击浇水按钮</i>，才能增加已浇水次数！！！</li>
+            <li>完成对应浇水次数后，需要<i>主动点击领取礼品</i>，才能获得奖励！！！</li>
+            <li>活动期间才能进行浇水；活动结束后将不能再领取礼品。大家抓紧时间参与哦！</li>
+        </ol>
+        <p class="tips">本活动最终解释权归温都金服所有</p>
+    </div>
+</div>
+<script>
+//    var InitData =  <?= dataJson?>
+    FastClick.attach(document.body);
+    var app = new Vue({
+        el: '#app',
+        data: {
+            //获取活动状态
+            promoStatus: 0,
+            isLogin:true,
+            times: 110,
+            residueTimes:100,
+            isShowRegular: true,
+            isWatering: false,
+            isDraw: false,
+            giftsStatus: {
+                gift1:false,
+                gift2:false,
+                gift3:false,
+                gift4:false,
+                gift5:false,
+                gift6:false,
+                gift7:false,
+            },
+            //是否已经领取
+            isGet:false,
+            isShare:false,
+        },
+        created: function () {
+
+        },
+        methods: {
+            showRegular: function () {
+                this.isShowRegular = !this.isShowRegular;
+            },
+            draw: function (target) {
+                var status = this.baseVerify();
+                var _this = this;
+                if(status){
+                   $.ajax({
+                       type:"GET",
+                       url:"/promotion/p180312/all-watered",
+                       data:{awardId:target},
+                       success:function(data){
+                           if(data.code == 0){
+                               _this.toastCenter("领取成功");
+                               _this.giftsStatus["gift"+target] = true;
+                           } else {
+                               _this.toastCenter(data.message);
+                           }
+                       },
+                       error:function(err){_this.toastCenter(err)}
+                   })
+                }
+            },
+            watering: function () {
+                var _this = this;
+                var status = this.baseVerify();
+                if(status){
+                    $.ajax({
+                        type:"GET",
+                        url:"/promotion/p180312/all-watered",
+                        data:'',
+                        success:function(data){
+                            if(data.code == 1){
+                                $("html,body").animate({scrollTop:0},500,function(){
+                                    _this.isWatering = true;
+                                    $('.bottle').on('webkitAnimationEnd', function () {
+                                        $(this).removeClass('bottleFadeIn');
+                                        _this.isWatering = false;
+                                        _this.times +=  data.count;
+                                        _this.residueTimes = 0;
+                                    });
+                                });
+                            } else {
+                                _this.toastCenter(data.message);
+                            }
+                        },
+                        error:function(err){_this.toastCenter(err)}
+                    });
+                }
+            },
+            getTimes:function(){
+                var status = this.baseVerify();
+                var _this = this;
+                if(status){
+                    $.ajax({
+                        type:"GET",
+                        url:"/promotion/p180312/get-free",
+                        data:'',
+                        success:function(data){
+                            if(data.code == 0){
+                                this.isGet = !this.isGet;
+                            } else {
+                                _this.toastCenter(data.message);
+                            }
+                        },
+                        error:function(err){_this.toastCenter(err)}
+                    })
+                }
+                console.log(status);
+            },
+            weixinShare:function(){
+                var status = this.baseVerify();
+                if(status){
+                    wxShare.setParams("测试标题","测试描述","http://view.wendujf.com/",111,"");
+                    wxShare.TimelineSuccessCallBack = function(){
+                        $.get("/promotion/p180312/get-share");
+                    };
+                    this.isShare = !this.isShare;
+                }
+            },
+            baseVerify:function(){
+                if(this.promoStatus == 1){
+                    this.toastCenter("活动未开始");
+                    return false;
+                } else if(this.promoStatus == 2){
+                    this.toastCenter("活动已结束");
+                    return false;
+                } else if(this.promoStatus == 0){
+                    if(!this.isLogin){
+                        this.toastCenter("未登录",function(){
+                            window.location.href = "/site/login";
+                        })
+                    } else {
+                        return true;
+                    }
+                }
+            },
+            toastCenter: function (val, active) {
+                var $alert = $('<div class="error-info" style="display: block; position: fixed;font-size: .4rem;"><div>' + val + '</div></div>');
+                $('body').append($alert);
+                $alert.find('div').width($alert.width());
+                setTimeout(function () {
+                    $alert.fadeOut();
+                    setTimeout(function () {
+                        $alert.remove();
+                    }, 200);
+                    if (active) {
+                        active();
+                    }
+                }, 2000);
+            }
+        }
+    });
+</script>
+</body>
+</html>

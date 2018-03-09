@@ -6,20 +6,26 @@ var wxShare = {
     des: "",
     link: "",
     imgUrl: "",
-    appId: ""
+    appId: "",
+    activeUrl:"",
+    obj:""
   },
   shareTag: ".share-btn",
   init: function () {
     this.panel(this.initParams);
   },
   /**设置微信分享参数**/
-  setParams: function (title, des, link, imgUrl, appId) {
+  setParams: function (title, des, link, imgUrl, appId,activeUrl,obj) {
     this.initParams.title = title;
     this.initParams.des = des;
     this.initParams.link = link;
     this.initParams.imgUrl = imgUrl;
     this.initParams.appId = appId;
-    this.panel(this.initParams);
+    this.initParams.activeUrl = activeUrl;
+    this.initParams.obj = obj;
+    if(activeUrl){
+      this.panel(this.initParams);
+    }
     this.wxPageShare(this.initParams);
   },
   /**判断浏览器终端**/
@@ -44,12 +50,22 @@ var wxShare = {
         if (version.ios || version.iPad || version.iPhone) {
           //苹果设备
           window.webkit.messageHandlers.share.postMessage(shareObj);
-          $.get('/promotion/p180222/add-share?scene=timeline&shareUrl='+encodeURIComponent(location.href), function (data) {
+          $.get(params.activeUrl+'?scene=timeline&shareUrl='+encodeURIComponent(location.href), function (data) {
+            if(data.code == 0 && params.obj){
+                params.obj.isShare = !params.obj.isShare;
+                params.obj.residueTimes++;
+                params.obj.toastCenter("增加浇水次数：1次");
+            }
           });
         } else if (version.android) {
           //android 设备,四个参数位置不可颠倒
           window.shareAction.share(params.title, params.des, params.link, params.imgUrl);
-          $.get('/promotion/p180222/add-share?scene=timeline&shareUrl='+encodeURIComponent(location.href), function (data) {
+          $.get(params.activeUrl+'?scene=timeline&shareUrl='+encodeURIComponent(location.href), function (data) {
+              if(data.code == 0 && params.obj){
+                  params.obj.isShare = !params.obj.isShare;
+                  params.obj.residueTimes++;
+                  params.obj.toastCenter("增加浇水次数：1次");
+              }
           });
         } else {
           //其它
