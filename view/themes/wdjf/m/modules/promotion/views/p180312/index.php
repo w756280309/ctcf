@@ -4,7 +4,7 @@ $this->title = '植树节种好礼';
 ?>
 
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20180228/css/index.min.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20180228/css/index.min.css?v=1.0">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
@@ -12,7 +12,7 @@ $this->title = '植树节种好礼';
 <div class="flex-content" id="app" v-cloak>
     <div :class="{bottleFadeIn:isWatering}" class="bottle" alt="a-watering"></div>
     <div class="banner">
-        <img class="bg" src="<?= FE_BASE_URI ?>wap/campaigns/active20180228/images/banner.png" alt="">
+<!--        <img class="bg" src="--><?//= FE_BASE_URI ?><!--wap/campaigns/active20180228/images/banner.png" alt="">-->
         <ul class="ctn-area">
             <li class="times rg">已浇水次数：<span v-html="times"></span>次</li>
             <li @click="draw(3)" class="gifts_01 shake1">
