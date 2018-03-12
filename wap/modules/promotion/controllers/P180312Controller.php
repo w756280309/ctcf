@@ -247,7 +247,7 @@ class P180312Controller extends BaseController
             } else {
                 return [
                     'code' => 5,
-                    'message' => '浇水次数不足',
+                    'message' => "浇水次数不足,<br>请点击下方浇水按钮",
                 ];
             }
         } catch (\Exception $ex) {

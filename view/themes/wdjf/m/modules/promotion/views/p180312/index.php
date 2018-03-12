@@ -210,7 +210,13 @@ $this->title = '植树节种好礼';
                                 _this.toastCenter("领取成功");
                                 _this.giftsStatus["gift"+target] = true;
                             } else {
-                                _this.toastCenter(data.message,function(){_this.flag = true;});
+                                if(data.code == 5){
+                                    _this.toastCenter("浇水次数不足，<br>请点击下方浇水按钮",function(){_this.flag = true;});
+                                    $("html,body").animate({scrollTop:"300px"},1000);
+
+                                } else {
+                                    _this.toastCenter(data.message,function(){_this.flag = true;});
+                                }
                             }
                         },
                         error:function(err){_this.toastCenter(err);_this.flag = true;}
@@ -315,7 +321,7 @@ $this->title = '植树节种好礼';
                     if (active) {
                         active();
                     }
-                }, 500);
+                }, 1500);
             }
         }
     });
