@@ -40,7 +40,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                     <div class="section">
                         <div class="number">4</div>
                         <span class="focus">产品</span><span>优质</span>
-                        <p>主流金融机构产品、优质政府平台类产品；</p>
+                        <p>产品优质，标的小额分散，期限灵活收益稳定；</p>
                         <p>优质供应链金融产品，期限多样，收益可观。</p>
                     </div>
 
