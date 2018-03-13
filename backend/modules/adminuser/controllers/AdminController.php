@@ -81,22 +81,9 @@ class AdminController extends BaseController
             $auths = $model->auths;
             $first_explode = explode(',', $auths);
             $ra = new AdminAuth();
-            if ($id) {
-                AdminAuth::deleteAll(['admin_id' => $id]);
-            }
-            foreach ($first_explode as $val) {
-                $sec_explode = explode('-', $val);
-                $_model = clone $ra;
-                $_model->admin_id = $id;
-                $_model->role_sn = $model->role_sn;
-                $_model->auth_sn = $sec_explode[0];
-                $_model->auth_name = $sec_explode[1];
-                $_model->status = 1;
-                $_model->setAttributes($_model);
-                $_model->save();
-            }
 
             if ($id) {
+                AdminAuth::deleteAll(['admin_id' => $id]);
                 if ($model->user_pass) {
                     $model->setPassword($model->user_pass);
                 }
@@ -108,11 +95,26 @@ class AdminController extends BaseController
                 } else {
                     $model->setPassword($model->user_pass);
                     $model->save();
+                    $id = $model->id;
+                }
+            }
+
+            //只有确认后台用户ID后才添加权限
+            if (null !== $id) {
+                foreach ($first_explode as $val) {
+                    $sec_explode = explode('-', $val);
+                    $_model = clone $ra;
+                    $_model->admin_id = $id;
+                    $_model->role_sn = $model->role_sn;
+                    $_model->auth_sn = $sec_explode[0];
+                    $_model->auth_name = $sec_explode[1];
+                    $_model->status = 1;
+                    $_model->setAttributes($_model);
+                    $_model->save();
                 }
             }
             $this->alert = 1;
             $this->toUrl = 'list';
-
             return $this->render('edit', ['model' => $model, 'roles' => $totalCategories, 'affiliators' => $totalAffiliators, 'authsval' => $aus]);
         }
 
