@@ -120,9 +120,13 @@ class UserController extends BaseController
             'page_size' => 5,
         ]);
 
-        foreach ($assets['data'] as $asset) {   //将债权订单记录按照创建时间的由近到远的顺序逐条插入到普通订单信息当中
+        //将债权订单记录按照创建时间的由近到远的顺序逐条插入到普通订单信息当中
+        foreach ($assets['data'] as $asset) {
+            //排除掉已经计息但未到收益中标的资产，否则会造成记录显示重复
+            if (in_array($asset['loan']['status'], [3, 7])) {
+                continue;
+            }
             $insertFlag = false;    //判断是否执行了插入操作标志位
-
             foreach ($orders as $key => $order) {
                 $assetTime = empty($asset['note_id']) ? $asset['orderTime'] : $asset['createTime'];
                 $_createTime = isset($order['createTime'])
