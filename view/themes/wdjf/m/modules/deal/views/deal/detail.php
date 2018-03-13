@@ -15,6 +15,9 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
 
 ?>
 <style>
+	body {
+		-webkit-text-size-adjust: 100% !important;
+	}
     .earn-ransom ol li {
         list-style: disc;
     }
@@ -298,6 +301,21 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
 <?php } ?>
 
 <script>
+  (function() {
+    if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+      handleFontSize();
+    } else {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    }
+    function handleFontSize() {
+      // 设置网页字体为默认大小
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+      // 重写设置网页字体大小的事件
+      WeixinJSBridge.on('menu:setfont', function() {
+        WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+      });
+    }
+  })();
     <?php if ($deal->issuerInfo && $deal->issuerInfo->video) { ?>
         window.onload = function () {
             var videoDiv = document.getElementById('video');

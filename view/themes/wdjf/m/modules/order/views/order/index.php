@@ -39,6 +39,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends
     <script src="<?= ASSETS_BASE_URI ?>js/layer.js?v=1"></script>
 
     <style>
+	    body {
+		    -webkit-text-size-adjust: 100% !important;
+	    }
 	    .produce{
 		    background-color: #ff6058;
 	    }
@@ -249,6 +252,21 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends
     <input type="hidden" id="selectedCouponRateday" value="0">
 <?php if ($deal->allowUseCoupon ===1 || $deal->allowRateCoupon === 1) { //修改T857问题,此处修改为邹键双找到的问题点?>
     <script type="text/javascript">
+      (function() {
+        if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+          handleFontSize();
+        } else {
+          document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+        }
+        function handleFontSize() {
+          // 设置网页字体为默认大小
+          WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+          // 重写设置网页字体大小的事件
+          WeixinJSBridge.on('menu:setfont', function() {
+            WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+          });
+        }
+      })();
         FastClick.attach(document.body);
         var money = $('#money').val();
         var sn = GetQueryString("sn");

@@ -12,7 +12,11 @@ UdeskWebIMHelper::init($this);
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
-
+<style>
+	body {
+		-webkit-text-size-adjust: 100% !important;
+	}
+</style>
 <?php if (!defined('IN_APP')) { ?>
     <div class="UtopTitle f18 flex-content">
         <a class="f14" href="/user/checkin">签到</a>
@@ -130,6 +134,21 @@ UdeskWebIMHelper::init($this);
 <?php } ?>
 
 <script type="text/javascript">
+  (function() {
+    if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+      handleFontSize();
+    } else {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    }
+    function handleFontSize() {
+      // 设置网页字体为默认大小
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+      // 重写设置网页字体大小的事件
+      WeixinJSBridge.on('menu:setfont', function() {
+        WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+      });
+    }
+  })();
     $(function () {
         FastClick.attach(document.body);
 
