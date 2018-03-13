@@ -5,6 +5,7 @@ use common\view\UdeskWebIMHelper;
 $this->title = '账户中心';
 $this->showBottomNav = true;
 UdeskWebIMHelper::init($this);
+$old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_user_id']);
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
@@ -142,6 +143,19 @@ UdeskWebIMHelper::init($this);
         </a>
     </li>
 </ul>
+<?php if (in_array(Yii::$app->user->id, $old_site_visible_user_id)) { ?>
+    <a href="http://legacy.hbctcf.com/account/allAssets">
+        <div class="out_ops flex-content">
+            <div style="width:0.69333333rem;height:1.226667rem;line-height:1.226667rem;text-align:left;vertical-align: middle;float:left;">
+                <img src="<?= ASSETS_BASE_URI ?>ctcf/images/ucenter/old_site.png" style="height: 45%;" alt="">
+            </div>
+            <div class="lf f15" style="background-position: 0 -1.518rem">老站入口</div>
+            <div class="rg f15">
+                &nbsp;<img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </div>
+    </a>
+<?php } ?>
 
 <a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>">
     <p class="customer_service f15">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?></p>
