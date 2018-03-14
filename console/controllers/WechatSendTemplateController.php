@@ -14,46 +14,41 @@ use yii\console\Controller;
  */
 class WechatSendTemplateController extends Controller
 {
-    public function actionIndex($id)
+    public function actionIndex($id, $action = null)
     {
         $model = Reply::findOne(['id' =>$id, 'style' => 'whole_message', 'isDel' => false]);
         if (is_null($model)) {
-            echo '相关模板消息不存在或已禁用';die;
+            echo '相关模板消息不存在或已禁用' . PHP_EOL;
+            die;
         }
         //获取关注公众号的用户
         $app = Yii::$container->get('weixin_wdjf');
         $userService = $app->user;
         $data = $userService->lists();
-        if ($data['count'] > 0) {
-            $users = $data['data']['openid'];
-            self::send($users, $model);
+        if ($action) {
+            if ($data['count'] > 0) {
+                $users = $data['data']['openid'];
+                self::send($users, $model, $data['next_openid']);
+            }
+        } else {
+            echo '发送消息给'. $data['total'] .'个用户' . PHP_EOL;
         }
 
     }
 
-    public static function send($users, $model)
+    public static function send($users, $model, $next)
     {
         if (isset($users) && count($users) > 0) {
-            echo count($users) . '个微信用户等待发送';
             $app = Yii::$container->get('weixin_wdjf');
             $array = json_decode($model->content);
             $template_id = $array->template_id;
             $url = $array->url;
             $data = $array->data;
-
-//            $template_id = 'Wf2CgM-J0s1Pp7DYngnxNTK6bn-86H2Qehm42uVHP0g';
-//            $url = 'https://m.wenjf.com/promotion/p171212/?utm_source=wxmp_wdjf&utm_medium=message&utm_content=171212-01';
-//            $data = [
-//                'first' => '双12狂欢开启，大额加息券限时返场，充值就送！送！送！',
-//                'keyword1' => '双12回馈',
-//                'keyword2' => '温都金服',
-//                'remark' => "\n由于手机端快捷充值限额，大额充值请使用电脑登录温都金服官网(www.wenjf.com)进行网银充值，有问题请立即与我们联系。点击立即参与活动",
-//            ];
-            $n = 0; //发送的数量,每五次歇一秒
+            $n = 0; //发送的数量,每10次歇0.5秒
             foreach ($users as $user) {
                 $n ++;
-                if ($n > 5) {
-                    usleep(1000000);
+                if ($n > 10) {
+                    usleep(500000);
                     $n = 0;
                 }
                 try {
@@ -63,13 +58,12 @@ class WechatSendTemplateController extends Controller
                 }
             }
         }
-        $lastOpenId = $users[count($users) -1];   //最后一个发送的用户
         $app = Yii::$container->get('weixin_wdjf');
         $userService = $app->user;
-        $data2 = $userService->lists($lastOpenId);
-        if ($data2['count'] > 0) {
-            $users2 = $data2['data']['openid'];
-            self::send($users2, $model);
+        $newData = $userService->lists($next);
+        if ($newData['count'] > 0) {
+            $newUsers = $newData['data']['openid'];
+            self::send($newUsers, $model, $newData['next_openid']);
         }
     }
 
@@ -85,5 +79,24 @@ class WechatSendTemplateController extends Controller
         //上传
         $result = $material->uploadImage(Yii::getAlias('@backend') . '/web/upload/wechat/toupiao.jpg');
         var_dump($result);
+    }
+
+    /**
+     * 用来生成全体消息内容的方法（格式：）
+     * 调试使用
+     */
+    public function actionCreateTemplateMessage()
+    {
+        $data = [
+            'template_id' => 'YCe17Ta3LbwhwQWe3aBOuTLE2EgYN_Tlho6mRz7aUC0',     //活动模板id
+            'url' => 'https://m.wenjf.com/promotion/p180312/?utm_source=wdjfmb&utm_medium=zsj',     //活动地址（注：加标识）
+            'data' => [
+                'first' => "红包、超市卡又来啦！把树种起来，奖品全拿走！\n",
+                'keyword1' => '植树节种好礼',
+                'keyword2' => '温都金服',
+                'remark' => "\n点击详情，快去种树拿大奖！",
+            ],
+        ];
+        echo json_encode($data);
     }
 }
