@@ -43,5 +43,5 @@ $this->title = '新人首投礼';
         </li>
     </ul>
     <a href="/user/invite" class="common-btn invite-btn">邀请好友参与</a>
-    <p class="copy-right">本活动最终解释权归楚天财富网所有</p>
+    <p class="copy-right">未详尽事宜请来电咨询</p>
 </div>
