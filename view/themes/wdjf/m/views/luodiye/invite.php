@@ -9,7 +9,7 @@ use common\view\WxshareHelper;
 use wap\assets\WapAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/first.css', ['depends' => WapAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/invite/activedisplay.css?v=20160810', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/invite/activedisplay.css?v=20180314', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/invite/activedisplay.js?v=20161013', ['depends' => WapAsset::class]);
 
@@ -31,11 +31,12 @@ if ($isLuodiye) {
 <div class="row transform-box">
     <div class="col-xs-12 transform-front-box">
         <div class="logo-back">
-            <img src="<?= ASSETS_BASE_URI ?>images/invite/logo-back.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>images/invite/middle_box_logo.png" alt="">
+            <i></i>
         </div>
         <div class="front-font">
             <?php if ($isLuodiye) { ?>
-                <p>新手标698元红包等你拿</p>
+                <p>新手标698红包等你拿</p>
                 <p>预期年化收益率10%</p>
             <?php } else { ?>
                 <p>好友邀请送好礼</p>

@@ -19,9 +19,8 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-sm-12">
-            <header class="row head-title head-title1">
-                <div class="logo logo1 col-xs-12 col-sm-12"><a href="/?_mark=1612"><img src="<?= ASSETS_BASE_URI ?>images/luodiye/logo-new.png" alt="logo"></a></div>
-                <div class="logo_tit logo_tit1">温州报业传媒旗下理财平台</div>
+            <header style="text-align: center;" class="row head-title head-title1">
+                <img style="width: 100%; max-width: 750px;" class="header_logo" src="<?= ASSETS_BASE_URI ?>images/luodiye/signup_logo.png" alt="">
             </header>
             <div class="row banner-box">
                 <div class="col-xs-12">

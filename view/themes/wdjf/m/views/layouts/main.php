@@ -62,8 +62,7 @@ $this->registerMetaTag([
     <?php if (!defined('IN_APP') && !$this->hideHeaderNav) { ?>
         <?php if ($this->headerNavOn) { ?>
             <header class="row head-title">
-                <div class="logo col-xs-12 col-sm-12"><img src="<?= ASSETS_BASE_URI ?>images/logo.png" alt="logo"></div>
-                <div class="logo_tit"><?= Html::encode($this->title) ?></div>
+                <img style="height: 100%; vertical-align: top;" class="header_logo" src="<?= ASSETS_BASE_URI ?>images/invite/header_logo.png" alt="">
             </header>
         <?php } else { ?>
             <?php if ($this->showAvatar) { ?>

@@ -277,8 +277,35 @@ a, a:hover {
 .transform-front-box .logo-back {
     padding: 7.2rem 0 2.3rem;
     background-color: #d55247;
+    position: relative;
 }
+.transform-front-box .logo-back i{
+    position: absolute;
+    height: 1px;
+    width: 52.64%;
+    left:0;
+    right:0;
+    margin:0 auto;
+    bottom:5%;
+    /*background: linear-gradient(*/
+            /*90deg,*/
+            /*#D55247 0%,*/
+            /*#E7A78A 50%,*/
+            /*#D55247 100%*/
+    /*);*/
+    background: -webkit-linear-gradient(to right,#D55247 0%,#E7A78A 50%,#D55247 100%);
+    background: -moz-linear-gradient(to right,#D55247 0%,#E7A78A 50%,#D55247 100%);
+    background: -ms-linear-gradient(to right,#D55247 0%,#E7A78A 50%,#D55247 100%);
+    background: -o-linear-gradient(to right,#D55247 0%,#E7A78A 50%,#D55247 100%);
+    background: linear-gradient(to right,#D55247 0%,#E7A78A 50%,#D55247 100%);
+    background-image: -moz-linear-gradient(right,#D55247,#E7A78A,#D55247);
+    background-image: -webkit-gradient(linear,left top,right top,color-stop(0,#D55247),color-stop(0.5,#E7A78A),color-stop(1,#D55247));
 
+
+
+
+
+}
 .transform-front-box .logo-back img {
     width: 100%;
 }
@@ -450,7 +477,7 @@ a, a:hover {
 
 @media (min-width: 501px) {
     .transform-front-box .logo-back {
-        padding: 3.2rem 0 1.3rem;
+        padding: 3.2rem 0 2.3rem;
     }
 }
 
