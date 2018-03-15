@@ -817,7 +817,8 @@ class Client
     }
 
     /**
-     * 4.3.3 投资用户返款接口(商户->平台)
+     * 4.3.3 投资用户返款接口(商户->平台) -- 只针对于个人投资者
+     *
      * @param type $txSn 商户订单号
      * @param type $txDate 商户订单日期
      * @param type $projectId 标的号
@@ -835,6 +836,33 @@ class Client
             'trans_action' => '02',
             'partic_type' => '01',
             'partic_acc_type' => '01',
+            'partic_user_id' => $particUserId,
+            'amount' => $amount * 100,   //单位为分
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 4.3.3 投资用户返款接口(商户->平台) -- 只针对于企业投资者
+     *
+     * @param type $txSn 商户订单号
+     * @param type $txDate 商户订单日期
+     * @param type $projectId 标的号
+     * @param type $particUserId 转账方用户号 企业用户：联动开立的商户号
+     * @param type $amount 金额
+     */
+    public function fkToOrgUser($txSn, $txDate, $projectId, $particUserId, $amount)
+    {
+        $data = [
+            'service' => 'project_transfer',
+            'order_id' => $txSn,
+            'mer_date' => date('Ymd', $txDate),  //商户生成订单的日期，格式YYYYMMDD
+            'project_id' => $projectId,  //标的号,本地id值
+            'serv_type' => '54',
+            'trans_action' => '02',
+            'partic_type' => '01',
+            'partic_acc_type' => '02',
             'partic_user_id' => $particUserId,
             'amount' => $amount * 100,   //单位为分
         ];

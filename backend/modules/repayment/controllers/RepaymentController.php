@@ -194,8 +194,9 @@ class RepaymentController extends BaseController
         }
 
         /** 第三步：标的账户返款到投资人账户 */
+        $isLhwxLoan = in_array($loan->sn, Yii::$app->params['lhwt_loan_sns']);
         try {
-            $this->loanRefundToLender($loan, $plans, $repayment->id);
+            $this->loanRefundToLender($loan, $plans, $repayment->id, $isLhwxLoan);
         } catch (\Exception $ex) {
             return [
                 'result' => 0,
@@ -205,15 +206,19 @@ class RepaymentController extends BaseController
 
         /** 第四步：更新用户资产回款状态及发送短信消息及微信推送 */
 
-        //还款短信
-        $userIds = array_unique(ArrayHelper::getColumn($plans, 'uid'));
-        $this->sendRefundSms($loan, $qishu, $userIds);
-
         //更新资产回款状态（TX）
         $this->updateAssetRepaidStatus($loan);
 
-        //微信推送给还款成功信息投资者
-        $this->repaySuccessPush($plans, $repayment);
+        //非立合旺通投资用户
+        if (!$isLhwxLoan) {
+            //还款短信
+            $userIds = array_unique(ArrayHelper::getColumn($plans, 'uid'));
+            $this->sendRefundSms($loan, $qishu, $userIds);
+
+            //微信推送给还款成功信息投资者
+            $this->repaySuccessPush($plans, $repayment);
+        }
+
 
         return [
             'result' => 1,
@@ -703,11 +708,12 @@ class RepaymentController extends BaseController
      * @param OnlineProduct $loan        标的
      * @param array         $plans       还款计划
      * @param int           $repaymentId 还款记录ID
+     * @param boolean       $isLhwxLoan  是否为立合旺通投资标的
      *
      * @return bool
      * @throws \Exception
      */
-    private function loanRefundToLender($loan, $plans, $repaymentId)
+    private function loanRefundToLender($loan, $plans, $repaymentId, $isLhwxLoan)
     {
         //检查融资者返款到账户是否完成，若完成直接返回true，进行下一步
         $refundRepayment = Repayment::find()
@@ -788,7 +794,11 @@ class RepaymentController extends BaseController
                 //判断是否是联动正式环境，然后返款给投资用户
                 if ($plan->benxi > 0 && Yii::$app->params['ump_uat']) {
                     //调用联动返款接口,返款给投资用户
-                    $fkResp = $ump->fankuan($plan->sn, $lenderRepaymentRecord->refund_time, $plan->online_pid, $user->epayUser->epayUserId, $plan->benxi);
+                    if ($isLhwxLoan) {
+                        $fkResp = $ump->fkToOrgUser($plan->sn, $lenderRepaymentRecord->refund_time, $plan->online_pid, $user->epayUser->epayUserId, $plan->benxi);
+                    } else {
+                        $fkResp = $ump->fankuan($plan->sn, $lenderRepaymentRecord->refund_time, $plan->online_pid, $user->epayUser->epayUserId, $plan->benxi);
+                    }
                     if (!$fkResp->isSuccessful()) {
                         $transaction->rollBack();
                         throw new \Exception($fkResp->get('ret_msg'));

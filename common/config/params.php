@@ -277,4 +277,5 @@ return [
         'click_message' => [],    //点击公众号菜单的提示信息
     ],
     'old_site_visible_user_id' => '',
+    'lhwt_loan_sns' => [],
 ];
