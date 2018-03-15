@@ -4,12 +4,14 @@ namespace common\models\offline;
 
 use common\models\mall\PointRecord;
 use common\models\order\OnlineOrder;
+use common\models\user\IdCardIdentity;
 use common\models\user\User;
 use common\service\AccountService;
 use common\utils\SecurityUtils;
 use common\utils\TxUtils;
 use Wcg\Xii\Crm\Model\Account;
 use Yii;
+use yii\db\Exception;
 
 class OfflinePointManager
 {
@@ -45,7 +47,7 @@ class OfflinePointManager
                      * 大于等于50000，奖励3500积分
                      * 其余奖励1400积分
                      */
-                    if ($isFirst == 0 && $type == PointRecord::TYPE_OFFLINE_BUY_ORDER) {
+                    if ($isFirst == 1 && $type == PointRecord::TYPE_OFFLINE_BUY_ORDER) {
                         self::sendFirstAward($order, PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1);
                     }
 
@@ -55,10 +57,10 @@ class OfflinePointManager
                         $inviter = OfflineUser::findOne(['crmAccount_id' => $acount->identity->inviter]);
                     }
 
-                    if ($isFirst < 3 && !is_null($inviter)) { //前三次返现
+                    if ($isFirst <= 3 && !is_null($inviter)) { //前三次返现
                         if ($inviter->onlineUserId && $type == PointRecord::TYPE_OFFLINE_BUY_ORDER) {
                             self::fanxian($inviter, $order->money);
-                        } elseif ($isFirst == 0 && is_null($inviter->onlineUserId)) {   //首次发几份
+                        } elseif ($isFirst == 1 && is_null($inviter->onlineUserId)) {   //首次发积分
                             $invite_type = $points > 0 ? PointRecord::TYPE_OFFLINE_INVITE_REWARD : PointRecord::TYPE_OFFLINE_INVITE_RESET;
                             self::sendPointsInviter($inviter, $order->money, $order->id, $invite_type);
                         }
@@ -249,24 +251,17 @@ class OfflinePointManager
     }
 
     //此身份证号的用户投资次数
-    public static function isFirst(OfflineOrder $order)
+    private static function isFirst(OfflineOrder $order)
     {
         $user = $order->user;
-        //线下账户是否有过投资
-        $off_count_orders = OfflineOrder::find()->where([
-            'idCard' => $user->idCard,
-            'isDeleted' => false])
-            ->andWhere(['<', 'created_at', $order->created_at])
-            ->count();
-        //线上账户投资
-        $on_count_orders = OnlineOrder::find()
-            ->innerJoin('user', 'user.id = online_order.uid')
-            ->where([
-                'user.safeIdCard' => SecurityUtils::encrypt($user->idCard),
-                'online_order.status' => 1,])
-            ->andWhere(['<', 'online_order.created_at', $order->created_at])
-            ->count();
-        return bcadd($off_count_orders, $on_count_orders, 0);
+        if (!is_null($user)) {
+            $idCardIdentity = new IdCardIdentity([
+                'idCard' => $user->idCard,
+            ]);
+            return $idCardIdentity->getInvestNumber($order->created_at);
+        } else {
+            throw new Exception('用户不存在');
+        }
 
     }
     //被邀请人前三次投资，给邀请人返现
@@ -284,13 +279,22 @@ class OfflinePointManager
     //首投奖励
     private function sendFirstAward(OfflineOrder $order, $type)
     {
-        if (self::isFirst($order) == 0) {
-            if (bcmul($order->money, 10000) >= 50000) {
-                $points = 3500;
-            } else {
-                $points = 1400;
+        //根据身份证号判断用户是否获得过首投
+        $user = $order->user;
+        if (!is_null($user)) {
+            $idCardIdentity = new IdCardIdentity([
+                'idCard' => $user->idCard,
+                ]);
+            if (!$idCardIdentity->isGetFirstAward()) { //未获得过首投奖励
+                if (self::isFirst($order) == 1) {
+                    if (bcmul($order->money, 10000) >= 50000) {
+                        $points = 3500;
+                    } else {
+                        $points = 1400;
+                    }
+                    self::doUpdatePoints($order, $points, $type);
+                }
             }
-            self::doUpdatePoints($order, $points, $type);
         }
     }
 

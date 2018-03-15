@@ -6,6 +6,7 @@ use common\models\mall\PointRecord;
 use common\models\offline\OfflineOrder;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
+use common\models\user\IdCardIdentity;
 use common\models\user\User;
 use common\utils\SecurityUtils;
 use common\utils\TxUtils;
@@ -60,26 +61,12 @@ class FirstOrderPoints
                 if (is_null($firstOrder) || $firstOrder->id !== $order->id) {
                     return false;
                 }
-                //当前身份证号的其他账户是否有过投资
-                $otherOnorder = OnlineOrder::find()
-                    ->innerJoin('user', 'user.id = online_order.uid')
-                    ->where(['user.safeIdCard' => $user->safeIdCard])
-                    ->andWhere(['!=', 'user.id', $user->id])
-                    ->andWhere(['<=', 'online_order.order_time', $order->order_time])
-                    ->count();
-                if ($otherOnorder > 0) {
-                    return false;
-                }
-                //在这之前线下是否有投资
-                $oldOffOrder = OfflineOrder::find()
-                    ->innerJoin("offline_user", "offline_user.id = offline_order.user_id")
-                    ->where([
-                        'offline_order.isDeleted' => false,
-                        'offline_user.idCard' => SecurityUtils::decrypt($order->user->safeIdCard),
-                    ])
-                    ->andWhere(['<', 'offline_order.created_at', $order->order_time])
-                    ->count();
-                if ($oldOffOrder > 0) {
+                //当前投资为第几次成功交易
+                $idCardIdentity = new IdCardIdentity([
+                    'idCard' => SecurityUtils::decrypt($user->safeIdCard),
+                    ]);
+                //不是第一次投资
+                if ($idCardIdentity->getInvestNumber($order->order_time) > 1) {
                     return false;
                 }
                 //活动期间首次投资而且是O2O渠道注册用户
@@ -100,11 +87,10 @@ class FirstOrderPoints
     //判断用户是否已经发过首投积分
     public function hasAwarded(User $user)
     {
-        $record = PointRecord::findOne([
-            'user_id' => $user->id,
-            'ref_type' => PointRecord::TYPE_FIRST_LOAN_ORDER_POINTS_1,//首次投资送积分
-        ]);
-        return !is_null($record);
+        $idCardIdentity = new IdCardIdentity([
+            'idCard' => SecurityUtils::decrypt($user->safeIdCard),
+            ]);
+        return $idCardIdentity->isGetFirstAward();
     }
 
     //根据用户首次投资订单给用户送积分
