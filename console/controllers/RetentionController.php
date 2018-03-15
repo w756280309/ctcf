@@ -147,7 +147,7 @@ class RetentionController extends Controller
     }
 
     /**
-     * 导出指定注册时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户信息
+     * 导出指定注册时间段且当前理财资产为0，可用余额为0，认购次数1次及以上的客户信息
      *
      * 导出项：用户ID、注册时间、姓名、联系方式、可用余额、投资成功金额、性别，生日，年龄
      * @param string $startDate 开始日期
@@ -157,7 +157,7 @@ class RetentionController extends Controller
      */
     public function actionListExport($startDate, $endDate)
     {
-        //获得指定时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户信息
+        //获得指定时间段且当前理财资产为0，可用余额为小于1000，认购次数1次及以上的客户信息
         $sql = "select 
 o.uid,u.real_name,u.safeMobile,from_unixtime(u.created_at) createTime,sum(o.order_money) as investMoney,ua.available_balance,u.safeIdCard,u.birthdate
 from online_order o 
@@ -207,7 +207,7 @@ group by o.uid";
     }
 
     /**
-     * 指定注册时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户发放指定代金券
+     * 指定注册时间段且当前理财资产为0，可用余额小于1000，认购次数1次及以上的客户发放指定代金券
      *
      * @param string $startDate 开始日期
      * @param string $endDate 结束日期
@@ -216,7 +216,7 @@ group by o.uid";
      */
     public function actionSendCoupon($startDate, $endDate)
     {
-        //获得指定时间段且当前理财资产为0，可用余额为0，认购次数1次以上的客户信息
+        //获得指定时间段且当前理财资产为0，可用余额小于1000，认购次数1次及以上的客户信息
         $sql = "select o.uid 
 from online_order o 
 inner join user u on u.id = o.uid
@@ -267,8 +267,8 @@ group by o.uid";
     private function getCouponSns()
     {
         return [
-            '180228_retention_100',
-            '180208_retention_500',
+            '180315_retention_50',
+            '180315_retention_10',
         ];
     }
 }
