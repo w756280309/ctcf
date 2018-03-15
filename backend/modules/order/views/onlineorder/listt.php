@@ -91,7 +91,7 @@ $loan_status = Yii::$app->request->get('loan_status');
                     $loanRate = $loanRate.'+'.\common\utils\StringUtils::amountFormat2($loan->jiaxi).'%';
                 }
                 $refundMethod = $offline ? Yii::$app->params['refund_method'][$loan->refund_method] : '---';
-                $productList = '/product/productonline/list?title=' . $title;    //跳转到贷款管理列表页，并通过项目名称筛选出该标的
+                $productList = !$offline ? '/offline/offline/list?title=' . $title : '/product/productonline/list?title=' . $title;    //跳转到贷款管理列表页，并通过项目名称筛选出该标的
                 $detailUrl = $offline ? rtrim(Yii::$app->params['clientOption']['host']['frontend'], '/') . '/deal/deal/detail?sn='.$loan->sn :
                     rtrim(Yii::$app->params['clientOption']['host']['backend'], '/') . '/offline/offline/loanlist?sn='.$loan->sn;
 

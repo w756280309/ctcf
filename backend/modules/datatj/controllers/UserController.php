@@ -6,6 +6,7 @@ use backend\controllers\BaseController;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\UserAffiliation;
 use common\models\user\User;
+use common\models\offline\OfflineOrder;
 use yii;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
@@ -213,4 +214,192 @@ REPAYMENT;
 
         return $repaymentAnnual;
     }
+
+    /**
+     * 统计线下用户某个月份范围内老客复投，老客新增，新客新增数据
+     */
+    public function actionOfflineIndex()
+    {
+        $request = Yii::$app->request->get();
+
+        //按照月份范围查询
+        if (isset($request['monthStart']) && !empty($request['monthStart'])) {
+            $monthStart = $request['monthStart'];
+        } else {
+            $monthStart = date('Y-m', strtotime('-1 month'));
+        }
+
+        if (isset($request['monthEnd']) && !empty($request['monthEnd'])) {
+            $monthEnd = $request['monthEnd'];
+        } else {
+            $monthEnd = date('Y-m', strtotime('-1 month'));
+        }
+
+        $offUsers = [];
+        $affId = 0;
+
+        if (isset($request['aff_id'])) {
+            $affId = (int) $request['aff_id'];
+        }
+        if (isset($request['user_type'])) {
+            $userType = (int) $request['user_type'];
+        }
+
+        //获取所有的分销商信息
+        $affs = Affiliator::find()
+            ->select('id, name')
+            ->indexBy('id')
+            ->asArray()
+            ->all();
+
+        $offlineOrderAnnual = $this->offlineOrderAnnual($monthStart, $monthEnd, $affId);
+        $offlineOrderAnnual = ArrayHelper::index($offlineOrderAnnual, 'user_id');
+        $offlineOrderUids = ArrayHelper::getColumn($offlineOrderAnnual, 'user_id');
+        $offlineRepaymentAnnual = $this->offlineRepaymentAnnual($monthStart, $monthEnd, $offlineOrderUids);
+        if (!empty($offlineRepaymentAnnual)) {
+            $offlineRepaymentAnnual = ArrayHelper::index($offlineRepaymentAnnual, 'user_id');
+        }
+
+        if (!empty($offlineOrderUids)) {
+            $offUserQuery = OfflineOrder::find()
+                ->innerJoin('offline_user', 'offline_order.user_id = offline_user.id')
+                ->select("offline_user.*, count(offline_order.id) as count")
+                ->where(['offline_user.id' => $offlineOrderUids])
+                ->andWhere(['offline_order.isDeleted' => 0])
+                ->andWhere("DATE_FORMAT( offline_order.orderDate, '%Y-%m') <= :month", [
+                    'month' => $monthEnd
+                ])
+                ->groupBy('offline_order.user_id');
+
+            if (1 === $userType) {
+                $offUserQuery->having("count = 1");
+            } elseif (2 === $userType) {
+                $offUserQuery->having("count > 1");
+            }
+
+            $offUsers = $offUserQuery
+                ->orderBy(['id' => SORT_DESC])
+                ->asArray()
+                ->all();
+        }
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $offUsers,
+        ]);
+        return $this->render('offline_index', [
+            'dataProvider' => $dataProvider,
+            'userData' => $this->offlineDataProcess($offUsers, $offlineRepaymentAnnual, $offlineOrderAnnual),
+            'affs' => $affs,
+            'monthStart' => $monthStart,
+            'monthEnd' => $monthEnd,
+            'affId' => $affId,
+            'userType' => $userType,
+        ]);
+    }
+
+    /**
+     * 统计线下用户某个月份范围内的投资年化金额
+     */
+    private function offlineOrderAnnual($monthStart, $monthEnd, $aff_id)
+    {
+        $where = $aff_id === 0 ? "AND o.affiliator_id != :aff_id" : "AND o.affiliator_id = :aff_id";
+        $orderSql = <<<Order
+            SELECT o.user_id as user_id, o.affiliator_id as affiliator_id, a.name as name, SUM( TRUNCATE( (
+            o.money * l.expires / if (l.unit = "天", 365 , 12)) * 10000 , 2 )
+            ) AS annual
+            FROM offline_order o
+            INNER JOIN offline_loan l ON o.loan_id = l.id
+            INNER JOIN affiliator a ON o.affiliator_id = a.id
+            WHERE DATE_FORMAT( o.orderDate , '%Y-%m') 
+            BETWEEN :monthStart
+            AND :monthEnd
+            $where
+            AND o.isDeleted = 0 
+            GROUP BY o.user_id
+Order;
+
+        $offlineOrderAnnual = Yii::$app->db->createCommand($orderSql, [
+            'monthStart' => $monthStart,
+            'monthEnd' => $monthEnd,
+            'aff_id' => $aff_id,
+        ])->queryAll();
+        return $offlineOrderAnnual;
+    }
+
+    /**
+     * 统计线下客户某个月份范围内的实际回款年化金额.
+     */
+    private function offlineRepaymentAnnual($monthStart, $monthEnd, array $offline_uids)
+    {
+        if (empty($offline_uids)) {
+            return null;
+        }
+
+        $uids = implode(',', $offline_uids);
+
+        $offlineRepaymentSql = <<<REPAYMENT
+            SELECT op.uid AS user_id, SUM( TRUNCATE(
+             op.benxi * ol.expires /if (ol.unit = "天", 365 , 12), 2 )
+            ) AS annual
+            FROM offline_repayment_plan op
+            INNER JOIN offline_loan ol ON op.loan_id = ol.id
+            WHERE op.status in (1, 2)
+            AND op.uid in ($uids)
+            AND DATE_FORMAT( op.actualRefundTime , '%Y-%m')
+            BETWEEN :monthStart
+            AND :monthEnd
+            GROUP BY op.uid
+REPAYMENT;
+
+        $offlineRepaymentAnnual = Yii::$app->db->createCommand($offlineRepaymentSql, [
+            'monthStart' => $monthStart,
+            'monthEnd' => $monthEnd,
+        ])->queryAll();
+
+        return $offlineRepaymentAnnual;
+    }
+
+    /**
+     * 处理数据.
+     *线下老用户：月份范围内有投资且小于等于结束月份投资大于1次
+     * 线下新用户：月份范围内有投资且小于等于结束月份投资只有1次
+     * 1. 计算线下老用户的复投金额、新增金额;
+     * 2. 计算线下新用户的新增金额;
+     * 3. 统计计算老客复投金额、老客新增金额、新客新增金额数据;
+     */
+    public function offlineDataProcess($users, $repaymentAnnual, $orderAnnual)
+    {
+        $totalNewGrowAmount = 0;
+        $totalOldGrowAmount = 0;
+        $totalOldRepeatAmount = 0;
+        $data = [];
+
+        foreach ($users as $user) {
+            //计算线下新客新增金额，老客复投新增金额
+            $oa = isset($orderAnnual[$user['id']]) ? $orderAnnual[$user['id']]['annual'] : 0;
+            $ra = isset($repaymentAnnual[$user['id']]) ? $repaymentAnnual[$user['id']]['annual'] : 0;
+            $amount = bcsub($oa, $ra, 2);
+            $amount = $amount > 0 ? $amount : 0;
+
+            if ((int)$user['count'] === 1) {
+                $data[$user['id']]['user_type'] = '新客';
+                $data[$user['id']]['new_grow_amount'] = $amount;
+                $totalNewGrowAmount = bcadd($totalNewGrowAmount, $amount, 14);
+            } elseif ((int)$user['count'] > 1) {
+                $data[$user['id']]['user_type'] = '老客';
+                $data[$user['id']]['old_grow_amount'] = $amount;           //老客新增金额
+                $data[$user['id']]['old_repeat_amount'] = min($oa, $ra);   //计算老客复投金额
+                $totalOldGrowAmount = bcadd($totalOldGrowAmount, $amount, 14);
+                $totalOldRepeatAmount = bcadd($totalOldRepeatAmount, $data[$user['id']]['old_repeat_amount'], 14);
+            }
+            $data[$user['id']]['affiliator'] = $orderAnnual[$user['id']]['name'];
+        }
+
+        return [
+            'total_new_grow_amount' => $totalNewGrowAmount,    //新客新增金额总计
+            'total_old_grow_amount' => $totalOldGrowAmount,    //老客新增金额总计
+            'total_old_repeat_amount' => $totalOldRepeatAmount,  //老客复投金额总计
+            'data' => $data,
+        ];
+    }
+
 }
