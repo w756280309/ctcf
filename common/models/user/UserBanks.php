@@ -102,7 +102,8 @@ class UserBanks extends \yii\db\ActiveRecord
     {
         $str_card = $this->$attribute;
         $str_card_len = strlen($str_card);
-        if ($str_card_len < 8 || $str_card_len > 20) {
+        //截止目前（2018-03-16）对公账户最多位数的是：北京银行23位
+        if ($str_card_len < 8 || $str_card_len > 23) {
             $this->addError($attribute, "你输入的银行卡号有误");
         } else {
             return TRUE;
