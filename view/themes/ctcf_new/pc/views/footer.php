@@ -25,7 +25,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/footer.min.css', ['depends' => 
             <div class="phone-service fz16 lf">
                 <p class="phone-service-msg">客服电话</p>
                 <p class="phone-service-number fz30"><?= Yii::$app->params['platform_info.contact_tel'] ?></p>
-                <p class="phone-service-time">(周一到周日 9:00-20:00)</p>
+                <p class="phone-service-time" style="line-height:26px;">(周一到周日 9:00-20:00)</p>
             </div>
             <ul class="clear-fix rg">
                 <li class="lf">
