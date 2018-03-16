@@ -18,6 +18,7 @@ use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
 use common\models\promo\Poker;
 use common\models\promo\PokerUser;
+use common\models\promo\PromoLotteryTicket;
 use common\models\transfer\Transfer;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
@@ -713,5 +714,49 @@ having orderAsset >= 0";
         }
 
         $this->stdout('写入失败');
+    }
+
+    /**
+     * 导出指定活动未领取奖励的客户名单
+     * 要素：姓名，手机号，剩余奖励次数
+     * 本次为植树节活动
+     * 希望将来大家能用到
+     * @param $promoId
+     */
+    public function actionTreeData($promoId = 55)
+    {
+        $sql = "SELECT 
+u.real_name '姓名',
+u.safeMobile '手机号',
+count(*) '剩余浇水次数'
+FROM user u 
+INNER JOIN promo_lottery_ticket plt
+ON u.id = plt.user_id
+WHERE 
+plt.promo_id = :promoId
+AND 
+plt.isDrawn = 0
+GROUP BY plt.user_id";
+        $datas = Yii::$app->db->createCommand($sql, [
+            'promoId' => $promoId,
+        ])->queryAll();
+        if (!empty($datas)) {
+            $file = Yii::getAlias('@app/runtime/promo_data_' . date("YmdHis") . '.xlsx');
+            $exportData[] = ['姓名', '手机号', '剩余浇水次数'];
+            foreach ($datas as $data) {
+                array_push($exportData, [
+                    $data['姓名'],
+                    SecurityUtils::decrypt($data['手机号']),
+                    $data['剩余浇水次数'],
+                ]);
+            }
+            //导出Excel
+            $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+            $objWriter->save($file);
+            $this->stdout('操作成功，文件：'. $file . PHP_EOL) ;
+        } else {
+            $this->stdout('无记录，请重试' . PHP_EOL) ;
+        }
     }
 }
