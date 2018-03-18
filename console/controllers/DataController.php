@@ -759,4 +759,65 @@ GROUP BY plt.user_id";
             $this->stdout('无记录，请重试' . PHP_EOL) ;
         }
     }
+
+    /**
+     * 导出有活动奖励未领取的用户名单
+     * @param $promoId
+     * @param $action
+     */
+    public function actionUnrewarded($promoId = 55)
+    {
+        $sql = "SELECT
+u.id 'ID', 
+u.real_name '姓名',
+u.safeMobile '手机号',
+count(*) '浇水次数'
+FROM user u 
+INNER JOIN promo_lottery_ticket plt
+ON u.id = plt.user_id
+WHERE 
+plt.promo_id = :promoId
+AND 
+plt.isDrawn = 1
+GROUP BY plt.user_id";
+        $datas = Yii::$app->db->createCommand($sql, [
+            'promoId' => $promoId,
+        ])->queryAll();
+        //判断用户是否有奖励未领取
+        //对应次数获得的奖励
+        $rewardCount = [
+            '80' => 7,
+            '60' => 6,
+            '28' => 5,
+            '8' => 4,
+            '5' => 3,
+            '3' => 2,
+            '2' => 1,
+        ];
+        $file = Yii::getAlias('@app/runtime/promo_data_' . date("YmdHis") . '.xlsx');
+        $exportData[] = ['姓名', '手机号'];
+        foreach ($datas as $data) {
+            //用户已经领取的奖励次数
+            $count = Award::find()
+                ->where([
+                    'user_id' => $data['ID'],
+                    'promo_id' => $promoId,
+                ])->count();
+            foreach ($rewardCount as $k => $v) {
+                //实际浇水次数达到，有部分奖励未领取
+                if ($data['浇水次数'] >= $k && $count < $v) {
+                    array_push($exportData,[
+                        $data['姓名'],
+                        SecurityUtils::decrypt($data['手机号']),
+                    ]);
+                    break;
+                }
+            }
+        }
+        //导出Excel
+        $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        $this->stdout('操作成功，文件：'. $file . PHP_EOL);
+    }
 }
