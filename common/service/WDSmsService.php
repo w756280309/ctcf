@@ -54,9 +54,12 @@ class WDSmsService
                 $smsMessage->status = SmsMessage::STATUS_SENT;
                 $smsMessage->save();
                 return true;
+            } else {
+                Yii::info('沃动短信发送失败，手机号：'.$mobile.'，失败原因：'. $res->data->message);
             }
+        } else {
+            Yii::info('账号：'.$mobile.'不存在');
         }
-
         return false;
     }
 

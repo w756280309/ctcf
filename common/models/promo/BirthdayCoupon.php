@@ -9,6 +9,7 @@ use common\service\SmsService;
 use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
 use common\service\WDSmsService;
+use Yii;
 
 /**
  * 生日当天送代金券活动
@@ -102,13 +103,6 @@ class BirthdayCoupon
                         }
                         $successCoupon++;
                     }
-
-                    //沃动短信通道
-                    $wodong = new WDSmsService();
-                    $res = $wodong->send(SecurityUtils::decrypt($user->safeMobile), '【温都金服】尊敬的' .$user->real_name. '，温都金服祝您生日快乐！赠您生日感恩代金券礼包，180天有效，客服热线400-101-5151，退订回N');
-                    if (!$res) {
-                        throw new \Exception();
-                    }
                     $translation->commit();
                 }
             } catch (\Exception $ex) {
@@ -116,6 +110,13 @@ class BirthdayCoupon
                 \Yii::info('[command][promo/send-coupon] 生日当天送代金券　用户('.$user->id.')发送失败, 失败信息: '. $ex->getMessage(), 'command');
                 throw new \Exception($ex->getMessage());
             }
+            //沃动短信通道
+            $wodong = new WDSmsService();
+            //公司简称
+            $shortName = Yii::$app->params["platform_info.company_short_name"];
+            $contact = Yii::$app->params["platform_info.contact_tel"];
+            $wodong->send($user->getMobile(),
+                '【'.$shortName .'】尊敬的' .$user->real_name. '，'.$shortName.'祝您生日快乐！赠您生日感恩代金券礼包，180天有效，客服热线'.$contact.'，退订回N');
             $successUser++;
         }
 
