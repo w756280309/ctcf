@@ -161,7 +161,7 @@ class RankingController extends BaseController
             ->where(['sn' => 'SP1802061505392888845138'])
             ->one();
         if (null !== $good) {
-            $query->andWhere(['ref_id' => $good->id]);
+            $query->andFilterWhere(['<>', 'concat(aw.ref_type, aw.ref_id)', 'PIKU' . $good->id]);
         }
 
         return $query->orderBy(['aw.createTime' => SORT_DESC]);
