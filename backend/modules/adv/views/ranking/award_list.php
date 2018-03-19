@@ -60,13 +60,13 @@ $this->title = '获奖列表';
                         [
                             'header' => '抽奖时间',
                             'value' => function ($model) {
-                                return date('Y-m-d H:i:s', $model['drawAt']);
+                                return null !== $model['drawAt'] ? date('Y-m-d H:i:s', $model['drawAt']) : '---';
                             }
                         ],
                         [
                             'header' => '发奖时间',
                             'value' => function ($model) {
-                                return $model['rewardedAt'] ? date('Y-m-d H:i:s', $model['rewardedAt']) : '未发奖';
+                                return $model['createTime'];
                             }
                         ],
                         [

@@ -4,6 +4,7 @@ namespace backend\modules\adv\controllers;
 
 use backend\controllers\BaseController;
 use common\models\adminuser\AdminLog;
+use common\models\code\GoodsType;
 use common\models\promo\DuoBao;
 use common\models\promo\PromoLotteryTicket;
 use common\models\user\User;
@@ -129,9 +130,9 @@ class RankingController extends BaseController
             foreach ($data as $value) {
                 echo $value['real_name']."\t,";
                 echo SecurityUtils::decrypt($value['safeMobile'])."\t,";
-                echo date('Y-m-d H:i:s', $value['drawAt'])."\t,";
-                echo ($value['rewardedAt'] ? date('Y-m-d H:i:s', $value['rewardedAt']) : "")."\t,";
-                echo $value['rewardName'] . "\t,";
+                echo (null !== $value['drawAt'] ? date('Y-m-d H:i:s', $value['drawAt']) : '---')."\t,";
+                echo $value['createTime']."\t,";
+                echo $value['rewardName']."\t,";
                 echo ($value['name'] ?: "")."\t\n";
             }
         }
@@ -139,24 +140,31 @@ class RankingController extends BaseController
 
     private function getAwardQuery($promo)
     {
-        return (new Query())
-            ->select([
-                'u.real_name',
-                'u.safeMobile',
-                't.drawAt',
-                't.rewardedAt',
-                't.reward_id',
-                'a.name',
-                't.user_id',
-                'r.name as rewardName'
-            ])->from('promo_lottery_ticket AS t')
-            ->innerJoin('user AS u', 't.user_id = u.id')
-            ->innerJoin('reward As r', 't.reward_id = r.id')
-            ->leftJoin('user_affiliation AS ua', 't.user_id = ua.user_id')
-            ->leftJoin('affiliator AS a', 'ua.affiliator_id = a.id')
-            ->where(['t.isDrawn' => true, 't.promo_id' => $promo->id])
-            ->andWhere('t.reward_id is not null')
-            ->orderBy(['t.created_at' => SORT_DESC]);
+        $query = new Query();
+        $query->select([
+            'u.real_name',
+            'u.safeMobile',
+            't.drawAt',
+            'aw.createTime',
+            'r.name as rewardName',
+            'a.name',
+        ])->from('award as aw')
+        ->innerJoin('user as u', 'u.id = aw.user_id')
+        ->innerJoin('reward as r', 'r.id = aw.reward_id')
+        ->leftJoin('promo_lottery_ticket as t', 't.id = aw.ticket_id')
+        ->leftJoin('user_affiliation as ua', 'aw.user_id = ua.user_id')
+        ->leftJoin('affiliator as a', 'ua.affiliator_id = a.id')
+        ->where(['aw.promo_id' => $promo->id]);
+
+        //排除未中奖占位商品
+        $good = GoodsType::find()
+            ->where(['sn' => 'SP1802061505392888845138'])
+            ->one();
+        if (null !== $good) {
+            $query->andWhere(['ref_id' => $good->id]);
+        }
+
+        return $query->orderBy(['aw.createTime' => SORT_DESC]);
     }
 
     /**
