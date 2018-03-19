@@ -25,7 +25,7 @@ class PromoController extends Controller
      * 在用户生日当天给用户发代金券
      * 每天8:50执行
      */
-    public function actionSendCoupon()
+    public function actionSendCoupon($birthDate = null)
     {
         Yii::info('[command][promo/send-coupon] 生日当天送代金券　正常开始', 'command');
         $promoKey = 'promo_birthday_coupon';
@@ -43,7 +43,7 @@ class PromoController extends Controller
             }
             Yii::info('[command][promo/send-coupon] 生日当天送代金券　准备发代金券', 'command');
             $model = new $promo->promoClass($promo);
-            $userList = $model->getAwardUserList();
+            $userList = $model->getAwardUserList($birthDate);
             Yii::info('[command][promo/send-coupon] 生日当天送代金券　找到'.count($userList).'个需要发生日券的用户', 'command');
             $model->sendAwardToUsers($userList);
         }

@@ -36,13 +36,17 @@ class BirthdayCoupon
         $this->promo = $promo;
     }
 
-    public function getAwardUserList()
+    /**
+     * 获得指定日期生日的用户
+     * @param null $birthDate
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getAwardUserList($birthDate = null)
     {
         $users = User::find()
             ->where(['type' => 1])
-            ->andWhere(['like', 'birthdate', date('m-d')])
+            ->andWhere(['like', 'birthdate', $birthDate ?: date('m-d')])
             ->all();
-
         return $users;
     }
 
