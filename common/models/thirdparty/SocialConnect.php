@@ -185,4 +185,9 @@ class SocialConnect extends ActiveRecord
         }
         return true;
     }
+    //获取绑定该微信号的用户
+    public function getUser()
+    {
+        return User::findOne($this->user_id);
+    }
 }

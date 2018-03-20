@@ -26,12 +26,20 @@ class Affiliator extends ActiveRecord
 
     /**
      * 获取分销商下的渠道码
+     * @return array
      */
     public function getCampaigns()
     {
         return $this->hasMany(AffiliateCampaign::className(), ['affiliator_id' => 'id']);
     }
-
+    /**
+     * 获取分销商下的渠道码
+     * @return object
+     */
+    public function getCampaign()
+    {
+        return $this->hasOne(AffiliateCampaign::className(), ['affiliator_id' => 'id']);
+    }
     /**
      * 判断当前某个渠道码是当前分销商所属的渠道码
      *

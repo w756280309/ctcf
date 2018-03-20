@@ -10,7 +10,6 @@ use yii\web\Controller;
 use Yii;
 use common\models\thirdparty\SocialConnect;
 use common\models\affiliation\Affiliator;
-use common\models\affiliation\AffiliateCampaign;
 use common\models\affiliation\UserAffiliation;
 /**
  * 微信推送服务
@@ -46,51 +45,58 @@ class PushController extends Controller
         //todo 验证请求来源，只许微信服务器访问
         $data = file_get_contents("php://input"); //接收post数据
         if (!empty($data)) {
-            $postObj = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA); //转换post数据为simplexml对象
-            if ($postObj->Event == 'subscribe') {
-                //欢迎信息
-                $res = self::hello($postObj->FromUserName);
-            } else if (strtolower($postObj->Event) == 'click') {
-                $res = self::sendMessage($postObj->EventKey, $postObj->FromUserName);
-            }
-            //被动回复
-            self::passiveREsponse($postObj);
-
-            if (($postObj->Event == 'subscribe' || $postObj->Event == 'SCAN') && $postObj->FromUserName) {
-                //绑定渠道
+            try {
+                $postObj = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA); //转换post数据为simplexml对象
                 if ($postObj->Event == 'subscribe') {
-                    $event_key = mb_substr(strval($postObj->EventKey), 8);
-                } else {
-                    $event_key = strval($postObj->EventKey);
+                    //欢迎信息
+                    self::hello($postObj->FromUserName);
+                    Yii::info('【' . $postObj->FromUserName . '】扫码关注了公众号');
+                } else if (strtolower($postObj->Event) == 'click') {
+                    //菜单点击事件
+                    self::sendMessage($postObj->EventKey, $postObj->FromUserName);
+                    Yii::info('【' . $postObj->FromUserName . '】点击了【' . $postObj->EventKey . '】');
                 }
-                $affiliator = Affiliator::findOne($event_key);
-                if (!is_null($affiliator)) {
-                    $redis = Yii::$app->redis;
-                    $redis->hset('wechat-push', $postObj->FromUserName, $event_key);
-                    //推送客服人员
-                    $lc_mes = '您目前的客服专员是【'.$affiliator->name.'】，有任何疑问他(她)都会帮您解答。';
-                    Yii::$container->get('weixin_wdjf')->staff->message($lc_mes)->to(strval($postObj->FromUserName))->send();
-                    /**
-                     * 推送有可能在用户注册后到达
-                     */
-                    $social = SocialConnect::findOne([
-                        'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
-                        'resourceOwner_id' => $postObj->FromUserName,
-                    ]);
-                    if (!is_null($social)) {
-                        //绑定渠道
-                        $user = User::findOne($social->user_id);
-                        $openId = $postObj->FromUserName;
-                        if (!UserAffiliation::findOne(['user_id' => $user->id])) {
-                            self::bindQD($user, $openId);
-                        }
+                //被动回复
+                self::passiveResponse($postObj);
+                if (($postObj->Event == 'subscribe' || $postObj->Event == 'SCAN') && $postObj->FromUserName) {
+                    //绑定渠道
+                    if ($postObj->Event == 'subscribe') {
+                        $event_key = mb_substr(strval($postObj->EventKey), 8);
                     } else {
-                        //已经绑定微信的则删除缓存
-//                        $redis->hdel('wechat-push', $postObj->FromUserName);
+                        $event_key = strval($postObj->EventKey);
+                    }
+                    Yii::info('【' . $postObj->FromUserName . '】扫了渠道码：' . $event_key);
+                    $affiliator = Affiliator::findOne($event_key);
+                    if (!is_null($affiliator)) {
+                        $redis = Yii::$app->redis;
+                        $redis->hset('wechat-push', $postObj->FromUserName, $event_key);
+                        //推送客服人员
+                        $lc_mes = '您目前的客服专员是【'.$affiliator->name.'】，有任何疑问他(她)都会帮您解答。';
+                        Yii::$container->get('weixin_wdjf')->staff->message($lc_mes)->to(strval($postObj->FromUserName))->send();
+                        /**
+                         * 推送有可能在用户注册后到达
+                         * 暂定有效时间为15分钟
+                         */
+                        $social = SocialConnect::findOne([
+                            'provider_type' => SocialConnect::PROVIDER_TYPE_WECHAT,
+                            'resourceOwner_id' => $postObj->FromUserName,
+                        ]);
+                        if (!is_null($social) && !is_null($social->user) && time() - $social->user->created_at < 15 * 60) {
+                            //绑定渠道
+                            $user = User::findOne($social->user_id);
+                            $openId = $postObj->FromUserName;
+                            if (!$user->userAffiliation) {
+                                self::bindQD($user, $openId);
+                            }
+                        }
                     }
                 }
+            } catch (\Exception $ex) {
+                return '';
             }
         }
+        return '';  //给微信服务器返回空字符串，防止重复请求
+                    //（注：微信服务器在五秒内收不到响应会断掉连接，并且重新发起请求，总共重试三次。）
     }
 
     //绑定微信扫码用户的渠道
@@ -100,17 +106,17 @@ class PushController extends Controller
         $affiliator_id = $redis->hget('wechat-push', $openId);
         if ($affiliator_id) {
             $affiliator = Affiliator::findOne($affiliator_id);
-            $affiliate_cam = AffiliateCampaign::findOne(['affiliator_id' => $affiliator->id]);
             $model = UserAffiliation::findOne(['user_id' => $user->id]);
             if (is_null($model)) {
                 $model = new UserAffiliation();
             }
             $model->user_id = $user->id;
-            $model->trackCode = $affiliate_cam->trackCode;
+            $model->trackCode = $affiliator->campaign->trackCode;
             $model->affiliator_id = $affiliator->id;
-            if ($model->save()) {
-                $redis->hdel('wechat-push', $openId);
-            }
+            $res = $model->save();
+            $logMessage = $res ? '用户【' . $user->id . '】成功绑定渠道：' . $model->trackCode
+                : '用户【' . $user->id . '】绑定渠道失败，原因：' . json_encode($model->getErrors());
+            Yii::info($logMessage);
         }
     }
 
@@ -139,7 +145,7 @@ class PushController extends Controller
         }
     }
     //被动回复
-    public static function passiveREsponse($postObj)
+    public static function passiveResponse($postObj)
     {
         if (strtolower($postObj->MsgType) == 'text' && !is_null($postObj->Content)) {
             $openid = strval($postObj->FromUserName);
@@ -161,7 +167,6 @@ class PushController extends Controller
                         $data = $datas->data;
                         $app->notice->to($openid)->uses($template_id)->andUrl($url)->data($data)->send();
                     }
-
                 }
             }
         }
