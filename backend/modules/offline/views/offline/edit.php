@@ -50,20 +50,20 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
             <div class="control-group">
                 <label class="control-label">客户姓名</label>
                 <div class="controls">
-                    <?= $form->field($model, 'realName', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4']])->textInput() ?>
+                    <?= $form->field($model, 'realName', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'readonly' => 'true']])->textInput() ?>
                     <?= $form->field($model, 'realName', ['template' => '{error}']); ?>
                 </div>
             </div>
              <div class="control-group">
                 <label class="control-label">联系电话</label>
                 <div class="controls">
-                    <?= $form->field($model, 'mobile', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '']])->textInput() ?>
-                    <?= $form->field($model, 'mobile', ['template' => '{error}']); ?>
-                    <div class="checkbox">
-                        <label style="color: green">
-                            <input type="checkbox" name="checkM" value="1">是否更新到会员账户详情
-                        </label>
-                    </div>
+                    <?= $form->field($model, 'userMobile', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span4', 'placeholder' => '', 'readonly' => 'true']])->textInput() ?>
+                    <?= $form->field($model, 'userMobile', ['template' => '{error}']); ?>
+<!--                    <div class="checkbox">-->
+<!--                        <label style="color: green">-->
+<!--                            <input type="checkbox" name="checkM" value="1">是否更新到会员账户详情-->
+<!--                        </label>-->
+<!--                    </div>-->
                 </div>
 
             </div>

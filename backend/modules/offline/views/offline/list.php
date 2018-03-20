@@ -139,7 +139,7 @@ $bid = (int)Yii::$app->request->get('bid');
                             <?= $order->idCard ?>
                         </td>
                         <td>
-                            <?= $order->mobile ?>
+                            <?= $order->userMobile ?>
                         </td>
                         <td>
                             <?= $order->accBankName ?>

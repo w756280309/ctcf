@@ -121,7 +121,7 @@ class OfflineController extends BaseController
             $order->andFilterWhere(['like', "$u.realName", $request['realName']]);
         }
         if (isset($request['mobile']) && !empty($request['mobile'])) {
-            $order->andFilterWhere(['like', "$o.mobile", $request['mobile']]);
+            $order->andFilterWhere(['like', "$u.mobile", $request['mobile']]);
         }
         if (isset($request['loan_id']) && !empty($request['loan_id'])) {
             $order->andFilterWhere(["$o.loan_id" => $request['loan_id']]);
@@ -282,7 +282,6 @@ class OfflineController extends BaseController
         //标的已经计息，不得修改
         if ($order->loan->is_jixi) {
             $order->scenario = 'is_jixi';
-            //return $this->redirect('list?loan_id=' . $order->loan->id);
         }
         $offUser = $this->findOr404(OfflineUser::class,['idCard' => $order->idCard]);
         try {
@@ -292,13 +291,13 @@ class OfflineController extends BaseController
                 }
             }
             //更新offlineUser表realName/mobile
-            $offUser->realName =  $post['OfflineOrder']['realName'];
-            if(isset($post['checkM']) && $post['checkM']){
-                $offUser->mobile = $post['OfflineOrder']['mobile'];
-            }
-            if (!$offUser->save()) {
-                throw new \Exception('用户真实姓名信息更新失败!');
-            }
+//            $offUser->realName =  $post['OfflineOrder']['realName'];
+//            if(isset($post['checkM']) && $post['checkM']){
+//                $offUser->mobile = $post['OfflineOrder']['mobile'];
+//            }
+//            if (!$offUser->save()) {
+//                throw new \Exception('用户真实姓名信息更新失败!');
+//            }
             //同步crm里面的认购记录
             $crmOrder = CrmOrder::findOne(['offline_order_sn' => $order->sn]);
             if (!is_null($crmOrder)) {
