@@ -425,7 +425,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                 | <a href="javascript:endproduct('<?= $val['id'] ?>')" class="btn mini green"><i
                                             class="icon-edit"></i> 结束项目</a>
                             <?php } ?>
-                            <?php if (!empty($val['online_status']) && empty($val['isPrivate'])) {
+                            <?php if (!empty($val['online_status'])) {
                                 if (empty($val['recommendTime'])) {
                                     ?>
                                     <a href="javascript:recommend('<?= $val['id'] ?>')" class="btn mini green"><i

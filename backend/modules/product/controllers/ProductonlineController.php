@@ -1153,10 +1153,6 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
             throw $this->ex404();
         }
 
-        if ($deal->isPrivate) {
-            return ['code' => 0, 'message' => '不允许推荐定向标'];
-        }
-
         if (!empty($deal->recommendTime)) {
             $count = OnlineProduct::find()->where('recommendTime != 0')->andWhere(['isPrivate' => 0, 'del_status' => 0])->count();
 
