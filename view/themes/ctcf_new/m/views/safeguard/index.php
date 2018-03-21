@@ -17,7 +17,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/libs/lib.flexible3.js', ['depen
             </div>
             <div class="rg safe-title-part">
                 <h5>专业合规</h5>
-                <p>为什么在楚天财富投资是安全的？</p>
+                <p>为什么选择在楚天财富投资？</p>
             </div>
         </a>
     </li>

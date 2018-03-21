@@ -20,7 +20,7 @@ $this->title = '关于我们';
             <?= Html::csrfMetaTags() ?>
             <?php $this->head() ?>
             <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/animate/animate.min.css?v=20161124">
-            <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/h5-180211/index.css?v=20180307">
+            <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/h5-180211/index.css?v=2018032102">
             <script src="<?= FE_BASE_URI ?>libs/lib.flexible2.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/fastclick.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/pageslider/zepto_modify.js?v=20161124"></script>
@@ -130,7 +130,7 @@ $this->title = '关于我们';
                                 <p class="title-h2"><span >系湖北日报新媒体集团旗下公司</span></p>
                                 <div class="hexagon">
                                         <img src="<?= ASSETS_BASE_URI ?>ctcf/images/h5-180211/six-fg-new.png" alt="六边形">
-                                        <span class="hexagon-txt" style="top: -23px;left: 26.6%;width: 51%;">平台以专业的风控能力、高效的技术保障为用户提供安全便捷的互联网金融综合信息服务。</span>
+                                        <span class="hexagon-txt" style="top: -23px;left: 26.6%;width: 51%;">平台以专业的风控能力、高效的技术保障为用户提供便捷的互联网金融综合信息服务。</span>
                                 </div>
                                 <div class="arrow"></div>
                         </div>

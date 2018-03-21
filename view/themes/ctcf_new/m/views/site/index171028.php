@@ -327,7 +327,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
                 <img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/with_us.png" alt="">
             </a>
             <a href="/safeguard/index" class="swiper-slide">
-                <img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/with_safegread.png" alt="" >
+                <img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/with_safegread_new.png" alt="" >
             </a>
         </div>
     </div>

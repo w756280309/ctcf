@@ -14,7 +14,7 @@ $this->extraKeywords = '平台安全';
     <div class="kong-width">
         <div class="row single">
             <h1>楚天财富平台安全常见问题：</h1><br>
-            <h1>1、为什么在楚天财富投资是安全的？</h1>
+            <h1>1、为什么选择在楚天财富投资？</h1>
             <p class="single-title">（1）对接专业机构产品
             <p>楚天财富产品优质，标的小额且分散，期限灵活，收益稳定，并有多重还款保障，安享稳健高收益。
             <p class="single-title">（2）坚持合法合规运营

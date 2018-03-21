@@ -8,7 +8,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/safeguard/major.min.css');
 <!-- 主体 -->
 <div class="padding-contain">
     <div class="major-title-msg">
-        <h5>为什么在楚天财富投资是安全的？</h5>
+        <h5>为什么选择在楚天财富投资？</h5>
     </div>
     <h6 class="major-title-retract">（1）对接专业机构产品</h6>
     <p>楚天财富的多款产品，灵活定制，标的分散，风险更低，且有多重还款进行保障。</p>

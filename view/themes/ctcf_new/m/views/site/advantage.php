@@ -116,20 +116,20 @@
             <div class="head-line ico"><span>—————</span>楚天财富五大优势<span>—————</span></div>
         </div>
 
-        <p class="h-first"><a href="javascript:;" class="number">1</a><span>国资</span>背景</p>
+        <p class="h-first"><a href="javascript:;" class="number">1</a>国资背景</p>
         <p class="suojin">隶属湖北日报新媒体集团旗下的理财平台；</p>
-        <p class="h-num"><a href="javascript:;" class="number">2</a><span>股东</span>强势</p>
+        <p class="h-num"><a href="javascript:;" class="number">2</a>股东强势</p>
         <p class="suojin">系湖北荆楚网络科技股份有限公司、湖北新海天投资有限公司投资</p>
 <!--        <p class="suojin">南京金融资产交易中心，</p>-->
 <!--        <p class="suojin">省级金融主管部门审批的合规平台；</p>-->
-        <p class="h-num"><a href="javascript:;" class="number">3</a><span>安全</span>合规</p>
+        <p class="h-num"><a href="javascript:;" class="number">3</a>稳健合规</p>
         <p class="suojin">资金全程托管，与平台隔离不被挪用；</p>
         <p class="suojin">绑定本人银行卡，提现只进本人账户；</p>
         <p class="suojin">层层风控，专业稳健，合法合规；</p>
-        <p class="h-num"><a href="javascript:;" class="number">4</a>产品<span>优质</span></p>
+        <p class="h-num"><a href="javascript:;" class="number">4</a>产品优质</p>
         <p class="suojin">产品优质，标的小额分散，期限灵活收益稳定，</p>
         <p class="suojin">优质供应链金融产品，期限多样，收益可观；</p>
-        <p class="h-num"><a href="javascript:;" class="number">5</a><span>灵活</span>便捷</p>
+        <p class="h-num"><a href="javascript:;" class="number">5</a>灵活便捷</p>
         <p class="suojin">网上有平台，线下有门店，楚天财富在您身边</p>
         <p class="suojin">千元起投，手机操作，随时随地实现财富增值。</p>
     </div>

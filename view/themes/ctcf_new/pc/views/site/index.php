@@ -103,7 +103,7 @@ JSFILE
         </dl>
         <dl class="lf clear-fix">
             <dt class="lf mgr20"><img class="w59" src="<?= ASSETS_BASE_URI ?>ctcf/images/t003@2x.png" alt=""></dt>
-            <dd class="lf fz-black"><p class="fz30 mgtb10">全面保障</p><p class="fz14">项目严格筛选多重保障</p></dd>
+            <dd class="lf fz-black"><p class="fz30 mgtb10">稳健合规</p><p class="fz14">项目严格筛选多重保障</p></dd>
         </dl>
     </div>
     <!--平台热门推荐-->
@@ -206,7 +206,7 @@ JSFILE
                     <a class="clear-fix" href="/helpcenter/security/" target="_blank">
                         <span class="lf fz14 fz-gray-strong w250 overflow">
                             <img class="mgr12 w4" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_08.png" alt="">
-                            为什么在楚天财富投资是安全的？
+                            为什么选择在楚天财富投资？
                         </span>
                         <span class="rg header-hover">></span>
                     </a>
