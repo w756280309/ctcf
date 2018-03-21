@@ -48,8 +48,8 @@ $this->title = '极速答题赢宝箱';
 
     <!--倒计时开始-->
     <div v-if="isShowTimeDown" class="count-down-box">
-        <img class="start-bg" src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/start_bg.png" alt="">
-        <img class="time-down" :src="timeDownSrc" alt="">
+        <img  onclick="return false;" class="start-bg" src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/start_bg.png" alt="">
+        <img  onclick="return false;" class="time-down" :src="timeDownSrc" alt="">
     </div>
 
     <!--答题页面-->
@@ -57,7 +57,7 @@ $this->title = '极速答题赢宝箱';
         <div v-if="isAnswer" class="cpt-area">
             <ul>
                 <li class="clearfix">
-                    <img class="lf text-png" src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/text.png"
+                    <img  onclick="return false;" class="lf text-png" src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/text.png"
                          alt="">
                     <div class="rg">
                         <div :style="{width:progressWidth+'%'}" class="progress">
@@ -81,14 +81,14 @@ $this->title = '极速答题赢宝箱';
                     <p>30秒共答对{{count}}题<br>你被评为<span>{{designation}}</span></p>
                     <p>
                         <span>获得{{treasure}}宝箱：</span>
-                        <img :class="{obtains:isGold}"
+                        <img  onclick="return false;" :class="{obtains:isGold}"
                              src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/box_01.png" alt="">
-                        <img :class="{obtains:isSilver}"
+                        <img onclick="return false;" :class="{obtains:isSilver}"
                              src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/box_02.png" alt="">
-                        <img :class="{obtains:isCopper}"
+                        <img onclick="return false;" :class="{obtains:isCopper}"
                              src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/box_03.png" alt="">
                     </p>
-                    <p><img :src="box" alt=""></p>
+                    <p><img  onclick="return false;" :src="box" alt=""></p>
                 </li>
                 <li v-if="isOpenBox" class="special">
                     <div @click="openBox" class="error">开启宝箱</div>
@@ -151,7 +151,7 @@ $this->title = '极速答题赢宝箱';
                  src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/pop_close.png" alt="">
             <p class="pop-title">宝箱已开启</p>
             <p class="pop-subtitle">恭喜获得{{reward.ref_amount}}元红包</p>
-            <img class="gifts" src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/coupon.png" alt="">
+            <img  onclick="return false;" class="gifts" src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/coupon.png" alt="">
             <div class="clearfix">
                 <div @click="weixinShare" class="share lf weixinShare"></div>
                 <div @click="replay" class="restart rg">再玩一次</div>
@@ -166,7 +166,7 @@ $this->title = '极速答题赢宝箱';
                  src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/pop_close.png" alt="">
             <p class="pop-title">宝箱已开启</p>
             <p class="pop-subtitle" style="margin-top: 0.666667rem">遗憾，您没有中奖</p>
-            <img class="no-gifts" src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/no_gitfs_01.png" alt="">
+            <img onclick="return false;" class="no-gifts" src="<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/no_gitfs_01.png" alt="">
             <div class="clearfix">
                 <div @click="weixinShare" class="share lf weixinShare"></div>
                 <div @click="replay" class="restart rg">再玩一次</div>
