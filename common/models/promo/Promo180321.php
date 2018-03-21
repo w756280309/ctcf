@@ -197,7 +197,7 @@ class Promo180321 extends BasePromo
             ->andWhere(['isRewarded' => false])
             ->one();
         if (null === $ticket) {
-            throw new \Exception('没有宝箱可兑换');
+            throw new \Exception('没有宝箱可兑换', 4);
         }
 
         $sessionCount = $this->getSessionCount($user);

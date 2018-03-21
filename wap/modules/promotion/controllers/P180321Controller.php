@@ -198,7 +198,14 @@ class P180321Controller extends BaseController
             return $data;
         } catch (\Exception $ex) {
             $code = (int) $ex->getCode();
-            if ($code > 3) {
+            if (4 === $code) {
+                Yii::$app->response->statusCode = 400;
+                return [
+                    'code' => 4,
+                    'message' => '您已经开过宝箱了',
+                    'ticket' => null,
+                ];
+            } elseif ($code > 4) {
                 $code = 6;
             }
 
