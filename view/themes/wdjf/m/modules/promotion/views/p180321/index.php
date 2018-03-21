@@ -91,7 +91,7 @@ $this->title = '极速答题赢宝箱';
                     <p><img  onclick="return false;" :src="box" alt=""></p>
                 </li>
                 <li v-if="isOpenBox" class="special">
-                    <div @click="openBox" class="error">开启宝箱</div>
+                    <div @click="openBox" data-repeat="true" id="open" class="error">开启宝箱</div>
                 </li>
                 <li v-if="!isOpenBox" class="clearfix">
                     <div @click="weixinShare" class="correct lf weixinShare">去分享</div>
@@ -444,7 +444,8 @@ $this->title = '极速答题赢宝箱';
             },
             openBox: function () {
                 var _this = this;
-                if (_this.isOpenBox) {
+                if (_this.isOpenBox && $("#open").data("repeat")) {
+                    $("#open").data("repeat",false);
                     var xhr = $.get("/promotion/p180321/open");
                     xhr.done(function (data) {
                         if(data.ticket.sn == "180318_ZW") {
@@ -464,12 +465,14 @@ $this->title = '极速答题赢宝箱';
                                 _this.box = "<?= FE_BASE_URI ?>wap/campaigns/active20180309/images/box_on_02.png";
                             }
                         }
+                        $("#open").data("repeat",true);
                     });
                     xhr.fail(function (jqXHR) {
                         if (400 === jqXHR.status && jqXHR.responseText) {
                             var resp = jqXHR.responseJSON;
                             _this.toastCenter(resp.message);
                         }
+                        $("#open").data("repeat",true);
                     });
                 } else {
                     this.replay();
