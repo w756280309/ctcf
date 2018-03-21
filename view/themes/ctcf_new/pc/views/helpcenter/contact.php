@@ -4,7 +4,7 @@ $this->title = '联系我们';
 $this->registerCssFile(ASSETS_BASE_URI.'css/help/contact.css', ['depends' => 'frontend\assets\FrontAsset']);
 
 ?>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=jfMUQzWO1Wlf9jc9bFBBEXWbLVzlPNIZ"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=jfMUQzWO1Wlf9jc9bFBBEXWbLVzlPNIZ"></script>
 <div class="wdjf-body">
     <div class="wdjf-ucenter clearfix">
         <div class="leftmenu">

@@ -259,8 +259,8 @@ and date(from_unixtime(u.created_at)) <= :endDate',
                     'campaignSource' => [//参数列表， key 是参数名， 不可为空
                         'name' => '渠道信息',//参数名
                         'type' => 'string',//参数的数据类型
-                        'value' => 'wzdsbczggt,zswzczggt,wzcjczggt',//参数的默认值
-                        'title' => '渠道用户信息导出',//参数标题
+                        'value' => '',//参数的默认值
+                        'title' => '渠道码',//参数标题
                         'isRequired' => true,//是否必要参数, 默认都是必要参数
                     ],
                 ],
@@ -380,8 +380,8 @@ group by u.campaign_source',
                     'campaignSource' => [//参数列表， key 是参数名， 不可为空
                         'name' => '渠道信息',//参数名
                         'type' => 'string',//参数的数据类型
-                        'value' => 'wzdsbgd,wzcjgd,wdjfgd',//参数的默认值
-                        'title' => '渠道用户统计信息导出',//参数标题
+                        'value' => '',//参数的默认值
+                        'title' => '渠道码',//参数标题
                         'isRequired' => true,//是否必要参数, 默认都是必要参数
                     ],
                 ],
