@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>春分小游戏</title>
+    <link rel="stylesheet" href="__FE_BASE_URI__/common/css/wenjfbase.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20180309/css/index.min.css">
+    <link rel="stylesheet" href="__FE_BASE_URI__wap/campaigns/active20180309/css/gifts-list.min.css">
+    <script src="__FE_BASE_URI__/libs/lib.flexible3.js"></script>
+    <script src="__FE_BASE_URI__/libs/jquery-1.11.1.min.js"></script>
+    <script src="__FE_BASE_URI__/libs/vue.min.js"></script>
+    <script src="__FE_BASE_URI__/libs/fastclick.js"></script>
+    <script src="__FE_BASE_URI__/libs/iscroll.js"></script>
+    <script src="__FE_BASE_URI__/libs/handlebars-v4.0.10.js"></script>
+    <script src="__FE_BASE_URI__wap/campaigns/active20180309/js/gifts-list.js"></script>
+</head>
+<body>
+<div class="flex-content" id="app" v-cloak>
+    <!--答题场景页-->
+    <div v-if="isShowScene">
+        <div class="banner"><img src="__FE_BASE_URI__wap/campaigns/active20180309/images/banner.png" alt=""></div>
+        <div class="operate-area">
+        <img class="box" src="__FE_BASE_URI__wap/campaigns/active20180309/images/treasure_box.png" alt="">
+        <img @click="giftListExamine" class="gift-list" src="__FE_BASE_URI__wap/campaigns/active20180309/images/gift_list.png" alt="">
+        <img @click="timeDown(3,showTimeDown)" class="answer" src="__FE_BASE_URI__wap/campaigns/active20180309/images/answer.png" alt="">
+        <p class="regular-btn" v-if="!isShowRegular" @click="showRegular"><span>活动规则</span></p>
+        <div class="active-footer">
+            <img src="__FE_BASE_URI__wap/campaigns/active20180309/images/active-footer.png" alt="">
+        </div>
+    </div>
+    </div>
+
+    <!--倒计时开始-->
+    <div v-if="isShowTimeDown" class="count-down-box">
+        <img class="start-bg" src="__FE_BASE_URI__wap/campaigns/active20180309/images/start_bg.png" alt="">
+        <img class="time-down" :src="timeDownSrc" alt="">
+    </div>
+
+    <!--答题页面-->
+    <div class="competition"  v-if="!isShowScene">
+        <div v-if="isAnswer" class="cpt-area">
+            <ul>
+                <li class="clearfix">
+                    <img class="lf text-png" src="__FE_BASE_URI__wap/campaigns/active20180309/images/text.png" alt="">
+                    <div class="rg">
+                        <div :style="{width:progressWidth+'%'}" class="progress">
+                            <div class="time-count-down" v-html="totalTime+'s'"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="title">第<span>1</span>题</div>
+                    <div class="ctn">书画“四君子”指的四 种植物是：梅、兰、 竹、菊</div>
+                </li>
+                <li class="clearfix">
+                    <div @click="answering(1)" class="correct lf">正确</div>
+                    <div @click="answering(0)" class="error rg">错误</div>
+                </li>
+            </ul>
+        </div>
+        <div v-if="!isAnswer" class="results">
+            <ul>
+                <li>
+                    <p>30秒共答对5题<br>你被评为<span>极速达人</span></p>
+                    <p>
+                        <span>获得黄金宝箱：</span>
+                        <img style="width:1.33333333rem" src="__FE_BASE_URI__wap/campaigns/active20180309/images/box_01.png" alt="">
+                        <img src="__FE_BASE_URI__wap/campaigns/active20180309/images/box_02.png" alt="">
+                        <img src="__FE_BASE_URI__wap/campaigns/active20180309/images/box_03.png" alt="">
+                    </p>
+                    <p><img :src="box" alt=""></p>
+                </li>
+                <li class="clearfix">
+                    <div class="correct lf">去分享</div>
+                    <div @click="openBox" class="error rg">{{boxDes}}</div>
+                </li>
+            </ul>
+            <div class="result-regular"><span @click="showRegular">活动规则</span></div>
+            <img @click="giftListExamine" class="gift-list" src="__FE_BASE_URI__wap/campaigns/active20180309/images/gift_list.png" alt="">
+        </div>
+    </div>
+    <!--活动规则-->
+    <div v-if="isShowRegular" class="regular">
+        <img @click="showRegular" class="close" src="__FE_BASE_URI__wap/campaigns/active20180309/images/close.png" alt="">
+        <p>活动规则</p>
+        <ul>
+            <li>1、活动时间：2018.3.21至3.27；</li>
+            <li>2、游戏玩法：在30秒倒计时内，用最快速度答对题，题目是判断题，选择“正确”和“错误”选项答题，每题答完后，会自动进入下一题，直到30秒结束为止；</li>
+            <li>3、完成答题后，将会授予你荣誉称号，并获得相应的宝箱类型（黄金宝箱、白银宝箱、青铜宝箱），开启宝箱，抽取奖励；</li>
+            <li>4、每轮答题不限题目数量，在30秒限时内，答题越多，获得奖励的几率越高哦！欢迎您邀请亲朋好友一起来玩，抢走大红包！</li>
+            <li>5、活动期间每位用户每天最多有2次免费游戏机会，其中第2次游戏机会必须分享本活动到朋友圈才能获得；</li>
+            <li>6、活动期间每天的游戏机会将在次日0点重置，请当日使用完；</li>
+            <li>7、活动期间，每天2次游戏机会用完后，可以次日进入本活动页继续参与游戏；</li>
+            <li>8、本次活动虚拟奖品将立即发放到账，实物奖品将在7个工作日内与您联系。</li>
+            <li>9、本活动最终解释权归温都金服所有。</li>
+        </ul>
+    </div>
+
+    <!--弹框从这开始-->
+    <!--答题机会用完弹框-->
+    <div class="mask" v-if="noChance">
+        <div class="pop">
+            <img  @click="closeMask" class="pop-close" src="__FE_BASE_URI__wap/campaigns/active20180309/images/pop_close.png" alt="">
+            <p class="pop-title">您今天已经用完了全部答题<br>机会，请明天再来吧！</p>
+            <div class="confirm">知道了</div>
+            <p>提示:活动期间每天都能来答题哦！</p>
+        </div>
+    </div>
+    <!--答题分享到朋友圈再次答题-->
+    <div class="mask" v-if="hasOneChance">
+        <div class="pop">
+            <img  @click="closeMask" class="pop-close" src="__FE_BASE_URI__wap/campaigns/active20180309/images/pop_close.png" alt="">
+            <p class="pop-title">您没有答题次数了，分享到<br>朋友圈还能再玩一次哦！</p>
+            <div class="confirm">立即分享</div>
+            <p>提示:必须分享到朋友圈才有效哦！</p>
+        </div>
+    </div>
+
+    <!--开启宝箱获得奖励弹框-->
+    <div v-if="win" class="mask">
+        <div class="pop-special">
+            <img @click="closeMask" class="pop-close" src="__FE_BASE_URI__wap/campaigns/active20180309/images/pop_close.png" alt="">
+            <p class="pop-title">宝箱已开启</p>
+            <p class="pop-subtitle">恭喜获得{{reward.ref_amount}}元红包</p>
+            <img class="gifts" src="__FE_BASE_URI__wap/campaigns/active20180309/images/coupon.png" alt="">
+            <div class="clearfix">
+                <div class="share lf"></div>
+                <div @click="replay" class="restart rg">再玩一次</div>
+            </div>
+        </div>
+    </div>
+
+    <!--开启宝箱未中奖-->
+    <div v-if="lose" class="mask">
+        <div class="pop-special">
+            <img @click="closeMask" class="pop-close" src="__FE_BASE_URI__wap/campaigns/active20180309/images/pop_close.png" alt="">
+            <p class="pop-title">宝箱已开启</p>
+            <p class="pop-subtitle" style="margin-top: 0.666667rem">遗憾，您没有中奖</p>
+            <img class="no-gifts" src="__FE_BASE_URI__wap/campaigns/active20180309/images/no_gitfs_01.png" alt="">
+            <div class="clearfix">
+                <div class="share lf"></div>
+                <div @click="replay" class="restart rg">再玩一次</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    FastClick.attach(document.body);
+    var app = new Vue({
+        el: '#app',
+        data: {
+            promoStatus: 0,
+            isLogin:true,
+            isShowScene:true,
+            timeDownSrc:"images/3.png",
+            isShowTimeDown:false,
+            isShowRegular:false,
+            progressWidth:100,
+            totalTime:30,
+            /*是否在答题*/
+            isAnswer:true,
+
+            /*防止重复点击*/
+            isRepeatClick:true,
+
+            /*状态锁住*/
+            isLock:false,
+            win:false,
+            lose:false,
+            /*开启宝箱*/
+            boxDes:"开启宝箱",
+            box:"images/box_off_01.png",
+            noChance:false,
+            hasOneChance:false,
+            reward:{
+                ref_amount:'',
+            }
+        },
+        created:function(){
+
+        },
+        methods: {
+            baseVerify: function () {
+                var _this = this;
+                switch (_this.promoStatus) {
+                    case 0:
+                        if(_this.isLogin){
+                            return true;
+                        } else {
+                            return false;
+                        }
+                        break;
+                    case 1:
+                        _this.toastCenter('活动未开始');
+                        return false;
+                        break;
+                    case 2:
+                        _this.toastCenter('活动已结束');
+                        return false;
+                        break;
+                    default:
+                        break;
+                }
+            },
+            toastCenter: function (val, active) {
+                var $alert = $('<div class="error-info" style="display: block; position: fixed;font-size: .4rem;"><div>' + val + '</div></div>');
+                $('body').append($alert);
+                $alert.find('div').width($alert.width());
+                setTimeout(function () {
+                    $alert.fadeOut();
+                    setTimeout(function () {
+                        $alert.remove();
+                    }, 200);
+                    if (active) {
+                        active();
+                    }
+                }, 2000);
+            },
+            timeDown:function(time,callBack){
+                var _this = this;
+                var status = this.baseVerify();
+                if(status && this.isRepeatClick){
+                    this.isRepeatClick = !this.isRepeatClick;
+                    this.isLock = !this.isLock;
+                    var begin = this.begin();
+                    if(begin) {
+                        this.isShowTimeDown = !this.isShowTimeDown;
+                        var timer = setInterval(function(){
+                            if(time<1){
+                                clearInterval(timer);
+                                _this.isLock = !_this.isLock;
+                                callBack();
+                                _this.isShowScene = !_this.isShowScene;
+                                _this.isRepeatClick = !_this.isRepeatClick;
+                                _this.progress();
+                                return false;
+                            } else {
+                                time--;
+                                _this.timeDownSrc = "images/"+time+".png";
+                            }
+                        },1000)
+                    }
+                }
+            },
+            showRegular:function () {
+                if(!this.isLock){
+                    this.isShowRegular = !this.isShowRegular;
+                }
+            },
+            showTimeDown:function(){
+                this.isShowTimeDown = !this.isShowTimeDown;
+                this.timeDownSrc = "images/3.png";
+            },
+            progress:function(){
+                var _this = this;
+                var progress =  setInterval(function(){
+                    if(_this.progressWidth<6){
+                        clearInterval(progress);
+                    } else {
+                        _this.progressWidth = _this.progressWidth - 0.33333333;
+                    }
+                },100);
+                var timer = setInterval(function(){
+                    if(_this.totalTime<1 && _this.progressWidth<6){
+                        _this.isAnswer = !_this.isAnswer;
+                        _this.progressWidth = 100;
+                        _this.totalTime = 30;
+                        clearInterval(timer);
+                        /*回调后台接口 通知后台答题结束*/
+                    } else {
+                        _this.totalTime--;
+                    }
+                },1000);
+            },
+            giftListExamine:function(){
+                var _this = this;
+                $.ajax({
+                    type:"GET",
+                    url:"/promotion/p180321/award",
+                    data:"",
+                    success:function(data){
+                        if(data.awards.length !=0){
+                            var lists = [];
+                            $.each(data.awards,function(i,n){
+                                var obj = {};
+                                obj.path = 'images/coupon.png';
+                                obj.name = n.amount+'元代金券';
+                                obj.awardTime = "中奖时间"+n.createTime;
+                                lists.push(obj);
+                            });
+                            giftsList({
+                                isGifts:true,//有奖品，无奖品为false
+                                closeImg:'images/pop_close.png',
+                                list:lists
+                            });
+                        } else {
+                            giftsList({
+                                isGifts:false,//无奖品为false
+                                closeImg:'images/pop_close.png',
+                                list:[]
+                            });
+                        }
+                    },
+                    error:function(error){_this.toastCenter(error)}
+                })
+            },
+            /*开始答题接口*/
+            begin:function(){
+                var _this = this;
+                $.ajax({
+                    type:"GET",
+                    url:"/promotion/p180321/begin",
+                    data:"",
+                    success:function(data){
+                        if(data.code == 0){
+                            return true;
+                        } else if(data.code == 4){
+                            _this.hasOneChance = !_this.hasOneChance;
+                            return false;
+                        } else if(data.code == 5){
+                            _this.noChance = !_this.noChance;
+                            return false;
+                        } else {
+                            _this.toastCenter(data.message);
+                            return false;
+                        }
+                    },
+                    error:function(error){_this.toastCenter(error)}
+                })
+            },
+            openBox:function(){
+                var _this = this;
+
+                if(this.boxDes != "再玩一次"){
+                    $.ajax({
+                        type:"GET",
+                        url:"/promotion/p180321/open",
+                        data:"",
+                        success:function(data){
+                            if(data.code == 0){
+                                _this.reward.ref_amount = data.reward.ref_amount;
+                                _this.win = !_this.win;
+                                /*开启宝箱*/
+                                _this.boxDes = "再玩一次";
+                                _this.box = "images/box_on_01.png";
+                            } else {
+                                _this.lose = !_this.this.lose
+                            }
+
+                        },
+                        error:function(error){_this.toastCenter(error)}
+                    });
+                } else {
+                    this.replay();
+                }
+            },
+            closeMask:function(){
+                this.win = this.lose = this.noChance = this.hasOneChance = false;
+            },
+            replay:function () {
+                this.isShowScene = !this.isShowScene;
+                this.isAnswer = !this.isAnswer;
+                this.win = this.lose = false;
+                this.boxDes = "开启宝箱";
+                this.box = "images/box_off_01.png";
+            }
+        }
+    });
+    Vue.config.devtools = true;
+</script>
+</body>
+</html>

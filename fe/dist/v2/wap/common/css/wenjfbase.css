@@ -282,7 +282,11 @@ p {
 img {
     vertical-align: middle;
 }
-
+html, body {
+    -webkit-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+}
 body,p,ul,ol,li,dl,dt,dd,form,h1,h2,h3,h4,h5,h6,input{
     margin:0;
     padding:0;

@@ -7,7 +7,7 @@ function giftsList(opt){
         '            <img class="pop_close" src="'+opt.closeImg+'" alt="">\n' +
         '\n' +
         '            <div class="prizes-pomp">\n' +
-        '                <p class="prizes-title">奖品列表</p>\n' +
+        '                <p class="prizes-title">我的奖品</p>\n' +
         '                <div id="wrapper">\n' +
         '                    <ul>\n' +
         '                        {{#if isGifts}}\n' +
