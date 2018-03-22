@@ -100,7 +100,7 @@ class PushController extends Controller
     }
 
     //绑定微信扫码用户的渠道
-    public static function bindQD($user, $openId)
+    public static function bindQD(User $user, $openId)
     {
         $redis = Yii::$app->redis;
         $affiliator_id = $redis->hget('wechat-push', $openId);
@@ -114,6 +114,10 @@ class PushController extends Controller
             $model->trackCode = $affiliator->campaign->trackCode;
             $model->affiliator_id = $affiliator->id;
             $res = $model->save();
+            if ($res) { //绑定渠道成功，同时记录 user 表的 campaign_source
+                $user->campaign_source = $model->trackCode;
+                $user->save(false);
+            }
             $logMessage = $res ? '用户【' . $user->id . '】成功绑定渠道：' . $model->trackCode
                 : '用户【' . $user->id . '】绑定渠道失败，原因：' . json_encode($model->getErrors());
             Yii::info($logMessage);
