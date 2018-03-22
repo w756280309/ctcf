@@ -138,8 +138,10 @@ use yii\helpers\Html;
                             },
                             'confirm_jixi' => function($url, $model, $key){
                                 if (null !== $model->jixi_time && $model->is_jixi == 0) {
-                                    return '<a href="/offline/offline/loan-confirm?id='.$model->id.'" onclick="return confirm(\'确认要计息吗？\')" class="btn mini green confirm_jixi"><i
-                                                class="icon-edit"></i>确认计息</a>';
+                                    return $model->canJixi()
+                                        ? '<a href="/offline/offline/loan-confirm?id='.$model->id.'" onclick="return confirm(\'确认要计息吗？\')" class="btn mini green confirm_jixi"><i
+                                                class="icon-edit"></i>确认计息</a>'
+                                        : '<a class="btn mini green confirm_jixi" onclick="return alert(\'需要设置固定还款日！\')"><i class="icon-edit"></i>确认计息</a>'  ;
                                 }
 
                             },

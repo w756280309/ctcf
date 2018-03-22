@@ -401,7 +401,7 @@ class OfflineController extends BaseController
         //正式的
         $loan = OfflineLoan::findOne($id);
         $backUrl = Yii::$app->request->referrer;
-        if (!is_null($loan) && $loan->is_jixi == false) {
+        if (!is_null($loan) && !$loan->is_jixi && $loan->canJixi()) {
             //将标的修改为确认计息状态
             $loan->is_jixi = true;
             //标的到期日

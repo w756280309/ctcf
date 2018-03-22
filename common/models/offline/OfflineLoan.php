@@ -165,4 +165,18 @@ class OfflineLoan extends ActiveRecord
             return $status['raise'];
         }
     }
+
+    /**
+     * 判断标的是否可以计息
+     * 如果还款方式为：自然月/季度等，必须设置固定还款日
+     */
+    public function canJixi()
+    {
+        if (in_array($this->repaymentMethod, ['6', '7', '8', '9'])) {
+            if (empty($this->paymentDay)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
