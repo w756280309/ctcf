@@ -54,6 +54,11 @@ class SqlExportJob extends Job
             if ('repayment_expire_interest' === $paramKey) {
                 $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
                 $item['原计划还款时间'] = date('Y-m-d', $item['原计划还款时间']);
+                if (!empty($item['转让ID'])) {    //如果是购买转让，需要标记[转让]
+                    $item['标的标题'] = '[转让]' . $item['标的标题'];
+                }
+                $item['投资金额'] = bcdiv($item['投资金额'], 100);
+                unset($item['转让ID']);
             } else if ('last_ten_day_draw' === $paramKey) {
                 $item['未投资时长'] = (new \DateTime)->diff(new \DateTime($item['未投资时长']))->days;
             } else if ('order_no_licai_plan' === $paramKey) {

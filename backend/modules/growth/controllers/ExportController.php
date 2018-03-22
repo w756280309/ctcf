@@ -26,7 +26,8 @@ class ExportController extends BaseController
 u.safeMobile AS '手机号',
 u.safeIdCard as '年龄',
 a.name as '分销商',
-o.order_money AS '投资金额',
+us.amount AS '投资金额',
+us.credit_order_id AS '转让ID',
 o.yield_rate AS '利率',
 p.title AS '标的标题',
 CASE p.refund_method
@@ -63,6 +64,7 @@ FROM `online_repayment_plan` AS r
 INNER JOIN user AS u ON r.uid = u.id
 INNER JOIN online_product AS p ON p.id = r.online_pid
 INNER JOIN online_order AS o ON o.id = r.order_id
+INNER JOIN tx.user_asset as us on us.order_id = r.order_id
 left join user_affiliation as ua on ua.user_id = u.id
 left join affiliator as a on a.id = ua.affiliator_id
 left join user_account as uc on u.id = uc.uid
@@ -74,6 +76,8 @@ AND r.status
 IN ( 1, 2 ) 
 AND date(r.`actualRefundTime`) = :repaymentDate
 AND o.status =1
+AND us.loan_id = r.online_pid
+AND us.user_id = r.uid
 ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用, 不可为空
                 'params' => [//如果没有必要参数, 可以为null, 但是必须是isset
                     'repaymentDate' => [//参数列表， key 是参数名， 不可为空
