@@ -77,10 +77,11 @@ class CreditNote
         $note = TxCreditNote::findOne($id);
         $order = $note->order;
         $interest = FinUtils::calculateCurrentProfit($note->loan, $amount, $order->apr);
-        if (bccomp($user->lendAccount->available_balance, bcadd($amount, $interest), 2) < 0) {
+        $realPay = bcmul(bcadd($amount, $interest, 14), bcsub(1, bcdiv($note->discountRate, 100, 14), 14), 2);
+        if (bccomp($user->lendAccount->available_balance, $realPay, 2) < 0) {
             return ['code' => 1, 'message' => '您的可用余额不足'];
         }
-        //可投余额为0
+        //可投余额为0ß
         if ($restAmount === 0) {
             return ['code' => 1, 'message' => '当前项目不可投,可投余额为0'];
         }
