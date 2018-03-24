@@ -465,8 +465,7 @@ class UserController extends BaseController
         $query = Plan::find()
             ->innerJoinWith('loan')
             ->where(['uid' => $this->getAuthedUser()->id])
-            ->andWhere(["$p.status" => Plan::STATUS_YIHUAN]);
-
+            ->andWhere(['in', "$p.status", [Plan::STATUS_YIHUAN, Plan::STATUS_TIQIAM]]);
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $size]);
         $profits = $query
             ->offset($pages->offset)
