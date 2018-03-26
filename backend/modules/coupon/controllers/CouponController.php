@@ -99,7 +99,7 @@ class CouponController extends BaseController
         $type = Yii::$app->request->get('type');
         $id   = Yii::$app->request->get('id');
         if (!empty($id)) {
-            $query->Where(['id' => (int)$id]);
+            $query->andWhere(['=', 'id', (int)$id]);
         }
         if (!empty($name)) {
             $query->andFilterWhere(['like', 'name', $name]);
