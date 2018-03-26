@@ -97,9 +97,11 @@ class CouponController extends BaseController
         $query = CouponType::find()->where(['isDisabled' => 0]);
         $name = Yii::$app->request->get('name');
         $type = Yii::$app->request->get('type');
-        $id   = Yii::$app->request->get('id');
-        if (!empty($id)) {
-            $query->andWhere(['=', 'id', (int)$id]);
+        $id   = (int)Yii::$app->request->get('id');
+        if ($id > 0) {
+            $query->andWhere(['=', 'id', $id]);
+        } else {
+            $id = '';
         }
         if (!empty($name)) {
             $query->andFilterWhere(['like', 'name', $name]);
