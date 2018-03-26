@@ -97,6 +97,10 @@ class CouponController extends BaseController
         $query = CouponType::find()->where(['isDisabled' => 0]);
         $name = Yii::$app->request->get('name');
         $type = Yii::$app->request->get('type');
+        $id   = Yii::$app->request->get('id');
+        if (!empty($id)) {
+            $query->Where(['id' => (int)$id]);
+        }
         if (!empty($name)) {
             $query->andFilterWhere(['like', 'name', $name]);
         }
@@ -113,7 +117,7 @@ class CouponController extends BaseController
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
         $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
 
-        return $this->render('list', ['model' => $model, 'name' => $name, 'type' => $type, 'pages' => $pages]);
+        return $this->render('list', ['model' => $model, 'name' => $name, 'type' => $type, 'id' => $id, 'pages' => $pages]);
     }
 
     /**

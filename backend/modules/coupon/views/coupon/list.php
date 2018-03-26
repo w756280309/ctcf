@@ -44,6 +44,10 @@ use yii\widgets\LinkPager;
                             <td>
                                 <input type="text" class="m-wrap span8" name='name' value="<?= Html::encode($name) ?>"/>
                             </td>
+                            <td><span class="title">券id</span></td>
+                            <td>
+                                <input type="text" class="m-wrap span8" name='id' value="<?= Html::encode($id) ?>"/>
+                            </td>
                             <td><span class="title">优惠券类型</span></td>
                             <td>
                                 <select name="type" class="w-wap">
@@ -68,7 +72,7 @@ use yii\widgets\LinkPager;
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                     <tr>
-                        <th>序号</th>
+                        <th>券id</th>
                         <th>名称</th>
                         <?php if($type == '0'){ ?>
                             <th class="money">面值</th>
@@ -91,7 +95,7 @@ use yii\widgets\LinkPager;
                 <tbody>
                 <?php foreach ($model as $key => $val) : ?>
                     <tr>
-                        <td><?= ++$key ?></td>
+                        <td><?= $val->id ?></td>
                         <td><?= $val->name ?></td>
                         <?php if($type == '0'){ ?>
                             <td class="money"><?= StringUtils::amountFormat2($val->amount) ?>元</td>
