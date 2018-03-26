@@ -26,40 +26,50 @@ class SqlExportJob extends Job
             $itemType = null;
         }
         $itemType = array_values($itemType);
-        if ($paramKey == 'repayment_expire_interest') { //指定日期还款数据
-            $data = $this->getRepaymentExpireInterest($queryParams['repaymentDate']);
-        } else {
-            if (('export_referral_user_info' === $paramKey || 'export_referral_user_count' === $paramKey) && !empty($queryParams['campaignSource'])) {
-                $campaignSource = trim($queryParams['campaignSource'], ',');
-                unset($queryParams['campaignSource']);
-                $campaignArr = explode(',', $campaignSource);
-                $len = count($campaignArr);
-                $paramKeysIn = [];
-                $pdoKeys = '';
-                for ($i = 0; $i < $len; $i++) {
-                    $keyV = 'v' . $i;
-                    $pdoKeys = $pdoKeys . ':v' . $i . ',';
-                    $paramKeysIn[] = $keyV;
-                }
-                $pdoKeys = rtrim($pdoKeys, ',');
-                $sql = str_replace(":campaignSource", $pdoKeys, $sql);
-                $campaignSources = array_combine($paramKeysIn, $campaignArr);
-                $queryParams = array_merge($queryParams, $campaignSources);
+        if (('export_referral_user_info' === $paramKey || 'export_referral_user_count' === $paramKey) && !empty($queryParams['campaignSource'])) {
+            $campaignSource = trim($queryParams['campaignSource'], ',');
+            unset($queryParams['campaignSource']);
+            $campaignArr = explode(',', $campaignSource);
+            $len = count($campaignArr);
+            $paramKeysIn = [];
+            $pdoKeys = '';
+            for ($i = 0; $i < $len; $i++) {
+                $keyV = 'v' . $i;
+                $pdoKeys = $pdoKeys . ':v' . $i . ',';
+                $paramKeysIn[] = $keyV;
             }
-            $command = Yii::$app->db->createCommand($sql);
-            if (!empty($queryParams)) {
-                $command = $command->bindValues($queryParams);
-            }
-            $data = $command->queryAll();
+            $pdoKeys = rtrim($pdoKeys, ',');
+            $sql = str_replace(":campaignSource", $pdoKeys, $sql);
+            $campaignSources = array_combine($paramKeysIn, $campaignArr);
+            $queryParams = array_merge($queryParams, $campaignSources);
         }
+        $command = Yii::$app->db->createCommand($sql);
+        if (!empty($queryParams)) {
+            $command = $command->bindValues($queryParams);
+        }
+        $data = $command->queryAll();
         $exportData[] = $itemLabels;
         foreach ($data as $num => $item) {
             if (isset($item['手机号'])) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
             }
             if ('repayment_expire_interest' === $paramKey) {
-//                $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
-//                $item['原计划还款时间'] = date('Y-m-d', $item['原计划还款时间']);
+                $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
+                $item['原计划还款时间'] = date('Y-m-d', $item['原计划还款时间']);
+                $item['分销商'] = !empty($item['分销商']) ? $item['分销商'] : '官方';
+                if (!empty($item['转让ID'])) {
+                    $item['标的标题'] = '[转让]' . $item['标的标题'];
+                }
+                $item['投资金额'] = Yii::$app->db_tx->createCommand('SELECT `amount` FROM `user_asset` WHERE `user_id` = :uid AND `loan_id` = :pid AND `order_id` = :oid', [
+                    'uid' => $item['UID'],
+                    'pid' => $item['PID'],
+                    'oid' => $item['OID'],
+                ])->queryScalar();
+                $item['投资金额'] = bcdiv($item['投资金额'], 100);  //user_asset的金额单位是‘分’
+                unset($item['转让ID']);
+                unset($item['UID']);
+                unset($item['PID']);
+                unset($item['OID']);
             } else if ('last_ten_day_draw' === $paramKey) {
                 $item['未投资时长'] = (new \DateTime)->diff(new \DateTime($item['未投资时长']))->days;
             } else if ('order_no_licai_plan' === $paramKey) {
@@ -110,55 +120,5 @@ class SqlExportJob extends Job
             exit(0);
         }
         exit(1);
-    }
-
-    /**
-     * 获取指定日期还款数据
-     * @param $date
-     */
-    public function getRepaymentExpireInterest($date)
-    {
-        $models = OnlineRepaymentPlan::find()
-            ->innerJoin('online_product', 'online_product.id = online_repayment_plan.online_pid')
-            ->where([
-                'online_product.status' => ['5', '6'],
-                'online_product.isTest' => false,
-                'online_repayment_plan.status' => ['1', '2'],
-                'date(`online_repayment_plan`.`actualRefundTime`)' => $date,
-            ])->all();
-        $data = [];
-        foreach ($models as $model) {
-            $user = $model->user;
-            $order = $model->order;
-            $loan = $model->loan;
-            if (!is_null($user) && !is_null($order) && !is_null($loan)) {
-                $userAsset = UserAsset::findOne([
-                    'user_id' => $user->id,
-                    'loan_id' => $loan->id,
-                    'order_id' => $order->id,
-                ]);
-                if (!is_null($userAsset) && $userAsset->amount > 0) {
-                    array_push($data, [
-                        $user->real_name,   //姓名
-                        $user->getMobile(), //手机号
-                        $user->crmAge,      //年龄
-                        $user->userAffiliation ? $user->userAffiliation->affiliator->name : '官方', //分销商
-                        bcdiv($userAsset->amount, 100),  //投资金额
-                        $order->yield_rate, //利率
-                        !empty($userAsset->credit_order_id) ? '[转让]'.$loan->title : $loan->title,   //标的名称
-                        Yii::$app->params['refund_method'][$loan->refund_method],   //还款方式
-                        $loan->status == OnlineProduct::STATUS_HUAN  ? '还款中' : '已还清',  //标的状态
-                        date('Y-m-d', $loan->finish_date),     //标的截止日期
-                        $model->benjin, //还款本金
-                        $model->lixi,  //还款利息
-                        $model->benxi,  //还款本息
-                        date('Y-m-d', strtotime($model->actualRefundTime)),   //实际还款时间
-                        date('Y-m-d', $loan->finish_date), //原计划还款时间
-                        $user->lendAccount->available_balance,  //可用余额
-                    ]);
-                }
-            }
-        }
-        return $data;
     }
 }

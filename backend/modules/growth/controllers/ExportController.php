@@ -22,7 +22,63 @@ class ExportController extends BaseController
                 'key' => 'repayment_expire_interest',//每个导出类型的唯一标示, 不可为空
                 'title' => '指定日期还款数据',//导出类型的标题，不可为空
                 'content' => '统计指定日期回款数据',//导出类型的说明，不可为空
-                'sql' => "",//导出的sql模板, 使用预处理方式调用, 不可为空
+                'sql' => "SELECT u.real_name AS '姓名',
+u.safeMobile AS '手机号',
+u.safeIdCard as '年龄',
+a.name as '分销商',
+o.order_money AS '投资金额',
+r.asset_id AS '转让ID',
+r.online_pid AS 'PID',
+r.order_id AS 'OID',
+r.uid AS 'UID',
+o.yield_rate AS '利率',
+p.title AS '标的标题',
+CASE p.refund_method
+WHEN 1
+THEN  '到期本息'
+WHEN 2
+THEN  '按月付息，到期本息'
+WHEN 3
+THEN  '按季付息，到期本息'
+WHEN 4
+THEN  '按半年付息，到期本息'
+WHEN 5
+THEN  '按年付息，到期本息'
+WHEN 6
+THEN  '按自然月付息，到期本息'
+WHEN 7
+THEN  '按自然季度付息，到期本息'
+WHEN 8
+THEN  '按自然半年付息，到期本息'
+WHEN 9
+THEN  '按自然年付息，到期本息'
+WHEN 10
+THEN  '等额本息'
+END AS  '还款方式',
+if(p.status = 5, '还款中', '已还清') as '标的状态',
+date(from_unixtime(p.finish_date)) as '标的截止日期',
+ r.benjin AS '还款本金',
+ r.lixi AS '还款利息',
+ r.benxi AS '还款本息',
+DATE(r.`actualRefundTime`) AS '实际还款时间',
+p.finish_date AS '原计划还款时间',
+uc.available_balance AS '可用余额'
+FROM `online_repayment_plan` AS r
+INNER JOIN user AS u ON r.uid = u.id
+INNER JOIN online_product AS p ON p.id = r.online_pid
+INNER JOIN online_order AS o ON o.id = r.order_id
+left join user_affiliation as ua on ua.user_id = u.id
+left join affiliator as a on a.id = ua.affiliator_id
+left join user_account as uc on u.id = uc.uid
+WHERE u.type =1
+AND p.isTest = false
+AND p.status
+IN ( 5, 6 ) 
+AND r.status
+IN ( 1, 2 ) 
+AND date(r.`actualRefundTime`) = :repaymentDate
+AND o.status =1
+ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用, 不可为空
                 'params' => [//如果没有必要参数, 可以为null, 但是必须是isset
                     'repaymentDate' => [//参数列表， key 是参数名， 不可为空
                         'name' => 'repaymentDate',//参数名
