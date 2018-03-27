@@ -52,6 +52,9 @@ use common\utils\StringUtils;
                 <input type="submit" class="link-charge" value="充值" id="rechargebtn" />
             </div>
             <p class="recharge-note">* 充值所需费用由楚天垫付</p>
+            <?php if ($bank->isDisabled) { ?>
+                <p style="color: #f44336;margin-left: 70px;">* 当前所绑定银行卡的快捷充值已暂停，您可以用电脑登录网站（www.hbctcf.com）进行大额充值。如有疑问请拨打客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?>。</p>
+            <?php } ?>
         </form>
         <!------------------已绑卡结束------------------>
         <?php } elseif ($binding) { ?>

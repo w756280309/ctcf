@@ -133,19 +133,26 @@ class BankService
     public static function checkBankcard($card = null)
     {
         if (empty($card)) {
-            return ['code' => 1, 'message' => 'card参数错误'];
+            return ['code' => 1, 'message' => 'card参数错误', 'bank_id' => '', 'bank_name' => ''];
         }
 
         try {
             $bin = BankManager::getBankFromCardNo($card);
-            if (!BankManager::isDebitCard($bin)) {
-                return ['code' => 1, 'message' => '该操作只支持借记卡'];
+            if (null === $bin) {
+                throw new \Exception('未匹配到对应银行');
             }
-            return ['code' => 0, 'bank_id' => $bin->bankId, 'bank_name' => $bin->bank->bankName];
+            if (!BankManager::isDebitCard($bin)) {
+                return ['code' => 1, 'message' => '该操作只支持借记卡', 'bank_id' => '', 'bank_name' => ''];
+            }
+            $bank = $bin->bank;
+            if (!$bank->getIsBinding()) {
+                return ['code' => 1, 'message' => '不支持当前选择的银行', 'bank_id' => $bin->bankId, 'bank_name' => $bank->bankName];
+            }
+
+            return ['code' => 0, 'bank_id' => $bin->bankId, 'bank_name' => $bank->bankName];
         } catch (\Exception $ex) {
             return ['code' => 0, 'bank_id' => '', 'bank_name' => ''];
         }
-
     }
 
     /**

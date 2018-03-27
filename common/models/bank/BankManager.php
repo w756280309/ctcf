@@ -46,13 +46,23 @@ class BankManager
     }
 
     /**
-     * 获取快捷卡列表.
+     * 获取快捷充值卡列表.
      */
     public static function getQpayBanks()
     {
-        $qpaybanks = QpayConfig::find()->where(['isDisabled' => 0])->all();
+        $qpaybanks = QpayConfig::find()->where(['isDisabled' => false])->all();
 
         return $qpaybanks;
+    }
+
+    /**
+     * 获取快捷绑卡列表
+     */
+    public static function getQpayBindBanks()
+    {
+        $qpayBindbanks = QpayConfig::find()->where(['allowBind' => true])->all();
+
+        return $qpayBindbanks;
     }
 
     /**
@@ -89,6 +99,9 @@ class BankManager
     public static function verifyQpayLimit(UserBanks $banks, $money)
     {
         $config = QpayConfig::findOne($banks->bank_id);
+        if ($config->isDisabled) {
+            throw new \Exception('此银行快捷充值由于系统维护已暂停');
+        }
         if (bccomp($config->singleLimit, $money) < 0) {
             throw new \Exception('超过单笔' . StringUtils::amountFormat1('{amount}{unit}', $config->singleLimit) . '限额');
         }

@@ -40,6 +40,7 @@ $menus = AuthSys::getMenus('A100000');
                 <th style="text-align: center">银行</th>
                 <th style="text-align: center">个人网银充值</th>
                 <th style="text-align: center">企业网银充值</th>
+                <th style="text-align: center">快捷绑卡</th>
                 <th style="text-align: center">快捷充值</th>
                 <th style="text-align: center">快捷充值限额</th>
                 <th style="text-align: center">操作</th>
@@ -58,6 +59,13 @@ $menus = AuthSys::getMenus('A100000');
                     </td>
                     <td style="text-align: center">
                         <?php if ($val->isBusiness): ?>
+                            <i class="icon-ok green" style="color: green;"></i>
+                        <?php else: ?>
+                            <i class="icon-remove" style="color: red;"></i>
+                        <?php endif; ?>
+                    </td>
+                    <td style="text-align: center">
+                        <?php if ($val->isBinding): ?>
                             <i class="icon-ok green" style="color: green;"></i>
                         <?php else: ?>
                             <i class="icon-remove" style="color: red;"></i>

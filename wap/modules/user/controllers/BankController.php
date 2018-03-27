@@ -43,7 +43,7 @@ class BankController extends BaseController
 
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::MIANMI_VALIDATE_N | BankService::BINDBANK_VALIDATE_Y;
         $data = BankService::check($this->getAuthedUser(), $cond);
-        $banks = BankManager::getQpayBanks();
+        $banks = BankManager::getQpayBindBanks();
 
         return $this->render('index', [
             'banklist' => $banks,

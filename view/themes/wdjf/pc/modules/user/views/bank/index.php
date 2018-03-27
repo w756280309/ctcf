@@ -2,7 +2,7 @@
 $this->title = '绑定银行卡';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/bindcard.css', ['depends' => 'frontend\assets\FrontAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js?v=20170109', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/bindcard.js?v=20180326', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
 ?>
 
@@ -12,7 +12,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
         <!--绑卡换卡标题后台控制-->
         <span class="bindCard-header-font">绑定银行卡</span>
     </div>
-    <div class="bind-middle">
+    <div class="bind-middle" style="height: auto; padding-bottom: 20px;">
         <div class="bind-limit"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/tip-red.png" alt=""><a href="/user/userbank/xiane" target="_blank">限额提醒</a></div>
         <div class="clearfix">
             <div class="bind-kaihu">开户行</div>
@@ -40,6 +40,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
                 <p class="error-ins">提示：目前仅支持添加一张储蓄卡，将作为唯一充值、提现银行卡</p>
             </div>
         </div>
+        <p id="bankRechargeRefer" style="padding-left: 124px;padding-right: 37px;color:#f44336"></p>
         <input class="bind-btn" type="submit" value="绑定">
         </form>
     </div>
@@ -57,7 +58,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/useraccount/chargedeposit.css');
     <h3 class="bankIcon-top">选择银行 <img class="close" src="<?= ASSETS_BASE_URI ?>images/login/close.png" alt=""></h3>
     <ul class="clearfix bankIcon-inner">
         <?php foreach ($banklist as $val) : ?>
-            <li class="bank-li-box" data-img="<?= $val->bankId ?>" data-bank="<?= $val->bank->bankName ?>"><img src="<?= ASSETS_BASE_URI ?>images/banks/<?= $val->bankId ?>.jpg" alt=""></li>
+            <li class="bank-li-box" disableRecharge="<?= $val->isDisabled ?>" data-img="<?= $val->bankId ?>" data-bank="<?= $val->bank->bankName ?>"><img src="<?= ASSETS_BASE_URI ?>images/banks/<?= $val->bankId ?>.jpg" alt=""></li>
         <?php endforeach; ?>
     </ul>
     <div class="bankIcon-btn">确定</div>

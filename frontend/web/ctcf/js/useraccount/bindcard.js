@@ -56,11 +56,12 @@ $(function() {
             $('.bind-check').show();
             $('#bank_id').val('');
             $('#bank_name').val('');
-
+            $('#bankRechargeRefer').html('');
             return false;
         }
 
         $.post("/user/bank/check", {card: card_no, _csrf : csrf}, function(result) {
+            refer(result['bank_id'], result['bank_name']);
             if (result.code !== 0) {
                 $('.bind-card').hide();
                 $('.bind-check').show();
@@ -201,4 +202,18 @@ function selectOneBank(dataImg, dataBank)
     if ('' !== pre_bank_id && parseInt(pre_bank_id) !== parseInt(dataImg)) {
         $("#card_no").val('');
     }
+}
+
+//是否支持绑卡但不支持快捷充值提示
+function refer(bankId, bankName) {
+    if ('' === bankId) {
+        $('#bankRechargeRefer').html('');
+        return false;
+    }
+    var isDisabledRecharge = $("ul.bankIcon-inner").find("li[data-img='"+bankId+"']").attr('disableRecharge');
+    if ('1' !== isDisabledRecharge) {
+        $('#bankRechargeRefer').html('');
+        return false;
+    }
+    $('#bankRechargeRefer').html('尊敬的用户，由于'+bankName+'银行系统改造，绑定后仅可用于到账提现，也可以正常的PC端网银充值，但是此卡不提供手机（快捷）充值服务。');
 }

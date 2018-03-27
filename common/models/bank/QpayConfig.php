@@ -21,7 +21,7 @@ class QpayConfig extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['isDisabled', 'integer'],
+            [['isDisabled', 'allowBind'], 'integer'],
             [['dailyLimit', 'singleLimit'], 'number']
         ];
     }
@@ -32,7 +32,8 @@ class QpayConfig extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'isDisabled' => '快捷充值（wap端绑卡）',
+            'isDisabled' => '快捷充值',
+            'allowBind' => '快捷绑卡',
             'singleLimit' => '万/次',
             'dailyLimit' => '万/天',
         ];

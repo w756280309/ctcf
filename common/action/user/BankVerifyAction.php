@@ -49,7 +49,7 @@ class BankVerifyAction extends Action
             }
 
             $qpay = QpayConfig::findOne($acct_model->bank_id);
-            if (null === $qpay || 1 === (int) $qpay->isDisabled) {
+            if (null === $qpay || 0 === (int) $qpay->allowBind) {
                 return $this->controller->createErrorResponse('抱歉不支持当前选择的银行');
             }
             $acct_model->binding_sn = TxUtils::generateSn('B');

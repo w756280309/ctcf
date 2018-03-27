@@ -1,7 +1,6 @@
 <?php
 
 namespace common\models\bank;
-use yii\base\Exception;
 
 /**
  * This is the model class for table "bank".
@@ -125,11 +124,26 @@ class Bank extends \yii\db\ActiveRecord
      */
     public function getIsDisabled()
     {
-        if (false === $this->isPersonal && false === $this->isBusiness && false === $this->isQuick) {
+        if (false === $this->isPersonal && false === $this->isBusiness && false === $this->isQuick && false === $this->isBinding) {
             return true;
         } else {
             return false;
         }
     }
 
+    /**
+     * 判断银行卡是否支持快捷绑卡
+     *
+     * @return bool
+     */
+    public function getIsBinding()
+    {
+        $isApproved = true;
+        $qPayConfig = QpayConfig::find()->where(['bankId' => $this->id])->one();
+        if (null !== $qPayConfig) {
+            return boolval($qPayConfig->allowBind);
+        }
+
+        return $isApproved;
+    }
 }

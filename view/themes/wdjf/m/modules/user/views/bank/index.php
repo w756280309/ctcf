@@ -57,6 +57,7 @@ $this->showViewport = false;
         <span class="lf" style="color: #ff6058">目前仅支持添加一张银行卡</span>
         <a href="/user/userbank/bankxiane"><img src="<?= FE_BASE_URI ?>wap/tie-card/img/icon_02.png" alt=""> 限额提醒</a>
     </p>
+    <p id="bankRechargeRefer" class="f13" style="padding-left: 0.53333333rem;padding-right: 0.53333333rem;color: #ff6058"></p>
 
     <a class="instant instantSpecial f18" href="javascript:void(0)" id="bind_btn">绑 卡</a>
 
@@ -74,7 +75,7 @@ $this->showViewport = false;
         <div id="wrapper">
             <ul>
                 <?php foreach($banklist as $bank): ?>
-                    <li data="<?= $bank->bankId ?>"><img src="<?= ASSETS_BASE_URI ?>images/bankicon/<?= $bank->bankId ?>.png" alt=""> <?= $bank->bank->bankName ?></li>
+                    <li disableRecharge="<?= $bank->isDisabled ?>" data="<?= $bank->bankId ?>"><img src="<?= ASSETS_BASE_URI ?>images/bankicon/<?= $bank->bankId ?>.png" alt="" style="padding-right:10px"><?= $bank->bank->bankName ?></li>
                 <?php endforeach; ?>
             </ul>
         </div>
@@ -129,10 +130,13 @@ $this->showViewport = false;
         $("#wrapper ul li").on("click",function() {
             $("#bank_id_img").attr({"src":$(this).children()[0].src}).show();
             $("#bank_show").val($(this).text()).addClass("changeWidth");
-            $("#bank_id").val($(this).attr('data'));
-            $("#bank_name").val($(this).text());
+            var selectedBankId = $(this).attr('data');
+            var selectedBankName = $(this).text();
+            $("#bank_id").val(selectedBankId);
+            $("#bank_name").val(selectedBankName);
             $('.closePomp').hide();
             $('.pomp').hide();
+            refer(selectedBankId, selectedBankName);
         });
 
         csrf = $("meta[name=csrf-token]").attr('content');
@@ -151,18 +155,32 @@ $this->showViewport = false;
             }
 
             $.post("/user/bank/check", {card: card_no, _csrf:csrf}, function (data) {
-                if(data.code) {
-                    toastCenter(data.message);
-                    return;
-                }
-
                 if('' !== data.bank_id && '' !== data.bank_name) {
                     $("#bank_id_img").attr({"src": '<?= ASSETS_BASE_URI ?>images/bankicon/'+data.bank_id+'.png'}).show();
                     $("#bank_show").val(' '+data.bank_name).addClass("changeWidth");
                     $('#bank_id').val(data.bank_id);
                     $('#bank_name').val(data.bank_name);
                 }
+                refer(data.bank_id, data.bank_name);
+                if(data.code) {
+                    toastCenter(data.message);
+                    return;
+                }
             });
         });
     })
+
+    //是否支持绑卡但不支持快捷充值提示
+    function refer(bankId, bankName) {
+        if ('' === bankId) {
+            $('#bankRechargeRefer').html('');
+            return false;
+        }
+        var isDisabledRecharge = $("#wrapper ul").find("li[data='"+bankId+"']").attr('disableRecharge');
+        if ('1' !== isDisabledRecharge) {
+            $('#bankRechargeRefer').html('');
+            return false;
+        }
+        $('#bankRechargeRefer').html('尊敬的用户，由于'+bankName+'银行系统改造，绑定后仅可用于到账提现，也可以正常的PC端网银充值，但是此卡不提供手机（快捷）充值服务。');
+    }
 </script>

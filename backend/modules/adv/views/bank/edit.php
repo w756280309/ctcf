@@ -34,6 +34,7 @@ use yii\widgets\ActiveForm;
 <?php $form = ActiveForm::begin() ?>
 <?= $form->field($eBank, 'typePersonal')->checkbox() ?>
 <?= $form->field($eBank, 'typeBusiness')->checkbox() ?>
+<?= $form->field($qPay, 'allowBind')->checkbox() ?>
 <?= $form->field($qPay, 'isDisabled')->checkbox(['uncheck' => 1,'value'=>0]) ?>
 <div class="form-group title">
     <label for="">快捷充值限额</label>
@@ -48,9 +49,9 @@ use yii\widgets\ActiveForm;
 <script type="text/javascript">
     $(function () {
         var div = $('div.form-group');
+        $(div[6]).css({'float':'left'});
         $(div[5]).css({'float':'left'});
         $(div[4]).css({'float':'left'});
-        $(div[3]).css({'float':'left'});
         $('.button_div').css({'clear':'both'});
         $('#submit_bank').click(function () {
             $.post('/adv/bank/edit?id=<?= $id ?>',
