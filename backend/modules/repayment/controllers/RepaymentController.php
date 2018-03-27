@@ -53,30 +53,44 @@ class RepaymentController extends BaseController
         $total_origin_lixi = 0;
         $total_bx = 0;
         $couponsAmount = 0;
+        $allBonusProfits = [];
         bcscale(14);
         $bcround = new BcRound();
         $qimodel = null;
         $today = date('Y-m-d');
         $days = $deal->getHoldingDays($today);//计算当前时间到计息日期的天数
         $isRefreshCalcLiXi = $this->isRefreshCalcLiXi($deal, $today);
+        //查找还款批次表的期数及回款状态
+        $repayment = Repayment::find()
+            ->where(['loan_id' => $pid])
+            ->indexBy('term')
+            ->asArray()
+            ->all();
+        //查找还款计划表最后一期的信息
+        $maxQiModel = OnlineRepaymentPlan::find()
+            ->where(['qishu' => count($repayment)])
+            ->andWhere(['online_pid' => $pid])
+            ->asArray()
+            ->all();
+        //根据最后一期计算加息金额
+        foreach ($maxQiModel as $value) {
+            $onlineOrder = OnlineOrder::findOne($value['order_id']);
+            $orderBonusProfit = $onlineOrder->getBonusProfit();
+            $couponsAmount += $orderBonusProfit;
+            $allBonusProfits[$value['order_id']] = $orderBonusProfit;
+        }
+
         foreach ($model as $val) {
             $qishu = intval($val['qishu']);
-            //判断当前是否已经还过款
-            $repayment = Repayment::findOne(['loan_id' => $pid, 'term' => $qishu]);
-            if (!$repayment) {
-                return ['result' => 0, 'message' => '还款信息不存在'];
-            }
-            $order = OnlineOrder::findOne($val['order_id']);
-            $orderBonusProfit = $order->getBonusProfit();
-            $couponsAmount += $orderBonusProfit;
             $total_origin_lixi = bcadd($total_origin_lixi, $val['lixi'], 14);
             $val['origin_lixi'] = max($val['lixi'], 0.01);
             //当没有还过款时候才重新计算利息
-            $payed = $repayment->isRefunded;
+            $payed = $repayment[$qishu]['isRefunded'];
             if ($isRefreshCalcLiXi) {
                 if (!$payed) {
+                    $bonusProfit = $allBonusProfits[$val['order_id']];
                     if ($orderBonusProfit > 0) {
-                        $val['lixi'] = max(0.01, $bcround->bcround(bcadd($orderBonusProfit, bcdiv(bcmul($days, bcsub($val['lixi'], $orderBonusProfit, 14), 14), $deal->expires, 14), 14), 2));
+                        $val['lixi'] = max(0.01, $bcround->bcround(bcadd($bonusProfit, bcdiv(bcmul($days, bcsub($val['lixi'], $bonusProfit, 14), 14), $deal->expires, 14), 14), 2));
                     } else {
                         $val['lixi'] = max(0.01, $bcround->bcround(bcdiv(bcmul($days, $val['lixi'], 14), $deal->expires, 14), 2));
                     }
@@ -90,8 +104,6 @@ class RepaymentController extends BaseController
             $total_bx = bcadd($total_bj, $total_lixi, 14);
             $qimodel[$val['qishu']][] = $val;
         }
-        $totalQishu = count($qimodel);
-        $couponsAmount /= $totalQishu;
         //应还款人数
         $count = OnlineRepaymentPlan::find()->select('uid')->where(['online_pid' => $pid])->groupBy('uid')->count();
 
