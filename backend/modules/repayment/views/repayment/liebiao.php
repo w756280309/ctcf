@@ -150,7 +150,7 @@ $bc = new BcRound();
                 </tr>
             </table>
         </div>
-        <?php if (5 === (int) $deal->status && 0 === (int) $qi[count($qi) - 1]['status']) { ?>
+        <?php if (0 === (int) $qi[count($qi) - 1]['status']) { ?>
         <div class="form-actions" style="text-align:right">
             <button type="button" class="btn blue button-repayment" qishu="<?= $qk ?>"><i class="icon-ok"></i> 确认还款</button>
         </div>

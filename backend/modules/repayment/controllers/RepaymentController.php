@@ -4,6 +4,7 @@ namespace backend\modules\repayment\controllers;
 
 use backend\controllers\BaseController;
 use backend\modules\order\controllers\OnlinefangkuanController;
+use backend\modules\order\core\FkCore;
 use common\lib\bchelp\BcRound;
 use common\lib\err\Err;
 use common\models\adminuser\AdminLog;
@@ -166,9 +167,44 @@ class RepaymentController extends BaseController
             ];
         }
 
+
         /** 请求参数初始化（待还款标的ID，待还款期数） */
         $pid = (int) Yii::$app->request->post('pid');
         $qishu = (int) Yii::$app->request->post('qishu');
+        $loan = OnlineProduct::findOne($pid);
+
+        try {
+            /** 确认计息后直接还款 - 放款审核、放款环节 */
+            if (null === $loan) {
+                throw new \Exception('标的不存在');
+            }
+
+            if ($loan->flexRepay) {
+                //放款审核操作
+                if ($loan->allowFkExamined()) {
+                    $fkcore = new FkCore();
+                    $createfk = $fkcore->createFk($this->admin_id, $pid, 1);
+                    if (0 === $createfk['res']) {
+                        throw new \Exception($createfk['msg']);
+                    }
+                }
+
+                //放款操作
+                $loan->refresh();
+                if ($loan->allowFk()) {
+                    $fk = $loan->fangkuan;
+                    if (null === $fk) {
+                        throw new \Exception('放款记录不存在');
+                    }
+                    $this->loanToMer($fk, $loan);
+                }
+            }
+        } catch (\Exception $ex) {
+            return [
+                'result' => 0,
+                'message' => '【30000】还款失败：'.$ex->getMessage(),
+            ];
+        }
 
         /** 检查对应标的该期是否可以还款，并返回对应的标的信息及对应标的期数的还款计划以及标的还款信息 */
         try {

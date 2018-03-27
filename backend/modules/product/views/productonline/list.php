@@ -391,7 +391,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                      class="btn mini red ajax_op" op="status" data-index="<?= $val['status'] ?>"
                                      index="<?= $val['id'] ?>"><i class="icon-minus-sign"></i>删除</a>
                             <?php } ?>
-                            <?php if ($val['online_status'] == 1 && ($val['status'] == 3 || $val['status'] == 7) && empty($val['fk_examin_time']) && 1 === (int)$val['is_jixi']) { ?>
+                            <?php if ($val->allowFkExamined() && !$val->flexRepay) { ?>
                                 |
                                 <a href="javascript:openwin('/order/onlinefangkuan/examinfk?pid=<?= $val['id'] ?>',800,400)"
                                    class="btn mini green"><i class="icon-edit"></i> 放款审核</a>
@@ -404,7 +404,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                 | <a href="/repayment/repayment?pid=<?= $val['id'] ?>" class="btn mini green"><i
                                             class="icon-edit"></i> 还款</a>
                             <?php } ?>
-                            <?php if ($val['fk_examin_time'] && in_array($val->fangkuan->status, [OnlineFangkuan::STATUS_EXAMINED, OnlineFangkuan::STATUS_FANGKUAN, OnlineFangkuan::STATUS_TIXIAN_FAIL])) { ?>
+                            <?php if ($val->allowFk() && !$val->flexRepay) { ?>
                                 | <a href="javascript:fk('<?= $val['id'] ?>');" class="btn mini green"><i
                                             class="icon-edit"></i> 放款</a>
                             <?php } ?>

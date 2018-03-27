@@ -69,6 +69,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string  $redemptionPeriods 赎回申请开放时段（可支持多个）
  * @property string  $redemptionPaymentDates 赎回付款日（可支持多个）
  * @property boolean $isDailyAccrual 是否分期设置截止日期 - todo 临时方案
+ * @property boolean $flexRepay 是否灵活还款（目前用于确认计息后直接还款） 1是0否
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -132,7 +133,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'del' => ['del_status'],
             'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
-            'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status', 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn', 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates', 'isDailyAccrual'],
+            'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status', 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn', 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates', 'isDailyAccrual', 'flexRepay'],
             'senior_edit' => ['title', 'internalTitle', 'kuanxianqi', 'issuerSn', 'pkg_sn'],
         ];
     }
@@ -559,6 +560,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'isRedeemable' => '是否允许主动赎回',
             'redemptionPeriods' => '赎回申请开放时段',
             'redemptionPaymentDates' => '赎回付款日',
+            'flexRepay' => '确认计息后可还款',
         ];
     }
 
@@ -1127,6 +1129,37 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     {
         if (
             in_array($this->status, [self::STATUS_HUAN, self::STATUS_OVER])
+            || ($this->flexRepay && $this->is_jixi)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 是否允许标的放款审核.
+     */
+    public function allowFkExamined()
+    {
+        if (in_array($this->status, [self::STATUS_FULL, self::STATUS_FOUND])
+            && $this->is_jixi
+            && null === $this->fangkuan
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 是否允许标的放款.
+     */
+    public function allowFk()
+    {
+        if (
+            in_array($this->fangkuan->status, [OnlineFangkuan::STATUS_EXAMINED, OnlineFangkuan::STATUS_FANGKUAN, OnlineFangkuan::STATUS_TIXIAN_FAIL])
+            && $this->fk_examin_time
         ) {
             return true;
         }

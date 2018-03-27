@@ -580,7 +580,7 @@ TPL;
                 </div>
             </div>
         </div>
-        <div class="row-fluid">
+        <div class="row-fluid clearfix">
             <div class="span6 ">
                 <div class="control-group">
                     <label class="control-label">允许使用代金券<span style="color:grey">(<?= $desc ?>)</span></label>
@@ -616,7 +616,7 @@ TPL;
                 </div>
             </div>
 
-            <div class="span6 fix-offset">
+            <div class="span6 fix-offset" >
                 <div class="control-group">
                     <label class="control-label">项目标签<span style="color:grey">(每个标签不超过四个字，且用中文逗号隔开)</span></label>
                     <div class="controls">
@@ -635,6 +635,7 @@ TPL;
                     </div>
                 </div>
             </div>
+
             <div class="span6">
                 <div class="control-group">
                     <label class="control-label">积分倍数<span style="color:grey">(<?= $desc ?>)</span></label>
@@ -660,14 +661,22 @@ TPL;
                     </div>
                 </div>
             </div>
-            <div class="span6  fix-offset">
+            <div class="span6 fix-offset">
+                <div class="control-group">
+                    <label class="control-label">确认计息后可还款<span style="color:grey">(<?= $desc ?>，常用于新手标)</span></label>
+                    <div class="controls">
+                        <?=  $form->field($model, 'flexRepay')->checkbox(array_merge(['autocomplete' => 'on'], $model->online_status ? ['disabled' => 'disabled', 'uncheck' => $model->flexRepay] : []))->label(false)?>
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
                 <div class="control-group">
                     <label class="control-label">指定累计资金额用户以上可见<span style="color:grey">（累计资金额=累计投资额+账户余额）</span></label>
                     <?=
                     $form->field($model, 'balance_limit', ['template' => '<div class="input-append"><span class="add-on">￥</span>{input}<span class="add-on">元</span> </div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '请输入累计资金额', 'value' => $model->balance_limit > 0 ? $model->balance_limit : '']])->textInput(['class' => 'm-wrap span12']) ?>
                 </div>
             </div>
-            <div class="span6">
+            <div class="span6 fix-offset">
                 <div class="control-group">
                     <label class="control-label">资产包编号<span style="color:grey">(<?= $desc ?>)</span></label>
                     <div class="controls">

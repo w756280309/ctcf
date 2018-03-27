@@ -215,8 +215,7 @@ class ProductonlineController extends BaseController
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
         $data = Yii::$app->request->post();
-
-        if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
+            if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
             try {
                 $this->validateContract([
                     'title' => $con_name_arr,
