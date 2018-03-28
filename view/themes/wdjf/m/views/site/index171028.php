@@ -25,9 +25,6 @@ $this->registerJsFile(FE_BASE_URI . 'libs/jquery.lazyload.min.js', ['depends' =>
 $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends' => JqueryAsset::class]);
 ?>
 <style>
-	body {
-		-webkit-text-size-adjust: 100% !important;
-	}
 	.pop {
 		position: fixed;
 		top: 50%;
@@ -290,21 +287,6 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 	</div>
 <?php } ?>
 <script>
-  (function() {
-    if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
-      handleFontSize();
-    } else {
-      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
-    }
-    function handleFontSize() {
-      // 设置网页字体为默认大小
-      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
-      // 重写设置网页字体大小的事件
-      WeixinJSBridge.on('menu:setfont', function() {
-        WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
-      });
-    }
-  })();
   function closeAdv() {
     $('.mask').addClass('hide');
     $('.pop').addClass('hide');

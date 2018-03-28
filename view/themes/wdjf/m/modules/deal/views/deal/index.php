@@ -22,11 +22,6 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 $pc_cat = Yii::$app->params['pc_cat'];
 $action = Yii::$app->controller->action->getUniqueId();
 ?>
-<style>
-	body {
-		-webkit-text-size-adjust: 100% !important;
-	}
-</style>
 <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
     <div class="row list-title">
         <div class="col-xs-6"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">理财列表</a></div>
@@ -43,20 +38,4 @@ $action = Yii::$app->controller->action->getUniqueId();
 <?php } else { ?>
     <div class="nodata" style="display:block;">暂无数据</div>
 <?php } ?>
-<script>
-  (function() {
-    if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
-      handleFontSize();
-    } else {
-      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
-    }
-    function handleFontSize() {
-      // 设置网页字体为默认大小
-      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
-      // 重写设置网页字体大小的事件
-      WeixinJSBridge.on('menu:setfont', function() {
-        WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
-      });
-    }
-  })();
-</script>
+
