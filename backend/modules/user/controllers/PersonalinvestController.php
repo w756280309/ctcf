@@ -114,7 +114,27 @@ class PersonalinvestController extends BaseController
     {
         $offlineUser = OfflineUser::findOne(['idCard' => $number]);
         if (!is_null($offlineUser)) {
-            $query_order2 = "select o.id as oid,o.apr,o.money,o.orderDate,o.accBankName,o.bankCardNo,l.id as lid,l.title,l.expires,l.unit,l.yield_rate,l.finish_date,l.repaymentMethod,l.jixi_time from offline_order as o inner join offline_loan as l on o.loan_id = l.id where o.user_id = ". $offlineUser->id;
+            $query_order2 = "select 
+o.id as oid,
+o.apr,o.money,
+o.orderDate,
+o.accBankName,
+o.bankCardNo,
+l.id as lid,
+l.title,
+l.expires,
+l.unit,
+l.yield_rate,
+l.finish_date,
+l.repaymentMethod,
+l.jixi_time 
+from offline_order as o 
+inner join offline_loan as l 
+on o.loan_id = l.id 
+where 
+o.isDeleted = 0
+and
+o.user_id = ". $offlineUser->id;
             $offlineOrder =  \Yii::$app->db->createCommand($query_order2)->queryAll();
             if (count($offlineOrder) > 0) {
                 foreach ($offlineOrder as $v) {
