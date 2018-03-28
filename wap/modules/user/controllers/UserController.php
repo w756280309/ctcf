@@ -16,6 +16,7 @@ use common\models\user\UserBank;
 use common\models\user\UserBanks;
 use common\service\BankService;
 use common\utils\SecurityUtils;
+use common\utils\StringUtils;
 use wap\modules\promotion\models\RankingPromo;
 use Wcg\Xii\Risk\Model\Risk;
 use Yii;
@@ -85,6 +86,7 @@ class UserController extends BaseController
             'html' => $html,
             'sumLicai' => isset($backArr['sumLicai']) ? $backArr['sumLicai'] : '',
             'off_licai' => isset($backArr['off_licai'])? $backArr['off_licai'] : '',
+            'eyeStatus' => isset($backArr['eyeStatus']) ? $backArr['eyeStatus'] : '',
         ];
     }
 
@@ -114,6 +116,14 @@ class UserController extends BaseController
             $countCoupon = UserCoupon::findCouponInUse($user->id, date('Y-m-d'))->count();
             $sumLicai = bcadd($ua->freeze_balance, $ua->investment_balance, 2);
         }
+
+        //账户中心页初始化页面时资产总额、累计收益、我的积分、可用余额、我的理财、门店理财的显示状态,第一次默认为显示状态
+        $eyeStatus = 'open';
+        $redis = Yii::$app->redis;
+        if ($redis->hexists('userReferences', $user->id)) {
+            $eyeStatus = $redis->hget('userReferences', $user->id);
+        }
+
         $risk = Risk::find()
             ->where([
                 'user_id' => $user->id,
@@ -134,6 +144,7 @@ class UserController extends BaseController
         //判断用户是否绑卡成功
         $isBindCard = $user->qpay;
 
+
         return [
             'sumCoupon' => $sumCoupon,
             'countCoupon' => $countCoupon,
@@ -144,6 +155,7 @@ class UserController extends BaseController
             'riskContent' => $riskContent,
             'off_licai' => (!is_null($user) && $user->offline) ? $user->offline->totalAssets : 0,
             'isBindCard' => $isBindCard,
+            'eyeStatus' => $eyeStatus,
         ];
     }
 
@@ -159,6 +171,41 @@ class UserController extends BaseController
         $user = $this->getAuthedUser();
 
         return BankService::checkKuaijie($user);
+    }
+
+    /**
+     * 交替显示账户中心页资产金额显示状态
+     * @param $status  open为显示，close为隐藏
+     * @return array 当为close时，只返回状态，当为open时，返回状态及资产总额、累计收益、我的积分、可用余额、我的理财、门店理财的值
+     */
+    public function actionHiddenAmount($status)
+    {
+        $user = $this->getAuthedUser();
+        $data = [];
+        if ($user) {
+            $ua = $user->lendAccount;
+            $redis = Yii::$app->redis;
+            if ($status === 'open') {
+                $status = 'close';
+                $redis->hset('userReferences', $user->id, $status);
+            } elseif ($status === 'close') {
+                $status = 'open';
+                $redis->hset('userReferences', $user->id, $status);
+
+                $data['totalAssets'] = StringUtils::amountFormat3($user->totalAssets); //资产总额
+                $data['profit'] = StringUtils::amountFormat3($user->getProfit());  //累计收益
+                $data['available_balance'] = StringUtils::amountFormat3($ua->available_balance); //可用余额
+                $data['points'] = StringUtils::amountFormat2($user->points);   //我的积分
+                $data['sumLicai'] = StringUtils::amountFormat2(bcadd($ua->freeze_balance, $ua->investment_balance, 2)); //我的理财
+                $data['offLicai'] = StringUtils::amountFormat2(($user->offline) ? $user->offline->totalAssets : 0);  //门店理财
+
+            }
+            $data['eyeStatus'] = $status;
+
+            return $data;
+        }
+
+        return $data;
     }
 
     /**

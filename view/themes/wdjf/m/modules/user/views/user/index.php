@@ -8,7 +8,7 @@ UdeskWebIMHelper::init($this);
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/homePage.css?v=20170629">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/homePage.css?v=20180327">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
@@ -154,17 +154,26 @@ UdeskWebIMHelper::init($this);
 
         var xhr = $.get('/user/user/is-login');
         xhr.done(function(data) {
+            if ('undefined' !== typeof data.sumLicai && data.sumLicai) {
+                $('#licai').html(WDJF.numberFormat(data.sumLicai, true));
+                $('#licai').after('<span>元</span>');
+            }
+                $('#off_licai').html(WDJF.numberFormat(data.off_licai, true));
+                $('#off_licai').after('<span>元</span>');
+
             if ('undefined' !== typeof data.html) {
                 $('#login').html(data.html);
                 adaptive();
+                if ('undifined' !== typeof data.eyeStatus && data.eyeStatus) {
+                    if (data.eyeStatus == 'close') {
+                        $("#zonge,#shouyi,#keyong,#jifen,#licai,#off_licai").html("****");
+                        $("#licai,#off_licai").next().remove();
+                    }
+
+                }
             }
 
-            if ('undefined' !== typeof data.sumLicai && data.sumLicai) {
-                $('#licai').html(WDJF.numberFormat(data.sumLicai, true));
-                $('#licai').after('元');
-            }
-            $('#off_licai').html(WDJF.numberFormat(data.off_licai, true));
-            $('#off_licai').after('元');
+
         });
     });
 
@@ -204,6 +213,28 @@ UdeskWebIMHelper::init($this);
         xhr.fail(function () {
             toastCenter('系统繁忙,请稍后重试!');
         });
+    }
+
+    function hiddenAmount(event) {
+        event.preventDefault();
+        var hiddenAmount = $("#hiddenAmount")
+        var status = hiddenAmount.data('status');
+        $.get('/user/user/hidden-amount?status='+ status, function (data) {
+            hiddenAmount.data('status', data['eyeStatus']);
+            if (data['eyeStatus'] == 'close') {
+                hiddenAmount.find('img').attr('src', "<?= ASSETS_BASE_URI ?>images/closeEye.png");
+                $("#zonge,#shouyi,#keyong,#jifen,#licai,#off_licai").html("****");
+                $("#licai,#off_licai").next().remove();
+            } else {
+                hiddenAmount.find('img').attr('src', "<?= ASSETS_BASE_URI ?>images/openEye.png")
+                $("#zonge").html(data['totalAssets'])
+                $("#shouyi").html(data['profit']);
+                $("#keyong").html(data['available_balance']);
+                $("#jifen").html(data['points']);
+                $("#licai").html(data['sumLicai']).after('<span>元</span>');
+                $("#off_licai").html(data['offLicai']).after('<span>元</span>');
+            }
+        })
     }
 
     function adaptive()

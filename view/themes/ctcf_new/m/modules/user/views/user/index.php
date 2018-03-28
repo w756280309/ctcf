@@ -11,7 +11,7 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
 <!--<link rel="stylesheet" href="--><?//= FE_BASE_URI ?><!--wap/ucenter/css/homePage.css?v=20170629">-->
 <!--<link rel="stylesheet" href="--><?//= ASSETS_BASE_URI ?><!--ctcf/common/ucenter/css/homePage.css?v=20180210">-->
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/ucenter/homePage.css?v=2018021211">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/ucenter/homePage.css?v=20180327">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/user/guide.min.css">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
@@ -174,17 +174,26 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
 
         var xhr = $.get('/user/user/is-login');
         xhr.done(function(data) {
+            if ('undefined' !== typeof data.sumLicai && data.sumLicai) {
+                $('#licai').html(WDJF.numberFormat(data.sumLicai, true));
+                $('#licai').after('<span>元</span>');
+            }
+            $('#off_licai').html(WDJF.numberFormat(data.off_licai, true));
+            $('#off_licai').after('<span>元</span>');
+
             if ('undefined' !== typeof data.html) {
                 $('#login').html(data.html);
                 adaptive();
+                if ('undifined' !== typeof data.eyeStatus && data.eyeStatus) {
+                    if (data.eyeStatus == 'close') {
+                        $("#zonge,#shouyi,#keyong,#jifen,#licai,#off_licai").html("****");
+                        $("#licai,#off_licai").next().remove();
+                    }
+
+                }
             }
 
-            if ('undefined' !== typeof data.sumLicai && data.sumLicai) {
-                $('#licai').html(WDJF.numberFormat(data.sumLicai, true));
-                $('#licai').after('元');
-            }
-            $('#off_licai').html(WDJF.numberFormat(data.off_licai, true));
-            $('#off_licai').after('元');
+
         });
     });
 
@@ -224,6 +233,28 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
         xhr.fail(function () {
             toastCenter('系统繁忙,请稍后重试!');
         });
+    }
+
+    function hiddenAmount(event) {
+        event.preventDefault();
+        var hiddenAmount = $("#hiddenAmount")
+        var status = hiddenAmount.data('status');
+        $.get('/user/user/hidden-amount?status='+ status, function (data) {
+            hiddenAmount.data('status', data['eyeStatus']);
+            if (data['eyeStatus'] == 'close') {
+                hiddenAmount.find('img').attr('src', "<?= ASSETS_BASE_URI ?>ctcf/images/user/closeEye.png");
+                $("#zonge,#shouyi,#keyong,#jifen,#licai,#off_licai").html("****");
+                $("#licai,#off_licai").next().remove();
+            } else {
+                hiddenAmount.find('img').attr('src', "<?= ASSETS_BASE_URI ?>ctcf/images/user/openEye.png")
+                $("#zonge").html(data['totalAssets'])
+                $("#shouyi").html(data['profit']);
+                $("#keyong").html(data['available_balance']);
+                $("#jifen").html(data['points']);
+                $("#licai").html(data['sumLicai']).after('<span>元</span>');
+                $("#off_licai").html(data['offLicai']).after('<span>元</span>');
+            }
+        })
     }
     
     function certification(popup) {

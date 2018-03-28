@@ -56,6 +56,19 @@ div.UtopTitle{
     margin-right: .16rem
 }
 
+#hiddenAmount {
+    display:inline-block;
+    position: relative;
+    width:0.7rem;
+    float:right;
+    margin-right: 0.5rem;
+    z-index: 1000
+}
+
+#hiddenAmount img {
+    width: 100%;
+}
+
 .top_one .user_imf .user_level {
     display: inline-block;
     width: .76rem;

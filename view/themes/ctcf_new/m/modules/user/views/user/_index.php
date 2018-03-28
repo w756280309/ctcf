@@ -24,6 +24,13 @@ use common\models\user\User;
                             <img src="<?= FE_BASE_URI ?>wap/ucenter/images/shape_level<?= $user->level ?>.png">
                         </span>
                         <span class="user_caifu f12">财富值：<?= StringUtils::amountFormat2($user->coins) ?></span>
+                        <span data-status = "<?= $eyeStatus ?>" id="hiddenAmount" onclick="hiddenAmount(event)">
+                            <?php if ($eyeStatus === 'open') { ?>
+                                <img src="<?= ASSETS_BASE_URI ?>ctcf/images/user/openEye.png">
+                            <?php } else { ?>
+                                <img src="<?= ASSETS_BASE_URI ?>ctcf/images/user/closeEye.png">
+                            <?php } ?>
+                        </span>
                     </p>
                 </a>
             <?php } ?>
