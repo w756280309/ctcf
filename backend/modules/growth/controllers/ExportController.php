@@ -432,6 +432,47 @@ and date(from_unixtime(p.finish_date)) <= :endDate',
                 'itemLabels' => ['姓名', '联系方式', '产品名称', '产品期限', '单位', '到期日', '到期金额'],
                 'itemType' => ['string', 'string', 'string', 'string', 'string', 'date', 'string'],
             ],
+            'export_crm_reception' => [
+                'key' => 'export_crm_reception',
+                'title' => '指定日期门店接待量',
+                'content' => '导出一段时间内的门店接待量',
+                'sql' => "SELECT
+a.real_name AS '接待者',
+cbv.createTime AS '拜访时间',
+ci.encryptedName AS '用户姓名',
+cc.encryptedNumber AS '手机号',
+cbv.content AS '内容',
+cbv.comment AS '备注'
+FROM crm_branch_visit cbv
+INNER JOIN admin a 
+ON a.id = cbv.creator_id
+INNER JOIN crm_account ca 
+ON ca.id = cbv.	account_id
+INNER JOIN crm_contact cc 
+ON cc.id = ca.primaryContact_id
+INNER JOIN crm_identity ci 
+ON ci.account_id = cbv.	account_id
+WHERE date(cbv.createTime) >= :startDate
+AND  date(cbv.createTime) <= :endDate",
+                'params' => [
+                    'startDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'startDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-30 day')),//参数的默认值
+                        'title' => '开始日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'endDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'endDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d'),//参数的默认值
+                        'title' => '结束日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['接待者', '拜访时间', '用户姓名', '联系方式', '内容', '备注'],
+                'itemType' => ['string', 'date', 'string', 'string', 'string', 'string'],
+            ],
         ];
         parent::init();
     }

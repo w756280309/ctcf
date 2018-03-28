@@ -80,6 +80,8 @@ class SqlExportJob extends Job
                 $item['联系方式'] = SecurityUtils::decrypt($item['联系方式']);
                 $item['单位'] = $item['单位'] > 1 ? '月' : '天';
                 $item['到期日'] = date('Y-m-d', $item['到期日']);
+            } else if ('export_crm_reception' === $paramKey) {  //门店接待记录
+                $item['用户姓名'] = SecurityUtils::decrypt($item['用户姓名']);
             }
 
             $item = array_values($item);
