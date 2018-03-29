@@ -327,7 +327,12 @@ class SiteController extends Controller
             return $this->redirect('/?_mark='.time());
         }
 
-        if (empty($next) || !filter_var($next, FILTER_VALIDATE_URL)) {
+        $isUrl = filter_var($next, FILTER_VALIDATE_URL);
+        if (null !== $next && !$isUrl) {
+            return $this->redirect('/?_mark='.time());
+        }
+
+        if (empty($next) || !$isUrl) {
             $from = Yii::$app->request->referrer;
             if (
                 !Yii::$app->request->isFromOutSite()
@@ -342,7 +347,6 @@ class SiteController extends Controller
             ) {
                 $from = '/';
             }
-
         } else {
             $from = $next;
         }
@@ -355,7 +359,6 @@ class SiteController extends Controller
             $model->phone = Yii::$app->request->post('phone');
             $model->password = Yii::$app->request->post('bad');
             $model->verifyCode = Yii::$app->request->post('verifyCode');
-//            $model->username = Yii::$app->request->get('phone');
             if ($model->validate()) {
                 $post_from = Yii::$app->request->post('from');
                 if ($model->login(User::USER_TYPE_PERSONAL, defined('IN_APP'))) {
@@ -387,6 +390,7 @@ class SiteController extends Controller
                     ])) {
                         $tourl = ThirdPartyConnect::generateLoginUrl($tourl);
                     }
+
                     return [
                         'code' => 0,
                         'message' => '登录成功',
@@ -506,10 +510,8 @@ class SiteController extends Controller
         }
 
         $next = filter_var($next, FILTER_VALIDATE_URL);
-
         $model = new SignupForm();
         $data = Yii::$app->request->post();
-        //var_dump($data);die;
         if (!isset($data['regContext']) || empty($data['regContext'])) {
             $data['regContext'] = 'm';
         }
@@ -768,8 +770,18 @@ class SiteController extends Controller
      */
     public function actionAppDownload($redirect = null)
     {
-        $isShowAppDownload = AppMeta::getValue('is_show_app_download');
+        if (null === $redirect) {
+            return $this->render('v2');
+        }
+
+        //不允许重定向到带有host的站点
+        $host = parse_url($redirect, PHP_URL_HOST);
+        if (null !== $host) {
+            return $this->render('v2');
+        }
+
         //'on'为未开启状态,'off'为关闭状态
+        $isShowAppDownload = AppMeta::getValue('is_show_app_download');
         if ('on' === $isShowAppDownload) {
             if (!$this->fromWx()) {
                 return $this->redirect($redirect);

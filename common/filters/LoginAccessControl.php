@@ -24,7 +24,12 @@ class LoginAccessControl extends ActionFilter
             }
             $user = Yii::$app->getUser()->getIdentity();
             if (null === $user) {
-                Yii::$app->response->redirect('/site/login?cancelUrl='.urlencode('/'))->send();
+                if (defined('IN_APP')) {
+                    $url = '/';
+                } else {
+                    $url = Yii::$app->request->hostInfo.'/';
+                }
+                Yii::$app->response->redirect('/site/login?cancelUrl='.urlencode($url))->send();
             }
         }
 

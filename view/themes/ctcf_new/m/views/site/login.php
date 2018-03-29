@@ -16,7 +16,7 @@ $this->title = '登录';
 
 <div class="row kongxi">
     <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login", 'options' => ['data-to'=>'1']]); ?>
-    <input name="from" type="hidden" value="<?= $from ?>">
+    <input name="from" type="hidden" value="<?= urlencode($from) ?>">
     <input id="iphone" class="login-info" name="LoginForm[phone]" maxlength="11" type="tel" placeholder="请输入手机号" autocomplete="off" >
 
     <div class="row sm-height">

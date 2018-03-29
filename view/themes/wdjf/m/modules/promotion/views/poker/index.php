@@ -185,7 +185,7 @@ $this->registerJs('forceReload_V2();');
             <p class="award-term">您还没有登录哦！</p>
             <p class="prize-rank">快去登录点亮扑克牌，</p>
             <p >抽取幸运大奖吧！</p>
-            <a class="know"  href="/site/login?next=/promotion/poker/">去登录</a>
+            <a class="know"  href="/site/login?next=<?= urlencode(Yii::$app->request->hostInfo.'/promotion/poker/') ?>">去登录</a>
         </div>
     </div>
 </div>
@@ -283,7 +283,7 @@ $this->registerJs('forceReload_V2();');
                             this.options.content = "登录平台即可获得本期个人专属幸运号码。有幸运号码就有机会获得幸运奖哦！";
                             this.options.num = "<?= FE_BASE_URI ?>wap/happy-week/images/doNot.png";
                             this.options.btn = '去登录';
-                            this.options.href = '/site/login?next=/promotion/poker/';
+                            this.options.href = "/site/login?next=<?= urlencode(Yii::$app->request->hostInfo.'/promotion/poker/') ?>";
                             this.options.btnIsShow = true;
                         } else if (this.isLoggedin == true) {
                             this.options.content = "您本期的个人专属幸运号码是"+data.card[0]+"。每周一上午10点记得来开奖哦！";
@@ -300,7 +300,7 @@ $this->registerJs('forceReload_V2();');
                         if (this.isLoggedin == false) {
                             this.options.num = "<?= FE_BASE_URI ?>wap/happy-week/images/rdoNot.png";
                             this.options.btn = '去登录';
-                            this.options.href = '/site/login?next=/promotion/poker/';
+                            this.options.href = "/site/login?next=<?= urlencode(Yii::$app->request->hostInfo.'/promotion/poker/') ?>";
                             this.options.btnIsShow = true;
                         } else if (this.isLoggedin == true) {
                             this.options.num = this.twoCardUrl;
