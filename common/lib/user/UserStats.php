@@ -61,6 +61,8 @@ class UserStats
                 '当前积分',
                 '会员等级',
                 '兑吧ID',
+                '未投资时长(天)',
+                '最后一次购买金额(元)',
             ],
         ];
 
@@ -71,7 +73,8 @@ class UserStats
         $ui = UserInfo::tableName();
         $tpc = ThirdPartyConnect::tableName();
         $model = (new Query())
-            ->select("$u.*,$ub.id as bid, $ua.available_balance, $ui.firstInvestAmount, $ua.investment_balance, $u.birthdate, $ui.firstInvestDate, $tpc.publicId")
+            ->select("$u.*,$ub.id as bid, $ua.available_balance, $ui.firstInvestAmount, $ua.investment_balance, 
+            $u.birthdate, $ui.firstInvestDate, $tpc.publicId, $ui.lastInvestAmount, $ui.lastInvestDate")
             ->from($u)
             ->leftJoin($ub, "$ub.uid = $u.id")
             ->leftJoin($ua, "$ua.uid = $u.id")
@@ -176,6 +179,8 @@ class UserStats
             $data[$key]['points'] = intval($user['points']);
             $data[$key]['level'] = UserService::calcUserLevel(bcdiv($user['annualInvestment'], 10000, 0));
             $data[$key]['publicId'] = $user['publicId'];
+            $data[$key]['lastInvestDate'] = (new \DateTime)->diff(new \DateTime($user['lastInvestDate']))->days;  //未投资时长
+            $data[$key]['lastInvestAmount'] = $user['lastInvestAmount'];    //最后一次投资金额
         }
 
         return $data;
