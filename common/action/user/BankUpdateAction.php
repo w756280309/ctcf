@@ -33,7 +33,7 @@ class BankUpdateAction extends Action
             return $this->controller->redirect('/user/bank/card');
         }
 
-        $banks = BankManager::getQpayBanks();
+        $banks = BankManager::getQpayBindBanks();   //获取支持绑卡的开户行
 
         return $this->controller->render('update', ['banklist' => $banks]);
     }
