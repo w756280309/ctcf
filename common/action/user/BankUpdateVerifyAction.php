@@ -50,7 +50,7 @@ class BankUpdateVerifyAction extends Action
             }
 
             $qpay = QpayConfig::findOne($model->bankId);
-            if (null === $qpay || 1 === (int)$qpay->isDisabled) {
+            if (null === $qpay || 0 === (int)$qpay->allowBind) {
                 return $this->controller->createErrorResponse('抱歉，不支持当前选择的银行');
             }
 
