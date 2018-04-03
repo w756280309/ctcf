@@ -55,6 +55,9 @@ class NewsController extends Controller
         }
 
         $new = News::findOne($id);
+        if (is_null($new) || $new->status != News::STATUS_PUBLISH) {
+            throw $this->ex404();     //不存在的文章或文章隐藏了,抛出404异常
+        }
         $user = Yii::$app->user->getIdentity();
         if (!is_null($user)) {
             $totalAssets = $user->jGMoney;
