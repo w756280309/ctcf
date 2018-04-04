@@ -8,7 +8,7 @@ body {
 }
 .flex-content .get-detail {
     margin: 0 auto;
-    padding-bottom: 0.2rem;
+    padding-bottom: 0.42rem;
     width: 95.2%;
     font-size: 0.32rem;
     color: #737373;
@@ -26,7 +26,7 @@ body {
     width: 91.59663866%;
     height: 1.22666667rem;
     line-height: 1.22666667rem;
-    font-size: 0.48rem;
+    font-size: 0.4rem;
     background-color: #fff;
     border-radius: 0.04rem;
 }
