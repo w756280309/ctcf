@@ -43,9 +43,31 @@ $this->hideHeaderNav = false;
 
 </style>
 <div class="flex-content">
-    <div class="picture"><img src="<?= FE_BASE_URI ?>wap/download-page/images/banner_01.png" alt=""></div>
-    <div class="picture"><img src="<?= FE_BASE_URI ?>wap/download-page/images/banner_02.png" alt=""></div>
-    <div class="picture"><img src="<?= FE_BASE_URI ?>wap/download-page/images/banner_03.png" alt=""></div>
-    <a class="link" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.wz.wenjf"><img src="<?= FE_BASE_URI ?>wap/download-page/images/btn.png" alt=""></a>
+    <div class="picture"><img onclick="prevent();" src="<?= FE_BASE_URI ?>wap/download-page/images/ct_banner_01.png" alt=""></div>
+    <div class="picture"><img onclick="prevent();" src="<?= FE_BASE_URI ?>wap/download-page/images/ct_banner_02.png" alt=""></div>
+    <div class="picture"><img onclick="prevent();" src="<?= FE_BASE_URI ?>wap/download-page/images/ct_banner_03.png" alt=""></div>
+    <a class="link" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.hb.ctcf"><img src="<?= FE_BASE_URI ?>wap/download-page/images/btn.png" alt=""></a>
     <p class="tips">积分商城暂时无法在微信端正常访问，<br>我们建议您下载楚天财富APP，以便正常使用。</p>
 </div>
+
+<script>
+    (function() {
+        if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+            handleFontSize();
+        } else {
+            document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+        }
+        function handleFontSize() {
+            // 设置网页字体为默认大小
+            WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+            // 重写设置网页字体大小的事件
+            WeixinJSBridge.on('menu:setfont', function() {
+                WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+            });
+        }
+    })();
+    function prevent(event) {
+        var event = event || window.event;
+        event.preventDefault();
+    }
+</script>
