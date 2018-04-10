@@ -3,6 +3,8 @@
 namespace common\models\user;
 
 use common\event\LoginEvent;
+use common\models\log\LoginLog;
+use common\service\LoginService;
 use common\utils\SecurityUtils;
 use Yii;
 use yii\base\Model;
@@ -147,6 +149,11 @@ class LoginForm extends Model
             : Yii::$app->user->login($this->user, $this->rememberMe ? 3600 : 0);
 
         if ($isLoggedIn) {
+            //登录成功日志
+            $login = new LoginService();
+            $logintype = CLIENT_TYPE == 'pc' ? LoginLog::TYPE_PC : LoginLog::TYPE_WAP;
+            $login->logFailure($this->phone, $logintype, LoginLog::STATUS_SUCCESS);
+
             $this->user->scenario = 'login';
             $this->user->last_login = time();
 

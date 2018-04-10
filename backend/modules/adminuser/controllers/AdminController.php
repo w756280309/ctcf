@@ -2,6 +2,7 @@
 
 namespace app\modules\adminuser\controllers;
 
+use common\models\adminuser\AdminLog;
 use common\models\affiliation\Affiliator;
 use Yii;
 use backend\controllers\BaseController;
@@ -205,5 +206,36 @@ class AdminController extends BaseController
         }
 
         return $this->render('editpass', ['model' => $model]);
+    }
+
+    /**
+     * 默认加载管理员日志列表
+     * 要素：管理员、类型、操作内容、处理结果、操作时间
+     */
+    public function actionAdminLog()
+    {
+        $query = AdminLog::find();
+        $get = Yii::$app->request->get();
+        //管理员姓名
+        if (!empty($get['name'])) {
+            $query->innerJoin('admin', 'admin.id = admin_log.admin_id')
+                ->andWhere(['admin.real_name' => trim($get['name'])]);
+        }
+        //类型
+        if (!empty($get['type'])) {
+            $query->andWhere(['like', 'admin_log.tableName', $get['type']]);
+        }
+        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
+        $models = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
+        //类型
+        $types = AdminLog::find()
+            ->select('tableName')
+            ->groupBy('tableName')
+            ->column();
+        return $this->render('adminLog', [
+            'models' => $models,
+            'pages' => $pages,
+            'types' => $types,
+        ]);
     }
 }

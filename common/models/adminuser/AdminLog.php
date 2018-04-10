@@ -110,4 +110,9 @@ class AdminLog extends ActiveRecord
         ]);
         return $log;
     }
+
+    public function getAdminName()
+    {
+        return Admin::find()->select('real_name')->where(['id' => $this->admin_id])->scalar();
+    }
 }

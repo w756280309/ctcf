@@ -19,12 +19,13 @@ class LoginService
      * @param string $loginName 登录用户名
      * @param int    $type      登录渠道
      */
-    public function logFailure($loginName, $type)
+    public function logFailure($loginName, $type, $status = LoginLog::STATUS_ERROR)
     {
         $log = new LoginLog([
             'ip' => $this->getRealIp(),
             'type' => $type,
             'user_name' => $loginName,
+            'status' => $status,
         ]);
 
         $log->save();
@@ -47,6 +48,7 @@ class LoginService
         }
 
         $failLoginNum = $query
+            ->andWhere(['status' => LoginLog::STATUS_ERROR])
             ->andWhere(['>', 'created_at', time() - 10 * 60])
             ->count();
 

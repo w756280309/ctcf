@@ -11,6 +11,7 @@ use common\models\affiliation\Affiliator;
 use common\models\affiliation\UserAffiliation;
 use common\models\bank\Bank;
 use common\models\epay\EpayUser;
+use common\models\log\LoginLog;
 use common\models\mall\PointRecord;
 use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder;
@@ -1065,5 +1066,28 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             ->groupBy('uid')
             ->having(['>=', 'total', $drawTimes])
             ->count();
+    }
+
+    /**
+     * 用户登录日志
+     */
+    public function actionUserLog()
+    {
+        $request = Yii::$app->request->get();
+        if (!empty($request['mobile'])) {
+            $query = LoginLog::find()->andWhere([
+                    'user_name' => $request['mobile'],
+                    'type' => ['1', '2'],
+                ]);
+            $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
+            $models = $query->offset($pages->offset)->limit($pages->limit)->orderBy('id desc')->all();
+        } else {
+            $pages = new Pagination(['totalCount' => 0, 'pageSize' => '15']);
+            $models = [];
+        }
+        return $this->render('userLog', [
+            'models' => $models,
+            'pages' => $pages,
+        ]);
     }
 }
