@@ -58,7 +58,15 @@ class UploadController extends BaseController
 
         if (!$model->hasErrors()) {
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                $this->uploadImage($model);
+                try {
+                    $this->uploadImage($model);
+                } catch (Exception $e) {
+                    $model = new Upload();
+                    $model->addError('link', $e->getMessage());
+                    return $this->render('edit', [
+                        'model' => $model,
+                    ]);
+                }
                 if (null === $model->link) {
                     unset($model->link);
                 }
@@ -101,6 +109,9 @@ class UploadController extends BaseController
         }
 
         if ($obj->link) {
+            if (!in_array($obj->link->extension, ['png', 'jpg']) || $obj->link->size > 1048576) {
+                throw new Exception('只允许上传扩展名为png和jpg并且大小不超过1M的文件');
+            }
             $picPath = 'upload/link/link'.time().rand(100000, 999999).'.'.$obj->link->extension;
 
             $obj->link->saveAs($picPath);
