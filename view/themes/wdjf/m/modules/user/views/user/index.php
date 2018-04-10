@@ -100,7 +100,7 @@ UdeskWebIMHelper::init($this);
 </a>
 <ul class="options flex-content f15" style="margin-top: 8px;">
     <li class="ops clearfix">
-        <a href="javascript:void(0)" id="btn_udesk_im" class="clearfix">
+        <a href="javascript:void(0)" id="btn_udesk_im" class="kefu clearfix">
             <div class="lf f15" style="background:url(<?= FE_BASE_URI ?>wap/new-homepage/images/online-servic-red.png) no-repeat;background-size: 21% 100%;background-position: 0 0">在线客服</div>
             <div class="rg f15">
                 &nbsp;<img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
@@ -155,6 +155,7 @@ UdeskWebIMHelper::init($this);
 
 
         });
+
     });
 
     function tixian()

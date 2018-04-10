@@ -150,7 +150,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends
             <span class="x-confirm">确定</span>
         </div>
     </div>
-<p id="btn_udesk_im" style="margin-bottom: 1rem;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
+<p id="btn_udesk_im" class="btn-kefu" style="margin-bottom: 1rem;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
     <div class="mask2" style="display: none"></div>
     <div class="coupon-box" style="display: none">
         <div class="coupon-box-title clearfix">

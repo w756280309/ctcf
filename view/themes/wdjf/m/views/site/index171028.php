@@ -46,12 +46,12 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		width: 8rem;
 		height: 10.66667rem
 	}
-	#btn_udesk_im{
+	#btn_udesk_im,#btn_udesk_im_app{
 		display: block;
 		width: 49.7%;
 		height: 2.586rem;
 	}
-	#btn_udesk_im img{
+	#btn_udesk_im img,#btn_udesk_im_app img{
 		width: 100%;
 		height: 100%;
 		margin:0;
@@ -234,7 +234,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 	<div class="phone-box">
 		<p class="phone-box-title">服务中心</p>
 		<div class="phone-box-links clearfix">
-			<p id="btn_udesk_im" class="lf"><img
+			<p id="btn_udesk_im" class="lf btn-kefu"><img
 					src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_phone_one.png" alt=""></p>
 			<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>" class="rg"><img
 					src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_phone_three.png" alt=""></a>
@@ -287,6 +287,23 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 	</div>
 <?php } ?>
 <script>
+  (function() {
+    if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+      handleFontSize();
+    } else {
+      document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+    }
+    function handleFontSize() {
+      // 设置网页字体为默认大小
+      WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+      // 重写设置网页字体大小的事件
+      WeixinJSBridge.on('menu:setfont', function() {
+        WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+      });
+    }
+
+
+  })();
   function closeAdv() {
     $('.mask').addClass('hide');
     $('.pop').addClass('hide');
@@ -324,6 +341,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 
   var guiZe = '<?= (empty($kaiPing) || empty($kaiPing->media)) ? '' : $kaiPing->media->uri ?>';
 </script>
+
 <script type="text/template" id="banner_text">
     <?php foreach ($hotActs as $act) {
         if (!is_null($act->media)) {
