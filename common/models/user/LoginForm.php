@@ -152,7 +152,7 @@ class LoginForm extends Model
             //登录成功日志
             $login = new LoginService();
             $logintype = CLIENT_TYPE == 'pc' ? LoginLog::TYPE_PC : LoginLog::TYPE_WAP;
-            $login->logFailure($this->phone, $logintype, LoginLog::STATUS_SUCCESS);
+            $login->logFailure(User::USER_TYPE_ORG === $userType ? $this->username : $this->phone, $logintype, LoginLog::STATUS_SUCCESS);
 
             $this->user->scenario = 'login';
             $this->user->last_login = time();
