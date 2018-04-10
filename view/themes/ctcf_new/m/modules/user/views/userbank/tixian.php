@@ -45,7 +45,10 @@ $this->title="提现";
                     $drawFreeLimit = Yii::$app->params['draw_free_limit'];
                     $restDrawCount = $drawFreeLimit - $user_acount->user->getDrawCount();
                 ?>
-                <span class="tixian-msg">(每月有<?= $drawFreeLimit ?>次免费发起提现的机会，本月您还有<?= $restDrawCount > 0 ? $restDrawCount : 0 ?>次免费机会，之后每笔收取<?= Yii::$app->params['drawFee'] ?>元手续费)</span>
+                <span style="height: auto" class="tixian-msg">(每月有<?= $drawFreeLimit ?>次免费发起提现的机会，本月您还有<?= $restDrawCount > 0 ? $restDrawCount : 0 ?>次免费机会，之后每笔收取<?= Yii::$app->params['drawFee'] ?>元手续费)</span>
+                <span style="height: auto" class="tixian-msg">
+                    当日可提现100万，超过100万以上请提前一个工作日联系客服申请，客服电话<?= Yii::$app->params['platform_info.contact_tel'] ?>。
+                </span>
             </div>
             <div class="hidden-xs col-sm-1"></div>
         </div>

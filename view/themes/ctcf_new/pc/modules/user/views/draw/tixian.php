@@ -46,7 +46,8 @@
             <div class="link-en">
                 <input type="submit" class="link-charge" value="提现" id="rechargebtn" />
             </div>
-            <p class="fee-info" style="margin-top: -24px;color: #f44336;margin-left: 60px;">* 每月有<?= $drawFreeLimit ?>次免费发起提现的机会，本月您还有<?= $restDrawCount > 0 ? $restDrawCount : 0 ?>次免费机会，之后每笔收取<?= $drawFee ?>元手续费</p>
+            <p class="fee-info" style="margin-top: -24px;color: #f44336;margin-left: 60px;">* 每月有<?= $drawFreeLimit ?>次免费发起提现的机会，本月您还有<?= $restDrawCount > 0 ? $restDrawCount : 0 ?>次免费机会，之后每笔收取<?= $drawFee ?>元手续费；</p>
+            <p class="fee-info" style="color: #f44336;margin-left: 60px;">* 当日可提现100万，超过100万以上请提前一个工作日联系客服申请，客服电话<?= Yii::$app->params['platform_info.contact_tel'] ?>。</p>
         </form>
         <!------------------已绑卡结束------------------>
     <?php } else { ?>
