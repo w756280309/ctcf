@@ -1333,4 +1333,20 @@ return [
              '625800' => '西湖信用卡-贷记卡',
          ],
     ],
+    '315' => [
+        'sort' => '32',
+        'bankname' => '恒丰银行',
+        'nickname' => 'Bank of HengFeng',
+        'limit' => [],
+        'bin' => [
+            '622384' => '九州借记卡(银联卡)',
+        ],
+    ],
+    '402' => [
+        'sort' => '33',
+        'bankname' => '北京农村商业银行',
+        'nickname' => 'Bank of CountryBeijing',
+        'limit' => [],
+        'bin' => [],
+    ],
 ];
