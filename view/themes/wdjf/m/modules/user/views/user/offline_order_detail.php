@@ -25,12 +25,12 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20180102', ['d
                 <div class="invest-title">
                     <div class="invest-left"><a href="#"><?= '【门店】' . $model->loan->title?></a></div>
                     <div class="invest-right">
-                        <?php if ($model->loan->status == '收益中') { ?>
+                        <?php if ($model->repaymentStatus == 1) { ?>
                             <!--还款中-已还清-募集中-文字颜色-->
                             <div class="invest-right-title invest-orange">收益中</div>
                             <!--还款中-已还清-募集中-图片-->
                             <img src="<?= ASSETS_BASE_URI ?>images/licai-huang.png" alt="">
-                        <?php } elseif ($model->loan->status == '募集中') { ?>
+                        <?php } elseif ($model->repaymentStatus == 2) { ?>
                             <!--还款中-已还清-募集中-文字颜色-->
                             <div class="invest-right-title invest-gray">募集中</div>
                             <!--还款中-已还清-募集中-图片-->
@@ -108,7 +108,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20180102', ['d
                     <div><?= $plan->benxi == $plan->lixi ? '利息' : '本息' ?></div>
                     <div><?= StringUtils::amountFormat2($plan->benxi) ?>元</div>
                     <!--还款计划-文字颜色-->
-                    <p class="<?= $plan->repaymentStatus ? 'repayment-green' : 'repayment-red' ?>"><?= $plan->repaymentStatus ? '已还' : '未还' ?></p>
+                    <p class="<?= in_array($plan->status, [1, 2]) ? 'repayment-green' : 'repayment-red' ?>"><?= in_array($plan->status, [1, 2]) ? '已还' : '未还' ?></p>
                 </li>
             <?php endforeach; ?>
                 <!--下拉按钮-->

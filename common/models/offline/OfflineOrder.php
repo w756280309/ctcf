@@ -150,4 +150,24 @@ class OfflineOrder extends ActiveRecord
         }
         return null;
     }
+
+    /**
+     * 判断订单状态
+     * 1 => '收益中'，2 => '募集中', 3 => '已还清'
+     */
+    public function getRepaymentStatus()
+    {
+        if (!$this->loan->is_jixi) {
+            return 2;
+        } else {
+            //获取最后一期还款计划
+            $plan = OfflineRepaymentPlan::findOne([
+                'uid' => $this->user_id,
+                'loan_id' => $this->loan_id,
+                'order_id' => $this->id,
+                'qishu' => $this->getLastTerm(),
+            ]);
+            return $plan->status ? 3 : 1;
+        }
+    }
 }

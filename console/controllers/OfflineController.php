@@ -135,4 +135,30 @@ class OfflineController extends Controller
         }
         $this->stdout('共修复数据：'.$num.'条。');
     }
+    /**
+     * 更新线下数据的还款计划状态为已还
+     * 还款日小于当前日期
+     * @param $loanId
+     */
+    public function actionUpdateRepaymentStatus($loanId = null)
+    {
+        if (!empty($loanId)) {
+            $models = OfflineRepaymentPlan::find()
+                ->where([
+                    'loan_id' => $loanId,
+                    'status' => 0,
+                    ])
+                ->andWhere(['<', 'refund_time', date('Y-m-d')])
+                ->all();
+        } else {
+            $models = OfflineRepaymentPlan::find()
+                ->where(['status' => 0])
+                ->andWhere(['<', 'refund_time', date('Y-m-d')])
+                ->all();
+        }
+        foreach ($models as $model) {
+            $model->status = 1; //已还
+            $model->save(false);
+        }
+    }
 }

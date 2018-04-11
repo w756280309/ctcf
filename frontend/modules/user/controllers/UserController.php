@@ -281,16 +281,31 @@ class UserController extends BaseController
         }
         $type = intval($type);
         $user = $this->getAuthedUser();
+        $sql = "select max(id) from offline_repayment_plan where uid = :uid GROUP BY loan_id";
+        $plan = Yii::$app->db->createCommand($sql, ['uid' => $user->offlineUserId])->queryColumn();
         $query = OfflineOrder::find()
             ->select('offline_order.*')
             ->innerJoin('offline_loan', 'offline_order.loan_id = offline_loan.id')
-            ->where(['offline_order.user_id' => $user->offlineUserId, 'offline_order.isDeleted' => false]);
+            ->where([
+                'offline_order.user_id' => $user->offlineUserId,
+                'offline_order.isDeleted' => false,
+                ]);
         if ($type == 1) {
-            $query->andWhere(['offline_loan.is_jixi' => true])
-                ->andWhere(['>=', 'offline_loan.finish_date', date('Y-m-d')]);
+            $query->innerJoin('offline_repayment_plan', 'offline_repayment_plan.loan_id = offline_loan.id')
+                ->andWhere([
+                    'offline_loan.is_jixi' => true,
+                    'offline_repayment_plan.id' => $plan,
+                    'offline_repayment_plan.status' => 0,
+                    ])
+                ->orderBy(['offline_order.orderDate' => SORT_ASC]);
         } else if ($type == 3) {
-            $query->andWhere(['offline_loan.is_jixi' => true])
-                ->andWhere(['<', 'offline_loan.finish_date', date('Y-m-d')]);
+            $query->innerJoin('offline_repayment_plan', 'offline_repayment_plan.loan_id = offline_loan.id')
+                ->andWhere([
+                    'offline_loan.is_jixi' => true,
+                    'offline_repayment_plan.id' => $plan,
+                    'offline_repayment_plan.status' => [1, 2],
+                    ])
+                ->orderBy(['offline_order.orderDate' => SORT_ASC]);
         } else if ($type == 2){
             $query->andWhere(['offline_loan.is_jixi' => false]);
         }

@@ -330,16 +330,31 @@ class UserController extends BaseController
         $type = intval($type);
         $pageSize = 5;
         $user = $this->getAuthedUser();
+        $sql = "select max(id) from offline_repayment_plan where uid = :uid GROUP BY loan_id";
+        $plan = Yii::$app->db->createCommand($sql, ['uid' => $user->offlineUserId])->queryColumn();
         if ($user) {
             $query = OfflineOrder::find()
                 ->select('offline_order.*')
                 ->innerJoin('offline_loan', 'offline_loan.id = offline_order.loan_id')
-                ->where(['user_id' => $user->offlineUserId, 'isDeleted' => false]);
+                ->where([
+                    'offline_order.user_id' => $user->offlineUserId,
+                    'offline_order.isDeleted' => false,
+                    ]);
             if ($type == 1) {   //收益中
-                $query->andWhere(['>=', 'offline_loan.finish_date', date('Y-m-d')])
+                $query->innerJoin('offline_repayment_plan', 'offline_repayment_plan.loan_id = offline_loan.id')
+                    ->andWhere([
+                        'offline_loan.is_jixi' => true,
+                        'offline_repayment_plan.id' => $plan,
+                        'offline_repayment_plan.status' => 0,
+                        ])
                     ->orderBy(['offline_loan.finish_date' => SORT_ASC]);
             } else if ($type == 3) {    //已还清
-                $query->andWhere(['<', 'offline_loan.finish_date', date('Y-m-d')])
+                $query->innerJoin('offline_repayment_plan', 'offline_repayment_plan.loan_id = offline_loan.id')
+                    ->andWhere([
+                        'offline_loan.is_jixi' => true,
+                        'offline_repayment_plan.id' => $plan,
+                        'offline_repayment_plan.status' => [1, 2],
+                        ])
                     ->orderBy(['offline_order.orderDate' => SORT_ASC]);
             } else if ($type == 2) {    //待成立
                 $query->andWhere(['is_jixi' => false])
