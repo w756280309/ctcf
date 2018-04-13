@@ -9,7 +9,7 @@ use yii\data\ActiveDataProvider;
 class BankController extends BaseController
 {
     /**
-     * 统计超过14天, 状态为处理中的换卡记录的条数.
+     * 统计超过3天, 状态为处理中的换卡记录的条数.
      */
     public function actionCountForUpdate()
     {
@@ -19,7 +19,7 @@ class BankController extends BaseController
     }
 
     /**
-     * 获取超过14天, 状态为处理中的换卡记录列表.
+     * 获取超过3天, 状态为处理中的换卡记录列表.
      */
     public function actionUpdateList()
     {
@@ -41,6 +41,6 @@ class BankController extends BaseController
 
         return BankCardUpdate::find()
             ->where(["$b.status" => BankCardUpdate::STATUS_ACCEPT])
-            ->andWhere(["<", "$b.created_at", strtotime("today - 14 days")]);
+            ->andWhere(["<", "$b.created_at", strtotime("today - 3 days")]);
     }
 }

@@ -51,7 +51,7 @@ $this->loadAuthJs = false;
                 noticeClass = 'notice-font';
             }
 
-            $('.bankupdate-notice-item').append('<br>截止当前有<a href="/datatj/bank/update-list" class="'+noticeClass+'">'+data+'</a>条超过14天的换卡记录需要处理！');
+            $('.bankupdate-notice-item').append('<br>截止当前有<a href="/datatj/bank/update-list" class="'+noticeClass+'">'+data+'</a>条超过3天的换卡记录需要处理！');
         });
     });
 </script>

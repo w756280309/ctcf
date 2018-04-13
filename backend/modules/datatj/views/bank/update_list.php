@@ -14,7 +14,7 @@ $this->registerJsFile('/js/clipboard.min.js', ['depends' => 'yii\web\YiiAsset'])
         <div class="row-fluid">
             <div class="span12">
                 <h4>
-                    超过14天且还是处理中的换卡记录列表
+                    超过3天且还是处理中的换卡记录列表
                 </h4>
                 <ul class="breadcrumb" style="line-height: 1.5rem;">
                     <li class="span12">PS：</li>
