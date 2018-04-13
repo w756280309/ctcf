@@ -29,6 +29,15 @@ class PointController extends BaseController
         ) {
             $result = $this->faFang($PointRecord, $userId, $isOffline, $points);
             if ($result) {
+                //更新线下账户
+                if (!$isOffline) {
+                    $offUser = $points->offline;
+                    if (!empty($offUser)) {
+                        $offPointrecord = new PointRecord();
+                        $offPointrecord->load(Yii::$app->request->post());
+                        $this->faFang($offPointrecord, $offUser->id, true, $points);
+                    }
+                }
                 if ($backUrl) {
                     return $this->redirect($backUrl);
                 }

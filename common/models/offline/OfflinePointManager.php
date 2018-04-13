@@ -302,6 +302,10 @@ class OfflinePointManager
     private function doUpdatePoints($order, $points, $type)
     {
         $user = $order->user;
+        if ($user->onlineUser) {    //合并账户后，线下/线上积分一致
+            $user->points = $user->onlineUser->points;
+            $user->save(false);
+        }
         //更新线下
         $res = \Yii::$app->db->createCommand(
             "UPDATE `offline_user` SET `points` = `points` + :points WHERE `id` = :userId",
