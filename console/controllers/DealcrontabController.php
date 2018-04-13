@@ -23,7 +23,7 @@ class DealcrontabController extends Controller
 {
     /**
      * 定时满标
-     * 1）存在其他推荐标的时，将该标的推荐时间置为0（即取消推荐状态）
+     * 1）存在其他推荐标的时，将该标的推荐时间置为0（即取消推荐状态）//2018-03-26   只要满标就取消推荐（不考虑有无其他推荐标）
      * 2）募集中状态 2 修改为 3 满标（已售罄）状态
      * 3）循环更新每个投资者账户的理财资产（+）及冻结金额（-）
      * 4）创建满标资金流水
@@ -43,11 +43,10 @@ class DealcrontabController extends Controller
         $db = Yii::$app->db;
         foreach ($loans as $loan) {
             //1）判断是否有其他推荐标，若存在，则将该标推荐时间置为0
+            //2018-03-26,直接将满标的标的取消推荐
             $recommendTime = $loan->recommendTime;
             if ($recommendTime > 0) {
-                if ($this->existOtherRecommendLoan($loan->id)) {
                     $recommendTime = 0;
-                }
             }
 
             $transaction = $db->beginTransaction();
