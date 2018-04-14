@@ -32,7 +32,7 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning', 'info'], //,'trace'
-                    'logVars' => ['_SERVER'], //_SERVER  _GET 等
+                    'logVars' => [], //_SERVER  _GET 等
                     //'logFile' => __DIR__.'/../../data/log/'.date('ymdhi').'.log',
                     //'messages'=>['test', 4, 'application', time()]
                 ],
