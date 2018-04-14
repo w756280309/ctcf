@@ -84,7 +84,10 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+            $res = Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+            //记录登录状态
+            self::loginStatus();
+            return $res;
         } else {
             return false;
         }
@@ -103,6 +106,13 @@ class LoginForm extends Model
 
         return $this->_user;
     }
-
-
+    //记录管理员登录状态
+    private function loginStatus()
+    {
+        $redis = Yii::$app->redis;
+        $sign = Yii::$app->session->getId();
+        if (!empty($sign) && !empty($this->user)) {
+            $redis->hset('login_status_admin', $this->user->id, $sign);
+        }
+    }
 }

@@ -154,6 +154,12 @@ return [
         'oldUserRewardPop' => 'common\ctcf\controllers\PopController',
     ],
     'params' => $params,
+    'as LoginStatusFilter' => [
+        'class' => \common\filters\LoginStatusFilter::className(),   //用户登录状态，保持各端只有一个有效的会话
+        'except' => [
+            'site/logout',
+        ],
+    ],
     'as requestBehavior' => [
         'class' => \common\components\RequestBehavior::className(),
     ],

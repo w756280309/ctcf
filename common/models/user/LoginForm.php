@@ -154,6 +154,9 @@ class LoginForm extends Model
             $logintype = CLIENT_TYPE == 'pc' ? LoginLog::TYPE_PC : LoginLog::TYPE_WAP;
             $login->logFailure(User::USER_TYPE_ORG === $userType ? $this->username : $this->phone, $logintype, LoginLog::STATUS_SUCCESS);
 
+            if (!$isInApp) {    //记录WAP，PC登录状态
+                self::loginStatus();
+            }
             $this->user->scenario = 'login';
             $this->user->last_login = time();
 
@@ -172,4 +175,23 @@ class LoginForm extends Model
     {
         return false !== $this->user;
     }
+    /**
+     * 记录用户的登录状态，各端只保留一个有效连接
+     * 用于 wap,PC
+     */
+    private function loginStatus()
+    {
+        //记录用户登录状态，限制相同的设备多处登录
+        $redis = Yii::$app->redis;
+        $equipment = CLIENT_TYPE == 'pc' ? 'pc' : 'wap';
+        $loginSign = Yii::$app->session->getId();
+        if (!empty($equipment) && !empty($loginSign) && !empty($this->user)) {
+            //当前用户是否存在登录状态   array
+            $redisContent = json_decode($redis->hget('login_status_user', $this->user->id), true);
+            $redisContent[$equipment] = $loginSign;
+            $redis->hset('login_status_user', $this->user->id, json_encode($redisContent));
+        }
+    }
+
+
 }

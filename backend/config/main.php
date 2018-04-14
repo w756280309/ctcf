@@ -116,4 +116,10 @@ return [
             'class' => 'backend\modules\wechat\Module',
         ],
     ],
+    'as LoginStatusFilter' => [
+        'class' => \common\filters\LoginStatusFilter::className(),   //用户登录状态，保持各端只有一个有效的会话
+        'except' => [
+            'login/logout',
+        ],
+    ],
 ];
