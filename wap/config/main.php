@@ -158,6 +158,7 @@ return [
         'class' => \common\filters\LoginStatusFilter::className(),   //用户登录状态，保持各端只有一个有效的会话
         'except' => [
             'site/logout',
+            'weixin/callback',
         ],
     ],
     'as requestBehavior' => [
