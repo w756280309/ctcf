@@ -408,10 +408,10 @@ JSFILE
                     wgt.css('cursor', 'pointer');
                 }
                 //判断个人投资总额大于五万时，前端页面显示总金额
-                if (data.showplatformStats) {
-                    $('.pt-data-last').removeClass('lf').addClass('rg');
-                    $('.pt-data-first').show();
-                }
+//                if (data.showplatformStats) {
+//                    $('.pt-data-last').removeClass('lf').addClass('rg');
+//                    $('.pt-data-first').show();
+//                }
             });
         }
         checkLoginStatus();
