@@ -130,7 +130,7 @@ use common\utils\StringUtils;
         }
         var reg = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
         if (!reg.test($('#fund').val())) {
-            err_message('充值金额格式不正确');
+            err_message('数值需≥1元，小数点后不超过2位');
             $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
             return false;
         }
