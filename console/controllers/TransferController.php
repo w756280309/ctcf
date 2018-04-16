@@ -26,7 +26,6 @@ class TransferController extends Controller
         $epayUserTable = EpayUser::tableName();
 
         $transfers = Transfer::find()
-            ->innerJoin("$epayUserTable", "$epayUserTable.appUserId = $transferTable.user_id")
             ->where(["$transferTable.status" => Transfer::STATUS_INIT])
             ->andWhere(['>', "$transferTable.amount", 0])
             ->orderBy([
@@ -42,6 +41,10 @@ class TransferController extends Controller
          * @var Transfer $transfer
          */
         foreach ($transfers as $transfer) {
+            $epayUser = EpayUser::findOne(['appUserId' => (string)$transfer->user_id]);
+            if (null === $epayUser) {
+                continue;
+            }
             //无论发放成功失败与否，都写入上次执行时间
             $sql = "update $transferTable set lastCronCheckTime = :time, `status` = :status where id = :transferId and user_id = :userId and `status` = '" . Transfer::STATUS_INIT . "'";
             $affectedRows = Yii::$app->db->createCommand($sql, [
