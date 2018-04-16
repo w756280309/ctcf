@@ -156,6 +156,15 @@ class WeixinController extends Controller
                     $user = User::findOne($social->user_id);
                     if (!is_null($user)) {
                         Yii::$app->user->login($user);    //微信绑定,自动登录
+                        $redis = Yii::$app->redis;
+                        $equipment = CLIENT_TYPE == 'pc' ? 'pc' : 'wap';
+                        $loginSign = Yii::$app->session->getId();
+                        if (!empty($equipment) && !empty($loginSign) && !empty($this->user)) {
+                            //当前用户是否存在登录状态   array
+                            $redisContent = json_decode($redis->hget('login_status_user', $this->user->id), true);
+                            $redisContent[$equipment] = $loginSign;
+                            $redis->hset('login_status_user', $this->user->id, json_encode($redisContent));
+                        }
                     }
                 }
             }
