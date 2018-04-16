@@ -159,11 +159,11 @@ class WeixinController extends Controller
                         $redis = Yii::$app->redis;
                         $equipment = CLIENT_TYPE == 'pc' ? 'pc' : 'wap';
                         $loginSign = Yii::$app->session->getId();
-                        if (!empty($equipment) && !empty($loginSign) && !empty($this->user)) {
+                        if (!empty($equipment) && !empty($loginSign) && !empty($user)) {
                             //当前用户是否存在登录状态   array
-                            $redisContent = json_decode($redis->hget('login_status_user', $this->user->id), true);
+                            $redisContent = json_decode($redis->hget('login_status_user', $user->id), true);
                             $redisContent[$equipment] = $loginSign;
-                            $redis->hset('login_status_user', $this->user->id, json_encode($redisContent));
+                            $redis->hset('login_status_user', $user->id, json_encode($redisContent));
                         }
                     }
                 }
