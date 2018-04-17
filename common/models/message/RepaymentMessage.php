@@ -36,7 +36,7 @@ class RepaymentMessage extends WechatMessage
         $asset = $plan->getAsset();
         if (!is_null($asset)) {
             $this->linkUrl = Yii::$app->params['clientOption']['host']['wap'].'user/user/orderdetail?asset_id='. $asset->id;
-            $this->linkUrl .= '&utm_campaign=wxmp_notify&utm_source=wxmp_wdjf&utm_content=repayment_success';
+            $this->linkUrl .= '&utm_campaign=wxmp_notify&utm_source=wxmp_gzh&utm_content=repayment_success';
         }
     }
 }
