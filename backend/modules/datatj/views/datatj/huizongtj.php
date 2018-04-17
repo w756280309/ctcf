@@ -6,6 +6,7 @@
     .div_list3_first {float: left; width: 31.623931623931625%; min-height: 30px;}
 CSS
 );
+    $pc_cat = Yii::$app->params['pc_cat'];
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid" style="font-family: monospace;">
@@ -41,8 +42,8 @@ CSS
         <div class="span4">线下年化累计交易额：<div class="pull-right"><?= number_format($offlineAnnualTotalInvestment, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
-        <div class="span4">温盈宝累计销售额：<div class="pull-right"><?= number_format($totalInvestmentInWyb, 2) ?>元</div></div>
-        <div class="span4">温盈金累计销售额：<div class="pull-right"><?= number_format($totalInvestmentInWyj, 2) ?>元</div></div>
+        <div class="span4"><?= $pc_cat['2'] ?>累计销售额：<div class="pull-right"><?= number_format($totalInvestmentInWyb, 2) ?>元</div></div>
+        <div class="span4"><?= $pc_cat['1'] ?>累计销售额：<div class="pull-right"><?= number_format($totalInvestmentInWyj, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
         <div class="span4">贷后余额： <div class="pull-right"><?= number_format($remainMoney, 2) ?>元</div></div>
