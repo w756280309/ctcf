@@ -32,6 +32,7 @@ class CreatePDF
         $userName = '';
         $date = "年月日";
         $money = "";
+        $mobile = '';
         if (null !== $onlineOrder) {
             $date = date("Y年m月d日", $onlineOrder->order_time);
             $money = $onlineOrder->order_money;
@@ -39,14 +40,20 @@ class CreatePDF
                 $real_name = $user->real_name;
                 $idCard = $user->getIdcard();
                 $userName = $user->getMobile();
+                $mobile = $userName;
             }
         }
         $res = preg_match_all('/(\｛|\{){2}(.+?)(\｝|\}){2}/is', $content, $array);
         if ($res && isset($array[0]) && count($array[0]) > 0 && isset($array[2]) && count($array[2]) > 0) {
             foreach ($array[2] as $key => $value) {
                 switch (strip_tags($value)) {
-                    case '投资人';
+                    case '投资人':
+                    case '出借人':
                         $content = str_replace($array[0][$key], $real_name, $content);
+                        break;
+                    case '投资人手机号':
+                    case '出借人手机号':
+                        $content = str_replace($array[0][$key], $mobile, $content);
                         break;
                     case '身份证号':
                         $content = str_replace($array[0][$key], $idCard, $content);
@@ -55,9 +62,11 @@ class CreatePDF
                         $content = str_replace($array[0][$key], $userName, $content);
                         break;
                     case '认购日期':
+                    case '出借日期':
                         $content = str_replace($array[0][$key], $date, $content);
                         break;
                     case '认购金额':
+                    case '出借金额':
                         $content = str_replace($array[0][$key], $money, $content);
                         break;
                     default:

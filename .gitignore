@@ -56,4 +56,6 @@ main-local.php.bk
 !/console/config/njfae/keys/.gitkeep
 
 .env
+common/config/payment/miit/cncert.pem
+common/config/payment/miit/client_pri.pem
 

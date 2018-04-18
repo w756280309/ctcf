@@ -197,10 +197,12 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
         if ($res && isset($array[0]) && count($array[0]) > 0 && isset($array[2]) && count($array[2]) > 0) {
             foreach ($array[2] as $key => $value) {
                 switch (strip_tags($value)) {
-                    case '投资人';
+                    case '投资人':
+                    case '出借人':
                         $content = str_replace($array[0][$key], $real_name, $content);
                         break;
-                    case '投资人手机号';
+                    case '投资人手机号':
+                    case '出借人手机号':
                         $content = str_replace($array[0][$key], $mobile, $content);
                         break;
                     case '身份证号':
@@ -210,9 +212,11 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
                         $content = str_replace($array[0][$key], $userName, $content);
                         break;
                     case '认购日期':
+                    case '出借日期':
                         $content = str_replace($array[0][$key], $date, $content);
                         break;
                     case '认购金额':
+                    case '出借金额':
                         $content = str_replace($array[0][$key], $money, $content);
                         break;
                     default:
