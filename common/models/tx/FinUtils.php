@@ -5,9 +5,9 @@ namespace common\models\tx;
 class FinUtils
 {
     //根据订单和标的计算应付利息,以分为单位
-    public static function calculateCurrentProfit(Loan $loan, $amount, $apr)
+    public static function calculateCurrentProfit(Loan $loan, $amount, $apr, $startTime = null)
     {
-        $date = date('Y-m-d');
+        $date = isset($startTime) ? date('Y-m-d', strtotime($startTime)): date('Y-m-d');
         $startDate = $loan->startDate;
         $plans = $loan->getRepaymentPlan($amount, $apr);//还款计划
         $count = count($plans);

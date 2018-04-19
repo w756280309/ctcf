@@ -155,8 +155,17 @@ class CreditOrderController extends Controller
         $errorCount = $errorQuery->count();
         if ($requireList) {
             $records = $query
-                ->select(['credit_order.id', 'credit_order.principal', 'credit_order.createTime', 'credit_order.status','user_asset.loan_id'])
+                ->select([
+                    'credit_order.id',
+                    'credit_order.principal',
+                    'credit_order.createTime',
+                    'credit_order.status',
+                    'credit_order.note_id',
+                    'user_asset.loan_id',
+                    'credit_note.discountRate',
+                ])
                 ->innerJoin('user_asset', 'credit_order.asset_id=user_asset.id')
+                ->innerJoin('credit_note', 'credit_order.note_id=credit_note.id')
                 ->offset(($page - 1) * $pageSize)
                 ->limit($pageSize)
                 ->orderBy(['credit_order.createTime' => SORT_DESC])

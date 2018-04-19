@@ -63,9 +63,9 @@ class UserAsset extends ActiveRecord
     }
 
     //计算预期收益(预期收益的日期 = 截止日 - 1 - 当天)
-    public function getRemainingInterest()
+    public function getRemainingInterest($startTime = null)
     {
-        $date = date('Y-m-d');
+        $date = isset($startTime) ? date('Y-m-d', strtotime($startTime)): date('Y-m-d');
         $order = $this->order;
         $plans = $this->loan->getRepaymentPlan($this->maxTradableAmount, $order->apr);
         $totalInterest = 0;
@@ -74,16 +74,17 @@ class UserAsset extends ActiveRecord
                 $totalInterest = bcadd($totalInterest, $plan['interest'], 2);
             }
         }
-        $currentInterest = $this->getCurrentInterest();
+        $date = isset($startTime) ? $date : null;
+        $currentInterest = $this->getCurrentInterest($date);
 
         return bcsub(bcmul($totalInterest, 100, 0), $currentInterest, 0);
     }
 
     //计算应付利息（应付利息的日期 = 当天 + 1 - 上个还款日|计息日）
-    public function getCurrentInterest()
+    public function getCurrentInterest($startTime = null)
     {
         $order = $this->order;
-        $profit = FinUtils::calculateCurrentProfit($this->loan, $this->maxTradableAmount, $order->apr);
+        $profit = FinUtils::calculateCurrentProfit($this->loan, $this->maxTradableAmount, $order->apr, $startTime);
 
         return $profit;
     }

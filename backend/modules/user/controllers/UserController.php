@@ -26,6 +26,8 @@ use common\models\user\RechargeRecord;
 use common\models\user\UserInfo;
 use common\models\user\UserSearch;
 use common\models\user\DrawRecord;
+use common\models\tx\UserAsset;
+use common\models\tx\CreditNote;
 use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use wap\modules\promotion\models\RankingPromo;
@@ -740,8 +742,11 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
         if (count($txRes['data']) > 0) {
             $loan = OnlineProduct::find()->where(['in', 'id', ArrayHelper::getColumn($txRes['data'], 'loan_id')])->all();
             $loan = ArrayHelper::index($loan, 'id');
+            $userAsset = UserAsset::find()->where(['in', 'credit_order_id', ArrayHelper::getColumn($txRes['data'], 'id')])->all();
+            $userAsset = ArrayHelper::index($userAsset, 'credit_order_id');
         } else {
             $loan = [];
+            $userAsset = [];
         }
         $dataProvider = new ArrayDataProvider([
             'allModels' => $txRes['data'],
@@ -753,6 +758,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
         return $this->renderFile('@backend/modules/user/views/user/credit_records.php', [
             'user' => $user,
             'loan' => $loan,
+            'userAsset' => $userAsset,
             'dataProvider' => $dataProvider,
             'pages' => $pages,
         ]);
@@ -1089,5 +1095,34 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'models' => $models,
             'pages' => $pages,
         ]);
+    }
+    /**
+     * 受让人投资信息查询
+     * 逻辑：根据转让挂单记录表credit_note的主键id，查询出该转让项目的受让人投资金额，在查询出受让人的个人信息
+     * @param string id credit_note的主键id
+     * @return string json(受让人手机号及投资金额) eg:json_encode(['mobile'=>'','principal'=>''])
+     */
+    public function actionInvestInfo()
+    {
+        $request = Yii::$app->request;
+        $noteId  = (int)$request->post('id');
+        $o = 'credit_order';
+        $n = CreditNote::tableName();
+        $creditNote = CreditNote::find()
+            ->select("$o.user_id,$o.principal")
+            ->where("$n.id = :noteId and $o.status = 1", ['noteId' => $noteId])
+            ->innerJoin("$o", "$n.id = $o.note_id")
+            ->asArray()
+            ->all();
+        $result = [];
+        if (!empty($creditNote)) {
+            $investInfo = User::find()->where(['in', 'id', ArrayHelper::getColumn($creditNote, 'user_id')])->all();
+            $investInfo = ArrayHelper::index($investInfo, 'id');
+            foreach ($creditNote as $key => $item) {
+                $result[$key]['mobile']     = $investInfo[$item['user_id']]->getMobile();
+                $result[$key]['principal']  = number_format($item['principal']/100, 2);
+            }
+        }
+        return json_encode($result);
     }
 }

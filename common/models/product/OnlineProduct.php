@@ -1372,4 +1372,43 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
         return $bonusAmount;
     }
+
+    /**
+     * 获取指定标的的剩余期限
+     * 到期本息返回天数；分期返回月数和天数（不足一月就不返回月数）
+     * @param object $loan 标的对象
+     * @param string $startTime eg:2018-04-17
+     * @return string json
+     */
+    public static function getRemainingTime($loan, $startTime = null)
+    {
+        $startDate = isset($startTime) ? date('Y-m-d',strtotime($startTime)):date('Y-m-d');
+        $endDate = date('Y-m-d', strtotime('-1 day', $loan->finish_date));
+
+        if (!is_object($loan) || $startDate > $endDate) {
+            $res = ['days' => 0];
+        } else {
+            $method = intval($loan->refund_method);
+            if (OnlineProduct::REFUND_METHOD_DAOQIBENXI === $method) {
+                $day = (new \DateTime($startDate))->diff(new \DateTime($endDate))->days;
+                $res = ['days' => $day];
+            } else {
+                $diff = (new DT($startDate))->humanDiff(new DT($endDate));
+                if (!empty($diff) && isset($diff['y']) && isset($diff['m']) && isset($diff['d'])) {
+                    $y = $diff['y'];
+                    $m = $diff['m'];
+                    $d = $diff['d'];
+                    $m = $y * 12 + $m;
+                    if ($m > 0) {
+                        $res = ['days' => $d, 'months' => $m];
+                    } else {
+                        $res = ['days' => $d];
+                    }
+                } else {
+                    $res = ['days' => 0];
+                }
+            }
+        }
+        return json_encode($res);
+    }
 }
