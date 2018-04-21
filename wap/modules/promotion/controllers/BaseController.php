@@ -24,6 +24,8 @@ class BaseController extends Controller
     const ERROR_CODE_TODAY_NO_TICKET = 5; //无有效抽奖机会且今日未获得抽奖机会
     const ERROR_CODE_SYSTEM = 6; //系统错误（包括参数（promoKey）错误及抽奖其他错误）
     const ERROR_CODE_NEVER_GOT_TICKET = 7; //活动至今为止从未获得抽奖机会
+    const ERROR_CODE_NO_ENOUGH_POINT = 8;  //用户积分不足
+    const ERROR_CODE_SYSTEM_BUSY = 9;      //系统繁忙
 
     use HelpersTrait;
 
@@ -120,6 +122,23 @@ class BaseController extends Controller
         return [];
     }
 
+    /**
+     * 获取用户积分的公共接口
+     */
+    public function actionGetPoints()
+    {
+        $user = $this->getAuthedUser();
+        if ($user === null) {
+            return $this->getErrorByCode(self::ERROR_CODE_NOT_LOGIN);
+        }
+
+        return [
+            'code' => self::STATUS_SUCCESS,
+            'message' => '成功',
+            'points' => $user->points,
+        ];
+    }
+
     protected function getErrorByCode($code, Array $extra = [])
     {
         Yii::$app->response->statusCode = 400;
@@ -177,6 +196,18 @@ class BaseController extends Controller
             self::ERROR_CODE_NEVER_GOT_TICKET => [
                 'code' => 7,
                 'message' => '您还未获得过任何抽奖机会哦！',
+                'ticket' => null,
+                'allTicketCount' => 0,
+            ],
+            self::ERROR_CODE_NO_ENOUGH_POINT => [
+                'code' => 8,
+                'message' => '积分不足',
+                'ticket' => null,
+                'allTicketCount' => 0,
+            ],
+            self::ERROR_CODE_SYSTEM_BUSY => [
+                'code' => 9,
+                'message' => '系统繁忙',
                 'ticket' => null,
                 'allTicketCount' => 0,
             ],

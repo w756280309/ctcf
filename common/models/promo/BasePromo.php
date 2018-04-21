@@ -200,4 +200,29 @@ class BasePromo
 
         return $totalInvestment;
     }
+
+    /**
+     * 某个奖品总库存剩余为0时概率的变化
+     * @param $pool  原奖池
+     * @param $sn  概率变化时,将概率加到此奖品上
+     * @return 变化后的奖池
+     */
+    public function reviseStocksRate($pool, $psn = null)
+    {
+        $rewardSns = Reward::find()
+            ->select('sn')
+            ->where(['>', 'limit', 0])
+            ->orWhere('`limit` is null')
+            ->andWhere(['promo_id' => $this->promo->id])
+            ->column();
+        foreach ($pool as $sn => $rate) {
+            if (!in_array($sn, $rewardSns)) {
+                if (!is_null($psn)) {
+                    $pool[$psn] = (string)($pool[$psn] + $rate);
+                }
+                $pool[$sn] = '0';
+            }
+        }
+        return $pool;
+    }
 }
