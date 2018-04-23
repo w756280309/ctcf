@@ -56,8 +56,10 @@ class DealController extends Controller
             $html = $this->renderFile('@wap/modules/deal/views/deal/_more.php', ['deals' => $deals, 'header' => $header]);
             return ['header' => $header, 'html' => $html, 'code' => $code, 'message' => $message];
         }
-
-        return $this->render('index', ['deals' => $deals, 'header' => $header]);
+        return $this->render('index', [
+            'deals' => $deals,
+            'header' => $header,
+            ]);
     }
 
     /**

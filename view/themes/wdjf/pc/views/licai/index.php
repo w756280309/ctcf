@@ -12,7 +12,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => Front
 $this->registerCssFile(ASSETS_BASE_URI.'css/deallist.css?v=170718', ['depends' => FrontAsset::class]);
 
 $action = Yii::$app->controller->action->getUniqueId();
-
+$user = Yii::$app->user->getIdentity();
 ?>
 
 <div class="projectContainer">
@@ -21,6 +21,9 @@ $action = Yii::$app->controller->action->getUniqueId();
             <div class="alist-box">
                 <a href='/licai/' class="list-span <?= 'licai/index' === $action ? 'select-span' : '' ?>">理财列表</a>
                 <a href='/licai/notes' class="list-span <?= 'licai/notes' === $action ? 'select-span' : '' ?>">转让列表</a>
+                <?php if (!empty($user) && $user->isShowNjq) { ?>
+                    <a href='/njq/loan-list' class="list-span <?= 'njq/loan-list' === $action ? 'select-span' : '' ?>">南金中心</a>
+                <?php } ?>
             </div>
         <?php } ?>
         <!--预告期-->

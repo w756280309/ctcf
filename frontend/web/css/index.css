@@ -1024,14 +1024,15 @@ a.zhaiquan-number:hover {
 
 /*首页交易额统计*/
 #turnover-box{
-    height: 122px;
+    /*height: 122px;*/
     width: 100%;
     min-width:1057px;
     background-color: #fff;
 }
 #turnover-box .turnover-box{
     width: 1000px;
-    height: 100%;
+    /*height: 100%;*/
+    height: 122px;
     margin:0 auto;
     text-align: center;
 }
@@ -1064,4 +1065,54 @@ a.zhaiquan-number:hover {
 #turnover-box .turnover-box .turnover-data.rg{
     width:229px;
     height: 100%;
+}
+/*180416 添加南金泉入口*/
+.njq-banner{
+    width: 1000px;
+    margin:0 auto;
+    display: block;
+    color:#464648;
+}
+.njq-banner h4{
+    height: 41px;
+    line-height: 41px;
+    vertical-align:middle;
+    font-size: 18px;
+    font-weight: 400;
+    color:#464648;
+}
+.njq-banner h4 i{
+    width: 32px;
+    height: 32px;
+    background:url(../images/njq_logo.png) 0 0 no-repeat;
+    display: inline-block;
+    vertical-align:middle;
+    margin-right: 5px;
+}
+.njq-banner h4 u{
+    width: 121px;
+    height: 36px;
+    background:url(../images/njq_jiaxi.png) 0 0 no-repeat;
+    display: inline-block;
+    vertical-align:middle;
+    margin-left: 5px;
+}
+.njq-banner .njq-img-box{
+    position: relative;
+    padding-top: 8px;
+}
+.njq-banner .njq-img-box img{
+    width: 1000px;
+    height: 260px;
+}
+.njq-banner .njq-img-box span{
+    position:absolute;
+    right: 30px;
+    bottom: 7px;
+    height: 56px;
+    line-height: 56px;
+    color:#bb9957;
+}
+.njq-img-bottom{
+    height: 41px;
 }

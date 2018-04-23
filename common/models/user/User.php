@@ -16,6 +16,7 @@ use common\models\order\OnlineRepaymentPlan as RepaymentPlan;
 use common\models\product\OnlineProduct;
 use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
+use common\models\thirdparty\Channel;
 use common\models\thirdparty\SocialConnect;
 use common\models\user\RechargeRecord as Recharge;
 use common\models\user\DrawRecord as Draw;
@@ -1133,7 +1134,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
 
     public static function findByMobile($mobile)
     {
-        return User::find(['safeMobile' => SecurityUtils::encrypt($mobile)]);
+        return User::find()->where(['safeMobile' => SecurityUtils::encrypt($mobile)]);
     }
 
     public function getJGMoney()
@@ -1175,5 +1176,36 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             $acount += $this->offline->totalAssets;
         }
         return $acount;
+    }
+    /**
+     * 是否显示南金中心入口
+     */
+    public function getIsShowNjq()
+    {
+        if (defined('IN_APP')) {    //app端禁止访问
+            return false;
+        }
+        $isEnabledWhiteList = Yii::$app->params['njq']['is_enabled_white_list'];
+        $whiteList = explode(',', Yii::$app->params['njq']['white_list']);
+        if ($isEnabledWhiteList) {  //启用白名单，只有白名单用户可以访问
+            if (in_array($this->mobile, $whiteList)) {
+                return true;
+            }
+        } else {
+            if ($this->getJGMoney() >= 50000) {
+                return true;
+            }
+        }
+        //不显示 @todo   50000可以改写成配置；
+        //@todo 南金中心pc站开发未完成，暂时隐藏入口；
+        return false;
+    }
+
+    /**
+     * 是否在南金中心注册
+     */
+    public function getChannel()
+    {
+        return Channel::findOne(['userId' => $this->id]);
     }
 }

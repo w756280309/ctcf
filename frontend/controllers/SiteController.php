@@ -144,7 +144,6 @@ class SiteController extends Controller
             ->orderBy(['sort' => SORT_ASC])
             ->limit(2)
             ->all();*/
-
         return $this->render('index', [
             'adv' => $adv,
             'loans' => $loans,
@@ -154,7 +153,6 @@ class SiteController extends Controller
             'first_media' => $first_media,
             'licai' => $licai,
             'touzi' => $touzi,
-            //'jingxuan' => $jingxuan,
         ]);
     }
 

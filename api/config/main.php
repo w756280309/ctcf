@@ -128,6 +128,9 @@ return [
         ],
         'source' => [
             'class' => 'Wcg\\Growth\\Integration\\Yii2Module\\Module',
+        ],
+        'njq' => [
+            'class' => 'api\\modules\\njq\\Module',
         ]
     ],
     'params' => $params,

@@ -4,7 +4,7 @@ use frontend\assets\FrontAsset;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/left.css', ['depends' => FrontAsset::class]);
 $action = Yii::$app->controller->action->getUniqueId();
-
+$user = Yii::$app->user->getIdentity();
 ?>
 
 <div class="userAccount-left-nav">
@@ -51,6 +51,11 @@ $action = Yii::$app->controller->action->getUniqueId();
                 <li class="<?= in_array($action, [
                     'risk/risk/index',
                 ]) ? 'selected' : '' ?>"><a href="/risk/risk"><span class="star"></span>风险测评</a></li>
+                <?php if (!is_null($user) && $user->isShowNjq) { ?>
+                    <li>
+                        <a href="/njq/connect?redirect=<?= urlencode('user/user') ?>" target="_blank"><span class="star"></span>南金账户中心</a>
+                    </li>
+                <?php } ?>
             </ul>
         </li>
     </ul>

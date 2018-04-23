@@ -5,10 +5,11 @@ use common\view\UdeskWebIMHelper;
 $this->title = '账户中心';
 $this->showBottomNav = true;
 UdeskWebIMHelper::init($this);
+$user = Yii::$app->user->getIdentity();
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/homePage.css?v=20180327">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/ucenter/css/homePage.css?v=2018041311">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
@@ -72,9 +73,22 @@ UdeskWebIMHelper::init($this);
         </li>
     <?php } ?>
 </ul>
+<!--南京资产交易中心账户开始-->
+<!--满足5万条件不显示-->
+<?php if (!empty($user) && $user->isShowNjq) { ?>
+    <a href="/njq/connect?redirect=<?= urlencode('user/user') ?>">
+        <div class="out_ops njq_ops flex-content">
+            <div class="lf f15"><span>南金中心账户<i></i></span></div>
+            <div class="rg">
+                <img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            </div>
+        </div>
+    </a>
+<?php } ?>
+<!--南京资产交易中心账户结束-->
 <a href="/user/user/myofforder">
     <div class="out_ops flex-content">
-        <div class="lf f15"style="background-position: 0 0">门店理财</div>
+        <div class="lf f15">门店理财</div>
         <div class="rg">
             <span class="f15" id="off_licai" style="color: #ff0000"></span>
             <img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">

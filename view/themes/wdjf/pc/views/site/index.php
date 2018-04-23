@@ -2,13 +2,14 @@
 
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=170508', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=18041801', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use yii\helpers\Html;
+$user = Yii::$app->user->getIdentity();
 $this->registerJs(<<<JSFILE
     $(function (){
         //统计数据
@@ -120,6 +121,16 @@ JSFILE
             <p class="turnover-data-name">历史兑付率</p>
         </li>
     </ul>
+    <?php if (!empty($user) && $user->isShowNjq) : ?>
+    <a class="njq-banner" href="/njq/connect?redirect=<?= urlencode('site/index') ?>" target="_blank">
+        <h4><i></i>南金中心正式入驻温都金服<u></u></h4>
+        <div class="njq-img-box">
+            <img src="<?= ASSETS_BASE_URI ?>images/njq_bg.png" alt="">
+            <span>查看详情&gt;</span>
+        </div>
+    </a>
+    <div class="njq-img-bottom"></div>
+    <?php endif; ?>
 </div>
 <!--交易总额-->
 

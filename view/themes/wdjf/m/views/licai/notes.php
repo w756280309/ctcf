@@ -16,11 +16,24 @@ $this->registerJs('var tp = ' . $tp . ';', 1);
 $this->registerJs("var url = '/licai/notes';", 1);
 
 $action = Yii::$app->controller->action->getUniqueId();
+$user = Yii::$app->user->getIdentity();
 ?>
 
+<!--<div class="row list-title">-->
+<!--    <div class="col-xs-4"><a href="/deal/deal/index" class="cre-title --><?//= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?><!--">理财列表</a></div>-->
+<!--    <div class="col-xs-4"><a href="/licai/notes" class="cre-title --><?//= $action === 'licai/notes' ? 'active-cre-title' : '' ?><!--">转让列表</a></div>-->
+<!--    <div class="col-xs-4"><a href="/licai/notes" class="cre-title --><?//= $action === 'licai/notes' ? 'active-cre-title' : '' ?><!--">南金中心</a></div>-->
+<!--</div>-->
 <div class="row list-title">
-    <div class="col-xs-6"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">理财列表</a></div>
-    <div class="col-xs-6"><a href="/licai/notes" class="cre-title <?= $action === 'licai/notes' ? 'active-cre-title' : '' ?>">转让列表</a></div>
+    <!--        区分大于5万显示南金中心，小于5万不显示-->
+    <?php if (!empty($user) && $user->isShowNjq) { ?>
+        <div class="col-xs-4"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">理财列表</a></div>
+        <div class="col-xs-4"><a href="/licai/notes" class="cre-title <?= $action === 'licai/notes' ? 'active-cre-title' : '' ?>">转让列表</a></div>
+        <div class="col-xs-4"><a href="/njq/loan-list" class="cre-title <?= $action === 'njq/loan/list' ? 'active-cre-title' : '' ?>">南金中心</a></div>
+    <?php } else { ?>
+        <div class="col-xs-6"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">理财列表</a></div>
+        <div class="col-xs-6"><a href="/licai/notes" class="cre-title <?= $action === 'licai/notes' ? 'active-cre-title' : '' ?>">转让列表</a></div>
+    <?php } ?>
 </div>
 
 <?php if ($notes) { ?>

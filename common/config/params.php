@@ -279,4 +279,14 @@ return [
     ],
     'old_site_visible_user_id' => '',
     'lhwt_loan_sns' => [],
+    //南金泉引流配置
+    'njq' => [
+        'platformId' => env('NJQ.PLATFORM_ID'),
+        'appSecret' => env('NJQ.APP_SECRET'),
+        'baseUri' => env('NJQ.BASE_URI'),
+        'host_m' => env('HOST_M'),
+        'host_pc' => env('HOST_PC'),
+        'is_enabled_white_list' => env('NJQ_IS_ENABLED_WHITE_LIST'),    //是否启用白名单，启用后，只有白名单用户可以访问
+        'white_list' => env('NJQ_WHITE_LIST'), //白名单用户手机号组成的数组，格式：[‘18876545678’, ‘15678654332’, ‘12436545743’]
+    ],
 ];

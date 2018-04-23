@@ -93,6 +93,7 @@ class UserController extends BaseController
     private function index()
     {
         $user = $this->getAuthedUser();
+
         $ua = $user->lendAccount;
         $pointPromo = RankingPromo::findOne(['key' => 'loan_order_points']);
 

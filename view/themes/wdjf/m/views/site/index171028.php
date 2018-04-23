@@ -10,6 +10,7 @@ if ($fromNb) {
 $this->params['breadcrumbs'][] = $this->title;
 $this->hideHeaderNav = true;
 $this->showBottomNav = true;
+$user = Yii::$app->user->getIdentity();
 
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
@@ -65,7 +66,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		font-weight: 800;
 	}
 </style>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/new-homepage/css/index.css?v=180101">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/new-homepage/css/index.css?v=18010112">
 <div>
     <img class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" width="100%" alt="">
 </div>
@@ -123,73 +124,91 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 			<p class="links-box-txt">公告</p>
 		</a>
 	</div>
-	<div class="bids-box">
-		<p class="bids-box-title"><span class="lf">理财专区</span><a href="/deal/deal/index" class="rg" style="color: #538feb">更多 ></a></p>
-		<!--        <ul class="bids-box-bidlist clearfix">-->
-		<!--            <li>-->
-		<!--                <a href="/deal/deal/index">-->
-		<!--                <img src="--><? //= FE_BASE_URI ?><!--wap/new-homepage/images/pic_bidList_1_new.png" alt="">-->
-		<!--                </a>-->
-		<!--            </li>-->
-		<!--            <li>-->
-		<!--                <a href="/deal/deal/index">-->
-		<!--                <img src="--><? //= FE_BASE_URI ?><!--wap/new-homepage/images/pic_bidList_2.png" alt="">-->
-		<!--                </a>-->
-		<!--            </li>-->
-		<!--        </ul>-->
-		<div class='bids-box-bidlist'>
-			<ul class="clearfix">
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“期限灵活”</span>
-						<span>期限30天</span>
-						<span>5.6%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“兼顾灵活和收益”</span>
-						<span>期限60天</span>
-						<span>6.0%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“兼顾灵活和收益”</span>
-						<span>期限90天</span>
-						<span>6.2%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“收益稳健”</span>
-						<span>期限180天</span>
-						<span>6.8%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“领跑收益”</span>
-						<span>期限365天</span>
-						<span>7.2-8.0%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“领跑收益”</span>
-						<span>期限730天</span>
-						<span>8-8.8%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+
+<!--	<div class="bids-box">-->
+<!--		<p class="bids-box-title"><span class="lf">理财专区</span><a href="/deal/deal/index" class="rg" style="color: #538feb">更多 ></a></p>-->
+<!--		        <ul class="bids-box-bidlist clearfix">-->
+<!--		            <li>-->
+<!--		                <a href="/deal/deal/index">-->
+<!--		                <img src="--><?///* //= FE_BASE_URI */?><!--wap/new-homepage/images/pic_bidList_1_new.png" alt="">-->
+<!--		                </a>-->
+<!--		            </li>-->
+<!--		            <li>-->
+<!--		                <a href="/deal/deal/index">-->
+<!--		                <img src="--><?///* //= FE_BASE_URI */?><!--wap/new-homepage/images/pic_bidList_2.png" alt="">-->
+<!--		                </a>-->
+<!--		            </li>-->
+<!--		        </ul>-->
+<!--		<div class='bids-box-bidlist'>-->
+<!--			<ul class="clearfix">-->
+<!--				<li class="forums-part">-->
+<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
+<!--						<span>“期限灵活”</span>-->
+<!--						<span>期限30天</span>-->
+<!--						<span>5.6%</span>-->
+<!--						<span>预期年化收益</span>-->
+<!--					</a>-->
+<!--				</li>-->
+<!--				<li class="forums-part">-->
+<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
+<!--						<span>“兼顾灵活和收益”</span>-->
+<!--						<span>期限60天</span>-->
+<!--						<span>6.0%</span>-->
+<!--						<span>预期年化收益</span>-->
+<!--					</a>-->
+<!--				</li>-->
+<!--				<li class="forums-part">-->
+<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
+<!--						<span>“兼顾灵活和收益”</span>-->
+<!--						<span>期限90天</span>-->
+<!--						<span>6.2%</span>-->
+<!--						<span>预期年化收益</span>-->
+<!--					</a>-->
+<!--				</li>-->
+<!--				<li class="forums-part">-->
+<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
+<!--						<span>“收益稳健”</span>-->
+<!--						<span>期限180天</span>-->
+<!--						<span>6.8%</span>-->
+<!--						<span>预期年化收益</span>-->
+<!--					</a>-->
+<!--				</li>-->
+<!--				<li class="forums-part">-->
+<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
+<!--						<span>“领跑收益”</span>-->
+<!--						<span>期限365天</span>-->
+<!--						<span>7.2-8.0%</span>-->
+<!--						<span>预期年化收益</span>-->
+<!--					</a>-->
+<!--				</li>-->
+<!--				<li class="forums-part">-->
+<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
+<!--						<span>“领跑收益”</span>-->
+<!--						<span>期限730天</span>-->
+<!--						<span>8-8.8%</span>-->
+<!--						<span>预期年化收益</span>-->
+<!--					</a>-->
+<!--				</li>-->
+<!--			</ul>-->
+<!--		</div>-->
+<!--	</div>-->
+
+<!--    添加的南金中心banner-->
+    <?php if (!empty($user) && $user->isShowNjq) : ?>
+        <a class="njfae-banner" href="/njq/connect?redirect=<?= urlencode('site/index') ?>">
+            <h4 class="njfae-banner-title">
+                <i></i>
+                <span>南金中心正式入驻温都金服</span>
+                <u></u>
+            </h4>
+            <div class="njfae-banner-img">
+                <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/njfae_banner1.png" alt="">
+                <span>查看详情></span>
+            </div>
+        </a>
+    <?php endif; ?>
+
+
     <?php if (!empty($news)) { ?>
 			<div class="reading-box">
 				<p class="reading-box-title">理财阅读</p>

@@ -22,7 +22,6 @@ class LicaiController extends Controller
         } else {
             $jianguan = false;
         }
-
         $array = [];
         if ($jianguan) {
             $query = OnlineProduct::find()->select('id');
@@ -68,6 +67,9 @@ class LicaiController extends Controller
             return ['header' => $header, 'code' => $code, 'message' => $message, 'notes' => $notes, 'html' => $html];
         }
 
-        return $this->render('notes', ['notes' => $notes, 'tp' => $tp]);
+        return $this->render('notes', [
+            'notes' => $notes,
+            'tp' => $tp,
+            ]);
     }
 }

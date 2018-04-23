@@ -255,9 +255,29 @@ body {
     position: relative;
     top: .33333333rem;
     background: url(../images/shapes.png) no-repeat;
-    background-size: .4rem 2.53333333rem
+    background-size: .4rem 2.53333333rem;
 }
+div.njq_ops .lf{
+    background-image: url(../images/njfae_shapes.png);
+    background-repeat: no-repeat;
+    background-position:-0.2rem -0.5rem;
+    background-size: .8266666667rem 0.933333333rem;
 
+}
+.njq_ops span{
+    position: relative;
+}
+.njq_ops span i{
+    position: absolute;
+    right:-0.92rem;
+    top:0;
+    width: 0.82666666667rem;
+    height: 0.52666666667rem;
+    background-image: url(../images/njfae_shapes.png);
+    background-repeat: no-repeat;
+    background-position:0 0;
+    background-size: .8266666667rem 0.933333333rem;
+}
 .out_ops .test {
     background: url(../images/shape_test.png) no-repeat;
     background-size: .493rem
