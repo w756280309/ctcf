@@ -125,8 +125,9 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		</a>
 	</div>
 
-<!--	<div class="bids-box">-->
-<!--		<p class="bids-box-title"><span class="lf">理财专区</span><a href="/deal/deal/index" class="rg" style="color: #538feb">更多 ></a></p>-->
+	<div class="bids-box">
+        <?php if (empty($user) || !$user->isShowNjq) : ?>
+		<p class="bids-box-title"><span class="lf">理财专区</span><a href="/deal/deal/index" class="rg" style="color: #538feb">更多 ></a></p>
 <!--		        <ul class="bids-box-bidlist clearfix">-->
 <!--		            <li>-->
 <!--		                <a href="/deal/deal/index">-->
@@ -139,60 +140,60 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 <!--		                </a>-->
 <!--		            </li>-->
 <!--		        </ul>-->
-<!--		<div class='bids-box-bidlist'>-->
-<!--			<ul class="clearfix">-->
-<!--				<li class="forums-part">-->
-<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
-<!--						<span>“期限灵活”</span>-->
-<!--						<span>期限30天</span>-->
-<!--						<span>5.6%</span>-->
-<!--						<span>预期年化收益</span>-->
-<!--					</a>-->
-<!--				</li>-->
-<!--				<li class="forums-part">-->
-<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
-<!--						<span>“兼顾灵活和收益”</span>-->
-<!--						<span>期限60天</span>-->
-<!--						<span>6.0%</span>-->
-<!--						<span>预期年化收益</span>-->
-<!--					</a>-->
-<!--				</li>-->
-<!--				<li class="forums-part">-->
-<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
-<!--						<span>“兼顾灵活和收益”</span>-->
-<!--						<span>期限90天</span>-->
-<!--						<span>6.2%</span>-->
-<!--						<span>预期年化收益</span>-->
-<!--					</a>-->
-<!--				</li>-->
-<!--				<li class="forums-part">-->
-<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
-<!--						<span>“收益稳健”</span>-->
-<!--						<span>期限180天</span>-->
-<!--						<span>6.8%</span>-->
-<!--						<span>预期年化收益</span>-->
-<!--					</a>-->
-<!--				</li>-->
-<!--				<li class="forums-part">-->
-<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
-<!--						<span>“领跑收益”</span>-->
-<!--						<span>期限365天</span>-->
-<!--						<span>7.2-8.0%</span>-->
-<!--						<span>预期年化收益</span>-->
-<!--					</a>-->
-<!--				</li>-->
-<!--				<li class="forums-part">-->
-<!--					<a href="/deal/deal/index" class="forums-part-contant">-->
-<!--						<span>“领跑收益”</span>-->
-<!--						<span>期限730天</span>-->
-<!--						<span>8-8.8%</span>-->
-<!--						<span>预期年化收益</span>-->
-<!--					</a>-->
-<!--				</li>-->
-<!--			</ul>-->
-<!--		</div>-->
-<!--	</div>-->
-
+		<div class='bids-box-bidlist'>
+			<ul class="clearfix">
+				<li class="forums-part">
+					<a href="/deal/deal/index" class="forums-part-contant">
+						<span>“期限灵活”</span>
+						<span>期限30天</span>
+						<span>5.6%</span>
+						<span>预期年化收益</span>
+					</a>
+				</li>
+				<li class="forums-part">
+					<a href="/deal/deal/index" class="forums-part-contant">
+						<span>“兼顾灵活和收益”</span>
+						<span>期限60天</span>
+						<span>6.0%</span>
+						<span>预期年化收益</span>
+					</a>
+				</li>
+				<li class="forums-part">
+					<a href="/deal/deal/index" class="forums-part-contant">
+						<span>“兼顾灵活和收益”</span>
+						<span>期限90天</span>
+						<span>6.2%</span>
+						<span>预期年化收益</span>
+					</a>
+				</li>
+				<li class="forums-part">
+					<a href="/deal/deal/index" class="forums-part-contant">
+						<span>“收益稳健”</span>
+						<span>期限180天</span>
+						<span>6.8%</span>
+						<span>预期年化收益</span>
+					</a>
+				</li>
+				<li class="forums-part">
+					<a href="/deal/deal/index" class="forums-part-contant">
+						<span>“领跑收益”</span>
+						<span>期限365天</span>
+						<span>7.2-8.0%</span>
+						<span>预期年化收益</span>
+					</a>
+				</li>
+				<li class="forums-part">
+					<a href="/deal/deal/index" class="forums-part-contant">
+						<span>“领跑收益”</span>
+						<span>期限730天</span>
+						<span>8-8.8%</span>
+						<span>预期年化收益</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+    <?php endif; ?>
 <!--    添加的南金中心banner-->
     <?php if (!empty($user) && $user->isShowNjq) : ?>
         <a class="njfae-banner" href="/njq/connect?redirect=<?= urlencode('site/index') ?>">
