@@ -820,4 +820,54 @@ GROUP BY plt.user_id";
         $objWriter->save($file);
         $this->stdout('操作成功，文件：'. $file . PHP_EOL);
     }
+
+    public function actionExportNoInvestUser($startDate, $endDate = null)
+    {
+        if (empty($endDate)) {
+            $endDate = date('Y-m-d');
+        }
+        $sql = "SELECT
+u.real_name '姓名',
+u.safeMobile '联系方式',
+u.safeIdCard '身份证号',
+u.birthdate '生日',
+(DATE_FORMAT(NOW(), '%Y') - SUBSTRING(u.birthdate, 1, 4)) as '年龄',
+af.name = '分销商'
+FROM user u 
+INNER JOIN user_info ui
+ON u.id = ui.user_id
+LEFT JOIN user_affiliation ua 
+on ua.user_id = u.id
+LEFT join affiliator af
+on ua.affiliator_id = af.id
+where ui.investCount = 0
+AND date(from_unixtime(u.created_at)) >= :startDate
+AND date(from_unixtime(u.created_at)) >= :endDate";
+        $datas = Yii::$app->db->createCommand($sql, [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
+
+        $exportData[] = ['姓名', '联系方式', '身份证号', '分销商', '性别', '生日', '年龄'];
+
+        foreach ($datas as $data) {
+            $idCard = SecurityUtils::decrypt($data['身份证号']);
+            array_push($exportData, [
+                $data['姓名'],
+                SecurityUtils::decrypt($data['联系方式']),
+                empty($idCard) ? null : $idCard,
+                empty($data['分销商']) ? '官方' : $data['分销商'],
+                !empty($idCard) ? (substr($idCard, -2, 1) % 2 ? '男' : '女') : null,
+                $data['生日'],
+                $data['年龄'],
+
+            ]);
+        }
+        //导出Excel
+        $file = Yii::getAlias('@app/runtime/no_invest_user_' . date("YmdHis") . '.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        $this->stdout('操作成功，文件：'. $file . PHP_EOL);
+    }
 }
