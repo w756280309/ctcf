@@ -821,6 +821,11 @@ GROUP BY plt.user_id";
         $this->stdout('操作成功，文件：'. $file . PHP_EOL);
     }
 
+    /**
+     * 导出指定日期内注册并且没有投资的用户名单
+     * @param $startDate
+     * @param null $endDate
+     */
     public function actionExportNoInvestUser($startDate, $endDate = null)
     {
         if (empty($endDate)) {
@@ -842,7 +847,7 @@ LEFT join affiliator af
 on ua.affiliator_id = af.id
 where ui.investCount = 0
 AND date(from_unixtime(u.created_at)) >= :startDate
-AND date(from_unixtime(u.created_at)) >= :endDate";
+AND date(from_unixtime(u.created_at)) <= :endDate";
         $datas = Yii::$app->db->createCommand($sql, [
             'startDate' => $startDate,
             'endDate' => $endDate,
