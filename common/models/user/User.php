@@ -1182,7 +1182,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
      */
     public function getIsShowNjq()
     {
-        if (defined('IN_APP') || CLIENT_TYPE == 'pc') {    //pc，app端禁止访问
+        if (defined('IN_APP')) {    //app端禁止访问
             return false;
         }
         $isEnabledWhiteList = Yii::$app->params['njq']['is_enabled_white_list'];
