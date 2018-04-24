@@ -629,36 +629,49 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
         $pageSize = 10;
         //从piwik中获取各渠道商名称及页面访问数量
         $piwikData = Piwik::getChannelUserNum($startDate, $endDate);
-        $channelData = ArrayHelper::getColumn($piwikData, 'label');
-        //查询时间段内各渠道注册人数及注册购买总金额
+        $registerUserData = Yii::$app->db->createCommand('SELECT
+            count(id) as registerUserCount,
+            campaign_source
+            FROM user  
+            WHERE DATE(FROM_UNIXTIME(created_at)) 
+            BETWEEN :startDate 
+            AND :endDate
+            GROUP BY campaign_source', [
+            'startDate' => $startDate,
+            'endDate' => $endDate
+        ])->queryAll();
+        $registerUserData = ArrayHelper::index($registerUserData, 'campaign_source');
+        //查询时间段内各渠道注册人数及注册购买总金额,订单数量和订单金额
         $registerData = Yii::$app->db->createCommand('SELECT 
-          campaign_source AS campaign_source,
-          count(u.id) AS registerUserCount,
-          sum(ui.investTotal) AS registerOrderMoneySum 
+          u.campaign_source AS campaign_source,
+          sum(ui.firstInvestAmount) AS firstInvestAmount,
+          count(o.id) as registerOrderCount,
+          sum(o.order_money) as registerOrderMoneySum 
           FROM user u 
           LEFT JOIN user_info ui
-          ON ui.user_id = u.id
-          WHERE DATE(FROM_UNIXTIME(u.created_at)) 
+          ON ui.user_id = u.id 
+          LEFT JOIN online_order o 
+          ON o.uid = u.id 
+          WHERE o.status = 1 
+          AND DATE(FROM_UNIXTIME(u.created_at)) 
           BETWEEN :startDate 
           AND :endDate
-          GROUP BY campaign_source', [
+          GROUP BY u.campaign_source', [
             'startDate' => $startDate,
             'endDate' => $endDate
         ])->queryAll();
         $registerData = ArrayHelper::index($registerData, 'campaign_source');
         //查询时间段内各渠道购买订单数量及订单总额
         $orderData = Yii::$app->db->createCommand('SELECT 
-            u.campaign_source AS campaign_source, 
+            o.campaign_source AS campaign_source, 
             count(o.id) AS orderCount,
             sum(o.order_money) AS orderMoneySum
             FROM online_order o 
-            INNER JOIN user u 
-            ON o.uid = u.id
             WHERE o.status = 1 
             AND DATE(FROM_UNIXTIME(o.created_at)) 
             BETWEEN :startDate 
             AND :endDate
-            GROUP BY u.campaign_source', [
+            GROUP BY o.campaign_source', [
             'startDate' => $startDate,
             'endDate' => $endDate,
         ])->queryAll();
@@ -674,14 +687,17 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m') < DATE_FORMAT(NOW(),'%Y-%m')  GROUP
             $nbVisits = count($piwikData[$campaign]) ? $piwikData[$campaign]['nb_visits'] : 0;
             $nbVisitsArray[] = $nbVisits;
             $allData[$campaign]['nb_visits'] = $nbVisits;
+            $allData[$campaign]['firstInvestAmount'] = count($registerData[$campaign]) ? $registerData[$campaign]['firstInvestAmount'] : 0; //新注册购买总额
+            $allData[$campaign]['registerOrderCount'] = count($registerData[$campaign]) ? $registerData[$campaign]['registerOrderCount'] : 0;//订单数量
+            //订单金额
             $allData[$campaign]['registerOrderMoneySum'] = count($registerData[$campaign]) ? $registerData[$campaign]['registerOrderMoneySum'] : 0;
-            $allData[$campaign]['orderMoneySum'] = count($orderData[$campaign]) ? $orderData[$campaign]['orderMoneySum'] : 0;
-            $registerUserCount = count($registerData[$campaign]) ? $registerData[$campaign]['registerUserCount'] : 0;
+            $allData[$campaign]['orderMoneySum'] = count($orderData[$campaign]) ? $orderData[$campaign]['orderMoneySum'] : 0; //渠道订单金额
+            $registerUserCount = count($registerUserData[$campaign]) ? $registerUserData[$campaign]['registerUserCount'] : 0;//注册人数
             $orderCount = count($orderData[$campaign]) ? $orderData[$campaign]['orderCount'] : 0;
-            $allData[$campaign]['registerUserCount'] = $registerUserCount;
-            $allData[$campaign]['orderCount'] = $orderCount;
-            $allData[$campaign]['registerConversionRate'] = 0;
-            $allData[$campaign]['orderConversionRate'] = 0;
+            $allData[$campaign]['registerUserCount'] = $registerUserCount; //注册人数
+            $allData[$campaign]['orderCount'] = $orderCount; //渠道订单数量
+            $allData[$campaign]['registerConversionRate'] = 0;  //注册转化率
+            $allData[$campaign]['orderConversionRate'] = 0; //订单转化率
             if ($nbVisits) {
                 $allData[$campaign]['registerConversionRate'] = $registerUserCount/$nbVisits*100;
                 $allData[$campaign]['orderConversionRate'] = $orderCount/$nbVisits*100;
