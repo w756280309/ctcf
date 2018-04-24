@@ -106,7 +106,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                 [
                     'label' => '订单数量',
                     'value' => function ($data) {
-                        return $data['orderCount'];
+                        return $data['registerOrderCount'];
                     },
                     'contentOptions' => ['class' => 'left'],
                     'headerOptions' => ['class' => 'left'],
@@ -130,7 +130,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                 [
                     'label' => '订单金额(元)',
                     'value' => function ($data) {
-                        return StringUtils::amountFormat2($data['orderMoneySum']);
+                        return StringUtils::amountFormat2($data['registerOrderMoneySum']);
                     },
                     'contentOptions' => ['class' => 'left'],
                     'headerOptions' => ['class' => 'left'],
@@ -138,11 +138,27 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                 [
                     'label' => '新注册购买总额(元)',
                     'value' => function ($data) {
-                        return StringUtils::amountFormat2($data['registerOrderMoneySum']);
+                        return StringUtils::amountFormat2($data['firstInvestAmount']);
                     },
                     'contentOptions' => ['class' => 'left'],
                     'headerOptions' => ['class' => 'left'],
                 ],
+                [
+                    'label' => '渠道订单数量',
+                    'value' => function ($data) {
+                        return $data['orderCount'];
+                    },
+                    'contentOptions' => ['class' => 'left'],
+                    'headerOptions' => ['class' => 'left'],
+                ],
+                [
+                    'label' => '渠道订单金额(元)',
+                    'value' => function ($data) {
+                        return $data['orderMoneySum'];
+                    },
+                    'contentOptions' => ['class' => 'left'],
+                    'headerOptions' => ['class' => 'left'],
+                ]
             ],
             'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
         ]) ?>
