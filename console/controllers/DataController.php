@@ -875,4 +875,57 @@ AND date(from_unixtime(u.created_at)) <= :endDate";
         $objWriter->save($file);
         $this->stdout('操作成功，文件：'. $file . PHP_EOL);
     }
+
+    /**
+     * 导出指定分销商的用户信息
+     * 要素：姓名，联系方式
+     * @param $id 对应affiliator表的id
+     */
+    public function actionExportAffiliatorUser($id)
+    {
+        //注册成用户
+        $sql = "SELECT
+u.real_name '姓名',
+u.safeMobile '手机号'
+FROM user u
+INNER JOIN user_affiliation ua 
+ON u.id = ua.user_id
+WHERE 
+ua.affiliator_id = :id";
+        $datas = Yii::$app->db->createCommand($sql, [
+            'id' => $id,
+        ])->queryAll();
+        $exportData[] = ['姓名', '联系方式'];
+        foreach ($datas as $data) {
+            array_push($exportData, [
+                $data['姓名'],
+                SecurityUtils::decrypt($data['手机号']),
+            ]);
+        }
+        //线下用户
+        $sqlOff = "SELECT
+u.realName '姓名',
+u.mobile '手机号'
+FROM offline_user u
+INNER JOIN crm_identity ci
+on u.crmAccount_id = ci.account_id
+WHERE
+ci.affiliator_id = :id";
+        $datasOff = Yii::$app->db->createCommand($sqlOff, [
+            'id' => $id,
+        ])->queryAll();
+        foreach ($datasOff as $data) {
+            array_push($exportData, [
+                $data['姓名'],
+                $data['手机号'],
+            ]);
+        }
+        //导出Excel
+        $file = Yii::getAlias('@app/runtime/channel_user_' . date("YmdHis") . '.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        $this->stdout('操作成功，文件：'. $file . PHP_EOL);
+    }
+
 }
