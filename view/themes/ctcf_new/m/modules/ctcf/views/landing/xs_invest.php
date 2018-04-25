@@ -5,7 +5,7 @@ $this->title = '新人首投礼';
 
 <link rel="stylesheet" href="/ctcf/css/active-20180207/base.css">
 <script src="/js/lib.flexible3.js"></script>
-<link rel="stylesheet" href="/ctcf/css/active-20180207/index.css">
+<link rel="stylesheet" href="/ctcf/css/active-20180207/index.css?v=1.0">
 <style>
     body {
         -webkit-text-size-adjust: 100% !important;
