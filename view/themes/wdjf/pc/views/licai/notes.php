@@ -15,9 +15,9 @@ $user = Yii::$app->user->getIdentity();
     <div class="alist-box">
         <a href='/licai/' class="list-span <?= 'licai/index' === $action ? 'select-span' : '' ?>">理财列表</a>
         <a href='/licai/notes' class="list-span <?= 'licai/notes' === $action ? 'select-span' : '' ?>">转让列表</a>
-        <?php if (!empty($user) && $user->isShowNjq) { ?>
-            <a href='/njq/loan-list' class="list-span <?= 'njq/loan-list' === $action ? 'select-span' : '' ?>">南金中心</a>
-        <?php } ?>
+<!--        --><?php //if (!empty($user) && $user->isShowNjq) { ?>
+<!--            <a href='/njq/loan-list' class="list-span --><?//= 'njq/loan-list' === $action ? 'select-span' : '' ?><!--">南金中心</a>-->
+<!--        --><?php //} ?>
     </div>
     <div class="clear"></div>
 

@@ -28,6 +28,7 @@ class NjqController extends Controller
      */
     public function actionLoanList($page = 1)
     {
+        throw $this->ex404();   //关闭南金中心理财列表
         $user = Yii::$app->user->getIdentity();
 
         if (empty($user) || !$user->isShowNjq) {    //不允许不符合条件的用户直接访问
