@@ -2,11 +2,11 @@
 
 namespace console\controllers;
 
-use common\models\adminuser\AdminLog;
 use common\models\draw\DrawManager;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
 use common\models\message\RepaymentMessage;
+use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\order\OnlineRepaymentRecord;
@@ -27,7 +27,6 @@ use EasyWeChat\Core\Exception;
 use Lhjx\Noty\Noty;
 use Yii;
 use yii\console\Controller;
-use yii\db\ActiveQuery;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
@@ -1361,6 +1360,63 @@ group by o.uid
             foreach ($plans as $plan) {
                 Noty::send(new RepaymentMessage($plan));
             }
+        }
+    }
+
+    /**
+     * 根据放款记录新建一笔提现
+     * 两种情况：
+     * 1）已经提现受理，但未生成提现，资金等流水记录，requireUmp传参数为0
+     * 2）提现失败或者未受理，需要重现生成，requireUmp可不传
+     *
+     * @param string $sn 放款sn
+     * @param integer $requireUmp 是否请求联动 0不请求1请求
+     *
+     * @throws \Exception
+     */
+    public function actionFkDraw($sn, $requireUmp = 1)
+    {
+        $requireUmp = boolval($requireUmp);
+        $onlineFangkuan = OnlineFangkuan::find()
+            ->where(['sn' => $sn])
+            ->one();
+        if (null === $onlineFangkuan) {
+            throw new \Exception('融资用户账户信息不存在', '000001');
+        }
+        $account = UserAccount::findOne(['uid' => $onlineFangkuan->uid, 'type' => UserAccount::TYPE_BORROW]);
+        if (!$account) {
+            throw new \Exception('融资用户账户信息不存在', '000002');
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            //融资方放款,不收取手续费
+            $draw = DrawManager::initDraw($account, $onlineFangkuan->order_money);
+            if (!$draw->save()) {
+                throw new \Exception('提现申请失败', '000003');
+            }
+
+            $draw->orderSn = $onlineFangkuan->sn;
+            if (!$draw->save()) {
+                throw new \Exception('写入放款流水失败', '000003');
+            }
+
+            if ($requireUmp) {
+                $ump = Yii::$container->get('ump');
+                $resp = $ump->orgDrawApply($draw);
+                if (!$resp->isSuccessful()) {
+                    throw new \Exception($resp->get('ret_code').$resp->get('ret_msg'));
+                }
+            }
+
+            DrawManager::ackDraw($draw);
+            $transaction->commit();
+
+            $this->stdout('提现受理中...');
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
         }
     }
 }
