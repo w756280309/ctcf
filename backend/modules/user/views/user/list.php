@@ -48,7 +48,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                     </li>
                 <?php } ?>
                 <li>
-                    <a href="javascript:void(0);">会员列表</a>
+                    <a href="javascript:void(0);">会员列表<?= !$isPersonal ? '(共计' . $pages->totalCount . '条)' : null ?></a>
                 </li>
             </ul>
         </div>
