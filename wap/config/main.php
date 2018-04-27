@@ -24,6 +24,7 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logVars' => [],
                 ],
                 //联动日志记录
                 [
