@@ -69,6 +69,8 @@ class NjqController extends Controller
 
     /**
      * 生成免登Url
+     * todo 与PC端统一
+     *
      * @return \yii\web\Response
      * @throws \yii\web\NotFoundHttpException
      */
@@ -79,7 +81,9 @@ class NjqController extends Controller
             throw $this->ex404();
         }
         $redirect = Yii::$app->request->get('redirect');
-        $redirect = !empty($redirect) ? Yii::$app->params['njq']['host_m'] . $redirect : null;
+        if (null !== $redirect) {
+            $redirect = Yii::$app->params['njq']['host_m'] . $redirect;
+        }
         $crypto = new Crypto();
         if (empty($user) || !$user->isShowNjq) {    //不允许不符合条件的用户直接访问
             throw $this->ex404();

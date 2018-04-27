@@ -196,7 +196,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
     <?php endif; ?>
 <!--    添加的南金中心banner-->
     <?php if (!empty($user) && $user->isShowNjq) : ?>
-        <a class="njfae-banner" href="/njq/connect?redirect=<?= urlencode('site/index') ?>">
+        <a class="njfae-banner" href="/njq/connect?redirect=<?= urlencode('site/index?utm_source='.$user->campaign_source) ?>">
             <h4 class="njfae-banner-title">
                 <i></i>
                 <span>南金中心正式入驻温都金服</span>

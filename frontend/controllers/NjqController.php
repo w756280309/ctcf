@@ -60,17 +60,30 @@ class NjqController extends Controller
             ]);
     }
 
-    //生成免登URL
+    /**
+     * 生成免登url
+     * todo 与M端统一
+     *
+     * @return \yii\web\Response
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionConnect()
     {
         $redirect = Yii::$app->request->get('redirect');
-        $redirect = !empty($redirect) ? Yii::$app->params['njq']['host_pc'] . $redirect : null;
         $user = Yii::$app->user->getIdentity();
         $crypto = new Crypto();
-        if (empty($user) || !$user->isShowNjq) {    //不允许不符合条件的用户直接访问
+
+        //不允许不符合条件的用户直接访问
+        if (empty($user) || !$user->isShowNjq) {
             throw $this->ex404();
         }
+
+        if (null !== $redirect) {
+            $redirect = Yii::$app->params['njq']['host_pc'] . $redirect;
+        }
+
         if (is_null($user->channel)) {
+            //todo 注册南金中心失败待处理
             $uid = $crypto->signUp($user);
         } else {
             $uid = $user->channel->thirdPartyUser_id;
@@ -86,6 +99,7 @@ class NjqController extends Controller
 
         $signData = $crypto->sign($data);
         unset($signData['appSecret']);
+
         return $this->redirect(Yii::$app->params['njq']['baseUri'] . 'user/account/connect?' . http_build_query($signData));
     }
 }

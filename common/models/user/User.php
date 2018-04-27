@@ -1192,12 +1192,12 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
                 return true;
             }
         } else {
+            //不显示 @todo   50000可以改写成配置；
             if ($this->getJGMoney() >= 50000) {
                 return true;
             }
         }
-        //不显示 @todo   50000可以改写成配置；
-        //@todo 南金中心pc站开发未完成，暂时隐藏入口；
+
         return false;
     }
 

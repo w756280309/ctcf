@@ -67,6 +67,13 @@ class Crypto
                 'bankCardNo' => !is_null($user->qpay) ? $user->qpay->card_number : null,
                 'bankMobile' => $user->mobile,
             ];
+
+            //获取注册的渠道，并添加到注册的参数中
+            $campaignSource = $user->campaign_source;
+            if (null !== $campaignSource) {
+                $data['campaignSource'] = $campaignSource;
+            }
+
             $signData = $this->sign($data);
             $res = HttpHelper::doGet(Yii::$app->params['njq']['baseUri'] . 'user/account/register?' . http_build_query($signData));
             if ($res) {
@@ -84,6 +91,7 @@ class Crypto
         } catch (\Exception $ex) {
             Yii::info('用户【' .$user->id. '】注册南金中心失败，原因：' . $ex->getMessage());
         }
+
         return null;
     }
 }
