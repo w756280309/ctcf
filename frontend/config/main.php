@@ -24,6 +24,8 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logVars' => [],
+                    'enableRotation' => false,
                 ],
                 //联动日志记录
                 [
@@ -33,6 +35,7 @@ return [
                     'logFile' => '@app/runtime/logs/ump/ump'.date('Ymd').'.log',
                     'maxFileSize' => 1024 * 2,
                     'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -45,6 +48,7 @@ return [
                     'logFile' => '@app/runtime/logs/user/user_status'.date('Ymd').'.log',
                     'maxFileSize' => 1024 * 2,
                     'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },

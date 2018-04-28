@@ -17,6 +17,8 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     }
@@ -27,7 +29,8 @@ return [
                     'categories' => ['notify'],
                     'logFile' => '@app/runtime/logs/notify/notify'. date('Ym').'.log',
                     'maxFileSize' => 1024*2,
-                    'logVars' => ['info'],
+                    'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     }
@@ -39,7 +42,8 @@ return [
                     'categories' => ['umplog'],
                     'logFile' => '@app/runtime/logs/ump/ump'.date('Ymd').'.log',
                     'maxFileSize' => 1024 * 2,
-                    'logVars' => ['trace'],
+                    'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -51,7 +55,8 @@ return [
                     'categories' => ['user_log'],
                     'logFile' => '@app/runtime/logs/user/user_status'.date('Ymd').'.log',
                     'maxFileSize' => 1024 * 2,
-                    'logVars' => ['trace'],
+                    'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
