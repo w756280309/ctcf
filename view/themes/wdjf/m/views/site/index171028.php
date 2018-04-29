@@ -125,76 +125,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		</a>
 	</div>
 
-	<div class="bids-box">
-        <?php if (empty($user) || !$user->isShowNjq) : ?>
-		<p class="bids-box-title"><span class="lf">理财专区</span><a href="/deal/deal/index" class="rg" style="color: #538feb">更多 ></a></p>
-<!--		        <ul class="bids-box-bidlist clearfix">-->
-<!--		            <li>-->
-<!--		                <a href="/deal/deal/index">-->
-<!--		                <img src="--><?///* //= FE_BASE_URI */?><!--wap/new-homepage/images/pic_bidList_1_new.png" alt="">-->
-<!--		                </a>-->
-<!--		            </li>-->
-<!--		            <li>-->
-<!--		                <a href="/deal/deal/index">-->
-<!--		                <img src="--><?///* //= FE_BASE_URI */?><!--wap/new-homepage/images/pic_bidList_2.png" alt="">-->
-<!--		                </a>-->
-<!--		            </li>-->
-<!--		        </ul>-->
-		<div class='bids-box-bidlist'>
-			<ul class="clearfix">
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“期限灵活”</span>
-						<span>期限30天</span>
-						<span>5.6%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“兼顾灵活和收益”</span>
-						<span>期限60天</span>
-						<span>6.0%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“兼顾灵活和收益”</span>
-						<span>期限90天</span>
-						<span>6.2%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“收益稳健”</span>
-						<span>期限180天</span>
-						<span>6.8%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“领跑收益”</span>
-						<span>期限365天</span>
-						<span>7.2-8.0%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-				<li class="forums-part">
-					<a href="/deal/deal/index" class="forums-part-contant">
-						<span>“领跑收益”</span>
-						<span>期限730天</span>
-						<span>8-8.8%</span>
-						<span>预期年化收益</span>
-					</a>
-				</li>
-			</ul>
-		</div>
-	</div>
-    <?php endif; ?>
-<!--    添加的南金中心banner-->
+    <!-- 添加的南金中心banner -->
     <?php if (!empty($user) && $user->isShowNjq) : ?>
         <a class="njfae-banner" href="/njq/connect?redirect=<?= urlencode('site/index?utm_source='.$user->campaign_source) ?>">
             <h4 class="njfae-banner-title">
@@ -208,7 +139,6 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
             </div>
         </a>
     <?php endif; ?>
-
 
     <?php if (!empty($news)) { ?>
 			<div class="reading-box">
@@ -229,17 +159,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 				<a href="/news" class="reading-box-more">更多></a>
 			</div>
     <?php } ?>
-	<div class="data-box">
-		<p class="data-box-title">平台数据</p>
-		<div class="data-box-show">
-			<p class="data-box-show-line1">温都金服平台已安全运营</p>
-			<p class="data-box-show-line2">
-				<span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-05-20'))->days ?></span>天（历史兑付率100%）</p>
-			<p class="data-box-show-line3" style="width: auto;display: inline-block;padding: 0 .306rem"><i class="totalTradeBox" style="font-style: normal;display: none">累计投资额<span
-						id="totalTradeAmount"></span></i> 兑付<span id="totalRefundAmount"></span> 带来<span
-					id="totalRefundInterest"></span>元收益</p>
-		</div>
-	</div>
+
 	<div class="aboutus-box swiper-container">
 		<div class="swiper-wrapper">
 			<a href="/site/h5?wx_share_key=h5" class="swiper-slide">
