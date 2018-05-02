@@ -8,19 +8,24 @@ $this->title = '我要理财';
 $this->showBottomNav = true;
 $this->hideHeaderNav = HttpUtils::isWeixinRequest();
 $this->backUrl = false;
+$action = Yii::$app->controller->action->getUniqueId();
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=2017041332', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/list_tag.css', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/TouchSlide.1.1.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/jquery.classyloader.js', ['depends' => JqueryAsset::class, 'position' => 1]);
-$this->registerJsFile(ASSETS_BASE_URI .'js/list.js?v=20160427', ['depends' => JqueryAsset::class, 'position' => 1]);
+if ($action === 'deal/deal/index') {
+    $this->registerJsFile(ASSETS_BASE_URI .'js/list.js?v=20160427', ['depends' => JqueryAsset::class, 'position' => 1]);
+} elseif ($action === 'deal/deal/loan') {
+    $this->registerJsFile(ASSETS_BASE_URI .'js/list-loan.js', ['depends' => JqueryAsset::class, 'position' => 1]);
+}
 
 $this->registerJs('var total=' . $header['count'] . ';', 1);
 $this->registerJs('var size=' . $header['size'] . ';', 1);
 $this->registerJs('var tp=' . $header['tp'] . ';', 1);
 $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 $pc_cat = Yii::$app->params['pc_cat'];
-$action = Yii::$app->controller->action->getUniqueId();
+
 $user = Yii::$app->user->getIdentity();
 ?>
 <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
