@@ -928,4 +928,44 @@ ci.affiliator_id = :id";
         $this->stdout('操作成功，文件：'. $file . PHP_EOL);
     }
 
+    /**
+     * 导出在$startDate至$endDate期间投资成功金额
+     * 脚本命令： php yii data/duration-invest-info 2018-03-30 2018-05-01
+     *
+     * @param string $startDate 投资开始日期
+     * @param string $endDate   投资结束日期
+     */
+    public function actionDurationInvestInfo($startDate, $endDate)
+    {
+        $investSql = "select
+                      uid,sum(order_money) as order_money
+                      from online_order
+                      where status = 1
+                      and date(from_unixtime(created_at)) >= :startDate
+                      and date(from_unixtime(created_at)) <= :endDate
+                      group by uid
+                      order by uid";
+        $investInfo = Yii::$app->db->createCommand($investSql, [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
+
+        $result = [];
+        foreach ($investInfo as $key => $val) {
+            $user = User::findOne($val['uid']);
+            $result[$key]['user_id'] = $val['uid'];
+            $result[$key]['register_time'] = date('Y-m-d H:i:s', $user->created_at);
+            $result[$key]['real_name'] = $user->real_name;
+            $result[$key]['mobile'] = SecurityUtils::decrypt($user->safeMobile);
+            $result[$key]['invest_money'] = $val['order_money'];
+        }
+
+        $title = ['用户ID', '注册时间', '姓名', '联系方式', '投资金额'];
+        array_unshift($result, $title);
+        $file = Yii::getAlias('@app/runtime/duration_invest_info_'.date('YmdHis').'.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($result);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
+    }
 }
