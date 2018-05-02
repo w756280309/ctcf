@@ -96,9 +96,10 @@ $action = Yii::$app->controller->action->getUniqueId();
 ?>
 
 <!-- Swiper -->
+<?php if (is_array($contracts) && count($contracts) > 1) :?>
 <div id="legal-docs-switcher" class="swiper-container" style="line-height: 18px;">
     <div class="swiper-wrapper">
-        <?php foreach($contracts as $key => $contract) : ?>
+        <?php foreach ($contracts as $key => $contract) : ?>
             <?php $url = 'order/order/agreement' === $action ? "/order/order/agreement?id=$id&note_id=$note_id&key=$key" : "/order/order/contract?asset_id=$asset_id&key=$key"; ?>
             <div data-switcher-index="<?= $key ?>" class="swiper-slide <?= $fk == $key ? 'dian' : '' ?>" url="<?= $url ?>">
                 <?= $contract['title'] ?>
@@ -106,6 +107,7 @@ $action = Yii::$app->controller->action->getUniqueId();
         <?php endforeach; ?>
     </div>
 </div>
+<?php endif;?>
 <div id="content">
     <?= $this->renderFile('@wap/modules/order/views/order/_contract.php', array_merge(['content' => $content], 'order/order/agreement' === $action ? [] : ['bq' => $bq, 'isDisDownload' => $isDisDownload, 'miitBQ' => $miitBQ])) ?>
 </div>

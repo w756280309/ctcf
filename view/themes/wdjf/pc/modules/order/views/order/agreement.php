@@ -9,16 +9,17 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends
         <div class="contract-container-box">
             <p class="contract-title">产品合同</p>
             <div class="contract-content">
-                <ul class="title-box">
-                    <?php foreach ($contracts as $key => $contract) : ?>
-                        <li class="title <?= 0 === $key ? 'active' : '' ?>">
-                            <a>
-                                 <?= $contract['title']?>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-
+                <?php if (is_array($contracts) && count($contracts) > 1) :?>
+                    <ul class="title-box">
+                        <?php foreach ($contracts as $key => $contract) : ?>
+                            <li class="title <?= 0 === $key ? 'active' : '' ?>">
+                                <a>
+                                     <?= $contract['title']?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif;?>
                 <div class="pagination">
                     <?php foreach ($contracts as $key => $contract) : ?>
                         <div class="list <?= 0 !== $key ? 'hide' : '' ?>">

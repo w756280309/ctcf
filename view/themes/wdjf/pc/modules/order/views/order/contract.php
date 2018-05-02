@@ -38,6 +38,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends
         <div class="contract-container-box">
             <p class="contract-title">产品合同</p>
             <div class="contract-content">
+                <?php if (is_array($loanContracts) && count($loanContracts) > 1) :?>
                 <ul class="title-box">
                     <?php foreach ($loanContracts as $key => $contract) : ?>
                         <li class="loan_content title <?= 0 === $key ? 'active' : '' ?>" key="<?= $key?>">
@@ -57,6 +58,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/productcontract.css', ['depends
                     </li>
                     <?php }?>
                 </ul>
+                <?php endif;?>
                 <div class="pagination">
                     <div class="list">
                         <div class="content"><?= html_entity_decode($loanContracts[0]['content']) ?></div>

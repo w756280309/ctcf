@@ -22,6 +22,7 @@ class LicaiController extends Controller
     public function actionIndex()
     {
         $data = LoanFinder::queryPublicLoans();
+        $data = $data->andWhere('cid != 3');
 
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
 
@@ -90,5 +91,29 @@ class LicaiController extends Controller
         $pages = new Pagination(['totalCount' => $totalCount, 'pageSize' => $pageSize]);
 
         return $this->render('notes', ['notes' => $notes, 'pages' => $pages]);
+    }
+
+    /**
+     * 网贷列表
+     */
+    public function actionLoan()
+    {
+        $data = LoanFinder::queryP2pLoans();
+
+        $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
+
+        $loans = $data->orderBy([
+            'xs_status' => SORT_DESC,
+            'recommendTime' => SORT_DESC,
+            'sort' => SORT_ASC,
+            'raiseDays' => SORT_DESC,
+            'finish_rate' => SORT_DESC,
+            'raiseSn' => SORT_DESC,
+            'isJiaxi' => SORT_ASC,
+            'finish_date' => SORT_DESC,
+            'id' => SORT_DESC,
+        ])->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('index', ['loans' => $loans, 'pages' => $pages]);
     }
 }

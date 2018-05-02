@@ -81,7 +81,7 @@ return [
     'platform_info.company_seal_176' => '',   //公司签章图片-认购确认函
     'platform_info.company_seal_640' => '',   //公司签章图片-交易资产凭证
     'platform_info.order_cert_logo' => '',    //认购协议页面上部logo
-    'pc_cat' => [],
+    'pc_cat' => ['1' => '温盈金', '2' => '温盈宝', '3' => '网贷'],
 
     'refund_method' => [
         '1' => '到期本息',
