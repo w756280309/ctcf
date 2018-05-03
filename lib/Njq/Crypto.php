@@ -94,4 +94,25 @@ class Crypto
 
         return null;
     }
+
+
+    /**
+     * @param array $data 签名信息
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function verifySign(array $data)
+    {
+        $paramSign = ArrayHelper::remove($data, 'sign');
+        $data['appSecret'] = $this->appSecret;
+        ksort($data);
+        $signStr = '';
+        foreach ($data as $v) {
+            $signStr .= $v;
+        }
+        $sign = md5($signStr);
+
+        return $paramSign === $sign;
+    }
 }

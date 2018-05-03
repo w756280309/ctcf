@@ -2,6 +2,7 @@
 
 namespace PayGate\Ump;
 
+use common\utils\TxUtils;
 use Crypto\CryptoUtils;
 use GuzzleHttp\Client as HttpClient;
 use P2pl\BorrowerInterface;
@@ -1092,11 +1093,14 @@ class Client
     {
         $starttime = microtime(true);
         // 添加协议参数
-        $source_data = $data = array_merge($data, [
+        $publicData = [
             'charset' => $this->charset,
             'mer_id' => $this->merchantId,
-            'version' => $this->version,
-        ]);
+        ];
+        if (!isset($data['version'])) {
+            $publicData['version'] = $this->version;
+        }
+        $source_data = $data = array_merge($data, $publicData);
 
         // 签名
         $sign_data = $data['sign'] = $this->sign($data);
@@ -1126,11 +1130,14 @@ class Client
     {
         $starttime = microtime(true);
         // 添加协议参数
-        $source_data = $data = array_merge($data, [
+        $publicData = [
             'charset' => $this->charset,
             'mer_id' => $this->merchantId,
-            'version' => $this->version,
-        ]);
+        ];
+        if (!isset($data['version'])) {
+            $publicData['version'] = $this->version;
+        }
+        $source_data = $data = array_merge($data, $publicData);
 
         // 签名
         $sign_data = $data['sign'] = $this->sign($data);
@@ -1303,5 +1310,67 @@ class Client
         $params = $this->buildQuery($data);
 
         return $this->apiUrl.'?'.$params;
+    }
+
+    /**
+     * 普通转账验密接口（商户到平台）
+     *
+     * @param string $epayUserId 转账方用户号
+     * @param string $amount 转账金额（元）
+     * @param string $retUrl 前台通知地址
+     * @param string $notifyUrl 后台通知地址
+     * @param null|string $sn 订单sn
+     * @param bool $isMobile 是否为移动端
+     *
+     * @return Response
+     **/
+    public function userToPlatform($epayUserId, $amount, $retUrl, $notifyUrl, $sn = null, $isMobile = false)
+    {
+        if (null === $sn) {
+            $orderId = TxUtils::generateSn('UTP');
+        } else {
+            $orderId = $sn;
+        }
+
+        $data = [
+            'service' => 'transfer_asyn',
+            'version' => '4.0',
+            'order_id' => $orderId,
+            'ret_url' => $retUrl,
+            'notify_url' => $notifyUrl,
+            'mer_date' => date('Ymd'),
+            'partic_user_id' => $epayUserId,
+            'partic_acc_type' => '01',
+            'amount' => $amount * 100,
+        ];
+        if ($isMobile) {
+            $data = array_merge($data, ['sourceV' => 'HTML5']);
+        }
+        $params = $this->buildQuery($data);
+
+        return $this->apiUrl.'?'.$params;
+    }
+
+    /**
+     * 4.5.1 转账订单交易查询接口.
+     *
+     * @param string $sn 交易流水号
+     * @param string $orderDate 订单日期 YYYYMMDD
+     *
+     * @return Response
+     *
+     * tran_state:0初始、2成功、3失败、4不明、5、交易关闭、6其他
+     */
+    public function getTransferInfo($sn, $orderDate)
+    {
+        $data = [
+            'service' => 'transfer_search',
+            'version' => '4.0',
+            'order_id' => $sn,
+            'mer_date' => $orderDate,
+            'busi_type' => '04',
+        ];
+
+        return $this->doRequest($data);
     }
 }

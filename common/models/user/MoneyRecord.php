@@ -47,6 +47,7 @@ class MoneyRecord extends \yii\db\ActiveRecord
     const TYPE_CREDIT_HUIKUAN = 109;//购买债权对应的还款计划回款
 
     const TYPE_LOAN_CANCEL = 110;//标的撤单
+    const TYPE_AUTHORIZED_TRANSFER = 111;//用户授权转账到平台
 
     public static function createSN()
     {
@@ -125,6 +126,7 @@ class MoneyRecord extends \yii\db\ActiveRecord
             self::TYPE_CREDIT_REPAID,
             self::TYPE_CREDIT_HUIKUAN,
             self::TYPE_LOAN_CANCEL,
+            self::TYPE_AUTHORIZED_TRANSFER,
         ];
     }
 }
