@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>活动入口</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0">
+	<meta name="format-detection" content="telephone=no"/>
+	<link rel="stylesheet" href="../common/css/wenjfbase.css">
+	<script src="../libs/jquery-1.11.1.min.js"></script>
+	<script src="../libs/vue.min.js"></script>
+	<style>
+		body{background-color:#fff}.flex-content{padding:.4rem .53333333rem}.underway{display:block;position:relative;margin-top:.4rem;width:8.93333333rem;height:4.16rem;-webkit-box-shadow:0 4px 12px rgba(0,0,0,.4);-moz-box-shadow:0 4px 12px rgba(0,0,0,.4);box-shadow:0 4px 12px rgba(0,0,0,.4)}.underway img{width:100%;height:100%;display:block}.underway:first-child{margin-top:0}.cover{width:100%;height:100%;background-color:rgba(0,0,0,.5);position:absolute;top:0;left:0;color:#fff;font-size:.42666667rem}.cover p{text-align:center;line-height:4.16rem}.cover p::after,.cover p::before{content:'';display:inline-block;height:.02666667rem;background-color:#fff;width:.8rem;margin-bottom:.13333333rem}
+	</style>
+	<script src="../libs/lib.flexible3.js"></script>
+</head>
+<body>
+<div class="flex-content" id="entry">
+	<a href="#" class="underway">
+		<img src="images/active1.png" alt="">
+	</a>
+	<a href="#" class="underway">
+		<img src="images/active1.png" alt="">
+		<div class="cover"><p>&nbsp;活动已结束&nbsp;</p></div>
+	</a>
+</div>
+<script>
+    var data = "<?= $data ?>";
+    var vm = new Vue({
+        el: '#entry',
+        data:{
+            rewardInfos:data,
+            stop:true,
+            currentPage:2,
+            totalPage:"<?= $totalPage ?>",
+    },
+    methods:{
+        loadMore:function(){
+            var _this = this;
+            if(this.stop && this.currentPage<=this.totalPage){
+                this.stop = false;
+                $.ajax({
+                    type: 'GET',
+                    url: "/promotion/poker/record?page="+this.currentPage+"&limit=5",
+                    dataType: 'json',
+                    success: function(data){
+                        var res = data.data;
+                        for(var i=0 ,len=res.length;i<len;i++){
+                            _this.rewardInfos.push(res[i]);
+                        }
+                        _this.currentPage++;
+                    },
+                    error: function(){},
+                    complete: function() {
+                        _this.stop = true;
+                    }
+                })
+            }
+        }
+    }
+    });
+    $(window).scroll(function() {
+        if ($(this).scrollTop() + $(window).height() + 20 >= $(document).height() && $(this).scrollTop() > 20) {
+            vm.loadMore();
+        }
+    });
+</script>
+</body>
+</html>

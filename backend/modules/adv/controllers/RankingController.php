@@ -21,10 +21,15 @@ class RankingController extends BaseController
      */
     public function actionIndex()
     {
-        $query = RankingPromo::find()
-            ->orderBy([
-                'startTime' => SORT_DESC,
-            ]);
+        $title = Yii::$app->request->get('title');
+        $query = RankingPromo::find();
+        if (!empty($title)) {
+            $query->andFilterWhere(['like', 'title', $title]);
+        }
+        $query->orderBy([
+            'sortValue' => SORT_DESC,
+            'startTime' => SORT_DESC,
+        ]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

@@ -69,6 +69,39 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 <?= $form->field($model, 'endTime', ['template' => '{error}']); ?>
             </div>
         </div>
+        <div  class="control-group">
+            <label class="control-label">活动排序</label>
+            <div class="controls">
+                <?= $form->field($model, 'sortValue', [
+                    'template' => '{input}',
+                    'inputOptions' => [
+                        'autocomplete' => 'off',
+                        'class' => 'm-wrap span3',
+                        'placeholder' => '请填写排序值',
+                    ]])->textInput() ?>
+                <?= $form->field($model, 'sortValue', ['template' => '{error}']); ?>
+            </div>
+        </div>
+        <div  class="control-group">
+            <label class="control-label">首页轮播ID</label>
+            <div class="controls">
+                <?= $form->field($model, 'advSn', [
+                    'template' => '{input}',
+                    'inputOptions' => [
+                        'autocomplete' => 'off',
+                        'class' => 'm-wrap span3',
+                        'placeholder' => '请填写轮播图ID',
+                    ]])->textInput() ?>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">是否隐藏</label>
+            <div class="controls">
+                <?= $form->field($model, 'isHidden', ['template' => '{input}'])
+                    ->radioList(['0' => '否', '1' => '是'])
+                ?>
+            </div>
+        </div>
         <div class="control-group">
             <label class="control-label">活动白名单</label>
             <div class="controls">

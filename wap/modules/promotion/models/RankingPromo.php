@@ -39,13 +39,15 @@ class RankingPromo extends ActiveRecord
     {
         return [
             [['title', 'startTime'], 'required'],
-            [['startTime', 'endTime', 'key'], 'string'],
+            [['startTime', 'endTime', 'key', 'advSn'], 'string'],
+            ['advSn', 'trim'],
+            ['sortValue', 'integer'],
             [['title'], 'string', 'max' => 50],
             ['whiteList', 'string', 'max' => 255],
             ['whiteList', 'match', 'pattern' => '/^1[34578]\d{9}((,)1[34578]\d{9})*$/', 'message' => '{attribute}必须是以英文逗号分隔的手机号，首尾不得加逗号'],
             ['endTime', 'compare', 'compareAttribute' => 'startTime', 'operator' => '>', 'skipOnEmpty' => true],
             [['promoClass', 'whiteList'], 'string', 'max' => 255],
-            ['isOnline', 'boolean'],
+            [['isOnline', 'isHidden'], 'boolean'],
         ];
     }
 
@@ -61,6 +63,9 @@ class RankingPromo extends ActiveRecord
             'whiteList' => '白名单',
             'isOnline' => '活动是否上线',
             'isO2O' => '活动是否为O2O',
+            'sortValue' => '排序',
+            'advSn' => '首页轮播id',
+            'isHidden' => '是否隐藏',
         ];
     }
 
