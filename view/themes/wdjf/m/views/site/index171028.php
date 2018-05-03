@@ -121,7 +121,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		<a href="/news/promo" class="lf">
 			<img src="<?= FE_BASE_URI ?>wap/new-homepage/images/icon_gg.png" alt=""
 			     style="width: 0.6266rem;margin-left: -0.3133rem;">
-			<p class="links-box-txt">活动入口</p>
+			<p class="links-box-txt">活动专区</p>
 		</a>
 	</div>
 

@@ -2,7 +2,7 @@
 
 use yii\web\View;
 
-$this->title = '活动入口';
+$this->title = '活动专区';
 
 $this->registerCssFile(FE_BASE_URI . 'wap/common/css/wenjfbase.css', ['position' => View::POS_HEAD]);
 $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['position' => View::POS_HEAD]);
