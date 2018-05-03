@@ -362,11 +362,6 @@ class OrderManager
             OnlineOrder::updateAll(["yield_rate" => $rate], ["online_pid" => $loan->id, "uid" => $user->id, "status" => OnlineOrder::STATUS_SUCCESS]);
         }
 
-        //投标之后添加保全
-        $job = new BaoQuanQueue(['itemId' => $order->id, 'status' => BaoQuanQueue::STATUS_SUSPEND, 'itemType' => BaoQuanQueue::TYPE_LOAN_ORDER]);
-        $job->save();
-
-
         //投标成功，向用户发送短信
         $message = [
             $user->real_name,
@@ -526,13 +521,13 @@ class OrderManager
                 if (null === OrderQueue::findOne(['orderSn' => $order->sn])) {
                     OrderQueue::initForQueue($order)->save();
                 }
-                //工信部保全队列
-
-                Yii::$app->queue->push(new MiitBaoQuanJob([
-                    'order' => $order,
-                    'item_type' => 'loan_order',
-                ]));
-
+                //和签保全
+                if (Yii::$app->params['enable_miitbaoquan']) {
+                    Yii::$app->queue->push(new MiitBaoQuanJob([
+                        'order' => $order,
+                        'item_type' => 'loan_order',
+                    ]));
+                }
                 return [
                     'code' => PayService::ERROR_SUCCESS,
                     'message' => '',

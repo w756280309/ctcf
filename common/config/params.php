@@ -289,4 +289,5 @@ return [
         'is_enabled_white_list' => env('NJQ_IS_ENABLED_WHITE_LIST'),    //是否启用白名单，启用后，只有白名单用户可以访问
         'white_list' => env('NJQ_WHITE_LIST'), //白名单用户手机号组成的数组，格式：[‘18876545678’, ‘15678654332’, ‘12436545743’]
     ],
+    'enable_miitbaoquan' => env('ENABLE_MIIT_BAOQUAN') ?: null,   //合同保全开关-和签
 ];

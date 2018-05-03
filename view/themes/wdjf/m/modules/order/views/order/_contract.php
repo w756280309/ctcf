@@ -11,12 +11,6 @@
         <?php if (isset($miitBQ) && $miitBQ) : ?>
             <button class="btn btn-primary" style="margin-bottom: 5%" onclick="window.location = '<?= $miitBQ ?>'">国家电子合同</button>
         <?php endif; ?>
-        <?php if (isset($bq['downUrl'])) : ?>
-            <button class="btn btn-primary download-ybq" <?php if (!(isset($isDisDownload) && $isDisDownload)) : ?>onclick="window.location = '<?= $bq['downUrl'] ?>'"<?php endif; ?>>易保全合同下载</button>
-        <?php endif; ?>
-        <?php if (isset($bq['linkUrl'])) : ?>
-            <button class="btn btn-primary ybq" onclick="window.location = '<?= $bq['linkUrl'] ?>'">易保全证书</button>
-        <?php endif; ?>
     </div>
 
     <?php if (isset($isDisDownload) && $isDisDownload) : ?>
