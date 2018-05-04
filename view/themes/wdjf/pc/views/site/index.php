@@ -105,7 +105,7 @@ JSFILE
 <div id="turnover-box">
     <?php if (!empty($user) && $user->isShowNjq) : ?>
     <a class="njq-banner" href="/njq/connect?redirect=<?= urlencode('site/index?utm_source='.$user->campaign_source) ?>" target="_blank">
-        <h4><i></i>南金中心正式入驻温都金服<u></u></h4>
+        <h4><i></i>南金中心正式开放会员中心<u></u></h4>
         <div class="njq-img-box">
             <img src="<?= ASSETS_BASE_URI ?>images/njq_bg.png" alt="">
             <span>查看详情&gt;</span>

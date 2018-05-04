@@ -130,7 +130,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
         <a class="njfae-banner" href="/njq/connect?redirect=<?= urlencode('site/index?utm_source='.$user->campaign_source) ?>">
             <h4 class="njfae-banner-title">
                 <i></i>
-                <span>南金中心正式入驻温都金服</span>
+                <span>南金中心正式开放会员中心</span>
                 <u></u>
             </h4>
             <div class="njfae-banner-img">
