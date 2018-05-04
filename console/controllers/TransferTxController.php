@@ -19,7 +19,6 @@ class TransferTxController extends Controller
      */
     public function actionCheck()
     {
-        exit;
         $transferTxs = TransferTx::find()
             ->where(['<', 'status', TransferTx::STATUS_SUCCESS])
             ->andWhere(['>', 'createTime', date('Y-m-d H:i:s', strtotime('-1 day'))])
@@ -34,17 +33,19 @@ class TransferTxController extends Controller
             $transferTx->save(false);
 
             //主动查询订单是否成功
-            $transferInfo = $ump->getTransferInfo($transferTx->sn, date('Ymd', strtotime($transferTx->createTime)));
+            $transferInfo = $ump->getOrderInfo1($transferTx->sn, date('Ymd', strtotime($transferTx->createTime)));
 
             //如果成功，更新订单状态及扣减温都余额及添加流水记录，失败更新状态
             if ($transferInfo->isSuccessful()) {
-                $tranState = $transferInfo ->get('tran_state');
-                if ('2' === $tranState) {
-                    $accountService->confirmTransfer($transferTx);
-                } elseif ('3' === $tranState) {
-                    $transferTx->status = TransferTx::STATUS_FAILURE;
-                    $transferTx->save(false);
-                }
+                $accountService->confirmTransfer($transferTx);
+            } elseif ('00240000' === $transferInfo->get('ret_code')) {
+                //需要特殊处理
+                $transferTx->status = TransferTx::STATUS_UNKNOWN;
+                $transferTx->save(false);
+            } else {
+                Yii::info('转账失败处理：【'.$transferInfo->get('ret_code').'】'.$transferInfo->get('ret_msg'), 'user_log');
+                $transferTx->status = TransferTx::STATUS_FAILURE;
+                $transferTx->save(false);
             }
         }
     }

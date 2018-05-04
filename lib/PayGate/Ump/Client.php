@@ -659,6 +659,27 @@ class Client
     }
 
     /**
+     * 4.5.1 订单交易查询接口.
+     *
+     * @param string $sn 订单流水号
+     * @param string $issueDate 订单日期
+     *
+     * @return Response
+     */
+    public function getOrderInfo1($sn, $issueDate)
+    {
+        $data = [
+            'service' => 'transfer_search',
+            'version' => '4.0',
+            'order_id' => $sn,
+            'mer_date' => $issueDate,
+            'busi_type' => '03',
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 4.3.3 标的转账【用于流标同步请求】.
      *
      * @param OrderTxInterface $ord
