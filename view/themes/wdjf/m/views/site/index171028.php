@@ -66,7 +66,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		font-weight: 800;
 	}
 </style>
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/new-homepage/css/index.css?v=18010112">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/new-homepage/css/index.css?v=18010504">
 <div>
     <img class="channel hide" src="<?= FE_BASE_URI ?>wap/index/images/channel.png" width="100%" alt="">
 </div>
