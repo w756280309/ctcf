@@ -15,6 +15,7 @@ class TransferTx extends ActiveRecord
     const STATUS_PENDING = 1;
     const STATUS_SUCCESS = 2;
     const STATUS_FAILURE = 3;
+    const STATUS_UNKNOWN = 4;
 
     public function behaviors()
     {
@@ -52,6 +53,8 @@ class TransferTx extends ActiveRecord
             $label = '成功';
         } elseif (self::STATUS_FAILURE === $this->status) {
             $label = '失败';
+        } elseif (self::STATUS_UNKNOWN === $this->status) {
+            $label = '不明';
         }
 
         return $label;

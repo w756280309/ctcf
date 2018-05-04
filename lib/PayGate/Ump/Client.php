@@ -511,6 +511,25 @@ class Client
         return $this->doRequest($data);
     }
 
+    public function orderNopass1($sn, $issueDate, $loanId, $epayUserId, $amount)
+    {
+        $data = [
+            'service' => 'project_transfer_nopwd',
+            'version' => '4.0',
+            'order_id' => $sn,
+            'mer_date' => $issueDate,
+            'project_id' => $loanId,
+            'serv_type' => '01',
+            'trans_action' => '01',
+            'partic_type' => '01',
+            'partic_acc_type' => '01',
+            'partic_user_id' => $epayUserId,
+            'amount' => $amount * 100,
+        ];
+
+        return $this->doRequest($data);
+    }
+
     /**
      * 4.3.5 标的转账[无密] - 企业用户
      * 用户投标.

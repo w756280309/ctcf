@@ -250,9 +250,8 @@ class AccountService
                     'remark' => '投资南金中心',
                 ]);
                 $moneyRecord->save(false);
-
-                $transaction->commit();
             }
+            $transaction->commit();
         } catch (\Exception $ex) {
             $transaction->rollBack();
             Yii::info('授权转账失败处理订单sn：'.$transferTx->sn, 'user_log');

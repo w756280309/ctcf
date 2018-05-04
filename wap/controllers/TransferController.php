@@ -101,6 +101,7 @@ class TransferController extends Controller
                 'money' => $money,
             ]);
             $transferTx->save(false);
+            $transferTx->refresh();
         } catch (\Exception $ex) {
             return $this->render('index', [
                 'code' => 2006,
@@ -109,10 +110,37 @@ class TransferController extends Controller
         }
 
         $epayUserId = $epayUser->epayUserId;
-        $retUrl = Yii::$app->request->hostInfo . '/transfer/frontend';
-        $notifyUrl = Yii::$app->request->hostInfo . '/transfer/backend';
+//        $retUrl = Yii::$app->request->hostInfo . '/transfer/frontend';
+//        $notifyUrl = Yii::$app->request->hostInfo . '/transfer/backend';
+//        $ump = Yii::$container->get('ump');
+//        $url = $ump->userToPlatform($epayUserId, $money, $retUrl, $notifyUrl, $transferTx->sn, true);
         $ump = Yii::$container->get('ump');
-        $url = $ump->userToPlatform($epayUserId, $money, $retUrl, $notifyUrl, $transferTx->sn, true);
+        $loanId = Yii::$app->params['large_loan_id'];
+        if ('' === $loanId) {
+            return $this->render('index', [
+                'code' => 2007,
+                'message' => '温都金服账户连接超时',
+            ]);
+        }
+        $issueDate = date('Ymd', strtotime($transferTx->createTime));
+        $ret = $ump->orderNopass1($transferTx->sn, $issueDate, $loanId, $epayUserId, $transferTx->money);
+        if ($ret->isSuccessful()) {
+            //确认授权转账成功处理逻辑
+            $accountService = new AccountService();
+            $accountService->confirmTransfer($transferTx);
+            //获得南金中心的认购处理中url
+            $crypto = new Crypto();
+            $param['sn'] = $transferTx->ref_sn;
+            $params = $crypto->sign($param);
+            $url = Yii::$app->params['njq']['host_m'] . 'order/wdjf-order/result?' . http_build_query($params);
+        } elseif ('00240000' === $ret->get('ret_code')) {
+            //需要特殊处理
+            $transferTx->status = TransferTx::STATUS_UNKNOWN;
+            $transferTx->save(false);
+        } else {
+            $transferTx->status = TransferTx::STATUS_FAILURE;
+            $transferTx->save(false);
+        }
 
         return $this->redirect($url);
     }
@@ -124,6 +152,7 @@ class TransferController extends Controller
      */
     public function actionBackend()
     {
+        exit;
         $ump = Yii::$container->get('ump');
         $data = Yii::$app->request->get();
         if (array_key_exists('token', $data)) {
@@ -166,6 +195,7 @@ class TransferController extends Controller
      */
     public function actionFrontend()
     {
+        exit;
         $ump = Yii::$container->get('ump');
         $data = Yii::$app->request->get();
         if (array_key_exists('token', $data)) {

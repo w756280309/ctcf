@@ -19,6 +19,7 @@ class TransferTxController extends Controller
      */
     public function actionCheck()
     {
+        exit;
         $transferTxs = TransferTx::find()
             ->where(['<', 'status', TransferTx::STATUS_SUCCESS])
             ->andWhere(['>', 'createTime', date('Y-m-d H:i:s', strtotime('-1 day'))])
