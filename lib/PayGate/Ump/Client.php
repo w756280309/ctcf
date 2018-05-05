@@ -640,6 +640,36 @@ class Client
     }
 
     /**
+     * 4.3.3 标的转账【由标的账户转到借款人同步请求】.
+     *
+     * @param string $sn 流水号
+     * @param string $issueDate 订单日期
+     * @param int $loanId 标的ID
+     * @param string $epayUserId 融资者联动账户ID
+     * @param string $amount 金额（元）
+     *
+     * @return Response
+     */
+    public function loanTransferToMer1($sn, $issueDate, $loanId, $epayUserId, $amount)
+    {
+        $data = [
+            'service' => 'project_transfer',
+            'sourceV' => 'HTML5',
+            'order_id' => $sn,
+            'mer_date' => $issueDate,
+            'project_id' => $loanId,
+            'serv_type' => '53',
+            'trans_action' => '02',
+            'partic_type' => '02',
+            'partic_acc_type' => '02',
+            'partic_user_id' => $epayUserId,
+            'amount' => $amount * 100,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
      * 4.5.1 订单交易查询接口.
      *
      * @param OrderTxInterface $order 商户订单
