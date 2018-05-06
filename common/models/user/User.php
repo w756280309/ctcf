@@ -1180,7 +1180,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     /**
      * 是否显示南金中心入口
      */
-    public function getIsShowNjq()
+    public function getIsShowNjq($limit = 50000)
     {
         if (defined('IN_APP')) {    //app端禁止访问
             return false;
@@ -1193,7 +1193,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             }
         } else {
             //不显示 @todo   50000可以改写成配置；
-            if ($this->getJGMoney() >= 50000) {
+            if ($this->getJGMoney() >= $limit) {
                 return true;
             }
         }

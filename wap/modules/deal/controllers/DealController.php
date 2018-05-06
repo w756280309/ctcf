@@ -28,6 +28,7 @@ class DealController extends Controller
     {
         $size = 5;
         $query = LoanFinder::queryPublicLoans();
+        $query = $query->andWhere('status = 6');
         $query = $query->andWhere('cid != 3');
         $count = $query->count();
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);

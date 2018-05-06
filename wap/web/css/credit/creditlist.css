@@ -255,3 +255,13 @@ i,em{
         font-size: 10px;
     }
 }
+.deal-njfae-hint{
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    width: 100%;
+    padding-top: 10px;
+}
+.deal-njfae-hint a.njfae-hint-banner{
+    display:block;
+}

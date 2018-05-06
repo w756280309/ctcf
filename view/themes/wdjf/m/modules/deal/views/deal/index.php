@@ -10,7 +10,7 @@ $this->hideHeaderNav = HttpUtils::isWeixinRequest();
 $this->backUrl = false;
 $action = Yii::$app->controller->action->getUniqueId();
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=2017041332', ['depends' => WapAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=20180505', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/list_tag.css', ['depends' => WapAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/TouchSlide.1.1.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI .'js/jquery.classyloader.js', ['depends' => JqueryAsset::class, 'position' => 1]);
@@ -43,11 +43,19 @@ $user = Yii::$app->user->getIdentity();
     </div>
 <?php } ?>
 
+<?php if ($action === 'deal/deal/index' && !empty($user) && $user->getIsShowNjq(20000)) : ?>
+    <div class="deal-njfae-hint">
+        <a class="njfae-hint-banner" href="/njq/connect?redirect=<?= urlencode('site/index?utm_source='.$user->campaign_source) ?>">
+            <img src="<?= ASSETS_BASE_URI ?>images/deal/deal_njfae_licai.png" alt="">
+        </a>
+    </div>
+<?php endif; ?>
+
 <?php if ($deals) { ?>
     <div id="item-list">
         <?= $this->renderFile('@wap/modules/deal/views/deal/_more.php',['deals' => $deals, 'header' => $header]) ?>
     </div>
-    <!--加载跟多-->
+    <!--加载更多-->
     <div class="load"></div>
 <?php } else { ?>
     <div class="nodata" style="display:block;">暂无数据</div>
