@@ -44,7 +44,7 @@ $user = Yii::$app->user->getIdentity();
 <?php } ?>
 
 <?php if ($action === 'deal/deal/index' && !empty($user) && $user->getIsShowNjq(20000)) : ?>
-    <div class="deal-njfae-hint">
+    <div class="deal-njfae-hint" style="display: none">
         <a class="njfae-hint-banner" href="/njq/connect?redirect=<?= urlencode('site/index?utm_source='.$user->campaign_source) ?>">
             <img src="<?= ASSETS_BASE_URI ?>images/deal/deal_njfae_licai.png" alt="">
         </a>
