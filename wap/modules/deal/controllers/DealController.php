@@ -24,7 +24,7 @@ class DealController extends Controller
     /**
      * 获取理财列表.
      */
-    public function actionIndex($page = 1)
+    public function actionLoan($page = 1)
     {
         $size = 5;
         $query = LoanFinder::queryPublicLoans();
@@ -157,7 +157,7 @@ class DealController extends Controller
     /**
      * 获取网贷列表.
      */
-    public function actionLoan($page = 1)
+    public function actionIndex($page = 1)
     {
         $size = 5;
         $query = LoanFinder::queryP2pLoans();
