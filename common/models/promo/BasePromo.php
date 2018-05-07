@@ -6,6 +6,7 @@ use common\models\offline\OfflineUser;
 use common\models\user\User;
 use common\models\user\UserInfo;
 use wap\modules\promotion\models\RankingPromo;
+use yii\web\Request;
 
 class BasePromo
 {
@@ -32,6 +33,24 @@ class BasePromo
                 'user_id' => $user->id,
             ])->andWhere(['>=', 'expiryTime', date('Y-m-d H:i:s')])
             ->count();
+    }
+
+    /**
+     * 根据来源获取用户剩余的抽奖信息
+     * @param User $user    用户
+     * @param $source    来源
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function fetchOneActiveTicket(User $user, $source)
+    {
+        return PromoLotteryTicket::find()
+            ->where([
+                'promo_id' => $this->promo->id,
+                'user_id' => $user->id,
+                'isDrawn' => false,
+                'source' => $source
+            ])->andWhere(['>=', 'expiryTime', date('Y-m-d H:i:s')])
+            ->one();
     }
 
     /**
@@ -224,5 +243,41 @@ class BasePromo
             }
         }
         return $pool;
+    }
+    /**
+     * 给邀请用户赠送抽奖机会
+     * @param User $newUser $newUser 新注册用户
+     * @param Request|null $request
+     * @param $source  抽奖机会来源
+     * @param bool $isAddMore   是否给邀请用户多于1次的抽奖机会
+     */
+    protected function addInviteTicketInternal(User $newUser, Request $request = null, $source, \DateTime $expiryTime = null, $isAddMore = true)
+    {
+        //获取邀请当前用户的人
+        $promoStartTime = strtotime($this->promo->startTime);
+        $inviteRecord = InviteRecord::find()
+            ->where(['invitee_id' => $newUser->id])
+            ->andWhere(['>=', 'created_at', $promoStartTime])
+            ->one();
+
+        if (!empty($inviteRecord)) {
+            $inviterId = $inviteRecord->user_id;
+            $inviterUser = User::findOne(['id' => $inviterId]);
+            //获取邀请者在活动期间邀请人数
+            $inviteCount = (int)InviteRecord::find()->where(['user_id' => $inviterId])->andWhere(['>=', 'created_at', $promoStartTime])->count();
+            //获取当前用户因为邀请被赠送的抽奖机会
+            $ticketCount = (int)PromoLotteryTicket::find()->where(['user_id' => $inviterId, 'source' => $source, 'promo_id' => $this->promo->id])->count();
+            //用户第一次邀请，给一次抽奖机会
+            if ($inviteCount === 1 && $ticketCount === 0) {
+                PromoLotteryTicket::initNew($inviterUser, $this->promo, $source, $expiryTime, $request)->save(false);
+            } elseif ($inviteCount > 1 && $isAddMore) {
+                $lastCount = $inviteCount - $ticketCount;//需要添加机会
+                if ($lastCount > 0) {
+                    for ($i = 1; $i <= $lastCount; $i++) {
+                        PromoLotteryTicket::initNew($inviterUser, $this->promo, $source, $expiryTime, $request)->save(false);
+                    }
+                }
+            }
+        }
     }
 }

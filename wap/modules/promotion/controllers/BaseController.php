@@ -26,6 +26,9 @@ class BaseController extends Controller
     const ERROR_CODE_NEVER_GOT_TICKET = 7; //活动至今为止从未获得抽奖机会
     const ERROR_CODE_NO_ENOUGH_POINT = 8;  //用户积分不足
     const ERROR_CODE_SYSTEM_BUSY = 9;      //系统繁忙
+    const ERROR_CODE_NO_ENOUGH_WORDS = 10;   //字数不足
+    const ERROR_CODE_WORDS_EXCEEDING = 11;   //字数溢出
+    const ERROR_CODE_HAS_CHECKED = 23000;    //已有抽奖机会
 
     use HelpersTrait;
 
@@ -211,6 +214,18 @@ class BaseController extends Controller
                 'ticket' => null,
                 'allTicketCount' => 0,
             ],
+            self::ERROR_CODE_NO_ENOUGH_WORDS => [
+                'code' => 10,
+                'message' => '字数不足',
+            ],
+            self::ERROR_CODE_WORDS_EXCEEDING => [
+                'code' => 11,
+                'message' => '字数溢出',
+            ],
+            self::ERROR_CODE_HAS_CHECKED => [
+                'code' => 23000,
+                'message' => '已有抽奖机会',
+            ]
         ];
     }
 
