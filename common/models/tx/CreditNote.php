@@ -287,7 +287,7 @@ class CreditNote extends ActiveRecord
         $cloneQuery = Clone $notesQuery;
         $notesIds = $notesQuery->orderBy(['createTime' => SORT_ASC])
             ->andWhere(['not in', 'user_id', $allUids])
-            ->limit(15)
+            ->limit(25)
             ->column();
         $notesExtraIds = $cloneQuery->andFilterWhere(['in', 'user_id', $allUids])
             ->column();
