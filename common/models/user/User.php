@@ -533,13 +533,23 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
 
     //通过固定格式生成可以升序的用户编号
     //如 WDJFQY0001 --> WDJFQY0002,
-    public static function create_code($field = 'usercode', $code = 'WDJF', $length = 4, $pad_length = 9)
+    public static function create_code($field = 'usercode', $code, $length = 4, $pad_length = 9)
     {
         //取到所找字段的最大值，如WDJFQY001 WDJFQY003 筛选出的结果应是WDJFQY003
-        if ('WDJF' === $code) {
-            $maxValue = self::find()->where(['type' => self::USER_TYPE_PERSONAL])->max($field);
+        if (Yii::$app->params['plat_code'] === $code) {
+            $maxValue = self::find()
+                ->select('usercode')
+                ->where(['type' => self::USER_TYPE_PERSONAL])
+                ->orderBy(['id' => SORT_DESC])
+                ->scalar();
+            //$maxValue = self::find()->where(['type' => self::USER_TYPE_PERSONAL])->max($field);
         } else {
-            $maxValue = self::find()->where(['type' => self::USER_TYPE_ORG])->max($field);
+            $maxValue = self::find()
+                ->select('usercode')
+                ->where(['type' => self::USER_TYPE_ORG])
+                ->orderBy(['id' => SORT_DESC])
+                ->scalar();
+            //$maxValue = self::find()->where(['type' => self::USER_TYPE_ORG])->max($field);
         }
         //若数据库中该字段没有值，就使用默认字符WDJFQY
         $usercode = $maxValue ? $maxValue : $code;

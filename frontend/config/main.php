@@ -6,7 +6,7 @@ $params = array_merge(
     require(__DIR__ . '/params.php')
 );
 
-return [
+$arr = [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -121,6 +121,10 @@ return [
         'class' => \common\components\RequestBehavior::className(),
     ],
     'as userAccountAccess' => \common\filters\UserAccountAcesssControl::className(),
-    'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),//监管控制：未实名无法查看首页和列表页
     'as logFirstVisitTime' => \common\filters\LogFirstVisitTime::className(),//记录用户首次访问时间
 ];
+//监管控制：未实名无法查看首页和列表页
+if (!empty($params['supervise_access_filter'])) {
+    $arr['as superviseAccessFilter'] = \common\filters\SuperviseAccessFilter::className();
+}
+return $arr;

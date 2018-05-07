@@ -51,7 +51,9 @@ return [
     'sms_white_list' => [],   //用户白名单功能只在mock_sms为true的时候有效，即mock_sms为true时，除了白名单里面设置的手机号，其他手机号一律不发短信
     'sms' => [
         'config' => [
-            'APP_ID' => '8a48b551525cdd3301526207479a0bcc',
+            'APP_ID' => null,   //应用id
+            'ACCOUNT_SID' => null,    //主账号id
+            'AUTH_TOKEN' => null,  //token
         ],
         'manbiao' => 71622,
         'tixian_succ' => 60753,
@@ -290,6 +292,11 @@ return [
         'is_enabled_white_list' => env('NJQ_IS_ENABLED_WHITE_LIST'),    //是否启用白名单，启用后，只有白名单用户可以访问
         'white_list' => env('NJQ_WHITE_LIST'), //白名单用户手机号组成的数组，格式：[‘18876545678’, ‘15678654332’, ‘12436545743’]
     ],
-    'enable_miitbaoquan' => env('ENABLE_MIIT_BAOQUAN') ?: null,   //合同保全开关-和签
+    //平台编号，此项必须配置
+    'plat_code' => env('PLAT_CODE') ?: null,
+    //监管控制：未实名无法查看首页和列表页
+    'supervise_access_filter' => env('SUPERVISE_ACCESS_FILTER') ?: null,    //只有配置了此项，且为true的时候，启用相应的filter
+    'login_access_filter' => env('LOGIN_ACCESS_FILTER') ?: false,    //有配置了此项，且为true的时候，启用相应的filter
+    'enable_miitbaoquan' => env('ENABLE_MIIT_BAOQUAN') ?: false,   //合同保全开关-和签
     'large_loan_id' => '',
 ];
