@@ -254,7 +254,7 @@ class CreditNote extends ActiveRecord
      * 获得符合条件的一批转让中的订单ID
      *
      * - 用户邀请人及其好友的转让中的订单
-     * - 当前转让中最早的4笔转让
+     * - 当前转让中最早的15笔转让
      *
      * 用处：温都可用余额转移
      *
@@ -287,7 +287,7 @@ class CreditNote extends ActiveRecord
         $cloneQuery = Clone $notesQuery;
         $notesIds = $notesQuery->orderBy(['createTime' => SORT_ASC])
             ->andWhere(['not in', 'user_id', $allUids])
-            ->limit(4)
+            ->limit(15)
             ->column();
         $notesExtraIds = $cloneQuery->andFilterWhere(['in', 'user_id', $allUids])
             ->column();
