@@ -123,20 +123,11 @@ class CreditNoteController extends Controller
     {
 
         $reqData = json_decode($this->request->rawBody, true);
-//        $requestQuery = $this->request->query;
-//        $page = $requestQuery->getInt('page', 1);
-//        $pageSize = $requestQuery->getInt('page_size', 10);
-//        $getSort = $requestQuery->get('sort', 'isClosed,-createTime');
-//        $loans = $requestQuery->get('loans', false);
         $page = isset($reqData['page']) ? $reqData['page'] : 1;
-
         $pageSize = isset($reqData['page_size']) ? $reqData['page_size'] : 10;
-
         $getSort = isset($reqData['sort']) ? $reqData['sort'] : 'isClosed,-createTime';
-
         $loans = isset($reqData['loans']) ? $reqData['loans'] : [];
-
-
+        $noteIds = isset($reqData['noteIds']) ? $reqData['noteIds'] : [];
         $sort = $getSort ? $getSort : 'isClosed,-createTime';
         $responseData = [
             'page' => $page,
@@ -164,10 +155,28 @@ class CreditNoteController extends Controller
             }
         }
 
-        $query = CreditNote::find()->where(['>', 'tradedAmount', 0])->orWhere(['isClosed' => false])->andWhere(['isTest' => false]);
+        $query = CreditNote::find()
+            ->where(['>', 'tradedAmount', 0])
+            ->orWhere(['isClosed' => false])
+            ->andWhere(['isTest' => false]);
+
         if (count($loans) > 0) {
             $query->andWhere(['in', 'loan_id', $loans]);
         }
+
+        //通过可见的转让中ID，然后排除掉不该看见的转让中ID
+        if (!empty($noteIds)) {
+            $exIds = CreditNote::find()
+                ->select('id')
+                ->where(['isClosed' => false])
+                ->andWhere(['isTest' => false])
+                ->andWhere(['not in', 'id', $noteIds])
+                ->column();
+            if (!empty($exIds)) {
+                $query->andWhere(['not in', 'id', $exIds]);
+            }
+        }
+
         $count = $query->count();
         $responseData['total_count'] = $count;
         $creditNoteList = $query->offset(($page - 1) * $pageSize)->limit($pageSize)->orderBy($sortArray)->all();

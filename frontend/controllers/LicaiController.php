@@ -6,6 +6,7 @@ use common\controllers\HelpersTrait;
 use common\models\order\OnlineOrder;
 use common\models\product\LoanFinder;
 use common\models\product\OnlineProduct;
+use common\models\tx\CreditNote;
 use common\models\user\UserAccount;
 use common\models\user\UserInfo;
 use Yii;
@@ -66,12 +67,16 @@ class LicaiController extends Controller
                 $array[] = $v['id'];
             }
         }
+
+        //获得所有可见的转让的id
+        $userId = null === $user ? null : $user->id;
+        $noteIds = CreditNote::getVisibleTradingIds($userId);
         $notes = [];
         $totalCount = 0;
         $pageSize = 0;
 
         $txClient = Yii::$container->get('txClient');
-        $response = $txClient->post('credit-note/list', ['page' => $page, 'isCanceled' => false, 'loans' => $array]);
+        $response = $txClient->post('credit-note/list', ['page' => $page, 'isCanceled' => false, 'loans' => $array, 'noteIds' => $noteIds]);
 
         if (null !== $response) {
             $notes = $response['data'];
