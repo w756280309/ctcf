@@ -85,7 +85,6 @@
     <p class="text_index"><span>产品名称：<?= $loanTitle ?></span></p>
     <p class="text_index"><span>产品类型：</span><span style="font-style:italic">收益权凭证、定向融资工具、理财计划</span></p>
     <p class="text_index"><span>发行人/管理人：<?= $loanIssuer ?></span></p>
-    <p class="text_index"><span>挂牌机构：<?= $affiliator ?></span></p>
     <p class="text_index"><span>发行规模：<?= $exceptRaisedAmount ?></span></p>
     <p class="text_index"><span>起购金额：<?= $incrAmount ?></span></p>
     <p class="text_index"><span>收益起算日：<?= $interestDate ?></span></p>

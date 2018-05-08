@@ -283,7 +283,6 @@ trait ContractTrait
                     'loanOrderPrincipal' => $prevOrderAmount,
                     'creditOrderPrincipal' => bcdiv($creditOrder['principal'], 100, 2),
                     'loanIssuer' => $loan->issuerInfo ? $loan->issuerInfo->name : null,
-                    'affiliator' => $loan->getAffiliatorName(),
                     'exceptRaisedAmount' => $loan->money,
                     'incrAmount' => $loan->start_money,
                     'interestDate' => date('Y-m-d', $loan->jixi_time),
