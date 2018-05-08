@@ -123,7 +123,7 @@ class SignupForm extends Model
             $transaction = Yii::$app->db->beginTransaction();
             //初始化User并保存 - 注册模块1
             $user = new User([
-                'usercode' => User::create_code(),
+                'usercode' => User::create_code('usercode', Yii::$app->params['plat_code'], 4, 9),
                 'type' => User::USER_TYPE_PERSONAL,
                 'mobile' => $this->phone,
                 'username' => '',

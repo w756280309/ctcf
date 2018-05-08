@@ -34,6 +34,25 @@ $this->title = '活动列表';
             </ul>
         </div>
     </div>
+    <div class="portlet-body">
+        <form action="/adv/ranking/index" method="get" target="_self">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td><span class="title">标题</span></td>
+                    <td>
+                        <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:300px" name='title' value="<?= Yii::$app->request->get('title') ?>" />
+                    </td>
+
+
+                    <td><div align="right" style="margin-right: 20px">
+                            <button type='submit' class="btn blue btn-block" style="width: 100px;">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
+                        </div></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
     <div class="row-fluid">
         <div class="span12">
             <div class="portlet-body">
@@ -56,6 +75,18 @@ $this->title = '活动列表';
                             'attribute' => 'endTime',
                             'value' => function ($model) {
                                 return $model->endTime ? $model->endTime : '长期';
+                            }
+                        ],
+                        [
+                            'attribute' => 'sortValue',
+                            'value' => function ($model) {
+                                return $model->sortValue ? $model->sortValue : '';
+                            }
+                        ],
+                        [
+                            'attribute' => 'advSn',
+                            'value' => function ($model) {
+                                return $model->advSn ? $model->advSn : '';
                             }
                         ],
                         [

@@ -74,7 +74,7 @@ $user = Yii::$app->user->getIdentity();
 <!--南京资产交易中心账户开始-->
 <!--满足5万条件不显示-->
 <?php if (!empty($user) && $user->isShowNjq) { ?>
-    <a href="/njq/connect?redirect=<?= urlencode('user/user') ?>">
+    <a href="/njq/connect?redirect=<?= urlencode('user/user?utm_source='.$user->campaign_source) ?>">
         <div class="out_ops njq_ops flex-content">
             <div class="lf f15"><span>南金中心账户<i></i></span></div>
             <div class="rg">

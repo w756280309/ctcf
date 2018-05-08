@@ -19,6 +19,8 @@ use common\models\user\DrawRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
 use common\models\user\UserAccount;
+use common\service\AccountService;
+use common\service\LoanService;
 use common\service\SmsService;
 use common\utils\SecurityUtils;
 use common\utils\TxUtils;
@@ -96,6 +98,7 @@ class ToolController extends Controller
                 'lhwt' => '7301209',//正式环境（立合旺通）在联动ID  转账流程已测试 正式转账已成功
                 'jmc' => '7303209',//正式环境（居莫愁）在联动ID
                 'hzyx' => '7305209', // 杭州越翔
+                'njhjd' => '7344209', // 南京华锦达投资有限公司
             ];
         }
 
@@ -1418,5 +1421,129 @@ group by o.uid
             $transaction->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * 标的转账到融资用户虚拟户，可选择是否自动帮助提现
+     *
+     * @param string $sn 标的sn
+     * @param string $uid 融资用户ID
+     * @param string $money 转账金额
+     * @param integer $isAutoDraw 是否自动提现 1是0否
+     * @param integer $requireUmp 是否调用联动提现 1是0否
+     *
+     * @throws \Exception
+     */
+    public function actionLoanToMer($sn, $uid, $money, $isAutoDraw = 0, $requireUmp = 1)
+    {
+        $ump = Yii::$container->get('ump');
+
+        //验证金额
+        if (!is_numeric($money)) {
+            throw new \Exception('金额错误');
+        }
+
+        //查询温都标的状态
+        $loan = OnlineProduct::find()
+            ->where(['sn' => $sn])
+            ->one();
+        if (null === $loan) {
+            throw new \Exception('标的不存在');
+        }
+        if (!in_array($loan->status, ['2', '3', '5', '7'])) {
+            throw new \Exception('标的状态必须为募集中~还款中');
+        }
+
+        //查询用户是否为融资用户
+        $borrower = User::findOne($uid);
+        if (null === $borrower || !$borrower->isOrgUser()) {
+            throw new \Exception('用户非融资用户');
+        }
+
+        //调用联动接口，查看联动标的状态
+        $loanResp = $ump->getLoanInfo($loan->id);
+        if (!$loanResp->isSuccessful()) {
+            throw new \Exception($loanResp->get('ret_msg'));
+        }
+        if ('02' === $loanResp->get('project_account_state')) {
+            throw new \Exception('当前联动标的状态为冻结状态');
+        }
+
+        //将联动标的状态置为还款中
+        LoanService::updateLoanState($loan, OnlineProduct::STATUS_HUAN);
+        $epayUserId = $borrower->epayUser->epayUserId;
+        $resp = $ump->loanTransferToMer1(TxUtils::generateSn('LTM'), date('Ymd'), $loan->id, $epayUserId, $money);
+        if (!$resp->isSuccessful()) {
+            throw new \Exception('联动一侧：'.$resp->get('ret_msg'));
+        }
+
+        //更新融资者账户余额
+        $res = Yii::$app->db->createCommand("UPDATE `user_account` SET `account_balance` = `account_balance` + :money, `available_balance` = `available_balance` + :money, `drawable_balance` = `drawable_balance` + :money, `in_sum` = `in_sum` + :money WHERE `uid` = :uid and `type` = :userType", [
+            'money' => $money,
+            'uid' => $uid,
+            'userType' => UserAccount::TYPE_BORROW,
+        ])->execute();
+        if (!$res) {
+            throw new \Exception('更新融资账户异常', '000003');
+        }
+
+        $this->stdout('已将标的账户金额转账到融资者账户中');
+        if ($isAutoDraw) {
+            $account = UserAccount::findOne(['uid' => $borrower->id, 'type' => UserAccount::TYPE_BORROW]);
+            if (!$account) {
+                throw new \Exception('融资用户账户信息不存在', '000002');
+            }
+
+            $transaction = Yii::$app->db->beginTransaction();
+
+            try {
+                //融资方放款,不收取手续费
+                $draw = DrawManager::initDraw($account, $money);
+                if (!$draw->save()) {
+                    throw new \Exception('提现申请失败', '000003');
+                }
+
+                $draw->orderSn = $sn;
+                if (!$draw->save()) {
+                    throw new \Exception('写入提现流水失败', '000003');
+                }
+
+                if ($requireUmp) {
+                    $resp = $ump->orgDrawApply($draw);
+                    if (!$resp->isSuccessful()) {
+                        throw new \Exception($resp->get('ret_code').$resp->get('ret_msg'));
+                    }
+                }
+
+                DrawManager::ackDraw($draw);
+                $transaction->commit();
+
+                $this->stdout('提现受理中...');
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+        }
+    }
+
+    /**
+     * 给用户发指定的现金
+     *
+     * @param integer $userId 用户ID
+     * @param string $money 金额
+     *
+     * @return int
+     * @throws \Exception
+     */
+    public function actionSendCash($userId, $money)
+    {
+        $user = User::findOne($userId);
+        if (null === $user) {
+            throw new \Exception('用户不存在');
+        }
+        AccountService::userTransfer($user, $money);
+
+        $this->stdout('现金已发送');
+        return self::EXIT_CODE_NORMAL;
     }
 }

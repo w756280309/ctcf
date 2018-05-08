@@ -2,6 +2,7 @@
 
 namespace common\models\order;
 
+use common\lib\MiitBaoQuan\Miit;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\epay\EpayUser;
@@ -575,5 +576,16 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     public function getOnlineUser()
     {
         return $this->getUser();
+    }
+    //获取‘和签’保全的链接
+    public function getMiitViewUrl()
+    {
+        if (Yii::$app->params['enable_miitbaoquan']) {
+            $miit = new Miit();
+            $miitBQ = $miit->viewHetong($this->id);
+        } else {
+            $miitBQ = null;
+        }
+        return $miitBQ;
     }
 }

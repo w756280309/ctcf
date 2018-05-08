@@ -10,8 +10,10 @@ use yii\helpers\Html;
 <?php foreach ($deals as $deal): ?>
     <?php $isActive = !in_array($deal->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]) || $deal->end_date < time(); ?>
     <a class="row col" href="/deal/deal/detail?sn=<?= $deal->sn ?>">
-        <?php if ($deal->is_xs) { ?>
-        <div class="newer" ><img src="<?= ASSETS_BASE_URI ?>images/newer.png" alt="新手专享"></div>
+        <?php if ($deal->is_xs && in_array($deal->status, [1, 2])) { ?>
+            <?php if ($deal->end_date >= time()) :?>
+                <div class="newer" ><img src="<?= ASSETS_BASE_URI ?>images/newer.png" alt="新手专享"></div>
+            <?php endif;?>
         <?php } ?>
         <div class="col-xs-12 col-sm-12 col-txt">
             <div class="row clearfix credit-num">

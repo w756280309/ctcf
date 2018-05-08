@@ -142,18 +142,8 @@ class GrowthController extends BaseController
     {
         $user = $order->user;
         $duration = $loan->getDuration();
-        $ebaoquan = $order->fetchBaoQuan();
-        if (null === $ebaoquan) {
-            $ebaoquanId = '';
-            $ebaoquanDate = '';
-        } else {
-            $ebaoquanId = $ebaoquan->baoId;
-            $ebaoquanDate = (new \DateTime(date('Y-m-d H:i:s',$ebaoquan->updated_at)));
-        }
         $orderInfo = $this->getOrderInfo($order);
         $data = [
-            'ebaoquanId' => $ebaoquanId,
-            'ebaoquanDate' => $ebaoquanDate,
             'userName' => $user->getName(),
             'idcard' => $user->getIdcard(),
             'title' => $order instanceof CreditOrder ? '【转让】 '.$loan->title : $loan->title,

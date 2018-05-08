@@ -2,6 +2,7 @@
 
 namespace common\models\tx;
 
+use common\models\promo\InviteRecord;
 use Yii;
 use Zii\Model\ActiveRecord;
 
@@ -247,5 +248,50 @@ class CreditNote extends ActiveRecord
     public function getSuccessCreditOrders()
     {
         return $this->hasMany(CreditOrder::className(), ['note_id' => 'id'])->where(['status' => CreditOrder::STATUS_SUCCESS]);
+    }
+
+    /**
+     * 获得符合条件的一批转让中的订单ID
+     *
+     * - 用户邀请人及其好友的转让中的订单
+     * - 当前转让中最早的15笔转让
+     *
+     * 用处：温都可用余额转移
+     *
+     * @param int $userId 用户ID
+     *
+     * @return array
+     */
+    public static function getVisibleTradingIds($userId)
+    {
+        //获得该用户邀请的好友
+        $inviteeUids = InviteRecord::find()
+            ->select('invitee_id')
+            ->where(['user_id' => $userId])
+            ->column();
+
+        //获得该用户的邀请人
+        $userIds = InviteRecord::find()
+            ->select('user_id')
+            ->where(['invitee_id' => $userId])
+            ->column();
+
+        //合并用户ID
+        $allUids = array_merge([$userId], $inviteeUids, $userIds);
+
+        //转让中query
+        $notesQuery = CreditNote::find()
+            ->select('id')
+            ->where(['isClosed' => false])
+            ->andWhere(['isTest' => false]);
+        $cloneQuery = Clone $notesQuery;
+        $notesIds = $notesQuery->orderBy(['createTime' => SORT_ASC])
+            ->andWhere(['not in', 'user_id', $allUids])
+            ->limit(25)
+            ->column();
+        $notesExtraIds = $cloneQuery->andFilterWhere(['in', 'user_id', $allUids])
+            ->column();
+
+        return array_unique(array_merge($notesIds, $notesExtraIds));
     }
 }

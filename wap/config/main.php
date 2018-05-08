@@ -6,7 +6,7 @@ $params = array_merge(
     require(__DIR__.'/params.php')
 );
 
-return [
+$arr = [
     'id' => 'app-wap',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -24,6 +24,8 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logVars' => [],
+                    'enableRotation' => false,
                 ],
                 //联动日志记录
                 [
@@ -33,6 +35,7 @@ return [
                     'logFile' => '@app/runtime/logs/ump/ump'.date('Ymd').'.log',
                     'maxFileSize' => 1024 * 2,
                     'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -44,6 +47,7 @@ return [
                     'logFile' => '@app/runtime/logs/notify/mall/mall_notify'. date('Ym').'.log',
                     'maxFileSize' => 1024*2,
                     'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     }
@@ -56,6 +60,7 @@ return [
                     'logFile' => '@app/runtime/logs/user/user_status'.date('Ymd').'.log',
                     'maxFileSize' => 1024 * 2,
                     'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -67,6 +72,7 @@ return [
                     'logFile' => '@app/runtime/logs/promo/user_join_'.date('Ymd').'.log',
                     'maxFileSize' => 1024 * 2,
                     'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -172,7 +178,14 @@ return [
             'weixin/callback',
         ],
     ],
-    'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),//监管控制：未实名无法查看首页和列表页
     'as logFirstVisitTime' => \common\filters\LogFirstVisitTime::className(),//记录用户首次访问时间
-    'as LoginAccessFilter' => \common\filters\LoginAccessControl::className(),
 ];
+
+//监管控制：未实名无法查看首页和列表页
+if (!empty($params['supervise_access_filter'])) {
+    $arr['as superviseAccessFilter'] = \common\filters\SuperviseAccessFilter::className();
+}
+if (!empty($params['login_access_filter'])) {
+    $arr['as LoginAccessFilter'] = \common\filters\LoginAccessControl::className();
+}
+return $arr;

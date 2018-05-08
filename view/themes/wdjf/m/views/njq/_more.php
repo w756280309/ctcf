@@ -9,7 +9,7 @@ use yii\helpers\Html;
 
 <?php foreach ($deals as $deal): $deal = new OnlineProduct($deal); ?>
     <?php $isActive = !in_array($deal->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]) || $deal->end_date < time(); ?>
-    <a class="row col" href="/njq/connect?redirect=<?= urlencode('deal/deal/detail?sn=' . $deal->sn) ?>">
+    <a class="row col" href="/njq/connect?redirect=<?= urlencode('deal/deal/detail?sn=' . $deal->sn . '&utm_source=' . $user->campaign_source) ?>">
         <?php if ($deal->is_xs) { ?>
             <div class="newer" ><img src="<?= ASSETS_BASE_URI ?>images/newer.png" alt="新手专享"></div>
         <?php } ?>

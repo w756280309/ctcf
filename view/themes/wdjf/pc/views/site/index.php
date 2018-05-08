@@ -2,7 +2,7 @@
 
 $this->title = Yii::$app->params['pc_page_title'];
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=18041801', ['depends' => 'frontend\assets\FrontAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/index.css?v=18041802', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/index.js', ['depends' => 'frontend\assets\FrontAsset']);
 
 use common\models\product\OnlineProduct;
@@ -103,27 +103,9 @@ JSFILE
 <!--理财公告-->
 <!--交易总额-->
 <div id="turnover-box">
-    <ul class="turnover-box">
-        <li class="turnover-data lf pt-data-first" style="display: none">
-            <p class="turnover-data-number" id="totalTradeAmount"><i></i> <span>亿+</span></p>
-            <p class="turnover-data-name">平台累计交易额</p>
-        </li>
-        <li class="turnover-data lf">
-            <p class="turnover-data-number" id="totalRefundAmount"><i></i> <span>亿+</span></p>
-            <p class="turnover-data-name">累计兑付</p>
-        </li>
-        <li class="turnover-data lf">
-            <p class="turnover-data-number" id="totalRefundInterest"><i></i> <span>亿+</span></p>
-            <p class="turnover-data-name">带来收益</p>
-        </li>
-        <li class="turnover-data lf pt-data-last">
-            <p class="turnover-data-number">100 <span>%</span></p>
-            <p class="turnover-data-name">历史兑付率</p>
-        </li>
-    </ul>
     <?php if (!empty($user) && $user->isShowNjq) : ?>
-    <a class="njq-banner" href="/njq/connect?redirect=<?= urlencode('site/index') ?>" target="_blank">
-        <h4><i></i>南金中心正式入驻温都金服<u></u></h4>
+    <a class="njq-banner" href="/njq/connect?redirect=<?= urlencode('site/index?utm_source='.$user->campaign_source) ?>" target="_blank">
+        <h4><i></i>南金中心正式开放会员中心<u></u></h4>
         <div class="njq-img-box">
             <img src="<?= ASSETS_BASE_URI ?>images/njq_bg.png" alt="">
             <span>查看详情&gt;</span>
@@ -179,80 +161,6 @@ JSFILE
         </ul>
     </div>
 </div>
-
-<!--推荐标 start-->
-<?php if ($loans) { ?>
-    <div class="new-heade"><span>推荐标</span><a href="/licai/" target="_blank">更多&gt;</a></div>
-    <div class="yingshou-box">
-        <div class="yingshou-content1">
-            <ul class="yingshou-inner1">
-                <?php foreach ($loans as $val) : ?>
-                    <li>
-                        <a href="/deal/deal/detail?sn=<?= $val->sn ?>" target="_blank" class="yingshou-left yingshou <?= (!in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW])) ? 'huibian' : '' ?>">
-                            <?php if ($val->is_xs) { ?>
-                                <div class="newhandVip"></div>
-                            <?php } ?>
-                            <div class="yingshou-top"><span><?= $val->title ?></span></div>
-                            <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>
-                                <div style="clear: both"></div>
-                                <div class="yingshou-content">
-                                    <p>项目总额：<?= StringUtils::amountFormat2($val->money) ?>元</p>
-                                    <p>可投余额：<?= StringUtils::amountFormat2($val->money - $val->funded_money) ?>元</p>
-                                    <div><?= Yii::$app->params['refund_method'][$val->refund_method] ?></div>
-                                </div>
-                            <?php } else { ?>
-                                <div class="yingshou-content2">
-                                    <p class="yingshou-content2-left">预期年化收益率
-                                        <span><?= LoanHelper::getDealRate($val) ?><?php if (!empty($val->jiaxi)) { ?>+<?= StringUtils::amountFormat2($val->jiaxi) ?><?php } ?>%</span>
-                                    </p>
-                                    <p class="yingshou-content2-right">项目期限 <span><?php $ex = $val->getDuration() ?><?= $ex['value']?><?= $ex['unit']?></span></p>
-                                </div>
-                            <?php } ?>
-                            <div class="yingshou-jindu">
-                                <div class="yingshou-jindutiao">
-                                    <div class="yingshou-jindutiao1" progressbar="<?= $val->getProgressForDisplay() ?>"></div>
-                                </div>
-                                <span><?= $val->getProgressForDisplay() ?>%</span>
-                            </div>
-                            <div style="clear: both"></div>
-                            <?php if (!in_array($val->status, [OnlineProduct::STATUS_HUAN, OnlineProduct::STATUS_OVER])) { ?>
-                                <div class="yingshou-number">
-                                    <div class="yingshou-nian">
-                                        <div>
-                                            <em><?= LoanHelper::getDealRate($val) ?><span>%</span><?php if (!empty($val->jiaxi)) { ?><i>+<?= doubleval($val->jiaxi) ?>%</i><?php } ?></em>
-                                        </div>
-                                        <p>预期年化收益率</p>
-                                    </div>
-                                    <div class="yingshou-nian yingshou-xian">
-                                        <?php $ex = $val->getDuration() ?><?= $ex['value']?><span> <?= $ex['unit']?></span>
-                                        <p>项目期限</p>
-                                    </div>
-                                </div>
-                                <div class="yingshou-liji">
-                                    <?php
-                                        if (OnlineProduct::STATUS_PRE === $val->status) {
-                                            $dates = Yii::$app->functions->getDateDesc($val->start_date);
-                                    ?>
-                                        <div class="yingshou-liji"><?= $dates['desc'].date('H:i', $dates['time']) ?>起售</div>
-                                    <?php } elseif (OnlineProduct::STATUS_NOW === $val->status) { ?>
-                                        <div class="yingshou-liji">立即投资</div>
-                                    <?php } else { ?>
-                                        <div class="yingshou-manbiao"><?= \Yii::$app->params['deal_status'][$val->status] ?></div>
-                                    <?php } ?>
-                                </div>
-                            <?php } else { ?>
-                                <div class="yingshou-shouyi"><?= \Yii::$app->params['deal_status'][$val->status] ?></div>
-                                <img src="<?= ASSETS_BASE_URI ?>images/shouyizhong_icon.png" class="yingshou-shouyi-img" alt="">
-                            <?php } ?>
-                        </a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-        <div style="clear: both"></div>
-    </div>
-<?php } ?>
-<!--推荐标 end-->
 
 <!--card start-->
 <!--<div class="card" id="wgt">

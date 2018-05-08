@@ -69,21 +69,22 @@ class NjqController extends Controller
 
     /**
      * 生成免登Url
+     * todo 与PC端统一
+     *
      * @return \yii\web\Response
      * @throws \yii\web\NotFoundHttpException
      */
     public function actionConnect()
     {
         $user = Yii::$app->user->getIdentity();
-        if (empty($user) || !$user->isShowNjq) {    //不允许不符合条件的用户直接访问
+        if (empty($user)) {    //不允许不符合条件的用户直接访问
             throw $this->ex404();
         }
         $redirect = Yii::$app->request->get('redirect');
-        $redirect = !empty($redirect) ? Yii::$app->params['njq']['host_m'] . $redirect : null;
-        $crypto = new Crypto();
-        if (empty($user) || !$user->isShowNjq) {    //不允许不符合条件的用户直接访问
-            throw $this->ex404();
+        if (null !== $redirect) {
+            $redirect = Yii::$app->params['njq']['host_m'] . $redirect;
         }
+        $crypto = new Crypto();
         if (is_null($user->channel)) {
             // @todo 注册南金中心失败如何处理
             $uid = $crypto->signUp($user);

@@ -8,6 +8,7 @@ use wap\modules\promotion\models\RankingPromo;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\web\Request;
 
 /**
  * This is the model class for table "promo_lottery_ticket".
@@ -108,7 +109,7 @@ class PromoLotteryTicket extends ActiveRecord
             ->one();
     }
 
-    public static function initNew(User $user, RankingPromo $promo, $source = null, \DateTime $expiryTime = null)
+    public static function initNew(User $user, RankingPromo $promo, $source = null, \DateTime $expiryTime = null, Request $request = null)
     {
         if (null === $expiryTime) {
             $expiryTime = new \DateTime($promo->endTime);
@@ -118,6 +119,7 @@ class PromoLotteryTicket extends ActiveRecord
             'source' => $source,
             'promo_id' => $promo->id,
             'expiryTime' => $expiryTime->format('Y-m-d H:i:s'),
+            'ip' => empty($request) ? '' : $request->getUserIP(),
         ]);
     }
 

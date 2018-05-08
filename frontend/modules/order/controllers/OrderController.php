@@ -158,9 +158,13 @@ class OrderController extends BaseController
         }
         $contracts = $this->getUserContract($asset);
         $bqLoan = $contracts['bqLoan'];
-        //查看工信部保权
-        $miit = new Miit();
-        $miitBQ = $miit->viewHetong($asset['order_id']);
+        //和签保全
+        if (Yii::$app->params['enable_miitbaoquan']) {
+            $miit = new Miit();
+            $miitBQ = $miit->viewHetong($asset['order_id']);
+        } else {
+            $miitBQ = null;
+        }
         return $this->render('contract', [
             'loanContracts' => $contracts['loanContract'],
             'creditContracts' => $contracts['creditContract'],

@@ -6,7 +6,7 @@ $params = array_merge(
     require(__DIR__ . '/params.php')
 );
 
-return [
+$arr = [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -24,6 +24,8 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logVars' => [],
+                    'enableRotation' => false,
                 ],
                 //联动日志记录
                 [
@@ -33,6 +35,7 @@ return [
                     'logFile' => '@app/runtime/logs/ump/ump'.date('Ymd').'.log',
                     'maxFileSize' => 1024 * 2,
                     'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -45,6 +48,7 @@ return [
                     'logFile' => '@app/runtime/logs/user/user_status'.date('Ymd').'.log',
                     'maxFileSize' => 1024 * 2,
                     'logVars' => [],
+                    'enableRotation' => false,
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -117,6 +121,10 @@ return [
         'class' => \common\components\RequestBehavior::className(),
     ],
     'as userAccountAccess' => \common\filters\UserAccountAcesssControl::className(),
-    'as superviseAccessFilter' => \common\filters\SuperviseAccessFilter::className(),//监管控制：未实名无法查看首页和列表页
     'as logFirstVisitTime' => \common\filters\LogFirstVisitTime::className(),//记录用户首次访问时间
 ];
+//监管控制：未实名无法查看首页和列表页
+if (!empty($params['supervise_access_filter'])) {
+    $arr['as superviseAccessFilter'] = \common\filters\SuperviseAccessFilter::className();
+}
+return $arr;

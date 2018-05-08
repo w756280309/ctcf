@@ -698,16 +698,25 @@ TPL;
                     'name' => $ctmodel[0]['name'],
                     'content' => $ctmodel[0]['content'],
                 ]);
-                echo CfcaUtils::renderXml($tpl, [
-                    'contentName' => '合同标题',
-                    'contentDetail' => '合同内容',
-                    'name' => $ctmodel[1]['name'],
-                    'content' => $ctmodel[1]['content'],
-                ]);
+                if ($model->cid !== 3) {
+                    echo CfcaUtils::renderXml($tpl, [
+                        'contentName' => '合同标题',
+                        'contentDetail' => '合同内容',
+                        'name' => $ctmodel[1]['name'],
+                        'content' => $ctmodel[1]['content'],
+                    ]);
+                }
                 foreach ($ctmodel as $key => $val) {
-                   if (in_array($key, [0, 1])) {
-                       continue;
-                   }
+                    if ($model->cid === 3) {
+                        if ($key === 0) {
+                            continue;
+                        }
+                    } else {
+                        if (in_array($key, [0, 1])) {
+                            continue;
+                        }
+                    }
+
                    echo CfcaUtils::renderXml($tpl2, [
                        'key' => $key,
                        'name' => $val['name'],
@@ -721,12 +730,12 @@ TPL;
                     'name' => $con_name_arr[0],
                     'content' => $con_content_arr[0],
                 ]);
-                echo CfcaUtils::renderXml($tpl, [
-                    'contentName' => '合同标题',
-                    'contentDetail' => '合同内容',
-                    'name' => $con_name_arr[1],
-                    'content' => $con_content_arr[1],
-                ]);
+//                echo CfcaUtils::renderXml($tpl, [
+//                    'contentName' => '合同标题',
+//                    'contentDetail' => '合同内容',
+//                    'name' => $con_name_arr[1],
+//                    'content' => $con_content_arr[1],
+//                ]);
                 if (!empty($con_name_arr)) {
                     foreach ($con_name_arr as $key => $val) {
                         if (in_array($key, [0, 1])) {

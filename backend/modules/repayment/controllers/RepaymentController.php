@@ -942,12 +942,20 @@ class RepaymentController extends BaseController
             return ['res' => 0, 'msg' => $code.$e->getMessage()];
         }
 
-        $drawBack = OnlinefangkuanController::actionInit($pid);
+        if ($product->cid !== 3) {
+            //融资会员提现
+            //1.校验标的信息是否存在,放款记录是否存在,当前放款状态是否允许提现操作,融资用户账户信息是否存在
+            //2.创建一个提现申请（计算可以提现的金额,初始化提现记录）,写入放款流水,请求联动融资用户提现申请,修改放款审核状态
+            //3.修改提现申请的状态为已受理并记录流水及余额变动:提现状态校验,更新提现状态,记录money_record及更新user_account（分2块，提现金额、提现手续费）,短信提醒提现受理成功
+            $drawBack = OnlinefangkuanController::actionInit($pid);
 
-        return [
-            'res' => $drawBack['res'],
-            'msg' => $drawBack['res'] ? '放款成功' : $drawBack['msg'],
-        ];
+            return [
+                'res' => $drawBack['res'],
+                'msg' => $drawBack['res'] ? '放款成功' : $drawBack['msg'],
+            ];
+        } else {
+            return ['res' => 1, 'msg' => '放款成功'];
+        }
     }
 
     /**

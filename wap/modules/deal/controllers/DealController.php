@@ -24,10 +24,12 @@ class DealController extends Controller
     /**
      * 获取理财列表.
      */
-    public function actionIndex($page = 1)
+    public function actionLoan($page = 1)
     {
         $size = 5;
         $query = LoanFinder::queryPublicLoans();
+        $query = $query->andWhere('status = 6');
+        $query = $query->andWhere('cid != 3');
         $count = $query->count();
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
         $deals = $query->orderBy([
@@ -150,5 +152,46 @@ class DealController extends Controller
             }
         }
         return $ret;
+    }
+
+    /**
+     * 获取网贷列表.
+     */
+    public function actionIndex($page = 1)
+    {
+        $size = 5;
+        $query = LoanFinder::queryP2pLoans();
+        $count = $query->count();
+        $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
+        $deals = $query->orderBy([
+            'xs_status' => SORT_DESC,
+            'recommendTime' => SORT_DESC,
+            'sort' => SORT_ASC,
+            'raiseDays' => SORT_DESC,
+            'finish_rate' => SORT_DESC,
+            'raiseSn' => SORT_DESC,
+            'isJiaxi' => SORT_ASC,
+            'finish_date' => SORT_DESC,
+            'id' => SORT_DESC,
+        ])->offset($pages->offset)->limit($pages->limit)->all();
+
+        $tp = ceil($count / $size);
+        $code = ($page > $tp) ? 1 : 0;
+        $header = [
+            'count' => intval($count),
+            'size' => $size,
+            'tp' => $tp,
+            'cp' => intval($page),
+        ];
+
+        if (Yii::$app->request->isAjax) {
+            $message = ($page > $tp) ? '数据错误' : '消息返回';
+            $html = $this->renderFile('@wap/modules/deal/views/deal/_more.php', ['deals' => $deals, 'header' => $header]);
+            return ['header' => $header, 'html' => $html, 'code' => $code, 'message' => $message];
+        }
+        return $this->render('index', [
+            'deals' => $deals,
+            'header' => $header,
+        ]);
     }
 }

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>慈善梦想气球</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="css/index.min.css?v=1.681111">
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <script src="../../libs/vue.min.js"></script>
+    <script src="../../libs/fastclick.js"></script>
+    <script src="js/drawImg.1.1.js"></script>
+    <!--<link rel="stylesheet" href="../../libs/animate/animate.min.css">-->
+</head>
+<body>
+<div ref="flexContent" class="flex-content" id="app">
+    <canvas style="display:none" id="canvasOne" width="500" height="300">
+        Your brower does not support HTML5 Canvas!
+    </canvas>
+    <a class="hand-hint">
+    </a>
+    <div :class="{'show-dream-box':showDream}" class="dream-box">
+        <div class="dream-img-box">
+            <img :src="imgUrl" alt="我的梦想">
+            <p>长按图片，保存到相册</p>
+            <i @click="hideDream"></i>
+        </div>
+    </div>
+    <div class="top-bg">
+        <div class="top-hint"></div>
+    </div>
+    <div class="dream-contant">
+        <div class="commonDisplay">
+            <div v-cloak v-if="firstLogin" class="envelope">
+                <!--<img src="./images/envelope_to_write2.png" alt="">-->
+                <span @click="toWriteMsg">去写下梦想</span>
+            </div>
+            <div ref="toWriteContent" v-cloak v-if="!firstLogin&&toWrite" class="envelope-write clearfix">
+                <div class="envelope-write-contant rg">
+                    <textarea class="textarea" contenteditable="true" maxlength="50" @focus="startDream" @input="writingDream" @blur="leaveDream" v-model="textareaDream" :class="{'no-write':noWriteColor}"></textarea>
+                    <p v-cloak>{{textareaLength}}/50</p>
+                </div>
+                <a>邀请好友参与</a>
+                <a @click="pullDream">放飞梦想气球</a>
+            </div>
+            <div v-cloak v-show="!firstLogin&&!toWrite" class="envelope-check">
+                <div ref="envelopeComplate" class="envelope-write-contant">
+                    <div class="cloud-father-box">
+                        <div class="envelope-cloud-bg">
+                            <p class="cloud-bg1"></p>
+                            <p class="cloud-bg2"></p>
+                            <p class="cloud-bg3"></p>
+                            <p class="cloud-bg4"></p>
+                            <p class="cloud-bg5"></p>
+                        </div>
+                    </div>
+                    <div class="pull-dream-box animated tada"></div>
+                    <!--<div class="hand-hint">-->
+                        <!--查看更多-->
+                        <!--<i></i>-->
+                    <!--</div>-->
+
+                    <canvas id="cas" width="750" height="540"></canvas>
+                </div>
+                <a>邀请好友参与</a>
+                <a @click="showDreamBox">查看我的梦想</a>
+                <p @click="modifiersDream" class="modifiers">修改梦想</p>
+            </div>
+        </div>
+        <div class="rule1" id="rulesMsg">
+            <div class="rule1-msg">
+                <div class="rule1-msg-p">
+                    <p>活动时间：2018.5.8至5.16；</p>
+                    <p>活动参与方式：在输入框写下自己的慈善小目标，然后放飞气球（可以查看、重写、分享）；</p>
+                    <p>活动奖励：周年庆当天，将在服务号公布各种慈善愿望；同时选取3位幸运用户，助力其实现自己的慈善愿望；</p>
+                    <p>公布3名幸运用户后，客服将在7个工作日内与其联系，帮助他们实现慈善梦想；</p>
+                    <p>本活动最终解释权归温都金服所有。</p>
+                </div>
+            </div>
+        </div>
+        <div class="rule2">
+            <div class="rule2-msg">
+                <p class="get-medal">我的慈善勋章总数：<span v-cloak>{{tsk1+tsk2}}枚</span></p>
+                <div class="medal-box clearfix">
+                    <div class="medal-type lf">
+                        <div class="img-box1">
+                            <img :src="imgUrl1" alt="">
+                            <span v-text="tsk1"></span>
+                        </div>
+                        <p>放飞梦想气球</p>
+                    </div>
+                    <div class="medal-type rg">
+                        <div class="img-box2">
+                            <img :src="imgUrl2" alt="">
+                            <span v-text="tsk2"></span>
+                        </div>
+                        <p>邀请好友完成注册</p>
+                    </div>
+                </div>
+                <ol>
+                    <li>本场活动期间，放飞梦想气球，最多获得1枚勋章；</li>
+                    <li>邀请好友完成注册，可获得无限枚慈善勋章；</li>
+                    <li>慈善勋章可在周年庆主会场(5月20日)抽奖使用(红包、积分)，最高可抽取520元现金红包。</li>
+                </ol>
+            </div>
+            <i></i>
+        </div>
+    </div>
+</div>
+<script>
+    window.onload=function(){
+        FastClick.attach(document.body);
+        var myapp=new Vue({
+            el:"#app",
+            created:function(){
+                // 查看支不支持canvas
+                var Cvs = document.getElementById("canvasOne");
+                if (!Cvs || !Cvs.getContext){
+                    this.supportCanvas=false;
+                }else{
+                    this.supportCanvas=true;
+                };
+                this.distance=document.querySelector('#rulesMsg').offsetTop;
+                this.imgUrl1=(this.tsk1==0?"./images/undone_tsk.png":"./images/done_tsk.png");
+                this.imgUrl2=(this.tsk2==0?"./images/undone_tsk.png":"./images/done_tsk.png");
+                this.firstDream==true?(this.textareaDream='在这里写下您的慈善梦想吧！',this.noWriteColor=true,this.textareaLength=50):(this.textareaDream=this.textDream,this.noWriteColor=true,this.textareaLength=(50-this.textareaDream.length));
+            },
+            mounted:function(){
+                var cas = document.getElementById('cas');
+                // 获取绘图工具
+                var ctx = cas.getContext('2d');// webgl
+                var baseWidth=cas.width;
+                var baseHeight=cas.height;
+                var that=this;
+                var img=new Image();
+                img.src=that.src2;
+                img.onload=function(){
+                    var mark={x:0,y:0};
+                    setInterval(function(){
+                        ctx.clearRect(0,0,baseWidth,baseHeight);
+                        ctx.drawImage(img,mark.x,mark.y,750,540,0,0,cas.width,cas.height);
+                        mark.x+=750;
+                        (mark.x==3750)&&(mark.x=0,mark.y+=540);
+                        (mark.y==2160)&&(mark.x=0,mark.y=0);
+                    },100);
+                };
+            },
+            data:{
+                // 第一次登陆点击写梦想
+                firstLogin:!false,
+                // 去写梦想还是查看梦想的页面
+                toWrite:false,
+                // 没有写过梦想提示文字的颜色
+                noWriteColor:true,
+                // 写梦想的默认提示文字及正式文字
+                textareaDream:'在这里写下您的慈善梦想吧！',
+                // 真实梦想
+                textDream:'真实梦想',
+                // 之前没有写过梦想
+                firstDream:true,
+                // 还剩多少字可以输入
+                textareaLength:50,
+                // 任务一和2的勋章对应的URL
+                tsk1:1,
+                tsk2:0,
+                imgUrl1:"",
+                imgUrl2:"",
+                // 梦想的有效字
+                textareaDreamValid:'',
+                animationEnd:['animationend','webkitAnimationEnd','mozAnimationEnd','MSAnimationEnd','oAnimationEnd'],
+                imgUrl:"./images/my_dream.png",
+                // 是否显示梦想
+                showDream:false,
+                // 是否支持canvas
+                supportCanvas:true,
+                // 活动介绍距离顶部的距离
+                distance:0,
+                src2:'./images/qiqius.png'
+            },
+            methods:{
+                // 首页点击写梦想
+                toWriteMsg:function(){
+                    this.firstLogin=false;
+                    this.toWrite=true;
+                },
+                // 获取焦点梦想  focus
+                startDream:function(){
+                    // (this.firstDream==true&&this.noWriteColor==true)?this.textareaDream='':this.textareaDream=this.textDream;
+                    if(this.firstDream==true){
+                        if(this.noWriteColor==true){
+                            this.textareaDream=''
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        if(this.noWriteColor==true){
+                            this.textareaDream=this.textDream;
+                            this.noWriteColor=false;
+                        }else{
+                            return false;
+                        }
+                    }
+                },
+                // 离开写梦想 blue
+                leaveDream:function(){
+                    // (this.firstDream==true&&this.textareaDream=='')&&(this.textareaDream='在这里写下您的慈善梦想吧！',this.noWriteColor=true);
+                    if(this.firstDream==true){
+                        if(this.textareaDream==''){
+                            this.textareaDream='在这里写下您的慈善梦想吧！';
+                            this.noWriteColor=true;
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        if(this.textareaDream==''){
+                            this.textareaDream=this.textDream;
+                            this.noWriteColor=true;
+                        }else{
+                            return false;
+                        }
+                    }
+                },
+                // 写梦想
+                writingDream:function(){
+                    this.textareaLength=50-this.textareaDream.length;
+                    this.noWriteColor=false;
+                    if(this.textareaDream.length==0||this.textareaDream==this.textDream){
+                        this.noWriteColor=true;
+                        return false;
+                        // this.textareaDream='在这里写下您的慈善梦想吧！';
+                    };
+
+                },
+                // 点击放飞梦想
+                pullDream:function(){
+                    var that=this;
+                    this.textareaDreamValid=this.removeAllSpace(this.textareaDream);
+                    if(this.noWriteColor==true||this.textareaDreamValid.length<5){
+                        this.toastCenter('请输入至少5个有效字');
+                        this.textareaDreamValid='';
+                    }else{
+                        // 符合要求发请求记录之前写过梦想，并把梦想复制
+                        // $.ajax({
+                        //     this.firstDream=false;
+                        // });
+                        var toWriteContent=this.$refs.toWriteContent;
+                        toWriteContent.classList.add('hideBox');
+                        for(var i=0;i<that.animationEnd.length;i++){
+                            this.$refs.toWriteContent.addEventListener(that.animationEnd[i],function(){
+                                that.firstDream=false;
+                                that.toWrite=false;
+                                toWriteContent.classList.remove('hideBox');
+                            },false);
+                        }
+
+
+
+                        // this.firstDream=false;
+                        // this.textDream=this.textareaDream;
+                        //
+                        //  this.toWrite=false;
+                        // this.textareaDreamValid='';
+                    }
+                },
+                // 点击修改梦想
+                modifiersDream:function(){
+                    // this.noWriteColor=false;
+                    this.toWrite=true;
+                },
+                // 点击查看梦想
+                showDreamBox:function(){
+                    // $.ajax({});
+                    var that=this;
+                    var obj={
+                        //素材路径
+                        src:'./images/my_dream.png',
+                        // 素材大小
+                        size:{width:'600',height:'800'},
+                        // 文本内容
+                        text:that.textareaDream,
+                        textAlign:'left',
+                        textBaseline:'top',
+                        textPosition:{wx:'38',hx:'536',width:'450',maxWidth:"710"},
+                        colorPosition:{x0:'0',y0:'0',x1:'750',y1:'440'},
+                        color:[["0","yellow"],["0.3","deeppink"],["1.0","blue"]],
+                        font:"26px microsoft yahei",
+                        initHeight:0,
+                        hHeight:33,
+                        sync:'sync',
+                        times:{delay:100,interval:200},
+                        // img:'',
+                        // 随机颜色
+                        // colorRandoming:true,
+                    };
+                    var abc=new Watermark(obj);
+                    abc.init(function(){
+                        that.imgUrl=abc.img.src
+                    });
+
+                    // abc.addWatermark(function(){
+                    //     abc.convertCanvasToImage();
+                    //     that.imgUrl=abc.img.src
+                    // });
+
+                    this.showDream=true;
+                    this.$refs.flexContent.addEventListener('touchmove',this.bodyScroll,false);
+                },
+                // 关闭按钮
+                hideDream:function(){
+                    this.showDream=false;
+                    this.$refs.flexContent.removeEventListener('touchmove',this.bodyScroll,false);
+                },
+                bodyScroll: function(e){
+                    var e=e||window.event;
+                    e.preventDefault();
+                },
+                handHint:function(){
+                    $('body,html').animate({scrollTop: this.distance},500);
+                    return false;
+                },
+                // 去除空格
+                removeAllSpace:function (str) {
+                    return str.replace(/\s+/g, "");
+                },
+                //toast
+                toastCenter: function (val, active) {
+                    var $alert = $('<div class="error-info" style="display: block; position: fixed;font-size: .4rem;"><div>' + val + '</div></div>');
+                    $('body').append($alert);
+                    $alert.find('div').width($alert.width());
+                    setTimeout(function () {
+                        $alert.fadeOut();
+                        setTimeout(function () {
+                            $alert.remove();
+                        }, 200);
+                        if (active) {
+                            active();
+                        }
+                    }, 2000);
+                }
+            },
+            watch:{
+                textareaDream:{
+                    deep:true,
+                    handler:function(newV,oldV){
+                    }
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

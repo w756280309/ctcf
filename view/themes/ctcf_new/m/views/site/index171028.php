@@ -242,10 +242,10 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 			     >
 			<p class="links-box-txt">邀请好友</p>
 		</a>
-		<a href="/news" class="lf">
+		<a href="/news/promo" class="lf">
 			<img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/icon_gg.png" alt=""
 			     >
-			<p class="links-box-txt">公告</p>
+			<p class="links-box-txt">活动专区</p>
 		</a>
 	</div>
 <!--    理财专区-->

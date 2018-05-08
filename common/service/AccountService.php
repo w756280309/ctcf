@@ -3,6 +3,7 @@
 namespace common\service;
 
 use common\models\TradeLog;
+use common\models\transfer\TransferTx;
 use common\models\user\UserAccount;
 use common\utils\TxUtils;
 use Yii;
@@ -190,6 +191,70 @@ class AccountService
             $transaction->rollBack();
             Yii::info("[user_transfer][exception]用户 {$user->id} 现金转账失败，转账金额 {$money} 元，失败信息 :{$e->getMessage()} ", 'user_log');
             throw $e;
+        }
+    }
+
+    /**
+     * 确认授权转账成功
+     */
+    public function confirmTransfer(TransferTx $transferTx)
+    {
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        try {
+            if (in_array($transferTx->status, [TransferTx::STATUS_SUCCESS, TransferTx::STATUS_FAILURE])) {
+                throw new \Exception('待处理订单状态【'.$transferTx->getStatusLabel().'】错误');
+            }
+            //当前订单为初始状态时，更新状态为处理中
+            if (0 === $transferTx->status) {
+                //转账订单变为处理中
+                $sql = "update transfer_tx set status = 1 where status = 0 and sn=:sn limit 1";
+                $affectedRows = $db->createCommand($sql, [
+                    'sn' => $transferTx->sn,
+                ])->execute();
+                if ($affectedRows <= 0) {
+                    throw new \Exception('更新流水记录状态为处理中时失败');
+                }
+            }
+            $transferTx->refresh();
+            if (1 === $transferTx->status) {
+                //更新交易状态
+                $sql = "update transfer_tx set status = 2 where status = 1 and sn=:sn limit 1";
+                $transferRows = $db->createCommand($sql, [
+                    'sn' => $transferTx->sn,
+                ])->execute();
+                if ($transferRows <= 0) {
+                    throw new \Exception('更新流水记录状态为成功时失败');
+                }
+
+                //更新用户余额
+                $sqlAccount = "update user_account set available_balance=available_balance-:availableBalance where uid = :uid limit 1";
+                $accountRows = $db->createCommand($sqlAccount, [
+                    'uid' => $transferTx->userId,
+                    'availableBalance' => $transferTx->money,
+                ])->execute();
+                if ($accountRows <= 0) {
+                    throw new \Exception('更新用户余额失败');
+                }
+
+                //添加资金流水 - 温都余额扣减
+                $ua = $transferTx->user->lendAccount;
+                $moneyRecord = new MoneyRecord([
+                    'sn' => TxUtils::generateSn('MR'),
+                    'type' => MoneyRecord::TYPE_AUTHORIZED_TRANSFER,
+                    'osn' => $transferTx->sn,
+                    'uid' => $transferTx->userId,
+                    'account_id' => $ua->id,
+                    'balance' => $ua->available_balance,
+                    'out_money' => $transferTx->money,
+                    'remark' => '投资南金中心',
+                ]);
+                $moneyRecord->save(false);
+            }
+            $transaction->commit();
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            Yii::info('授权转账失败处理订单sn：'.$transferTx->sn, 'user_log');
         }
     }
 }

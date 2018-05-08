@@ -146,12 +146,6 @@ $feUrl = Yii::$app->params['fe_base_uri'];
     <div class="inner">
         <h4>电子交易资产凭证</h4>
         <div class="content">
-            <span class="left">保<i class="first-left">全</i><i class="first-left">号</i></span>：<span class="rig"><?= $data['ebaoquanId'] ?></span>
-        </div>
-        <div class="content">
-            <span class="left">保全时间</span>：<span class="rig"><?= $data['ebaoquanDate']->format('Y年m月d日') ?></span>
-        </div>
-        <div class="content">
             <span class="left">姓<i class="name-left"></i>名</span>：<span class="rig"><?= $data['userName'] ?></span>
         </div>
         <div class="content">

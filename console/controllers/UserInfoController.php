@@ -143,22 +143,26 @@ class UserInfoController extends Controller
 u.real_name '姓名',
 u.safeMobile '联系方式',
 tpc.publicId '对吧ID',
-af.name '分销商'
+af.name '分销商',
+ui.investTotal '累计投资'
 FROM third_party_connect tpc
 INNER JOIN user u 
 ON u.id = tpc.user_id
+INNER JOIN user_info ui
+ON tpc.user_id = ui.user_id
 LEFT JOIN user_affiliation ua 
 ON tpc.user_id = ua.user_id
 LEFT JOIN affiliator af
 ON af.id = ua.affiliator_id";
         $datas = Yii::$app->db->createCommand($sql)->queryAll();
-        $exportData[] = ['姓名', '联系方式', '分销商', '对吧ID'];
+        $exportData[] = ['姓名', '联系方式', '分销商', '对吧ID', '累计投资'];
         foreach ($datas as $data) {
             array_push($exportData, [
                 $data['姓名'],
                 SecurityUtils::decrypt($data['联系方式']),
                 $data['分销商'],
                 $data['对吧ID'],
+                $data['累计投资'],
             ]);
         }
         //导出Excel

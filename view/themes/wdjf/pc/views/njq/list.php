@@ -28,7 +28,7 @@ $user = Yii::$app->user->getIdentity();
         <?php } ?>
         <!--预告期-->
         <?php foreach ($loans as $key => $val) : $val = new OnlineProduct($val); ?>
-            <a target="_blank" href="/njq/connect?redirect=<?= urlencode('deal/deal/detail?sn=' . $val->sn) ?>">
+            <a target="_blank" href="/njq/connect?redirect=<?= urlencode('deal/deal/detail?sn=' . $val->sn . '&utm_source=' . $user->campaign_source) ?>">
                 <div class="deal-single loan <?= $key === count($loans) - 1 ? 'last' : '' ?> <?= in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]) ? 'deal-single-border' : '' ?>">
                     <div class="clearfix">
                         <?php if ($val->is_xs) { ?>

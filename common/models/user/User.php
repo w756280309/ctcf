@@ -533,13 +533,23 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
 
     //通过固定格式生成可以升序的用户编号
     //如 WDJFQY0001 --> WDJFQY0002,
-    public static function create_code($field = 'usercode', $code = 'WDJF', $length = 4, $pad_length = 9)
+    public static function create_code($field = 'usercode', $code, $length = 4, $pad_length = 9)
     {
         //取到所找字段的最大值，如WDJFQY001 WDJFQY003 筛选出的结果应是WDJFQY003
-        if ('WDJF' === $code) {
-            $maxValue = self::find()->where(['type' => self::USER_TYPE_PERSONAL])->max($field);
+        if (Yii::$app->params['plat_code'] === $code) {
+            $maxValue = self::find()
+                ->select('usercode')
+                ->where(['type' => self::USER_TYPE_PERSONAL])
+                ->orderBy(['id' => SORT_DESC])
+                ->scalar();
+            //$maxValue = self::find()->where(['type' => self::USER_TYPE_PERSONAL])->max($field);
         } else {
-            $maxValue = self::find()->where(['type' => self::USER_TYPE_ORG])->max($field);
+            $maxValue = self::find()
+                ->select('usercode')
+                ->where(['type' => self::USER_TYPE_ORG])
+                ->orderBy(['id' => SORT_DESC])
+                ->scalar();
+            //$maxValue = self::find()->where(['type' => self::USER_TYPE_ORG])->max($field);
         }
         //若数据库中该字段没有值，就使用默认字符WDJFQY
         $usercode = $maxValue ? $maxValue : $code;
@@ -1180,11 +1190,11 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     /**
      * 是否显示南金中心入口
      */
-    public function getIsShowNjq()
+    public function getIsShowNjq($limit = 50000)
     {
-        if (defined('IN_APP')) {    //app端禁止访问
-            return false;
-        }
+//        if (defined('IN_APP')) {    //app端禁止访问
+//            return false;
+//        }
         $isEnabledWhiteList = Yii::$app->params['njq']['is_enabled_white_list'];
         $whiteList = explode(',', Yii::$app->params['njq']['white_list']);
         if ($isEnabledWhiteList) {  //启用白名单，只有白名单用户可以访问
@@ -1192,12 +1202,12 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
                 return true;
             }
         } else {
-            if ($this->getJGMoney() >= 50000) {
+            //不显示 @todo   50000可以改写成配置；
+            if ($this->getJGMoney() >= $limit) {
                 return true;
             }
         }
-        //不显示 @todo   50000可以改写成配置；
-        //@todo 南金中心pc站开发未完成，暂时隐藏入口；
+
         return false;
     }
 

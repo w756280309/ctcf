@@ -53,7 +53,7 @@ $user = Yii::$app->user->getIdentity();
                 ]) ? 'selected' : '' ?>"><a href="/risk/risk"><span class="star"></span>风险测评</a></li>
                 <?php if (!is_null($user) && $user->isShowNjq) { ?>
                     <li>
-                        <a href="/njq/connect?redirect=<?= urlencode('user/user') ?>" target="_blank"><span class="star"></span>南金账户中心</a>
+                        <a href="/njq/connect?redirect=<?= urlencode('user/user?utm_source='.$user->campaign_source) ?>" target="_blank"><span class="star"></span>南金账户中心</a>
                     </li>
                 <?php } ?>
             </ul>

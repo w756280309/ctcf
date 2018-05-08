@@ -19,8 +19,9 @@ $user = Yii::$app->user->getIdentity();
     <div class="projectList">
         <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
             <div class="alist-box">
-                <a href='/licai/' class="list-span <?= 'licai/index' === $action ? 'select-span' : '' ?>">理财列表</a>
-                <a href='/licai/notes' class="list-span <?= 'licai/notes' === $action ? 'select-span' : '' ?>">转让列表</a>
+                <a href='/licai/loan' class="list-span <?= 'licai/loan' === $action ? 'select-span' : '' ?>">网贷</a>
+                <a href='/licai/' class="list-span <?= 'licai/index' === $action ? 'select-span' : '' ?>">定期</a>
+                <a href='/licai/notes' class="list-span <?= 'licai/notes' === $action ? 'select-span' : '' ?>">转让</a>
 <!--                --><?php //if (!empty($user) && $user->isShowNjq) { ?>
 <!--                    <a href='/njq/loan-list' class="list-span --><?//= 'njq/loan-list' === $action ? 'select-span' : '' ?><!--">南金中心</a>-->
 <!--                --><?php //} ?>
@@ -31,8 +32,10 @@ $user = Yii::$app->user->getIdentity();
         <a target="_blank" href="/deal/deal/detail?sn=<?= $val->sn ?>">
             <div class="deal-single loan <?= $key === count($loans) - 1 ? 'last' : '' ?> <?= in_array($val->status, [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW]) ? 'deal-single-border' : '' ?>">
                 <div class="clearfix">
-                    <?php if ($val->is_xs) { ?>
-                        <div class="newer"></div>
+                    <?php if ($val->is_xs && in_array($val->status, [1,2])) { ?>
+                        <?php if ($val->end_date >= time()) :?>
+                            <div class="newer"></div>
+                        <?php endif;?>
                     <?php } ?>
                     <!--类btn_ing_border为预告期和可投期的红边框-->
                     <div class="single_left">
