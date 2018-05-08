@@ -11,13 +11,13 @@ $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => Jquer
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/udesk/css/index.min.css">
 <div class="flex-content">
     <dl class="clearfix">
-        <dd class="lf" id="btn_udesk_im">
+        <dt class="lf" id="btn_udesk_im">
             <a href="javascript:void(0)">
                 <div></div>
                 <div>立即咨询</div>
                 <div>9:00-17:30(工作日时间)</div>
             </a>
-        </dd>
+        </dt>
         <dd class="rg">
             <a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>">
                 <div></div>
