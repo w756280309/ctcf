@@ -158,6 +158,15 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 			</div>
     <?php } ?>
 
+    <div class="data-box">
+        <p class="data-box-title">平台数据</p>
+        <div class="data-box-show">
+            <p class="data-box-show-line1">温都金服平台已安全运营</p>
+            <p class="data-box-show-line2">
+                <span><?= (new \DateTime(date('Y-m-d')))->diff(new DateTime('2016-05-20'))->days ?></span>天</p>
+            <p class="data-box-show-line3" style="width: auto;display: inline-block;padding: 0 .306rem">历史兑付率<span>100%</span></p>
+        </div>
+    </div>
 	<div class="aboutus-box swiper-container">
 		<div class="swiper-wrapper">
 			<a href="/site/h5?wx_share_key=h5" class="swiper-slide">
