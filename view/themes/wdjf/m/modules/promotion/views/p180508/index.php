@@ -108,6 +108,7 @@ $user = Yii::$app->user->getIdentity();
 <script src="<?= FE_BASE_URI ?>libs/wxShare.js?v=3.0"></script>
 <script>
     window.dataJson=dataJson;
+    window.origin = document.location.origin;
     // console.log(window.dataJson);
     window.onload=function(){
         FastClick.attach(document.body);
@@ -212,7 +213,7 @@ $user = Yii::$app->user->getIdentity();
                 // 梦想的有效字
                 textareaDreamValid:'',
                 animationEnd:['animationend','webkitAnimationEnd','mozAnimationEnd','MSAnimationEnd','oAnimationEnd'],
-                imgUrl:"<?= ASSETS_BASE_URI ?>images/my_dream.png",
+                imgUrl:window.origin+"/images/my_dream.png",
                 // 是否显示梦想
                 showDream:false,
                 // 是否支持canvas
@@ -441,7 +442,7 @@ $user = Yii::$app->user->getIdentity();
                                         that.textDream=data.content;
                                         var obj={
                                             //素材路径
-                                            src:'<?= ASSETS_BASE_URI ?>images/my_dream.png',
+                                            src:window.origin+'/images/my_dream.png',
                                             // 素材大小
                                             size:{width:'600',height:'800'},
                                             // 文本内容
