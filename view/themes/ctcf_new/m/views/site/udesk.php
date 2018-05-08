@@ -15,14 +15,14 @@ $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => Jquer
             <a href="javascript:void(0)">
                 <div></div>
                 <div>立即咨询</div>
-                <div>9:00-17:30(工作日时间)</div>
+                <div>8:30-17:30(工作日时间)</div>
             </a>
         </dt>
         <dd class="rg">
             <a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>">
                 <div></div>
                 <div>立即拨打</div>
-                <div>9:00-20:00</div>
+                <div>8:30-20:00</div>
             </a>
         </dd>
     </dl>

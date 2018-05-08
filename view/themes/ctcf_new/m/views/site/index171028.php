@@ -314,11 +314,11 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		<div class="phone-box-links clearfix">
 			<p id="btn_udesk_im" class="lf">
                 <a href="/site/udesk" style="width:100%">
-                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/go_refer.png" alt="">
+                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/go_refer_summer.png" alt="">
                 </a>
             </p>
 			<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>" class="rg"><img
-					src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/go_phone.png" alt=""></a>
+					src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/go_phone_summer.png" alt=""></a>
 		</div>
 		<p class="phone-box-address">地址：武汉市武昌区东湖路181号楚天文化创意产业园<br/>8号楼1层</p>
 	</div>
