@@ -14,9 +14,7 @@ $user = Yii::$app->user->getIdentity();
 
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
-use common\view\UdeskWebIMHelper;
 
-UdeskWebIMHelper::init($this);
 $this->registerCssFile(FE_BASE_URI . "libs/swiper/swiper-3.4.2.min.css");
 $this->registerCssFile(FE_BASE_URI . "wap/common/css/wenjfbase.css?v=171028");
 $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => JqueryAsset::class, 'position' => 1]);
@@ -253,8 +251,11 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 	<div class="phone-box">
 		<p class="phone-box-title">服务中心</p>
 		<div class="phone-box-links clearfix">
-			<p id="btn_udesk_im" class="lf btn-kefu"><img
-					src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_phone_one.png" alt=""></p>
+			<p id="btn_udesk_im" class="lf btn-kefu">
+                <a href="/site/udesk" style="width:100%">
+                    <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_phone_one.png" alt="">
+                </a>
+            </p>
 			<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>" class="rg"><img
 					src="<?= FE_BASE_URI ?>wap/new-homepage/images/pic_phone_three.png" alt=""></a>
 		</div>

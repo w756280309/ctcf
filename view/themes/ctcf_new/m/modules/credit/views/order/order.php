@@ -1,11 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use common\view\UdeskWebIMHelper;
 
 $this->title = '购买';
 $this->backUrl = '/credit/note/detail?id='.$respData['id'];
-UdeskWebIMHelper::init($this);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/buy-setting/order.css?v=201800212', ['depends' => 'wap\assets\WapAsset']);
 
 use common\utils\StringUtils;
@@ -79,7 +77,11 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
         查看<a href="/order/order/agreement?id=<?=$loan['id']?>&note_id=<?=$respData['id']?>">《认购协议》</a><a href="/credit/note/risk-note?type=2&loanId=<?= $loan['id'] ?>">《风险揭示》</a>
     </div>
 </div>
-<p id="btn_udesk_im"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
+<p id="btn_udesk_im">
+    <a href="/site/udesk">
+        <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服
+    </a>
+</p>
 <script>
     var currentInterest = <?= floatval($respData['currentInterest'] / 100) ?>;
     var remainingInterest = <?= floatval($respData['remainingInterest'] / 100) ?>;

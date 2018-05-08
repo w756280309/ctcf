@@ -2,10 +2,12 @@
 
 namespace console\controllers;
 
+use common\lib\user\UserStats;
 use common\models\promo\InviteRecord;
 use common\models\tx\CreditOrder;
 use common\models\user\User;
 use common\models\user\UserInfo;
+use common\utils\SecurityUtils;
 use GuzzleHttp\Client;
 use yii\console\Controller;
 use Yii;
@@ -133,5 +135,37 @@ class UserInfoController extends Controller
         $this->stdout('脚本执行结束');
 
         return Controller::EXIT_CODE_NORMAL;
+    }
+
+    public function actionThirdParty()
+    {
+        $sql = "SELECT
+u.real_name '姓名',
+u.safeMobile '联系方式',
+tpc.publicId '对吧ID',
+af.name '分销商'
+FROM third_party_connect tpc
+INNER JOIN user u 
+ON u.id = tpc.user_id
+LEFT JOIN user_affiliation ua 
+ON tpc.user_id = ua.user_id
+LEFT JOIN affiliator af
+ON af.id = ua.affiliator_id";
+        $datas = Yii::$app->db->createCommand($sql)->queryAll();
+        $exportData[] = ['姓名', '联系方式', '分销商', '对吧ID'];
+        foreach ($datas as $data) {
+            array_push($exportData, [
+                $data['姓名'],
+                SecurityUtils::decrypt($data['联系方式']),
+                $data['分销商'],
+                $data['对吧ID'],
+            ]);
+        }
+        //导出Excel
+        $file = Yii::getAlias('@app/runtime/third_party_user_' . date("YmdHis") . '.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        $this->stdout('操作成功，文件：'. $file . PHP_EOL);
     }
 }

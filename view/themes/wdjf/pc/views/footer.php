@@ -111,6 +111,14 @@ $this->registerCss(".about-qq2{
         }, function() {
             $('.about-app').animate({right:'-200px',opacity:0},600);
         });
+        $("#btn_udesk_im").click(function () {
+            ud({
+                "onReady": function () {
+                    ud.init();
+                    ud.showPanel();
+                }
+            })
+        })
 
         //复制
         if(navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion .split(";")[1].replace(/[ ]/g,"")=="MSIE8.0" && navigator.appVersion .split(";")[1].replace(/[ ]/g,"")=="MSIE7.0" && navigator.appVersion .split(";")[1].replace(/[ ]/g,"")=="MSIE6.0" ){

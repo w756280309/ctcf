@@ -89,27 +89,12 @@ class UdeskWebIMHelper
           }
 JS;
         $_css = <<<CSS
-             #btn_udesk_im,#btn_udesk_im_app{
-                width: 100%;
-                text-align: center;
-                margin:0 auto;
-                font-size: 14px;
-                color: #000;
-                cursor: pointer;
-            }
-            #btn_udesk_im img,#btn_udesk_im_app img{
-                width: 20px;
-                height:20px;
-                margin-right: 5px;
-                margin-bottom: 3px;
-            }
-
             #udesk_btn{
                 display: none;
             } 
 CSS;
 
-        $view->registerJsFile( ASSETS_BASE_URI . "js/ua-parser.min.js", ['position' => View::POS_HEAD]);
+        $view->registerJsFile(ASSETS_BASE_URI . "js/ua-parser.min.js", ['position' => View::POS_HEAD]);
         $view->registerJs($_js, View::POS_END, 'body_close_udesk');
         $view->registerCss($_css);
     }

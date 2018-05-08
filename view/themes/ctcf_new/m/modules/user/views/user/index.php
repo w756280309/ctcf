@@ -1,10 +1,8 @@
 <?php
 
-use common\view\UdeskWebIMHelper;
 
 $this->title = '账户中心';
 $this->showBottomNav = true;
-UdeskWebIMHelper::init($this);
 $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_user_id']);
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
@@ -121,7 +119,7 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
 </a>
 <ul class="options flex-content f15" style="margin-top: 8px;">
     <li class="ops clearfix">
-        <a href="javascript:void(0)" id="btn_udesk_im" class="clearfix">
+        <a href="/site/udesk" id="btn_udesk_im" class="clearfix">
             <div style="width:0.69333333rem;height:1.226667rem;line-height:1.226667rem;text-align:left;vertical-align: middle;float:left;">
                 <img src="<?= ASSETS_BASE_URI ?>ctcf/images/ucenter/service.png" style="height: 45%;" alt="">
             </div>

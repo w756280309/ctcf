@@ -318,6 +318,11 @@ class SiteController extends Controller
         return $cache->get($key);
     }
 
+    //Udesk在线客服功能，将在线客服放到一个新的页面上，避免影响m站访问速度
+    public function actionUdesk()
+    {
+        return $this->render('udesk');
+    }
     /**
      * 用户登录表单页.
      */

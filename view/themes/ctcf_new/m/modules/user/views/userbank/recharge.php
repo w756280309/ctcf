@@ -2,10 +2,8 @@
 
 use yii\helpers\Html;
 use common\utils\StringUtils;
-use common\view\UdeskWebIMHelper;
 
 $this->title="充值";
-UdeskWebIMHelper::init($this);
 
 if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     $this->backUrl = Html::encode($backUrl);
@@ -13,6 +11,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/chongzhi.css?v=20171213"/>
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/udesk.css">
 <script src="<?= ASSETS_BASE_URI ?>js/layer.js?v=1"></script>
 <!--银行卡-->
 <div class="row bank-card">
@@ -71,7 +70,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     <?php } ?>
 </form>
 
-<a href="javascript:void(0)" id="btn_udesk_im" style="display:block; margin-bottom: 10%;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</a>
+<a href="/site/udesk" id="btn_udesk_im" style="display:block; margin-bottom: 10%;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</a>
 
 <script type="text/javascript">
     var csrf;

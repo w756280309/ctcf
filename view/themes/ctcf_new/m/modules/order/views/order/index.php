@@ -3,13 +3,11 @@
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use wap\assets\WapAsset;
-use common\view\UdeskWebIMHelper;
 use yii\web\YiiAsset;
 
 $this->title = '购买';
 
 $validCouponCount = count($validCoupons);
-UdeskWebIMHelper::init($this);
 
 $yr = $deal->yield_rate;
 $qixian = $deal->getDuration()['value'];
@@ -33,6 +31,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
 
 ?>
     <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/rate-coupon/bid-page/css/index.css?v=1">
+    <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/udesk.css">
     <script src="<?= FE_BASE_URI ?>/libs/lib.flexible3.js"></script>
     <script src="<?= FE_BASE_URI ?>/libs/fastclick.js"></script>
     <script src="<?= ASSETS_BASE_URI ?>js/common.js?v=1"></script>
@@ -147,7 +146,12 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
             <span class="x-confirm">确定</span>
         </div>
     </div>
-<p id="btn_udesk_im" style="color:#434a54;margin-bottom: 1rem;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>
+<p id="btn_udesk_im" style="color:#434a54;margin-bottom: 1rem;">
+    <a href="/site/udesk">
+        <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服
+    </a>
+
+</p>
     <div class="mask2" style="display: none"></div>
     <div class="coupon-box" style="display: none">
         <div class="coupon-box-title clearfix">
