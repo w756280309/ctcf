@@ -228,10 +228,6 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                 ckidkey++;
             }
         }
-        if (ids.length == 0) {
-            alert('请选择要导出的融资会员');
-            return false;
-        }
         $(this).attr('href','/user/user/org-user-info-export?ids='+ids.join(',')).trigger(click);
     });
 </script>
