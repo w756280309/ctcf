@@ -1145,7 +1145,10 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
 
         $query = User::find()
             ->select('id,org_name,username,real_name')
-            ->where(['type' => User::USER_TYPE_ORG]);
+            ->where([
+                'type' => User::USER_TYPE_ORG,
+                'is_soft_deleted' => 0,
+            ]);
 
         if (!empty($ids)) {
             $query = $query->andWhere(['in', 'id', explode(',', $ids)]);
