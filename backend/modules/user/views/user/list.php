@@ -179,6 +179,13 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                     </div>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div align="left" class="search-btn">
+                                        <a id="org_user_info_export" class="btn green btn-block" style="width: 140px;" href="javascript:void(0);">导出融资会员信息</a>
+                                    </div>
+                                </td>
+                            </tr>
                         <?php } ?>
                     </tbody>
                 </table>
@@ -210,6 +217,22 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                 $('.dropDownMenu').slideUp();
             }
         }
+    });
+    $('#org_user_info_export').click(function() {
+        var objs = $("input[name='choose[]']").parent();
+        var ids = new Array();
+        var ckidkey = 0;
+        for (var i = 0; i < objs.length; i++) {
+            if ($(objs[i]).hasClass('checked')) {
+                ids[ckidkey] = $($("input[name='choose[]']").get(i)).val();
+                ckidkey++;
+            }
+        }
+        if (ids.length == 0) {
+            alert('请选择要导出的融资会员');
+            return false;
+        }
+        $(this).attr('href','/user/user/org-user-info-export?ids='+ids.join(',')).trigger(click);
     });
 </script>
 <?php $this->endBlock(); ?>

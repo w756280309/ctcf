@@ -89,7 +89,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     </div>
 
                     <div class="controls"><label >企业初始密码：</label>
-                        <?= $form->field($model, 'password_hash', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12']])->textInput($is_add ? ['readonly' => true] : []) ?>
+                        <?= $form->field($model, 'password_hash', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12']])->textInput($is_add ? ['readonly' => false] : []) ?>
                         <?= $form->field($model, 'password_hash', ['template' => '{error}']); ?>
                     </div>
 

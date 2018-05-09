@@ -1125,4 +1125,69 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
         }
         return json_encode($result);
     }
+
+    //融资用户信息导出
+    public function actionOrgUserInfoExport()
+    {
+        $ids = Yii::$app->request->get('ids');
+
+        $data = ['title' =>
+            [
+                '企业名称',
+                '企业用户名',
+                '企业密码',
+                '联动用户ID号',
+                '企业联系人',
+                '开户行',
+                '银行卡号',
+            ],
+        ];
+
+        $query = User::find()
+            ->select('id,org_name,username,real_name')
+            ->where(['type' => User::USER_TYPE_ORG]);
+
+        if (!empty($ids)) {
+            $query = $query->andWhere(['in', 'id', explode(',', $ids)]);
+        }
+
+        $users = $query->orderBy(['id' => SORT_ASC])->all();
+
+        if (0 !== count($users)) {
+            $banks = Yii::$app->params['bank'];
+            foreach ($banks as $key => $val) {
+                $bank[$key] = $val['bankname'];
+            }
+
+            foreach ($users as $key => $user) {
+                $epayuser = EpayUser::findOne(['appUserId' => $user->id]);
+                $userBank = UserBanks::findOne(['uid' => $user->id]);
+
+                $data[$key]['org_name'] = $user->org_name;
+                $data[$key]['username'] = $user->username;
+                $data[$key]['password'] = '';
+                $data[$key]['epayUserId'] = $epayuser->epayUserId;
+                $data[$key]['real_name'] = $user->real_name;
+                $data[$key]['bank_name'] = $bank[$userBank->bank_id];
+                $data[$key]['card_number'] = $userBank->card_number;
+            }
+        }
+
+        $path = rtrim(Yii::$app->params['backend_tmp_share_path'], '/');
+        $fileName = 'org_user_info.xlsx';
+        $file = $path . '/' . $fileName;
+        if (file_exists($file)) {
+            unlink($file);
+        }
+
+        $objPHPExcel = UserStats::initPhpExcelObject($data);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+
+        if (file_exists($file)) {
+            return Yii::$app->response->xSendFile('/downloads/' . $fileName, $fileName, [
+                'xHeader' => 'X-Accel-Redirect',
+            ]);
+        }
+    }
 }

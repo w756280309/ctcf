@@ -11,6 +11,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                 <th>手机号</th>
                 <th>真实姓名</th>
         <?php } else { ?>
+                <th><input class="chooseall" type='checkbox'></th>
                 <th>企业名称</th>
         <?php } ?>
                 <th>注册时间</th>
@@ -34,6 +35,9 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                 <td><?= $val['mobile'] ?></td>
                 <td><?= $val['real_name'] ? '<a href="/user/user/detail?id='.$val['id'].'">'.$val['real_name'].'</a>' : '---' ?></td>
         <?php } else { ?>
+                <td>
+                    <input class="choice" type='checkbox' name='choose[]' value='<?= $val['id'] ?>'>
+                </td>
                 <td><?= $val['org_name'] ?></td>
         <?php }?>
                 <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
@@ -125,6 +129,14 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
            })
        }
 
-   })
+   });
+    $(".chooseall").click(function() {
+        var isChecked = $(this).parent().hasClass('checked');
+        if (!isChecked) {
+            $("input[name='choose[]']").parent().addClass('checked');
+        } else {
+            $("input[name='choose[]']").parent().removeClass('checked');
+        }
+    });
 </script>
 
