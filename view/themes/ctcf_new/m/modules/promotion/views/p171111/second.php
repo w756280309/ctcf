@@ -47,7 +47,7 @@ $this->title = '11月理财节';
             <div class="coupon clearfix coupon-shadow">
                 <div class="coupon-left lf">
                     <p class="lf-top"><span>+</span><i>{{rateCoupon.couponRate}}</i>%</p>
-                    <p class="lf-bottom">{{rateCoupon.lowestInvestMoney}}万元起投</p>
+                    <p class="lf-bottom">{{rateCoupon.lowestInvestMoney}}万元起借</p>
                 </div>
                 <div class="coupon-right rg">
                     <p class="lf-top">加息券-<span>{{rateCoupon.couponLength}}</span>天</p>
@@ -96,9 +96,9 @@ $this->title = '11月理财节';
             </div>
             <div class="result-box-task rg">
                 <img class="finished" v-if="isVested == 1" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/icon_finished.png" alt="">
-                <p class="top-invest">任意投资一笔</p>
+                <p class="top-invest">任意出借一笔</p>
                 <p class="center-txt"><span class="investTask">{{isVested}}</span>/1</p>
-                <a href="/deal/deal/index" class="link">去投资</a>
+                <a href="/deal/deal/index" class="link">去出借</a>
             </div>
         </div>
     </div>
@@ -139,7 +139,7 @@ $this->title = '11月理财节';
             timeNav: [10,15,20],
             secondKillList: [],
             orderPop: '', //预约框  1：已预约  0：未预约
-            isVested: '1', //喜卡－投资状态
+            isVested: '1', //喜卡－出借状态
             appointmentId: true,
             isAppointmented: '0',// 是否预约 1：已预约  0：未预约
             appointObject: { appointmentObjectId: 0, appointmentObjectName: '楚盈恒180天以上'}, // 预约标的
@@ -173,7 +173,7 @@ $this->title = '11月理财节';
                 xhr.done(function(data) {
                     _this.appointmentTime = data.appointmentTime; // 时间戳 1
                     _this.orderPop = data.isAppointmented; //预约框状态 2
-                    _this.isVested  = data.isVested;//投资状态 6
+                    _this.isVested  = data.isVested;//出借状态 6
                     _this.secondKillRecord = data.secondKillRecord; //秒杀记录 3
                     _this.activeNav = data.activeNav; // 导航高亮 7
                     _this.isAppointmented = data.isAppointmented; //预约状态 5
@@ -199,7 +199,7 @@ $this->title = '11月理财节';
                         }
                     }
                     if (_this.orderPop == '1') { //有加息券  _this.appointObject
-                        _this.appointObject = _this.newArrayVue(data.appointObject); //投资项目 类型 预约标
+                        _this.appointObject = _this.newArrayVue(data.appointObject); //出借项目 类型 预约标
                     }
                     for(var j = 0; j < data.secondKillList.length; j++) {
                         _this.secondKillList[j].secondKillStatus = data.secondKillList[j].secondKillStatus;
@@ -538,10 +538,10 @@ $this->title = '11月理财节';
                                 popBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/pop_bg_fair.png) no-repeat',
                                 popBorder: 0,
                                 closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/pop_close.png",
-                                btnMsg: "去投资",
+                                btnMsg: "去出借",
                                 popTopColor: "#f03350",
                                 bgSize: "100% 100%",
-                                title: '<p style="font-size:0.72rem;">您的积分不足，<span style="display:block;font-size: 0.72rem;">您快去投资赚积分吧！</span></p>',
+                                title: '<p style="font-size:0.72rem;">您的积分不足，<span style="display:block;font-size: 0.72rem;">您快去出借赚积分吧！</span></p>',
                                 popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/page-second/pop_btn.png) no-repeat',
                                 popMiddleHasDiv: true,
                                 contentMsg: "<div style='margin: 0 auto 0.5rem;display: block;width: 4.8rem;height: 3rem;'></div>",

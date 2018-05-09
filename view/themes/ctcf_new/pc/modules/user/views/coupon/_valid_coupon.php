@@ -47,8 +47,8 @@ use yii\helpers\ArrayHelper;
                     <div class="quan-right">
                         <div class="quan-right-content">
                             <div><?= $coupon->couponType->name ?></div>
-                            <p>单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $coupon->couponType->minInvest) ?>可用</p>
-                            <p class="coupon_name" style="display: none"> 单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $coupon->couponType->minInvest) ?>可抵扣<?= $coupon->couponType->amount ?>元</p>
+                            <p>单笔出借满<?= StringUtils::amountFormat1('{amount}{unit}', $coupon->couponType->minInvest) ?>可用</p>
+                            <p class="coupon_name" style="display: none"> 单笔出借满<?= StringUtils::amountFormat1('{amount}{unit}', $coupon->couponType->minInvest) ?>可抵扣<?= $coupon->couponType->amount ?>元</p>
                             <p>
                                 <?= $coupon->couponType->loanExpires ? '期限满'.$coupon->couponType->loanExpires.'天可用(除转让)' : '新手标、转让不可用' ?>
                             </p>

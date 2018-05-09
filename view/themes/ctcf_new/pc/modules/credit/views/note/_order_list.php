@@ -8,8 +8,8 @@ use common\utils\StringUtils;
         <tr>
             <th class="piD-th1 piD-center"><span>序号</span></th>
             <th class="piD-th2 piD-left"><span>受让人</span></th>
-            <th class="piD-th3 piD-left"><span>投资时间</span></th>
-            <th class="piD-th4 piD-right"><span>投资金额(元)</span></th>
+            <th class="piD-th3 piD-left"><span>出借时间</span></th>
+            <th class="piD-th4 piD-right"><span>出借金额(元)</span></th>
             <th class="piD-th5 piD-center"><span>状态</span></th>
         </tr>
         <?php foreach ($data as $key => $val) { ?>

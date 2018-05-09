@@ -12,9 +12,9 @@ $this->title = '520天纪念活动';
     <div class="rule-title"></div>
     <div class="rule">
         <span>已累计年化：<?= $totalMoney ?>万元</span>
-        <p>活动期间，年化投资金额每累计<i>10万元</i>，即可获赠额外<i>520积分</i>。</p>
+        <p>活动期间，年化出借金额每累计<i>10万元</i>，即可获赠额外<i>520积分</i>。</p>
         <h4>最终积分<i>（每年化10万）：</i></h4>
-        <p class="txt">520（活动奖励）＋600（投资所得）＝1120积分</p>
+        <p class="txt">520（活动奖励）＋600（出借所得）＝1120积分</p>
     </div>
     <a class="btn-invest" @click="link"></a>
     <div class="goods-title">
@@ -28,7 +28,7 @@ $this->title = '520天纪念活动';
         <li v-for="item in rightItems"><a :href="item.url"><img :src="item.img" alt=""></a></li>
     </ul>
     <p class="bottom-txt bottom-up">本次活动最终解释权归楚天财富所有</p>
-    <p class="bottom-txt bottom-down">理财非存款<i></i>产品有风险<i></i>投资须谨慎</p>
+    <p class="bottom-txt bottom-down">理财非存款<i></i>产品有风险<i></i>出借须谨慎</p>
 </div>
 <script>
     var promoStatus = $('input[name=promoStatus]').val();

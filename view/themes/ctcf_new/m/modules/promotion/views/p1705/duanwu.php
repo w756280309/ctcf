@@ -44,11 +44,11 @@ $this->headerNavOn = true;
                 <ol>
                     <li>活动时间：2017年5月22日-2017年5月30日；</li>
                     <li>本次活动面向所有楚天财富注册用户；</li>
-                    <li>活动期间累计年化投资（不含新手标及转让产品）达到指定额度，即可获得相应礼品。</li>
+                    <li>活动期间累计年化出借（不含新手标及转让产品）达到指定额度，即可获得相应礼品。</li>
                 </ol>
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td>累计投资年化金额（元）</td>
+                        <td>累计出借年化金额（元）</td>
                         <td>礼品</td>
                         <td>对应积分</td>
                     </tr>
@@ -89,9 +89,9 @@ $this->headerNavOn = true;
             </div>
             <div class="rules-content-box2">
                 <p class="title-how">比如：如何获得800元面值超市卡</p>
-                <p class="content-how"><img src="<?= FE_BASE_URI ?>wap/campaigns/duanwu/images/lh1.png" alt="">需投资金额为100万元、期限为12个月的产品</p>
-                <p class="content-how" style="margin: 0.2666rem 0 0.4rem;"><img src="<?= FE_BASE_URI ?>wap/campaigns/duanwu/images/lh2.png" alt="">需投资金额为50万元、期限为24个月的产品</p>
-                <p class="beizhu">注：年化投资金额=投资金额*项目期限/365</p>
+                <p class="content-how"><img src="<?= FE_BASE_URI ?>wap/campaigns/duanwu/images/lh1.png" alt="">需出借金额为100万元、期限为12个月的产品</p>
+                <p class="content-how" style="margin: 0.2666rem 0 0.4rem;"><img src="<?= FE_BASE_URI ?>wap/campaigns/duanwu/images/lh2.png" alt="">需出借金额为50万元、期限为24个月的产品</p>
+                <p class="beizhu">注：年化出借金额=出借金额*项目期限/365</p>
             </div>
         </div>
         <a href="/deal/deal/index" class="go_invest"></a>

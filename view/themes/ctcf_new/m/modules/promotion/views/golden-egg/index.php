@@ -28,7 +28,7 @@ $this->share = new Share([
     </div>
     <div class="section-one">
         <img class="section-title" src="<?= FE_BASE_URI ?>wap/campaigns/active20170830/images/section_01.png" alt="">
-        <p class="rule-tip">活动期间进行1次任意投资，即可免费参与 砸金蛋！手机、超市卡、红包…应有尽有！</p>
+        <p class="rule-tip">活动期间进行1次任意出借，即可免费参与 砸金蛋！手机、超市卡、红包…应有尽有！</p>
         <img class="my-gifts" v-on:click="giftsShow" src="<?= FE_BASE_URI ?>wap/campaigns/active20170830/images/my-gifts.png" alt="">
         <div class="smashing-egg">
             <transition name="fade">
@@ -44,7 +44,7 @@ $this->share = new Share([
             </transition>
         </div>
         <div class="shareAll clearfix">
-            <a class="lf" href="/deal/deal/index">投资砸金蛋</a>
+            <a class="lf" href="/deal/deal/index">出借砸金蛋</a>
             <a class="rg share" href="javascript:void(0);" style="margin-top: 0;">分享好友玩</a>
         </div>
     </div>
@@ -68,12 +68,12 @@ $this->share = new Share([
         <div class="regular-detail">
             <ol v-cloak v-show="isShow">
                 <li>活动时间2017年9月4日-9月8日；</li>
-                <li>活动期间完成1次任意投资，获得免费砸金蛋的机会 （最多1次），活动结束后失效；</li>
+                <li>活动期间完成1次任意出借，获得免费砸金蛋的机会 （最多1次），活动结束后失效；</li>
                 <li>
-                    <div>活动期间投资楚天财富平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；</div>
+                    <div>活动期间出借楚天财富平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；</div>
                     <table>
                         <tr>
-                            <td>累计年化投资金额</td>
+                            <td>累计年化出借金额</td>
                             <td>礼品</td>
                             <td>对应积分</td>
                         </tr>
@@ -103,7 +103,7 @@ $this->share = new Share([
                 <li>本次活动中虚拟礼品会立即发放到您的账户，实物礼品将于7个工作日内联系发放，详询客服电话<?= Yii::$app->params['platform_info.contact_tel'] ?>。</li>
             </ol>
             <div class="tips">
-                <p>注：年化投资金额=投资金额*项目期限/365</p>
+                <p>注：年化出借金额=出借金额*项目期限/365</p>
                 <p>本活动最终解释权归楚天财富所有</p>
             </div>
         </div>
@@ -116,7 +116,7 @@ $this->share = new Share([
         el: '#active',
         data: {
             isOpen: false,//砸蛋效果
-            totalMoney: <?= $totalMoney ?>,//年化投资额
+            totalMoney: <?= $totalMoney ?>,//年化出借额
             isRotate: false,//规则按钮翻转
             isShow: false,//活动规则显示数据
             promoStatus:$('input[name=promoStatus]').val(),//活动状态
@@ -160,8 +160,8 @@ $this->share = new Share([
                         if(code == 7){
                             //未获得抽奖机会
                             var opt = {
-                                btnMsg:'去投资',
-                                msg:'任意投资可以获得1次砸金蛋的机会哦，快去投资吧！',
+                                btnMsg:'去出借',
+                                msg:'任意出借可以获得1次砸金蛋的机会哦，快去出借吧！',
                                 btnHref:'/deal/deal/index'
                             };
                             _this.haveNoChange(opt);

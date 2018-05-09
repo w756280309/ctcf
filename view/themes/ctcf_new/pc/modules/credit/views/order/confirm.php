@@ -40,7 +40,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                     </div>
                 </div>
                 <div class="rg credit-ct-rg">
-                    <p class="sum"><span class="lf-span">投资金额:</span><i class="rg-i text-align-rg"><?= number_format($amount, 2)?></i></p>
+                    <p class="sum"><span class="lf-span">出借金额:</span><i class="rg-i text-align-rg"><?= number_format($amount, 2)?></i></p>
                     <p class="reduce"><span class="lf-span">应付利息:</span><i class="rg-i text-align-rg" id="interest">0.00</i></p>
                     <p class="sum"><span class="lf-span">预期收益:</span><i class="rg-i text-align-rg" id="profit">0.00</i></p>
                     <div class="real-credit rg">

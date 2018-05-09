@@ -65,7 +65,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
         <ol>
             <li>活动时间：2017年7月17日-7月23日；</li>
             <li>每日获得1次免费翻牌机会，分享本页面（必须分享至朋友圈）后再获得1次机会；</li>
-            <li>活动期间每日年化投资满10万元，将获得1次翻金牌机会，此次奖池将自动升级为更高价值礼品；</li>
+            <li>活动期间每日年化出借满10万元，将获得1次翻金牌机会，此次奖池将自动升级为更高价值礼品；</li>
             <li>未使用的次数不能累积到次日；</li>
             <li>每次翻牌必定获得礼品1份，翻中西瓜牌将额外获得1000元超市卡一张！</li>
         </ol>
@@ -196,10 +196,10 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                 popBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_bg_01.png) no-repeat',
                 popBorder:0,
                 closeUrl : "<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_close.png",
-                btnMsg : "去投资",
+                btnMsg : "去出借",
                 popMiddle:false,
                 popTopColor:"#fb3f5a",
-                title:'<p style="font-size: 0.50666667rem; margin: 1rem 0 1.5rem;">每日年化投资十万元<br>即可升级奖池哦！</p>',
+                title:'<p style="font-size: 0.50666667rem; margin: 1rem 0 1.5rem;">每日年化出借十万元<br>即可升级奖池哦！</p>',
                 popBtmBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_btn_01.png) no-repeat',
                 popMiddleHasDiv:true,
                 popBtmBorderRadius:0,
@@ -213,7 +213,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                 closeUrl : "<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_close.png",
                 popMiddle:false,
                 popTopColor:"#fb3f5a",
-                title:'<p style="font-size:0.50666667rem;margin: 1.2rem 0 0.3rem;">每日年化投资十万元，<br>即可升级奖池</p><p style="color: #21b1e0;font-size: 0.4rem;margin-bottom: 0.8rem;">您今天已经升级过了哦！</p>',
+                title:'<p style="font-size:0.50666667rem;margin: 1.2rem 0 0.3rem;">每日年化出借十万元，<br>即可升级奖池</p><p style="color: #21b1e0;font-size: 0.4rem;margin-bottom: 0.8rem;">您今天已经升级过了哦！</p>',
                 popBtmBackground:'url(img/pop_btn_01.png) no-repeat',
                 popMiddleHasDiv:true,
                 popBtmHas:false
@@ -311,10 +311,10 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                         popBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_bg_01.png) no-repeat',
                         popBorder:0,
                         closeUrl : "<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_close.png",
-                        btnMsg : "去投资",
+                        btnMsg : "去出借",
                         popMiddle:false,
                         popTopColor:"#fb3f5a",
-                        title:'<p style="font-size:0.50666667rem;margin: 1rem 0 0.3rem;">您的抽奖机会已用完！</p><p style="color: #21b1e0;font-size: 0.4rem;margin-bottom: 0.8rem;">年化投资十万元即可再抽<span style="color: #ffc155;">1</span>次 ，奖池更丰富！</p>',
+                        title:'<p style="font-size:0.50666667rem;margin: 1rem 0 0.3rem;">您的抽奖机会已用完！</p><p style="color: #21b1e0;font-size: 0.4rem;margin-bottom: 0.8rem;">年化出借十万元即可再抽<span style="color: #ffc155;">1</span>次 ，奖池更丰富！</p>',
                         popBtmBackground:'url(<?= FE_BASE_URI ?>wap/campaigns/active20170711/img/pop_btn_01.png) no-repeat',
                         popMiddleHasDiv: true,
                         popBtmBorderRadius: 0,

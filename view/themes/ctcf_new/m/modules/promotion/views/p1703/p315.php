@@ -31,7 +31,7 @@ $this->title = '3.15限时专享活动';
         <ol>
             <li class="f14">活动时间：2017年3月15日—3月16日；</li>
             <li class="f14">本次活动面向所有楚天财富用户；</li>
-            <li class="f14">活动期间投资楚天财富平台理财产品累计金额达到指定额度，即可获得相应礼品(不含转让产品)；</li>
+            <li class="f14">活动期间出借楚天财富平台理财产品累计金额达到指定额度，即可获得相应礼品(不含转让产品)；</li>
             <table class="tab" cellpadding="0" width="100%" cellspacing="0">
                 <tbody>
                 <tr class="f12 tit">

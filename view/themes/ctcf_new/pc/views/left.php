@@ -21,7 +21,7 @@ $action = Yii::$app->controller->action->getUniqueId();
         <li class="nav-title"><span>资产管理</span></li>
         <li class="nav-content">
             <ul>
-                <li class="<?= 'user/user/myorder' === $action ? 'selected' : '' ?>"><a href="/user/user/myorder"><span class="star"></span>我的理财</a></li>
+                <li class="<?= 'user/user/myorder' === $action ? 'selected' : '' ?>"><a href="/user/user/myorder"><span class="star"></span>我的出借</a></li>
                 <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
                     <li class="<?= in_array($action, ['credit/trade/assets', 'credit/note/new']) ? 'selected' : '' ?>"><a href="/credit/trade/assets"><span class="star"></span>我的转让</a></li>
                 <?php } ?>

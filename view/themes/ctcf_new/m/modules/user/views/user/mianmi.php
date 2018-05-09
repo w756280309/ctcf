@@ -41,7 +41,7 @@ $this->showViewport = false;
 
     <a class="instant f18" href="/user/qpay/binding/umpmianmi">开 通</a>
 
-    <p class="f12 tipsCtn">＊现在将为您开通免密支付功能，方便您进行投资行为</p>
+    <p class="f12 tipsCtn">＊现在将为您开通免密支付功能，方便您进行出借行为</p>
 </div>
 
 <script type="text/javascript">

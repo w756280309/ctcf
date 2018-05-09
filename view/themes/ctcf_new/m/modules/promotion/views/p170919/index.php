@@ -14,7 +14,7 @@ $this->title = '中秋佳品放送';
 </style>
 <div class="flex-content" id="app">
     <div class="part-one">
-        <div class="go-invest" @click="link()">去投资</div>
+        <div class="go-invest" @click="link()">去出借</div>
         <p class="leiji">已累计年化：<span><?= rtrim(rtrim(bcdiv($totalAnnual, 10000, 2), '0'), '.') ?></span>万元</p>
     </div>
     <div class="part-two">

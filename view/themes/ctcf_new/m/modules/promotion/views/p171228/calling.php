@@ -31,7 +31,7 @@ $this->share = new Share([
                     <li class="clearfix"><span>2、</span><p>活动期间每邀请1位好友通过微信端注册并完成首投（不含新手标及转让），即可获得18.8元奖励金；</p></li>
                     <li class="clearfix"><span>3、</span><p>活动期间奖励金限量1000份，单个用户最多获得6份奖励金；</p></li>
                     <li class="clearfix"><span>4、</span><p>每笔奖励金将立即发放到账户余额，请注意查收；</p></li>
-                    <li class="clearfix"><span>5、</span><p>本活动仅限投资用户（不含新手标及转让）参与。</p></li>
+                    <li class="clearfix"><span>5、</span><p>本活动仅限出借用户（不含新手标及转让）参与。</p></li>
                 </ol>
             </div>
         </div>

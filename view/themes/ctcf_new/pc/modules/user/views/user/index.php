@@ -32,7 +32,7 @@ use common\utils\StringUtils;
     </div>
     <div class="top-box-bottom">
         <ul class="clearfix">
-            <li class="grayFont">累计投资：<span class="redFont"><?= StringUtils::amountFormat3($user->getTotalInvestment()) ?></span> <i class="blackFont">元</i><img id="tip" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt=""><div class="grayFont dialog">投资金额累计相加</div></li>
+            <li class="grayFont">累计出借：<span class="redFont"><?= StringUtils::amountFormat3($user->getTotalInvestment()) ?></span> <i class="blackFont">元</i><img id="tip" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt=""><div class="grayFont dialog">出借金额累计相加</div></li>
             <li class="grayFont">累计收益：<span class="redFont"><?= StringUtils::amountFormat3($user->getProfit()) ?></span> <i class="blackFont">元</i></li>
         </ul>
     </div>
@@ -55,28 +55,28 @@ use common\utils\StringUtils;
                     <i>可用余额</i>
                     <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                     <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->available_balance) ?></i>元
-                    <div class="property-tishi" style="left: -2px;">当前账户可用投资，提现金额 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
+                    <div class="property-tishi" style="left: -2px;">当前账户可用出借，提现金额 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                 </li>
                 <li class="grayFont">
                     <div class="property-point greenBg"></div>
-                    <i>理财资产</i>
+                    <i>我的资产</i>
                     <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                     <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->investment_balance) ?></i>元
-                    <div class="property-tishi" style="left: 3px;">正在投资中待回收本金总和 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
+                    <div class="property-tishi" style="left: 3px;">正在出借中待回收本金总和 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                 </li>
                 <li class="grayFont">
                     <div class="property-point redBg"></div>
                     <i>冻结资金</i>
                     <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                     <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->freeze_balance) ?></i>元
-                    <div class="property-tishi" style="left: -20px;">投资资金在项目未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
+                    <div class="property-tishi" style="left: -20px;">出借资金在标的未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                 </li>
                 <li class="grayFont">
                     <div class="property-point redBg"></div>
-                    <i>门店理财</i>
+                    <i>门店出借</i>
                     <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                     <i class="redFont"><?= StringUtils::amountFormat3($user->offline->totalAssets) ?></i>元
-                    <div class="property-tishi" style="left: -20px;">门店下认购的正在投资中待回收本金总和<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
+                    <div class="property-tishi" style="left: -20px;">门店下认购的正在出借中待回收本金总和<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                 </li>
             </ul>
         </div>
@@ -86,16 +86,16 @@ use common\utils\StringUtils;
 <div class="investment-box">
     <div class="investment-box-top">
         <div class="investment-box-logo"></div>
-        <div class="investment-box-content blackFont">在投项目</div>
+        <div class="investment-box-content blackFont">在投标的</div>
         <div class="investment-link"><a href="/user/user/myorder/"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/jiantou.png" alt=""></a></div>
     </div>
     <div class="investment-box-bottom">
         <div class="investment-bottom-title">
             <ul>
-                <li class="investment-name"><div style="padding-left: 10px;">项目名称</div></li>
-                <li class="investment-money"><div>投资金额(元)</div></li>
+                <li class="investment-name"><div style="padding-left: 10px;">标的名称</div></li>
+                <li class="investment-money"><div>出借金额(元)</div></li>
                 <li class="investment-profit"><div>预期收益(元)</div></li>
-                <li class="investment-time"><div>项目期限</div></li>
+                <li class="investment-time"><div>标的期限</div></li>
                 <li class="investment-contract"><div>状态</div></li>
             </ul>
         </div>
@@ -167,8 +167,8 @@ use common\utils\StringUtils;
             </ul>
         <?php } else { ?>
             <!--无数据是显示-->
-            <p class="without-font">暂无投资明细</p>
-            <a class="link-tender" href="/licai/">立即投资</a>
+            <p class="without-font">暂无出借明细</p>
+            <a class="link-tender" href="/licai/">立即出借</a>
         <?php } ?>
     </div>
 </div>

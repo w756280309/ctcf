@@ -93,7 +93,7 @@ use common\utils\StringUtils;
     <div class="charge-explain">
         <p class="charge-explain-title">温馨提示：</p>
         <ul>
-            <li>投资人充值手续费由楚天财富垫付；</li>
+            <li>出借人充值手续费由楚天财富垫付；</li>
             <li>最低充值金额应大于等于1元；</li>
             <li>为保障安全，连续3次因余额不足导致充值失败，快捷充值通道将被锁定24小时，请核实后交易；</li>
             <li>如果快捷充值通道已被锁定，可先选择网银充值；</li>

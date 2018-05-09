@@ -140,9 +140,9 @@
     <div class="footer-title">
         <div class="footer-inner1">
             <?php if($uniqueActionId === 'deal/deal/index') {?>
-                <a href="/deal/deal/index" class="nav-bar special-bar"><span class="licai"></span>理财</a>
+                <a href="/deal/deal/index" class="nav-bar special-bar"><span class="licai"></span>出借</a>
             <?php } else {?>
-                <a href="/deal/deal/index" class="nav-bar"><span class="licai"></span>理财</a>
+                <a href="/deal/deal/index" class="nav-bar"><span class="licai"></span>出借</a>
             <?php }?>
         </div>
     </div>

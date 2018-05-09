@@ -33,7 +33,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                     <li>
                         <div class="clearfix pl-middle-fl">
                             <span class="pl-middle-inner"><?= StringUtils::amountFormat2($order->yield_rate * 100) ?><i>%</i></span>
-                            <p>预期年化收益率</p>
+                            <p>借贷双方约定利率</p>
                         </div>
                     </li>
                     <li>
@@ -115,7 +115,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                     <?php } ?>
 
                     <?php if (!$isClosed) { ?>
-                        <li class="dR-inner-left">认购金额：</li>
+                        <li class="dR-inner-left">出借金额：</li>
                         <li class="dR-inner-right"><a href="javascript:recharge()">去充值</a></li>
                     <?php } ?>
                 </ul>
@@ -128,7 +128,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                         <div class="tishi tishi-dev">
                             <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
                             <ul class="dR-tishi">
-                                <li><span>起投<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元</span></li>
+                                <li><span>起借<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元</span></li>
                                 <li><span>递增<?= StringUtils::amountFormat2(bcdiv($note_config['incr_order_amount'], 100, 2)) ?>元</span></li>
                             </ul>
                         </div>
@@ -146,14 +146,14 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
                         <li class="dR-inner-right yuqi"><span><i>0.00</i></span>元</li>
                     </ul>
 
-                    <input type="submit" class="dR-btn" id="order_submit" value="立即投资" />
+                    <input type="submit" class="dR-btn" id="order_submit" value="立即出借" />
                 </form>
                 <?php } else { ?>
                     <div class="over-credit">转让完成...</div>
                     <a href="/licai/" class="dR-btn">查看其他项目</a>
                 <?php } ?>
 
-                <p class="fengxian-tip">*理财非存款，产品有风险，投资须谨慎</p>
+                <p class="fengxian-tip">*市场有风险，出借需谨慎</p>
                 <p class="risk-note"><a href="/credit/note/risk-note?type=2&loanId=<?= $respData['loan_id'] ?>" target="_blank">查看并确认《风险提示》</a></p>
             </div>
         </div>
@@ -178,7 +178,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             $(this).parent().find(".tips").stop(true, false).hide();
         });
 
-        //获取投资记录
+        //获取出借记录
         getOrderList('/credit/note/orders?id=<?= $respData['id'] ?>');
         $('#order_list').on('click', 'a', function (e) {
             e.preventDefault(); // 禁用a标签默认行为
@@ -250,7 +250,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 
             xhr.always(function () {
                 note_button.attr('disabled', false);
-                note_button.val("立即投资");
+                note_button.val("立即出借");
             });
 
             xhr.fail(function () {

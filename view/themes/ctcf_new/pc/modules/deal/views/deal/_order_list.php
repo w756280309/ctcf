@@ -4,9 +4,9 @@
             <tbody>
             <tr style="background: rgb(239, 239, 243);">
                 <th class="piD-th1 piD-left"><span>序号</span></th>
-                <th class="piD-th2 piD-left"><span>投资人</span></th>
-                <th class="piD-th3 piD-left"><span>投资时间</span></th>
-                <th class="piD-th4 piD-right"><span>投资金额(元)</span></th>
+                <th class="piD-th2 piD-left"><span>出借人</span></th>
+                <th class="piD-th3 piD-left"><span>出借时间</span></th>
+                <th class="piD-th4 piD-right"><span>出借金额(元)</span></th>
                 <th class="piD-th5 piD-left"><span>状态</span></th>
             </tr>
             <?php foreach($data as $k=>$v) { ?>
@@ -22,7 +22,7 @@
         </table>
     <?php }else{?>
         <!--无数据是显示-->
-        <p class="not_yet">暂无投资记录</p>
+        <p class="not_yet">暂无出借记录</p>
     <?php }?>
     <!--分页-->
     <center><?= \common\widgets\Pager::widget(['pagination' => $pages])?></center>

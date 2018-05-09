@@ -117,9 +117,9 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/weixin.js?v=201
                 <div class="col-xs-12">
                     <p class="informations"><span class="one">1</span>活动时间：2016年5月20日至2016年6月10日;</p>
                     <p class="informations"><span class="two">2</span>新老用户均可参与,领券和注册时手机号须一致；</p>
-                    <p class="informations"><span class="three">3</span>每笔投资限用一张券,使用时请参看代金券规则；</p>
+                    <p class="informations"><span class="three">3</span>每笔出借限用一张券,使用时请参看代金券规则；</p>
                     <p class="informations"><span class="four">4</span>领券后6月20日前未使用,代金券失效；</p>
-                    <p class="informations"><span class="five">5</span>代金券等同于现金,与投资本金一并计息，</p>
+                    <p class="informations"><span class="five">5</span>代金券等同于现金,与出借本金一并计息，</p>
                     <p class="informations only"><i class="five_only"></i>随项目还款时返还；</p>
                     <p class="informations"><span class="six">6</span>法律许可范围内,本活动最终解释权归</p>
                     <p class="informations only"><i class="six_only"></i>楚天财富所有。</p>
@@ -128,7 +128,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/weixin.js?v=201
             </div>
             <p class="clear"></p>
             <div class="icon">
-                <div class="foot">理财非存款，产品有风险，投资需谨慎</div>
+                <div class="foot">理财非存款，产品有风险，出借需谨慎</div>
             </div>
             <div class="row">
                 <div class="col-xs-4"></div>

@@ -68,11 +68,11 @@ $currentUrl = Yii::$app->request->absoluteUrl;
 <div class="mask cancel"></div>
 <div class="pomp f12">
     <p class="grey">理财资产：</p>
-    <p class="black">正在投资中待回收本金总和</p>
+    <p class="black">正在出借中待回收本金总和</p>
     <p class="grey">冻结资金：</p>
-    <p class="black">投资资金在项目未满标时锁定的金额</p>
+    <p class="black">出借资金在项目未满标时锁定的金额</p>
     <p class="grey">可用余额：</p>
-    <p class="black">当前账户可用投资、提现金额</p>
+    <p class="black">当前账户可用出借、提现金额</p>
     <div class="close f15">知道了</div>
 </div>
 <script>

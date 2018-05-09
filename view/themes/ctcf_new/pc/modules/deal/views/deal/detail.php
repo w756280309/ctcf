@@ -34,7 +34,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                                     <?php if (!empty($deal->jiaxi)) { ?>+<?= StringUtils::amountFormat2($deal->jiaxi) ?>%<?php } ?>
                                 </em>
                             </span>
-                            <p>预期年化收益率</p>
+                            <p>借贷双方约定利率</p>
                         </div>
                     </li>
                     <li>
@@ -42,7 +42,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                             <span class="pl-middle-inner">
                                 <?php $ex = $deal->getDuration(); ?><?= $ex['value']?><i><?= $ex['unit'] ?></i>
                             </span>
-                            <p>项目期限</p>
+                            <p>借款期限</p>
                         </div>
                     </li>
                 </ul>
@@ -50,7 +50,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
             <div class="pl-bottom">
                 <ul>
                     <li class="amount">
-                        项目总额:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><?= StringUtils::amountFormat1('{amount}{unit}', $deal->money) ?></span>
+                        借款金额:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><?= StringUtils::amountFormat1('{amount}{unit}', $deal->money) ?></span>
                     </li>
                     <li>
                         还款方式:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><?= Yii::$app->params['refund_method'][$deal->refund_method] ?></span>
@@ -60,11 +60,11 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                         <?php } ?>
                     </li>
                     <li class="amount">
-                        产品起息日:&nbsp;&nbsp;&nbsp;&nbsp;<span><?= $deal->jixi_time > 0 ? date('Y-m-d', $deal->jixi_time) : '项目成立日次日'; ?></span>
+                        标的计息日:&nbsp;&nbsp;&nbsp;&nbsp;<span><?= $deal->jixi_time > 0 ? date('Y-m-d', $deal->jixi_time) : '项目成立日次日'; ?></span>
                     </li>
                     <?php if (0 === (int) $deal->finish_date) { ?>
                         <li>
-                            项目期限:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            借款期限:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <span>
                                 <?php $ex = $deal->getDuration(); ?><?= $ex['value']?><?= $ex['unit'] ?>
                             </span>
@@ -73,7 +73,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                         <li>产品到期日:&nbsp;&nbsp;&nbsp;&nbsp;<span><?= date('Y-m-d', $deal->finish_date) ?></span></li>
                     <?php } ?>
                     <li class="amount">
-                        起投金额:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><?= StringUtils::amountFormat2($deal->start_money) ?>元</span>
+                        起借金额:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><?= StringUtils::amountFormat2($deal->start_money) ?>元</span>
                     </li>
                     <li>
                         递增金额:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><?= StringUtils::amountFormat2($deal->dizeng_money) ?>元</span>
@@ -89,11 +89,11 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
             <?php } ?>
 
             <?php if ($deal->is_xs) { ?>
-                <p class="grace-period notice-coupon">新手专享标每账户限投资一次，限购一万元。</p>
+                <p class="grace-period notice-coupon">新手专享标每账户限出借一次，限购一万元。</p>
             <?php } ?>
 
             <?php if (!$deal->allowUseCoupon) { ?>
-                <p class="grace-period notice-coupon">此项目不参与活动，不可使用代金券。</p>
+                <p class="grace-period notice-coupon">此标的不参与活动，不可使用代金券。</p>
             <?php } ?>
         </div>
         <?php if ($deal->isFlexRate && !$deal->isRedeemable) { ?>
@@ -150,16 +150,16 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
             </table>
             <h5 class='ransom-h5'>赎回说明</h5>
             <ol class="ransom-list" id='ransom-list'>
-                <li class="ransom-list-weidth">建议投资者选择到期后自动兑付，最高利率达到9.5%；提前赎回将根据实际投资金额和投资期限计算实际收益，收益率低于到期自动兑付的利率。</li>
+                <li class="ransom-list-weidth">建议出借者选择到期后自动兑付，最高利率达到9.5%；提前赎回将根据实际出借金额和出借期限计算实际收益，收益率低于到期自动兑付的利率。</li>
                 <?php
                     $closedExpireTime = RedeemHelper::getClosedPeriodExpireTime($deal->redemptionPeriods);
                     if (null !== $closedExpireTime) {
                 ?>
-                    <li class="ransom-list-weidth">封闭期：本产品从购买日至<?= $closedExpireTime->format('Y年m月d日') ?>属封闭期，投资者在封闭期内不得赎回理财产品。</li>
+                    <li class="ransom-list-weidth">封闭期：本产品从购买日至<?= $closedExpireTime->format('Y年m月d日') ?>属封闭期，出借者在封闭期内不得赎回理财产品。</li>
                 <?php } ?>
-                <li>提前赎回：封闭期过后，投资者可在<?= RedeemHelper::formatRedemptionPeriods($deal->redemptionPeriods) ?>期间预约提前赎回；预约成功后，<?= RedeemHelper::formatRedemptionPaymentDates($deal->redemptionPaymentDates) ?>当日为投资者兑付所有投资本金及收益。赎回不收取任何手续费。</li>
-                <li>到期自动兑付：如投资者不提前赎回，产品从购买日起算，满3年后，自动兑付所有投资本金及收益，收益率高于提前赎回利率。具体收益详见收益说明。</li>
-                <li>付息方式说明：购买后，每自然年6月30日，12月30日按照提前赎回利率支付收益。若投资者未申请提前赎回，将在产品到期日补足所有差额收益。</li>
+                <li>提前赎回：封闭期过后，出借者可在<?= RedeemHelper::formatRedemptionPeriods($deal->redemptionPeriods) ?>期间预约提前赎回；预约成功后，<?= RedeemHelper::formatRedemptionPaymentDates($deal->redemptionPaymentDates) ?>当日为出借者兑付所有出借本金及收益。赎回不收取任何手续费。</li>
+                <li>到期自动兑付：如出借者不提前赎回，产品从购买日起算，满3年后，自动兑付所有出借本金及收益，收益率高于提前赎回利率。具体收益详见收益说明。</li>
+                <li>付息方式说明：购买后，每自然年6月30日，12月30日按照提前赎回利率支付收益。若出借者未申请提前赎回，将在产品到期日补足所有差额收益。</li>
             </ol>
         </div>
         <?php } ?>
@@ -173,10 +173,10 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
         <div class="pl-detail">
             <div class="plD-title">
                 <div class="plD-btn plD-redBorder">
-                    <div class="plD-redBorder">项目详情</div>
+                    <div class="plD-redBorder">借款详情</div>
                 </div>
                 <div class="plD-btn">
-                    <div>投资记录</div>
+                    <div>出借记录</div>
                 </div>
             </div>
             <div class="plD-content show">
@@ -190,7 +190,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
     <div class="project-right">
         <div class="pR-box clearfix">
             <div class="pR-box-inner">
-                <div class="pR-title">募集进度：</div>
+                <div class="pR-title">借款进度：</div>
                 <div class="dR-progress-box">
                     <div class="dR-progress">
                         <span data-progress="<?= $deal->getProgressForDisplay()?>" style="width: <?= $deal->getProgressForDisplay()?>%;"></span>
@@ -198,7 +198,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                     <div class="dRP-data"><?= $deal->getProgressForDisplay()?>%</div>
                 </div>
                 <ul class="clearfix dR-inner">
-                    <li class="dR-inner-left">项目可投余额：</li>
+                    <li class="dR-inner-left">标的可出借金额：</li>
                     <li class="dR-inner-right">
                         <span><i>
                                 <?= StringUtils::amountFormat2($deal->getLoanBalance())?>元
@@ -207,7 +207,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                     <li class="dR-inner-left">我的可用余额：</li>
                     <li class="dR-inner-right"><?= (null === $user) ? '查看余额请【<a onclick="login()" style="cursor: pointer">登录</a>】' : ($user->lendAccount ? StringUtils::amountFormat3($user->lendAccount->available_balance).' 元' : '0 元') ?></li>
                     <?php if ($deal->status == OnlineProduct::STATUS_NOW && $deal->end_date >= time()) { ?>
-                        <li class="dR-inner-left">投资金额(元)：</li>
+                        <li class="dR-inner-left">出借金额(元)：</li>
                         <li class="dR-inner-right"><a style="cursor: pointer" onclick="chongzhi()">去充值</a></li>
                     <?php } ?>
                 </ul>
@@ -215,17 +215,17 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                 <?php if ($deal->status == OnlineProduct::STATUS_NOW) { ?>
                     <?php if (null !== $user && $deal->is_xs && $user->xsCount() >= Yii::$app->params['xs_trade_limit']) { ?>
                         <div class="dR-shouqing">您已经参与过新手专享体验</div>
-                        <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
+                        <div class="dR-btn" onclick="window.location = '/licai'">查看其他标的</div>
                     <?php } elseif($deal->end_date >= time()) { ?>
                         <form action="/deal/deal/check?sn=<?= $deal->sn ?>" method="post" id="order_form">
                             <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>"/>
                             <div class="dR-input">
-                                <input type="text" class="dR-money" name="money" id="deal_money" placeholder="<?= StringUtils::amountFormat1('{amount}{unit}', $deal->start_money) ?>起投，<?= StringUtils::amountFormat1('{amount}{unit}', $deal->dizeng_money) ?>递增" autocomplete="off" value="<?= ($money > 0) ? $money : null ?>"/>
+                                <input type="text" class="dR-money" name="money" id="deal_money" placeholder="<?= StringUtils::amountFormat1('{amount}{unit}', $deal->start_money) ?>起借，<?= StringUtils::amountFormat1('{amount}{unit}', $deal->dizeng_money) ?>递增" autocomplete="off" value="<?= ($money > 0) ? $money : null ?>"/>
                                 <!--输入款提示信息-->
                                 <div class="tishi tishi-dev">
                                     <img class="jiao-left" src="/images/deal/jiao-right.png" alt="">
                                     <ul class="dR-tishi">
-                                        <li><span>起投<?= StringUtils::amountFormat2($deal->start_money) ?>元</span></li>
+                                        <li><span>起借<?= StringUtils::amountFormat2($deal->start_money) ?>元</span></li>
                                         <li><span>递增<?= StringUtils::amountFormat2($deal->dizeng_money) ?>元</span></li>
                                     </ul>
                                 </div>
@@ -235,7 +235,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                                 </div>
                             </div>
                             <ul class="clearfix dR-inner dR-shouyi">
-                                <li class="dR-inner-left">预计收益:</li>
+                                <li class="dR-inner-left">出借利息:</li>
                                 <li class="dR-inner-right"><span><i id="expect_profit">0.00</i></span>元</li>
                             </ul>
 
@@ -244,12 +244,12 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                                 <div id="coupons"></div>
                             <?php } ?>
                             <div>
-                                <input type="submit" class="dR-btn" id="order_submit" value="立即投资"/>
+                                <input type="submit" class="dR-btn" id="order_submit" value="立即出借"/>
                             </div>
                         </form>
                     <?php } else { ?>
-                        <div class="dR-shouqing">项目已成立</div>
-                        <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
+                        <div class="dR-shouqing">标的已成立</div>
+                        <div class="dR-btn" onclick="window.location = '/licai'">查看其他标的</div>
                     <?php }?>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_PRE) { ?>
                     <?php
@@ -257,22 +257,22 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                         $deal->start_date = $start['desc'].date('H:i', $start['time']);
                     ?>
                     <div class="dR-shouqing"><?= $deal->start_date ?>起售</div>
-                    <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
+                    <div class="dR-btn" onclick="window.location = '/licai'">查看其他标的</div>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_FOUND) { ?>
-                    <div class="dR-shouqing">项目已成立</div>
-                    <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
+                    <div class="dR-shouqing">标的已成立</div>
+                    <div class="dR-btn" onclick="window.location = '/licai'">查看其他标的</div>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_FULL) { ?>
-                    <div class="dR-shouqing">项目已售罄</div>
-                    <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
+                    <div class="dR-shouqing">标的已售罄</div>
+                    <div class="dR-btn" onclick="window.location = '/licai'">查看其他标的</div>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_OVER) { ?>
-                    <div class="dR-shouqing">项目已还清</div>
-                    <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
+                    <div class="dR-shouqing">标的已还清</div>
+                    <div class="dR-btn" onclick="window.location = '/licai'">查看其他标的</div>
                 <?php } elseif ($deal->status == OnlineProduct::STATUS_HUAN) { ?>
-                    <div class="dR-shouqing">项目募集完成，收益中...</div>
-                    <div class="dR-btn" onclick="window.location = '/licai'">投资其他项目</div>
+                    <div class="dR-shouqing">标的募集完成，收益中...</div>
+                    <div class="dR-btn" onclick="window.location = '/licai'">查看其他标的</div>
                 <?php } ?>
 
-                <p style="padding-bottom: 0.5em; font-size: 12px; color: #aab2bd;">*理财非存款，产品有风险，投资须谨慎</p>
+                <p style="padding-bottom: 0.5em; font-size: 12px; color: #aab2bd;">*市场有风险，出借需谨慎</p>
             </div>
         </div>
     </div>
@@ -306,7 +306,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
             $('#kuanxian_message').fadeOut();
         });
 
-        //获取投资记录
+        //获取出借记录
         getOrderList('/deal/deal/order-list?pid=<?= $deal->id ?>');
         $('#order_list').on('click', 'a', function (e) {
             e.preventDefault(); // 禁用a标签默认行为
@@ -340,7 +340,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
 
             if ('' === money) {
                 $('.dR-tishi-error ').show();
-                $('.dR-tishi-error .err_message').html('投资金额不能为空');
+                $('.dR-tishi-error .err_message').html('出借金额不能为空');
 
                 return false;
             }
@@ -396,7 +396,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
 
         xhr.always(function () {
             buy.attr('disabled', false);
-            buy.val("立即投资");
+            buy.val("立即出借");
         });
 
         xhr.fail(function () {
@@ -571,9 +571,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
             var message = '';
 
             if (amount > 0) {
-                message = '您有'+validCouponCount+'张代金券可用，目前已选择'+count+'张代金券可抵扣'+WDJF.numberFormat(amount, true)+'元投资';
+                message = '您有'+validCouponCount+'张代金券可用，目前已选择'+count+'张代金券可抵扣'+WDJF.numberFormat(amount, true)+'元';
             } else {
-                message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即投资';
+                message = '您有'+validCouponCount+'张代金券可用，本次未使用代金券抵扣，点击确定立即出借';
             }
 
             $('.confirmBox-top p').html(message);

@@ -49,7 +49,7 @@ $this->registerCssFile('/css/useraccount/chargedeposit.css');
         <p class="charge-explain-content">1、若您的账户余额为0且没有在途资金，系统将在半小时以内自动审核换卡；否则需拨打客服热线<?= \Yii::$app->params['platform_info.contact_tel'] ?>提交相关资料，提交资料后，进行2-5天的人工审核换卡；</p>
         <p class="charge-explain-content">2、换卡申请期间不影响充值和提现；</p>
         <p class="charge-explain-content">3、绑定的银行卡必须为本人身份证办理。</p>
-        <p class="charge-explain-content">注：在途资金指有投资回款或提现冻结金额。</p>
+        <p class="charge-explain-content">注：在途资金指有出借回款或提现冻结金额。</p>
     </div>
 </div>
 <!--选择银行卡-->

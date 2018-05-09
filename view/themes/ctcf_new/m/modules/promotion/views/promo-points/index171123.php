@@ -52,7 +52,7 @@ $this->title = '感恩节回馈';
 <div class="contain">
     <header>
         <p>已累计年化:<span><?= $totalMoney ?></span>万元</p>
-        <a href="javascript:void(0)">去投资</a>
+        <a href="javascript:void(0)">去出借</a>
     </header>
     <div class="mid_divnav">
         <div class="mid_divnav_mid"></div>

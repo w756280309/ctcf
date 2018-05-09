@@ -11,8 +11,8 @@ use common\view\WxshareHelper;
 $host = Yii::$app->params['clientOption']['host']['wap'];
 
 $share = new Share([
-    'title' => '我在楚天财富投资啦，也送你888元福利，拿去花',
-    'description' => '楚天财富隶属湖北日报新媒体集团旗下理财平台，平台稳健运行3年，投资更放心',
+    'title' => '我在楚天财富出借啦，也送你888元福利，拿去花',
+    'description' => '楚天财富隶属湖北日报新媒体集团旗下理财平台，平台稳健运行3年，出借更放心',
     'url' => $host.'luodiye/invite?code='.$user->usercode,
     'imgUrl' => (ASSETS_BASE_URI === '/' ? $host : ASSETS_BASE_URI).'ctcf/images/promo/share_weixin1.jpg',
 ]);
@@ -45,19 +45,19 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
                 <div class="invite-quan background-yellow">
                     <div>
                         <p>30<i>元</i></p>
-                        <span>(投资代金券)</span>
+                        <span>(出借代金券)</span>
                     </div>
                 </div>
-                <em>好友首次投资<br/><10,000元</em>
+                <em>好友首次出借<br/><10,000元</em>
             </li>
             <li>
                 <div class="invite-quan background-orange">
                     <div>
                         <p>50<i>元</i></p>
-                        <span>(投资代金券)</span>
+                        <span>(出借代金券)</span>
                     </div>
                 </div>
-                <em>好友首次投资<br/>>=10,000元</em>
+                <em>好友首次出借<br/>>=10,000元</em>
             </li>
             <li>
                 <div class="invite-quan background-red">
@@ -66,7 +66,7 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
                         <span>(现金红包)</span>
                     </div>
                 </div>
-                <em>好友前三次<br/>投资的0.1%</em>
+                <em>好友前三次<br/>出借的0.1%</em>
             </li>
         </ul>
     </div>
@@ -88,13 +88,13 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
                     <div class="invited-quan background-red invited-quans">
                         <div>
                             <p>30<i>元</i></p>
-                            <span>(投资代金券)</span>
+                            <span>(出借代金券)</span>
                         </div>
                     </div>
                     <div class="invited-quan background-red invited-quans1">
                         <div>
                             <p>50<i>元</i></p>
-                            <span>(投资代金券)</span>
+                            <span>(出借代金券)</span>
                         </div>
                     </div>
                 </div>
@@ -150,21 +150,21 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
             <ul>
                 <li>登录楚天财富网站，进入“我的账户”；</li>
                 <li>点击“邀请好友”可以看到邀请好友活动，通过微信或者链接进行邀请；</li>
-                <li>当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励；</li>
-                <li>邀请人在邀请好友之前必须在平台投资过，有投资记录才能参与现金返现活动，发放奖励现金时，以"角"为单位取整，采用四舍五入；</li>
+                <li>当您的小伙伴通过此邀请链接注册并成功出借后，您即可获得邀请好友的奖励；</li>
+                <li>邀请人在邀请好友之前必须在平台出借过，有出借记录才能参与现金返现活动，发放奖励现金时，以"角"为单位取整，采用四舍五入；</li>
                 <li>新手专享标和转让均不参加邀请奖励；</li>
                 <li>严禁恶意刷邀请好友，如有发生，封号处理。</li>
             </ul>
             <div class="inv-title"><b>奖励规则：</b></div>
             <ul>
-                <li>被邀请好友首次单笔投资（新手专享和转让除外）1万元以上（含1万元），邀请人获得1张50元代金券；</li>
-                <li>被邀请好友首次单笔投资（新手专享和转让除外）1万元以下（不含1万元），邀请人获得1张30元代金券；</li>
-                <li>邀请人获得被邀请人投资额0.1% 的奖励返现（仅限前三次投资，新手专享和转让除外）；</li>
+                <li>被邀请好友首次单笔出借（新手专享和转让除外）1万元以上（含1万元），邀请人获得1张50元代金券；</li>
+                <li>被邀请好友首次单笔出借（新手专享和转让除外）1万元以下（不含1万元），邀请人获得1张30元代金券；</li>
+                <li>邀请人获得被邀请人出借额0.1% 的奖励返现（仅限前三次出借，新手专享和转让除外）；</li>
                 <li>被邀请人注册即可获得50元代金券。</li>
             </ul>
             <div class="inv-title"><b>代金券使用规则：</b></div>
             <ul>
-                <li>代金券有效期30天(单笔投资满1万元抵扣)。</li>
+                <li>代金券有效期30天(单笔出借满1万元抵扣)。</li>
             </ul>
         </div>
     </div>

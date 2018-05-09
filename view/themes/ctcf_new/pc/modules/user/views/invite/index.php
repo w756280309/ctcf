@@ -46,18 +46,18 @@ use common\utils\StringUtils;
         <div class="box-ticket ">
             <div class="ticket ticket-left">
                 <p class="num"><span>30</span>元</p>
-                <p class="coupon">(投资代金券)</p>
+                <p class="coupon">(出借代金券)</p>
                 <img class="border-fff" src="<?= ASSETS_BASE_URI ?>images/useraccount/invitefriends/border-fff.png">
             </div>
-            <p class="ticket-txt">好友首次投资<10,000元</p>
+            <p class="ticket-txt">好友首次出借<10,000元</p>
         </div>
         <div class="box-ticket">
             <div class="ticket ticket-center">
                 <p class="num"><span>50</span>元</p>
-                <p class="coupon">(投资代金券)</p>
+                <p class="coupon">(出借代金券)</p>
                 <img class="border-fff" src="<?= ASSETS_BASE_URI ?>images/useraccount/invitefriends/border-fff.png">
             </div>
-            <p class="ticket-txt">好友首次投资>=10,000元</p>
+            <p class="ticket-txt">好友首次出借>=10,000元</p>
         </div>
         <div class="box-ticket">
             <div class="ticket ticket-right">
@@ -65,12 +65,12 @@ use common\utils\StringUtils;
                 <p class="coupon">(现金红包)</p>
                 <img class="border-fff" src="<?= ASSETS_BASE_URI ?>images/useraccount/invitefriends/border-fff.png">
             </div>
-            <p class="ticket-txt">好友前三次投资的0.1%</p>
+            <p class="ticket-txt">好友前三次出借的0.1%</p>
         </div>
         <div class="box-ticket">
             <div class="ticket ticket-last">
                 <p class="num"><span>50</span>元</p>
-                <p class="coupon">(投资代金券)</p>
+                <p class="coupon">(出借代金券)</p>
                 <img class="border-fff" src="<?= ASSETS_BASE_URI ?>images/useraccount/invitefriends/border-fff.png">
             </div>
             <p class="ticket-txt">好友注册即得</p>
@@ -102,19 +102,19 @@ use common\utils\StringUtils;
             <p><span>活动规则：</span></p>
             <p>1. 登录楚天财富网站，进入“我的账户”；</p>
             <p>2. 点击“邀请好友”可以看到邀请好友活动，通过微信或者链接进行邀请；</p>
-            <p>3. 当您的小伙伴通过此邀请链接注册并成功投资后，您即可获得邀请好友的奖励；</p>
-            <p>4. 邀请人在邀请好友之前必须在平台投资过，有投资记录才能参与现金返现活动，发放奖励现金时，以"角"为单位取整，采用四舍五入；</p>
+            <p>3. 当您的小伙伴通过此邀请链接注册并成功出借后，您即可获得邀请好友的奖励；</p>
+            <p>4. 邀请人在邀请好友之前必须在平台出借过，有出借记录才能参与现金返现活动，发放奖励现金时，以"角"为单位取整，采用四舍五入；</p>
             <p>5. 新手专享标和转让均不参加邀请奖励；</p>
             <p>6. 严禁恶意刷邀请好友，如有发生，封号处理。</p>
             <br/>
             <p><span>奖励规则：</span></p>
-            <p>1. 被邀请好友首次单笔投资（新手专享和转让除外）1万元以上（含1万元），邀请人获得1张50元代金券；</p>
-            <p>2. 被邀请好友首次单笔投资（新手专享和转让除外）1万元以下（不含1万元），邀请人获得1张30元代金券；</p>
-            <p>3. 邀请人获得被邀请人投资额0.1% 的奖励返现（仅限前三次投资，新手专享和转让除外）；</p>
+            <p>1. 被邀请好友首次单笔出借（新手专享和转让除外）1万元以上（含1万元），邀请人获得1张50元代金券；</p>
+            <p>2. 被邀请好友首次单笔出借（新手专享和转让除外）1万元以下（不含1万元），邀请人获得1张30元代金券；</p>
+            <p>3. 邀请人获得被邀请人出借额0.1% 的奖励返现（仅限前三次出借，新手专享和转让除外）；</p>
             <p>4. 被邀请人注册即可获得50元代金券。</p>
             <br/>
             <p><span>代金券使用规则：</span></p>
-            <p>1. 代金券有效期30天（单笔投资满1万元抵扣）。</p>
+            <p>1. 代金券有效期30天（单笔出借满1万元抵扣）。</p>
         </div>
     </div>
 </div>

@@ -17,8 +17,8 @@ if ($isLuodiye) {
     $host = Yii::$app->params['clientOption']['host']['wap'];
 
     $share = new Share([
-        'title' => '我在楚天财富投资啦，也送你888元福利，拿去花',
-        'description' => '楚天财富隶属湖北日报新媒体集团旗下理财平台，平台稳健运行3年，投资更放心',
+        'title' => '我在楚天财富出借啦，也送你888元福利，拿去花',
+        'description' => '楚天财富隶属湖北日报新媒体集团旗下平台，平台稳健运行3年，出借更放心',
         'url' => $host.'luodiye',
         'imgUrl' => ('/' === ASSETS_BASE_URI ? $host : ASSETS_BASE_URI).'ctcf/images/promo/share_weixin1.jpg',
     ]);
@@ -56,7 +56,7 @@ if ($isLuodiye) {
         <div class="transform-center">
             <p class="p-tip">恭喜您获得代金券！</p>
             <p class="p-number"><?= $isLuodiye ? 698 : 50 ?>元</p>
-            <p class="p-use">投资即可使用</p>
+            <p class="p-use">出借即可使用</p>
         </div>
         <div class="transform-bottom">
             <a href="/luodiye/signup/" id="collect">立即领取</a>
@@ -65,7 +65,7 @@ if ($isLuodiye) {
 </div>
 <div class="row description-box">
     <p class="description-header"><span>什么是楚天财富？</span></p>
-    <p class="description-content">楚天财富（武汉）金融服务有限公司简称“楚天财富”，隶属湖北日报新媒体集团下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金，安享稳健收益。</p>
+    <p class="description-content">楚天财富（武汉）金融服务有限公司简称“楚天财富”，隶属湖北日报新媒体集团下平台。甄选各类金融机构、优质企业产品。提供银行级服务，保障用户资金，安享稳健收益。</p>
 </div>
 <!--<div class="row production-box">-->
 <!--    <p class="production-header">精品理财</p>-->
@@ -93,7 +93,7 @@ if ($isLuodiye) {
 <div class="back-fff">
     <a class="link-last" href="/deal/deal/index/">立即认购</a>
 </div>
-<p class="danger-tip">理财非存款，产品有风险，投资须谨慎</p>
+<p class="danger-tip">产品有风险，出借须谨慎</p>
 <!--<div class="fixed-float">
     <img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt="">
 </div>

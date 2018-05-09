@@ -66,7 +66,7 @@ $this->showViewport = false;
 
     <div class="f12">
         <p class="tipsCtn">*实名认证信息由公安部进行认证</p>
-        <p class="tipsCtn">*平台为保障您的资金安全，投资前请先进行实名认证</p>
+        <p class="tipsCtn">*平台为保障您的资金安全，出借前请先进行实名认证</p>
     </div>
 </div>
 <!--<p id="btn_udesk_im" style="position:absolute;bottom: 30px;"><img src="<?= FE_BASE_URI ?>wap/new-homepage/images/online-service-blue.png">在线客服</p>-->

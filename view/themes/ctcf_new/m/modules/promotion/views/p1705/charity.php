@@ -53,5 +53,5 @@ $this->headerNavOn = true;
         </div>
     </div>
     <a class="btn" href="/promotion/p1705/to-loan-detail">去理财</a>
-    <p class="tips">本次活动最终解释权归楚天财富所有<br>理财非存款 产品有风险 投资须谨慎</p>
+    <p class="tips">本次活动最终解释权归楚天财富所有<br>理财非存款 产品有风险 出借须谨慎</p>
 </div>

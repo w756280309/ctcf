@@ -48,7 +48,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => Front
         <div class="detail_head">
             <div class="head1 lf">类型</div>
             <div class="head2 lf">时间</div>
-            <div class="head3 lf">投资积分</div>
+            <div class="head3 lf">出借积分</div>
             <div class="head4 lf">当前积分</div>
             <div class="head5 lf">详情</div>
         </div>

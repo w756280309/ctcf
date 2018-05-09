@@ -44,7 +44,7 @@ use common\models\offline\OfflineRepaymentPlan;
                 <th class="text-align-lf pl-box-10" width="220">项目名称</th>
                 <th class="text-align-rg" width="100">到期时间</th>
                 <th class="text-align-rg" width="80">预期年化</th>
-                <th class="text-align-rg" width="110">投资金额(元)</th>
+                <th class="text-align-rg" width="110">出借金额(元)</th>
                 <th class="text-align-rg" width="110">购买时间</th>
                 <th class="text-align-rg" width="100">预期收益(元)</th>
                 <th class="text-align-rg" width="90">还款计划</th>
@@ -53,14 +53,14 @@ use common\models\offline\OfflineRepaymentPlan;
                     <th class="text-align-lf pl-box-10" width="">项目名称</th>
                     <th class="text-align-rg" width="">项目期限</th>
                     <th class="text-align-rg" width="">预期年化</th>
-                    <th class="text-align-rg" width="">投资金额(元)</th>
+                    <th class="text-align-rg" width="">出借金额(元)</th>
                     <th class="text-align-rg" width="">购买时间</th>
                 <?php endif; ?>
                 <?php if (3 === $type) : ?>
                     <th class="text-align-lf pl-box-10" width="">项目名称</th>
                     <th class="text-align-rg" width="">还款时间</th>
                     <th class="text-align-rg" width="">预期年化</th>
-                    <th class="text-align-rg" width="">投资金额(元)</th>
+                    <th class="text-align-rg" width="">出借金额(元)</th>
                     <th class="text-align-rg" width="">购买时间</th>
                     <th class="text-align-rg" width="">实际收益(元)</th>
                     <th class="text-align-rg" width="">还款计划</th>
@@ -144,7 +144,7 @@ use common\models\offline\OfflineRepaymentPlan;
         <?php if (empty($models)) : ?>
             <div class="no-data"></div>
             <div class="no-data"></div>
-            <p class="without-font">暂无投资明细</p>
+            <p class="without-font">暂无出借明细</p>
         <?php endif; ?>
     </div>
     <center><?= Pager::widget(['pagination' => $pages]); ?></center>

@@ -112,7 +112,7 @@ $this->registerJs('forceReload_V2();');
                 <li><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_04.png" alt="">每周专属幸运号码</li>
                 <li><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_03.png" alt="">每周首次登录时间</li>
                 <li><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_02.png" alt="">每周首次签到日期</li>
-                <li><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_01.png" alt="">每周首次投资时间</li>
+                <li><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_01.png" alt="">每周首次出借时间</li>
             </ul>
         </dd>
     </dl>
@@ -127,8 +127,8 @@ $this->registerJs('forceReload_V2();');
                     <ol>
                         <li>奖品介绍<br>一等奖：<span style="color:#ef5b4f">200元超市卡</span>（每周至少一位哦）<br>幸运奖：<span style="color:#ef5b4f">随机积分奖励</span>（不限人数）</li>
                         <li>开奖时间：每周一上午10点</li>
-                        <li>中奖规则<br>一等奖：用户抽奖码与系统公布号码完全一致，即获奖（如果当期没有任何用户号码完全一致，系统将在幸运奖用户中，选取投资最早的用户作为一等奖得主）。<br>幸运奖：黑桃卡片数字和系统公布的黑桃幸运数字一致即可中奖。</li>
-                        <li>卡片点亮秘诀<br>黑桃卡片：幸运卡片，进入活动页面即可点亮；<br>红桃卡片：登录即可点亮；<br>梅花卡片：签到即可点亮；<br>方块卡片：任意投资即可点亮（活动期间尽早投资可能有惊喜哦）。</li>
+                        <li>中奖规则<br>一等奖：用户抽奖码与系统公布号码完全一致，即获奖（如果当期没有任何用户号码完全一致，系统将在幸运奖用户中，选取出借最早的用户作为一等奖得主）。<br>幸运奖：黑桃卡片数字和系统公布的黑桃幸运数字一致即可中奖。</li>
+                        <li>卡片点亮秘诀<br>黑桃卡片：幸运卡片，进入活动页面即可点亮；<br>红桃卡片：登录即可点亮；<br>梅花卡片：签到即可点亮；<br>方块卡片：任意出借即可点亮（活动期间尽早出借可能有惊喜哦）。</li>
                         <li>积分奖励将立即发放到您的账户，实物奖励将在中奖后7个工作日内联系发放，如有疑问请联系客服电话<?= Yii::$app->params['platform_info.contact_tel'] ?>。</li>
 
                         <div class="last_li">播种一个行动，收获一个惊喜，中奖不靠人品，因为我们是有算法的：<i v-on:click="showRegular" class="regular_tips">号码生成规则<span :class="{rot180:isShowRegular}">>></span></i></div>
@@ -137,12 +137,12 @@ $this->registerJs('forceReload_V2();');
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_04.png" alt="">每周专属幸运号码(完全随机)</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_03.png" alt="">每周首次登录时间(秒数) T1 %13，0=K</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_02.png" alt="">每周首次签到时间(秒数) T2 %13，0=K</div>
-                            <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_01.png" alt="">每周首次投资时间(秒数) T3 %13，0=K</div>
+                            <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_01.png" alt="">每周首次出借时间(秒数) T3 %13，0=K</div>
                             <div class="plat_code">平台中奖码：</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_04.png" alt="">每周总交易额&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S %13，0=K</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_03.png" alt="">每周登录用户数&nbsp;&nbsp;&nbsp;N1 %13，0=K</div>
                             <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_02.png" alt="">每周签到用户数&nbsp;&nbsp;&nbsp;N2 %13，0=K</div>
-                            <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_01.png" alt="">每周投资用户数&nbsp;&nbsp;&nbsp;N3 %13，0=K</div>
+                            <div><img src="<?= FE_BASE_URI ?>wap/happy-week/images/type_01.png" alt="">每周出借用户数&nbsp;&nbsp;&nbsp;N3 %13，0=K</div>
                         </div>
                         <p style="margin-top: 0.3rem;">本活动最终解释权归楚天财富所有</p>
                     </ol>
@@ -329,10 +329,10 @@ $this->registerJs('forceReload_V2();');
                         break;
                     case 'state4':
                         this.options.state = "<?= FE_BASE_URI ?>wap/happy-week/images/bg_04.png";
-                        this.options.title = "投资理财";
-                        this.options.content = "任意投资即可点亮本期方片扑克牌。点亮4张扑克可参与本期抽奖。";
+                        this.options.title = "出借理财";
+                        this.options.content = "任意出借即可点亮本期方片扑克牌。点亮4张扑克可参与本期抽奖。";
                         this.options.btnIsShow = true;
-                        this.options.btn = '去投资';
+                        this.options.btn = '去出借';
                         this.options.href = "/deal/deal/index";
                         if (this.isLoggedin == false) {
                             this.options.num = "<?= FE_BASE_URI ?>wap/happy-week/images/rdoNot.png";

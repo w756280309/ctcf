@@ -7,7 +7,7 @@ use common\view\LoanHelper;
 use wap\assets\WapAsset;
 use yii\helpers\HtmlPurifier;
 
-$this->title = '项目详情';
+$this->title = '借款详情';
 
 $this->registerCssFile(FE_BASE_URI.'libs/videojs/video-js.min.css', ['position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/details-list/xiangqing.css?v=20180212111', ['depends' => WapAsset::class, 'position' => 1]);
@@ -45,7 +45,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
                     <?= LoanHelper::getDealRate($deal) ?><span class="column-lu">%</span>
                     <?php if (!empty($deal->jiaxi)) { ?><span class="bonus-badge">+<?=  doubleval($deal->jiaxi) ?>%</span><?php } ?>
                 </div>
-                <span class="qing">预期年化收益率</span>
+                <span class="qing">借贷双方约定利率</span>
             </li>
             <li class="col-xs-6">
                 <div>
@@ -69,7 +69,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
 <div class="row shuju">
     <div class="col-xs-9 amt">
         <span><?= $deal->status == 1 ? StringUtils::amountFormat1('{amount}{unit}', $deal->money) : StringUtils::amountFormat2($deal->getLoanBalance()).'元' ?></span><i>/<?= StringUtils::amountFormat1('{amount}{unit}', $deal->money) ?></i>
-        <div>可投余额/项目总额</div>
+        <div>可出借金额/出借总额</div>
     </div>
     <div class="col-xs-2 progress-detail">
         <div class="shuju-bili"><?= $deal->getProgressForDisplay() ?><em>%</em></div>
@@ -80,16 +80,16 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
 <div class="row message">
     <div class="col-xs-12 xian2">
         <?php if ($deal->is_xs) { ?>
-            <p class="notice-coupon">新手专享标每账户限投资一次，限购一万元。</p>
+            <p class="notice-coupon">新手专享标每账户限出借一次，限购一万元。</p>
         <?php } ?>
         <?php if (!$deal->allowUseCoupon) { ?>
             <p class="notice-coupon">此项目不参与活动，不可使用代金券。</p>
         <?php } ?>
-        <div class="m1">起投金额：<span><?= StringUtils::amountFormat2($deal->start_money) ?>元</span></div>
+        <div class="m1">起借金额：<span><?= StringUtils::amountFormat2($deal->start_money) ?>元</span></div>
         <div class="m5">递增金额：<span><?= StringUtils::amountFormat2($deal->dizeng_money) ?>元</span></div>   <!-- 增加递增金额字段 -->
-        <div class="m2">产品起息日：<span><?= $deal->jixi_time > 0 ? date('Y-m-d',$deal->jixi_time) : '项目成立日次日';?></span></div>
+        <div class="m2">标的计息日：<span><?= $deal->jixi_time > 0 ? date('Y-m-d',$deal->jixi_time) : '标的成立日次日';?></span></div>
         <?php if (0 === (int)$deal->finish_date) { ?>
-            <div class="m3">项目期限：<span><?php $ex = $deal->getDuration() ?><?= $ex['value'] ?></span><?= $ex['unit']?></div>
+            <div class="m3">借款期限：<span><?php $ex = $deal->getDuration() ?><?= $ex['value'] ?></span><?= $ex['unit']?></div>
         <?php } else { ?>
             <div class="m3">产品到期日：<span><?= date('Y-m-d',$deal->finish_date) ?></span></div>
         <?php } ?>
@@ -169,7 +169,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
 <div class=earn-ransom>
     <h5>收益说明</h5>
     <div class="row earnings-tips">
-        <div class="col-xs-4 col">投资金额</div>
+        <div class="col-xs-4 col">出借金额</div>
         <div class="col-xs-4 col">提前赎回利率</div>
         <div class="col-xs-4 col">到期兑付利率</div>
     </div>
@@ -190,16 +190,16 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     </div>
     <h5 class='ransom-h5'>赎回说明</h5>
     <ol class="ransom-list" id='ransom-list' style="list-style: decimal;">
-        <li>建议投资者选择到期后自动兑付，最高利率达到9.5%；提前赎回将根据实际投资金额和投资期限计算实际收益，收益率低于到期自动兑付的利率。</li>
+        <li>建议出借者选择到期后自动兑付，最高利率达到9.5%；提前赎回将根据实际出借金额和出借期限计算实际收益，收益率低于到期自动兑付的利率。</li>
         <?php
             $closedExpireTime = RedeemHelper::getClosedPeriodExpireTime($deal->redemptionPeriods);
             if (null !== $closedExpireTime) {
         ?>
-            <li>封闭期：本产品从购买日至<?= $closedExpireTime->format('Y年m月d日') ?>属封闭期，投资者在封闭期内不得赎回理财产品。</li>
+            <li>封闭期：本产品从购买日至<?= $closedExpireTime->format('Y年m月d日') ?>属封闭期，出借者在封闭期内不得赎回理财产品。</li>
         <?php } ?>
-        <li>提前赎回：封闭期过后，投资者可在<?= RedeemHelper::formatRedemptionPeriods($deal->redemptionPeriods) ?>期间预约提前赎回；预约成功后，<?= RedeemHelper::formatRedemptionPaymentDates($deal->redemptionPaymentDates) ?>当日为投资者兑付所有投资本金及收益。赎回不收取任何手续费。</li>
-        <li>到期自动兑付：如投资者不提前赎回，产品从购买日起算，满3年后，自动兑付所有投资本金及收益，收益率高于提前赎回利率。具体收益详见收益说明。</li>
-        <li>付息方式说明：购买后，每自然年6月30日，12月30日按照提前赎回利率支付收益。若投资者未申请提前赎回，将在产品到期日补足所有差额收益。</li>
+        <li>提前赎回：封闭期过后，出借者可在<?= RedeemHelper::formatRedemptionPeriods($deal->redemptionPeriods) ?>期间预约提前赎回；预约成功后，<?= RedeemHelper::formatRedemptionPaymentDates($deal->redemptionPaymentDates) ?>当日为出借者兑付所有出借本金及收益。赎回不收取任何手续费。</li>
+        <li>到期自动兑付：如出借者不提前赎回，产品从购买日起算，满3年后，自动兑付所有出借本金及收益，收益率高于提前赎回利率。具体收益详见收益说明。</li>
+        <li>付息方式说明：购买后，每自然年6月30日，12月30日按照提前赎回利率支付收益。若出借者未申请提前赎回，将在产品到期日补足所有差额收益。</li>
     </ol>
 </div>
 <?php } ?>
@@ -225,8 +225,8 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
 <div class="row tab">
     <div class="col-xs-1"></div>
     <div class="col-xs-10 tabs">
-        <div class="tab1">项目详情</div>
-        <div class="tab2">投资记录</div>
+        <div class="tab1">借款详情</div>
+        <div class="tab2">出借记录</div>
     </div>
     <div class="col-xs-1"></div>
 </div>
@@ -234,18 +234,18 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     <div class="col-xs-1"></div>
     <div class="col-xs-10">
         <?= HtmlPurifier::process($deal->description) ?>
-        <p style="margin-top: 1em; padding-bottom: 0.5em; font-size: 12px; color: #bababf;">*理财非存款，产品有风险，投资须谨慎</p>
+        <p style="margin-top: 1em; padding-bottom: 0.5em; font-size: 12px; color: #bababf;">*市场有风险，出借需谨慎</p>
     </div>
     <div class="col-xs-1"></div>
 </div>
-<!--投资记录-->
+<!--出借记录-->
 <div class="row touzi-box">
     <div class="col-xs-1"></div>
     <div class="col-xs-10 col">
             <div class="row touzi datafirst">
-                <div class="col-xs-3 col">投资人</div>
-                <div class="col-xs-5">投资时间</div>
-                <div class="col-xs-4" style="padding: 0px;">投资金额(元)</div>
+                <div class="col-xs-3 col">出借人</div>
+                <div class="col-xs-5">出借时间</div>
+                <div class="col-xs-4" style="padding: 0px;">出借金额(元)</div>
             </div>
 
         </div>
@@ -265,7 +265,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
         </form>
         <div id="x-purchase" class="row rengou" style="cursor: pointer">
             <div class="col-xs-1"></div>
-            <div class="col-xs-10">立即认购</div>
+            <div class="col-xs-10">立即出借</div>
             <div class="col-xs-1"></div>
         </div>
     <?php } else { ?>

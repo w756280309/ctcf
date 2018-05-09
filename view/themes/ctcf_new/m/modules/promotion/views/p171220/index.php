@@ -428,7 +428,7 @@ $this->title = '积分限时秒杀';
                     btnMsg: "赚积分",
                     popTopColor: "#f03350",
                     bgSize: "100% 100%",
-                    title: '<p style="font-size:0.48rem;color: #97280a;font-weight: bold">Sorry，您的积分不足！<br>快去投资赚取积分吧！</p>',
+                    title: '<p style="font-size:0.48rem;color: #97280a;font-weight: bold">Sorry，您的积分不足！<br>快去出借赚取积分吧！</p>',
                     popBtmBackground: 'url(<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/pop-btn-bg.png) no-repeat',
                     popMiddleHasDiv: true,
                     contentMsg: "<img style='margin: -.4rem auto 0;display: block;height: 2.24rem;' src='<?= FE_BASE_URI ?>wap/campaigns/active20171220/images/fail.png' alt='图片地址'/>",

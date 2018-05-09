@@ -1,14 +1,14 @@
 <?php
-$this->title = ("success" === $ret) ? "购买成功" : "购买失败";
+$this->title = ("success" === $ret) ? "出借成功" : "出借失败";
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/buy-setting/setting.css?v=20160331">
 
 <div class="row" id='bind-box'>
     <div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-            <div>购买成功</div>
+            <div>出借成功</div>
         <?php } else { ?>
-            <div>购买失败</div>
+            <div>出借失败</div>
         <?php } ?>
     </div>
 </div>
@@ -24,7 +24,7 @@ $this->title = ("success" === $ret) ? "购买成功" : "购买失败";
 <div class="row daojishi" id='bind-close1'>
     <div class="col-xs-12 page_padding">
         <?php if ('success' === $ret) { ?>
-            <div>您已成功认购项目，可以进入我的理财查看认购详情</div>
+            <div>您已成功认购项目，可以进入我的出借查看认购详情</div>
         <?php } else { ?>
             <div>遇到问题请联系客服，电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></div>
         <?php } ?>

@@ -5,7 +5,7 @@ use common\view\LoanHelper;
 use wap\assets\WapAsset;
 use yii\web\YiiAsset;
 
-$this->title = '购买';
+$this->title = '出借';
 
 $validCouponCount = count($validCoupons);
 
@@ -24,7 +24,7 @@ $this->registerJs(<<<JS
 JS
     , 1);
 
-$this->registerJsFile(ASSETS_BASE_URI . 'js/order.js?v=20171108', ['depends' => YiiAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI . 'js/order.js?v=20180509', ['depends' => YiiAsset::class]);
 
 $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=2018021111', ['depends' => WapAsset::class]);
 
@@ -75,16 +75,16 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
     <!--   购买页 start-->
     <div class="row produce">
         <div class="col-xs-12 text-align-lf first-hang" style="padding-left: 0.613rem;"><?= $deal->title ?></div>
-        <div style="width: 35%;" class="col-xs-4 text-align-lf">预期年化收益</div>
+        <div style="width: 35%;" class="col-xs-4 text-align-lf">借贷双方约定利率</div>
         <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= LoanHelper::getDealRate($deal) ?>
             %<?php if (!empty($deal->jiaxi)) { ?>+<?= $deal->jiaxi ?>%<?php } ?></div>
-        <div style="width: 35%;" class="col-xs-4 text-align-lf">项目期限</div>
+        <div style="width: 35%;" class="col-xs-4 text-align-lf">借款期限</div>
         <div style="width: 65%;" class="col-xs-8 text-align-lf col">
             <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit'] ?>
         </div>
-        <div style="width: 35%;" class="col-xs-4 text-align-lf">可投余额</div>
+        <div style="width: 35%;" class="col-xs-4 text-align-lf">可出借余额</div>
         <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->getLoanBalance()) ?>元</div>
-        <div style="width: 35%;" class="col-xs-4 text-align-lf">起投金额</div>
+        <div style="width: 35%;" class="col-xs-4 text-align-lf">起借金额</div>
         <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->start_money) ?>元</div>
         <div style="width: 35%;" class="col-xs-4 text-align-lf">递增金额</div>
         <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->dizeng_money) ?>元</div>
@@ -100,9 +100,9 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
     <form style="position: relative;" action="/order/order/doorder?sn=<?= $deal->sn ?>" method="post" id="orderform" data-to="1">
         <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
         <div class="row surplus">
-            <div class="lf" style="border:none;width: 31%;color:#a3a4a6;">投资金额(元)</div>
+            <div class="lf" style="border:none;width: 31%;color:#a3a4a6;">出借金额(元)</div>
             <input name="money" maxlength="8" type="tel" id="money" value="<?= empty($money) ? '' : $money ?>"
-                   placeholder="请输入投资金额" class="lf" step="any" autocomplete="off">
+                   placeholder="请输入出借金额" class="lf" step="any" autocomplete="off">
             <div id="btnDelete" class="col-xs-2 safe-txt" style="position: absolute;right: 0;border:none;width: 14%;"><img class="delete-input" src="<?= ASSETS_BASE_URI ?>images/icon_delete.png" alt=""></div>
         </div>
             <input name="couponConfirm" id="couponConfirm" type="text" value="" hidden="hidden">
@@ -131,7 +131,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
         </div>
 
         <div class="row login-sign-btn ht">
-	          <input id="buybtn" class="btn-common btn-normal" type="submit" value="购买">
+	          <input id="buybtn" class="btn-common btn-normal" type="submit" value="出借">
         </div>
         <div class="row" style="margin: 0.533rem auto .5rem;">
             <center><a style="text-align: left;padding-left: 0.613rem;" class="col-xs-12 lf" href="/order/order/agreement?id=<?= $deal->id ?>">我已阅读并同意<span style="color: #419bf9">《产品合同》</span></a></center>
@@ -235,13 +235,13 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
         </ul>
         <p class="rules-parts">代金券</p>
         <ul class="rules-content">
-            <li>一次投资可使用多张代金券，多张代金券使用需要满足投资额不少于多张代金券的累计金额。</li>
+            <li>一次出借可使用多张代金券，多张代金券使用需要满足出借额不少于多张代金券的累计金额。</li>
             <li>代金券不能与加息券叠加使用。</li>
-            <li>代金券使用后，所投资项目开始收益后，代金券金额将成为账户总资产的一部分。</li>
+            <li>代金券使用后，所出借项目开始收益后，代金券金额将成为账户总资产的一部分。</li>
         </ul>
         <p class="rules-parts">加息券</p>
         <ul class="rules-content">
-            <li>一次投资使用1张加息券，使用后项目在加息时间内获得额外年化收益。</li>
+            <li>一次出借使用1张加息券，使用后项目在加息时间内获得额外年化收益。</li>
             <li>加息券不可叠加使用，也不与其他卡券叠加使用。</li>
             <li>通过加息券获得的收益将随项目最后一期本息一期回到您的账户；项目中途转让将不享受任何加息券带来的收益。</li>
         </ul>
@@ -293,7 +293,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
                                 limitTxt = "正式标产品可用";
                             }
                             if (!!data.CouponList[i].loanExpires) {
-                                limitTxt2 = "投资满" + parseInt(data.CouponList[i].minInvest) + "元可用"
+                                limitTxt2 = "出借满" + parseInt(data.CouponList[i].minInvest) + "元可用"
                             }
                             var jineTxt;
                             if (Number(data.CouponList[i].minInvest) < 10000) {
@@ -356,8 +356,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
                     } else if (data.total.type === 0) {
                         var daijinNum = parseInt(data.total.sum);
                         var daijinCount = data.total.count;
-                        $(".daijin-remind").html("已选<span style='color:#6d96e0'>" + daijinCount + "</span>张代金券，可抵扣<span style='color:#6d96e0'>" + daijinNum + "</span>元投资")
-                        $(".line-two").html("(已选" + daijinCount + "张代金券，可抵扣" + daijinNum + "元投资)");
+                        $(".daijin-remind").html("已选<span style='color:#6d96e0'>" + daijinCount + "</span>张代金券，可抵扣<span style='color:#6d96e0'>" + daijinNum + "</span>元")
+                        $(".line-two").html("(已选" + daijinCount + "张代金券，可抵扣" + daijinNum + "元)");
                         $(".safe-txt .notice").html("抵扣" + daijinNum + "元(" + daijinCount + "张代金券)")
                         $("#selectedCouponAmount").val(daijinNum);
                         $("#selectedCouponCount").val(daijinCount);
@@ -389,7 +389,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
         function toCoupon() {
             var money = $('#money').val();
             if (!money) {
-                toastCenter("请先输入投资金额");
+                toastCenter("请先输入出借金额");
             } else {
                 $(".produce,.surplus,#orderform,#btn_udesk_im").hide();
                 $(".coupon-box").show();
@@ -538,8 +538,8 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
                             if (data.data.coupons.length > 0) {
                                 var daijinNum = data.data.money;
                                 var daijinCount = data.data.total;
-                                $(".daijin-remind").html("已选<span style='color:#6d96e0'>" + daijinCount + "</span>张代金券，可抵扣<span style='color:#6d96e0'>" + daijinNum + "</span>元投资")
-                                $(".line-two").html("(已选" + daijinCount + "张代金券，可抵扣" + daijinNum + "元投资)");
+                                $(".daijin-remind").html("已选<span style='color:#6d96e0'>" + daijinCount + "</span>张代金券，可抵扣<span style='color:#6d96e0'>" + daijinNum + "</span>元")
+                                $(".line-two").html("(已选" + daijinCount + "张代金券，可抵扣" + daijinNum + "元)");
                                 $(".safe-txt .notice").html("抵扣" + daijinNum + "元(" + daijinCount + "张代金券)");
                                 $("#selectedCouponAmount").val(daijinNum);
                                 $("#selectedCouponCount").val(daijinCount);

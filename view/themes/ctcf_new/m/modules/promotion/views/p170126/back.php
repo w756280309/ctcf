@@ -19,11 +19,11 @@ if ($user && !($user->id % 2)) {
     <div class="header f16">
         <img src="<?= FE_BASE_URI ?>wap/luodiye/images/tick_01.png" alt="">
         <p>您已成功注册楚天财富</p>
-        <p>现在投资即可领取</p>
+        <p>现在出借即可领取</p>
     </div>
     <ul class="liststep f16">
         <li><span class="f24 lf">1</span>注册成功</li>
-        <li><a class="go-deal" href="<?= $toUrl ?>"><span class="f24 lf">2</span>首次投资1000元即可获得积分</a></li>
+        <li><a class="go-deal" href="<?= $toUrl ?>"><span class="f24 lf">2</span>首次出借1000元即可获得积分</a></li>
         <li><span class="f24 lf">3</span>前往积分商城兑换</li>
     </ul>
 

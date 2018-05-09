@@ -50,7 +50,7 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
             <div style="width:0.69333333rem;height:1.226667rem;line-height:1.226667rem;text-align:left;vertical-align: middle;float:left;">
                 <img src="<?= ASSETS_BASE_URI ?>ctcf/images/ucenter/licai.png" style="height: 40%;" alt="">
             </div>
-            <div class="lf"style="background-position: 0 0">我的理财</div>
+            <div class="lf"style="background-position: 0 0">我的出借</div>
             <div class="rg">
                 <span class="f15" id="licai" style="color: #ff6707"></span>
                 <img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
@@ -87,7 +87,7 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
         <div style="width:0.69333333rem;height:1.226667rem;line-height:1.226667rem;text-align:left;vertical-align: middle;float:left;">
             <img src="<?= ASSETS_BASE_URI ?>ctcf/images/ucenter/door_licai.png" style="height: 40%;" alt="">
         </div>
-        <div class="lf f15"style="background-position: 0 0">门店理财</div>
+        <div class="lf f15"style="background-position: 0 0">门店出借</div>
         <div class="rg">
             <span class="f15" id="off_licai" style="color: #ff6707"></span>
             <img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">

@@ -101,7 +101,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/bindcardalready.css
 
         <h3>温馨提示</h3>
         <div class="section">
-            <p>投资人充值手续费由楚天财富垫付；</p>
+            <p>出借人充值手续费由楚天财富垫付；</p>
             <p>最低充值金额应大于等于1元；</p>
             <p>充值期间请勿关闭浏览器，待充值成功并返回账户中心后，所充资金才能入账。如有疑问，请联系客服<?= Yii::$app->params['platform_info.contact_tel'] ?>。</p>
         </div>

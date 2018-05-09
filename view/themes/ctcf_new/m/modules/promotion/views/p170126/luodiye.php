@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '首次投资送太空展套票';
+$this->title = '首次出借送太空展套票';
 $config = json_decode($promo->config, true);
 
 use yii\bootstrap\ActiveForm;
@@ -90,7 +90,7 @@ use yii\captcha\Captcha;
             </dt>
             <dd class="erweima f11"><img src="<?= FE_BASE_URI ?>wap/luodiye/images/erweima.png" alt=""><p>微信公众号</p></dd>
         </dl>
-        <p class="f11">*理财非存款，产品有风险，投资须谨慎</p>
+        <p class="f11">*理财非存款，产品有风险，出借须谨慎</p>
     </div>
 </div>
 

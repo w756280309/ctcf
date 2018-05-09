@@ -91,7 +91,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
                         <li class="left transferMoney_title">转让金额：</li>
                         <li class="left transferMoney_space"></li>
                         <li class="left transferMoney_money transfer_common">
-                            <input type="text" name="" id="credit_amount" placeholder="起投<?= StringUtils::amountFormat2($minOrderAmount) ?>元，递增<?= StringUtils::amountFormat2($incrOrderAmount) ?>元" autocomplete="off" t_value="" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
+                            <input type="text" name="" id="credit_amount" placeholder="起借<?= StringUtils::amountFormat2($minOrderAmount) ?>元，递增<?= StringUtils::amountFormat2($incrOrderAmount) ?>元" autocomplete="off" t_value="" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
                             <span>元</span>
                         </li>
                         <li class="transferMoney_error common_color" id="amount_error">/li>
@@ -344,7 +344,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         }
         if (total_amount >= minAmount) {
             if (amount < minAmount) {
-                amount_error.html('转让金额必须大于起投金额');
+                amount_error.html('转让金额必须大于起借金额');
                 amount_error.show();
                 return false;
             }

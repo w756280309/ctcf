@@ -172,7 +172,7 @@ use common\utils\StringUtils;
                     </p>
                     <p class="single-tuchu">6、换卡申请提交后，多久可以换卡成功？
                     </p>
-                    <p>若您的账户余额为0且没有在途资金，系统将在一小时以内自动审核换卡；否则需拨打客服热线<?= \Yii::$app->params['platform_info.contact_tel'] ?>提交相关资料，提交资料后，进行2-5天的人工审核换卡；在途资金指有投资回款或提现冻结金额。换卡申请期间不影响充值和提现。
+                    <p>若您的账户余额为0且没有在途资金，系统将在一小时以内自动审核换卡；否则需拨打客服热线<?= \Yii::$app->params['platform_info.contact_tel'] ?>提交相关资料，提交资料后，进行2-5天的人工审核换卡；在途资金指有出借回款或提现冻结金额。换卡申请期间不影响充值和提现。
                     </p>
                     <p class="single-tuchu">7、换卡申请都需要提交哪些资料？
                     </p>
@@ -185,15 +185,15 @@ use common\utils\StringUtils;
                     <p>（4）无新卡图片的，提供新卡开户单子或新卡与身份证关联关系证明（银行出具）。
                     </p>
                 </div>
-                <p class="help-header"><span>——————</span>&nbsp;&nbsp;投资/提现&nbsp;&nbsp;<span>——————</span></p>
+                <p class="help-header"><span>——————</span>&nbsp;&nbsp;出借/提现&nbsp;&nbsp;<span>——————</span></p>
                 <div class="kong-width">
                     <p class="single-tuchu">1、理财产品的计息日和还款日如何计算？
                     </p>
-                    <p>用户所投资的产品在募集完成后，产品状态变化为“收益中”当天即为计息日。具体以产品发布页面、相关合同为准。
+                    <p>用户所出借的产品在募集完成后，产品状态变化为“收益中”当天即为计息日。具体以产品发布页面、相关合同为准。
                     </p>
-                    <p class="single-tuchu">2、投资金额有什么限制吗？
+                    <p class="single-tuchu">2、出借金额有什么限制吗？
                     </p>
-                    <p>用户的投资金额需要满足项目的起投金额和递增金额，并且不能使剩余可投金额小于一倍起投金额。
+                    <p>用户的出借金额需要满足项目的起借金额和递增金额，并且不能使剩余可投金额小于一倍起借金额。
                     </p>
 
                     <p class="single-tuchu">3、如何申请转让？

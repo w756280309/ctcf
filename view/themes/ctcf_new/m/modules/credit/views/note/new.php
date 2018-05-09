@@ -32,7 +32,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
     <div class="col-xs-11 col-xs-offset-1 text-align-lf first-line" style="padding-right: 0;"><?= Html::encode($loan->title)?></div>
     <div class="col-xs-3 col-xs-offset-1">可转让金额</div>
     <div class="col-xs-8 text-align-lf col"><?= number_format(bcdiv($asset['maxTradableAmount'], 100, 2), 2)?>元</div>
-    <div class="col-xs-3 col-xs-offset-1">预期年化率</div>
+    <div class="col-xs-3 col-xs-offset-1">借贷双方约定利率</div>
     <div class="col-xs-8 text-align-lf col">
         <?= floatval($apr) * 100 ?>%
     </div>
@@ -53,7 +53,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
 </div>
 <div class="row sm-height margin-top">
     <div class="col-xs-3 col-xs-offset-1 safe-txt font-32">转让金额</div>
-    <input type="text" name="" id="credit_amount" placeholder="起投<?= StringUtils::amountFormat2($minOrderAmount) ?>元，递增<?= StringUtils::amountFormat2($incrOrderAmount) ?>元" autocomplete="off" t_value="" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" class="col-xs-7 safe-lf text-align-lf font-26">
+    <input type="text" name="" id="credit_amount" placeholder="起借<?= StringUtils::amountFormat2($minOrderAmount) ?>元，递增<?= StringUtils::amountFormat2($incrOrderAmount) ?>元" autocomplete="off" t_value="" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" class="col-xs-7 safe-lf text-align-lf font-26">
     <div class=" safe-txt font-32 money_yuan">元</div>
 </div>
 <div class="row sm-height">
@@ -281,7 +281,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         }
         if (total_amount >= minAmount) {
             if (amount < minAmount) {
-                toastCenter('转让金额必须大于起投金额');
+                toastCenter('转让金额必须大于起借金额');
                 return false;
             }
             var lastAmount = total_amount - amount;

@@ -19,9 +19,9 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
     <img class="client-img title-01" src="<?= FE_BASE_URI ?>wap/campaigns/active20170520/images/title-01.png" alt="title-01">
     <p class="title-01-text">楚天财富周年庆特别版理财项目<br/>外企航服定向融资工具，限时加息<span>0.5%</span></p>
     <p class="box">国企+央企双担保<br/>原预期年化收益7.4%-8.0%，再加<span>0.5%</span></p>
-    <a class="invest" href="/deal/deal/index">去投资</a>
+    <a class="invest" href="/deal/deal/index">去出借</a>
     <img class="client-img" src="<?= FE_BASE_URI ?>wap/campaigns/active20170520/images/title-02.png" alt="title-02">
-    <p class="invest-txt">5月20日当天，投资任意理财项目（不含转让产品），所获积分提升为原来的5倍。</p>
+    <p class="invest-txt">5月20日当天，出借任意理财项目（不含转让产品），所获积分提升为原来的5倍。</p>
     <img class="client-img invest-client" src="<?= FE_BASE_URI ?>wap/campaigns/active20170520/images/table.png" alt="table">
     <a class="invest invest-02" href="/deal/deal/index">去理财</a>
     <img class="client-img" src="<?= FE_BASE_URI ?>wap/campaigns/active20170520/images/title-03.png" alt="title-03">
@@ -43,7 +43,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
         <?php endif; ?>
     </div>
     <img class="client-img task" src="<?= FE_BASE_URI ?>wap/campaigns/active20170520/images/task.png" alt="task">
-    <p class="tips">本次活动最终解释权归楚天财富所有<br/>理财非存款 产品有风险 投资须谨慎</p>
+    <p class="tips">本次活动最终解释权归楚天财富所有<br/>理财非存款 产品有风险 出借须谨慎</p>
 
     <!-- 遮罩 -->
     <div class="mask"></div>

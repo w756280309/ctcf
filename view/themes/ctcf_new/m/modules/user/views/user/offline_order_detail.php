@@ -5,7 +5,7 @@
  * Date: 17-12-26
  * Time: 下午2:43
  */
-$this->title = '投资详情';
+$this->title = '出借详情';
 use common\models\product\RateSteps;
 use common\models\order\OnlineRepaymentPlan;
 use common\utils\StringUtils;
@@ -46,16 +46,16 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20180102', ['d
             </div>
         </div>
     </div>
-    <!--投资信息-->
+    <!--出借信息-->
     <div class="row" id="information-box">
         <div class="col-xs-12">
             <div class="information-title">
-                <div class="information-left">投资信息</div>
+                <div class="information-left">出借信息</div>
                 <div class="information-right"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
             </div>
         </div>
     </div>
-    <!--投资信息详情-->
+    <!--出借信息详情-->
     <div class="row" id="information-content">
         <div class="col-xs-12">
             <ul class="information-content">

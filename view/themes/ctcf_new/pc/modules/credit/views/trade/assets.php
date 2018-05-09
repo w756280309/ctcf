@@ -27,9 +27,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', 
                 </div>
                 <div class="myCoupon-content">
                     <div class="list-single">
-                        <a class="a_first <?= 1 === $type ? 'select' : '' ?>" href="/credit/trade/assets">可转让的项目</a>
-                        <a class="a_second <?= 2 === $type ? 'select' : '' ?>" href="/credit/trade/assets?type=2">转让中的项目</a>
-                        <a class="a_third <?= 3 === $type ? 'select' : '' ?>" href="/credit/trade/assets?type=3">已转让的项目</a>
+                        <a class="a_first <?= 1 === $type ? 'select' : '' ?>" href="/credit/trade/assets">可转让的标的</a>
+                        <a class="a_second <?= 2 === $type ? 'select' : '' ?>" href="/credit/trade/assets?type=2">转让中的标的</a>
+                        <a class="a_third <?= 3 === $type ? 'select' : '' ?>" href="/credit/trade/assets?type=3">已转让的标的</a>
                     </div>
                     <?php if (1 === $type) { ?>
                         <div class="display_number">
@@ -38,9 +38,9 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', 
                         </div>
                         <table>
                             <tr>
-                                <th class="text-first" width="120">项目名称</th>
+                                <th class="text-first" width="120">标的名称</th>
                                 <th class="text-align-ct" width="100">剩余期限</th>
-                                <th class="text-third" width="110">预期年化</th>
+                                <th class="text-third" width="110">借贷双方约定利率</th>
                                 <th class="text-third" width="130">可转让金额(元)</th>
                                 <th class="text-align-ct" width="110">还款计划</th>
                                 <th class="text-third" width="60">合同</th>
@@ -125,8 +125,8 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', 
                         <?php if (empty($assets)) { ?>
                             <div class="table-kong"></div>
                             <div class="table-kong"></div>
-                            <p class="without-font">暂无可转让的项目</p>
-                            <a class="link-tender" href="/licai/">立即投资</a>
+                            <p class="without-font">暂无可转让的标的</p>
+                            <a class="link-tender" href="/licai/">立即出借</a>
                         <?php } else { ?>
                             <center><?= Pager::widget(['pagination' => $pages]); ?></center>
                         <?php } ?>
@@ -138,7 +138,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', 
                         </div>
                         <table>
                             <tr>
-                                <th class="text-first" width="226">项目名称</th>
+                                <th class="text-first" width="226">标的名称</th>
                                 <th class="text-align-ct" width="80">转让日期</th>
                                 <th class="text-third" width="90">转让金额(元)</th>
                                 <th class="text-align-ct" width="90">折让率(%)</th>
@@ -164,7 +164,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', 
                             <div class="table-kong"></div>
                             <div class="table-kong"></div>
                             <p class="without-font">暂无转让中的项目</p>
-                            <a class="link-tender" href="/licai/">立即投资</a>
+                            <a class="link-tender" href="/licai/">立即出借</a>
                         <?php } else { ?>
                             <center><?= Pager::widget(['pagination' => $pages]); ?></center>
                         <?php } ?>
@@ -175,7 +175,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', 
                         </div>
                         <table>
                             <tr>
-                                <th class="text-first" width="226">项目名称</th>
+                                <th class="text-first" width="226">标的名称</th>
                                 <th class="text-align-ct" width="80">完成日期</th>
                                 <th class="text-third" width="120">已转让金额(元)</th>
                                 <th class="text-align-ct" width="90">折让率(%)</th>
@@ -205,7 +205,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/transfering.js?v=161026', 
                             <div class="table-kong"></div>
                             <div class="table-kong"></div>
                             <p class="without-font">暂无已转让的项目</p>
-                            <a class="link-tender" href="/licai/">立即投资</a>
+                            <a class="link-tender" href="/licai/">立即出借</a>
                         <?php } else { ?>
                             <center><?= Pager::widget(['pagination' => $pages]); ?></center>
                         <?php } ?>

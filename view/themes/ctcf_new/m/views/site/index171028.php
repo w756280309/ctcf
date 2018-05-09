@@ -81,19 +81,19 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
             <p class="popover-title">价值698元代金券<br>已发到您的账户</p>
             <p class="popover-detail">你也可以在账户-代金券中,查看奖励</p>
             <a class="btn_01" href="/user/coupon/list">查看详情</a>
-            <a class="btn_02" href="javascript:void(0)">去投资 领取160元超市卡</a>
+            <a class="btn_02" href="javascript:void(0)">去出借 领取160元超市卡</a>
         </div>
     </div>
 
     <!--新增首页弹框2-->
     <div class="second-popover" style="display: none">
         <img class="popover-close" src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/popover-close_01.png" alt="">
-        <p class="popover-title">投资前先开通资金托管账户</p>
-        <p class="popover-detail">开通账户送积分，投资还有更多超市卡等你拿</p>
+        <p class="popover-title">出借前先开通资金托管账户</p>
+        <p class="popover-detail">开通账户送积分，出借还有更多超市卡等你拿</p>
         <a class="popover-btn" href="/user/identity">马上去开通</a>
     </div>
 
-    <!--已登陆未投资弹窗-->
+    <!--已登陆未出借弹窗-->
     <div class="mask-no-invest">
         <div class="popup-box">
             <div class="popup-box-top"></div>
@@ -135,7 +135,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
             <a href="/user/coupon/list/" class="popup-box-btn">点击领取</a>
         </div>
     </div>
-    <!--已登陆已投资-->
+    <!--已登陆已出借-->
     <div class="mask-login-invest">
         <div class="popup-box">
             <i class="close-box"></i>
@@ -143,10 +143,10 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
                 <ul class="swiper-wrapper" id="upgrade-sweper">
                     <li class="swiper-slide upgrade_explain">
                         <h5>尊敬的用户，您好：</h5>
-                        <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史投资额，特发放了豪华升级礼包，敬请收下！</p>
+                        <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史出借额，特发放了豪华升级礼包，敬请收下！</p>
                         <table>
                             <tr>
-                                <th>累计年化投资金额（万元）</th>
+                                <th>累计年化出借金额（万元）</th>
                                 <th>升级红包</th>
                                 <th>升级积分</th>
                             </tr>
@@ -216,12 +216,12 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 			<span class="newbid-insideBox-title">新手专享</span>
 			<p class="newbid-insideBox-shouyiNum">10%</p>
 			<p class="newbid-insideBox-shouyiTxt">预期年化收益</p>
-			<img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/pic_newbid.png" class="newbid-insideBox-pic">
+			<img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/pic_newbid_new.png" class="newbid-insideBox-pic">
 			<a href="/site/signup" class="newbid-insideBox-register">注册</a>
 			<a href="/site/login" class="newbid-insideBox-login">登录</a>
 		</div>
 		<p class="newbid-wendu-link"><a href="/site/h5?wx_share_key=h5" style="color: #538feb;">1分钟了解楚天财富</a></p>
-		<p class="newbid-wendu-txt">湖北日报新媒体集团旗下理财平台</p>
+		<p class="newbid-wendu-txt">湖北日报新媒体集团旗下平台</p>
 	</div>
 	<div class="links-box clearfix">
 		<a href="/user/checkin" class="lf">
@@ -251,7 +251,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 <!--    理财专区-->
     <?php if ($loans) { ?>
 	<div class="bids-box">
-        <h5 class="bids-box-title clearfix"><span class="lf">推荐理财</span></h5>
+        <h5 class="bids-box-title clearfix"><span class="lf">精选散标</span></h5>
         <ul class="bids-box-bidlist clearfix">
             <?php foreach ($loans as $val) { ?>
             <li>
@@ -264,11 +264,11 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
                     <div class="bid-main-msg clearfix">
                         <div class="lf bid-about-rate">
                             <p class="bid-rate-number"><?= LoanHelper::getDealRate($val) ?><span>%</span><?php if (!empty($val->jiaxi)) { ?><i>+<?= doubleval($val->jiaxi) ?>%</i><?php } ?></p>
-                            <p class="bid-rate-msg">预期年化收益</p>
+                            <p class="bid-rate-msg">借贷双方约定利率</p>
                         </div>
                         <div class="lf bid-about-data">
                             <span>期限&nbsp;&nbsp;<i><?php $ex = $val->getDuration() ?><?= $ex['value']?><?= $ex['unit']?></i></span>
-                            <p><?= StringUtils::amountFormat2($val->start_money) ?>元起投</p>
+                            <p><?= StringUtils::amountFormat2($val->start_money) ?>元起借</p>
                         </div>
                     </div>
                 </a>
@@ -288,7 +288,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 								<a href="/news/detail?id=<?= $new->id ?>&v=<?= time() ?>">
 									<p class="reading-box-list-til"><?= $new->title ?></p>
 									<p class="reading-box-list-des clearfix">
-										<span class="lf">理财公告</span>
+										<span class="lf">平台公告</span>
 										<span class="rg"><?= date('Y-m-d', $new->news_time) ?></span>
 									</p>
 								</a>
@@ -346,15 +346,15 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		<p class="popover-title">价值698元代金券<br>已发到您的账户</p>
 		<p class="popover-detail">你也可以在账户-代金券中,查看奖励</p>
 		<a class="btn_01" href="/user/coupon/list">查看详情</a>
-		<a class="btn_02" href="javascript:void(0)">去投资 领取160元超市卡</a>
+		<a class="btn_02" href="javascript:void(0)">去出借 领取160元超市卡</a>
 	</div>
 </div>-->
 
 <!--新增首页弹框2-->
 <!--<div class="second-popover" style="display: none">
 	<img class="popover-close" src="<?/*= ASSETS_BASE_URI */?>ctcf/images/new-homepage/popover-close_01.png" alt="">
-	<p class="popover-title">投资前先开通资金托管账户</p>
-	<p class="popover-detail">开通账户送积分，投资还有更多超市卡等你拿</p>
+	<p class="popover-title">出借前先开通资金托管账户</p>
+	<p class="popover-detail">开通账户送积分，出借还有更多超市卡等你拿</p>
 	<a class="popover-btn" href="/user/identity">马上去开通</a>
 </div>-->
 
@@ -394,7 +394,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
         if (!code.isLoggedIn) {
           $('.newbid-box').css('display', 'block');
         }
-        //判断是否是投资者
+        //判断是否是出借者
         if (code.isInvestor) {
           if (Cookies.get('showIndexPop')) {
             Cookies.remove('showIndexPop');
@@ -402,7 +402,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
             $('.second-popover').hide();
           }
         }
-        //判断个人投资总额大于五万时，前端页面显示总金额
+        //判断个人出借总额大于五万时，前端页面显示总金额
         if (code.showplatformStats) {
           $(".totalTradeBox").css('display', 'inline-block');
         }

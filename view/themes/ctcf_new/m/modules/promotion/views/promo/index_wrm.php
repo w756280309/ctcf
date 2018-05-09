@@ -89,12 +89,12 @@ $config = json_decode($promo->config, true);
         <a href="/deal/deal/index">
             <p class="f15">新手专享标</p>
             <p class="f45"><em>10<i class="f25">%</i><span class="f15"></span></em></p>
-            <p class="f12">预期年化率</p>
+            <p class="f12">借贷双方约定利率</p>
             <ul class="clearfix">
-                <li class="f14 lf text-align-lf"><img class="icon5"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_05.png" alt=""> 1,000元起投</li>
-                <li class="f14 lf comred"><img class="icon6"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_06.png" alt=""> 15天理财期限</li>
+                <li class="f14 lf text-align-lf"><img class="icon5"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_05.png" alt=""> 1,000元起借</li>
+                <li class="f14 lf comred"><img class="icon6"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_06.png" alt=""> 15天出借期限</li>
                 <li class="f14 lf text-align-rg"><img class="icon7"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_07.png" alt=""> 限购一万</li>
-                <li class="f18 lf">去理财</li>
+                <li class="f18 lf">去出借</li>
             </ul>
         </a>
         <p class="f15 intro"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_02.png" alt=""> 楚天财富历史兑付率100%</p>
@@ -106,7 +106,7 @@ $config = json_decode($promo->config, true);
             <p class="f15">什么是楚天财富？</p>
             <ul>
                 <li></li>
-                <li class="f15" style="color: #333333;text-align: left;">楚天财富是隶属湖北日报新媒体集团旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金，安享稳健收益。</li>
+                <li class="f15" style="color: #333333;text-align: left;">楚天财富是隶属湖北日报新媒体集团旗下平台。甄选各类金融机构、优质企业产品。提供银行级服务，保障用户资金，安享稳健收益。</li>
             </ul>
         </div>
 
@@ -208,7 +208,7 @@ $config = json_decode($promo->config, true);
             </dt>
             <dd class="erweima f11"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/erweima.png" alt=""><p>微信公众号</p></dd>
         </dl>
-        <p class="f11">*理财非存款，产品有风险，投资须谨慎</p>
+        <p class="f11">*产品有风险，出借须谨慎</p>
     </div>
 </div>
 

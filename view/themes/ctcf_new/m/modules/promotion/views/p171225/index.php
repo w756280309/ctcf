@@ -143,8 +143,8 @@ $this->title = '圣诞抽奖活动';
                             popBorder:"0.0933333rem solid #945a2d",
                             popMiddleHasDiv:true,
                             closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171218/images/close.png",
-                            contentMsg:"<ul><li style='list-style: decimal;font-size:0.56rem;color:#3b3b3b; text-align:left;'>任意投资一次，即可抽1次奖； 每年化投资10万元可再抽1次。 <i style='color: #e85050;font-style: normal;'>比如：<br>年化投资100万元=11次哦！</i></li><li style='list-style: decimal;font-size:0.56rem;color:#3b3b3b; text-align:left;margin: 0.3rem 0 0.4rem;'>活动期间投资额越高，奖池越 豪华(5个档次)！升级奖池后的 首次抽奖必中大奖！</li></ul>",
-                            btnMsg: "去投资",
+                            contentMsg:"<ul><li style='list-style: decimal;font-size:0.56rem;color:#3b3b3b; text-align:left;'>任意出借一次，即可抽1次奖； 每年化出借10万元可再抽1次。 <i style='color: #e85050;font-style: normal;'>比如：<br>年化出借100万元=11次哦！</i></li><li style='list-style: decimal;font-size:0.56rem;color:#3b3b3b; text-align:left;margin: 0.3rem 0 0.4rem;'>活动期间出借额越高，奖池越 豪华(5个档次)！升级奖池后的 首次抽奖必中大奖！</li></ul>",
+                            btnMsg: "去出借",
                             popBtmFontSize:"0.666667rem",
                             popBtmBorderRadius:"0.14rem",
                             popBtmBackground:"#c0926d",
@@ -166,8 +166,8 @@ $this->title = '圣诞抽奖活动';
                         closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171218/images/close.png",
                         contentMsg:"" +
                         "<ul class='regularStyle'><li>活动时间：2017.12.25-12.30；</li>" +
-                        "<li>活动期间首次投资任意金额，可获得1次抽奖次数；每年化投资10万元，可再累加1次抽奖次数；</li>" +
-                        "<li>活动期间奖池分为5档，分别为：年化投资≤5万、5万＜年化投资≤20万、20万＜年化投资≤50万、50万＜年化投资≤100万、年化投资＞100万；</li>" +
+                        "<li>活动期间首次出借任意金额，可获得1次抽奖次数；每年化出借10万元，可再累加1次抽奖次数；</li>" +
+                        "<li>活动期间奖池分为5档，分别为：年化出借≤5万、5万＜年化出借≤20万、20万＜年化出借≤50万、50万＜年化出借≤100万、年化出借＞100万；</li>" +
                         "<li>升级奖池后的首次抽奖必中对应奖池内大奖之一；</li>" +
                         "<li>奖品将在活动结束后7个工作日内联系发放，请保持通讯畅通。</li></ul><p class='regularTips'>本活动最终解释权归楚天财富所有</p>",
                         popBtmHas:false,
@@ -207,7 +207,7 @@ $this->title = '圣诞抽奖活动';
                         popBorder:"0.0933333rem solid #945a2d",
                         popMiddleHasDiv:true,
                         closeUrl: "<?= FE_BASE_URI ?>wap/campaigns/active20171218/images/close.png",
-                        contentMsg:"<div class='noDrawChance'>您没有抽奖次数了哦！</div><p style='padding-right:7%;line-height:0.8266667rem;font-size:0.5333333333rem;color:#3b3b3b; text-align:left;'>活动期间任意投资一次，获得1次抽奖机会；每年化投资10万元，可再获得1次！</br><i style='color: #e85050;font-style: normal;'>例：年化投资100万元=11次</i></p>",
+                        contentMsg:"<div class='noDrawChance'>您没有抽奖次数了哦！</div><p style='padding-right:7%;line-height:0.8266667rem;font-size:0.5333333333rem;color:#3b3b3b; text-align:left;'>活动期间任意出借一次，获得1次抽奖机会；每年化出借10万元，可再获得1次！</br><i style='color: #e85050;font-style: normal;'>例：年化出借100万元=11次</i></p>",
                         btnMsg: "获取次数",
                         popBtmFontSize:"0.666667rem",
                         popBtmBorderRadius:"0.14rem",

@@ -54,7 +54,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends'
                 <div class="xian">
                     <?= StringUtils::amountFormat2($order->yield_rate * 100) ?><span class="column-lu">%</span>
                 </div>
-                <span class="qing">预期年化收益率</span>
+                <span class="qing">借贷双方约定利率</span>
             </li>
             <li class="col-xs-6">
                 <div>
@@ -86,7 +86,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends'
 <div class="row shuju">
     <div class="col-xs-9" style="padding: 0;padding-left: 30px">
         <span><?= $isClosed ? 0 : StringUtils::amountFormat2(bcdiv(bcsub($respData['amount'], $respData['tradedAmount']), 100, 2)) ?>元</span><i>/<?= StringUtils::amountFormat1('{amount}{unit}', bcdiv($respData['amount'], 100, 2)) ?></i>
-        <div>可投余额/转让金额</div>
+        <div>可出借金额/转让金额</div>
     </div>
     <div class="col-xs-3" style="padding: 0;padding-right: 30px">
         <div class="shuju-bili"><?= $progress ?><em>%</em></div>
@@ -162,7 +162,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends'
                     }
                 ?>
             <?php } else { ?>
-                    <a href="javascript:void(0)" id="check-in">立即认购</a>
+                    <a href="javascript:void(0)" id="check-in">立即出借</a>
             <?php } ?>
         <?php } else { ?>
             <a href="javascript:;" class="red-gray">转让完成</a>

@@ -12,6 +12,6 @@
 <div class="loginUp-box" style="display: none;">
 <div class="test-remind">
     <div class="test-remind-title">提示</div>
-    <p class="test-remind-word">根据相关法规要求，请先完成风险测评了解自身的风险承受能力，以便你更好地做出理性的投资决策。</p>
+    <p class="test-remind-word">根据相关法规要求，请先完成风险测评了解自身的风险承受能力，以便你更好地做出理性的出借决策。</p>
     <a href="/risk/risk"><div class="test-remind-button">去测评</div></a>
 </div>

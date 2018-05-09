@@ -199,7 +199,7 @@ $this->title = '关于我们';
                         <p class="h3-txt h3-bottom">9:00-17:30（周一至周五）</p>
                         <h3 class="h3 h3-top">客服电话 : </h3>
                         <p class="h3-txt colorC h3-bottom"><?= Yii::$app->params['platform_info.contact_tel'] ?>（9:00-20:00）</p>
-                        <a href="/deal/deal/index" class="invited">立即理财</a>
+                        <a href="/deal/deal/index" class="invited">立即出借</a>
                         <div class="code-txt">
                             <span class="left-code-txt"><i class="aline"></i>关注微信公众号<i class="aline"></i></span>
                         </div>

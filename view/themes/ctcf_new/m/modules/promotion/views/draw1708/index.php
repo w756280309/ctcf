@@ -42,7 +42,7 @@ if (1 === $promoStatus) {
                 <a  class="task-bot <?= $btnStatusClass ?>" href="/user/checkin"><em>去领取</em></a>
             </li>
             <li class="lf marginrg25">
-                <p class="task-top <?php if ($taskStatus['investFinished']) { ?>complete<?php } ?>"><em>每年化投资5万<br>得10元现金<br><span style="color:#fff;">已投<?= rtrim(rtrim(bcdiv($todayAnnualInvest, 10000, 1), '0'), '.') ?>万元</span></em></p>
+                <p class="task-top <?php if ($taskStatus['investFinished']) { ?>complete<?php } ?>"><em>每年化出借5万<br>得10元现金<br><span style="color:#fff;">已投<?= rtrim(rtrim(bcdiv($todayAnnualInvest, 10000, 1), '0'), '.') ?>万元</span></em></p>
                 <p class="task-mid"><em><span>最高100元</span><br>现金红包</em></p>
                 <a  class="task-bot <?= $btnStatusClass ?>" href="/deal/deal/index"><em>去理财</em></a>
             </li>
@@ -52,13 +52,13 @@ if (1 === $promoStatus) {
                 <a  class="task-bot <?= $btnStatusClass ?>" href="/user/invite"><em>去邀请</em></a>
             </li>
         </ul>
-        <p class="tips">注：单日年化投资每累计5万元，可获得10元现金红包；每天最高可获得100元（即单日年化投资50万元）。</p>
+        <p class="tips">注：单日年化出借每累计5万元，可获得10元现金红包；每天最高可获得100元（即单日年化出借50万元）。</p>
     </div>
     <div class="draw-gifts">
         <div class="title-bg">
             <p>每天完成所有任务抽苹果7</p>
             <span class="prizes <?= $btnStatusClass ?>">我的<br>奖品</span>
-            <div class="draw-tips">以上三个任务（签到、投资、邀请）各完成1次即可抽奖。</div>
+            <div class="draw-tips">以上三个任务（签到、出借、邀请）各完成1次即可抽奖。</div>
         </div>
         <div class="draw-bg" id="prz_pool">
             <table class="clearfix" id="prize_pool">
@@ -104,21 +104,21 @@ if (1 === $promoStatus) {
                         <td>5积分</td>
                     </tr>
                     <tr>
-                        <td>累计年化投资5万元</td>
+                        <td>累计年化出借5万元</td>
                         <td>10元现金红包<br>(最高100元)</td>
                     </tr>
                     <tr>
-                        <td>邀请好友首次投资</td>
+                        <td>邀请好友首次出借</td>
                         <td>500积分<br>(最高1500积分)</td>
                     </tr>
                 </table>
             </li>
-            <li>活动期间单日年化投资每累计5万元，即可获得10元现金红包；每日最高可获得100元现金红包（单日累计年化投资50万元）；</li>
-            <li>被邀请人活动期间完成首次投资，邀请人才能获得积分奖励，每日最多获得3次；</li>
-            <li>活动期间每日完成所有任务（签到、投资、邀请任务各完成1次），获得1次免费抽奖机会；</li>
+            <li>活动期间单日年化出借每累计5万元，即可获得10元现金红包；每日最高可获得100元现金红包（单日累计年化出借50万元）；</li>
+            <li>被邀请人活动期间完成首次出借，邀请人才能获得积分奖励，每日最多获得3次；</li>
+            <li>活动期间每日完成所有任务（签到、出借、邀请任务各完成1次），获得1次免费抽奖机会；</li>
             <li>活动期间，现金红包及积分奖励将即时发放到您的账户；实物礼品将在活动结束后的7个工作日内发放，请保持通讯畅通。</li>
         </ol>
-        <p class="regular-tips">注：年化投资金额=投资金额*项目期限/365</p>
+        <p class="regular-tips">注：年化出借金额=出借金额*项目期限/365</p>
     </div>
 </div>
 

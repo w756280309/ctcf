@@ -80,7 +80,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                     </div>
                 </div>
                 <div class="charity-bottom">
-                    <p><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""><span>您的每一笔投资，都有一份爱的奉献</span><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""></p>
+                    <p><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""><span>您的每一笔出借，都有一份爱的奉献</span><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""></p>
                 </div>
             </div>
         <?php else: ?>
@@ -92,7 +92,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                     </div>
                 </div>
                 <div class="charity-bottom">
-                    <p><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""><span>您的每一笔投资，都有一份爱的奉献</span><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""></p>
+                    <p><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""><span>您的每一笔出借，都有一份爱的奉献</span><img src="<?= FE_BASE_URI ?>wap/index/images/heart.png" alt=""></p>
                 </div>
             </div>
         <?php endif; ?>
@@ -128,9 +128,9 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                     <a href="/deal/deal/index">
                         <p class="f15"><?= $xs->title ?></p>
                         <p class="f45"><?= LoanHelper::getDealRate($xs) ?><i class="f25">%</i></p>
-                        <p class="f12">预期年化率</p>
+                        <p class="f12">借贷双方约定利率</p>
                         <ul class="clearfix">
-                            <li class="f14 lf text-align-lf"><img class="icon5" src="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起投</li>
+                            <li class="f14 lf text-align-lf"><img class="icon5" src="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起借</li>
                             <li class="f14 lf comred"><img class="icon6" src="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>期限</li>
                             <li class="f14 lf text-align-rg"><img class="icon7" src="<?= FE_BASE_URI ?>wap/index/images/icon_07.png" alt=""> 限购一万</li>
                             <li class="f18 lf">去理财</li>
@@ -141,9 +141,9 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                     <a href="/deal/deal/index">
                         <p class="f15"><?= $xs->title ?></p>
                         <p class="f30"><em><?= LoanHelper::getDealRate($xs) ?><i class="f20">%</i><?php if (!empty($xs->jiaxi)) { ?><span class="f15">+<?= StringUtils::amountFormat2($xs->jiaxi) ?>%</span><?php } ?></em></p>
-                        <p class="f12">预期年化率</p>
+                        <p class="f12">借贷双方约定利率</p>
                         <ul class="clearfix">
-                            <li class="f14 lf text-align-lf"><img class="icon5" src="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起投</li>
+                            <li class="f14 lf text-align-lf"><img class="icon5" src="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起借</li>
                             <li class="f14 lf comred"><img class="icon6" src="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>期限</li>
                             <li class="f14 lf text-align-rg"><img class="icon7" src="<?= FE_BASE_URI ?>wap/index/images/icon_07.png" alt=""> 限购一万</li>
                             <li class="f18 lf">去理财</li>
@@ -219,11 +219,11 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                                 <div class="superctn clearfix">
                                     <div class="lf">
                                         <p><em class="f24"><?= LoanHelper::getDealRate($loan) ?><span class="f15">%</span><?php if (!empty($loan->jiaxi)) { ?><i class="f12">+<?= StringUtils::amountFormat2($loan->jiaxi) ?>%</i><?php } ?></em></p>
-                                        <p class="f14">预期年化率</p>
+                                        <p class="f14">借贷双方约定利率</p>
                                     </div>
                                     <div class="lf">
                                         <p class="f14 months"><span class="f16"><?= $ex['value'] ?></span><?= $ex['unit'] ?></p>
-                                        <p class="f14 money"><span class="f16"><?= StringUtils::amountFormat2($loan->start_money) ?></span>元起投</p>
+                                        <p class="f14 money"><span class="f16"><?= StringUtils::amountFormat2($loan->start_money) ?></span>元起借</p>
                                     </div>
                                 </div>
                                 <div class="progessline clearfix">
@@ -330,15 +330,15 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             <p class="popover-title">价值288元代金券<br>已发到您的账户</p>
             <p class="popover-detail">你也可以在账户-代金券中,查看奖励</p>
             <a class="btn_01" href="/user/coupon/list">查看详情</a>
-            <a class="btn_02" href="javascript:void(0)">去投资 领取160元超市卡</a>
+            <a class="btn_02" href="javascript:void(0)">去出借 领取160元超市卡</a>
         </div>
     </div>
 
     <!--新增首页弹框2-->
     <div class="second-popover" style="display: none">
         <img class="popover-close" src="<?= FE_BASE_URI ?>wap/index/images/popover-close_01.png" alt="">
-        <p class="popover-title">投资前先开通资金托管账户</p>
-        <p class="popover-detail">开通账户送积分，投资还有更多超市卡等你拿</p>
+        <p class="popover-title">出借前先开通资金托管账户</p>
+        <p class="popover-detail">开通账户送积分，出借还有更多超市卡等你拿</p>
         <a class="popover-btn" href="/user/identity">马上去开通</a>
     </div>
 
@@ -385,7 +385,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                     } else {
                         $('.relative .signature').css('top','5.2rem');
                     }
-                    //判断是否是投资者
+                    //判断是否是出借者
                     if (!code.isInvestor) {
                         $('#loginNewPeople').removeClass('hide');
                     } else {
@@ -395,7 +395,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                             $('.second-popover').hide();
                         }
                     }
-                    //判断个人投资总额大于五万时，前端页面显示总金额
+                    //判断个人出借总额大于五万时，前端页面显示总金额
                     if (code.showplatformStats) {
                         $("#totalTradeAmount").removeClass('hide');
                     }

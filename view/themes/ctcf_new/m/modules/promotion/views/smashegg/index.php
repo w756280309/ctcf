@@ -139,13 +139,13 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                 <div class="ruler-title f15" style="margin-bottom: 0.173rem">活动规则：</div>
                 <ul class="f12">
                     <li>活动期间所有注册用户均可获赠1次砸蛋机会；</li>
-                    <li>活动期间用户每投资3万元（不含转让产品），可获得1次砸蛋机会，上不封顶；</li>
+                    <li>活动期间用户每出借3万元（不含转让产品），可获得1次砸蛋机会，上不封顶；</li>
                     <li>活动时间2017年4月10日-4月13日，过期未使用的砸蛋机会将失效；</li>
                     <li>在活动页面右上角“我的奖品”中可以查看已获得的奖品；</li>
                     <li>活动结束后7个工作日内，工作人员将与您联系确认领取奖品相关事宜，请保持通讯畅通。</li>
                 </ul>
                 <div class="ruler-bottom f12">注：本活动最终解释权归楚天财富所有。</div>
-                <div class="remind-bottom f9">理财非存款 产品有风险 投资须谨慎</div>
+                <div class="remind-bottom f9">理财非存款 产品有风险 出借须谨慎</div>
             </div>
         </div>
     </div>
@@ -158,10 +158,10 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
             <img src="<?= FE_BASE_URI ?>wap/campaigns/golden-egg/images/noChange.png" alt="">
         </div>
         <!--蛋壳太硬了！登录后再砸吧！-->
-        <div class="login-inner f14">没有砸蛋机会了~ 快去投资吧！</div>
+        <div class="login-inner f14">没有砸蛋机会了~ 快去出借吧！</div>
         <a href="javascript:;" class="login-btn"><img src="<?= FE_BASE_URI ?>wap/campaigns/golden-egg/images/btn.png" alt="">
             <!--立即登录-->
-            <span class="f17">去投资</span>
+            <span class="f17">去出借</span>
         </a>
     </div>
     <!--card-box-->
@@ -292,7 +292,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                                     }, 100);
                                     $('.login-btn span').html('立即登录');
                                     $('.login-btn').attr({href: '<?= $loginUrl ?>'});
-                                } else if (data.code == 102) { //没有砸蛋机会,去投资(理财列表)
+                                } else if (data.code == 102) { //没有砸蛋机会,去出借(理财列表)
                                     $('.login-inner').html(data.msg);
                                     $('.login-img img').attr({src: cdn+'wap/campaigns/golden-egg/images/noChange.png'});
                                     $('.mark-box').fadeIn();
@@ -301,7 +301,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                                     setTimeout(function () {
                                         $('.login-box').addClass('login-box1');
                                     }, 100);
-                                    $('.login-btn span').html('去投资');
+                                    $('.login-btn span').html('去出借');
                                     $('.login-btn').attr({href: '/deal/deal/index'});
                                 } else if (data.code == 200) {
                                     $('.card-title').html('获得'+data.name);

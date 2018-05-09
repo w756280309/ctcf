@@ -73,14 +73,14 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
     </div>
     <!-- 邀请 -->
     <div class="invite-box">
-        <h4><span>已邀请投资：<i><?= $inviteCount ?></i> 位</span></h4>
+        <h4><span>已邀请出借：<i><?= $inviteCount ?></i> 位</span></h4>
         <ul>
             <li>活动期间，成功邀请</li>
-            <li>2位好友注册并投资，送<span>28元</span>现金红包;</li>
-            <li>5位好友注册并投资，送<span>88元</span>现金红包;</li>
-            <li>10位好友注册并投资，送<span>188元</span>现金红包!</li>
+            <li>2位好友注册并出借，送<span>28元</span>现金红包;</li>
+            <li>5位好友注册并出借，送<span>88元</span>现金红包;</li>
+            <li>10位好友注册并出借，送<span>188元</span>现金红包!</li>
             <li class="txt-light">红包奖励可叠加！</li>
-            <li class="txt">比如：邀请10位好友注册并投资，即可获得28+88+188=304元现金红包!</li>
+            <li class="txt">比如：邀请10位好友注册并出借，即可获得28+88+188=304元现金红包!</li>
         </ul>
         <p class="tip">温馨提示：被邀请人在活动期间完成注册，邀请人才能获得奖励哦！奖品将在活动结束后7个工作日内发放(账户需实名认证)。</p>
     </div>
@@ -89,9 +89,9 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
     <div class="cash-box">
         <h4></h4>
         <ul>
-            <li>邀请人可以获得被邀请人前三笔投资<span>0.1%</span>的返现奖励哦！</li>
-            <li>比如：被邀请人前三笔累积投资<span>50万元</span>，邀请人可以获得<span>500元</span>现金奖励！</li>
-            <li class="tips">温馨提示：邀请好友前必须在楚天财富平台投资过，才能获得奖励哦！</li>
+            <li>邀请人可以获得被邀请人前三笔出借<span>0.1%</span>的返现奖励哦！</li>
+            <li>比如：被邀请人前三笔累积出借<span>50万元</span>，邀请人可以获得<span>500元</span>现金奖励！</li>
+            <li class="tips">温馨提示：邀请好友前必须在楚天财富平台出借过，才能获得奖励哦！</li>
         </ul>
 
         <?php if (1 === $promoStatus) : ?>
@@ -167,7 +167,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                 popBorder: "0.10666667rem solid #82cee7",
                 popBtmBackground : "#82cee7",
                 popBtmFontSize : ".48rem",
-                contentMsg:"<span style='font-size: 0.4rem;color: #333;line-height: .4rem!important;'>邀请好友投资<br>还能获得大量现金奖励哦！</span>",
+                contentMsg:"<span style='font-size: 0.4rem;color: #333;line-height: .4rem!important;'>邀请好友出借<br>还能获得大量现金奖励哦！</span>",
                 btnHref : "/user/invite",
                 btnMsg : "继续邀请",
                 afterPop: function () {

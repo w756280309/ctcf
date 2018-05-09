@@ -155,7 +155,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1607/js/smash-golden-eggs.js', ['
                 <ul>
                     <li>活动期间所有用户均可获得三次砸蛋机会；</li>
                     <li>用户新增理财资产每5万可获得一次砸蛋机会；</li>
-                    <li>活动期间累计投资额每满20万可额外获得一次砸蛋机会；</li>
+                    <li>活动期间累计出借额每满20万可额外获得一次砸蛋机会；</li>
                     <li>新增理财资产不包括回款复投；</li>
                     <li>代金券奖励当天到账，京东卡奖励客服会在7个工作日内与您联系并发放；</li>
                     <li>抽奖时间截至7月22日，过期未使用的砸蛋机会失效。</li>
@@ -173,10 +173,10 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1607/js/smash-golden-eggs.js', ['
             <img src="<?= ASSETS_BASE_URI ?>promo/1607/images/smash-golden-eggs/noChange.png" alt="">
         </div>
         <!--蛋壳太硬了！登录后再砸吧！-->
-        <div class="login-inner">没有砸蛋机会了~ 快去投资吧！</div>
+        <div class="login-inner">没有砸蛋机会了~ 快去出借吧！</div>
         <a href="javascript:;" class="login-btn"><img src="<?= ASSETS_BASE_URI ?>promo/1607/images/smash-golden-eggs/btn.png" alt="">
             <!--立即登录-->
-            <span>去投资</span>
+            <span>去出借</span>
         </a>
     </div>
     <!--card-box-->

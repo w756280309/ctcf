@@ -22,7 +22,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/deal/buy.css?v=20161113');
                 <div class="lf invest-ct-lf">
                     <div class="invest-ct-lf-title">
                         <p class="lf percentage">
-                            预期年化收益率
+                            借贷双方约定利率
                             <span class="nums"> <?= LoanHelper::getDealRate($deal) ?><i>%</i>
                                 <?php if (!empty($deal->jiaxi)) { ?>
                                     <span class="other-nums">
@@ -38,11 +38,11 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/deal/buy.css?v=20161113');
                     </div>
                 </div>
                 <div class="rg invest-ct-rg">
-                    <p class="sum"><span class="lf-span">投资金额:</span><i class="rg-i text-align-rg"><?= number_format($money,2)?>元</i></p>
+                    <p class="sum"><span class="lf-span">出借金额:</span><i class="rg-i text-align-rg"><?= number_format($money,2)?>元</i></p>
                     <p class="reduce"><span class="lf-span">代金券抵扣:</span><i class="rg-i text-align-rg"><?= $cou_money ? '-' : '' ?><?= number_format($cou_money ,0) ?>元</i></p>
                     <div class="real-invest rg">
                         <p class="real-money"><span>实际支付:</span><i>￥</i><?= number_format(max($money-$cou_money, 0), 2)?></p>
-                        <p><a class="buy" id="sub_button">确认购买</a></p>
+                        <p><a class="buy" id="sub_button">确认出借</a></p>
                     </div>
                     <div style="clear: both"></div>
                     <p style="color: red;    padding-left: 10px;margin-top: 10px;" id="err_message"></p>

@@ -11,7 +11,7 @@ use common\utils\StringUtils;
             <div class="col-xs-7 font-24 common-line-height common-pad-lf">可转让金额：<span class="font-28 common-color"><?= StringUtils::amountFormat2(bcdiv($val['maxTradableAmount'], 100, 2)) ?>元</span></div>
             <div class="col-xs-5 font-32 common-color text-align-ct common-line-height"><?= StringUtils::amountFormat2($val['order']->yield_rate * 100) ?>%</div>
             <div class="col-xs-7 font-24 common-line-height common-pad-lf">项目结束：<span class="font-28"><?= date('Y-m-d', $val['loan']->finish_date) ?></span></div>
-            <div class="col-xs-5 font-24 text-align-ct common-line-height">预期年化率</div>
+            <div class="col-xs-5 font-24 text-align-ct common-line-height">借贷双方约定利率</div>
         </a>
     <?php } elseif (2 === $type) { ?>
         <a class="row col common-mar" href="/credit/note/detail?id=<?= $val['id'] ?>&fromType=2">

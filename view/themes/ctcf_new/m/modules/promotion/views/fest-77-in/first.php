@@ -46,7 +46,7 @@ $this->share = new Share([
             <p class="result-congra">恭喜您获得</p>
             <div class="result-coupon">
                 <p class="coupon-jine"><span><?= !is_null($coupon) ? ceil($coupon->amount) : 10 ?></span>元代金券</p>
-                <p class="coupon-qitou"><span><?= !is_null($coupon) ? ceil($coupon->minInvest) : 1000 ?></span>元起投</p>
+                <p class="coupon-qitou"><span><?= !is_null($coupon) ? ceil($coupon->minInvest) : 1000 ?></span>元起借</p>
             </div>
             <div class="result-link clearfix">
                 <!--此处是不可点击状态下的按钮-->

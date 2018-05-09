@@ -131,7 +131,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/161224/js/smash-golden-eggs.js', 
                 <div class="ruler-title">活动规则：</div>
                 <ul>
                     <li>活动期间所有用户均可获得1次砸蛋机会；</li>
-                    <li>活动期间用户每累计投资5万元可获得1次砸蛋的机会，购买转让产品除外；</li>
+                    <li>活动期间用户每累计出借5万元可获得1次砸蛋的机会，购买转让产品除外；</li>
                     <li>代金券奖励当天到账，实物奖励客服会在7个工作日内与您联系并发放；</li>
                     <li>活动时间12月24日-12月26日，过期未使用的砸蛋机会失效。</li>
                 </ul>
@@ -148,10 +148,10 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/161224/js/smash-golden-eggs.js', 
             <img src="<?= ASSETS_BASE_URI ?>promo/1607/images/smash-golden-eggs/noChange.png" alt="">
         </div>
         <!--蛋壳太硬了！登录后再砸吧！-->
-        <div class="login-inner">没有砸蛋机会了~ 快去投资吧！</div>
+        <div class="login-inner">没有砸蛋机会了~ 快去出借吧！</div>
         <a href="javascript:;" class="login-btn"><img src="<?= ASSETS_BASE_URI ?>promo/1607/images/smash-golden-eggs/btn.png" alt="">
             <!--立即登录-->
-            <span>去投资</span>
+            <span>去出借</span>
         </a>
     </div>
     <!--card-box-->

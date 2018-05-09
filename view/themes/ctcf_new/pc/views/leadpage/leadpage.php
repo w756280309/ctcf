@@ -26,7 +26,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/leadpage/leadpage.js?v=20160708', ['de
         </div>
         <div class="change-single">
             <div class="change-center">
-                <p class="change-click">第4步：投资</p>
+                <p class="change-click">第4步：出借</p>
             </div>
         </div>
         <div class="change-single">
@@ -66,18 +66,18 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/leadpage/leadpage.js?v=20160708', ['de
         <a class="container-right"></a>
     </div>
     <div class="container-box hidden">
-        <p class="tip-font"><span>进入【理财】</span>，选择适合您的投资项目，按页面指引按成认购</p>
+        <p class="tip-font"><span>进入【我要出借】</span>，选择适合您的标的，按页面指引按成出借</p>
         <a class="container-left"></a>
         <div class="container-center">
-            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/leadpage/display_4.png" width="649" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/leadpage/display_4_new.png" width="649" alt="">
         </div>
         <a class="container-right"></a>
     </div>
     <div class="container-box hidden">
-        <p class="tip-font">投资完成后，可到【账户】><span>【我的理财】</span>中，查看您的认购项目</p>
+        <p class="tip-font">出借完成后，可到【账户】><span>【我的出借】</span>中，查看您的认购项目</p>
         <a class="container-left"></a>
         <div class="container-center">
-            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/leadpage/display_5.png?v=1.0" width="649" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/leadpage/display_5_new.png?v=1.0" width="649" alt="">
         </div>
         <a class="container-right"></a>
     </div>
@@ -85,13 +85,13 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/leadpage/leadpage.js?v=20160708', ['de
         <p class="tip-font">登录【账户】，<span>点击【提现】</span>，可将金额提现至绑定的银行卡</p>
         <a class="container-left"></a>
         <div class="container-center">
-            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/leadpage/display_6.png" width="649" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/leadpage/display_6_new.png" width="649" alt="">
         </div>
         <a class="container-none"></a>
     </div>
     <div class="clear"></div>
     <?php if (\Yii::$app->getUser()->isGuest) { ?>
         <a class="link-register" href="/site/signup">立即注册</a>
-        <p class="bottom-font">1分钟成为楚天财富会员，轻松开始理财</p>
+        <p class="bottom-font">1分钟成为楚天财富会员，轻松开始出借</p>
     <?php } ?>
 </div>

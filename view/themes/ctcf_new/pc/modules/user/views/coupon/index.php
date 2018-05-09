@@ -23,7 +23,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/couponcode.js', ['depends'
         <div class="display_number">
             <p class="p_left">可用代金券：<span><?= empty($data['totalAmount']) ? 0 : StringUtils::amountFormat2($data['totalAmount']) ?></span>元</p>
             <p class="p_right">共：<span><?= $data['count'] ?></span>个</p>
-            <a href="/licai/">立即投资</a>
+            <a href="/licai/">立即出借</a>
         </div>
         <table>
             <tr>
@@ -44,7 +44,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/useraccount/couponcode.js', ['depends'
                         <td class="table-text-number"><?= StringUtils::amountFormat2($val->couponType->amount) ?></td>
                 <?php } ?>
                     <td>
-                        单笔投资满<?= StringUtils::amountFormat1('{amount}{unit}', $val->couponType->minInvest) ?>可用；
+                        单笔出借满<?= StringUtils::amountFormat1('{amount}{unit}', $val->couponType->minInvest) ?>可用；
                         <?php
                             if ($val->couponType->loanExpires) {
                                 echo '期限满'.$val->couponType->loanExpires.'天可用(除转让)';

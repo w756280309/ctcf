@@ -50,7 +50,7 @@ $this->share = new Share([
                 </dl>
                 <dl class="lf">
                     <dt><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/intro_02.png" alt=""></dt>
-                    <dd>首次投资<br>送50元超市卡</dd>
+                    <dd>首次出借<br>送50元超市卡</dd>
                 </dl>
             </div>
 

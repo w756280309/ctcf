@@ -21,13 +21,13 @@ $this->title = '门票好礼三重奏';
     <div class="contain-part1">
         <div class="top-nav"></div>
         <div class="part1-msg">
-            <p>活动期间累计年化投资：</p>
+            <p>活动期间累计年化出借：</p>
             <p>排行第1名，送价值<span>1680</span>元门票<i>2</i>张；</p>
             <p>排行第2名至第5名，送价值<span>880</span>元门票<i>2</i>张；</p>
             <p>排行第6名至第15名，送价值<span>680</span>元门票<i>2</i>张；</p>
         </div>
-        <a @click="goInvite" class="go-invest go-invest1">去投资</a>
-        <p class="part1-suggestion-p">累计年化投资额相同时，最先达到该金额的排在前面</p>
+        <a @click="goInvite" class="go-invest go-invest1">去出借</a>
+        <p class="part1-suggestion-p">累计年化出借额相同时，最先达到该金额的排在前面</p>
         <?php if (!empty($rankingList)) { ?>
         <div class="pop-ranking">
             <div class="pop-ranking-nav"></div>
@@ -35,7 +35,7 @@ $this->title = '门票好礼三重奏';
                 <dl>
                     <dt class="clearfix">
                         <span class="fl">用户ID</span>
-                        <span class="fr">实时年化投资额(元)</span>
+                        <span class="fr">实时年化出借额(元)</span>
                     </dt>
                     <?php foreach ($rankingList as $k => $ranking) { ?>
                         <?php $num = $k + 1; ?>
@@ -67,7 +67,7 @@ $this->title = '门票好礼三重奏';
     </div>
     <div class="contain-part2">
         <div class="top-nav"></div>
-        <p class="part2-msg">活动期间年化投资每累计<span>5万</span>，获得1次抽奖机会</p>
+        <p class="part2-msg">活动期间年化出借每累计<span>5万</span>，获得1次抽奖机会</p>
         <div class="clearfix fr-mygift">
             <span @click="showPrizeList" class="fr part-mygift">我的奖品>>
             </span>
@@ -80,7 +80,7 @@ $this->title = '门票好礼三重奏';
             </div>
         </div>
         <p>剩余次数：<span v-cloak>{{msg}}</span>次</p>
-        <a @click="goInvite" class="go-invest">去投资</a>
+        <a @click="goInvite" class="go-invest">去出借</a>
     </div>
 <!--     为登陆框-->
     <div v-cloak :class="{'hide-prize':noLogin}" class="goto-login">
@@ -270,7 +270,7 @@ $this->title = '门票好礼三重奏';
                         location.href='/site/login';
                     };
                 },
-                //去投资
+                //去出借
                 goInvite: function () {
                     if (this.promoStatus == 1) {
                         toastCenter('活动未开始');

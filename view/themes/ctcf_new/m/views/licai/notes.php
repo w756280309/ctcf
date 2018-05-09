@@ -2,7 +2,7 @@
 
 use Lhjx\Http\HttpUtils;
 
-$this->title = '我要理财';
+$this->title = '我要出借';
 $this->showBottomNav = true;
 $this->hideHeaderNav = HttpUtils::isWeixinRequest();
 $this->backUrl = false;
@@ -19,7 +19,7 @@ $action = Yii::$app->controller->action->getUniqueId();
 ?>
 
 <div class="row list-title">
-    <div class="col-xs-6"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">理财列表</a></div>
+    <div class="col-xs-6"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">散标列表</a></div>
     <div class="col-xs-6"><a href="/licai/notes" class="cre-title <?= $action === 'licai/notes' ? 'active-cre-title' : '' ?>">转让列表</a></div>
 </div>
 

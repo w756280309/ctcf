@@ -58,7 +58,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/helpcenter.js', ['depends' => 'yii\web
                 </div>
             </div>
         </a>
-        <!--投资提现-->
+        <!--出借提现-->
         <a href="/site/help?type=3">
             <div class="row">
                 <div class="col-xs-12">

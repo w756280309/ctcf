@@ -49,18 +49,18 @@ $this->share = $share;
     <div class="regular">
         <div class="list">
             <ul>
-                <li class="clearfix"><span class="lf">8元代金券</span><img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/line.png" alt=""><span class="rg">投资<i>1千元</i>可用</span></li>
-                <li class="clearfix"><span class="lf">20元代金券</span><img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/line1.png" alt=""><span class="rg">投资<i>1万元</i>可用</span></li>
-                <li class="clearfix"><span class="lf">30元代金券</span><img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/line2.png" alt=""><span class="rg">投资<i>2万元</i>可用</span></li>
-                <li class="clearfix"><span class="lf">80元代金券</span><img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/line3.png" alt=""><span class="rg">投资<i>10万元</i>可用</span></li>
-                <li class="clearfix"><span class="lf">150元代金券</span><img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/line4.png" alt=""><span class="rg">投资<i>20万元</i>可用</span></li>
+                <li class="clearfix"><span class="lf">8元代金券</span><img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/line.png" alt=""><span class="rg">出借<i>1千元</i>可用</span></li>
+                <li class="clearfix"><span class="lf">20元代金券</span><img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/line1.png" alt=""><span class="rg">出借<i>1万元</i>可用</span></li>
+                <li class="clearfix"><span class="lf">30元代金券</span><img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/line2.png" alt=""><span class="rg">出借<i>2万元</i>可用</span></li>
+                <li class="clearfix"><span class="lf">80元代金券</span><img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/line3.png" alt=""><span class="rg">出借<i>10万元</i>可用</span></li>
+                <li class="clearfix"><span class="lf">150元代金券</span><img src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/line4.png" alt=""><span class="rg">出借<i>20万元</i>可用</span></li>
             </ul>
         </div>
         <div class="btm">
             <img class="list-img" src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/regular.png" alt="">
         </div>
         <div class="construct">
-            成功投资后，您还可以参与以下活动 <br>
+            成功出借后，您还可以参与以下活动 <br>
             <img class="point" src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/circle.png" alt="">
         </div>
     </div>
@@ -78,7 +78,7 @@ $this->share = $share;
                 <li><span>●</span> 12月10日亲子活动</li>
                 <li><span>●</span> 12月19日-12月25日圣诞活动等</li>
             </ul>
-            <p class="special">投资者如需参加，请拨打客服热线：<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></p>
+            <p class="special">出借者如需参加，请拨打客服热线：<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></p>
         </div>
     </div>
     <div class="backactive">
@@ -89,7 +89,7 @@ $this->share = $share;
         <div class="show-hide">
             <img class="listImg" src="<?= ASSETS_BASE_URI ?>promo/1611/newuser/images/list.png" alt="">
             <ul class="list-btm">
-                <li><span>●</span> 累计投资金额为在2016/1/1 – 2016/12/31 期间购买160天及以上项目的累计投资金额（购买的转让项目不参加）</li>
+                <li><span>●</span> 累计出借金额为在2016/1/1 – 2016/12/31 期间购买160天及以上项目的累计出借金额（购买的转让项目不参加）</li>
                 <li><span>●</span> 领奖时间为活动结束后7个工作日内</li>
             </ul>
         </div>
@@ -100,14 +100,14 @@ $this->share = $share;
             <li>客服热线：<a href="tel:400-101-5151">400-101-5151</a> 或 <a href="tel:0577-55599998">0577-55599998</a></li>
             <li>官方网址：www.wenjf.com</li>
             <li>本活动最终解释权在法律范围内归楚天财富所有</li>
-            <li>理财非存款 产品有风险 投资须谨慎</li>
+            <li>理财非存款 产品有风险 出借须谨慎</li>
         </ul>
     </div>
 </div>
 <div class="nav">
     <ul>
         <li><a id="register" href="/luodiye/signup">马上注册</a></li>
-        <li><a href="/deal/deal/index">立即投资</a></li>
+        <li><a href="/deal/deal/index">立即出借</a></li>
         <li><a style="border:none;" href="/site/h5?wx_share_key=h5">了解楚天财富</a></li>
     </ul>
 </div>

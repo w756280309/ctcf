@@ -136,7 +136,7 @@ $next = Yii::$app->request->hostInfo.'/promotion/p1705/duobao2';
     <?php } ?>
 
     <p class="text-align-ct tips">本次活动最终解释权归楚天财富所有<br>
-        理财非存款 产品有风险 投资须谨慎
+        理财非存款 产品有风险 出借须谨慎
     </p>
     <div class="mask"></div>
     <div class="pomp note">

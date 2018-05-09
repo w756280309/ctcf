@@ -48,7 +48,7 @@ $this->share = new Share([
         <?php } ?>
     </div>
     <div class="text-tips">
-        <p>达成条件：活动期间完成新用户首次投资，或邀请好友完成新用户首投</p>
+        <p>达成条件：活动期间完成新用户首次出借，或邀请好友完成新用户首投</p>
         <p>达成奖励：七夕大礼包一份，内含<span>7.7元现金红包</span>和<span>随机高价值礼品</span>一份！</p>
         <a href="javascript:;" class="a-prize-btn">
             <img class="finger" src="<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/third-finger.png">
@@ -71,7 +71,7 @@ $this->share = new Share([
         <img class="close-btn" src="<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/close.png" alt="">
         <ol>
             <li>活动时间2017年8月28日-8月31日；</li>
-            <li>活动期间，完成新用户首次投资，或邀请好友完成新用户首次投资，即可点亮牛郎织女图（以认购成功时间为准）；</li>
+            <li>活动期间，完成新用户首次出借，或邀请好友完成新用户首次出借，即可点亮牛郎织女图（以认购成功时间为准）；</li>
             <li>点亮牛郎织女图，可领取七夕大礼包一份，内含7.7元现金红包（必得）和随机高价值礼品一份；</li>
             <li>现金红包、代金券将在领取后立即到账，实物礼品将于7个工作日内联系发放，如有疑问请联系客服电话400-101-5151。</li>
         </ol>

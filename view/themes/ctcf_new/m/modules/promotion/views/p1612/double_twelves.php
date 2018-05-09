@@ -142,7 +142,7 @@ use common\utils\StringUtils;
                 <li><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/phase_02.png" alt=""></li>
                 <li><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/phase_03.png" alt=""></li>
             </ul>
-            <p class="warn">*如果中奖号码超过奖品名额，最早投资楚天财富的用户中奖，活动期间内每人仅限一次获奖机会。</p>
+            <p class="warn">*如果中奖号码超过奖品名额，最早出借楚天财富的用户中奖，活动期间内每人仅限一次获奖机会。</p>
         </div>
 
         <?php if (!empty($boardList)) { ?>
@@ -174,7 +174,7 @@ use common\utils\StringUtils;
             <li>2.活动期间获奖人员须本人持身份证来楚天财富领取；</li>
             <li>3.活动结束后一周内未领取礼品的视为自动放弃；</li>
             <li>4.领取地点：武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层；</li>
-            <li>5.未投资过的用户抽中现金红包后，需要首次投资后发放到账户中心，红包有效期20天；</li>
+            <li>5.未出借过的用户抽中现金红包后，需要首次出借后发放到账户中心，红包有效期20天；</li>
             <li>6.详情可咨询客服热线：<a href="tel:400-101-5151">400-101-5151</a>；</li>
             <li>7.本活动最终解释权在法律范围内归楚天财富（楚天财富（武汉）金融服务有限公司）所有。</li>
         </ul>
@@ -182,7 +182,7 @@ use common\utils\StringUtils;
     <a class="goindex" href="/<?= !defined('IN_APP') ? '?v='.time() : '' ?>"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goindex.png" alt=""></a>
 </section>
 <!--footer-->
-<footer><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/adv.png" alt=""> 理财非存款 产品有风险 投资须谨慎 </footer>
+<footer><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/adv.png" alt=""> 理财非存款 产品有风险 出借须谨慎 </footer>
 
 <!--遮罩-->
 <div class="mask"></div>

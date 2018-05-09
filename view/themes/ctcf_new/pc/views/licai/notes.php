@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '我要理财';
+$this->title = '我要出借';
 
 $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/attorn.min.css?v=1.111', ['depends' => 'frontend\assets\CtcfFrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/pagination.css', ['depends' => 'frontend\assets\CtcfFrontAsset']);
@@ -14,7 +14,7 @@ $action = Yii::$app->controller->action->getUniqueId();
 <div class="ctcf-container">
     <div class="main">
         <ul class="product-nav clear-fix fz18">
-            <li class="lf <?= 'licai/index' === $action ? 'active-nav-product' : '' ?>"><a href="/licai/">理财列表</a></li>
+            <li class="lf <?= 'licai/index' === $action ? 'active-nav-product' : '' ?>"><a href="/licai/">散标列表</a></li>
             <li class="lf <?= 'licai/notes' === $action ? 'active-nav-product' : '' ?>"><a href="/licai/">转让列表</a></li>
         </ul>
         <div class="attorn-product-list fz-gray">
@@ -47,7 +47,7 @@ $action = Yii::$app->controller->action->getUniqueId();
                                 <div class="rate-top-part fz28 fz-orange-strong">
                                     <span class="fz42 "><?= null === $order ? '' : StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2)) ?></span>%
                                 </div>
-                                <div class="rate-bottom-part fz14">预期年化收益率</div>
+                                <div class="rate-bottom-part fz14">借贷双方约定利率</div>
                             </div>
                             <div class="term-rate">
                                 <div class="term-top-part fz18 fz-black">

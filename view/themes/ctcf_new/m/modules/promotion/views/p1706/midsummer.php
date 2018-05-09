@@ -15,7 +15,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
     <div class="top-part"></div>
     <div class="middle-part"></div>
     <div class="bottom-part">
-        <p class="rules">活动期间，累计年化投资每达到10万元，</p>
+        <p class="rules">活动期间，累计年化出借每达到10万元，</p>
         <p class="rules">即可获得1个随机现金红包，最多可获得3个！</p>
         <p class="rules">现金奖励将直接发放到账户余额。</p>
         <div class="hongbao">
@@ -25,7 +25,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
         <div class="show-hongbao">我的红包</div>
         <a href="/deal/deal/index" class="go-invest">去理财</a>
         <p class="remind">本次活动最终解释权归楚天财富所有</p>
-        <p class="remind">理财非存款 产品有风险 投资须谨慎</p>
+        <p class="remind">理财非存款 产品有风险 出借须谨慎</p>
     </div>
     <div class="mask"></div>
     <div class="have-hongbao">
@@ -48,7 +48,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
     <div class="no-hongbao">
         <div class="tanhao">!</div>
         <p class="no-hongbao-content">您还没有红包哦</p>
-        <p class="no-hongbao-content">快去投资吧！</p>
+        <p class="no-hongbao-content">快去出借吧！</p>
         <a href="/deal/deal/index" class="go-invest">去理财</a>
         <img src="<?= FE_BASE_URI ?>wap/campaigns/xiazhi/images/btn_off.png" alt="" class="btn-off">
     </div>

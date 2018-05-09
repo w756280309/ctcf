@@ -75,7 +75,7 @@ $taps = date('Y-m-d') >= '2017-05-01' && date('Y-m-d') <= '2017-05-31';
         <p class="djq_deadline f13">代金券有效期30天；</p>
         <table class="f13">
             <tr>
-                <th>起投金额（元）</th>
+                <th>起借金额（元）</th>
                 <th>可用代金券</th>
             </tr>
             <tr>

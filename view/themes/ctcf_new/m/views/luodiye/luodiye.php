@@ -112,7 +112,7 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
                 </div>
             </div>
             <a class="link-last" href="/deal/deal/index/">立即认购</a>
-            <p class="danger-tip">理财非存款，产品有风险，投资须谨慎</p>
+            <p class="danger-tip">理财非存款，产品有风险，出借须谨慎</p>
             <div class="fixed-float">
                 <img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt="">
             </div>

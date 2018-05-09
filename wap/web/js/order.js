@@ -84,7 +84,7 @@ function openPopup() {
     var day = $('#selectedCouponRateday').val();
     var message = '';
     if ('undefined' !== typeof count) {
-        message = '您有'+validCouponCount+'张优惠券可用，目前已选择'+count+'张代金券可抵扣'+WDJF.numberFormat(amount, true)+'元投资';
+        message = '您有'+validCouponCount+'张优惠券可用，目前已选择'+count+'张代金券可抵扣'+WDJF.numberFormat(amount, true)+'元';
     } else {
         message = '您有'+validCouponCount+'张优惠券可用，本次未使用优惠券抵扣，点击确定立即投资';
     }

@@ -31,16 +31,16 @@ $this->title = '共植友谊树好礼拿不停';
     <div class="treeContent">
         <dl>
             <dt class="f15 comMargin">活动简介</dt>
-            <dd class="f15">3月11日—3月17日植树节期间，楚天财富发起『共植友谊“树”，好礼拿不停，邀好友得金币』活动，邀请好友注册、投资除获得代金券及现金红包外，达到指定标准更将获得足金鸡年生肖金币等黄金豪礼。</dd>
+            <dd class="f15">3月11日—3月17日植树节期间，楚天财富发起『共植友谊“树”，好礼拿不停，邀好友得金币』活动，邀请好友注册、出借除获得代金券及现金红包外，达到指定标准更将获得足金鸡年生肖金币等黄金豪礼。</dd>
         </dl>
         <dl>
             <dt class="f15">参与规则</dt>
-            <dd class="f15">好友在活动期间注册成为楚天财富用户，种下一颗投资理财的种子。在未来1年的时间内，好友累计年化投资达到一定金额，我们将送给您以下超值豪礼！</dd>
+            <dd class="f15">好友在活动期间注册成为楚天财富用户，种下一颗出借理财的种子。在未来1年的时间内，好友累计年化出借达到一定金额，我们将送给您以下超值豪礼！</dd>
         </dl>
 
         <table class="tablebox" cellpadding="0" cellspacing="0">
             <tr>
-                <td class="f12">好友累计年化投资总额<br><span class="f9" style="width: 90%;display: block;text-align: center;">（单位：元）</span></td>
+                <td class="f12">好友累计年化出借总额<br><span class="f9" style="width: 90%;display: block;text-align: center;">（单位：元）</span></td>
                 <td class="f12">邀请人获得奖励</td>
             </tr>
             <tr style="width: 100%;height: 0.1rem;background-color: transparent"></tr>
@@ -67,39 +67,39 @@ $this->title = '共植友谊树好礼拿不停';
 
         <ul class="regular-detail">
             <li class="f15 comweight">邀请人奖励：</li>
-            <li class="f15">（1）注册投资得投资代金券</li>
+            <li class="f15">（1）注册出借得出借代金券</li>
         </ul>
 
         <table class="tablebox tableboxspecial" cellpadding="0" cellspacing="0">
             <tr style="border:none;">
-                <td class="f12" style="padding-top: 0.3rem;">好友注册投资</td>
+                <td class="f12" style="padding-top: 0.3rem;">好友注册出借</td>
                 <td class="f12" style="padding-top: 0.3rem;">邀请人获得奖励</td>
             </tr>
             <tr style="width: 100%;height: 0.1rem;background-color: transparent"></tr>
             <tr style="border:none;padding-top: 0.3rem;">
                 <td class="f12" style="padding-top: 0.3rem;">好友注册即得</td>
-                <td class="f12" style="padding-top: 0.3rem;">50元投资代金券</td>
+                <td class="f12" style="padding-top: 0.3rem;">50元出借代金券</td>
             </tr>
             <tr style="border:none;">
-                <td class="f12">好友首次投资<10,000元 </td>
-                <td class="f12">30元投资代金券</td>
+                <td class="f12">好友首次出借<10,000元 </td>
+                <td class="f12">30元出借代金券</td>
             </tr>
             <tr style="border:none;">
-                <td class="f12" style="padding-bottom: 0.3rem;">好友首次投资>=10,000元 </td>
-                <td class="f12" style="padding-bottom:0.3rem;">50元投资代金券</td>
+                <td class="f12" style="padding-bottom: 0.3rem;">好友首次出借>=10,000元 </td>
+                <td class="f12" style="padding-bottom:0.3rem;">50元出借代金券</td>
             </tr>
         </table>
         <ul class="regular-detail">
             <li class="f15">（2）现金红包</li>
-            <li class="f15">好友前3次投资额0.1%的返现奖励</li>
+            <li class="f15">好友前3次出借额0.1%的返现奖励</li>
             <li class="f15 comweight">被邀请人奖励：</li>
-            <li class="f15">（1）注册即得50元投资代金券+288元红包；</li>
-            <li class="f15">（2）首次投资1000元，送1400积分，可兑换价值70元的沃尔玛购物卡。</li>
+            <li class="f15">（1）注册即得50元出借代金券+288元红包；</li>
+            <li class="f15">（2）首次出借1000元，送1400积分，可兑换价值70元的沃尔玛购物卡。</li>
         </ul>
-        <p class="tips f10 text-align-rg" style="line-height: normal;width: 92%;">*被邀请人投资产品不包含新手专享和转让产品，详见“活动规则”</p>
+        <p class="tips f10 text-align-rg" style="line-height: normal;width: 92%;">*被邀请人出借产品不包含新手专享和转让产品，详见“活动规则”</p>
         <dl>
             <dt class="f15 giftsSend">礼品发放事宜</dt>
-            <dd class="f15">被邀请人累计年化投资金额达到上述标准，工作人员会在3个工作日内联系邀请人确认礼品、积分发放事宜。为保证顺利领取礼品，请保持通讯畅通。</dd>
+            <dd class="f15">被邀请人累计年化出借金额达到上述标准，工作人员会在3个工作日内联系邀请人确认礼品、积分发放事宜。为保证顺利领取礼品，请保持通讯畅通。</dd>
         </dl>
         <dl>
             <dt class="f15 activeStyle">活动参与方式</dt>

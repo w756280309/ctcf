@@ -42,7 +42,7 @@ use common\utils\StringUtils;
                         <?=
                             null === $order ? '' : StringUtils::amountFormat2(bcmul($order->yield_rate, 100, 2));
                         ?><i class="col-lu">%</i></span>
-                    <p>预期年化率</p>
+                    <p>借贷双方约定利率</p>
                 </div>
                 <div class="col-xs-4">
                     <span class="rate-steps">

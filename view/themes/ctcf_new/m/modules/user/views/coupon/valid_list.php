@@ -31,7 +31,7 @@ $inApp = defined('IN_APP');
     <p class="coupon-remind coupon-remind1" style="<?= $inApp ? 'margin-top: 0;' : '' ?>">
         <?php if (!empty($selectedCoupon)) : ?>
             已选<span class="coupon-remind-number"><?= $couponCount ?></span>张代金券，可抵扣<span
-                class="coupon-remind-sum"><?= StringUtils::amountFormat2($couponMoney) ?></span>元投资
+                class="coupon-remind-sum"><?= StringUtils::amountFormat2($couponMoney) ?></span>元
         <?php else : ?>
             可选多张代金券
         <?php endif; ?>
@@ -45,7 +45,7 @@ $inApp = defined('IN_APP');
 
 <a href="javascript:void(0)" id="submit" class="coupon-button">
     <p class="btn-line1">确认选择</p>
-    <p class="btn-line2">（已选<?= $couponCount ?>张，可抵扣<?= StringUtils::amountFormat2($couponMoney) ?>元投资）</p>
+    <p class="btn-line2">（已选<?= $couponCount ?>张，可抵扣<?= StringUtils::amountFormat2($couponMoney) ?>元）</p>
 </a>
 
 <script type="text/javascript">
@@ -93,10 +93,10 @@ $inApp = defined('IN_APP');
                 var money = WDJF.numberFormat(data.data.money, true);
                 var msg = '';
 
-                $('p.btn-line2').html('（已选'+total+'张，可抵扣'+money+'元投资）');
+                $('p.btn-line2').html('（已选'+total+'张，可抵扣'+money+'元）');
 
                 if (total > 0) {
-                    msg = '已选<span class="coupon-remind-number">'+total+'</span>张代金券，可抵扣<span class="coupon-remind-sum">'+money+'</span>元投资';
+                    msg = '已选<span class="coupon-remind-number">'+total+'</span>张代金券，可抵扣<span class="coupon-remind-sum">'+money+'</span>元';
                 } else {
                     msg = '可选多张代金券';
                 }

@@ -56,7 +56,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
             <img class="common_img sm-height_tips_img" src="<?= ASSETS_BASE_URI ?>images/credit/icon_instruction.png" style="width: 16px" alt="">
             <p class="sm-height_tips">
                 <img src="<?= ASSETS_BASE_URI ?>images/credit/triangle.png" alt="">
-                <span>投资资金在项目未满标时锁定的金额</span>
+                <span>出借资金在项目未满标时锁定的金额</span>
             </p>
         </div>
 
@@ -69,7 +69,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
     <br>
     <div class="row accountcenter-center-left">
         <div class="col-xs-1"></div>
-        <div class="col-xs-5">累计投资（元）</div>
+        <div class="col-xs-5">累计出借（元）</div>
         <div class="col-xs-6">累计收益（元）</div>
     </div>
     <div class="row accountcenter-center-right">
@@ -90,7 +90,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
     </div>
     <div class="clear"></div>
     <a class="row sm-height border-bottom margin-top block" href="/user/user/myorder" >
-        <div class="col-xs-10 left-txt">我的理财</div>
+        <div class="col-xs-10 left-txt">我的出借</div>
         <div class="col-xs-1 arrow">
             <img src="<?= ASSETS_BASE_URI ?>images/arrow.png" alt="右箭头">
         </div>

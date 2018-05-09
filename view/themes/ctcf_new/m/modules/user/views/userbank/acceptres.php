@@ -24,8 +24,8 @@ $backUrl = 'success' === $ret ? '/user/user' : '/user/bank';
         <img class="sucImg" src="<?= FE_BASE_URI ?>wap/tie-card/img/success.png" alt="">
         <p class="sucMes f17">绑卡申请提交成功</p>
         <div class="message">
-            <p class="f15">充值后即可进行投资</p>
-            <p class="f15">体验超短期新手专享标，预期年化率<span class="red">10%</span></p>
+            <p class="f15">充值后即可进行出借</p>
+            <p class="f15">体验超短期新手专享标，借贷双方约定利率<span class="red">10%</span></p>
         </div>
         <a class="instant f18" href="/user/userbank/recharge?backUrl=<?= urlencode(Yii::$app->request->hostInfo.'/user/user') ?>" id="to_recharge">去 充 值</a>
     <?php } else { ?>

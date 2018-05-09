@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '购买结果';
+$this->title = '出借结果';
 $this->backUrl = false;
 $cookies = Yii::$app->request->cookies;
 if (isset($cookies['pointPopUp'])) {
@@ -119,9 +119,9 @@ if (isset($cookies['pointPopUp'])) {
 	<div class="row" id='bind-box'>
 		<div class="col-xs-12">
         <?php if ('success' === $ret) { ?>
-					<div>购买成功</div>
+					<div>出借成功</div>
         <?php } else { ?>
-					<div>购买失败</div>
+					<div>出借失败</div>
         <?php } ?>
 		</div>
 	</div>
@@ -157,7 +157,7 @@ if (isset($cookies['pointPopUp'])) {
 		<img src="<?= FE_BASE_URI ?>wap/point/img/point-header.png" alt="">
 		<p class="pomp-time"><i></i>恭喜您获得<span></span><i></i></p>
 		<p class="pomp-points"><span id="pomp-point"><?= $incrPoints ?></span>积分<i id="pomp-coupon"></i></p>
-		<p>本次投资奖励</p>
+		<p>本次出借奖励</p>
 		<p style=""><a href="/mall/point/list" style="background-color: transparent; color: #6A7FA6; font-size: 0.27rem;">查看积分</a>
 		</p>
 		<a href="javascript:closePomp();">关闭</a>
@@ -168,7 +168,7 @@ if (isset($cookies['pointPopUp'])) {
   $(function () {
     if ("<?= isset($popUpOnce) ?>") {
       $(".mask, .pomp").show();
-      "<?php Yii::$app->response->cookies->remove('pointPopUp') ?>"    //投资成功后弹出框弹出一次后销毁此cookie
+      "<?php Yii::$app->response->cookies->remove('pointPopUp') ?>"    //出借成功后弹出框弹出一次后销毁此cookie
     }
   })
 

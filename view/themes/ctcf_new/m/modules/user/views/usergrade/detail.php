@@ -30,7 +30,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td>积分权利</td>
-                    <td>投资获得积分</td>
+                    <td>出借获得积分</td>
                 </tr>
             </table>
         </li>
@@ -49,7 +49,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td valign="top">积分权利</td>
-                    <td>投资获得积分*1.02倍</td>
+                    <td>出借获得积分*1.02倍</td>
                 </tr>
                 <tr>
                     <td>专属顾问</td>
@@ -76,7 +76,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td valign="top">积分权利</td>
-                    <td>投资获得积分*1.04倍</td>
+                    <td>出借获得积分*1.04倍</td>
                 </tr>
                 <tr>
                     <td>专属顾问</td>
@@ -107,7 +107,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td valign="top">积分权利</td>
-                    <td>投资获得积分*1.06倍</td>
+                    <td>出借获得积分*1.06倍</td>
                 </tr>
                 <tr>
                     <td>专属顾问</td>
@@ -138,7 +138,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td valign="top">积分权利</td>
-                    <td>投资获得积分*1.08倍</td>
+                    <td>出借获得积分*1.08倍</td>
                 </tr>
                 <tr>
                     <td>专属顾问</td>
@@ -169,7 +169,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td valign="top">积分权利</td>
-                    <td>投资获得积分*1.1倍</td>
+                    <td>出借获得积分*1.1倍</td>
                 </tr>
                 <tr>
                     <td>专属顾问</td>
@@ -200,7 +200,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td valign="top">积分权利</td>
-                    <td>投资获得积分*1.12倍</td>
+                    <td>出借获得积分*1.12倍</td>
                 </tr>
                 <tr>
                     <td valign="top">专属顾问</td>
@@ -231,7 +231,7 @@ $this->title = '特权说明';
                 </tr>
                 <tr>
                     <td valign="top">积分权利</td>
-                    <td>投资获得积分*1.15倍</td>
+                    <td>出借获得积分*1.15倍</td>
                 </tr>
                 <tr>
                     <td valign="top">专属顾问</td>

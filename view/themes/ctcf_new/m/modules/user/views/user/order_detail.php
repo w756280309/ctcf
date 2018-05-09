@@ -1,5 +1,5 @@
 <?php
-$this->title = '投资详情';
+$this->title = '出借详情';
 
 if ($fromTransfer) {
     $this->backUrl = '/credit/trade/assets?type=1';
@@ -76,16 +76,16 @@ $this->registerCssFile(ASSETS_BASE_URI .'ctcf/css/details-list/touzixiangqing.cs
             </div>
         </div>
     </div>
-    <!--投资信息-->
+    <!--出借信息-->
     <div class="row" id="information-box">
         <div class="col-xs-12">
             <div class="information-title">
-                <div class="information-left">投资信息</div>
+                <div class="information-left">出借信息</div>
                 <div class="information-right"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
             </div>
         </div>
     </div>
-    <!--投资信息详情-->
+    <!--出借信息详情-->
     <div class="row" id="information-content">
         <div class="col-xs-12">
             <ul class="information-content">
@@ -94,7 +94,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'ctcf/css/details-list/touzixiangqing.cs
                     if (false !== $rate) {
                 ?>
                 <li>
-                    <div class="rate-steps-notes">因为该项目的累计投资金额已达<?= StringUtils::amountFormat2($totalFund) ?>元，本订单享受年化率<?= StringUtils::amountFormat2($rate) ?>%</div>
+                    <div class="rate-steps-notes">因为该项目的累计出借金额已达<?= StringUtils::amountFormat2($totalFund) ?>元，本订单享受年化率<?= StringUtils::amountFormat2($rate) ?>%</div>
                 </li>
                 <?php } } ?>
                 <?php if (in_array($product->status, [2, 3, 7]) && !$product->is_jixi) { ?>

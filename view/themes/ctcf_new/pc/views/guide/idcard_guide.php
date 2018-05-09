@@ -51,7 +51,7 @@
 <div class="guide-login">
     <h5>您还未实名认证</h5>
     <dl class="clearfix">
-        <dt class="lf">平台积极响应金融监管规定，为保障您的投资安全，请使用本产品前，先实名认证。</dt>
+        <dt class="lf">平台积极响应金融监管规定，为保障您的出借安全，请使用本产品前，先实名认证。</dt>
         <dd class="lf"><a href="/user/identity">立即认证</a></dd>
     </dl>
 </div>

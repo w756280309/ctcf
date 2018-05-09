@@ -14,14 +14,14 @@ $this->title = '11月理财节';
         <div class="result-box clearfix">
             <div class="result-box-task lf">
                 <p >成功邀请好友</p>
-                <p >注册并投资</p>
+                <p >注册并出借</p>
                 <p class="center-txt"><span class="inviteTask">0</span>/1</p>
                 <a href="/user/invite" class="link">去邀请</a>
             </div>
             <div class="result-box-task rg">
-                <p class="top-invest">任意投资一笔</p>
+                <p class="top-invest">任意出借一笔</p>
                 <p class="center-txt"><span class="investTask">0</span>/1</p>
-                <a href="/deal/deal/index" class="link">去投资</a>
+                <a href="/deal/deal/index" class="link">去出借</a>
             </div>
         </div>
         <p class="last-tips">本活动最终解释权归楚天财富所有</p>
@@ -43,7 +43,7 @@ $this->title = '11月理财节';
                 _this.inviteTask = <?= $inviteTask ?>;
                 _this.investTask = <?= $investTask ?>;
                 $('.inviteTask').html(_this.inviteTask); // 邀请
-                $('.investTask').html(_this.investTask);// 投资
+                $('.investTask').html(_this.investTask);// 出借
                 if (_this.inviteTask == '1') {
                     $('.inviteTask').parents('.result-box-task').addClass('finished');
                 }

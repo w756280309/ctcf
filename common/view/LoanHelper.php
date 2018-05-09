@@ -50,10 +50,15 @@ class LoanHelper
         ) {
             $duration = $loan->getDuration();
             $expires = $duration['value'];
+            $plat = \Yii::$app->params['plat_code'];
             if ($loan->kuanxianqi > $expires * 0.5) {
-                return '融资方可提前还款，客户收益按实际天数计息。';
+                return $plat == 'CTCF'
+                    ? '融资方可提前还款，客户利息按实际出借期限计算。'
+                    : '融资方可提前还款，客户收益按实际天数计息。';
             } else {
-                return '融资方可提前' . $loan->kuanxianqi . '天内任一天还款，客户收益按实际天数计息。';
+                return $plat == 'CTCF'
+                ? '融资方可提前还款，客户利息按实际出借期限计算。'
+                : '融资方可提前' . $loan->kuanxianqi . '天内任一天还款，客户收益按实际天数计息。';
             }
         }
 

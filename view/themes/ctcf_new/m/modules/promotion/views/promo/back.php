@@ -26,7 +26,7 @@ if ($isFromWrm && !$isIdVerified) {
     </div>
     <ul class="liststep f16">
         <li><span class="f24 lf">1</span>注册成功</li>
-        <li><span class="f24 lf">2</span>实名认证和投资，领取超市卡</li>
+        <li><span class="f24 lf">2</span>实名认证和出借，领取超市卡</li>
     </ul>
 
     <?php if(!$isIdVerified) {?>

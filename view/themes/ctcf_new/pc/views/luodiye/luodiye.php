@@ -2,7 +2,7 @@
 
 use frontend\assets\FrontAsset;
 
-$this->title = '湖北日报新媒体集团旗下理财平台';
+$this->title = '湖北日报新媒体集团旗下平台';
 
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/luodiye/luodiye.css?v=1608015', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/JPlaceholder.js', ['depends' => FrontAsset::class]);
@@ -68,7 +68,7 @@ use yii\captcha\Captcha;
 <div class="container-fluid">
     <div class="container-content content-why">
         <h3>什么是楚天财富？</h3>
-        <p>楚天财富（武汉）金融服务有限公司简称楚天财富，是由湖北日报新媒体集团发起设立的、具有国资背景的、专业从事财富管理平台和互联网金融服务平台，以专业的风控能力、丰富的理财产品、强大的网络技术能力，提供安全、便捷、可靠的网上理财服务。</p>
+        <p>楚天财富（武汉）金融服务有限公司简称楚天财富，是由湖北日报新媒体集团发起设立的、具有国资背景的、专业从事财富管理平台和互联网金融服务平台，以专业的风控能力、丰富的产品、强大的网络技术能力，提供安全、便捷、可靠的网上服务。</p>
     </div>
 </div>
 <!--<div class="container-fluid container-fluid-because">-->
@@ -82,12 +82,12 @@ use yii\captcha\Captcha;
 <!--                <p class="because-header">楚盈金</p>-->
 <!--                <p class="because-yuxuan">预期年化利</p>-->
 <!--                <p class="because-number">5.5<span>%</span>-6.5<span>%</span></p>-->
-<!--                <P class="because-time"><span>—</span><span class="time-font">投资期限1-12个月</span><span>—</span></P>-->
+<!--                <P class="because-time"><span>—</span><span class="time-font">出借期限1-12个月</span><span>—</span></P>-->
 <!--                <div class="tip_pop">-->
 <!--                    <div class="tip_pop-en">-->
 <!--                        <div class="tip_pop-border">-->
 <!--                        </div>-->
-<!--                        <div class="tip_pop-content">1000元起投</div>-->
+<!--                        <div class="tip_pop-content">1000元起借</div>-->
 <!--                    </div>-->
 <!--                </div>-->
 <!--                <a href="/licai/">立即赚钱</a>-->
@@ -96,13 +96,13 @@ use yii\captcha\Captcha;
 <!--                <p class="because-header">楚盈宝</p>-->
 <!--                <p class="because-yuxuan">预期年化利</p>-->
 <!--                <p class="because-number">6.5<span>%</span>-9<span>%</span></p>-->
-<!--                <P class="because-time"><span>—</span><span class="time-font">投资期限1-24个月</span><span>—</span></P>-->
+<!--                <P class="because-time"><span>—</span><span class="time-font">出借期限1-24个月</span><span>—</span></P>-->
 <!--                <P class="because-limit"></P>-->
 <!--                <div class="tip_pop">-->
 <!--                    <div class="tip_pop-en">-->
 <!--                        <div class="tip_pop-border">-->
 <!--                        </div>-->
-<!--                        <div class="tip_pop-content">1万元起投</div>-->
+<!--                        <div class="tip_pop-content">1万元起借</div>-->
 <!--                    </div>-->
 <!--                </div>-->
 <!--                <a href="/licai/">立即赚钱</a>-->
@@ -125,7 +125,7 @@ use yii\captcha\Captcha;
             <div class="choose-single choose-second">
                 <div class="single-back"></div>
                 <p>门槛较低，</p>
-                <p>1000元即可投资</p>
+                <p>1000元即可出借</p>
             </div>
 
             <div class="choose-single choose-third">
@@ -141,6 +141,6 @@ use yii\captcha\Captcha;
             </div>
         </div>
         <a class="link-last" href="/licai/">立即赚钱</a><br>
-        <center><p>理财非存款，产品有风险，投资须谨慎</p></center>
+        <center><p>产品有风险，出借须谨慎</p></center>
     </div>
 </div>

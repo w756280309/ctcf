@@ -1,5 +1,5 @@
 <?php
-$this->title = '股权投资';
+$this->title = '股权出借';
 ?>
 <link href="<?= ASSETS_BASE_URI ?>css/first.css?v=20160401" rel="stylesheet"/>
 
@@ -20,37 +20,37 @@ $this->title = '股权投资';
             <li >
                 <div class="color2 p1">
                     <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">楚股投介绍</span></p>
-                    <p>楚天财富甄选优秀的股权投资基金管理机构，为市民家庭提供良好的股权投资机会，推出“楚股投”系列产品。以私募基金形式，向合资格投资者定向非公开开放。</p>
+                    <p>楚天财富甄选优秀的股权出借基金管理机构，为市民家庭提供良好的股权出借机会，推出“楚股投”系列产品。以私募基金形式，向合资格出借者定向非公开开放。</p>
                 </div>
             </li>
             <li >
                 <div class="color2 p1">
-                    <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">投资方向</span></p>
+                    <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">出借方向</span></p>
                     <p>第一期楚股投产品，投向中国一二线城市的优秀青年白领公寓企业，分享中国城市青年租房需求升级的红利。</p>
                 </div>
             </li>
             <li >
                 <div class="color2 p1">
                     <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">退出方式</span></p>
-                    <p>被并购，IPO，股东回购，投资份额转让等。</p>
+                    <p>被并购，IPO，股东回购，出借份额转让等。</p>
                 </div>
             </li>
             <li >
                 <div class="color2 p1">
-                    <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">投资期限</span></p>
+                    <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">出借期限</span></p>
                     <p>2+2年</p>
                 </div>
             </li>
             <li >
                 <div class="color2 p1">
-                    <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">起投金额</span></p>
+                    <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">起借金额</span></p>
                     <p><?= $model->min_fund ?>万元人民币</p>
                 </div>
             </li>
             <li >
                 <div class="color2 p1 p2">
                     <p class="tit"><a href="javascript:;" class="a1" ></a><span class="color1">基金管理人</span></p>
-                    <p>正规持牌备案，合法合规运行，投资能力卓越。收房租，好生意。楚股投，只投稳妥的股权。有意者，请点击预约登记。专业投资机构将派专人为您服务。</p>
+                    <p>正规持牌备案，合法合规运行，出借能力卓越。收房租，好生意。楚股投，只投稳妥的股权。有意者，请点击预约登记。专业出借机构将派专人为您服务。</p>
                 </div>
             </li>
 

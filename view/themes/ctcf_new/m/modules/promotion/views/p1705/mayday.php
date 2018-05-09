@@ -12,7 +12,7 @@ $this->headerNavOn = true;
 <div class="flex-content">
     <div class="box-one"></div>
     <div class="box-two">
-        <p class="rule">2017年4月29日-5月1日期间，投资任意理财项目（不含转让产品），所获得的积分翻倍。</p>
+        <p class="rule">2017年4月29日-5月1日期间，出借任意理财项目（不含转让产品），所获得的积分翻倍。</p>
         <a class="link-one" href="/deal/deal/index"></a>
     </div>
     <div class="box-three">

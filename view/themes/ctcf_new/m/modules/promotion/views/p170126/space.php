@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '首次投资送太空展套票';
+$this->title = '首次出借送太空展套票';
 $this->share = $share;
 $config = json_decode($promo->config, true);
 
@@ -76,9 +76,9 @@ $config = json_decode($promo->config, true);
         <a href="/deal/deal/index">
             <p class="f15">新手专享标</p>
             <p class="f45"><em>10<i class="f25">%</i><span class="f15"></span></em></p>
-            <p class="f12">预期年化率</p>
+            <p class="f12">借贷双方约定利率</p>
             <ul class="clearfix">
-                <li class="f14 lf text-align-lf"><img class="icon5"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_05.png" alt=""> 1,000元起投</li>
+                <li class="f14 lf text-align-lf"><img class="icon5"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_05.png" alt=""> 1,000元起借</li>
                 <li class="f14 lf comred"><img class="icon6"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_06.png" alt=""> 15天理财期限</li>
                 <li class="f14 lf text-align-rg"><img class="icon7"  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/icon_07.png" alt=""> 限购一万</li>
                 <li class="f18 lf">去理财</li>
@@ -196,7 +196,7 @@ $config = json_decode($promo->config, true);
             </dt>
             <dd class="erweima f11"><img  data-original="<?= FE_BASE_URI ?>wap/luodiye/images/erweima.png" alt=""><p>微信公众号</p></dd>
         </dl>
-        <p class="f11">*理财非存款，产品有风险，投资须谨慎</p>
+        <p class="f11">*理财非存款，产品有风险，出借须谨慎</p>
     </div>
 </div>
 

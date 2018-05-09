@@ -1,5 +1,5 @@
 <?php
-$this->title = '我的理财';
+$this->title = '我的出借';
 
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/mytrade.css?v=20160810', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
@@ -21,13 +21,13 @@ table .pr-box-10 {
 <div class="myCoupon-box">
     <div class="myCoupon-header">
         <div class="myCoupon-header-icon"></div>
-        <span class="myCoupon-header-font">我的理财</span>
+        <span class="myCoupon-header-font">我的出借</span>
     </div>
     <div class="myCoupon-content">
         <div class="list-single">
-            <a class="a_first <?= 1 === $type ? 'select' : '' ?>" href="/user/user/myorder">收益中的项目</a>
-            <a class="a_second <?= 2 === $type ? 'select' : '' ?>" href="/user/user/myorder?type=2">待成立的项目</a>
-            <a class="a_third <?= 3 === $type ? 'select' : '' ?>" href="/user/user/myorder?type=3">已还清的项目</a>
+            <a class="a_first <?= 1 === $type ? 'select' : '' ?>" href="/user/user/myorder">收益中的标的</a>
+            <a class="a_second <?= 2 === $type ? 'select' : '' ?>" href="/user/user/myorder?type=2">待成立的标的</a>
+            <a class="a_third <?= 3 === $type ? 'select' : '' ?>" href="/user/user/myorder?type=3">已还清的标的</a>
         </div>
         <?php if (in_array($type, [1, 3])) { ?>
         <?php if (1 === $type) { ?>
@@ -45,22 +45,22 @@ table .pr-box-10 {
         <table>
             <?php if (1 === $type) { ?>
                 <tr>
-                    <th class="text-align-lf pl-box-10" width="220">项目名称</th>
+                    <th class="text-align-lf pl-box-10" width="220">标的名称</th>
                     <th class="text-align-rg" width="100">到期时间</th>
-                    <th class="text-align-rg" width="80">预期年化</th>
-                    <th class="text-align-rg" width="110">投资金额(元)</th>
-                    <th class="text-align-rg" width="110">购买时间</th>
+                    <th class="text-align-rg" width="80">借贷双方约定利率</th>
+                    <th class="text-align-rg" width="110">出借金额(元)</th>
+                    <th class="text-align-rg" width="110">出借时间</th>
                     <th class="text-align-rg" width="100">预期收益(元)</th>
                     <th class="text-align-rg" width="90">还款计划</th>
                     <th class="text-align-rg pr-box-10" width="60">合同</th>
                 </tr>
             <?php } else { ?>
                 <tr>
-                    <th class="text-align-lf pl-box-10" width="220">项目名称</th>
+                    <th class="text-align-lf pl-box-10" width="220">标的名称</th>
                     <th class="text-align-rg" width="100">还款时间</th>
-                    <th class="text-align-rg" width="80">预期年化</th>
-                    <th class="text-align-rg" width="110">投资金额(元)</th>
-                    <th class="text-align-rg" width="110">购买时间</th>
+                    <th class="text-align-rg" width="80">借贷双方约定利率</th>
+                    <th class="text-align-rg" width="110">出借金额(元)</th>
+                    <th class="text-align-rg" width="110">出借时间</th>
                     <th class="text-align-rg" width="100">实际收益(元)</th>
                     <th class="text-align-rg" width="100">还款计划</th>
                     <th class="text-align-rg pr-box-10" width="50">合同</th>
@@ -128,21 +128,21 @@ table .pr-box-10 {
         <?php if (empty($model)) : ?>
             <div class="no-data"></div>
             <div class="no-data"></div>
-            <p class="without-font">暂无投资明细</p>
-            <a class="link-tender" href="/licai/">立即投资</a>
+            <p class="without-font">暂无出借明细</p>
+            <a class="link-tender" href="/licai/">立即出借</a>
         <?php endif; ?>
         <?php } elseif (2 === $type) { ?>
         <div class="display_number">
-            <p class="p_left">待成立项目总金额：<span><?= StringUtils::amountFormat3($tj['totalAmount']) ?></span>元</p>
+            <p class="p_left">待成立标的总金额：<span><?= StringUtils::amountFormat3($tj['totalAmount']) ?></span>元</p>
             <p class="p_right">共计：<span><?= $tj['count'] ?></span>笔</p>
         </div>
         <table>
             <tr>
-                <th class="text-align-lf pl-box-10" width="240">项目名称</th>
-                <th class="text-align-rg" width="110">项目期限</th>
-                <th class="text-align-rg" width="120">预期年化</th>
-                <th class="text-align-rg" width="120">投资金额(元)</th>
-                <th class="text-align-rg" width="80">购买时间</th>
+                <th class="text-align-lf pl-box-10" width="240">标的名称</th>
+                <th class="text-align-rg" width="110">标的期限</th>
+                <th class="text-align-rg" width="120">借贷双方约定利率</th>
+                <th class="text-align-rg" width="120">出借金额(元)</th>
+                <th class="text-align-rg" width="80">出借时间</th>
                 <th class="text-align-rg pr-box-10" width="80">募集进度</th>
             </tr>
             <?php foreach ($model as $val) : ?>
@@ -163,8 +163,8 @@ table .pr-box-10 {
         <?php if (empty($model)) : ?>
             <div class="no-data"></div>
             <div class="no-data"></div>
-            <p class="without-font">暂无投资明细</p>
-            <a class="link-tender" href="/licai/">立即投资</a>
+            <p class="without-font">暂无出借明细</p>
+            <a class="link-tender" href="/licai/">立即出借</a>
         <?php endif; ?>
         <?php } ?>
     </div>

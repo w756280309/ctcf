@@ -50,7 +50,7 @@ JSFILE
         <?php if (Yii::$app->user->isGuest) { ?>
         <!--未登录-->
         <div class="login-box">
-            <p class="fz22 fz-white mgt40b30">最高年化收益率</p>
+            <p class="fz22 fz-white mgt40b30">最高出借收益率</p>
             <p class="fz60 fz-yellow">10%</p>
             <a class="fz18 fz-black btn-yellow mgt28b8" href="/site/signup">立即注册</a>
             <p class="fz14 fz-white">已有账户，立即<a class="fz-yellow" href="/site/login">登录</a></p>
@@ -113,22 +113,22 @@ JSFILE
             <li class="lf first mgr17">
                 <p class="fz30">热门推荐</p>
                 <i></i>
-                <p class="fz14">热门推荐·精选理财</p>
+                <p class="fz14">精选散标、专业风控</p>
             </li>
             <?php foreach ($loans as $val) : ?>
             <li class="lf mgr17 special">
                 <a href="/deal/deal/detail?sn=<?= $val->sn ?>" target="_blank">
                     <div class="title fz18 fz-gray"><?= $val->title ?></div>
                     <div class="rate fz-orange-strong"><span class="fz36"><?= LoanHelper::getDealRate($val) ?><em class="fz18">%</em><?php if (!empty($val->jiaxi)) { ?><i class="fz18">+<?= doubleval($val->jiaxi) ?>%</i><?php } ?></span></div>
-                    <div class="rate-des fz14 fz-gray">预期年化收益率</div>
+                    <div class="rate-des fz14 fz-gray">借贷双方约定利率</div>
                     <div class="clear-fix des">
                         <dl class="lf">
                             <dt class="fz16 fz-black"><?php $ex = $val->getDuration() ?><?= $ex['value']?><span> <?= $ex['unit']?></span></dt>
-                            <dd class="f14 fz-gray">投资期限</dd>
+                            <dd class="f14 fz-gray">出借期限</dd>
                         </dl>
                         <dl class="lf">
                             <dt class="fz16 fz-black"><?= StringUtils::amountFormat2($val->start_money) ?>元</dt>
-                            <dd class="f14 fz-gray">起投金额</dd>
+                            <dd class="f14 fz-gray">起借金额</dd>
                         </dl>
                     </div>
                     <div class="progress">
@@ -138,7 +138,7 @@ JSFILE
                     <?php if (OnlineProduct::STATUS_PRE === $val->status) { ?>
                         <span class="btn btn-light-orange f14 fz-white">预告期</span>
                     <?php } elseif (OnlineProduct::STATUS_NOW === $val->status) { ?>
-                        <span class="btn btn-orange f14 fz-white">立即投资</span>
+                        <span class="btn btn-orange f14 fz-white">立即出借</span>
                     <?php } elseif (OnlineProduct::STATUS_FULL === $val->status || OnlineProduct::STATUS_FOUND === $val->status) { ?>
                         <span class="btn btn-gray f14 fz-white">已售罄</span>
                     <?php } elseif (OnlineProduct::STATUS_HUAN === $val->status) { ?>
@@ -158,7 +158,7 @@ JSFILE
     <div class="financing mgt20">
         <ul class="clear-fix">
             <li class="lf first">
-                <p class="fz30">定期理财</p>
+                <p class="fz30">散标列表</p>
                 <i></i>
                 <p class="fz14">期限灵活·优质资产</p>
             </li>
@@ -170,11 +170,11 @@ JSFILE
                 <div class="finance-list">
                     <table>
                         <tr class="fz16 fz-gray" height="69">
-                            <td>产品名称</td>
-                            <td>预期年化利率</td>
+                            <td>标的名称</td>
+                            <td>借贷双方约定利率</td>
                             <td class="special">期限</td>
-                            <td>起投金额</td>
-                            <td>募集进度</td>
+                            <td>起借金额</td>
+                            <td>借款进度</td>
                         </tr>
                     </table>
                 </div>
@@ -206,7 +206,7 @@ JSFILE
                     <a class="clear-fix" href="/helpcenter/security/" target="_blank">
                         <span class="lf fz14 fz-gray-strong w250 overflow">
                             <img class="mgr12 w4" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_08.png" alt="">
-                            为什么选择在楚天财富投资？
+                            为什么选择在楚天财富出借？
                         </span>
                         <span class="rg header-hover">></span>
                     </a>
@@ -264,7 +264,7 @@ JSFILE
         <div class="lf">
             <p>
                 <span class="lf fz-black fz16">
-                    <img class="mgr12 w15" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_07.png" alt="">理财公告
+                    <img class="mgr12 w15" src="<?= ASSETS_BASE_URI ?>ctcf/images/icon_07.png" alt="">标的兑付公告
                 </span>
                 <a  class="rg fz14 header-hover" href="/news/index?type=notice" target="_blank">更多>></a>
             </p>
@@ -314,7 +314,7 @@ JSFILE
         <td><div class="btn btn-light-orange f14 fz-white">预告期</div></td>
         {{/status1}}
         {{#status2 status}}
-        <td><div class="btn btn-orange f14 fz-white">立即投资</div></td>
+        <td><div class="btn btn-orange f14 fz-white">立即出借</div></td>
         {{/status2}}
         {{#status3 status}}
         <td><div class="btn btn-gray f14 fz-white">已售罄</div></td>
@@ -468,7 +468,7 @@ JSFILE
 
 <!--<input type="hidden" name="isLoggedin" value="false">-->
 <!--<input type="hidden" name="isInvest" value="false">-->
-<!--已登陆未投资-->
+<!--已登陆未出借-->
 <div class="mask-no-invest">
     <div class="popup-box">
         <div class="popup-box-top"></div>
@@ -510,7 +510,7 @@ JSFILE
         <a href="/user/coupon/" class="popup-box-btn">点击领取</a>
     </div>
 </div>
-<!--已登陆已投资-->
+<!--已登陆已出借-->
 <div class="mask-login-invest">
     <div class="popup-box">
         <i class="close-box"></i>
@@ -518,10 +518,10 @@ JSFILE
             <ul class="swiper-wrapper clear-fix" id="upgrade-sweper">
                 <li class="swiper-slide upgrade_explain">
                     <h5>尊敬的用户，您好：</h5>
-                    <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史投资额，特发放了豪华升级礼包，敬请收下！</p>
+                    <p class="login-invest-msg">2018年楚天财富系统全新升级，并建立了全新会员和积分体系。平台根据您的历史出借额，特发放了豪华升级礼包，敬请收下！</p>
                     <table>
                         <tr>
-                            <th>累计年化投资金额（万元）</th>
+                            <th>累计年化出借金额（万元）</th>
                             <th>升级红包</th>
                             <th>升级积分</th>
                         </tr>

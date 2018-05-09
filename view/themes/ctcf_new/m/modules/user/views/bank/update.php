@@ -67,7 +67,7 @@ $this->backUrl = '/user/bank/card';
             <div>绑定的银行卡必须为本人身份证办理；</div>
             <div>若您的账户余额为0且没有在途资金，系统将在半小时以内自动审核换卡；否则需拨打客服热线<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>提交相关资料，提交资料后，进行2-5天的人工审核换卡；</div>
             <div>换卡申请期间不影响充值和提现。</div>
-            <div>注：在途资金指有投资回款或提现冻结金额。</div>
+            <div>注：在途资金指有出借回款或提现冻结金额。</div>
         </div>
     </div>
     <!--提交按钮-->

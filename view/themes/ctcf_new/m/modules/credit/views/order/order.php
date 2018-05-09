@@ -47,8 +47,8 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 <input type="hidden" name="_csrf" value="<?= Yii::$app->request->csrfToken ?>" />
 <input type="hidden" name="note_id" value="<?= $respData['id'] ?>">
 <div class="row sm-height border-bottom">
-    <div class="col-xs-3 col-xs-offset-1 safe-txt font-32">投资金额</div>
-    <input name="amount" type="text" id="money" value="" t_value="" AUTOCOMPLETE="off" placeholder="起投<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元，递增<?= StringUtils::amountFormat2(bcdiv($note_config['incr_order_amount'], 100, 2)) ?>元"  class="col-xs-7 safe-lf text-align-lf font-26" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
+    <div class="col-xs-3 col-xs-offset-1 safe-txt font-32">出借金额</div>
+    <input name="amount" type="text" id="money" value="" t_value="" AUTOCOMPLETE="off" placeholder="起借<?= StringUtils::amountFormat2(bcdiv($note_config['min_order_amount'], 100, 2)) ?>元，递增<?= StringUtils::amountFormat2(bcdiv($note_config['incr_order_amount'], 100, 2)) ?>元"  class="col-xs-7 safe-lf text-align-lf font-26" onkeyup="if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}">
     <div class="safe-txt font-32 money_yuan">元</div>
 </div>
 
@@ -134,17 +134,17 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
             e.preventDefault();
 
             if ($('#money').val() == '') {
-                toast('投资金额不能为空');
+                toast('出借金额不能为空');
                 return false;
             }
 
             if ($('#money').val() <= 0) {
-                toast('投资金额应大于0');
+                toast('出借金额应大于0');
                 return false;
             }
 
             $buy.attr('disabled', true);
-            $buy.val('购买中...');
+            $buy.val('出借中...');
             var vals = $("#orderform").serialize();
 
             var xhr = $.post($("#orderform").attr("action"), vals, function (data) {
