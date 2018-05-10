@@ -38,6 +38,7 @@ class SuperviseAccessFilter extends ActionFilter
             'licai/index',
             'deal/deal/detail',
             'licai/notes',
+            'licai/loan',
             'credit/note/detail',
             'upload/showpic',
         ])) {

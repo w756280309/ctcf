@@ -47,7 +47,7 @@ $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
         <div class="header-nav">
             <ul>
                 <li><a class="<?= 'site/index' === $action ? 'header-nav-click' : '' ?>" href="/">首页</a></li>
-                <li><a class="<?= 'licai/index' === $action || 'licai/notes' === $action ? 'header-nav-click' : '' ?>" href="/licai/">我要理财</a></li>
+                <li><a class="<?= 'licai/index' === $action || 'licai/notes' === $action || 'licai/loan' === $action ? 'header-nav-click' : '' ?>" href="/licai/loan">我要理财</a></li>
                 <li><a class="<?= 'safeguard/index' === $action ? 'header-nav-click' : '' ?>" href="/safeguard/">安全保障</a></li>
                 <li><a class="<?= 'helpcenter/operation' === $action ? 'header-nav-click' : '' ?>" href="/helpcenter/operation/">帮助中心</a></li>
                 <li class="header-nav-last"><a class="<?= 'guide/index' === $action ? 'header-nav-click' : '' ?>" href="/guide/">新手引导</a></li>
