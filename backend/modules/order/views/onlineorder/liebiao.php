@@ -162,6 +162,10 @@ use common\utils\StringUtils;
                         'format' => 'raw',
                         'value' => function ($order) use ($loan) {
                             $html = '';
+                            $hasCreatedEbaoquan = $order->getBaoquanDownloadLink();
+                            if($hasCreatedEbaoquan) {
+                                $html .= "<a href=".$hasCreatedEbaoquan." target='_blank' class='btn mini green'>易保全合同下载</a> | ";
+                            }
                             $hasCreatedBaoquan = $order->miitViewUrl;
                             if($hasCreatedBaoquan) {
                                 $html .= "<a href=".$hasCreatedBaoquan." target='_blank' class='btn mini green'>下载保全合同</a> | ";
