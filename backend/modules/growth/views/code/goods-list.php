@@ -75,6 +75,12 @@ $this->title = '商品列表';
                     'layout' => '{items}',
                     'columns' => [
                         [
+                            'label' => 'id',
+                            'value' => function ($data) {
+                                return $data['id'];
+                            }
+                        ],
+                        [
                             'label' => '商品名称',
                             'value' => function ($data) {
                                 return $data['name'];

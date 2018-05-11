@@ -223,8 +223,8 @@ class CodeController extends BaseController
         }
         $count = Yii::$app->db->createCommand("SELECT COUNT(id)  FROM goods_type where " . $where)->queryScalar();
         $dataProvider = new SqlDataProvider([
-            'sql' => "SELECT `code`.total,goods_type.name,goods_type.createdAt,goods_type.type,goods_type.sn from 
-(select name, createdAt,sn,type from goods_type where " . $where . " group by sn order by id desc) as goods_type left join (select goodsType_sn,count(id) as total from code group by goodsType_sn) as code on `code`.goodsType_sn = goods_type.sn",
+            'sql' => "SELECT `code`.total,goods_type.id,goods_type.name,goods_type.createdAt,goods_type.type,goods_type.sn from 
+(select id, name, createdAt,sn,type from goods_type where " . $where . " group by sn order by id desc) as goods_type left join (select goodsType_sn,count(id) as total from code group by goodsType_sn) as code on `code`.goodsType_sn = goods_type.sn",
             'totalCount' => $count,
             'pagination' => [
                 'pageSize' => $pageSize,
