@@ -1,0 +1,249 @@
+.flex-content{
+    background-color: #FFCBD1;
+    padding-bottom: 0.6666667rem;
+}
+.active-banner{
+    width: 10rem;
+    height: 6.18666667rem;
+    background: url(/ctcf/images/active-20180513/active_banner.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    margin-bottom: 0.2266667rem;
+}
+/*奖品列表*/
+.prize-lise{
+
+}
+.prize-lise .prize-top{
+    width: 9.24rem;
+    /*height: 3.573333333rem;*/
+    /*background: url(/ctcf/images/active-20180513/prize_top.png) 0 0 no-repeat;*/
+    /*-webkit-background-size: 100% 100%;*/
+    /*background-size: 100% 100%;*/
+    margin:0 auto;
+}
+.prize-lise .prize-bottom{
+    width: 9.24rem;
+    /*height: 3.573333333rem;*/
+    /*background: url(/ctcf/images/active-20180513/prize_bottom.png) 0 0 no-repeat;*/
+    /*-webkit-background-size: 100% 100%;*/
+    /*background-size: 100% 100%;*/
+    margin: 0.266666667rem auto 0;
+}
+
+.prize-top .prize-box,.prize-bottom .prize-box{
+    height: 3.573333333rem;
+    width: 2.92rem;
+}
+.prize-top .prize-top1{
+    background: url(/ctcf/images/active-20180513/prize_top1.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    margin-right: 0.24rem;
+}
+.prize-top .prize-top2{
+    background: url(/ctcf/images/active-20180513/prize_top2.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+.prize-top .prize-top3{
+    background: url(/ctcf/images/active-20180513/prize_top3_new.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+.prize-bottom .prize-bottom1{
+    background: url(/ctcf/images/active-20180513/prize_bottom1.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    margin-right: 0.24rem;
+}
+.prize-bottom .prize-bottom2{
+    background: url(/ctcf/images/active-20180513/prize_bottom2.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+.prize-bottom .prize-bottom3{
+    background: url(/ctcf/images/active-20180513/prize_bottom3.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+.prize-box .over-prize{
+    width: 2.92rem;
+    height: 2.94rem;
+    background-color:rgba(0,0,0,0.3);
+    position: relative;
+    display:none;
+}
+.prize-bottom2 .over-prize,.prize-bottom3 .over-prize{
+    height: 2.96rem;
+}
+.prize-box .over-prize i{
+    position: absolute;
+    right:0;
+    top:0;
+    width: 1.22666667rem;
+    height: 1.24rem;
+    background: url(/ctcf/images/active-20180513/over_mark.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+
+.go-licai{
+    display:block;
+    width: 8.933333rem;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    -webkit-border-radius: 0.12rem;
+    -moz-border-radius: 0.12rem;
+    border-radius: 0.12rem;
+    background-color: #FF4B50;
+    color:#fff;
+    margin:0.45rem auto 0;
+    font-size: 0.48rem;
+    text-align: center;
+    -webkit-box-shadow: 0px 0px 3px #FF4B50;
+    -moz-box-shadow: 0px 0px 3px #FF4B50;
+    box-shadow: 0px 0px 3px #FF4B50;
+    letter-spacing: 0.05em;
+}
+.all-invest{
+    height: 0.9733333rem;
+    line-height: 0.97333333rem;
+    color:#FFF;
+    font-size: 0.3733333rem;
+    text-align: center;
+}
+.active-rule{
+    overflow: hidden;
+    position: relative;
+}
+.rule-msg1{
+    margin-top: 0.7833333rem;
+    position: relative;
+    z-index: 1;
+}
+.rule-msg1 i{
+    width: 2.37333333rem;
+    height: 1.1866666667rem;
+    background: url(/ctcf/images/active-20180513/active_rule_msg.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    position: absolute;
+    left:0;
+    right:0;
+    margin:0 auto;
+    top:-0.59rem;
+}
+.rule-msg1 ul{
+    -webkit-border-radius: 0.22666667rem;
+    -moz-border-radius: 0.22666667rem;
+    border-radius: 0.22666667rem;
+    width: 8.93333333rem;
+    margin: 0 auto;
+    padding-left: 1.05333333rem;
+    padding-right: 0.333333rem;
+    padding-top: 0.76rem;
+    padding-bottom: 0.4rem;
+    background-color: #FFE5E8;
+    color:#ff4b50;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 0.34666667rem;
+    counter-reset:subsection;
+}
+.rule-msg1 ul li{
+    line-height: 0.64rem;
+    counter-increment:subsection;
+    position: relative;
+}
+.rule-msg1 ul li::before{
+    content: counter(subsection) "、";
+    position: absolute;
+    width:0.5333333rem;
+    height:100%;
+    left:-0.5333333rem;
+    top:0;
+}
+.rule-msg2{
+    margin-top: 0.53333333rem;
+    position: relative;
+    z-index: 2;
+}
+.rule-msg2 u{
+    position:absolute;
+    width: 7.786666667rem;
+    height: 1.17333333rem;
+    background: url(/ctcf/images/active-20180513/string.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    left:0;
+    right:0;
+    margin:0 auto;
+    top:-0.826666665rem;
+}
+.rule-msg2 ul{
+    -webkit-border-radius: 0.22666667rem;
+    -moz-border-radius: 0.22666667rem;
+    border-radius: 0.22666667rem;
+    width: 8.93333333rem;
+    margin: 0 auto;
+    background-color: #FFE5E8;
+    color:#ff4b50;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 0.34666667rem;
+    counter-reset:subsection;
+}
+
+.rule-msg2 ul li{
+    line-height: 1.08rem;
+}
+.rule-msg2 ul li~li{
+    border-top: 1px solid #FF989C;
+}
+.rule-msg2 ul li span{
+    width:50%;
+    text-align: center;
+    height: 100%;
+}
+p.rule-msg3{
+    z-index: 3;
+    position: relative;
+    -webkit-border-radius: 0.22666667rem;
+    -moz-border-radius: 0.22666667rem;
+    border-radius: 0.22666667rem;
+    width: 8.0799998rem;
+    margin: 0.533333333rem auto;
+    background-color: #FFE5E8;
+    color:#ff4b50;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 0.34666667rem;
+    counter-reset:subsection;
+    line-height: 0.62666667rem;
+    padding: 0.466667rem 0.4266667rem;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+.rule-msg3 u{
+    position:absolute;
+    width: 7.786666667rem;
+    height: 1.17333333rem;
+    background: url(/ctcf/images/active-20180513/string.png) 0 0 no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    left:0;
+    right:0;
+    margin:0 auto;
+    top:-0.826666665rem;
+}
+.last-p-msg{
+    color:#ee97a1;
+    font-size: 0.32rem;
+    text-align: center;
+    line-height: 0.38666667rem;
+}
