@@ -79,7 +79,7 @@ class Crypto
             if ($res) {
                 $res = json_decode($res, true);
             }
-            if ($res['code'] == '2000') {
+            if ('2000' === (string) $res['code']) {
                 $model = new Channel([
                     'userId' => $user->id,
                     'thirdPartyUser_id' => $res['data']['uid'],
@@ -88,13 +88,12 @@ class Crypto
                 $model->save(false);
                 return $res['data']['uid'];
             }
+            throw new \Exception($res['message'], $res['code']);
         } catch (\Exception $ex) {
             Yii::info('用户【' .$user->id. '】注册南金中心失败，原因：' . $ex->getMessage());
+            throw $ex;
         }
-
-        return null;
     }
-
 
     /**
      * @param array $data 签名信息

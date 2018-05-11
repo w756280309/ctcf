@@ -83,14 +83,15 @@ class NjqController extends Controller
         }
 
         if (is_null($user->channel)) {
-            //todo 注册南金中心失败待处理
-            $uid = $crypto->signUp($user);
+            try {
+                $uid = $crypto->signUp($user);
+            } catch (\Exception $ex) {
+                return $this->redirect('/njq/fail?code='.$ex->getCode());
+            }
         } else {
             $uid = $user->channel->thirdPartyUser_id;
         }
-        if (!$uid) {
-            throw $this->ex404();
-        }
+
         $data = [
             'uid' => $uid,
             'device' => 'desktop',
@@ -101,5 +102,22 @@ class NjqController extends Controller
         unset($signData['appSecret']);
 
         return $this->redirect(Yii::$app->params['njq']['baseUri'] . 'user/account/connect?' . http_build_query($signData));
+    }
+
+    /**
+     * 授权登录失败
+     */
+    public function actionFail()
+    {
+        $code = (string) Yii::$app->request->get('code');
+        if ('99999' === $code) {
+            $message = '您在南金中心开户的手机号和身份证与温都金服不一致，无法进行账号授权登录。';
+        } else {
+            $message = '授权登录服务请求超时。';
+        }
+
+        return $this->render('fail', [
+            'message' => $message,
+        ]);
     }
 }
