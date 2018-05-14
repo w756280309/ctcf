@@ -1356,4 +1356,11 @@ return [
         'limit' => [],
         'bin' => [],
     ],
+    '1555' => [
+        'sort' => '35',
+        'bankname' => '长安银行',
+        'nickname' => 'CCAB',
+        'limit' => [],
+        'bin' => [],
+    ],
 ];
