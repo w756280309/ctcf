@@ -15,6 +15,7 @@ use common\models\tx\UserAsset;
 use common\models\user\MoneyRecord;
 use common\models\user\UserAccount;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use EBaoQuan\Client;
 use P2pl\OrderTxInterface;
 use phpDocumentor\Reflection\Types\Self_;
@@ -587,5 +588,52 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
             $miitBQ = null;
         }
         return $miitBQ;
+    }
+    /**
+     * 创建“认购凭证”数据
+     * @param bool $hideBaoquan
+     */
+    public function createOrderCert($hideBaoqun = false)
+    {
+        $loan = $this->loan;
+        $duration = $loan->getDuration();
+        $user = $this->user;
+        $data = [
+            'userName' => $user->getName(),
+            'idcard' => SecurityUtils::decrypt($user->safeIdCard),
+            'title' =>$loan->title,
+            'duration' => $duration['value'].$duration['unit'],
+            'rate' => bcmul($this->yield_rate, 100, 2) . '%',
+            'orderMoney' => $this->order_money ,
+            'refundMethod' => Yii::$app->params['refund_method'][$loan->getRefundMethod()],
+            'orderDate' => new \DateTime($this->orderDate),
+            'date' => (new \DateTime()),
+        ];
+        return $data;
+    }
+    /**
+     * 创建“确认函”数据
+     */
+    public function createLetter()
+    {
+        $loan = $this->loan;
+        $user = $this->user;
+        $duration = $loan->getDuration();
+        $date = date('Y-m-d');
+        $data = [
+            'userName' => $user->getName(),
+            'orderDate' => $this->getOrderDate(),
+            'title' => $loan->title,
+            'idcard' => $user->getIdcard(),
+            'startDate' => new \DateTime($loan->getStartDate()),//起息日
+            'fullDate' => new \DateTime($loan->getStartDate()),//成立日
+            'endDate' => new \DateTime($loan->getEndDate()),
+            'duration' => $duration['value'].$duration['unit'],
+            'orderMoney' => $this->order_money,
+            'rate' => bcmul($this->yield_rate, 100, 2) . '%',
+            'refundMethod' => \Yii::$app->params['refund_method'][$loan->getRefundMethod()],
+            'date' => $date,
+        ];
+        return $data;
     }
 }

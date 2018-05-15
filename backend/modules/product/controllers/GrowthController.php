@@ -38,24 +38,8 @@ class GrowthController extends BaseController
             if (is_null($order)) {
                 throw $this->ex404();
             }
-            $loan = $order->loan;
-            $user = $order->user;
-            $duration = $loan->getDuration();
-
-            $data[] = [
-                'userName' => $user->getName(),
-                'orderDate' => $order->getOrderDate(),
-                'title' => $loan->title,
-                'idcard' => $user->getIdcard(),
-                'startDate' => new \DateTime($loan->getStartDate()),//起息日
-                'fullDate' => new \DateTime($loan->getStartDate()),//成立日
-                'endDate' => new \DateTime($loan->getEndDate()),
-                'duration' => $duration['value'].$duration['unit'],
-                'orderMoney' => $order->order_money,
-                'rate' => bcmul($order->yield_rate, 100, 2) . '%',
-                'refundMethod' => \Yii::$app->params['refund_method'][$loan->getRefundMethod()],
-                'date' => $date,
-            ];
+            //认购函数据
+            $data[] = $order->createLetter();
         } else {
             if (empty($loanId)) {
                 throw $this->ex404();
@@ -102,7 +86,6 @@ class GrowthController extends BaseController
             throw $this->ex404();
         }
         $order = OnlineOrder::findOne($orderId);
-        $loanOrder = $order;
         if (is_null($order)) {
             throw $this->ex404();
         }
@@ -111,8 +94,11 @@ class GrowthController extends BaseController
         if (is_null($loan)) {
             throw $this->ex404();
         }
-
-        return $this->createData($loan, $order, $loanOrder);
+        //认购凭证数据
+        $data = $order->createOrderCert();
+        return $this->renderFile('@backend/modules/product/views/growth/certificate.php', [
+            'data' => $data,
+        ]);
     }
 
     public function actionTransferCert()
