@@ -62,4 +62,66 @@ class Promo180508 extends BasePromo
             }
         }
     }
+
+    /*
+     * 奖池配置
+     * 用户第一次抽奖一个奖池，第二次及之后更换奖池
+     * 如果库存为0，则将概率添加到5.2现金红包上
+     * @return array
+     * */
+    public function getAwardPool(User $user, $joinTime)
+    {
+        $firstDraw = [
+            '180520_RP0.52' => '0.299',
+            '180520_RP0.66' => '0.1',
+            '180520_RP0.88' => '0.1',
+            '180520_P16' => '0.25',
+            '180520_P18' => '0.25',
+            '180520_RP5.2' => '0.001',
+        ];
+        $secondDraw = [
+            '180520_RP5.2' => '0.299',
+            '180520_RP6.6' => '0.2',
+            '180520_RP8.8' => '0.1',
+            '180520_P88' => '0.25',
+            '180520_P166' => '0.15',
+            '180520_RP52' => '0.001',//库存1
+        ];
+        $count = PromoLotteryTicket::findLotteryByPromoId($this->promo->id)
+            ->andWhere(['user_id' => $user->id])
+            ->andWhere(['isDrawn' => true])
+            ->andWhere(['isRewarded' => true])
+            ->count();
+        if ($count < 1) {
+            $pool = $firstDraw;
+        } else {
+            $pool = $this->reviseStocksRate($secondDraw, '180520_RP5.2');
+        }
+        return $pool;
+    }
+
+    /*
+     * 获取剩余抽奖机会(慈善勋章数量)
+     *@param $user
+     *@return int
+     * */
+    public function getMedalCount(User $user)
+    {
+        $count = $this->getActiveTicketCount($user);
+        $result = !empty($count) ? $count : 0;
+        return $result;
+    }
+
+    /*
+     * 检测能否抽奖
+     * @param $user
+     * @return Exception
+     * */
+    public function checkDraw(User $user)
+    {
+        $count = $this->getMedalCount($user);
+        if ($count < 1) {
+            throw new \Exception('无抽奖机会', 4);
+        }
+    }
 }
