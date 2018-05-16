@@ -4,6 +4,7 @@ namespace backend\modules\order\controllers;
 
 use backend\controllers\BaseController;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
+use common\jobs\MiitBaoQuanJob;
 use common\lib\user\UserStats;
 use common\models\user\User;
 use common\models\order\OnlineOrder;
@@ -220,5 +221,21 @@ class OnlineorderController extends BaseController
             'user' => $user,
             'loanStatus' => $loanStatus
         ]);
+    }
+    //国家电子合同保全(重新保全国家电子合同)
+    public function actionMiitBaoquan($id)
+    {
+        $order = OnlineOrder::findOne($id);
+        if (!is_null($order)) { //订单是否存在
+            $miitLog = $order->getMiitLog();
+            //和签保全开关开启且不存在成功的保全记录
+            if (is_null($miitLog) && Yii::$app->params['enable_miitbaoquan']) {
+                Yii::$app->queue->push(new MiitBaoQuanJob([
+                    'order' => $order,
+                    'item_type' => 'loan_order',
+                ]));
+            }
+        }
+        return '合同生成中，请稍后';
     }
 }

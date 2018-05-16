@@ -578,6 +578,14 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
     {
         return $this->getUser();
     }
+
+    /**
+     * 获取和签保全记录
+     */
+    public function getMiitLog()
+    {
+        return EbaoQuan::findOne(['itemId' => $this->id, 'success' => 1, 'type' => EbaoQuan::TYPE_M_LOAN]);
+    }
     //获取‘和签’保全的链接
     public function getMiitViewUrl()
     {

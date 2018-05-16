@@ -169,6 +169,8 @@ use common\utils\StringUtils;
                             $hasCreatedBaoquan = $order->miitViewUrl;
                             if($hasCreatedBaoquan) {
                                 $html .= "<a href=".$hasCreatedBaoquan." target='_blank' class='btn mini green'>下载保全合同</a> | ";
+                            } else {
+                                $html .= '<a class="btn mini green" onclick="miitbaoquan('. $order->id .')">下载保全合同</a> |';
                             }
                             $html .= '<a href="/product/growth/order-cert?orderId='.$order->id.'" target="_blank" class="btn mini" style="background-color:#36A9CE;color: white;">&emsp;交易凭证&emsp;</a> | ';
                             if ($loan->is_jixi) {
@@ -187,5 +189,14 @@ use common\utils\StringUtils;
     </div>
                                     
 </div>
+<script>
+    //重新保全（国家电子合同）
+    function miitbaoquan(id) {
+        $.post('/order/onlineorder/miit-baoquan?id=' + id, function(str){
+            alert(str);
+            window.location.reload();
+        })
+    }
+</script>
 <?php $this->endBlock(); ?>
 
