@@ -39,7 +39,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     <div class="row kahao recharge-kahao">
         <div class="col-xs-3 col-sm-2">充值金额</div>
         <div class="col-xs-9 col-sm-8 safe-lf">
-            <input type="number" id="fund" autocomplete="off" name='RechargeRecord[fund]' placeholder="输入充值金额"/>
+            <input type="number" step="0.000001" id="fund" autocomplete="off" name='RechargeRecord[fund]' placeholder="输入充值金额"/>
             <span class="trans" ></span>
         </div>
     </div>
@@ -62,6 +62,8 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
                 <li style="color: #ff6707">手机充值不能超过<?= StringUtils::amountFormat1('{amount}{unit}', $bank['dailyLimit']) ?>每日限额，可以用电脑登录网站（www.hbctcf.com）进行大额充值。
                     <a href="/user/userbank/refer" style="color: #419bf9;">[查看详情]</a>
                 </li>
+                <li>投资人充值手续费由楚天财富垫付。</li>
+                <li>最低充值金额应大于等于1元。</li>
                 <li>为保障安全，连续3次充值失败，24小时内将无法通过手机充值。</li>
                 <li>客服电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?>。</li>
             </ul>
@@ -80,14 +82,9 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
             $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
             return false;
         }
-        if ($('#fund').val() === '0') {
-            toast('充值金额不能为零');
-            $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
-            return false;
-        }
-        var reg = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
+        var reg = /^[1-9](\d+)?([.]{1}[0-9]{1,2})?$/;
         if (!reg.test($('#fund').val())) {
-            toast('充值金额格式不正确');
+            toast('数值需≥1元，小数点后不超过2位');
             $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
             return false;
         }

@@ -71,7 +71,7 @@ class RechargeRecord extends \yii\db\ActiveRecord implements \P2pl\QpayTxInterfa
             [['fund', 'uid', 'bank_id', 'pay_type'], 'required'],
             [['account_id', 'uid', 'status'], 'integer'],
             [['fund'], 'filter', 'filter' => 'trim'],
-            [['fund'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9]{1,2})?$/', 'message' => '数值需≥1元，小数点后不超过2位'],
+            [['fund'], 'match', 'pattern' => '/^[1-9](\d+)?([.]{1}[0-9]{1,2})?$/', 'message' => '数值需≥1元，小数点后不超过2位'],
             [['fund'], 'number', 'min' => 1, 'max' => 1000000000],
             [['sn'], 'string', 'max' => 30],
             [['bank_id'], 'string', 'max' => 20],

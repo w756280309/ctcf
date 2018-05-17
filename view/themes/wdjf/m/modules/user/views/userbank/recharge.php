@@ -81,12 +81,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
             $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
             return false;
         }
-        if ($('#fund').val() === '0') {
-            toast('充值金额不能为零');
-            $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
-            return false;
-        }
-        var reg = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
+        var reg = /^[1-9](\d+)?([.]{1}[0-9]{1,2})?$/;
         if (!reg.test($('#fund').val())) {
             toast('数值需≥1元，小数点后不超过2位');
             $('#rechargebtn').removeClass("btn-press").addClass("btn-normal");
