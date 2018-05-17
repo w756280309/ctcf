@@ -156,7 +156,7 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
 <?php } ?>
 
 <a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>">
-    <p class="customer_service f15">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?></p>
+    <p class="customer_service f15">客服电话：<?= Yii::$app->params['platform_info.contact_tel'] ?> / 027-88569666</p>
     <p class="customer_service f15">（8:30-20:00）</p>
 </a>
 

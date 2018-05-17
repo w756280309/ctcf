@@ -37,7 +37,7 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
                         </a>
                     </li>
                     <li class="lf"><a class="pd15 border-r1 header-hover" href="/helpcenter/operation/">帮助</a></li>
-                    <li class="lf header-hover pdl15">客服热线：<?= Yii::$app->params['platform_info.contact_tel'] ?></li>
+                    <li class="lf header-hover pdl15">客服热线：<?= Yii::$app->params['platform_info.contact_tel'] ?> / 027-88569666</li>
                 </ul>
             </div>
         <!--已登录-->
@@ -62,7 +62,7 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
                         </a>
                     </li>-->
                     <li class="lf"><a class="pd15 border-r1 header-hover" href="/helpcenter/operation/">帮助</a></li>
-                    <li class="lf header-hover pdl15">客服热线：<?= Yii::$app->params['platform_info.contact_tel'] ?></li>
+                    <li class="lf header-hover pdl15">客服热线：<?= Yii::$app->params['platform_info.contact_tel'] ?> / 027-88569666</li>
                 </ul>
             </div>
         <?php } ?>

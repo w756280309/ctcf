@@ -15,7 +15,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/lib.flexible3.js', ['depends' => Jquer
             <a href="javascript:void(0)">
                 <div></div>
                 <div>立即咨询</div>
-                <div>8:30-17:30(工作日时间)</div>
+                <div>9:00-17:30(工作日时间)</div>
             </a>
         </dt>
         <dd class="rg">
