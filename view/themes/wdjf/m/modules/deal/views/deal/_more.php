@@ -33,7 +33,7 @@ use yii\helpers\Html;
                     <span class="rate-steps <?= $isActive ? '' : 'specialcolor' ?>">
                         <?= LoanHelper::getDealRate($deal) ?><i class="col-lu">%<?php if (!empty($deal->jiaxi)) { ?><em class="credit-jiaxi">+<?= StringUtils::amountFormat2($deal->jiaxi) ?>%</em><?php } ?></i>
                     </span>
-                    <p>预期年化率</p>
+                    <p><?= $deal->cid === 3 ? '约定利率' : '预期年化率' ?></p>
                 </div>
                 <div class="col-xs-4">
                     <span class="rate-steps"><?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><i class="col-lu"><?= $ex['unit']?></i></span>

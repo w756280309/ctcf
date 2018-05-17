@@ -22,7 +22,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deal/buy.css?v=20161101');
                 <div class="lf invest-ct-lf">
                     <div class="invest-ct-lf-title">
                         <p class="lf percentage">
-                            预期年化收益率
+                            <?= $deal->cid === 3 ? '约定利率' : '预期年化收益率' ?>
                             <span class="nums"> <?= LoanHelper::getDealRate($deal) ?><i>%</i>
                                 <?php if (!empty($deal->jiaxi)) { ?>
                                     <span class="other-nums">

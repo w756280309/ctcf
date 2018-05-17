@@ -48,7 +48,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
                     <?= LoanHelper::getDealRate($deal) ?><span class="column-lu">%</span>
                     <?php if (!empty($deal->jiaxi)) { ?><span class="bonus-badge">+<?=  doubleval($deal->jiaxi) ?>%</span><?php } ?>
                 </div>
-                <span class="qing">预期年化收益率</span>
+                <span class="qing"><?= $deal->cid === 3 ? '约定利率' : '预期年化收益率' ?></span>
             </li>
             <li class="col-xs-6">
                 <div>
@@ -143,7 +143,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     <div class="row message"  style="padding-bottom: 0px;" >
         <div class="col-xs-1  col-sm-1" ></div>
         <div class="col-xs-5 money col-sm-5" style="color:#9c9c9c">认购金额(元)</div>
-        <div class="col-xs-5 shouyi right_num col-sm-5"  style="color:#9c9c9c;" >预期年化收益率(%)</div>
+        <div class="col-xs-5 shouyi right_num col-sm-5"  style="color:#9c9c9c;" ><?= $deal->cid === 3 ? '约定利率' : '预期年化收益率' ?>(%)</div>
         <div class="col-xs-1 right_hide  col-sm-1" ></div>
     </div>
     <div class="row message" style="padding-bottom: 0px;" >

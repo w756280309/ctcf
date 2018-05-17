@@ -55,7 +55,7 @@ $user = Yii::$app->user->getIdentity();
                                 <li class="li_1 <?= $val->isFlexRate && $val->jiaxi ? 'rate-steps-jiaxi' : '' ?>">
                                     <i class="float-left"><?= LoanHelper::getDealRate($val) ?></i><span>%</span><?php if (!empty($val->jiaxi)) { ?><span class="addRadeNumber">+<?= StringUtils::amountFormat2($val->jiaxi) ?>%</span><?php } ?>
                                 </li>
-                                <li class="li_2">预期年化收益率</li>
+                                <li class="li_2"><?= $val->cid === 3 ? '约定利率' : '预期年化收益率' ?></li>
                             </ul>
                             <ul class="single_ul_center">
                                 <li class="li_1"><?php $ex = $val->getDuration(); ?><?= $ex['value']?><span><?= $ex['unit'] ?></span></li>

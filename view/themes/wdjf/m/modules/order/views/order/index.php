@@ -77,7 +77,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'css/setting.css?v=20170125', ['depends
     <!--   购买页 start-->
     <div class="row produce">
         <div class="col-xs-12 text-align-lf first-hang" style="padding-left: 0.613rem;"><?= $deal->title ?></div>
-        <div style="width: 35%;" class="col-xs-4 text-align-lf">预期年化收益</div>
+        <div style="width: 35%;" class="col-xs-4 text-align-lf"><?= $deal->cid === 3 ? '约定利率' : '预期年化收益' ?></div>
         <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= LoanHelper::getDealRate($deal) ?>
             %<?php if (!empty($deal->jiaxi)) { ?>+<?= $deal->jiaxi ?>%<?php } ?></div>
         <div style="width: 35%;" class="col-xs-4 text-align-lf">项目期限</div>

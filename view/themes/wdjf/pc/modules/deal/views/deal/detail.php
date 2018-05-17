@@ -34,7 +34,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                                     <?php if (!empty($deal->jiaxi)) { ?>+<?= StringUtils::amountFormat2($deal->jiaxi) ?>%<?php } ?>
                                 </em>
                             </span>
-                            <p>预期年化收益率</p>
+                            <p><?= $deal->cid === 3 ? '约定利率' : '预期年化收益率' ?></p>
                         </div>
                     </li>
                     <li>
@@ -101,7 +101,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
             <div class="pl-subscription">
                 <ul class="clearfix">
                     <li class="pl-grayBg"><span>认购金额（元）</span></li>
-                    <li class="pl-grayBg pl-center">预期年化收益率（%）</li>
+                    <li class="pl-grayBg pl-center"><?= $deal->cid === 3 ? '约定利率' : '预期年化收益率' ?>（%）</li>
                     <li>
                         <div><i>累计认购<?= StringUtils::amountFormat2($deal->start_money) ?>起</i></div>
                     </li>
