@@ -783,6 +783,7 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
         if ($id) {
             $model = OnlineProduct::findOne($id);
             $model->scenario = 'del';
+            $model->title = $model->title.'deleted'.time();
             $model->del_status = 1;
             //修改标的修改记录
             try {
