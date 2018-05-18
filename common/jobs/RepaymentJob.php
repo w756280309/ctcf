@@ -128,7 +128,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
 
                 //发计息短信和确认函短信
                 if (strtotime(date('Y-m-d')) == strtotime($order->valueDate)) {
-                    self::sendJixiSms($order->mobile, $order->user->realName, $order->orderDate, $order->loan->title, $order->valueDate, $order->affiliator_id);
+                    self::sendJixiSms($order->userMobile, $order->user->realName, $order->orderDate, $order->loan->title, $order->valueDate, $order->affiliator_id);
                 }
             }
             if (empty($repaymentData)) {
@@ -183,7 +183,7 @@ class RepaymentJob extends Object implements Job  //需要继承Object类和Job�
                         ];
                         $templateId = Yii::$app->params['offline_repayment_sms']['fuxi_ordinary'];
                     }
-                    $res = SmsService::send($order->mobile, $templateId, $message);
+                    $res = SmsService::send($order->userMobile, $templateId, $message);
                     if ($res) {
                         //修改状态
                         $plan->isSendSms = true;
