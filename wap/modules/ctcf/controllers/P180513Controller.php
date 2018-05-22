@@ -26,6 +26,7 @@ class P180513Controller extends BaseController
         $isLoggedIn = null !== $user;
         $annualInvest = 0;
         $rewards = $this->getRewards($annualInvest);
+        $promoStatus = $this->getPromoStatus($promo);
         if ($user) {
             $promoClass = new $promo->promoClass($promo);
             $promoStatus = $this->getPromoStatus($promo);
