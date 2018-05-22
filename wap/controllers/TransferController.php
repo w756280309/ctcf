@@ -35,6 +35,7 @@ class TransferController extends Controller
         $money = (string) $request->get('money');
         $userId = (int) $request->get('userId');
         $sn = trim($request->get('sn'));
+        $ump = Yii::$container->get('ump');
 
         //验签
         $crypto = new Crypto();
@@ -85,6 +86,19 @@ class TransferController extends Controller
             ]);
         }
 
+        //查询联动账户余额
+        $epayUserId = $epayUser->epayUserId;
+        $userInfo = $ump->getUserInfo($epayUserId);
+        if ($userInfo->isSuccessful()) {
+            $balance = bcdiv($userInfo->get('balance'), 100, 2);
+            if (-1 === bccomp($balance, $money, 2)) {
+                return $this->render('index', [
+                    'code' => 2008,
+                    'message' => '温都金服账户余额不足',
+                ]);
+            }
+        }
+
         //添加授权转账业务申请记录
         try {
             $transferTx = TransferTx::find()
@@ -109,12 +123,6 @@ class TransferController extends Controller
             ]);
         }
 
-        $epayUserId = $epayUser->epayUserId;
-//        $retUrl = Yii::$app->request->hostInfo . '/transfer/frontend';
-//        $notifyUrl = Yii::$app->request->hostInfo . '/transfer/backend';
-//        $ump = Yii::$container->get('ump');
-//        $url = $ump->userToPlatform($epayUserId, $money, $retUrl, $notifyUrl, $transferTx->sn, true);
-        $ump = Yii::$container->get('ump');
         $loanId = Yii::$app->params['large_loan_id'];
         if ('' === $loanId) {
             return $this->render('index', [
@@ -124,18 +132,11 @@ class TransferController extends Controller
         }
         $issueDate = date('Ymd', strtotime($transferTx->createTime));
         $ret = $ump->orderNopass1($transferTx->sn, $issueDate, $loanId, $epayUserId, $transferTx->money);
+        //05月21日更新，不再处理失败的订单
         if ($ret->isSuccessful()) {
             //确认授权转账成功处理逻辑
             $accountService = new AccountService();
             $accountService->confirmTransfer($transferTx);
-        } elseif ('00240000' === $ret->get('ret_code')) {
-            //需要特殊处理
-            $transferTx->status = TransferTx::STATUS_UNKNOWN;
-            $transferTx->save(false);
-        } else {
-            Yii::info('转账失败处理：【'.$ret->get('ret_code').'】'.$ret->get('ret_msg'), 'user_log');
-            $transferTx->status = TransferTx::STATUS_FAILURE;
-            $transferTx->save(false);
         }
 
         //获得南金中心的认购处理中url
