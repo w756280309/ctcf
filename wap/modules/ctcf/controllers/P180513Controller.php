@@ -28,23 +28,26 @@ class P180513Controller extends BaseController
         $rewards = $this->getRewards($annualInvest);
         if ($user) {
             $promoClass = new $promo->promoClass($promo);
+            $promoStatus = $this->getPromoStatus($promo);
             $annualInvest = $promoClass->calcUserAmount($user, true);
             $annualInvest /= 10000;
             $rewards = $this->getRewards($annualInvest);
-            foreach ($rewards as $key => $value) {
-                if ($value) {
-                    $hasTicket = $promoClass->fetchOneActiveTicket($user, $key);
-                    if (!$hasTicket) {
-                        PromoLotteryTicket::initNew($user, $promo, $key)->save(false);
-                        $reward = Reward::fetchOneBySn($key);
-                        $ticket = $promoClass->fetchOneActiveTicket($user, $key);
-                        PromoService::award($user, $reward, $promo, $ticket);
+            if ($promoStatus === 0) {
+                foreach ($rewards as $key => $value) {
+                    if ($value) {
+                        $hasTicket = $promoClass->fetchOneActiveTicket($user, $key);
+                        if (!$hasTicket) {
+                            PromoLotteryTicket::initNew($user, $promo, $key)->save(false);
+                            $reward = Reward::fetchOneBySn($key);
+                            $ticket = $promoClass->fetchOneActiveTicket($user, $key);
+                            PromoService::award($user, $reward, $promo, $ticket);
+                        }
                     }
                 }
             }
         }
         $data = [
-            'promoStatus' => $this->getPromoStatus($promo),
+            'promoStatus' => $promoStatus,
             'isLoggedIn' => $isLoggedIn,
             'rewards' => $rewards,
         ];
