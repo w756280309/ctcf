@@ -22,7 +22,7 @@ use common\utils\StringUtils;
                 <div class="kong-width">
                     <p class="single-tuchu">1、设置登录密码有什么要求？
                     </p>
-                    <p>a. 6-20个数字+英文字符；
+                    <p>a. 6-16个数字+英文字符；
                     </p>
                     <p>b. 只能包含字母、数字以及标点符号（除空格）；
                     </p>
