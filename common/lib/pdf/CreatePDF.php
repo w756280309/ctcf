@@ -10,6 +10,7 @@ namespace common\lib\pdf;
 use common\models\order\OnlineOrder;
 use common\models\user\User;
 use Knp\Snappy\Pdf;
+use Yii;
 
 //用于生成pdf文件
 class CreatePDF
@@ -33,6 +34,9 @@ class CreatePDF
         $date = "年月日";
         $money = "";
         $mobile = '';
+        $chapter = '<img style="width: 169px;margin-top:-100px;" src="data:image/jpeg;base64,'
+            . base64_encode(@file_get_contents(Yii::getAlias('@backend') . '/web'
+                . Yii::$app->params['platform_info.company_seal_640'])).'">';
         if (null !== $onlineOrder) {
             $date = date("Y年m月d日", $onlineOrder->order_time);
             $money = $onlineOrder->order_money;
@@ -68,6 +72,9 @@ class CreatePDF
                     case '认购金额':
                     case '出借金额':
                         $content = str_replace($array[0][$key], $money, $content);
+                        break;
+                    case '平台章':
+                        $content = str_replace($array[0][$key], $chapter, $content);
                         break;
                     default:
                         break;

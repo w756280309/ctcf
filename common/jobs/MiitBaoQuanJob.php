@@ -10,6 +10,7 @@
 namespace common\jobs;
 
 use common\lib\MiitBaoQuan\Miit;
+use common\lib\pdf\CreatePDF;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\user\User;
@@ -71,14 +72,14 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
                     $c = $v['content'];
                     if ($c) {
                         //获取合同模板
-                        $c = self::handleContent($k, $c, $order, $user);
+                        $c = (new CreatePDF())->handleContent($k, $c, $order, $user);
                         $content = $content . $c . ' <br/><br/><hr/><br/><br/>';
                     }
                 }
                 //多份合同合并成一份
                 $content = rtrim($content, '<br/><br/><hr/><br/><br/>');
                 //生成PDF
-                $file = self::createPdf($content, $order->sn);
+                $file = (new CreatePDF())->createPdf($content, $order->sn);
                 if (file_exists($file)) {
                     //生成保全
                     $miit = new Miit();
