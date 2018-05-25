@@ -182,7 +182,7 @@ TPL;
                 <div class="control-group">
                     <label class="control-label">项目利率</label>
                     <div class="controls">
-                    <?=
+                        <?=
                         $form->field($model, 'yield_rate', [
                             'template' => '<div class="input-append">{input}<span class="add-on">%</span> </div>{error}',
                             'inputOptions' => [
@@ -191,7 +191,22 @@ TPL;
                                 'class' => 'm-wrap span12',
                             ]
                         ])->textInput($readonly)
-                    ?>
+                        ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">融资方利率</label>
+                    <div class="controls">
+                        <?=
+                        $form->field($model, 'borrowerRate', [
+                            'template' => '<div class="input-append">{input}<span class="add-on">%</span> </div>{error}',
+                            'inputOptions' => [
+                                'autocomplete' => 'off',
+                                'placeholder' => '项目利率',
+                                'class' => 'm-wrap span12',
+                            ]
+                        ])->textInput($readonly)
+                        ?>
                     </div>
                 </div>
             </div>
@@ -367,9 +382,31 @@ TPL;
                             $form->field($model, 'borrow_uid', [
                                 'template' => '{input}{error}',
                                 'inputOptions' => $borrow_uid_input_option,
-                            ])->dropDownList($rongziInfo, [0 => '--请选择--'])
+                            ])->dropDownList(['' => '--选择--'] + $rongziInfo)
                         ?>
                     </div>
+                    <?php if (!empty(Yii::$app->params['alternativeRepayer'])) : ?>
+                        <label class="control-label">代偿方<span style="color:grey">(<?= $desc ?>)</span></label>
+                        <div class="controls">
+                            <?=
+                            $form->field($model, 'alternativeRepayer', [
+                                'template' => '{input}{error}',
+                                'inputOptions' => $borrow_uid_input_option,
+                            ])->dropDownList(['' => '--选择--'] + Yii::$app->params['alternativeRepayer'])
+                            ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (!empty(Yii::$app->params['fundReceiver'])) : ?>
+                        <label class="control-label">用款方<span style="color:grey">(<?= $desc ?>)</span></label>
+                        <div class="controls">
+                            <?=
+                            $form->field($model, 'fundReceiver', [
+                                'template' => '{input}{error}',
+                                'inputOptions' => $borrow_uid_input_option,
+                            ])->dropDownList(['' => '--选择--'] + Yii::$app->params['fundReceiver'])
+                            ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 

@@ -467,7 +467,14 @@ class ProductonlineController extends BaseController
 
         $error_loans = '';
         foreach ($loans as $loan) {
-            $borrow = new Borrower($loan['epayUserId'], null, Borrower::MERCHAT);//借款人测试阶段只能用7601209
+            $ump = Yii::$container->get('ump');
+            $merchantInfo = $ump->getMerchantInfo($loan['epayUserId']);
+            if ($merchantInfo->isSuccessful()) {
+                $type = Borrower::MERCHAT;
+            } else {
+                $type = Borrower::PERSONAL;
+            }
+            $borrow = new Borrower($loan['epayUserId'], null, $type);//借款人测试阶段只能用7601209
             unset($loan['epayUserId']);
             $loanObj = new OnlineProduct($loan);
             try {
@@ -785,6 +792,7 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
             $model->scenario = 'del';
             $model->title = $model->title.'deleted'.time();
             $model->del_status = 1;
+
             //修改标的修改记录
             try {
                 $log = AdminLog::initNew($model);

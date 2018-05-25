@@ -5,6 +5,7 @@ namespace common\models\product;
 use common\lib\product\ProductProcessor;
 use common\models\adminuser\AdminAuth;
 use common\models\adminuser\Auth;
+use common\models\epay\EpayUser;
 use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineOrder;
 use common\models\payment\PaymentLog;
@@ -133,7 +134,15 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'del' => ['del_status'],
             'status' => ['status', 'sort', 'full_time'],
             'jixi' => ['jixi_time'],
-            'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate', 'start_money', 'borrow_uid', 'fee', 'status', 'description', 'refund_method', 'account_name', 'account', 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit', 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time', 'sort', 'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest', 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn', 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates', 'isDailyAccrual', 'flexRepay'],
+            'create' => ['title', 'sn', 'cid', 'money', 'borrow_uid', 'expires', 'expires_show', 'yield_rate',
+                'start_money', 'borrow_uid', 'fee', 'status', 'description', 'refund_method', 'account_name', 'account',
+                'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit',
+                'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time',
+                'sort', 'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest',
+                'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple',
+                'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn',
+                'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates', 'isDailyAccrual', 'flexRepay',
+                'fundReceiver', 'alternativeRepayer', 'borrowerRate'],
             'senior_edit' => ['title', 'internalTitle', 'kuanxianqi', 'issuerSn', 'pkg_sn'],
         ];
     }
@@ -561,6 +570,9 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'redemptionPeriods' => '赎回申请开放时段',
             'redemptionPaymentDates' => '赎回付款日',
             'flexRepay' => '确认计息后可还款',
+            'alternativeRepayer' => '代偿方',
+            'fundReceiver' => '用款方',
+            'borrowerRate' => '融资方利率',
         ];
     }
 
@@ -1410,5 +1422,45 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             }
         }
         return json_encode($res);
+    }
+
+    /**
+     * 获取标的在联动的代偿方联动用户ID
+     *
+     * @return string|null
+     */
+    public function getAltRepayerId()
+    {
+        $altRepayerId = null;
+        if (null !== $this->alternativeRepayer) {
+            $epayUser = EpayUser::find()
+                ->where(['appUserId' => $this->alternativeRepayer])
+                ->one();
+            if (null !== $epayUser) {
+                $altRepayerId = $epayUser->epayUserId;
+            }
+        }
+
+        return $altRepayerId;
+    }
+
+    /**
+     * 获取标的在联动的用款方联动用户ID
+     *
+     * @return string|null
+     */
+    public function getFundReceiverId()
+    {
+        $fundReceiverId = null;
+        if (null !== $this->fundReceiver) {
+            $epayUser = EpayUser::find()
+                ->where(['appUserId' => $this->fundReceiver])
+                ->one();
+            if (null !== $epayUser) {
+                return $epayUser->epayUserId;
+            }
+        }
+
+        return $fundReceiverId;
     }
 }

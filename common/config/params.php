@@ -299,4 +299,8 @@ return [
     'login_access_filter' => env('LOGIN_ACCESS_FILTER') ?: false,    //有配置了此项，且为true的时候，启用相应的filter
     'enable_miitbaoquan' => env('ENABLE_MIIT_BAOQUAN') ?: false,   //合同保全开关-和签
     'large_loan_id' => '',
+    //中融信-代还方，格式 ['123' => '百度', '134' => '新浪']，注 key 为对应user表的id
+    'alternativeRepayer' => [],
+    //中融信-用款方
+    'fundReceiver' => [],
 ];

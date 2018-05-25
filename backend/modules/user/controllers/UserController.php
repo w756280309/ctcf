@@ -30,8 +30,8 @@ use common\models\tx\UserAsset;
 use common\models\tx\CreditNote;
 use common\utils\SecurityUtils;
 use common\utils\StringUtils;
+use common\utils\TxUtils;
 use wap\modules\promotion\models\RankingPromo;
-use Wcg\Http\HeaderUtils;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
@@ -782,12 +782,16 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
                 throw new \Exception('Epayuser info is null.');
             }
 
+            //若没有user-bank，则建立一个新的UserBank对象
+            if (null !== $userBank) {
+                $bankId = $userBank->bank_id;
+            } else {
+                $userBank = new UserBanks();
+                $bankId = null;
+            }
             $password = $model->password_hash;
-            $bankId = $userBank->bank_id;
-
             $model->scenario = 'add';
             $model->type = $type;
-
             $userBank->scenario = 'org_insert';
 
             $banks = Yii::$app->params['bank'];
@@ -887,6 +891,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
                     }
 
                     $model->setPassword($model->password_hash);
+                    $model->regContext = '';
                     if (!$model->save(false)) {
                         $transaction->rollBack();
                         $err = $model->getSingleError();
@@ -916,6 +921,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
                     $userBank->uid = $model->id;
                     $userBank->epayUserId = $epayuser->epayUserId;
                     $userBank->bank_name = $bank[$userBank->bank_id];
+                    $userBank->binding_sn = TxUtils::generateSn('B');
 
                     if (!$userBank->save(false)) {
                         $transaction->rollBack();

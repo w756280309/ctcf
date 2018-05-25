@@ -982,9 +982,10 @@ class RepaymentController extends BaseController
             try {
                 LoanService::updateLoanState($product, OnlineProduct::STATUS_HUAN);
 
+                $realBorrowerId = $product->fundReceiver ? $product->fundReceiver : $product->borrow_uid;
                 $res = Yii::$app->db->createCommand("UPDATE `user_account` SET `account_balance` = `account_balance` + :money, `available_balance` = `available_balance` + :money, `drawable_balance` = `drawable_balance` + :money, `in_sum` = `in_sum` + :money WHERE `uid` = :uid and `type` = :userType", [
                     'money' => $product->funded_money,
-                    'uid' => $product->borrow_uid,
+                    'uid' => $realBorrowerId,
                     'userType' => UserAccount::TYPE_BORROW,
                 ])->execute();
 
@@ -998,13 +999,13 @@ class RepaymentController extends BaseController
                     throw new \Exception('更新放款批次异常', '000003');
                 }
 
-                $ua = UserAccount::findOne(['uid' => $product->borrow_uid, 'type' => UserAccount::TYPE_BORROW]);
+                $ua = UserAccount::findOne(['uid' => $realBorrowerId, 'type' => UserAccount::TYPE_BORROW]);
                 $moneyRecord = new MoneyRecord([
                     'type' => MoneyRecord::TYPE_FANGKUAN,
                     'sn' => MoneyRecord::createSN(),
                     'osn' => $fk->sn,
                     'account_id' => $ua->id,
-                    'uid' => $product->borrow_uid,
+                    'uid' => $realBorrowerId,
                     'in_money' => $product->funded_money,
                     'remark' => '已放款',
                     'balance' => $ua->available_balance,
@@ -1016,7 +1017,23 @@ class RepaymentController extends BaseController
 
                 //当不允许访问联动时候，默认联动处理成功
                 if (Yii::$app->params['ump_uat']) {
-                    $resp = Yii::$container->get('ump')->loanTransferToMer($fk);
+                    $ump = Yii::$container->get('ump');
+                    //添加当资金使用方不为空时，标的将放款到资金使用方
+                    if ($product->fundReceiver) {
+                        $fundReceiverId = $product->getFundReceiverId();
+                        if (null === $fundReceiverId) {
+                            throw new \Exception('未找到代偿方账户', '000003');
+                        }
+                        $resp = $ump->loanTransferToFundReceiver($fk->getTxSn(), date('Ymd'), $fk->getLoanId(), $fundReceiverId, $fk->getAmount());
+                    } else {
+                        //当前不允许放款给个人融资方，即非企业商户
+                        $borrowerMerId = $fk->getBorrowerId();
+                        $merchantInfo = $ump->getMerchantInfo($borrowerMerId);
+                        if (!$merchantInfo->isSuccessful()) {
+                            throw new \Exception('暂不支持放款给非企业商户', '000003');
+                        }
+                        $resp = $ump->loanTransferToMer($fk);
+                    }
                     if (!$resp->isSuccessful()) {
                         throw new \Exception('联动一侧：'.$resp->get('ret_msg'));
                     }

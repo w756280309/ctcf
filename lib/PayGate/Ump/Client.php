@@ -296,6 +296,8 @@ class Client
 
     /**
      * 4.3.1 发标(商户向平台).
+     * 资金使用方暂时只支持企业
+     *
      *
      * @param LoanInterface     $loan
      * @param BorrowerInterface $borrower
@@ -313,6 +315,65 @@ class Client
             'loan_user_id' => $borrower->getLoanUserId(), // 会去联动一侧判断用户是否存在[测试上投资用户可以用来融资]
             'loan_acc_type' => (null === $borrower->getLoanAccountType() || 1 === $borrower->getLoanAccountType()) ? '01' : '02', //当为商户号时loan_acc_type 为必填字段，值02
             'ctrl_over_invest' => 0,//联动控制超投标志0不允许超投1允许
+        ];
+
+        //获得代偿方联动用户ID
+        $altRepayerId = $loan->getAltRepayerId();
+        if (null !== $altRepayerId) {
+            $data['warranty_user_id'] = $altRepayerId;
+        }
+
+        //获得用款方联动用户ID
+        $fundReceiverId = $loan->getFundReceiverId();
+        if (null !== $fundReceiverId) {
+            $data['receive_user_id'] = $fundReceiverId;
+            $data['receive_acc_type'] = '02';
+        }
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 添加代偿方（默认借款人用户为个人）
+     *
+     * @param int $loanId 标的ID
+     * @param string $epayUserId 代偿方联动用户ID
+     * @param string $loanAccType 操作类型 01 个人 02 商户
+     *
+     * @return Response
+     */
+    public function addLoanAltRepayer($loanId, $epayUserId, $loanAccType = '01')
+    {
+        $data = [
+            'service' => 'mer_update_project',
+            'project_id' => $loanId,
+            'loan_acc_type' => $loanAccType, //当为商户号时loan_acc_type 为必填字段，值02
+            'option_type' => 0, //仅限建标状态【92】下可以替换借款人，从文档中来看，对借款人不可以注销，注销的只能是担保方和资金使用方
+            'change_type' => '03',
+            'warranty_user_id' => $epayUserId,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 注销代偿方（默认借款人用户为个人）
+     *
+     * @param int $loanId 标的ID
+     * @param string $epayUserId 代偿方联动用户ID
+     * @param string $loanAccType 借款方账户类型 01 个人 02 商户
+     *
+     * @return Response
+     */
+    public function deleteLoanAltRepayer($loanId, $epayUserId, $loanAccType = '01')
+    {
+        $data = [
+            'service' => 'mer_update_project',
+            'project_id' => $loanId,
+            'loan_acc_type' => $loanAccType, //当为商户号时loan_acc_type 为必填字段，值02
+            'option_type' => 1, //仅限建标状态【92】下可以替换借款人，从文档中来看，对借款人不可以注销，注销的只能是担保方和资金使用方
+            'change_type' => '03',
+            'warranty_user_id' => $epayUserId,
         ];
 
         return $this->doRequest($data);
@@ -614,7 +675,7 @@ class Client
 
 
     /**
-     * 4.3.3 标的转账【由标的账户转到借款人同步请求】.
+     * 4.3.3 标的转账【由标的账户转到企业借款人同步请求】.
      *
      * @param LoanFkInterface $fk
      *
@@ -640,7 +701,7 @@ class Client
     }
 
     /**
-     * 4.3.3 标的转账【由标的账户转到借款人同步请求】.
+     * 4.3.3 标的转账【由标的账户转到个人借款人同步请求】.
      *
      * @param string $sn 流水号
      * @param string $issueDate 订单日期
@@ -1190,7 +1251,7 @@ class Client
                 || 'mer_send_sms_pwd' === $data['service']
                 || 'project_transfer_nopwd' === $data['service']
          ) {
-            $this->logAdapter->log(1, $source_data, $sign_data, $prorp, $endtime - $starttime);
+            //$this->logAdapter->log(1, $source_data, $sign_data, $prorp, $endtime - $starttime);
         }
 
         return $prorp;
@@ -1439,6 +1500,196 @@ class Client
             'order_id' => $sn,
             'mer_date' => $orderDate,
             'busi_type' => '04',
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 4.4.6 个人客户无密提现
+     *
+     * @param string $sn
+     * @param string $issueDate
+     * @param string $epayUserId
+     * @param string $amount
+     * @param string $notifyUrl
+     *
+     * @return Response
+     */
+    public function orgDrawNoPass($sn, $issueDate, $epayUserId, $amount, $notifyUrl)
+    {
+        $data = [
+            'service' => 'cust_withdrawals_nopwd',
+            'version' => '4.0',
+            'notify_url' => $notifyUrl,
+            'mer_date' => $issueDate,
+            'order_id' => $sn,
+            'user_id' => $epayUserId,
+            'amount' => $amount * 100,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 企业代偿方代偿还款（暂用于P2P）
+     *
+     * 资金方向：担保方账户 -> 标的账户
+     *
+     * @param string $sn 交易流水号
+     * @param string $issueDate 转账日期（PHP:Ymd）
+     * @param integer $loanId 标的ID
+     * @param string $epayUserId 转账方联动账户用户ID 
+     * @param string $amount 转账金额（分）
+     *
+     * @return Response
+     */
+    public function refundViaAltRepayer($sn, $issueDate, $loanId, $epayUserId, $amount)
+    {
+        $data = [
+            'service' => 'project_transfer_nopwd',
+            'order_id' => $sn,
+            'mer_date' => $issueDate,  //商户生成订单的日期，格式YYYYMMDD
+            'project_id' => $loanId,  //标的号,本地id值
+            'serv_type' => '04',
+            'trans_action' => '01',
+            'partic_type' => '04',
+            'partic_acc_type' => '02',
+            'partic_user_id' => $epayUserId,
+            'amount' => $amount * 100,  //单位为分
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 标的账户扣取居间服务费到平台（暂用于P2P）
+     *
+     * @param string $sn 流水号
+     * @param string $issueDate 转账日期（PHP:Ymd）
+     * @param integer $loanId 标的ID
+     * @param string $amount 转账金额
+     *
+     * @return Response
+     */
+    public function serviceFeeToPlatform($sn, $issueDate, $loanId, $amount)
+    {
+        $data = [
+            'service' => 'project_transfer_nopwd',
+            'order_id' => $sn,
+            'mer_date' => $issueDate,  //商户生成订单的日期，格式YYYYMMDD
+            'project_id' => $loanId,  //标的号,本地id值
+            'serv_type' => '52',
+            'trans_action' => '02',
+            'partic_type' => '03',
+            'partic_acc_type' => '02',
+            'partic_user_id' => $this->merchantId,
+            'amount' => $amount * 100,  //单位为分
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 4.3.3 投资用户返款接口(商户->平台) -- 只针对于个人投资者
+     *
+     * @param string $txSn 商户订单号
+     * @param string $txDate 商户订单日期
+     * @param string $projectId 标的号
+     * @param string $particUserId 转账方用户号 企业用户：联动开立的商户号
+     * @param string $amount 金额（元）
+     *
+     * @return Response
+     */
+    public function fankuan1($txSn, $txDate, $projectId, $particUserId, $amount)
+    {
+        $data = [
+            'service' => 'project_transfer',
+            'order_id' => $txSn,
+            'mer_date' => date('Ymd', $txDate),  //商户生成订单的日期，格式YYYYMMDD
+            'project_id' => $projectId,  //标的号,本地id值
+            'serv_type' => '55', //偿付后返款
+            'trans_action' => '02',
+            'partic_type' => '01',
+            'partic_acc_type' => '01',
+            'partic_user_id' => $particUserId,
+            'amount' => $amount * 100,   //单位为分
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 4.3.3 标的转账【由标的账户转到企业资金使用方同步请求】.
+     *
+     * @param string $sn 流水号
+     * @param string $issueDate 订单日期
+     * @param int $loanId 标的ID
+     * @param string $epayUserId 用款方联动账户ID
+     * @param string $amount 金额（元）
+     *
+     * @return Response
+     */
+    public function loanTransferToFundReceiver($sn, $issueDate, $loanId, $epayUserId, $amount)
+    {
+        $data = [
+            'service' => 'project_transfer',
+            'sourceV' => 'HTML5',
+            'order_id' => $sn,
+            'mer_date' => $issueDate,
+            'project_id' => $loanId,
+            'serv_type' => '53',
+            'trans_action' => '02',
+            'partic_type' => '05',
+            'partic_acc_type' => '02',
+            'partic_user_id' => $epayUserId,
+            'amount' => $amount * 100,
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 添加标的资金使用方（当前仅支持商户）
+     * 联动@唯心不易反馈各个标的状态下均可修改，需要实际线上验证
+     *
+     * @param int $loanId 标的ID
+     * @param string $epayUserId 代偿方联动用户ID
+     *
+     * @return Response
+     */
+    public function addLoanFundReceiver($loanId, $epayUserId)
+    {
+        $data = [
+            'service' => 'mer_update_project',
+            'project_id' => $loanId,
+            'option_type' => 0,
+            'change_type' => '04',
+            'receive_user_id' => $epayUserId,
+            'receive_acc_type' => '02', //商户
+        ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     * 注销标的资金使用方（当前仅支持商户）
+     * 联动@唯心不易反馈各个标的状态下均可修改，需要实际线上验证
+     *
+     * @param int $loanId 标的ID
+     * @param string $epayUserId 代偿方联动用户ID
+     *
+     * @return Response
+     */
+    public function deleteLoanFundReceiver($loanId, $epayUserId)
+    {
+        $data = [
+            'service' => 'mer_update_project',
+            'project_id' => $loanId,
+            'option_type' => 1,
+            'change_type' => '04',
+            'receive_user_id' => $epayUserId,
+            'receive_acc_type' => '02', //商户
         ];
 
         return $this->doRequest($data);

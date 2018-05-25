@@ -2,6 +2,7 @@
 
 namespace console\controllers;
 
+use common\lib\bchelp\BcRound;
 use common\models\draw\DrawManager;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
@@ -1545,5 +1546,213 @@ group by o.uid
 
         $this->stdout('现金已发送');
         return self::EXIT_CODE_NORMAL;
+    }
+
+    /**
+     * 在联动侧添加/注销标的资金使用方
+     *
+     * @param integer $loanId 标的ID
+     * @param string $epayUserId 商户ID
+     * @param string $option 操作（add添加del添加）
+     *
+     * @throws \Exception
+     */
+    public function actionOptFundReceiver($loanId, $epayUserId, $option = 'add')
+    {
+        $ump = Yii::$container->get('ump');
+        if (!in_array($option, ['add', 'del'])) {
+            throw new \Exception('参数错误');
+        }
+        if ('add' === $option) {
+            $resp = $ump->AddLoanFundReceiver($loanId, $epayUserId);
+        } elseif ('del' === $option) {
+            $resp = $ump->deleteLoanFundReceiver($loanId, $epayUserId);
+        }
+        var_dump($resp);
+    }
+
+    /**
+     * 用款方账户（企业）提现
+     *
+     * @param int $uid 用款方用户ID
+     * @param string $money 提现金额
+     * @param int $requireUmp 1调用联动0不调用联动
+     *
+     * @throws \Exception
+     */
+    public function actionFundReceiverDraw($uid, $money, $requireUmp = 1)
+    {
+        $ump = Yii::$container->get('ump');
+        $account = UserAccount::findOne(['uid' => $uid, 'type' => UserAccount::TYPE_BORROW]);
+        if (!$account) {
+            throw new \Exception('商户账户信息不存在', '000002');
+        }
+
+        //用款方放款,不收取手续费
+        $draw = DrawManager::initDraw($account, $money);
+        if (!$draw->save()) {
+            throw new \Exception('提现申请失败', '000003');
+        }
+
+        $draw->orderSn = TxUtils::generateSn('FR');
+        if (!$draw->save()) {
+            throw new \Exception('写入提现流水失败', '000003');
+        }
+
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+
+        try {
+            if ($requireUmp) {
+                $resp = $ump->orgDrawApply($draw);
+                if (!$resp->isSuccessful()) {
+                    throw new \Exception($resp->get('ret_code').$resp->get('ret_msg'));
+                }
+            }
+
+            //处理提现记录
+            $sql = "update draw_record set `status` = :drawStatus where `sn` = :drawSn and `status` = 0";
+            $affectedRows = $db->createCommand($sql, [
+                'drawStatus' => DrawRecord::STATUS_EXAMINED,
+                'drawSn' => $draw->sn,
+            ])->execute();
+            if (0 === $affectedRows) {
+                throw new \Exception('【提现受理】提现记录：更新受理状态失败');
+            }
+
+            /* 获得当前提现用户账户信息 */
+            $draw->refresh();
+            $user = $draw->user;
+            $fee = $draw->fee;
+
+            //记录money_record及更新user_account，分2块，提现金额、提现手续费
+            /* 提现金额 */
+            $bc = new BcRound();
+            bcscale(14);
+            $moneyRecord = new MoneyRecord();
+            $moneyRecord->sn = MoneyRecord::createSN();
+            $moneyRecord->type = MoneyRecord::TYPE_DRAW;
+            $moneyRecord->osn = $draw->sn;
+            $moneyRecord->account_id = $account->id;
+            $moneyRecord->uid = $user->id;
+            $moneyRecord->balance = $bc->bcround(bcsub($account->available_balance, $draw->money), 2);
+            $moneyRecord->out_money = $draw->money;
+            if (!$moneyRecord->save()) {
+                throw new \Exception('【提现受理】资金流水记录：提现金额失败');
+            }
+            $sql = "update user_account set available_balance = available_balance - :amount, out_sum = out_sum - :amount where id = :accountId";
+            $res = $db->createCommand($sql, [
+                'amount' => $draw->money,
+                'accountId' => $account->id,
+            ])->execute();
+            if (0 === $res) {
+                throw new \Exception('【提现受理】账户余额更新：提现金额失败');
+            }
+
+            /* 提现手续费 */
+            if ($fee > 0) {
+                $account->refresh();
+                $feeRecord = new MoneyRecord();
+                $feeRecord->osn = $draw->sn;
+                $feeRecord->account_id = $account->id;
+                $feeRecord->uid = $user->id;
+                $feeRecord->sn = MoneyRecord::createSN();
+                $feeRecord->type = MoneyRecord::TYPE_DRAW_FEE;
+                $feeRecord->balance = $bc->bcround(bcsub($account->available_balance, $draw->fee), 2);
+                $feeRecord->out_money = $fee;
+                if (!$feeRecord->save()) {
+                    throw new \Exception('【提现受理】资金流水记录：提现手续费失败');
+                }
+                $sql = "update user_account set available_balance = available_balance - :fee, out_sum = out_sum - :fee where id = :accountId";
+                $res = $db->createCommand($sql, [
+                    'fee' => $draw->fee,
+                    'accountId' => $account->id,
+                ])->execute();
+                if (0 === $res) {
+                    throw new \Exception('【提现受理】账户余额更新：提现金额失败');
+                }
+            }
+
+            //事务提交
+            $transaction->commit();
+            $this->stdout('提现受理中...');
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * 个人商户注册
+     *
+     * 用户名：会员ID
+     * 密码：身份证号后6位
+     * 后台融资方显示名称：个人-用户名-会员ID
+     *
+     * @param string $mobile 手机号
+     * @param string $idCard 身份证号
+     * @param string $realName 姓名
+     *
+     * @throws \Exception
+     */
+    public function actionRegister($mobile, $idCard, $realName)
+    {
+        $ump = Yii::$container->get('ump');
+        $mobile = trim($mobile);
+        $idCard = strtoupper(trim($idCard));
+        $realName = trim($realName);
+        $sn = TxUtils::generateSn('REG');
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        try {
+            $usercode = User::create_code('usercode', Yii::$app->params['plat_code'] . 'PR', 8, 6);
+            //添加user
+            $user = new User();
+            $user->scenario = 'add';
+            $user->type = 2;
+            $user->password_hash = Yii::$app->security->generatePasswordHash(strtoupper(substr($idCard, -6)));
+            $user->real_name = $realName;
+            $user->username = $usercode;
+            $user->usercode = $usercode;
+            $user->org_name = $realName.'-'.$usercode;
+            $user->law_mobile = '';
+            $user->safeIdCard = SecurityUtils::encrypt($idCard);
+            $user->safeMobile = SecurityUtils::encrypt($mobile);
+            $user->regContext = '';
+            $user->save(false);
+
+            //添加user_account
+            $userAccount = new UserAccount([
+               'uid' => $user->id,
+               'type' => UserAccount::TYPE_BORROW,
+            ]);
+            $userAccount->save(false);
+
+            //调用联动
+            $resp = $ump->register($user, $sn);
+            if (!$resp->isSuccessful()) {
+                throw new \Exception('开户失败');
+                var_dump($resp);
+            }
+
+            //添加epay_user表
+            $epayUser = new EpayUser([
+                'appUserId' => $user->id,
+                'epayId' => 1,
+                'clientIp' => ip2long(\Yii::$app->functions->getIp()),
+                'regDate' => $resp->get('reg_date'),
+                'createTime' => date('Y-m-d H:i:s'),
+                'epayUserId' => $resp->get('user_id'),
+                'accountNo' => $resp->get('account_id'),
+            ]);
+            $epayUser->save(false);
+            $transaction->commit();
+            $this->stdout('开户成功，联动用户信息如下'.PHP_EOL);
+            $umpUserInfo = $ump->getUserInfo($epayUser->epayUserId);
+            var_dump($umpUserInfo);
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            throw $ex;
+        }
     }
 }
