@@ -54,6 +54,37 @@ class BasePromo
     }
 
     /**
+     * 根据来源及当前日期获取用户的已抽奖信息
+     * @param User $user 用户
+     * @param null $source 来源
+     * @param null $day 当前日期
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function fetchOneDrawnTicket(User $user, $source = null, $startTime = null, $endTime = null)
+    {
+        if ($startTime === null) {
+            $startTime = strtotime('today');
+        }
+        if ($endTime === null) {
+            $endTime = strtotime('tomorrow');
+        }
+        $query = PromoLotteryTicket::find()
+            ->where([
+                'promo_id' => $this->promo->id,
+                'user_id' => $user->id,
+                'isDrawn' => true,
+            ]);
+        if (null !== $source) {
+            $query->andWhere(['source' => $source]);
+        }
+        if ($startTime !== null && $endTime !== null) {
+            $query->andWhere(['between', 'created_at', $startTime, $endTime]);
+        }
+
+        return $query->andWhere(['>=', 'expiryTime', date('Y-m-d H:i:s')])
+            ->one();
+    }
+    /**
      * 获得某个人已中奖列表 --- 仅适用通过抽奖机会的获奖列表(暂时保留)
      *
      * @param User $user 无需格外校验

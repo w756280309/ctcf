@@ -107,7 +107,7 @@ class BaseController extends Controller
      *
      * @return array
      */
-    public function actionAwardList()
+    public function actionAwardList($sn = null)
     {
         $key = Yii::$app->request->get('key');
         $user = $this->getAuthedUser();
@@ -118,7 +118,7 @@ class BaseController extends Controller
         if (!empty($promo->promoClass)) {
             $promoClass = new $promo->promoClass($promo);
             if (method_exists($promoClass, 'getAwardList')) {
-                return $promoClass->getAwardList($user);
+                return $promoClass->getAwardList($user, $sn);
             }
         }
 
