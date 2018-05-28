@@ -132,7 +132,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
                 <u></u>
             </h4>
             <div class="njfae-banner-img">
-                <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/njfae_banner1.png" alt="">
+                <img src="<?= FE_BASE_URI ?>wap/new-homepage/images/njfae_banner2.png" alt="">
                 <span>查看详情></span>
             </div>
         </a>
