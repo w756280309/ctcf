@@ -103,18 +103,22 @@ class BasePromo
 
     /**
      * 获取用户在活动中已抽奖的次数
-     *
-     * @param User $user 用户对象
-     *
-     * @return int
+     * @param User $user  用户对象
+     * @param bool $isDaily true:获取当天已抽奖次数， false:获取活动中所有的抽奖次数
+     * @return mixed  int
      */
-    public function getDrawnCount(User $user)
+    public function getDrawnCount(User $user, $isDaily = false)
     {
-        return (int) PromoLotteryTicket::find()
+        $query = (int) PromoLotteryTicket::find()
             ->where(['promo_id' => $this->promo->id])
             ->andWhere(['user_id' => $user->id])
-            ->andWhere(['isDrawn' => true])
-            ->count();
+            ->andWhere(['isDrawn' => true]);
+
+        if ($isDaily) {
+            $joinTime = new \DateTime();
+            $query->where(['date(from_unixtime(created_at))' => $joinTime->format('Y-m-d')]);
+        }
+        return $query->count();
     }
 
     /**

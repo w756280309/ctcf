@@ -1,0 +1,814 @@
+@q:75rem;
+//处理3倍图
+@a:75rem*1.5;
+.flex-content{
+  //选书页弹框
+  .check-box-father{
+    width: 10rem;
+    height: 100vh;
+    position: fixed;
+    left:0;
+    right:0;
+    margin:0 auto;
+    z-index: 6;
+    background: rgba(0,0,0,0.4);
+    display:none;
+    .check-box{
+      width: 647/@q;
+      height: 801/@q;
+      position: absolute;
+      left:50%;
+      top:50%;
+      -webkit-transform: translate(-50%,-50%);
+      -moz-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+      -o-transform: translate(-50%,-50%);
+      transform: translate(-50%,-50%);
+      background-color: #fff;
+      -webkit-border-radius: 20/@q;
+      -moz-border-radius: 20/@q;
+      border-radius: 20/@q;
+      overflow: hidden;
+      text-align: center;
+      div.not-over-book{
+        overflow: hidden;
+        p{
+          font-size: 68/@q;
+          line-height: 80/@q;
+          color:#784c32;
+        }
+        p:first-child{
+          font-size: 42/@q;
+          margin-top: 37/@q;
+          line-height: 64/@q;
+        }
+      }
+      div.alery-over-book{
+        overflow: hidden;
+        p{
+          font-size: 68/@q;
+          line-height: 80/@q;
+          color:#784c32;
+          font-weight: 700;
+        }
+        p:first-child{
+          margin-top: 37/@q;
+        }
+        p:nth-child(2){
+          font-size: 32/@q;
+          color:#c98b72;
+        }
+      }
+      img.overBook{
+        width: 150/@a;
+        position:absolute;
+        right: 0;
+        top: 0;
+        display: none;
+      }
+      img.checkBookImg{
+        width: 576/@a;
+        height: 608/@a;
+        vertical-align: top;
+        margin-top: 20/@q;
+      }
+      .check-btn-box{
+        width: 548/@q;
+        margin:27/@q auto 0;
+        span{
+          width: 375/@a;
+          height: 125/@a;
+          background: url(../images/book_btn_check@3x.png) 0 0 no-repeat;
+          -webkit-background-size: 100% 100%;
+          background-size: 100% 100%;
+          line-height: 110/@a;
+          font-size: 36/@q;
+          color:#350d03;
+        }
+      }
+    }
+    .getChance{
+      width: 1101/@a;
+      height: 957/@a;
+      background: url(../images/get_chance_bg@3x.png) 0 0 no-repeat;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      position:absolute;
+      top:50%;
+      left: 50%;
+      -webkit-transform: translate(-50%,-50%);
+      -moz-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+      -o-transform: translate(-50%,-50%);
+      transform: translate(-50%,-50%);
+      //overflow: hidden;
+      i{
+        position: absolute;
+        width: 90/@a;
+        height: 180/@a;
+        background: url(../images/close_answer_hint@3x.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        right:1.5rem;
+        top:-0.8rem;
+      }
+      p{
+        text-align: center;
+      }
+      p:nth-child(1){
+        font-size: 38/@q;
+        color:#784c32;
+        //font-weight: 700;
+        margin: 88/@q auto 0;
+        line-height: 54/@q;
+        width: 364/@q;
+      }
+      p:nth-child(2){
+        color:#c98b72;
+        font-size: 28/@q;
+        margin: 8/@q auto 0;
+        width: 270/@q;
+        line-height: 34/@q;
+      }
+      p:nth-child(3){
+        color:#c2b8b6;
+        font-size: 26/@q;
+        line-height: 30/@q;
+        margin-top: 28/@q;
+      }
+      span{
+        position: absolute;
+        width: 375/@a;
+        height: 125/@a;
+        background: url(../images/book_btn_check@3x.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        line-height: 110/@a;
+        color:#350d03;
+        left:0;
+        right:0;
+        text-align: center;
+        margin: 0 auto;
+        font-size: 36/@q;
+        bottom:-112/@q;
+      }
+    }
+  }
+  //答题页弹窗
+  .end-answer-father{
+    width: 10rem;
+    height: 100vh;
+    position: fixed;
+    left:0;
+    right:0;
+    margin:0 auto;
+    z-index: 6;
+    background: rgba(0,0,0,0.4);
+    display:none;
+    .answer-box{
+      width: 1101/@a;
+      height: 887/@a;
+      position: absolute;
+      left:50%;
+      top:50%;
+      -webkit-transform: translate(-50%,-50%);
+      -moz-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+      -o-transform: translate(-50%,-50%);
+      transform: translate(-50%,-50%);
+      background: url(../images/end_true_bg@3x.png) 0 0 no-repeat;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      text-align: center;
+      .true-answer-hint{
+        width: 714/@a;
+        height: 164/@a;
+        background: url(../images/end_true_num@3x.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        margin: 55/@q auto 0;
+        font-size: 37/@q;
+        line-height: 164/@a;
+        color:#fff;
+      }
+      p:nth-of-type(1){
+        color:#784c32;
+        font-size: 38/@q;
+        height: 57/@q;
+        line-height: 57/@q;
+        margin-top: 17/@q;
+      }
+      p:nth-of-type(2){
+        color:#c98b72;
+        font-size: 28/@q;
+        height: 47/@q;
+        line-height: 47/@q;
+      }
+      i{
+        position: absolute;
+        width: 90/@a;
+        height: 180/@a;
+        background: url(../images/close_answer_hint@3x.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        right:1.5rem;
+        top:-0.8rem;
+      }
+      u{
+        width: 867/@a;
+        height: 209/@a;
+        position: absolute;
+        left:0;
+        right:0;
+        margin:0 auto;
+        bottom:-90/@a;
+        background: url(../images/end_true_book@3x.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        z-index: 3;
+      }
+      >img{
+        z-index: 2;
+        //display:none;
+        position: absolute;
+        left:0;
+        right:0;
+        bottom:0;
+        margin:0 auto;
+        width: 320/@a;
+        height: 409/@a;
+      }
+      div.prize-img{
+        //display: none;
+        z-index: 2;
+        width: 273/@a;
+        height: 165/@a;
+        position: absolute;
+        left:0;
+        right:0;
+        margin: 0 auto;
+        bottom: 0.5rem;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+        //h5{
+        //  position: absolute;
+        //  color:#fff4b6;
+        //  font-size: 96/@q;
+        //  top:0;
+        //  left:72/@q;
+        //  width: 162/@q;
+        //  height: 248/@a;
+        //  line-height: 2rem;
+        //  text-align: left;
+        //}
+      }
+      div.end-answer-btn{
+        width: 542/@q;
+        bottom:-157/@q;
+        left:0;
+        right:0;
+        margin:0 auto;
+        position: absolute;
+        span{
+          width: 375/@a;
+          height: 125/@a;
+          background: url(../images/book_btn_check@3x.png) 0 0 no-repeat;
+          -webkit-background-size: 100% 100%;
+          background-size: 100% 100%;
+          line-height: 110/@a;
+          font-size: 36/@q;
+          color:#350d03;
+        }
+      }
+    }
+  }
+  //我的奖品
+  .my-gift{
+    width: 10rem;
+    height: 100vh;
+    position: fixed;
+    left:0;
+    right:0;
+    margin:0 auto;
+    z-index: 6;
+    background: rgba(0,0,0,0.4);
+    display:none;
+    div.gift-bg{
+      width: 960/@a;
+      height: 1208/@a;
+      position: absolute;
+      left:50%;
+      top:50%;
+      -webkit-transform: translate(-50%,-50%);
+      -moz-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+      -o-transform: translate(-50%,-50%);
+      transform: translate(-50%,-50%);
+      background: url(../images/gift_box@3x.png) 0 0 no-repeat;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      padding:120/@q 35/@q 35/@q;
+      i.close-gift{
+        position: absolute;
+        width: 90/@a;
+        height: 180/@a;
+        top:-100/@a;
+        right:0;
+        background: url(../images/close_answer_hint@3x.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+      }
+      .wrapper-father{
+        height: (1208/@a)-(155/@q);
+        width: (960/@a)-(70/@q);
+        background: rgba(255,255,255,0.6);
+        -webkit-border-radius: 20/@q;
+        -moz-border-radius: 20/@q;
+        border-radius: 20/@q;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding:20/@q;
+      }
+      #wrapper{
+        height: (1208/@a)-(195/@q);
+        width: (960/@a)-(110/@q);
+        position: relative;
+        //overflow: hidden;
+        ul.gift-list{
+          //height: (1208/@a)-(195/@q);
+          width: (960/@a)-(110/@q);
+          li{
+            height: ((1208/@a)-(195/@q))/3;
+            border-bottom:1px dashed #ccc9ba;
+            img.lf{
+              height: 85%;
+              margin-top:15/@q
+            }
+            .gift-right-box{
+              overflow: hidden;
+              height: 100%;
+              padding-left:25/@q;
+              p:nth-child(1){
+                line-height: 85/@q;
+                height: 85/@q;
+                font-size: 30/@q;
+                color:#784c32;
+              }
+              p:nth-child(2){
+                font-size: 26/@q;
+                height: 52/@q;
+                line-height: 52/@q;
+                color:#c98b72;
+              }
+              p:nth-child(3){
+                font-size: 26/@q;
+                height: 42/@q;
+                line-height: 42/@q;
+                color:#c98b72;
+              }
+            }
+          }
+          //li~li{
+          //  border-top: 1px dashed #ccc9ba;
+          //}
+        }
+      }
+    }
+  }
+  //选书页
+  .check-book-page{
+    background-color: #a5bc5c;
+    //进来时的首页
+    div.top-banner{
+      width: 10rem;
+      height: 980/@q;
+      background: url(../images/banner_bg@2x.png) 0 bottom no-repeat;
+      -webkit-background-size: cover;
+      background-size: cover;
+      position:relative;
+      .active-time{
+        position: absolute;
+        right:0;
+        top:0;
+        img{
+          width: 245/@q;
+        }
+        i{
+          position: absolute;
+          left:0;
+          right:0;
+          margin:0 auto;
+          bottom:0.2rem;
+          text-align: center;
+          font-style: normal;
+          font-size: 26/@q;
+          color:#360000;
+          //font-weight: 700;
+        }
+      }
+    }
+    .check-books-box,.active-rules{
+      margin: 0 auto;
+      width: 690/@q;
+      position: relative;
+      span.my-prize-list{
+        -webkit-box-shadow: 0px 1px 0.1rem #666;
+        -moz-box-shadow: 0px 1px 0.1rem #666;
+        box-shadow: 0px 1px 0.1rem #666;
+        position: absolute;
+        height: 91/@q;
+        width: 190/@q;
+        line-height: 78/@q;
+        top:-75/@q;
+        left:0;
+        z-index: 1;
+        background-color:#ff6876;
+        font-size: 32/@q;
+        color:#fff;
+        text-align: center;
+        -webkit-border-radius: 15/@q 15/@q 0 0 ;
+        -moz-border-radius: 15/@q 15/@q 0 0 ;
+        border-radius: 15/@q 15/@q 0 0 ;
+        border:1px solid #fff;
+      }
+      .inner-box{
+        height: 13.4rem;
+        width: 100%;
+        position: absolute;
+        top:0.2rem;
+        left:0;
+        box-shadow: 0px 0px 0.31rem #666;
+        z-index: 1;
+      }
+      .check-books-top{
+        position: relative;
+        z-index: 2;
+        height: 100/@q;
+        line-height: 100/@q;
+        text-align: center;
+        width: 100%;
+        background: url(../images/book_box_top@3x.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        p{
+          width: 311/@a;
+          height: 66/@a;
+          display: inline-block;
+          vertical-align: middle;
+          background: url(../images/active_title1@3x.png) 0 0 no-repeat;
+          -webkit-background-size: 100% 100%;
+          background-size: 100% 100%;
+        }
+      }
+      .check-books-middle{
+        height: 832/@q;
+        background:url(../images/books.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        position: relative;
+        z-index: 2;
+        img{
+          width: 150/@a;
+          height: 150/@a;
+          position: absolute;
+          display: none;
+        }
+        img:nth-of-type(1){
+          left:3.15rem;
+          top:40/@q;
+
+        }
+        img:nth-of-type(2){
+          right:41/@q;
+          top:40/@q;
+        }
+        img:nth-of-type(3){
+          left:3.15rem;
+          top:5.666667rem;
+        }
+        img:nth-of-type(4){
+          right:41/@q;
+          top:5.666667rem;
+        }
+        span{
+          position: absolute;
+          width: 282/@a;
+          height: 92/@a;
+          background: url(../images/book_button@3x.png) 0 0 no-repeat;
+          -webkit-background-size: 100% 100%;
+          background-size: 100% 100%;
+          position: absolute;
+        }
+        span:nth-child(1){
+          top:311/@q;
+          left:95/@q;
+        }
+        span:nth-child(2){
+          top:311/@q;
+          right:95/@q;
+        }
+        span:nth-child(3){
+          bottom:77/@q;
+          left:95/@q;
+        }
+        span:nth-child(4){
+          bottom:77/@q;
+          right:95/@q;
+        }
+      }
+      .check-books-bottom{
+        z-index: 2;
+        height: 100/@q;
+        width: 100%;
+        background: url(../images/book_box_bottom@3x.png) 0 top no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+      }
+    }
+    .active-rules{
+
+      margin-top: 11/@q;
+      .inner-box{
+        height: 10rem;
+      }
+      p.active-rules-title2{
+        background: url(../images/active_title2@3x.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+      }
+      ol.active-rules-contain{
+        position: relative;
+        z-index: 2;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding:44/@q 47/@q;
+        background: #fff;
+        li{
+          text-align: justify;
+          color:#9d694a;
+          font-size: 28/@q;
+          line-height: 43/@q;
+        }
+        li~li{
+          margin-top: 7/@q;
+        }
+      }
+      .check-books-bottom{
+        p{
+          color:#c67730;
+          font-size: 26/@q;
+          height: 1.3333333rem;
+          line-height:1.33333333rem;
+          text-align: center;
+        }
+      }
+      padding-bottom: 105/@q;
+    }
+  }
+   //答题页
+  .answer-test-page{
+    //background-color: #fbd7b1;
+    width: 750/@q;
+    height: 1346/@q;
+    position: relative;
+    >i:nth-child(1){
+      position: absolute;
+      width: 750/@q;
+      height: 700/@q;
+      top: 0;
+      left:0;
+      background: url(../images/answer_test_bg1.png) 0 0 no-repeat;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      z-index: 1;
+    }
+    >i:nth-child(2){
+      position: absolute;
+      width: 750/@q;
+      height: 646/@q;
+      left:0;
+      top:700/@q;
+      background: url(../images/answer_test_bg2.png) 0 0 no-repeat;
+      -webkit-background-size: 100% 100%;
+      background-size: 100% 100%;
+      z-index: 1;
+    }
+    .test-content{
+      position: relative;
+      z-index: 3;
+      overflow: hidden;
+      .top_time_hint{
+        margin: 50/@q auto 0;
+        width: 640/@q;
+        p:nth-child(1){
+          width: 100%;
+          height: 23/@q;
+          -webkit-border-radius: 12/@q;
+          -moz-border-radius: 12/@q;
+          border-radius: 12/@q;
+          //margin: 0 auto;
+          border:1px solid #784C32;
+          position: relative;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          overflow: hidden;
+          u{
+            position: absolute;
+            //height: 18/@q;
+            height:100%;
+            width: 640/@q;
+            -webkit-border-radius: 12/@q;
+            -moz-border-radius: 12/@q;
+            border-radius: 12/@q;
+            left:0;
+            top:0;
+            background-color: #EC4835;
+          }
+        }
+        p:nth-child(2){
+          font-size: 28/@q;
+          line-height: 46/@q;
+          height: 46/@q;
+          color:#855643;
+          text-align: right;
+          span{
+            color:#D53023;
+          }
+        }
+      }
+      p.book-test-title{
+        color:#855643;
+        font-size: 58/@q;
+        line-height: 85/@q;
+        text-align: center;
+      }
+      .title-box{
+        width: 1023/@a;
+        height: 432/@a;
+        background: url(../images/title_box@3x.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        margin: 20/@q auto 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding:80/@q 55/@q;
+        color:#6b3922;
+        font-size: 40/@q;
+        line-height: 59/@q;
+      }
+      ul.answer-box{
+        width: 965/@a;
+        margin:40/@q auto;
+        li{
+          width: 100%;
+          height: 174/@a;
+          line-height: 174/@a;
+          position: relative;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          padding: 0 159/@q;
+          color:#6b3922;
+          font-size: 30/@q;
+          font-style: normal;
+          //background: url(../images/true_answer_bg@3x.png) 0 0 no-repeat/100% 100%;
+          //background: url(../images/all_judge_answer@3x.png) 0 0 no-repeat/965/@a 2300/@a;
+          //img:nth-of-type(1){
+          //  width: 100%;
+          //  height: 100%;
+          //  position: absolute;
+          //  z-index: -1;
+          //}
+          //img:nth-of-type(2){
+          //  position: absolute;
+          //  height: 80/@a;
+          //  right:0.4rem;
+          //  vertical-align: middle;
+          //  top:50/@a;
+          //}
+          img{
+            position:absolute;
+            height: 80/@a;
+            top: 0.38rem;
+            right: 0.4rem;
+            display: none;
+          }
+          img.true-style{
+            display:block;
+          }
+          img.error-style{
+            display:block;
+          }
+        }
+        li.true-style,li.error-style{
+          color:#fff;
+        }
+        li:nth-child(1){
+          background: url(../images/all_judge_answer@3x.png) 0 -401/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(1).active-style{
+          background: url(../images/all_judge_answer@3x.png) 0 -584/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(1).true-style{
+          background: url(../images/all_judge_answer@3x.png) 0 -213/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(1).error-style{
+          background: url(../images/all_judge_answer@3x.png) 0 -19/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(2){
+          background: url(../images/all_judge_answer@3x.png) 0 -1159/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(2).active-style{
+          background: url(../images/all_judge_answer@3x.png) 0 -1363/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(2).true-style{
+          background: url(../images/all_judge_answer@3x.png) 0 -966/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(2).error-style{
+          background: url(../images/all_judge_answer@3x.png) 0 -779/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(3){
+          background: url(../images/all_judge_answer@3x.png) 0 -1934/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(3).active-style{
+          background: url(../images/all_judge_answer@3x.png) 0 -2116/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(3).true-style{
+          background: url(../images/all_judge_answer@3x.png) 0 -1743/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li:nth-child(3).error-style{
+          background: url(../images/all_judge_answer@3x.png) 0 -1553/@a no-repeat;
+          -webkit-background-size:965/@a 2300/@a;
+          background-size:965/@a 2300/@a;
+        }
+        li~li{
+          margin-top: 30/@q;
+        }
+      }
+      p.submitAnswer{
+        width: 375/@a;
+        height: 125/@a;
+        margin:0 auto;
+        background: url(../images/book_btn_check@3x.png) 0 0 no-repeat;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+        line-height: 110/@a;
+        color:#350d03;
+        text-align: center;
+        font-size: 36/@q;
+      }
+      >span{
+        display:block;
+        color:#b07e64;
+        line-height: 40/@q;
+        font-size: 26/@q;
+        height: 40/@q;
+        text-align: center;
+      }
+    }
+    .bottom-books{
+      width: 429/@a;
+      height: 240/@a;
+      vertical-align: top;
+      position: relative;
+      z-index: 3;
+      left: -0.55rem;
+      top: -1rem;
+    }
+  }
+}
+//显示的类名
+.block-book{
+  display:block!important;
+}

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>给孩子讲个故事</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <script src="../../libs/vue.min.js"></script>
+    <script src="../../libs/fastclick.js"></script>
+    <!--<link rel="stylesheet" href="../../libs/animate/animate.min.css">-->
+</head>
+<body>
+    <div class="flex-content" ref="flexContent" id="app">
+        <!--弹窗1 开始答题时的弹框-->
+        <div v-cloak :class="{'block-book' : checkBookFather}" class="check-box-father">
+            <div v-if="haveChance" class="check-box">
+                <!--<check-book-vue v-cloak :book-kinds="bookKind"></check-book-vue>-->
+                <div v-if="notOverBook" class="not-over-book">
+                    <p>您选的书是</p>
+                    <p v-cloak>《&nbsp;{{bookKind}}&nbsp;》</p>
+                </div>
+                <div v-else class="alery-over-book">
+                    <p v-cloak>《&nbsp;{{bookKind}}&nbsp;》</p>
+                    <p>再次答题，没有奖励哦！</p>
+                </div>
+                <!--是否通关-->
+                <img v-cloak src="./images/over_book_mark@3x.png" :class="{'block-book':checkOver}" class="overBook" alt="">
+                <img class="checkBookImg" :src=checkBookUrl alt="">
+                <div class="check-btn-box clearfix">
+                    <span @click="changeBook" class="lf">去换本书</span>
+                    <span @click="goTest" class="rg">开始答题</span>
+                </div>
+            </div>
+            <div v-else class="getChance">
+                <div v-if="shareGetChance" class="shareGetChance">
+                    <p>您没有答题次数了</p>
+                    <p>分享到朋友圈，还能 再玩一次哦！</p>
+                    <p>提示：活动期间每天都能来答题</p>
+                </div>
+                <div v-else>
+                    <p>您今天答题次数已经 用完了</p>
+                    <p>明天再来玩吧！</p>
+                    <p>提示：活动期间每天都能来答题</p>
+                </div>
+                <i @click="closeShareChanceBtn"></i>
+                <span :class="{'share-btn':addShareBtn}">{{shareChanceMsg}}</span>
+            </div>
+        </div>
+        <!--答题结束的弹框-->
+        <div :class="{'block-book' : endAnswerFather}" class="end-answer-father">
+            <div class="answer-box">
+                <div class="true-answer-hint">本轮答对{{testTrueNum}}题</div>
+                <p>遗憾，您差一点通关本书</p>
+                <p>哎呀，红包与您擦肩而过</p>
+                <i @click="closePrize"></i>
+                <img v-if="successOverTest" src="./images/prize_1@3x.png" alt="">
+                <div v-if="notOverTest" class="prize-img">
+                    <img src="./images/ticket_3yuan@3x.png" alt="">
+                    <!--<h5>2</h5>-->
+                </div>
+                <!--book-->
+                <u></u>
+                <div class="end-answer-btn clearfix">
+                    <span class="lf">去分享</span>
+                    <span class="rg">再玩一次</span>
+                </div>
+            </div>
+        </div>
+        <!--奖品列表-->
+        <div :class="{'block-book':myGift}" class="my-gift">
+            <div class="gift-bg">
+                <i class="close-gift"></i>
+                <ul class="gift-list">
+                    <li class="clearfix">
+                        <img class="lf" src="./images/gift_all@3x.png" alt="">
+                        <div class="gift-right-box">
+                            <p>20元代金券＋20积分</p>
+                            <p>2万元起投</p>
+                            <p>2018-6-2  14:08:51</p>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <img class="lf" src="./images/gift_3@3x.png" alt="">
+                        <div class="gift-right-box">
+                            <p>20元代金券＋20积分</p>
+                            <p>2万元起投</p>
+                            <p>2018-6-2  14:08:51</p>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <img class="lf" src="./images/gift_8@3x.png" alt="">
+                        <div class="gift-right-box">
+                            <p>20元代金券＋20积分</p>
+                            <p>2万元起投</p>
+                            <p>2018-6-2  14:08:51</p>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <img class="lf" src="./images/gift_8@3x.png" alt="">
+                        <div class="gift-right-box">
+                            <p>20元代金券＋20积分</p>
+                            <p>2万元起投</p>
+                            <p>2018-6-2  14:08:51</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--选书页-->
+        <div v-if="checkBookPage" class="check-book-page">
+            <!--banner-->
+
+            <div src="images/banner_bg@2x.png" class="top-banner">
+                <div class="active-time">
+                    <img src="./images/active_time@3x.png" alt="">
+                    <i>2018.06.01-06.07</i>
+                </div>
+            </div>
+            <!--选书区-->
+            <div class="check-books-box">
+                <span class="my-prize-list">我的奖品</span>
+                <div class="check-books-top">
+                    <p></p>
+                </div>
+                <div class="check-books-middle">
+                    <span @click="goTest" ref="span1"></span>
+                    <span @click="goTest" ref="span2"></span>
+                    <span @click="goTest" ref="span3"></span>
+                    <span @click="goTest" ref="span4"></span>
+                    <img src="./images/over_book_mark@3x.png" :class="{'block-book':blockBook1}" class="over-book1" alt="">
+                    <img src="./images/over_book_mark@3x.png" :class="{'block-book':blockBook2}" class="over-book2" alt="">
+                    <img src="./images/over_book_mark@3x.png" :class="{'block-book':blockBook3}" class="over-book3" alt="">
+                    <img src="./images/over_book_mark@3x.png" :class="{'block-book':blockBook4}" class="over-book4" alt="">
+                </div>
+                <div class="check-books-bottom"></div>
+            </div>
+            <div class="active-rules">
+                <div class="check-books-top">
+                    <p class="active-rules-title2"></p>
+                </div>
+                <ol class="active-rules-contain">
+                    <li>1.活动时间：2018年6月1日至6月7日；</li>
+                    <li>2.消耗1次答题机会，可以从4本童话书中任选一本进入答题；</li>
+                    <li>3.每轮答对4~5题，将会通关选中书籍，并获得通关礼包；选择已经通关的书进行答题，将不再获得奖励；</li>
+                    <li>4.活动期间，每天免费获得1次答题机会；分享活动到朋友圈后，可再次获得1次答题机会；</li>
+                    <li>5.答题机会每日0点重置，每天记得叫上朋友一起来玩哦！</li>
+                    <li>6.本次活动获得的奖品将立即发放到账。</li>
+                </ol>
+                <div class="check-books-bottom">
+                    <p>本活动最终解释权归温都金服所有</p>
+                </div>
+            </div>
+        </div>
+        <!--答题页-->
+        <div v-else class="answer-test-page">
+            <i answer-top-bg></i>
+            <i answer-bottom-bg></i>
+            <div class="test-content">
+                <div class="top_time_hint">
+                    <p><u ref="topTimeHint"></u></p>
+                    <p>答题剩余：<span>{{surplusTime|myFilter}}s</span></p>
+                </div>
+                <p class="book-test-title">《&nbsp;{{checkKindTest}}&nbsp;》</p>
+                <div class="title-box">
+                    <p>1.小红帽的帽子是谁送给她的？</p>
+                </div>
+                <ul class="answer-box">
+                    <li :class="{'active-style':activeStyle1,'true-style':trueStyle1,'error-style':errorStyle1}" @click="selectAnswer" ref="answerBg1">
+                        {{answerA}}
+                        <!--<img :src="btnSrc1" alt="">-->
+                        <!--<i>A</i>-->
+                        <!--<img :src="answerMarkSrc" alt="">-->
+                        <img :class="{'true-style':(trueStyle1&&aleryAnswer)}" src="./images/true_answer@3x.png" alt="">
+                        <img :class="{'error-style':(errorStyle1&&aleryAnswer)}" src="./images/error_answer@3x.png" alt="">
+                    </li>
+                    <li :class="{'active-style':activeStyle2,'true-style':trueStyle2,'error-style':errorStyle2}" @click="selectAnswer" ref="answerBg2">
+                        {{answerB}}
+                        <!--<img :src="btnSrc2" alt="">-->
+                        <!--<i>B</i>-->
+                        <!--<img :src="answerMarkSrc" alt="">-->
+                        <img :class="{'true-style':(trueStyle2&&aleryAnswer)}" src="./images/true_answer@3x.png" alt="">
+                        <img :class="{'error-style':(errorStyle2&&aleryAnswer)}" src="./images/error_answer@3x.png" alt="">
+                    </li>
+                    <li :class="{'active-style':activeStyle3,'true-style':trueStyle3,'error-style':errorStyle3}" @click="selectAnswer" ref="answerBg3">
+                        {{answerC}}
+                        <!--<img :src="btnSrc3" alt="">-->
+                        <!--<i>C</i>-->
+                        <!--<img :src="answerMarkSrc" alt="">-->
+                        <img :class="{'true-style':(trueStyle3&&aleryAnswer)}" src="./images/true_answer@3x.png" alt="">
+                        <img :class="{'error-style':(errorStyle3&&aleryAnswer)}" src="./images/error_answer@3x.png" alt="">
+                    </li>
+                </ul>
+                <p @click="submitEnd" class="submitAnswer">{{submitWord}}</p>
+                <span>第{{testNum}}题/共5题</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function(){
+            var timer=null;
+            FastClick.attach(document.body);
+            // var checkBookVue={
+            //     template:`<div>
+            //                     <p>您选的书是</p>
+            //                     <p v-cloak>《{{bookKinds}}》</p>
+            //              </div>`,
+            //     // data:function(){
+            //     //     return{
+            //     //
+            //     //     }
+            //     // },
+            //     props:['bookKinds'],
+            // };
+            var myApp=new Vue({
+                el:"#app",
+                created:function(){
+                    // this.shareGetChance=false;
+                    this.cutDown();
+                    this.btnSrc3="./images/check_active_stack@3x.png";
+                },
+                data:{
+                    // 我的奖品
+                    myGift:true,
+                    //1234本书 是否通关的标志
+                    blockBook1:true,
+                    blockBook2:true,
+                    blockBook3:true,
+                    blockBook4:true,
+                    // 选书的时候的弹框
+                    checkBookFather:false,
+                    // 选择的书的内容
+                    bookKind:'格林童话',
+                    // 选择的书的图标
+                    checkBookUrl:'./images/check_book1@3x.png',
+                    // 该书是否答题通关
+                    checkOver:true,
+                    // 是否已通关显示的弹窗内容
+                    notOverBook:false,
+                    // 是否有机会
+                    haveChance:true,
+                    // 可以通过分享获取游戏次数
+                    shareGetChance:true,
+                    // 获取次数的提示按钮
+                    shareChanceMsg:'立即分享',
+                    // 添加分享功能的按钮
+                    addShareBtn:true,
+                    // 是否是选书页  答题页
+                    checkBookPage:true,
+                    // 倒计时
+                    surplusTime:20,
+                    // 倒计时计数点
+                    nums:0,
+                    // 回答那本书
+                    checkKindTest:"格林童话",
+                    // btnSrc1:"./images/not_check_stack@3x.png",
+                    // btnSrc2:"./images/not_check_stack@3x.png",
+                    // btnSrc3:"./images/not_check_stack@3x.png",
+                    // // 正确还是错误
+                    // answerMarkSrc:"./images/true_answer@3x.png",
+                    // 答题时是提交答案还是查看结果
+                    submitWord:'提交答案',
+                    // 第几题
+                    testNum:'1',
+                    // 答案内容
+                    answerA:'爸爸',
+                    answerB:'妈妈',
+                    answerC:'奶奶',
+                    // 3个答案的状态
+                    activeStyle1:false,
+                    trueStyle1:false,
+                    errorStyle1:false,
+                    activeStyle2:false,
+                    trueStyle2:false,
+                    errorStyle2:false,
+                    activeStyle3:false,
+                    trueStyle3:false,
+                    errorStyle3:false,
+                    // 是否已经答题
+                    aleryAnswer:false,
+                    // 答案
+                    endAnswer:'B',
+                    //正确答案
+                    trueAnswer:'A',
+                    // 答题结束的弹窗
+                    endAnswerFather:false,
+                    // 答对的题数
+                    testTrueNum:5,
+                    // 通关
+                    successOverTest:false,
+                    notOverTest:true,
+                },
+                methods:{
+                    goTest: function(e){
+                        console.log($(e.target).index());
+
+                    },
+                    changeBook: function(){
+
+                    },
+                    goTest: function(){
+                        this.checkBookFather=!this.checkBookFather;
+                    },
+                    // 选择答案
+                    selectAnswer:function(e){
+                        var e=e||window.event;
+                        this.answerNormoal();
+                        this.aleryAnswer=true;
+                        if(e.target==this.$refs.answerBg1){
+                            this.activeStyle1=true;
+                            this.endAnswer="A";
+                        }else if(e.target==this.$refs.answerBg2){
+                            this.activeStyle2=true;
+                            this.endAnswer="B";
+                        }else if(e.target==this.$refs.answerBg3){
+                            this.activeStyle3=true;
+                            this.endAnswer="C";
+                        }
+                    },
+                    // 正确答案
+                    trueStyle:function(){
+                        this.answerNormoal();
+                        this.aleryAnswer=true;
+                        if(this.trueAnswer=="A"){
+                            this.trueStyle1=true;
+                        }else if(this.trueAnswer=="B"){
+                            this.trueStyle2=true;
+                        }else if(this.trueAnswer=="C"){
+                            this.trueStyle3=true;
+                        }
+                    },
+                    // 有错误答案
+                    haveErrorStyle:function(){
+                        this.answerNormoal();
+                        this.aleryAnswer=true;
+                        if(this.endAnswer=='A'){
+                            this.errorStyle1=true;
+                        }else if(this.endAnswer=='B'){
+                            this.errorStyle2=true;
+                        }else if(this.endAnswer=='C'){
+                            this.errorStyle3=true;
+                        };
+                        if(this.trueAnswer=="A"){
+                            if(this.endAnswer==''){
+                                this.aleryAnswer=false;
+                                this.errorStyle2=true;
+                                this.errorStyle3=true;
+                            }
+                            this.trueStyle1=true;
+                        }else if(this.trueAnswer=="B"){
+                            if(this.endAnswer==''){
+                                this.aleryAnswer=false;
+                                this.errorStyle1=true;
+                                this.errorStyle3=true;
+                            }
+                            this.trueStyle2=true;
+                        }else if(this.trueAnswer=="C"){
+                            if(this.endAnswer==''){
+                                this.aleryAnswer=false;
+                                this.errorStyle1=true;
+                                this.errorStyle2=true;
+                            }
+                            this.trueStyle3=true;
+                        };
+                    },
+                    //默认状态
+                    answerNormoal:function(){
+                        this.activeStyle1=false;
+                        this.trueStyle1=false;
+                        this.errorStyle1=false;
+                        this.activeStyle2=false;
+                        this.trueStyle2=false;
+                        this.errorStyle2=false;
+                        this.activeStyle3=false;
+                        this.trueStyle3=false;
+                        this.errorStyle3=false;
+                    },
+                    // 关闭分享提示窗口按钮
+                    closeShareChanceBtn:function(){
+                        this.checkBookFather=false;
+                    },
+                    // 关闭奖励列表
+                    closePrize:function(){
+                        this.endAnswerFather=false;
+                    },
+                    submitEnd:function(){
+
+                    },
+                    // 倒计时
+                    cutDown:function(){
+                        var that=this;
+                        that.nums=0;
+                        clearInterval(timer);
+                        timer=setInterval(function(){
+                            that.nums=that.nums+10;
+                            that.$refs.topTimeHint.style.width=(8.53333333-8.53333333*that.nums/20000)+'rem';
+                            if(that.nums%1000==0){
+                                if(that.surplusTime>0){
+                                    that.surplusTime--;
+                                }else if(that.surplusTime==0){
+                                    clearInterval(timer);
+                                }
+                            }
+                        },10);
+                    },
+                    // toast 弹窗
+                    toastCenter: function (val, active) {
+                        var $alert = $('<div class="error-info" style="display: block; position: fixed;font-size: .4rem;"><div>' + val + '</div></div>');
+                        $('body').append($alert);
+                        $alert.find('div').width($alert.width());
+                        setTimeout(function () {
+                            $alert.fadeOut();
+                            setTimeout(function () {
+                                $alert.remove();
+                            }, 200);
+                            if (active) {
+                                active();
+                            }
+                        }, 2000);
+                    },
+                    // 禁止滑动
+                    bodyScroll: function(e){
+                        var e=e||window.event;
+                        e.preventDefault();
+                    },
+                },
+                // components:{
+                //     'check-book-vue':checkBookVue,
+                // },
+                watch:{
+                    shareGetChance:function(newV,oldV){
+                       if(newV==false){
+                           this.addShareBtn=false;
+                           this.shareChanceMsg="我知道了";
+                       }else{
+                           this.addShareBtn=true;
+                           this.shareChanceMsg="立即分享";
+                       }
+                    },
+                },
+                filters:{
+                    'myFilter':function(value){
+                        if(value>9){
+                            return value;
+                        }else{
+                            return '0'+value;
+                        }
+                    }
+                }
+            })
+        })
+
+    </script>
+</body>
+</html>

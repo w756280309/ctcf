@@ -20,8 +20,8 @@ class BaseController extends Controller
     const ERROR_CODE_NOT_BEGIN = 1; //未开始
     const ERROR_CODE_ALREADY_END = 2; //已结束
     const ERROR_CODE_NOT_LOGIN = 3; //未登录
-    const ERROR_CODE_NO_TICKET = 4; //无有效抽奖机会
-    const ERROR_CODE_TODAY_NO_TICKET = 5; //无有效抽奖机会且今日未获得抽奖机会
+    const ERROR_CODE_NO_TICKET = 4; //免费机会已用完,可通过做任务获取机会
+    const ERROR_CODE_TODAY_NO_TICKET = 5; //抽奖次数已用完
     const ERROR_CODE_SYSTEM = 6; //系统错误（包括参数（promoKey）错误及抽奖其他错误）
     const ERROR_CODE_NEVER_GOT_TICKET = 7; //活动至今为止从未获得抽奖机会
     const ERROR_CODE_NO_ENOUGH_POINT = 8;  //用户积分不足
@@ -180,13 +180,13 @@ class BaseController extends Controller
             ],
             self::ERROR_CODE_NO_TICKET => [
                 'code' => 4,
-                'message' => '您还没有抽奖机会哦！',
+                'message' => '免费机会已用完,可通过做任务获取机会！',
                 'ticket' => null,
                 'allTicketCount' => 0,
             ],
             self::ERROR_CODE_TODAY_NO_TICKET => [
                 'code' => 5,
-                'message' => '您今日还没有获得抽奖机会，快去完成任务吧！',
+                'message' => '抽奖次数已用完！',
                 'ticket' => null,
                 'allTicketCount' => 0,
             ],
