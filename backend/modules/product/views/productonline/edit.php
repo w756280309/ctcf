@@ -13,6 +13,8 @@ $this->registerCssFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.css');
 $this->registerJsFile('/vendor/kindeditor/4.1.11/kindeditor-all-min.js', ['depends' => 'yii\web\YiiAsset']);
 $this->registerJsFile('/vendor/kindeditor/4.1.11/lang/zh-CN.js', ['depends' => 'yii\web\YiiAsset']);
 $this->registerJsFile('/vendor/kindeditor/4.1.11/plugins/code/prettify.js', ['depends' => 'yii\web\YiiAsset']);
+$this->registerJsFile('/js/My97DatePicker/bootstrap-select.js', ['depends' => YiiAsset::class]);
+$this->registerCssFile('/css/bootstrap-select.min.css', ['position' => 1]);
 
 $readonly = $model->online_status ? ['readonly' => 'readonly'] : [];
 $disabled = $model->online_status ? ['disabled' => 'disabled'] : [];
@@ -375,7 +377,9 @@ TPL;
                         <?php
                             $borrow_uid_input_option = array_merge([
                                 'autocomplete' => 'off',
-                                'class' => 'chosen-with-diselect span6',
+                                'class' => 'chosen-with-diselect span6 selectpicker',
+                                'data-live-search' => 'true',
+                                'data-size' => 10,
                             ], $disabled);
                         ?>
                         <?=
@@ -434,8 +438,10 @@ TPL;
                         <?php
                         $change_input_option = array_merge([
                             'autocomplete' => 'off',
-                            'class' => 'chosen-with-diselect span6',
+                            'class' => 'chosen-with-diselect span6 selectpicker',
                             'onchange' => 'changeIssueName(this)',
+                            'data-live-search' => 'true',
+                            'data-size' => 10,
                         ], $disabled);
                         ?>
                         <?=
