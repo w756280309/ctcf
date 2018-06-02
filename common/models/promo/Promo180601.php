@@ -17,7 +17,7 @@ class Promo180601 extends BasePromo
     public function getQuestions(User $user, $sn)
     {
         $currentCount = $this->getCurrentTicketCount($user);
-        $batchSn = $sn . $currentCount % 5;
+        $batchSn = $sn . $currentCount % 4;
         $data = [];
         $questions = Question::find()
             ->select("id, title, batchSn as sn")
