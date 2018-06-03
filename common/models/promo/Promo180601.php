@@ -95,7 +95,7 @@ class Promo180601 extends BasePromo
             $joinTime = new \DateTime();
         }
         $currentCount = $this->getCurrentTicketCount($user);
-        $batchSn = $sn . $currentCount % 5;
+        $batchSn = $sn . $currentCount % 4;
         $qa = Question::find()
             ->select('id,answer')
             ->where(['batchSn' => $batchSn])
