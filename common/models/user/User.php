@@ -811,6 +811,9 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         }
 
         $this->real_name = Yii::$app->functions->removeWhitespace($openAccount->getName());//去除所有空格
+        if ($this->type == self::USER_TYPE_ORG) {
+            $this->org_name = $this->real_name . '-' . $this->usercode;
+        }
         $this->idcard = $openAccount->getIdCard();
         $this->safeIdCard = $idCard;
         $this->birthdate = date('Y-m-d', strtotime(substr($openAccount->getIdCard(), 6, 8)));
