@@ -1533,7 +1533,12 @@ group by o.uid
                 }
 
                 if ($requireUmp) {
-                    $resp = $ump->orgDrawApply($draw);
+                    if (2 === $borrowerType) {
+                        $resp = $ump->orgDrawApply($draw);
+                    } else {
+                        //免密提现地址暂时传一个不存在的地址
+                        $resp = $ump->orgDrawNoPass(TxUtils::generateSn('DRP'), date('Ymd'), $epayUserId, $money, 'https://m.wenjf.com/tmp/address');
+                    }
                     if (!$resp->isSuccessful()) {
                         throw new \Exception($resp->get('ret_code').$resp->get('ret_msg'));
                     }
