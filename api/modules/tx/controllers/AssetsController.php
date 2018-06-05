@@ -197,11 +197,27 @@ class AssetsController extends Controller
                 }
             }
             if (1 === $type) {
-                ArrayHelper::multisort($assetsData, function ($item) {
-                    return $item['loan']['finish_date'];
-                }, SORT_ASC);
+                ArrayHelper::multisort($assetsData, [
+                    function ($item) {
+                        return $item['loan']['isTest'];
+                    },
+                    function ($item) {
+                        return $item['loan']['finish_date'];
+                    }
+                ], [
+                    SORT_ASC,
+                    SORT_ASC,
+                ]);
             } else {
-                ArrayHelper::multisort($assetsData, 'id', SORT_DESC);
+                ArrayHelper::multisort($assetsData, [
+                    function ($item) {
+                        return $item['loan']['isTest'];
+                    },
+                    'id',
+                ], [
+                    SORT_ASC,
+                    SORT_DESC,
+                ]);
             }
         }
 
