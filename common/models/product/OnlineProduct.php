@@ -20,57 +20,81 @@ use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * 标的（项目）.
+ * 标的Model
  *
- * @property string $id
- * @property string $title
- * @property string $sn
- * @property string $cid
- * @property int $borrow_uid
- * @property string $yield_rate
- * @property string $fee
- * @property string $expires_show
- * @property string $refund_method
- * @property int $expires
- * @property string $money
- * @property string $start_money
- * @property string $dizeng_money
- * @property int $start_date
- * @property int $end_date
- * @property string $description
- * @property int $full_time
- * @property int $del_status
- * @property int $status
- * @property string $yuqi_faxi
- * @property int $order_limit
- * @property string $creator_id
- * @property string $create_at
- * @property string $updated_at
- * @property string $isFlexRate
- * @property string $rateSteps
- * @property integer $paymentDay
- * @property integer $issuer
- * @property int $isTest
- * @property boolean $allUseCoupon 是否允许使用代金券
- * @property boolean $isLicai 是否为理财计划标识
- * @property int     $pointsMultiple    积分倍数
- * @property bool    $allowTransfer     是否允许转让
- * @property bool    $isCustomRepayment     是否是自定义还款
- * @property bool    $isJixiExamined        计息是否通过审核(当标的是自定义还款时候需要计息审核)
- * @property string  $jixi_time     计息日期
- * @property string  $funded_money  实际募集金额
- * @property string  $finish_date   截止日
- * @property bool    $is_jixi
- * @property string  $internalTitle 副标题（仅供内部使用）
- * @property string  $publishTime   产品上线时间
- * @property int     $kuanxianqi 宽限期
- * @property string  $originalBorrower 底层融资方
- * @property string  $pkg_sn  资产包编号
- * @property boolean $isRedeemable 是否允许主动赎回
- * @property string  $redemptionPeriods 赎回申请开放时段（可支持多个）
+ * Class OnlineProduct
+ * @package common\models\product
+ *
+ * @property string  $id                     ID
+ * @property string  $epayLoanAccountId      标的在托管平台的账户号
+ * @property string  $title                  项目名称
+ * @property string  $sn                     项目sn
+ * @property string  $cid                    项目类型 1温盈金2温盈宝3网贷
+ * @property integer $recommendTime          推荐时间
+ * @property integer $borrow_uid             融资用户ID
+ * @property string  $yield_rate             年利率
+ * @property string  $jiaxi                  加息利率
+ * @property string  $fee                    平台手续费（放款时收取）
+ * @property string  $expires_show           还款期限文字显示
+ * @property string  $refund_method          还款方式 1到期本息2按月付息3按季付息4按半年付息5按年付息6按自然月付息7按自然季付息9按自然半年付息10等额本息
+ * @property integer $expires                借款期限
+ * @property integer $kuanxianqi             宽限期
+ * @property string  $money                  项目融资总额
+ * @property string  $funded_money           实际募集金额
+ * @property string  $start_money            起投金额
+ * @property string  $dizeng_money           递增金额
+ * @property string  $finish_date            截止日
+ * @property integer $start_date             融资开始日期
+ * @property integer $end_date               融资结束日期
+ * @property string  $description            项目描述
+ * @property integer $full_time              满标时间
+ * @property string  $jixi_time              计息时间
+ * @property string  $fk_examin_time         放款审核时间
+ * @property string  $account_name           账户名称
+ * @property string  $account                账户
+ * @property string  $bank                   银行
+ * @property integer $del_status             状态 1无效0有效
+ * @property integer $online_status          上线状态 1上线0未上线
+ * @property integer $status                 标的状态 1预告期2进行中3满标4流标5还款中6已还清7募集结束
+ * @property string  $yuqi_faxi              逾期罚息
+ * @property integer $order_limit            限制投标人数
+ * @property boolean $isPrivate              定向标 1是0不是
+ * @property string  $allowedUids            定向标用户ID
+ * @property string  $finish_rate            募集完成比例
+ * @property boolean $is_jixi                是否计息 1是0不是
+ * @property integer $sort                   排序 10预告期20募集中66满标31项目成立40流标70还款中60已还清
+ * @property integer $contract_type          模板类型 0固定1特殊模板
+ * @property string  $creator_id             创建者管理员ID
+ * @property string  $create_at              创建时间
+ * @property string  $updated_at             更新时间
+ * @property string  $isFlexRate             是否启用浮动利率 1启用0不启用
+ * @property string  $rateSteps              浮动利率
+ * @property integer $paymentDay             固定还款日
+ * @property integer $issuer                 发行方
+ * @property string  $issuerSn               发行方sn
+ * @property boolean $isTest                 是否为测试标 1是0不是
+ * @property string  $filingAmount           备案金额
+ * @property boolean $allUseCoupon           是否允许使用代金券
+ * @property string  $tags                   项目标签
+ * @property boolean $isLicai                是否为理财计划标识
+ * @property integer $pointsMultiple         积分倍数
+ * @property boolean $allowTransfer          是否允许转让
+ * @property boolean $isCustomRepayment      是否是自定义还款
+ * @property boolean $isJixiExamined         计息是否通过审核(当标的是自定义还款时候需要计息审核)
+ * @property string  $internalTitle          副标题（仅供内部使用）
+ * @property string  $publishTime            产品上线时间
+ * @property string  $balance_limit          资金额限制标的可见（余额+累计投资+可用代金券）
+ * @property string  $originalBorrower       底层融资方
+ * @property string  $pkg_sn                 资产包编号
+ * @property boolean $isRedeemable           是否允许主动赎回
+ * @property string  $redemptionPeriods      赎回申请开放时段（可支持多个）
  * @property string  $redemptionPaymentDates 赎回付款日（可支持多个）
- * @property boolean $isDailyAccrual 是否分期设置截止日期 - todo 临时方案
- * @property boolean $flexRepay 是否灵活还款（目前用于确认计息后直接还款） 1是0否
+ * @property boolean $isDailyAccrual         是否分期设置截止日期 - todo 临时方案
+ * @property boolean $flexRepay              是否灵活还款（目前用于确认计息后直接还款） 1是0否
+ * @property integer $fundReceiver           用款方
+ * @property integer $alternativeRepayer     代偿方
+ * @property string  $borrowerRate           融资方利率
+ * @property integer $guarantee              担保方
  */
 class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 {
@@ -142,7 +166,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple',
                 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn',
                 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates', 'isDailyAccrual', 'flexRepay',
-                'fundReceiver', 'alternativeRepayer', 'borrowerRate'],
+                'fundReceiver', 'alternativeRepayer', 'borrowerRate', 'guarantee'],
             'senior_edit' => ['title', 'internalTitle', 'kuanxianqi', 'issuerSn', 'pkg_sn'],
         ];
     }
@@ -1462,5 +1486,25 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
 
         return $fundReceiverId;
+    }
+
+    /**
+     * 获取标的在联动的联动用户ID
+     *
+     * @return string|null
+     */
+    public function getGuaranteeId()
+    {
+        $guaranteeId = null;
+        if (null !== $this->guarantee) {
+            $epayUser = EpayUser::find()
+                ->where(['appUserId' => $this->guarantee])
+                ->one();
+            if (null !== $epayUser) {
+                return $epayUser->epayUserId;
+            }
+        }
+
+        return $guaranteeId;
     }
 }

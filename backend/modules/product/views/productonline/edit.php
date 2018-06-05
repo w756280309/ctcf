@@ -389,17 +389,6 @@ TPL;
                             ])->dropDownList(['' => '--选择--'] + $rongziInfo)
                         ?>
                     </div>
-                    <?php if (!empty(Yii::$app->params['alternativeRepayer'])) : ?>
-                        <label class="control-label">代偿方<span style="color:grey">(<?= $desc ?>)</span></label>
-                        <div class="controls">
-                            <?=
-                            $form->field($model, 'alternativeRepayer', [
-                                'template' => '{input}{error}',
-                                'inputOptions' => $borrow_uid_input_option,
-                            ])->dropDownList(['' => '--选择--'] + Yii::$app->params['alternativeRepayer'])
-                            ?>
-                        </div>
-                    <?php endif; ?>
                     <?php if (!empty(Yii::$app->params['fundReceiver'])) : ?>
                         <label class="control-label">用款方<span style="color:grey">(<?= $desc ?>)</span></label>
                         <div class="controls">
@@ -408,6 +397,17 @@ TPL;
                                 'template' => '{input}{error}',
                                 'inputOptions' => $borrow_uid_input_option,
                             ])->dropDownList(['' => '--选择--'] + Yii::$app->params['fundReceiver'])
+                            ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (!empty(Yii::$app->params['alternativeRepayer'])) : ?>
+                        <label class="control-label">代偿方<span style="color:grey">(<?= $desc ?>)</span></label>
+                        <div class="controls">
+                            <?=
+                            $form->field($model, 'alternativeRepayer', [
+                                'template' => '{input}{error}',
+                                'inputOptions' => $borrow_uid_input_option,
+                            ])->dropDownList(['' => '--选择--'] + Yii::$app->params['alternativeRepayer'])
                             ?>
                         </div>
                     <?php endif; ?>
@@ -427,6 +427,17 @@ TPL;
                         ?>
                     </div>
                 </div>
+                <?php if (!empty(Yii::$app->params['guarantee'])) : ?>
+                    <label class="control-label" style="margin-top: 29px;">担保方<span style="color:grey">(<?= $desc ?>)</span></label>
+                    <div class="controls">
+                        <?=
+                        $form->field($model, 'guarantee', [
+                            'template' => '{input}{error}',
+                            'inputOptions' => $borrow_uid_input_option,
+                        ])->dropDownList(['' => '--选择--'] + Yii::$app->params['guarantee'])
+                        ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 

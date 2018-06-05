@@ -338,16 +338,14 @@ class Client
      *
      * @param int $loanId 标的ID
      * @param string $epayUserId 代偿方联动用户ID
-     * @param string $loanAccType 操作类型 01 个人 02 商户
      *
      * @return Response
      */
-    public function addLoanAltRepayer($loanId, $epayUserId, $loanAccType = '01')
+    public function addLoanAlternativeRepayer($loanId, $epayUserId)
     {
         $data = [
             'service' => 'mer_update_project',
             'project_id' => $loanId,
-            'loan_acc_type' => $loanAccType, //当为商户号时loan_acc_type 为必填字段，值02
             'option_type' => 0, //仅限建标状态【92】下可以替换借款人，从文档中来看，对借款人不可以注销，注销的只能是担保方和资金使用方
             'change_type' => '03',
             'warranty_user_id' => $epayUserId,
@@ -361,16 +359,14 @@ class Client
      *
      * @param int $loanId 标的ID
      * @param string $epayUserId 代偿方联动用户ID
-     * @param string $loanAccType 借款方账户类型 01 个人 02 商户
      *
      * @return Response
      */
-    public function deleteLoanAltRepayer($loanId, $epayUserId, $loanAccType = '01')
+    public function deleteLoanAlternativeRepayer($loanId, $epayUserId)
     {
         $data = [
             'service' => 'mer_update_project',
             'project_id' => $loanId,
-            'loan_acc_type' => $loanAccType, //当为商户号时loan_acc_type 为必填字段，值02
             'option_type' => 1, //仅限建标状态【92】下可以替换借款人，从文档中来看，对借款人不可以注销，注销的只能是担保方和资金使用方
             'change_type' => '03',
             'warranty_user_id' => $epayUserId,
@@ -701,17 +697,19 @@ class Client
     }
 
     /**
-     * 4.3.3 标的转账【由标的账户转到个人借款人同步请求】.
+     * 4.3.3 标的转账【由标的账户转到借款人同步请求】.
+     * 支持个人和企业
      *
      * @param string $sn 流水号
      * @param string $issueDate 订单日期
      * @param int $loanId 标的ID
      * @param string $epayUserId 融资者联动账户ID
      * @param string $amount 金额（元）
+     * @param int $borrowerType 1个人2企业，默认企业
      *
      * @return Response
      */
-    public function loanTransferToMer1($sn, $issueDate, $loanId, $epayUserId, $amount)
+    public function loanTransferToMer1($sn, $issueDate, $loanId, $epayUserId, $amount, $borrowerType = 2)
     {
         $data = [
             'service' => 'project_transfer',
@@ -722,7 +720,7 @@ class Client
             'serv_type' => '53',
             'trans_action' => '02',
             'partic_type' => '02',
-            'partic_acc_type' => '02',
+            'partic_acc_type' => 2 === $borrowerType ? '02' : '01',
             'partic_user_id' => $epayUserId,
             'amount' => $amount * 100,
         ];

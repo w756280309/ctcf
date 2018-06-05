@@ -40,9 +40,15 @@ class ProductonlineController extends BaseController
      */
     private function orgUserInfo()
     {
+
+        //要排除的用款方、担保方、代偿方的用户ID集合
+        $arr = Yii::$app->params['alternativeRepayer'] + Yii::$app->params['fundReceiver'] + Yii::$app->params['guarantee'];
+        $extraIds = array_keys($arr);
+
         return User::find()
             ->where(['type' => User::USER_TYPE_ORG])
             ->andWhere(['is_soft_deleted' => 0])
+            ->andWhere(['not in', 'id', $extraIds])
             ->orderBy(['sort' => SORT_DESC])
             ->select('org_name')
             ->indexBy('id')
@@ -466,8 +472,8 @@ class ProductonlineController extends BaseController
                 ->where('loan.id in ('.$ids.')')->all();
 
         $error_loans = '';
+        $ump = Yii::$container->get('ump');
         foreach ($loans as $loan) {
-            $ump = Yii::$container->get('ump');
             $merchantInfo = $ump->getMerchantInfo($loan['epayUserId']);
             if ($merchantInfo->isSuccessful()) {
                 $type = Borrower::MERCHAT;
@@ -478,17 +484,32 @@ class ProductonlineController extends BaseController
             unset($loan['epayUserId']);
             $loanObj = new OnlineProduct($loan);
             try {
-                $resp = OnlineProduct::createLoan($loanObj, $borrow);
+                //调用联动上标，获得联动上标ID
+                $loanAccountId = OnlineProduct::createLoan($loanObj, $borrow);
                 $updateData = [
-                    'epayLoanAccountId' => $resp,
+                    'epayLoanAccountId' => $loanAccountId,
                     'online_status' => 1,
                     'publishTime' => date('Y-m-d H:i:s'),
                 ];
-                //添加标的更改记录
+
+                //更新温都标的记录
+                OnlineProduct::updateAll($updateData, 'id=' . $loan['id']);
+
+                //更新标的状态
+                LoanService::updateLoanState($loanObj, OnlineProduct::STATUS_PRE);
+
+                //新增担保方
+                $guaranteeId = $loanObj->getGuaranteeId();
+                if (null !== $guaranteeId) {
+                    $resp = $ump->addLoanAlternativeRepayer($loanObj->id, $guaranteeId);
+                    if (!$resp->isSuccessful()) {
+                        throw new \Exception('担保方绑定不成功'.$resp->get('ret_code').$resp->get('ret_msg'));
+                    }
+                }
+
+                //记录标的后台日志
                 $log = AdminLog::initNew(['tableName' => OnlineProduct::tableName(), 'primaryKey' => $loan['id']], Yii::$app->user, $updateData);
                 $log->save();
-                OnlineProduct::updateAll($updateData, 'id=' . $loan['id']);
-                LoanService::updateLoanState($loanObj, OnlineProduct::STATUS_PRE);
             } catch (\Exception $ex) {
                 $error_loans .= $loanObj->sn.$ex->getMessage().',';
             }

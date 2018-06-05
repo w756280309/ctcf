@@ -1426,23 +1426,19 @@ group by o.uid
 
     /**
      * 标的转账到融资用户虚拟户，可选择是否自动帮助提现
+     * 0530:添加支持个人及企业
      *
      * @param string $sn 标的sn
      * @param string $uid 融资用户ID
-     * @param string $money 转账金额
      * @param integer $isAutoDraw 是否自动提现 1是0否
      * @param integer $requireUmp 是否调用联动提现 1是0否
+     * @param null|string $money 转账金额(若为null时取联动标的账户当前余额)
      *
      * @throws \Exception
      */
-    public function actionLoanToMer($sn, $uid, $money, $isAutoDraw = 0, $requireUmp = 1)
+    public function actionLoanToMer($sn, $uid, $isAutoDraw = 0, $requireUmp = 1, $money = null)
     {
         $ump = Yii::$container->get('ump');
-
-        //验证金额
-        if (!is_numeric($money)) {
-            throw new \Exception('金额错误');
-        }
 
         //查询温都标的状态
         $loan = OnlineProduct::find()
@@ -1455,12 +1451,6 @@ group by o.uid
             throw new \Exception('标的状态必须为募集中~还款中');
         }
 
-        //查询用户是否为融资用户
-        $borrower = User::findOne($uid);
-        if (null === $borrower || !$borrower->isOrgUser()) {
-            throw new \Exception('用户非融资用户');
-        }
-
         //调用联动接口，查看联动标的状态
         $loanResp = $ump->getLoanInfo($loan->id);
         if (!$loanResp->isSuccessful()) {
@@ -1470,10 +1460,33 @@ group by o.uid
             throw new \Exception('当前联动标的状态为冻结状态');
         }
 
+        //验证金额
+        if (null === $money) {
+            $money = bcdiv($loanResp->get('balance'), 100, 2);
+        }
+        if (!is_numeric($money)) {
+            throw new \Exception('金额错误');
+        }
+
+        //查询用户是否为融资用户
+        $borrower = User::findOne($uid);
+        if (null === $borrower || !$borrower->isOrgUser()) {
+            throw new \Exception('用户非融资用户');
+        }
+
         //将联动标的状态置为还款中
         LoanService::updateLoanState($loan, OnlineProduct::STATUS_HUAN);
         $epayUserId = $borrower->epayUser->epayUserId;
-        $resp = $ump->loanTransferToMer1(TxUtils::generateSn('LTM'), date('Ymd'), $loan->id, $epayUserId, $money);
+
+        //判断转账方类型1个人2企业，默认为企业
+        $borrowerType = 2;
+        $merchantInfo = $ump->getMerchantInfo($epayUserId);
+        if (!$merchantInfo->isSuccessful()) {
+            $borrowerType = 1;
+        }
+
+        //调用联动标的转帐接口放款
+        $resp = $ump->loanTransferToMer1(TxUtils::generateSn('LTM'), date('Ymd'), $loan->id, $epayUserId, $money, $borrowerType);
         if (!$resp->isSuccessful()) {
             throw new \Exception('联动一侧：'.$resp->get('ret_msg'));
         }
@@ -1504,6 +1517,16 @@ group by o.uid
                     throw new \Exception('提现申请失败', '000003');
                 }
 
+                $fk = OnlineFangkuan::find()
+                    ->where(['online_product_id' => $loan->id])
+                    ->one();
+                if (null !== $fk) {
+                    $sn = $fk->sn;
+                    $fk->status = OnlineFangkuan::STATUS_TIXIAN_APPLY;
+                    if (!$fk->save()) {
+                        throw new \Exception('修改放款审核状态失败', '000003');
+                    }
+                }
                 $draw->orderSn = $sn;
                 if (!$draw->save()) {
                     throw new \Exception('写入提现流水失败', '000003');
@@ -1549,25 +1572,52 @@ group by o.uid
     }
 
     /**
-     * 在联动侧添加/注销标的资金使用方
+     * 标的添加/注销标的资金使用方
      *
      * @param integer $loanId 标的ID
-     * @param string $epayUserId 商户ID
+     * @param string $userId 商户ID
      * @param string $option 操作（add添加del添加）
      *
      * @throws \Exception
      */
-    public function actionOptFundReceiver($loanId, $epayUserId, $option = 'add')
+    public function actionOptFundReceiver($loanId, $userId, $option = 'add')
     {
-        $ump = Yii::$container->get('ump');
+        //判断参数
         if (!in_array($option, ['add', 'del'])) {
             throw new \Exception('参数错误');
         }
+
+        //判断标的
+        $loan = OnlineProduct::findOne($loanId);
+        if (null === $loan) {
+            throw new \Exception('标的不存在');
+        }
+
+        //判断用户
+        $user = User::findOne($userId);
+        if (null === $user) {
+            throw new \Exception('用户不存在');
+        }
+
+        //获得联动用户ID
+        $epayUserId = $user->getEpayUserId();
+        if (null === $epayUserId) {
+            throw new \Exception('联动账户异常');
+        }
+
+        $ump = Yii::$container->get('ump');
         if ('add' === $option) {
-            $resp = $ump->AddLoanFundReceiver($loanId, $epayUserId);
+            $resp = $ump->addLoanFundReceiver($loanId, $epayUserId);
+            $loan->fundReceiver = $userId;
         } elseif ('del' === $option) {
             $resp = $ump->deleteLoanFundReceiver($loanId, $epayUserId);
+            $loan->fundReceiver = null;
         }
+        if ($resp->isSuccessful()) {
+            $loan->save(false);
+            $this->stdout('更新用款方成功');
+        }
+        $this->stdout('更新用款方失败，联动返回如下');
         var_dump($resp);
     }
 
@@ -1754,5 +1804,83 @@ group by o.uid
             $transaction->rollBack();
             throw $ex;
         }
+    }
+
+    /**
+     * 标的添加/注销标的代偿方|担保方
+     *
+     * @param integer $loanId 标的ID
+     * @param string $userId 商户ID
+     * @param string $option 操作（add添加del添加）
+     * @param null|string $operator 操作对象 null|guarantee|alternativeRepayer
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function actionOptRepayer($loanId, $userId, $option = 'add', $operator = null)
+    {
+        if (!in_array($option, ['add', 'del'])) {
+            throw new \Exception('参数错误');
+        }
+
+        //判断用户
+        $user = User::findOne($userId);
+        if (null === $user) {
+            throw new \Exception('用户不存在');
+        }
+
+        //获得联动用户ID
+        $epayUserId = $user->getEpayUserId();
+        if (null === $epayUserId) {
+            throw new \Exception('联动账户异常');
+        }
+
+        $ump = Yii::$container->get('ump');
+        if ('add' === $option) {
+            $resp = $ump->addLoanAlternativeRepayer($loanId, $epayUserId);
+        } elseif ('del' === $option) {
+            $resp = $ump->deleteLoanAlternativeRepayer($loanId, $epayUserId);
+        }
+        if ($resp->isSuccessful()) {
+            $this->stdout('更新联动委托还款方成功');
+            if (null !== $operator) {
+                $loan = OnlineProduct::findOne($loanId);
+                if (null === $loan) {
+                    throw new \Exception('标的不存在');
+                    $loan->{$operator} = 'add' === $option ? $user->id : null;
+                    $loan->save(false);
+                    $this->stdout('更新操作方成功');
+                }
+            }
+
+            return self::EXIT_CODE_NORMAL;
+        }
+        $this->stdout('更新联动委托还款方失败，联动返回如下');
+        var_dump($resp);
+    }
+
+    /**
+     * 查询联动用户账户信息
+     *
+     * @param integer $userId 用户
+     * @param int $isPersonal 是否为个人，1是0不是
+     *
+     * @throws \Exception
+     */
+    public function actionGetUmpUserInfo($userId, $isPersonal = 1)
+    {
+        $user = User::findOne($userId);
+        if (null === $user) {
+            throw new \Exception('用户不存在');
+        }
+
+        $epayUserId = $user->getEpayUserId();
+        $ump = Yii::$container->get('ump');
+        if ($isPersonal) {
+            $resp = $ump->getUserInfo($epayUserId);
+        } else {
+            $resp = $ump->getMerchantInfo($epayUserId);
+        }
+        var_dump($resp);
     }
 }
