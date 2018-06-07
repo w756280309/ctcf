@@ -443,7 +443,8 @@ left join user_affiliation uf on uf.user_id = u.id
 left join affiliator af on af.id = uf.affiliator_id
 where ua.type = 1 
 and u.idcard_status = 1
-and ua.investment_balance >= 0";
+and ua.investment_balance >= 0
+order by ua.investment_balance desc";
         $users = $db->createCommand($onlineSql)
             ->queryAll();
         $onlineUsers = [];
@@ -452,7 +453,11 @@ and ua.investment_balance >= 0";
             $user['idCard'] = $idCard;
             $user['mobile'] = SecurityUtils::decrypt($user['mobile']);
             $user['gender'] = substr($idCard, -2, 1) % 2 ? '男' : '女';
-            $onlineUsers[$idCard] = $user;
+            if (!array_key_exists($idCard, $onlineUsers)) {
+                $onlineUsers[$idCard] = $user;
+            } else {
+                $onlineUsers[$idCard]['orderAsset'] += $user['orderAsset'];
+            }
         }
 
         /**
