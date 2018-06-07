@@ -88,18 +88,22 @@ class ToolController extends Controller
 
         if ($isTest) {
             $ePayUserIdList = [
-                'njj' => '7601209',//测试环境只有一个账号
-                'lhwt' => '7601209',//测试环境只有一个账号
-                'jmc' => '7601209',//测试环境只有一个账号
-                'hzyx' => '7601209',//测试环境只有一个账号
+                'wdjf.njj' => '7601209', //温都企业测试账号1
+                'wdjf.lhwt' => '8199209', //温都企业测试账号2
+                'ctcf.njj' => '7601242', //楚天企业测试账号1
+                'ctcf.lhwt' => '7798242', //楚天企业测试账号2
             ];
         } else {
             $ePayUserIdList = [
-                'njj' => '7302209',//正式环境（南京交）在联动ID
-                'lhwt' => '7301209',//正式环境（立合旺通）在联动ID  转账流程已测试 正式转账已成功
-                'jmc' => '7303209',//正式环境（居莫愁）在联动ID
-                'hzyx' => '7305209', // 杭州越翔
-                'njhjd' => '7344209', // 南京华锦达投资有限公司
+                'njj' => '7302209', //正式温都环境 - 南金交
+                'lhwt' => '7301209', //正式温都环境 - 立合旺通
+                'jmc' => '7303209', //正式温都环境 - 居莫愁
+                'hzyx' => '7305209', //正式温都环境 - 杭州越翔
+                'njhjd' => '7344209', //正式温都环境 - 南京华锦达投资有限公司
+                'whzj' => '7389209', //正式温都环境 - 武汉中基
+                'zhdw' => '7304209', //正式温都环境 - 珠海鼎沃投资顾问有限公司
+                'ctcf.zhdw' => '7303242', //正式楚天环境 - 珠海鼎沃投资顾问有限公司
+                'ctcf.zhdcr' => '7431242', //正式楚天环境 - 珠海鼎长润酒店管理有限公司
             ];
         }
 
@@ -1472,6 +1476,19 @@ group by o.uid
         $borrower = User::findOne($uid);
         if (null === $borrower || !$borrower->isOrgUser()) {
             throw new \Exception('用户非融资用户');
+        }
+
+        //没有贴现过才会进行贴现
+        if (!$loan->isCouponAmountTransferred()) {
+            $payLog = PaymentLog::findOne(['loan_id' => $loan->id, 'ref_type' => 0]);
+
+            //当不允许访问联动时候，默认联动处理成功
+            if ($payLog) {
+                $ret = Yii::$container->get('ump')->merOrder($payLog);
+                if (!$ret->isSuccessful()) {
+                    throw new \Exception('联动一侧：'.$ret->get('ret_msg'));
+                }
+            }
         }
 
         //将联动标的状态置为还款中
