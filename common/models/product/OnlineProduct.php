@@ -253,7 +253,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             [['money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'fee', 'filingAmount'], 'double'],
             [['yuqi_faxi', 'fee'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['money'], 'compare', 'compareValue' => 0, 'operator' => '>'],
-            [['start_money'], 'compare', 'compareAttribute' => 'money', 'operator' => '<', 'type' => "number"],//以数字做比较
+            [['start_money'], 'compare', 'compareAttribute' => 'money', 'operator' => '<=', 'type' => "number"],//以数字做比较
             [['yield_rate', 'jiaxi'], 'compare', 'compareValue' => 100, 'operator' => '<='],
             [['yield_rate', 'jiaxi', 'kuanxianqi'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['jiaxi'], 'match', 'pattern' => '/^[0-9]+([.]{1}[0-9])?$/', 'message' => '加息利率只允许有一位小数'],
