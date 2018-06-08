@@ -1440,7 +1440,7 @@ group by o.uid
      *
      * @throws \Exception
      */
-    public function actionLoanToMer($sn, $uid, $isAutoDraw = 0, $requireUmp = 1, $money = null)
+    public function actionLoanToMer($sn, $uid, $isAutoDraw, $requireUmp = 1, $money = null)
     {
         $ump = Yii::$container->get('ump');
 
@@ -1464,14 +1464,6 @@ group by o.uid
             throw new \Exception('当前联动标的状态为冻结状态');
         }
 
-        //验证金额
-        if (null === $money) {
-            $money = bcdiv($loanResp->get('balance'), 100, 2);
-        }
-        if (!is_numeric($money)) {
-            throw new \Exception('金额错误');
-        }
-
         //查询用户是否为融资用户
         $borrower = User::findOne($uid);
         if (null === $borrower || !$borrower->isOrgUser()) {
@@ -1490,6 +1482,21 @@ group by o.uid
                 }
             }
         }
+
+        //调用联动接口，查看联动标的状态
+        $loanResp1 = $ump->getLoanInfo($loan->id);
+        if (!$loanResp1->isSuccessful()) {
+            throw new \Exception($loanResp->get('ret_msg'));
+        }
+
+        //验证金额
+        if (null === $money) {
+            $money = bcdiv($loanResp1->get('balance'), 100, 2);
+        }
+        if (!is_numeric($money)) {
+            throw new \Exception('金额错误');
+        }
+        $this->stdout('标的转账金额为'.$money.'元');
 
         //将联动标的状态置为还款中
         LoanService::updateLoanState($loan, OnlineProduct::STATUS_HUAN);
