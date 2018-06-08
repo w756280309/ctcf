@@ -24,6 +24,9 @@ class DatatjController extends Controller
         $remainMoney = Perf::getRemainMoney();
         $annualInvestment = Perf::getAnnualInvestment();
         $usableMoney = Perf::getUsableMoney();
+        //线下贷后余额及贷后年化余额
+        $offlineRemainMoney = Perf::getOfflineRemainMoney();
+        $offlineAnnualInvestment = Perf::getOfflineAnnualInvestment();
 
         //平台累计对付金额及客户累计收益
         $statsData = Perf::getStatsForIndex();
@@ -83,6 +86,8 @@ class DatatjController extends Controller
             'monthSuccessFound' => $month['monthSuccessFound'] + $today['successFound'],//本月融资项目
             'remainMoney' => $remainMoney,//贷后余额
             'annualInvestment' => $annualInvestment, //贷后年化余额
+            'offlineRemainMoney' => $offlineRemainMoney, //线下贷后余额
+            'offlineAnnualInvestment' => $offlineAnnualInvestment,
             'usableMoney' => $usableMoney,//可用余额
             'usedCoupon' => $usedCoupon,//已使用代金券
             'unusedCoupon' => $unusedCoupon,//未使用代金券

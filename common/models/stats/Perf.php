@@ -429,6 +429,24 @@ AND p.is_xs = 1
     }
 
     /**
+     * 计算线下贷后余额
+     * 计算方案：线下标的未被删除，已经计息且当前时间小于到期日（收益中）的所有订单之和
+     */
+    public static function getOfflineRemainMoney()
+    {
+        $date = date('Y-m-d H:i:s');
+        $sql = "SELECT SUM(o.money) * 10000 
+              FROM offline_order o 
+              INNER JOIN offline_loan l 
+              ON o.loan_id = l.id 
+              WHERE o.isDeleted = 0 
+              AND l.is_jixi = 1 
+              AND '" . $date ."' <= l.finish_date";
+
+        return self::getDbRead()->createCommand($sql)->queryScalar();
+    }
+
+    /**
      * 线上年化累计交易额
      * 到期本息  交易额×项目期限/365
      * 非到期本息：交易额×项目期限/12
@@ -473,6 +491,26 @@ AND p.is_xs = 1
         return self::getDbRead()->createCommand($sql)->queryScalar();
     }
 
+    /**
+     * 计算线下贷后年化余额
+     * 计算方案：募集总金额 = 收益中（标的已计息且当前时间小于等于到期日）的标的订单总金额
+     * 到期本息：募集总金额 * 产品期限 / 365
+     * 非到期本息：募集总金额 * 产品期限 / 12
+     * @return false|null|string
+     */
+    public static function getOfflineAnnualInvestment()
+    {
+        $date = date('Y-m-d H:i:s');
+        $sql = "SELECT SUM(o.money * l.expires / if (l.unit = '天', 365, 12)) * 10000 
+            FROM offline_order o 
+            INNER JOIN offline_loan l 
+            ON o.loan_id = l.id 
+            WHERE o.isDeleted = 0 
+            AND l.is_jixi = 1 
+            AND '" . $date ."' <= l.finish_date";
+
+        return self::getDbRead()->createCommand($sql)->queryScalar();
+    }
 
     //可用余额,网站所有用户的可用余额总和
     public static function getUsableMoney()

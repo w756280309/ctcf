@@ -51,6 +51,10 @@ CSS
         <div class="span4">平台可用余额：<div class="pull-right"><?= number_format($usableMoney, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
+        <div class="span4">线下贷后余额： <div class="pull-right"><?= number_format($offlineRemainMoney, 2) ?>元</div></div>
+        <div class="span4">线下贷后年化余额： <div class="pull-right"><?= number_format($offlineAnnualInvestment, 2) ?>元</div></div>
+    </div>
+    <div class="row-fluid">
         <div class="span4">今日充值金额：<div class="pull-right"><?= number_format($todayRechargeMoney, 2) ?>元</div></div>
         <div class="span4">今日提现金额：<div class="pull-right"><?= number_format($todayDraw, 2) ?>元</div></div>
     </div>
