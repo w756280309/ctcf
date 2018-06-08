@@ -310,6 +310,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                 <th width="100">利率（%）</th>
                 <th width="90" class="money">募集(元)</th>
                 <th width="120" class="money">实际募集(元)</th>
+                <th width="80">已投资人数</th>
                 <th width="80">满标时间</th>
                 <th width="80">起息时间</th>
                 <th width="80">放款时间</th>
@@ -357,6 +358,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     </td>
                     <td class="money"><?= number_format($val['money'], 2) ?></td>
                     <td class="money"><?= number_format($val['funded_money'], 2) ?></td>
+                    <td class="investnumber<?= $val['id'] ?>">0</td>
                     <td>
                         <?= ($val['status'] > 2 && $val['status'] != 4) ? date('Y-m-d H:i:s', $val['full_time']) : '--' ?>
                     </td>
@@ -450,6 +452,19 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
 
     <script type="text/javascript">
         $(function () {
+            var objss = $("input[name='choose[]']").parent();
+            var idss = new Array();
+
+            for (var i = 0; i < objss.length; i++) {
+                idss[i] = $($("input[name='choose[]']").get(i)).val();
+            }
+
+            $.get('/product/productonline/get-invest-number', {pids: idss.join(',')}, function (data) {
+                for (var j = 0; j < data.length; j++) {
+                    $('.investnumber'+data[j].pid).html(data[j].investnumber);
+                }
+            });
+
             $('.chooseall').click(function () {
                 var isChecked = $(this).parent().hasClass('checked');
                 if (!isChecked) {

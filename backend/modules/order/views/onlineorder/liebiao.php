@@ -161,17 +161,8 @@ use common\utils\StringUtils;
                         'header' => '操作',
                         'format' => 'raw',
                         'value' => function ($order) use ($loan) {
-                            $html = '';
-                            $hasCreatedEbaoquan = $order->getBaoquanDownloadLink();
-                            if($hasCreatedEbaoquan) {
-                                $html .= "<a href=".$hasCreatedEbaoquan." target='_blank' class='btn mini green'>易保全合同下载</a> | ";
-                            }
-                            $hasCreatedBaoquan = $order->miitViewUrl;
-                            if($hasCreatedBaoquan) {
-                                $html .= "<a href=".$hasCreatedBaoquan." target='_blank' class='btn mini green'>下载保全合同</a> | ";
-                            } else {
-                                $html .= '<a class="btn mini green" onclick="miitbaoquan('. $order->id .')">下载保全合同</a> |';
-                            }
+                            $html = "<a href='#' onclick='ebaoquan(".$order->id.")' class='btn mini green'>易保全合同下载</a> | ";
+                            $html .= "<a href='#' onclick='viewMiit(".$order->id.")' class='btn mini green'>下载保全合同</a> | ";
                             $html .= '<a href="/product/growth/order-cert?orderId='.$order->id.'" target="_blank" class="btn mini" style="background-color:#36A9CE;color: white;">&emsp;交易凭证&emsp;</a> | ';
                             if ($loan->is_jixi) {
                                 $html .= '<a href="/product/growth/letter?orderId='.$order->id.'&isOnline=1" target="_blank" class="btn mini green">打印确认函</a>';
@@ -190,12 +181,42 @@ use common\utils\StringUtils;
                                     
 </div>
 <script>
-    //重新保全（国家电子合同）
-    function miitbaoquan(id) {
-        $.post('/order/onlineorder/miit-baoquan?id=' + id, function(str){
-            alert(str);
-            window.location.reload();
-        })
+    //和签保全查看
+    function viewMiit(id) {
+        if (id !== null && id !== undefined && id !== '') {
+            $.ajax({
+                type: "GET",
+                url: "/order/onlineorder/miit-baoquan",
+                data: {id : id},
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 0) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        window.open(data.url);
+                    }
+                }
+            });
+        }
+    }
+    //易保全查看
+    function ebaoquan(id) {
+        if (id !== null && id !== undefined && id !== '') {
+            $.ajax({
+                type: "GET",
+                url: "/order/onlineorder/ebaoquan",
+                data: {id : id},
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 0) {
+                        alert(data.message);
+                    } else {
+                        window.open(data.url);
+                    }
+                }
+            });
+        }
     }
 </script>
 <?php $this->endBlock(); ?>

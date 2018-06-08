@@ -222,20 +222,57 @@ class OnlineorderController extends BaseController
             'loanStatus' => $loanStatus
         ]);
     }
-    //国家电子合同保全(重新保全国家电子合同)
+
+    /**
+     * 下载和签保全合同
+     * @param $id
+     * @return array|\yii\web\NotFoundHttpException
+     */
     public function actionMiitBaoquan($id)
     {
         $order = OnlineOrder::findOne($id);
-        if (!is_null($order)) { //订单是否存在
-            $miitLog = $order->getMiitLog();
-            //和签保全开关开启且不存在成功的保全记录
-            if (is_null($miitLog) && Yii::$app->params['enable_miitbaoquan']) {
-                Yii::$app->queue->push(new MiitBaoQuanJob([
-                    'order' => $order,
-                    'item_type' => 'loan_order',
-                ]));
-            }
+        //订单不存在
+        if (is_null($order)) {
+            throw $this->ex404();
         }
-        return '合同生成中，请稍后';
+
+        $url = $order->getMiitViewUrl();
+        //成功保全的直接返回查看链接
+        if (!empty($url)) {
+            return ['code' => 1, 'url' => $url];
+        }
+
+        //保全失败的，重新保全
+        if (Yii::$app->params['enable_miitbaoquan']) {
+            Yii::$app->queue->push(new MiitBaoQuanJob([
+                'order' => $order,
+                'item_type' => 'loan_order',
+            ]));
+        }
+
+        return ['code' => 0, 'message' => '合同生成中，请稍后'];
+    }
+
+    /**
+     * 下载易保全合同
+     * @param $id
+     * @return array|\yii\web\NotFoundHttpException
+     */
+    public function actionEbaoquan($id)
+    {
+        $order = OnlineOrder::findOne($id);
+        //订单不存在
+        if (is_null($order)) {
+            throw $this->ex404();
+        }
+
+        $url = $order->getBaoquanDownloadLink();
+        //成功保全的直接返回查看链接
+        if (!empty($url)) {
+            return ['code' => 1, 'url' => $url];
+        }
+
+        //保全失败的，返回失败
+        return ['code' => 0, 'message' => '保全失败，无法下载'];
     }
 }

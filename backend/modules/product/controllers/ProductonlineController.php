@@ -1325,4 +1325,23 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
             'message' => $res ? '操作成功' : '操作失败',
         ];
     }
+
+    //获取标的投资人数
+    public function actionGetInvestNumber($pids)
+    {
+        if (empty($pids)) {
+            return [];
+        }
+        $pids = explode(',', $pids);
+        
+        return OnlineOrder::find()
+            ->select(['pid' => 'online_pid', 'investnumber' => 'count(distinct uid)'])
+            ->where([
+                'online_pid' => $pids,
+                'status' => OnlineOrder::STATUS_SUCCESS,
+            ])
+            ->groupBy('online_pid')
+            ->asArray()
+            ->all();
+    }
 }
