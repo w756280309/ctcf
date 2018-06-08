@@ -33,7 +33,7 @@ class Permission extends Model
         }
 
         //需要排除权限限制的path
-        $allow_paths = array('site/index', 'site/deny', 'system/role/authlist', 'adminuser/admin/authlist', 'adminuser/admin/roles');
+        $allow_paths = Yii::$app->params['backend_allow_paths'];
         if (in_array($path, $allow_paths)) {
             return true;
         }

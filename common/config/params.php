@@ -303,6 +303,16 @@ return [
     'alternativeRepayer' => [],
     //用款方
     'fundReceiver' => [],
+    //需要排除权限限制的path
+    'backend_allow_paths' => [
+        'site/index',
+        'site/deny',
+        'system/role/authlist',
+        'adminuser/admin/authlist',
+        'adminuser/admin/roles',
+        'user/user/address',
+        'product/productonline/get-invest-number',
+    ],
     //担保方
     'guarantee' => [],
 ];
