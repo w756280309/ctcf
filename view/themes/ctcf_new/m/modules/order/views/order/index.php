@@ -75,19 +75,19 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
     <!--   购买页 start-->
     <div class="row produce">
         <div class="col-xs-12 text-align-lf first-hang" style="padding-left: 0.613rem;"><?= $deal->title ?></div>
-        <div style="width: 35%;" class="col-xs-4 text-align-lf">借贷双方约定利率</div>
-        <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= LoanHelper::getDealRate($deal) ?>
+        <div style="width: 40%;" class="col-xs-4 text-align-lf">借贷双方约定利率</div>
+        <div style="width: 60%;" class="col-xs-8 text-align-lf col"><?= LoanHelper::getDealRate($deal) ?>
             %<?php if (!empty($deal->jiaxi)) { ?>+<?= $deal->jiaxi ?>%<?php } ?></div>
-        <div style="width: 35%;" class="col-xs-4 text-align-lf">借款期限</div>
-        <div style="width: 65%;" class="col-xs-8 text-align-lf col">
+        <div style="width: 40%;" class="col-xs-4 text-align-lf">借款期限</div>
+        <div style="width: 60%;" class="col-xs-8 text-align-lf col">
             <?php $ex = $deal->getDuration() ?><?= $ex['value'] ?><?= $ex['unit'] ?>
         </div>
-        <div style="width: 35%;" class="col-xs-4 text-align-lf">可出借余额</div>
-        <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->getLoanBalance()) ?>元</div>
-        <div style="width: 35%;" class="col-xs-4 text-align-lf">起借金额</div>
-        <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->start_money) ?>元</div>
-        <div style="width: 35%;" class="col-xs-4 text-align-lf">递增金额</div>
-        <div style="width: 65%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->dizeng_money) ?>元</div>
+        <div style="width: 40%;" class="col-xs-4 text-align-lf">可出借余额</div>
+        <div style="width: 60%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->getLoanBalance()) ?>元</div>
+        <div style="width: 40%;" class="col-xs-4 text-align-lf">起借金额</div>
+        <div style="width: 60%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->start_money) ?>元</div>
+        <div style="width: 40%;" class="col-xs-4 text-align-lf">递增金额</div>
+        <div style="width: 60%;" class="col-xs-8 text-align-lf col"><?= StringUtils::amountFormat3($deal->dizeng_money) ?>元</div>
     </div>
     <div class="row surplus margin-top">
         <div class="lf" style="width: 31%;color:#aab2bd;">可用余额</div>
