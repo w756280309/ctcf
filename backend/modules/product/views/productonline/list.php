@@ -209,8 +209,8 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         </div>
                         <div class="item_content">
                             <select class="m-wrap" name="isTest" id="isTest">
-                                <option value="0" selected>正式标</option>
-                                <option value="1">测试标</option>
+                                <option value="0" <?php echo $loanSearch->isTest ? '':'selected';?>>正式标</option>
+                                <option value="1" <?php echo $loanSearch->isTest ? 'selected':'';?>>测试标</option>
                             </select>
                         </div>
                     </div>
