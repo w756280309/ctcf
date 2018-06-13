@@ -2,6 +2,8 @@
 $this->title = '月历史数据';
 use yii\grid\GridView;
 
+$pc_cat = Yii::$app->params['pc_cat'];
+
 ?>
 <?php $this->beginBlock('blockmain'); ?>
 <div class="container-fluid">
@@ -97,7 +99,7 @@ use yii\grid\GridView;
                 ],
                 [
                     'attribute' => 'investmentInWyb',
-                    'label' => '温盈宝销售额',
+                    'label' => $pc_cat['2'].'销售额',
                     'value' => function ($data) {
                         return number_format($data['investmentInWyb'], 2);
                     },
@@ -106,7 +108,7 @@ use yii\grid\GridView;
                 ],
                 [
                     'attribute' => 'investmentInWyj',
-                    'label' => '温盈金销售额',
+                    'label' => $pc_cat['1'].'销售额',
                     'value' => function ($data) {
                         return number_format($data['investmentInWyj'], 2);
                     },

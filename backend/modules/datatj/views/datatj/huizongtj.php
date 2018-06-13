@@ -59,8 +59,8 @@ CSS
         <div class="span4">今日提现金额：<div class="pull-right"><?= number_format($todayDraw, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
-        <div class="span4">今日温盈宝销售额：<div class="pull-right"><?= number_format($todayInvestmentInWyb, 2) ?>元</div></div>
-        <div class="span4">今日温盈金销售额：<div class="pull-right"><?= number_format($todayInvestmentInWyj, 2) ?>元</div></div>
+        <div class="span4">今日<?= $pc_cat['2'] ?>销售额：<div class="pull-right"><?= number_format($todayInvestmentInWyb, 2) ?>元</div></div>
+        <div class="span4">今日<?= $pc_cat['1'] ?>销售额：<div class="pull-right"><?= number_format($todayInvestmentInWyj, 2) ?>元</div></div>
     </div>
     <div class="row-fluid">
         <div class="span4">累计充值手续费：<div class="pull-right"><?= number_format($totalRechargeCost, 2) ?>元</div></div>
