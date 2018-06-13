@@ -12,6 +12,7 @@ use common\models\user\UserIdentity;
 use common\service\BankService;
 use console\command\OpenAccountJob;
 use yii\base\Action;
+use Yii;
 
 //实名认证表单提交公共action
 class IdentityVerifyAction extends Action
@@ -25,7 +26,10 @@ class IdentityVerifyAction extends Action
                 return $data;
             }
             $model = new UserIdentity();
-            if ($model->load(\Yii::$app->request->post(), 'User') && $model->validate()) {
+            $post = Yii::$app->request->post();
+            $model->idcard = UserIdentity::trimAll($post['User']['idcard']);
+            $model->real_name = UserIdentity::trimAll($post['User']['real_name']);
+            if ($model->validate()) {
                 $openAccountRecord = OpenAccount::initNew($user, $model);
                 $openAccountRecord->ip = ip2long(\Yii::$app->request->getUserIP());
                 $openAccountRecord->save(false);

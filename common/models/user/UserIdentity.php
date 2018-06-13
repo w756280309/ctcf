@@ -24,6 +24,7 @@ class UserIdentity extends Model
     public function rules()
     {
         return [
+            [['idcard', 'real_name'], 'trim'],
             [['idcard'], CnIdCardValidator::className()],
             [['real_name'], NameValidator::className()],
         ];
@@ -40,5 +41,13 @@ class UserIdentity extends Model
             'real_name' => '姓名',
             'idcard' => '身份证号',
         ];
+    }
+    //删除字符串里面所有的空格
+    public static function trimAll($str)
+    {
+        $oldChar = array(" ", "\t", "\n", "\r");
+        $newChar = array("", "", "", "");
+
+        return str_replace($oldChar, $newChar, $str);
     }
 }

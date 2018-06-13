@@ -80,6 +80,30 @@ var t = 0;
 var allowClick = true;
 var idCardBtn = $('#idcardbtn');
 
+// 姓名input框
+var realName=document.getElementById("real_name");
+// 身份证input框
+var idCards=document.getElementById("idcard");
+// 姓名输入去除空格
+realName.onkeyup=function(e){
+    var e=e||window.event;
+    if(e.keyCode==32){
+        realName.value=removeAllSpace(realName.value);
+    };
+}
+
+// 身份证输入去掉空格
+idCards.onkeyup=function(e){
+    var e=e||window.event;
+    if(e.keyCode==32){
+        idCards.value = removeAllSpace(idCards.value);
+    };
+}
+// 去除空格
+function removeAllSpace(str){
+    return str.replace(/\s+/g, "");
+}
+
 if (err === '1') {
     toastCenter(mess, function () {
         if (tourl !== '') {
