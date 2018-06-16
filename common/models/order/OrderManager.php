@@ -2,6 +2,8 @@
 
 namespace common\models\order;
 
+use common\event\Events;
+use common\event\OrderEvent;
 use common\models\coupon\CouponType;
 use common\models\message\OrderMessage;
 use common\models\product\OnlineProduct;
@@ -377,6 +379,9 @@ class OrderManager
 
         //投资成功之后更新用户信息
         UserInfo::dealWidthOrder($order);
+
+        $orderEvent = new OrderEvent(['order' => $order]);
+        Yii::$app->trigger(Events::ORDER_SUCCESS, $orderEvent);
 
         //投资完成之后活动统一处理逻辑
         try {

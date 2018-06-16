@@ -8,4 +8,5 @@ namespace common\event;
 final class Events
 {
     const REG_SUCCESS = 'reg_success';
+    const ORDER_SUCCESS = 'orderSuccess';
 }

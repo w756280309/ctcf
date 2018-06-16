@@ -1,5 +1,7 @@
 <?php
 
+use common\components\EventsBehavior;
+
 return [
     // 以 https://asset-packagist.org/ 为源安装的前端资源包需要指定路径
     'aliases' => [
@@ -69,8 +71,21 @@ return [
             'password' => env('QUEUE_REDIS_PASSWORD'),
             'database' => env('QUEUE_REDIS_DATABASE'),
         ],
+        'queue2' => [
+            'class' => 'yii\queue\redis\Queue',
+            'channel' => 'queue2',
+        ]
     ],
     'bootstrap' => [
-        'queue',
+        'queue', 'queue2',
+    ],
+    'as myHandlers' => [
+        'class' => EventsBehavior::class,
+        'events' => [
+            'orderSuccess' => [
+                ['common\models\promo\Promo180618', 'onOrderSuccess'],
+                ['common\ctcf\promo\Promo180618', 'onOrderSuccess'],
+            ],
+        ],
     ],
 ];

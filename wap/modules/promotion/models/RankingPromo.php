@@ -242,6 +242,22 @@ class RankingPromo extends ActiveRecord
         return true;
     }
 
+    //订单事件中判断活动状态，登录状态，上线状态
+    public function isActiveInEvent(User $user = null, $time = null)
+    {
+        $dateTime = null === $time ? new \DateTime() : \DateTime::createFromFormat('U', $time);
+
+        try {
+            $this->inPromoTime($dateTime);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        $whiteList = explode(',', $this->whiteList);
+
+        return !(!$this->isOnline && (empty($user) || !in_array($user->mobile, $whiteList)));
+    }
+
     /**
      * 判断一个时间点是否在活动中.
      */

@@ -1,0 +1,104 @@
+@q:75rem;
+@a:75rem*1.5;
+.prize-bg{
+  -webkit-transform: translateZ(12px);
+  -moz-transform: translateZ(12px);
+  -ms-transform: translateZ(12px);
+  -o-transform: translateZ(12px);
+  transform: translateZ(12px);
+  z-index: 19;
+  position: fixed;
+  width: 10rem;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.4);
+  .prize-content{
+    height: 743/@q;
+    width: 641/@q;
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    background-color: #fff;
+    border-radius: 15/@q;
+    -webkit-border-radius: 15/@q;
+    -moz-border-radius: 15/@q;
+    .close-prize{
+      width: 60/@q;
+      height: 140/@q;
+      position:absolute;
+      right:0;
+      top:-140/@q;
+    }
+    .wrpper-top{
+      height: 146/@q;
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      img{
+        width: 338/@q;
+        height: 146/@q;
+        position: absolute;
+        left:0;
+        right:0;
+        margin: 0 auto;
+        top:-0.9rem;
+      }
+    }
+    .wrapper{
+      width: 547/@q;
+      margin:82/@q auto 0;
+      height: 608/@q;
+      overflow: hidden;
+      p{
+        height: 608/@q;
+        line-height: 608/@q;
+        text-align: center;
+        font-size: 36/@q;
+      }
+      ul{
+        li{
+          height: 200/@q;
+          border-bottom:1px dashed #ccc9ba;
+          overflow: hidden;
+          >div{
+            margin-top: 17/@q;
+            height: 141/@q;
+            width: 100%;
+            .lf{
+              width: 188/@q;
+              height: 141/@q;
+              line-height: 141/@q;
+              text-align: left;
+              img{
+                width: 240/@a;
+                height: 240/@a;
+              }
+            }
+            .rg-prize{
+              overflow: hidden;
+              height: 100%;
+              text-align: left;
+              p:first-child{
+                margin-top: 10/@q;
+                height: 73/@q;
+                line-height: 73/@q;
+                font-size: 32/@q;
+                color:#784c32;
+              }
+              p:last-child{
+                height: 55/@q;
+                line-height: 55/@q;
+                color:#c98b72;
+                font-size: 26/@q;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
