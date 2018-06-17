@@ -3,8 +3,8 @@
 $this->title = '闯关赢好礼';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/index.min.css?v=1.3">
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/window-box.min.css?v=1.2">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/index.min.css?v=1.4">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/window-box.min.css?v=1.3">
 <script src="<?= FE_BASE_URI ?>libs/bscroll.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/vue.min.js"></script>
@@ -13,6 +13,9 @@ $this->title = '闯关赢好礼';
 <style>
     .flex-content{
         -webkit-overflow-scrolling: touch;
+    }
+    [v-cloak]{
+        display:none;
     }
 </style>
 <div id="app" ref="flexContent" class="flex-content">
@@ -36,7 +39,7 @@ $this->title = '闯关赢好礼';
              src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/images/prize_top_bg@2x.png" alt="">
         <img :class="{'show-content':showBg5}" class="top-bg5 top-bg" @click.prevent
              src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/images/prize_top_bg@2x.png" alt="">
-        <p>当前累计年化投资：{{ userAnnualAmount | round }}万元</p>
+        <p v-cloak>当前累计年化投资：{{ userAnnualAmount | round }}万元</p>
         <img class="go-licai" @click.prevent="goLicai"
              src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/images/go_licai@2x.png" alt="">
         <div class="notice">注：年化投资额＝投资金额＊项目期限/365</div>
@@ -96,7 +99,7 @@ $this->title = '闯关赢好礼';
             data: {
                 promoStatus: dataJson.promoStatus,
                 isLoggedIn: dataJson.isLoggedIn,
-                userAnnualAmount: dataJson.userAnnualInvest,
+                userAnnualAmount: 0,
                 // 奖品外面的圆圈
                 showBg1: true,
                 showBg2: true,
@@ -120,6 +123,7 @@ $this->title = '闯关赢好礼';
                 this.$on('showPrize', function () {
                     this.show = false;
                 });
+                (dataJson.userAnnualInvest)&&(this.userAnnualAmount=dataJson.userAnnualInvest);
                 var newV = this.userAnnualAmount;
                 if (newV > 0 && newV < 10000) {
                     this.defaultPosition();

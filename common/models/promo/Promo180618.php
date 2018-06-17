@@ -47,7 +47,7 @@ class Promo180618 extends BasePromo
     {
         return [
             '180618_P66' => $userAnnualInvest >= 10000 ? true : false,
-            '180618_P266' => $userAnnualInvest >= 20000 ? true : false,
+            '180618_P266' => $userAnnualInvest >= 50000 ? true : false,
             '180618_P466' => $userAnnualInvest >= 100000 ? true : false,
             '180618_RP38' => $userAnnualInvest >= 200000 ? true : false,
             '180618_G100' => $userAnnualInvest >= 500000 ? true : false,
