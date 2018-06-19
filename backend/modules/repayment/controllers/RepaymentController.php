@@ -343,7 +343,7 @@ class RepaymentController extends BaseController
                 //分期(不是等额本息)不是最后一期
                 $templateId = Yii::$app->params['sms']['fenqihuikuan'];
                 $message = [
-                    $repaymentRecord['real_name'],
+                    $user->real_name,
                     $loan->title,
                     $term,
                     $repaymentRecord['lixi'],
