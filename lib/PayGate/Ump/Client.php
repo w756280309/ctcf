@@ -1535,19 +1535,18 @@ class Client
      * 资金方向：担保方账户 -> 标的账户
      *
      * @param string $sn 交易流水号
-     * @param string $issueDate 转账日期（PHP:Ymd）
      * @param integer $loanId 标的ID
      * @param string $epayUserId 转账方联动账户用户ID 
      * @param string $amount 转账金额（分）
      *
      * @return Response
      */
-    public function refundViaAltRepayer($sn, $issueDate, $loanId, $epayUserId, $amount)
+    public function refundViaAltRepayer($sn, $loanId, $epayUserId, $amount)
     {
         $data = [
-            'service' => 'project_transfer_nopwd',
+            'service' => 'project_transfer',
             'order_id' => $sn,
-            'mer_date' => $issueDate,  //商户生成订单的日期，格式YYYYMMDD
+            'mer_date' => date('Ymd'),  //商户生成订单的日期，格式YYYYMMDD
             'project_id' => $loanId,  //标的号,本地id值
             'serv_type' => '04',
             'trans_action' => '01',

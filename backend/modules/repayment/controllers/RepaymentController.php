@@ -499,19 +499,19 @@ class RepaymentController extends BaseController
         }
 
         //检查融资者用户信息
-        $borrower = $loan->borrower;
+        $borrower = $loan->repayer;
         if (null === $borrower) {
-            throw new \Exception('融资者用户信息不存在');
+            throw new \Exception('还款用户信息不存在');
         }
         //检查融资者用户账户信息
         $borrowerAccount = $borrower->borrowAccount;
         if (null === $borrowerAccount) {
-            throw new \Exception('融资者用户账户信息不存在');
+            throw new \Exception('还款用户账户信息不存在');
         }
         //检查融资者对应联动账户信息
         $borrowerEpayUser = $borrower->epayUser;
         if (null === $borrowerEpayUser) {
-            throw new \Exception('融资者对应联动账户信息不存在');
+            throw new \Exception('还款对应联动账户信息不存在');
         }
 
         //当不允许访问联动时候，默认联动测处理成功，查看联动标的状态
@@ -568,7 +568,7 @@ class RepaymentController extends BaseController
 
         //判断温都融资者账户余额是否足够
         if (bccomp($totalFund, $borrowerAccount->available_balance, 2) > 0) {
-            throw new \Exception('融资者用户账户余额不足');
+            throw new \Exception('还款用户账户余额不足');
         }
         //判断实际联动方融资者账户信息是否异常
         if (Yii::$app->params['ump_uat']) {
@@ -680,11 +680,19 @@ class RepaymentController extends BaseController
 
                 //联动一测融资用户还款到标的账户
                 if ($totalFund > 0 && Yii::$app->params['ump_uat']) {
-                    $hk = $ump->huankuan(
-                        TxUtils::generateSn('HK'),
-                        $loan->id,
-                        $borrowerEpayUser->epayUserId,
-                        $totalFund);
+                    if ($loan->borrow_uid === $borrower->id) {
+                        $hk = $ump->huankuan(
+                            TxUtils::generateSn('HK'),
+                            $loan->id,
+                            $borrowerEpayUser->epayUserId,
+                            $totalFund);
+                    } else {
+                        $hk = $ump->refundViaAltRepayer(
+                            TxUtils::generateSn('HK'),
+                            $loan->id,
+                            $borrowerEpayUser->epayUserId,
+                            $totalFund);
+                    }
 
                     if (!$hk->isSuccessful()) {
                         $transaction->rollBack();
@@ -701,7 +709,7 @@ class RepaymentController extends BaseController
                 ])->execute();
                 if (!$updateRepayment) {
                     $transaction->rollBack();
-                    throw new \Exception('更新还款记录融资账户回款状态失败');
+                    throw new \Exception('更新还款记录还款账户回款状态失败');
                 }
 
                 $transaction->commit();
@@ -771,6 +779,8 @@ class RepaymentController extends BaseController
             return true;
         }
 
+        $repayer = $loan->repayer;
+        $isOrgUser = $repayer->id === $loan->borrow_uid;
         //获得剩余本息余额
         $restBenxi = (float) OnlineRepaymentPlan::find()
             ->where([
@@ -842,10 +852,16 @@ class RepaymentController extends BaseController
                 //判断是否是联动正式环境，然后返款给投资用户
                 if ($plan->benxi > 0 && Yii::$app->params['ump_uat']) {
                     //调用联动返款接口,返款给投资用户
+                    //判断是否为立合旺通企业投资者投资标的
                     if ($isLhwxLoan) {
                         $fkResp = $ump->fkToOrgUser($plan->sn, $lenderRepaymentRecord->refund_time, $plan->online_pid, $user->epayUser->epayUserId, $plan->benxi);
                     } else {
-                        $fkResp = $ump->fankuan($plan->sn, $lenderRepaymentRecord->refund_time, $plan->online_pid, $user->epayUser->epayUserId, $plan->benxi);
+                        //判断当前返款用户是否为融资用户，若不为则为偿付返款，否则为正常返款
+                        if ($isOrgUser) {
+                            $fkResp = $ump->fankuan($plan->sn, $lenderRepaymentRecord->refund_time, $plan->online_pid, $user->epayUser->epayUserId, $plan->benxi);
+                        } else {
+                            $fkResp = $ump->fankuan1($plan->sn, $lenderRepaymentRecord->refund_time, $plan->online_pid, $user->epayUser->epayUserId, $plan->benxi);
+                        }
                     }
                     if (!$fkResp->isSuccessful()) {
                         $transaction->rollBack();

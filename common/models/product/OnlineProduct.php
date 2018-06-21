@@ -1507,4 +1507,24 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
         return $guaranteeId;
     }
+
+    /**
+     * 获取标的还款用户（暂不考虑第二代偿方（即担保方）偿付）
+     *
+     * @return null|\yii\db\ActiveRecord
+     */
+    public function getRepayer()
+    {
+        $repayerId = null;
+        if (null !== $this->alternativeRepayer) {
+            $repayerId = $this->alternativeRepayer;
+        } else {
+            $repayerId = $this->borrow_uid;
+        }
+
+        return User::find()
+            ->where(['id' => $repayerId])
+            ->andWhere(['type' => User::USER_TYPE_ORG])
+            ->one();
+    }
 }
