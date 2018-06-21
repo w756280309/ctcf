@@ -43,10 +43,6 @@ class CouponController extends BaseController
      */
     private function preprocess(CouponType $obj)
     {
-        if ($obj->isAudited) {
-            throw new \Exception();
-        }
-
         if (empty($obj->expiresInDays) && empty($obj->useEndDate)) {
             $obj->addErrors(['expiresInDays' => '有效天数与截止日期不能都为空', 'useEndDate' => '有效天数与截止日期不能都为空']);
 
@@ -78,6 +74,7 @@ class CouponController extends BaseController
         }
 
         $model = $this->findOr404(CouponType::class, $id);
+        $isSent = UserCoupon::findCouponByConfig($id)->count() > 0;
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $this->preprocess($model)) {
             if (!$model->save(false)) {
                 throw new \Exception('数据库错误');
@@ -86,7 +83,7 @@ class CouponController extends BaseController
             }
         }
 
-        return $this->render('edit', ['model' => $model]);
+        return $this->render('edit', ['model' => $model, 'isSent' => $isSent]);
     }
 
     /**

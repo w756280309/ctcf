@@ -35,7 +35,7 @@ class CouponType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'amount', 'minInvest', 'issueStartDate', 'issueEndDate'], 'required'],
+            [['name', 'sn', 'amount', 'minInvest', 'issueStartDate', 'issueEndDate'], 'required'],
             [['amount', 'minInvest','bonusDays','bonusRate'], 'number'],
             [['useStartDate', 'useEndDate', 'issueStartDate', 'issueEndDate'], 'safe'],
             [['isDisabled','type', 'created_at', 'updated_at', 'expiresInDays', 'customerType', 'allowCollect', 'isAppOnly', 'loanExpires'], 'integer'],
