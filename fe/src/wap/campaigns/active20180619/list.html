@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>理财列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="css/list.min.css">
+    <script src="../../libs/lib.flexible3.js"></script>
+    <script src="../../libs/jquery-1.11.1.min.js"></script>
+    <script src="../../libs/vue.min.js"></script>
+    <script src="../../libs/bscroll.js"></script>
+    <style>
+        .hide{
+            display:none;
+        }
+        .show{
+            display:block;
+        }
+        [v-clock]{
+            display: none;
+        }
+        .flex-content{
+            background-color: #f6f6f6;
+        }
+        div.flex-content ul.bid-list{
+            padding-bottom: 0;
+        }
+        div.flex-content ul.bid-list li:last-child{
+            padding-bottom:0.26666667rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex-content wrapper" id="app">
+        <ul class="bid-list">
+            <li v-clock v-if="list.length" v-for="(item, index) in list" :key="index">
+                <a :href="item.url">
+
+                    <div v-if="item.isActive==true" class="title-msg">
+                        <!--售罄 收益中 还清-->
+                        <div v-if="item.dealStatus==3" class="icon-rg-sell"></div>
+                        <div v-if="item.dealStatus==5" class="icon-rg-earning"></div>
+                        <div v-if="item.dealStatus==6" class="icon-rg-pay"></div>
+                        <h4 class="list_title">
+                            <span>{{item.title}}</span>
+                            <i v-if="item.isXin==1" class="rg">新手</i>
+                            <i v-if="item.dealStatus==7||item.dealStatus==1">募集结束</i>
+                        </h4>
+                    </div>
+                    <div v-else class="title-msg">
+                        <!--售罄 收益中 还清-->
+                        <div v-if="item.dealStatus==3" class="icon-rg-sell"></div>
+                        <div v-if="item.dealStatus==5" class="icon-rg-earning"></div>
+                        <div v-if="item.dealStatus==6" class="icon-rg-pay"></div>
+                        <h4 class="list_title">
+                            <span>{{item.title}}</span>
+                            <i v-if="item.isXin==1" class="rg">新手</i>
+                            <i v-if="item.dealStatus==1">预告期</i>
+                            <i v-if="item.dealStatus==7">募集结束</i>
+                        </h4>
+                    </div>
+                    <div class="rate-box clearfix">
+                        <div class="rate-box-lf lf">
+                            <p>{{item.rate}}<u>%</u><span>+{{item.rateAdd}}%</span></p>
+                            <i v-if="item.cid==3" class="color9">约定利率</i>
+                            <i v-else class="color9">预期年化率</i>
+                        </div>
+                        <div class="rate-box-rg color4 lf">
+                            <p>
+                                <span>{{item.duration}}</span><span>{{item.durationUnit}}</span>
+                            </p>
+                            <p>
+                                <span>{{item.startMoney}}</span><span>元起投</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div v-if="item.progress!=100" class="rate-copies">
+                        <!--<u style="width:'{{item.progress}}'%" class="move-u"></u>-->
+
+                        <u :style="{width:item.progress+'%'}" class="move-u"></u>
+                        <i></i>
+                        <span>{{item.progress}}%</span>
+                    </div>
+                    <div v-else class="rate-copies end-invest">
+                        <span class="end-invest-span">{{item.progress}}%</span>
+                    </div>
+                    <div class="weal-sign clearfix">
+                        <span v-for="sub in item.tags" class="lf">{{sub}}</span>
+                        <span v-if="item.pointsMultiple>=2" class="lf rate-color">{{item.pointsMultiple}}倍积分</span>
+                        <i class="rg color9">{{item.refundMethod}}</i>
+                    </div>
+                </a>
+            </li>
+
+        </ul>
+        <p class="last-msg hide" style="height: 1rem;line-height: 1rem;font-size: 0.4rem;text-align: center">加载中······</p>
+    </div>
+    <script>
+        var bscroll=null;
+        var app=new Vue({
+            el:"#app",
+            data:{
+                list:[],
+                page:1,
+                bidTime:24,
+                stop:true,
+                maxPage:1,
+                lis:[],
+            },
+            created(){
+                // this.lis=
+                //     [
+                //     {
+                //         "url":"/deal/deal/index?sn=123123",//标的详情地址
+                //         "title":"0615是测试标的",//标题名称
+                //         "cid":"3",//标的类型     '1温盈金', '2温盈宝', '3网贷'
+                //         "isXin":0,//是否是新手 0否 1是
+                //         "isShowXin":0,//是否展示新手表Logo 0否  1是
+                //         "dealStatus":6,//标的状态   1'预告期',2 '募集中',3 '已售罄',4  '流标',5 '收益中',6 '已还清',7 '募集结束',
+                //         "isActive":true,//是否募集已完成 false 否  true 是
+                //         "dealStatusMsg":"已还清",//标的状态描述
+                //         "tags":"11,9,7,3",//标签信息，以中文'，'分割,返回字符串  举例‘慈善专属，特殊活动’
+                //         "pointsMultiple":1,//积分倍数
+                //         "rate":"9.5",//年化收益率 单位%
+                //         "rateAdd":"0.5",//加息利率 单位%
+                //         "duration":5,//期限
+                //         "durationUnit":"个月",//期限单位
+                //         "startMoney":"1,000",//起投金额
+                //         "progress":100,//募集进度  单位%
+                //         "refundMethod":"按季付息，到期本息"//还款方式
+                //     },
+                //         {
+                //             "url":"/deal/deal/index?sn=123123",//标的详情地址
+                //             "title":"0615是测试标的",//标题名称
+                //             "cid":"3",//标的类型     '1温盈金', '2温盈宝', '3网贷'
+                //             "isXin":0,//是否是新手 0否 1是
+                //             "isShowXin":0,//是否展示新手表Logo 0否  1是
+                //             "dealStatus":6,//标的状态   1'预告期',2 '募集中',3 '已售罄',4  '流标',5 '收益中',6 '已还清',7 '募集结束',
+                //             "isActive":true,//是否募集已完成 false 否  true 是
+                //             "dealStatusMsg":"已还清",//标的状态描述
+                //             "tags":"1,2,3",//标签信息，以中文'，'分割,返回字符串  举例‘慈善专属，特殊活动’
+                //             "pointsMultiple":1,//积分倍数
+                //             "rate":"9.5",//年化收益率 单位%
+                //             "rateAdd":"0.5",//加息利率 单位%
+                //             "duration":5,//期限
+                //             "durationUnit":"个月",//期限单位
+                //             "startMoney":"1,000",//起投金额
+                //             "progress":100,//募集进度  单位%
+                //             "refundMethod":"按季付息，到期本息"//还款方式
+                //         }
+                //
+                //   ]
+                // var partArr=[];
+                //
+                // for(key in this.lis){
+                //
+                //     if(this.lis[key].tags.length>0){
+                //         partArr=this.lis[key].tags.split(',');
+                //         this.lis[key].tags=partArr;
+                //         console.log(111,partArr);
+                //
+                //     };
+                //     this.list.push(this.lis[key]);
+                //     partArr=[];
+                // }
+                //  console.log(this.list);
+
+            },
+            mounted(){
+                var that=this;
+                this.bidTime=this.getUrlParam('bidTime');
+                if(this.bidTime==7||this.bidTime==24||this.bidTime==36){
+                    this.getPage(this.bidTime,this.page);
+                };
+                window.onscroll=function(e){
+                    if ($(this).scrollTop() + $(window).height() + 20 >= $(document).height() && $(this).scrollTop() > 20) {
+                        //当前要加载的页码
+                        that.getPage(that.bidTime,that.page);
+                    }
+                }
+            },
+            methods:{
+                getUrlParam(name) {
+                    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
+                    var r = window.location.search.substr(1).match(reg);  // 匹配目标参数
+                    if (r != null) return unescape(r[2]); return null; // 返回参数值
+                },
+                getPage(x,y){
+                    var that=this;
+                    var partArr=[];
+                    if(that.stop==true&&that.page<=that.maxPage){
+                        $('.last-msg').removeClass('hide');
+                        that.stop=false;
+                        $.ajax({
+                            url:'/promotion/p180620/recommend-product',
+                            data:{'expires':x,
+                                'page':y,
+                                'size':5},
+                            type:'get',
+                            dataType:'json',
+                            success:function(data){
+                                that.maxPage=data.relateInfo.totalPage;
+                                if(data.data.length>0){
+                                    for(key in data.data){
+                                        if(data.data[key].tags>0){
+                                            partArr=data.data[key].tags.split(',');
+                                            data.data[key].tags=partArr;
+                                        };
+                                        app.list.push(data.data[key]);
+                                        partArr=[];
+                                    }
+                                }
+                                that.page++;
+                                $('.last-msg').addClass('hide');
+                                that.stop=true;
+                            },
+                            error:function(){
+                                $('.last-msg').addClass('hide');
+                                that.stop=true;
+                            }
+                        })
+                    }
+                }
+            },
+        })
+    </script>
+</body>
+</html>

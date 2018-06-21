@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>小微贷项目推荐</title>
+    <link rel="stylesheet" href="../../common/css/wenjfbase.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <script src="../../libs/lib.flexible3.js"></script>
+</head>
+<body>
+    <div class="flex-content">
+        <img onclick="return false;" class="banner" src="images/banner.jpg" alt="">
+        <div class="part-one">
+            <div class="bg"></div>
+            <div class="content">
+                <img onclick="return false;" class="intro-img" src="images/intro.png" alt="">
+                <div class="detail">
+                    <p class="title"><i class="red">* </i>计算公式举例<i class="red"> *</i></p>
+                    <ul>
+                        <li><i class="red f30">原：</i>小明购买了10万元到期本息项目，期限36个月，约定利率9.2%，最终能拿到本金+利息共计12万7600元。</li>
+                        <li><img onclick="return false;" src="images/angle.png" alt=""></li>
+                        <li><i class="red f30">现：</i>小明购买了10万元等额本息项目，期限36个月，约定利率9.2%，每个月都能拿到本金+利息回款3189.29元，再拿这笔钱复投一年期宁富赚项目，最终能拿到的本金+利息共计<i class="red">13万3184元</i>。</li>
+                        <li><img onclick="return false;" src="images/angle.png" alt=""></li>
+                        <li class="red">选择等额本息复投<br>最终收益将比到期本息高了5584元！</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="part-two">
+            <div class="bg"></div>
+            <div class="content">
+                <img onclick="return false;" class="icon" src="images/icon.png" alt="">
+                <div class="invest">
+                    <img onclick="return false;" src="images/invest.png" alt="">
+                    <a id="list24" class="m24" href="javascript:void(0);">查看详情</a>
+                    <a id="list36" class="m36" href="javascript:void(0);">查看详情</a>
+                </div>
+                <img onclick="return false;" class="intro" src="images/intro_01.png" alt="">
+            </div>
+        </div>
+    </div>
+    <script>
+        document.onreadystatechange = function () {
+            if (document.readyState === "complete") {
+                document.body.style.opacity = 1;
+            }
+        };
+        window.onload = function(){
+            var list24 = document.getElementById("list24"),list36 = document.getElementById("list36");
+            if(dataJson.isLoggedIn){
+                list24.setAttribute('href','/list?bidTime=24');
+                list36.setAttribute('href','/list?bidTime=36');
+            } else {
+                list24.setAttribute('href','/site/login');
+                list36.setAttribute('href','/site/login');
+            }
+        }
+    </script>
+</body>
+</html>
