@@ -356,31 +356,31 @@ html, body {
 }
 
 .page4 .page4-content li:nth-child(1) {
-    background: url(../../images/h5-180211/advantage1.png) no-repeat left top;
+    background: url(../../images/h5-180211/page3-c1.png) no-repeat left top;
     width: 5.8rem;
     background-size: 100% 100%;
     position: relative
 }
 
-.page4 .page4-content li:nth-child(2) {
+/*.page4 .page4-content li:nth-child(2) {
     background: url(../../images/h5-180211/advantage2.png?v=1.1) no-repeat left top;
     width: 3.93rem;
     background-size: 100% 100%
-}
+}*/
 
-.page4 .page4-content li:nth-child(3) {
+.page4 .page4-content li:nth-child(2) {
     background: url(../../images/h5-180211/advantage3_new.png) no-repeat left top;
     background-size: 100% 100%
 }
 
-.page4 .page4-content li:nth-child(4) {
-    background: url(../../images/h5-180211/page4-content4-new.png) no-repeat left top;
+.page4 .page4-content li:nth-child(3) {
+    background: url(../../images/h5-180211/page3-c3.png) no-repeat left top;
     width: 5.38rem;
     background-size: 100% 100%
 }
 
-.page4 .page4-content li:nth-child(5) {
-    background: url(../../images/h5-180211/page4-content5.png?__inline) no-repeat left top;
+.page4 .page4-content li:nth-child(4) {
+    background: url(../../images/h5-180211/page3-c4.png?__inline) no-repeat left top;
     width: 5.09rem;
     background-size: 100% 100%
 }

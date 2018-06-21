@@ -65,7 +65,7 @@ if ($isLuodiye) {
 </div>
 <div class="row description-box">
     <p class="description-header"><span>什么是楚天财富？</span></p>
-    <p class="description-content">楚天财富（武汉）金融服务有限公司简称“楚天财富”，隶属湖北日报新媒体集团下平台。甄选各类金融机构、优质企业产品。提供银行级服务，保障用户资金，安享稳健收益。</p>
+    <p class="description-content">楚天财富（武汉）金融服务有限公司简称“楚天财富”，隶属湖北日报新媒体集团下平台，是湖北省首家具有国资背景的从事互联网金融综合信息服务的企业，是国内传统“纸媒”行业响应国家“十二五”规划和新时代发展战略的创新举措。</p>
 </div>
 <!--<div class="row production-box">-->
 <!--    <p class="production-header">精品理财</p>-->
@@ -86,12 +86,12 @@ if ($isLuodiye) {
 <div class="row choose-box">
     <h3>为什么选择楚天财富？</h3>
     <div class="choose-content">
-        <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose_new.png" alt="">
-        <img src="<?= ASSETS_BASE_URI ?>images/luodiye/why-wdjf-new.png?v=20180307" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/luodiye/adv-1.png" alt="">
+        <img src="<?= ASSETS_BASE_URI ?>ctcf/images/luodiye/adv-2.png?v=20180307" alt="">
     </div>
 </div>
 <div class="back-fff">
-    <a class="link-last" href="/deal/deal/index/">立即认购</a>
+    <a class="link-last" href="/deal/deal/index/">立即出借</a>
 </div>
 <p class="danger-tip">产品有风险，出借须谨慎</p>
 <!--<div class="fixed-float">

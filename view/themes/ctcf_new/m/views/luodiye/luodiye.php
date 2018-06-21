@@ -86,7 +86,7 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
 
             <div class="row description-box">
                 <p class="description-header"><span>什么是楚天财富？</span></p>
-                <p class="description-content">楚天财富系湖北日报新媒体集团旗下控股公司，具国资背景。平台始终以合规运营为立业之本、以技术创新为展业之翼，以稳健风控为执业之基，致力于为用户打造合规、安全、丰富的金融产品，提供可靠、高效、便捷的互联网金融综合信息服务。</p>
+                <p class="description-content">楚天财富（武汉）金融服务有限公司简称“楚天财富”，隶属湖北日报新媒体集团下平台，是湖北省首家具有国资背景的从事互联网金融综合信息服务的企业，是国内传统“纸媒”行业响应国家“十二五”规划和新时代发展战略的创新举措。</p>
             </div>
 <!--            <div class="row production-box">-->
 <!--                <p class="production-header">精品理财</p>-->
@@ -107,11 +107,11 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
             <div class="row choose-box">
                 <h3>为什么选择楚天财富？</h3>
                 <div class="choose-content">
-                    <img src="<?= ASSETS_BASE_URI ?>images/luodiye/choose_new.png" alt="">
-                    <img src="<?= ASSETS_BASE_URI ?>images/luodiye/why-wdjf-new.png?v=20180307" alt="">
+                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/luodiye/adv-1.png" alt="">
+                    <img src="<?= ASSETS_BASE_URI ?>ctcf/images/luodiye/adv-2.png" alt="">
                 </div>
             </div>
-            <a class="link-last" href="/deal/deal/index/">立即认购</a>
+            <a class="link-last" href="/deal/deal/index/">立即出借</a>
             <p class="danger-tip">理财非存款，产品有风险，出借须谨慎</p>
             <div class="fixed-float">
                 <img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt="">

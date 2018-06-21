@@ -20,7 +20,7 @@ $this->title = '关于我们';
             <?= Html::csrfMetaTags() ?>
             <?php $this->head() ?>
             <link rel="stylesheet" href="<?= FE_BASE_URI ?>libs/animate/animate.min.css?v=20161124">
-            <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/h5-180211/index.css?v=2018032102">
+            <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/h5-180211/index.css?v=2018062101">
             <script src="<?= FE_BASE_URI ?>libs/lib.flexible2.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/fastclick.js?v=20161124"></script>
             <script src="<?= FE_BASE_URI ?>libs/pageslider/zepto_modify.js?v=20161124"></script>
@@ -145,8 +145,8 @@ $this->title = '关于我们';
                         <div class="top-empt4-2"></div>
                         <ul class="page4-content page-content">
                             <li class="page4-content1"></li>
-                            <li class="page4-content2"></li>
-                            <li class="page4-content3"></li>
+<!--                            <li class="page4-content2"></li>
+-->                            <li class="page4-content3"></li>
                             <li class="page4-content4"></li>
                             <li class="page4-content5" style="margin-bottom:0;"></li>
                         </ul>
