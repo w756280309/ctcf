@@ -3,7 +3,7 @@
 $this->title = '小微贷项目推荐';
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css">
-<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20180619/css/index.min.css">
+<link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/campaigns/active20180619/css/index.min.css?v=1.0">
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 
 <div class="flex-content">
@@ -15,11 +15,11 @@ $this->title = '小微贷项目推荐';
             <div class="detail">
                 <p class="title"><i class="red">* </i>计算公式举例<i class="red"> *</i></p>
                 <ul>
-                    <li><i class="red f30">原：</i>小明购买了10万元到期本息项目，期限36个月，约定利率9.2%，最终能拿到本金+利息共计12万7600元。</li>
+                    <li><i class="red f30">原：</i>小明购买了10万元到期本息项目，期限36个月，约定利率9.2%，最终能拿到本金+约定收益共计12万7600元。</li>
                     <li><img onclick="return false;" src="<?= FE_BASE_URI ?>wap/campaigns/active20180619/images/angle.png" alt=""></li>
-                    <li><i class="red f30">现：</i>小明购买了10万元等额本息项目，期限36个月，约定利率9.2%，每个月都能拿到本金+利息回款3189.29元，再拿这笔钱复投温盈金一年期项目，最终能拿到的本金+利息共计<i class="red">13万3184元</i>。</li>
+                    <li><i class="red f30">现：</i>小明购买了10万元等额本息项目，期限36个月，约定利率9.2%，每个月拿到的回款（部分本金+部分约定收益）去复投其他项目，继续产生收益，最终能拿到约定收益+复投收益！</li>
                     <li><img onclick="return false;" src="<?= FE_BASE_URI ?>wap/campaigns/active20180619/images/angle.png" alt=""></li>
-                    <li class="red">选择等额本息复投<br>最终收益将比到期本息高了5584元！</li>
+                    <li class="red">选择等额本息进行复投<br>最终的预期收益将高于到期本息！</li>
                 </ul>
             </div>
         </div>
