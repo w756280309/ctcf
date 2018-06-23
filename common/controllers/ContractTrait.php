@@ -197,6 +197,7 @@ trait ContractTrait
         $chapter = '<img style="width: 169px;margin-top:-100px;" src="data:image/jpeg;base64,'
             . base64_encode(@file_get_contents(Yii::getAlias('@backend') . '/web'
                 . Yii::$app->params['platform_info.company_seal_640'])).'">';
+        $fourTotalAsset = 4 * $loan->money; //todo 4期总资产
 
         $content = preg_replace("/{{投资人}}/is", $userName, $content);
         $content = preg_replace("/{{出借人}}/is", $userName, $content);
@@ -212,6 +213,8 @@ trait ContractTrait
         $content = preg_replace("/{{产品起息日}}/is", $jixiTime, $content);
         $content = preg_replace("/{{产品到期日}}/is", $finishDate, $content);
         $content = preg_replace("/{{平台章}}/is", $chapter, $content);
+        $content = preg_replace("/{{4期总资产}}/is", $fourTotalAsset, $content);
+
         $content = preg_replace("/｛｛投资人｝｝/is", $userName, $content);
         $content = preg_replace("/｛｛出借人｝｝/is", $userName, $content);
         $content = preg_replace("/｛｛身份证号｝｝/is", $idCard, $content);
@@ -226,6 +229,7 @@ trait ContractTrait
         $content = preg_replace("/｛｛产品起息日｝｝/is", $jixiTime, $content);
         $content = preg_replace("/｛｛产品到期日｝｝/is", $finishDate, $content);
         $content = preg_replace("/｛｛平台章｝｝/is", $chapter, $content);
+        $content = preg_replace("/｛｛4期总资产｝｝/is", $fourTotalAsset, $content);
 
         return $content;
     }

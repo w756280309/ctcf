@@ -184,6 +184,7 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
         $date = "年月日";
         $money = "";
         $mobile = null;
+        $fourTotalAsset = null; //todo 四期总资产
         if (null !== $onlineOrder) {
             $date = date("Y年m月d日", $onlineOrder->order_time);
             $money = $onlineOrder->order_money;
@@ -192,6 +193,10 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
                 $idCard = $user->getIdcard();
                 $userName = $user->getMobile();
                 $mobile = $userName;
+            }
+            $loan = $onlineOrder->loan;
+            if (null !== $loan) {
+                $fourTotalAsset = 4 * $loan->money;
             }
         }
         $res = preg_match_all('/(\｛|\{){2}(.+?)(\｝|\}){2}/is', $content, $array);
@@ -219,6 +224,9 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
                     case '认购金额':
                     case '出借金额':
                         $content = str_replace($array[0][$key], $money, $content);
+                        break;
+                    case '4期总资产':
+                        $content = str_replace($array[0][$key], $fourTotalAsset, $content);
                         break;
                     default:
                         break;

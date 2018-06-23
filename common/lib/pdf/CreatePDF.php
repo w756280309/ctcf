@@ -37,6 +37,7 @@ class CreatePDF
         $chapter = '<img style="width: 169px;margin-top:-100px;" src="data:image/jpeg;base64,'
             . base64_encode(@file_get_contents(Yii::getAlias('@backend') . '/web'
                 . Yii::$app->params['platform_info.company_seal_640'])).'">';
+        $fourTotalAsset = null;
         if (null !== $onlineOrder) {
             $date = date("Y年m月d日", $onlineOrder->order_time);
             $money = $onlineOrder->order_money;
@@ -45,6 +46,10 @@ class CreatePDF
                 $idCard = $user->getIdcard();
                 $userName = $user->getMobile();
                 $mobile = $userName;
+            }
+            $loan = $onlineOrder->loan;
+            if (null !== $loan) {
+                $fourTotalAsset = 4 * $loan->money;
             }
         }
         $res = preg_match_all('/(\｛|\{){2}(.+?)(\｝|\}){2}/is', $content, $array);
@@ -75,6 +80,9 @@ class CreatePDF
                         break;
                     case '平台章':
                         $content = str_replace($array[0][$key], $chapter, $content);
+                        break;
+                    case '4期总资产':
+                        $content = str_replace($array[0][$key], $fourTotalAsset, $content);
                         break;
                     default:
                         break;
