@@ -619,7 +619,7 @@ TPL;
         <div class="row-fluid">
             <div class="span6 gudinghk">
                 <div class="control-group">
-                    <label class="control-label">固定还款日</label>
+                    <label class="control-label">固定付息日</label>
                     <div class="controls">
                         <?php
                             $paymentDayInputOptions = [];
@@ -628,7 +628,7 @@ TPL;
                             }
                         ?>
                         <?=
-                            $form->field($model, 'paymentDay', ['template' => '<div class="input-append">{input}<span class="add-on">(日)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '固定还款日', 'class' => 'm-wrap span12 gdhk', 'value' => empty($model->paymentDay) ? 20 : $model->paymentDay]])->textInput($paymentDayInputOptions)
+                            $form->field($model, 'paymentDay', ['template' => '<div class="input-append">{input}<span class="add-on">(日)</span></div>{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '固定付息日', 'class' => 'm-wrap span12 gdhk', 'value' => empty($model->paymentDay) ? 20 : $model->paymentDay]])->textInput($paymentDayInputOptions)
                         ?>
                     </div>
                 </div>
