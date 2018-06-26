@@ -62,7 +62,12 @@ date(from_unixtime(p.finish_date)) as '标的截止日期',
  r.benxi AS '还款本息',
 DATE(r.`actualRefundTime`) AS '实际还款时间',
 p.finish_date AS '原计划还款时间',
-uc.available_balance AS '可用余额'
+uc.available_balance AS '可用余额',
+ui.lastInvestDate AS '未投资时长(天)',
+ui.lastInvestAmount AS '最后一次购买金额',
+ui.investTotal AS '投资成功金额(元)',
+cpc.callTime As '最近一次通话时间',
+cpc.content AS '通话内容'
 FROM `online_repayment_plan` AS r
 INNER JOIN user AS u ON r.uid = u.id
 INNER JOIN online_product AS p ON p.id = r.online_pid
@@ -70,6 +75,9 @@ INNER JOIN online_order AS o ON o.id = r.order_id
 left join user_affiliation as ua on ua.user_id = u.id
 left join affiliator as a on a.id = ua.affiliator_id
 left join user_account as uc on u.id = uc.uid
+left join user_info as ui on u.id = ui.user_id
+left join crm_phone_call as cpc on u.crmAccount_id = cpc.account_id AND cpc.id 
+IN (select max(id) from crm_phone_call group by account_id)
 WHERE u.type =1
 AND p.isTest = false
 AND p.status
@@ -88,8 +96,11 @@ ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用,
                         'isRequired' => true,//是否必要参数, 默认都是必要参数
                     ],
                 ],
-                'itemLabels' => ['姓名', '手机号', '年龄', '分销商', '投资金额', '利率', '标的名称', '还款方式', '标的状态', '标的截止日期', '还款本金', '还款利息', '还款本息', '实际还款时间', '原计划还款时间', '可用余额'],//统计的数据项，不可为空
-                'itemType' => ['string', 'int', 'int', 'string', 'float', 'float', 'string', 'string', 'string', 'string','float', 'float', 'float', 'date', 'date', 'float'],
+                'itemLabels' => ['姓名', '手机号', '年龄', '分销商', '投资金额', '利率', '标的名称', '还款方式', '标的状态',
+                    '标的截止日期', '还款本金', '还款利息', '还款本息', '实际还款时间', '原计划还款时间', '可用余额', '未投资时长(天)',
+                    '最后一次购买金额', '投资成功金额(元)', '最近一次通话时间', '通话内容'],//统计的数据项，不可为空
+                'itemType' => ['string', 'int', 'int', 'string', 'float', 'float', 'string', 'string', 'string', 'string',
+                    'float', 'float', 'float', 'date', 'date', 'float', 'int', 'float', 'float', 'date', 'string'],
                 'beforeExport' => function($row) {
                     $row['手机号'] = SecurityUtils::decrypt($row['手机号']);
                     $row['年龄'] = date('Y') - substr(SecurityUtils::decrypt($row['年龄']), 6, 4);
@@ -98,23 +109,54 @@ ORDER BY p.id asc ,r.uid asc",//导出的sql模板, 使用预处理方式调用,
             ],
             'last_ten_day_draw' => [
                 'key' => 'last_ten_day_draw',
-                'title' => '最近10天成功提现数据',
-                'content' => '统计最近10天每天每个用户的累计成功提现金额, 时间以发起提现时间为准',
-                'sql' => "SELECT u.safeMobile AS  '手机号', u.real_name AS  '姓名', SUM( d.money ) AS  '累计成功提现金额', DATE( FROM_UNIXTIME( d.created_at ) ) AS  '提现发起日期', 
+                'title' => '指定日期成功提现数据',
+                'content' => '统计指定日期每个用户的累计成功提现金额, 时间以发起提现时间为准',
+                'sql' => "SELECT 
+u.safeMobile AS  '手机号', 
+u.real_name AS  '姓名', 
+u.safeIdCard AS 性别,
+u.safeIdCard as '年龄',
+ua.investment_balance AS '理财资产',
+ui.lastInvestAmount AS '最后一次购买金额',
+ui.investTotal AS '投资成功金额(元)',
+SUM( d.money ) AS  '累计成功提现金额', 
+DATE( FROM_UNIXTIME( d.created_at ) ) AS  '提现发起日期', 
 ui.lastInvestDate AS '未投资时长',
-ua.available_balance AS '可用余额'
+ua.available_balance AS '可用余额',
+cpc.callTime As '最近一次通话时间',
+cpc.content AS '通话内容'
 FROM draw_record AS d
 INNER JOIN user AS u ON u.id = d.uid
 INNER JOIN user_info AS ui ON ui.user_id = d.uid
 INNER JOIN user_account AS ua ON ua.uid = d.uid
+left join crm_phone_call as cpc on u.crmAccount_id = cpc.account_id AND cpc.id 
+IN (select max(id) from crm_phone_call group by account_id)
 WHERE d.status =2
 AND u.type =1
-AND FROM_UNIXTIME( d.created_at ) >= date_sub(curdate(), INTERVAL 10 DAY)
+AND FROM_UNIXTIME( d.created_at ) >= :startDate
+AND FROM_UNIXTIME( d.created_at ) <= :endDate
 GROUP BY d.uid, DATE( FROM_UNIXTIME( d.created_at ) ) 
 ORDER BY DATE( FROM_UNIXTIME( d.created_at ) ) DESC , d.uid ASC ",
-                'params' => null,
-                'itemLabels' => ['手机号', '姓名', '累计成功提现金额', '提现发起日期', '未投资时长', '可用余额'],
-                'itemType' => ['int', 'string', 'float', 'date', 'int', 'float'],
+                'params' => [//如果没有必要参数, 可以为null, 但是必须是isset
+                    'startDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'startDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-1 month')),//参数的默认值
+                        'title' => '开始日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'endDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'endDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-1 day')),//参数的默认值
+                        'title' => '结束日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['手机号', '姓名', '性别', '年龄', '理财资产', '最后一次购买金额', '投资成功金额(元)', '累计成功提现金额',
+                    '提现发起日期', '未投资时长', '可用余额', '最近一次通话时间', '通话内容'],
+                'itemType' => ['int', 'string', 'string', 'string', 'float', 'float', 'float', 'string', 'string', 'float',
+                    'float', 'date', 'string'],
                 'beforeExport' => function($row) {
                     $row['手机号'] = SecurityUtils::decrypt($row['手机号']);
                     return $row;
@@ -316,22 +358,38 @@ and p.isTest = 0)',
                 'key' => 'xs_due_list_export',
                 'title' => '新手标数据导出',
                 'content' => '导出新手标数据信息',
-                'sql' => 'select 
-u.real_name 姓名,
-u.safeMobile 手机号,
-from_unixtime(p.finish_date) 到期时间,
-o.benxi 到期金额,a.name 分销商
+                'sql' => "select 
+u.real_name '姓名',
+u.safeMobile '手机号',
+u.safeIdCard as '性别',
+u.safeIdCard as '年龄',
+from_unixtime(p.finish_date) '到期时间',
+o.benxi '到期金额',
+a.name '分销商',
+u.points AS '积分',
+uc.available_balance AS '可用余额',
+uc.investment_balance AS '理财资产',
+ui.investCount AS '成功投资次数',
+ui.lastInvestDate AS '未投资时长(天)',
+ui.lastInvestAmount AS '最后一次购买金额',
+ui.investTotal AS '投资成功金额(元)',
+cpc.callTime As '最近一次通话时间',
+cpc.content AS '通话内容'
 from online_repayment_record o 
 inner join online_product p on o.online_pid = p.id 
 inner join user u on u.id = o.uid 
 left join user_affiliation ua on ua.user_id = o.uid 
 left join affiliator a on a.id = ua.affiliator_id 
+left join user_account as uc on u.id = uc.uid
+left join user_info as ui on u.id = ui.user_id
+left join crm_phone_call as cpc on u.crmAccount_id = cpc.account_id AND cpc.id 
+IN (select max(id) from crm_phone_call group by account_id)
 where date(from_unixtime(p.finish_date)) >= :startDate 
 and date(from_unixtime(p.finish_date)) <= :endDate 
 and o.status in (1,2) 
 and p.is_xs = 1 
 and p.isTest = 0 
-order by p.finish_date asc',
+order by p.finish_date asc",
                 'params' => [
                     'startDate' => [//参数列表， key 是参数名， 不可为空
                         'name' => 'startDate',//参数名
@@ -348,8 +406,10 @@ order by p.finish_date asc',
                         'isRequired' => true,//是否必要参数, 默认都是必要参数
                     ],
                 ],
-                'itemLabels' => ['姓名', '手机号', '到期时间', '到期金额', '分销商'],
-                'itemType' => ['string', 'string', 'date', 'string', 'string'],
+                'itemLabels' => ['姓名', '手机号', '性别', '年龄', '到期时间', '到期金额', '分销商', '积分', '可用余额', '理财资产',
+                    '成功投资次数', '未投资时长(天)', '最后一次购买金额', '投资成功金额(元)', '最近一次通话时间', '通话内容'],
+                'itemType' => ['string', 'string', 'string', 'string', 'date', 'string', 'string', 'int', 'float', 'float',
+                    'int', 'string', 'float', 'float', 'date', 'string'],
             ],
             'export_referral_user_count' => [
                 'key' => 'export_referral_user_count',
@@ -472,6 +532,111 @@ AND  date(cbv.createTime) <= :endDate",
                 ],
                 'itemLabels' => ['接待者', '拜访时间', '用户姓名', '联系方式', '内容', '备注'],
                 'itemType' => ['string', 'date', 'string', 'string', 'string', 'string'],
+            ],
+            'register_return_visit' => [
+                'key' => 'register_return_visit',
+                'title' => '指定日期注册回访',
+                'content' => '导出一段时间内注册回访数据',
+                'sql' => "SELECT 
+date(from_unixtime(u.created_at)) '注册时间',
+u.real_name '姓名',
+u.safeMobile '手机号',
+u.idcard_status '是否开户(1-开户 0-未开户)',
+if(ub.id > 0, 1, 0) 是否绑卡,
+ua.available_balance '可用余额(元)',
+ui.investTotal '投资成功金额(元)',
+ui.firstInvestAmount '首投金额',
+ua.investment_balance '理财资产',
+u.safeIdCard '性别',
+u.birthdate '生日',
+u.safeIdCard '年龄',
+af.name '渠道名称',
+cpc.callTime '最近一次通话时间',
+cpc.callTime '最近一次通话时间',
+cpc.content '通话内容'
+FROM user u
+LEFT JOIN user_account ua ON u.id = ua.uid
+LEFT JOIN user_info ui ON u.id = ui.user_id
+left join user_affiliation uf on uf.user_id = u.id
+left join affiliator af on af.id = uf.affiliator_id
+left join user_bank ub on ub.uid = u.id
+left join crm_phone_call cpc on u.crmAccount_id = cpc.account_id AND cpc.id 
+IN (select max(id) from crm_phone_call group by account_id)
+WHERE 
+u.type = 1
+AND date(from_unixtime(u.created_at)) >= :startDate 
+AND date(from_unixtime(u.created_at)) <= :endDate",
+                'params' => [
+                    'startDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'startDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-30 day')),//参数的默认值
+                        'title' => '开始日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'endDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'endDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d'),//参数的默认值
+                        'title' => '结束日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['注册时间', '姓名', '手机号', '是否开户(1-开户 0-未开户)', '是否绑卡(1-绑卡 0-未绑卡)', '可用余额(元)',
+                    '投资成功金额(元)', '首投金额', '理财资产', '性别', '生日', '年龄', '渠道名称', '最近一次通话时间', '通话内容'],
+                'itemType' => ['date', 'string', 'string', 'int', 'int', 'float', 'float', 'float', 'float', 'string',
+                    'string', 'string', 'string', 'date', 'string'],
+            ],
+            'available_balance_lie' => [
+                'key' => 'available_balance_lie',
+                'title' => '导出可用余额闲置表',
+                'content' => '导出一段时间内可用余额闲置表',
+                'sql' => "SELECT
+date(from_unixtime(u.created_at)) '注册时间',
+af.name '渠道名称',
+u.real_name '姓名',
+u.safeMobile '手机号',
+u.safeIdCard '性别',
+u.safeIdCard '年龄',
+ua.investment_balance '理财资产',
+ua.available_balance '可用余额',
+ui.lastInvestDate '未投资时长(天)',
+ui.lastInvestAmount '最后一次购买金额',
+cpc.callTime '最近一次通话时间',
+cpc.content '通话内容'
+FROM user u
+LEFT JOIN user_account ua ON u.id = ua.uid
+LEFT JOIN user_info ui ON u.id = ui.user_id
+left join user_affiliation uf on uf.user_id = u.id
+left join affiliator af on af.id = uf.affiliator_id
+left join crm_phone_call cpc on u.crmAccount_id = cpc.account_id AND cpc.id 
+IN (select max(id) from crm_phone_call group by account_id)
+WHERE 
+u.type = 1
+AND ua.available_balance >= :moneyMin
+AND ua.available_balance <= :moneyMax  
+AND u.id not in
+(SELECT `uid` FROM `money_record` WHERE date(from_unixtime(created_at)) > date_sub(curdate(),interval 10 day) AND `type` <> 4 GROUP BY `uid` HAVING count(*) > 0)",
+                'params' => [
+                    'moneyMin' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'moneyMin',//参数名
+                        'type' => 'number',//参数的数据类型
+                        'value' => null,//参数的默认值
+                        'title' => '可用余额范围',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'moneyMax' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'moneyMax',//参数名
+                        'type' => 'number',//参数的数据类型
+                        'value' => null,//参数的默认值
+                        'title' => '',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['注册时间', '渠道名称', '姓名', '手机号', '性别', '年龄', '理财资产', '可用余额', '未投资时长(天)',
+                    '最后一次购买金额', '最近一次通话时间', '通话内容'],
+                'itemType' => ['date', 'string', 'string', 'string', 'string', 'string', 'float', 'float', 'string',
+                    'float', 'date', 'string'],
             ],
         ];
         parent::init();

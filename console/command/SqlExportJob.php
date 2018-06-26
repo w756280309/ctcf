@@ -50,8 +50,14 @@ class SqlExportJob extends Job
         $data = $command->queryAll();
         $exportData[] = $itemLabels;
         foreach ($data as $num => $item) {
-            if (isset($item['手机号'])) {
+            if (array_key_exists('手机号', $item)) {
                 $item['手机号'] = SecurityUtils::decrypt($item['手机号']);
+            }
+            if (array_key_exists('未投资时长(天)', $item)) {
+                $item['未投资时长(天)'] = (new \DateTime)->diff(new \DateTime($item['未投资时长(天)']))->days;
+            }
+            if (array_key_exists('渠道名称', $item)) {
+                $item['渠道名称'] = !empty($item['渠道名称']) ? $item['渠道名称'] : '官方';
             }
             if ('repayment_expire_interest' === $paramKey) {
                 $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
@@ -72,18 +78,29 @@ class SqlExportJob extends Job
                 unset($item['OID']);
             } else if ('last_ten_day_draw' === $paramKey) {
                 $item['未投资时长'] = (new \DateTime)->diff(new \DateTime($item['未投资时长']))->days;
+                $item['性别'] = substr(SecurityUtils::decrypt($item['性别']), -2, 1) % 2 ? '男' : '女';
+                $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
             } else if ('order_no_licai_plan' === $paramKey) {
                 $item['身份证号'] = SecurityUtils::decrypt($item['身份证号']);
             }  else if ('xs_due_list_export' === $paramKey) {
                 $item['分销商'] = is_null($item['分销商']) ? '官方' : $item['分销商'];
+                $item['性别'] = substr(SecurityUtils::decrypt($item['性别']), -2, 1) % 2 ? '男' : '女';
+                $item['年龄'] = date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4);
             } else if ('export_nbxdjb_finish' === $paramKey) {
                 $item['联系方式'] = SecurityUtils::decrypt($item['联系方式']);
                 $item['单位'] = $item['单位'] > 1 ? '月' : '天';
                 $item['到期日'] = date('Y-m-d', $item['到期日']);
             } else if ('export_crm_reception' === $paramKey) {  //门店接待记录
                 $item['用户姓名'] = SecurityUtils::decrypt($item['用户姓名']);
+            } else if ('register_return_visit' === $paramKey
+                || 'available_balance_lie' === $paramKey) {
+                $item['性别'] = !empty($item['性别']) ?
+                    (substr(SecurityUtils::decrypt($item['性别']), -2, 1) % 2 ? '男' : '女')
+                    : null;
+                $item['年龄'] = !empty($item['年龄']) ?
+                    (date('Y') - substr(SecurityUtils::decrypt($item['年龄']), 6, 4))
+                    : null;
             }
-
             $item = array_values($item);
             if (count($item) !== $labelLength) {
                 throw new \Exception('sql查询数据项和标题项个数不同');
