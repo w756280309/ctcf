@@ -22,10 +22,12 @@ use common\models\user\RechargeRecord as Recharge;
 use common\models\user\DrawRecord as Draw;
 use common\utils\SecurityUtils;
 use common\utils\StringUtils;
+use common\utils\TxUtils;
 use P2pl\Borrower;
 use P2pl\UserInterface;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
+use Exception;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
@@ -1220,5 +1222,86 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public function getChannel()
     {
         return Channel::findOne(['userId' => $this->id]);
+    }
+
+    /**
+     * 个人融资用户开户
+     * @param $mobile  手机号
+     * @param $idCard  身份证号
+     * @param $name   姓名
+     * @return User
+     * @throws Exception
+     */
+    public static function createOrgUser($mobile, $idCard, $name)
+    {
+        //去空
+        $mobile = trim($mobile);
+        $idCard = trim($idCard);
+        $name = trim($name);
+        //判断个人融资用户是否已经开户
+        $user = self::findOne([
+            'safeIdCard' => SecurityUtils::encrypt(trim($idCard)),
+            'type' => self::USER_TYPE_ORG,
+            'status' => self::STATUS_ACTIVE,
+            'is_soft_deleted' => 0,
+        ]);
+        if (!is_null($user)) {
+            throw new Exception('个人融资用户【' . $mobile . '】已经开户，无需重复开户');
+        }
+
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        try {
+            //添加user表
+            $usercode = User::create_code('usercode', Yii::$app->params['plat_code'] . 'PR', 8, 6);
+            $user = new User([
+                'type' => self::USER_TYPE_ORG,
+                'real_name' => trim($name),
+                'org_name' => trim($name) . '-' . $usercode,
+                'usercode' => $usercode,
+                'safeIdCard' => SecurityUtils::encrypt(trim($idCard)),
+                'safeMobile' => SecurityUtils::encrypt(trim($mobile)),
+                'password_hash' => Yii::$app->security->generatePasswordHash(strtoupper(substr(trim($idCard), -6))),
+                'username' => $usercode,
+            ]);
+            $user->scenario = 'add';
+            if (!$user->save()) {
+                throw new Exception(json_encode($user->getFirstErrors()));
+            }
+
+            //添加user_account
+            $userAccount = new UserAccount([
+                'uid' => $user->id,
+                'type' => UserAccount::TYPE_BORROW,
+            ]);
+            $userAccount->save(false);
+
+            //联动开户
+            $ump = Yii::$container->get('ump');
+            $sn = TxUtils::generateSn('REG');
+            $resp = $ump->register($user, $sn);
+            if (!$resp->isSuccessful()) {
+                throw new \Exception('联动开户失败');
+            }
+
+            //添加epay_user表
+            $epayUser = new EpayUser([
+                'appUserId' => $user->id,
+                'epayId' => 1,
+                'clientIp' => ip2long(\Yii::$app->functions->getIp()),
+                'regDate' => $resp->get('reg_date'),
+                'createTime' => date('Y-m-d H:i:s'),
+                'epayUserId' => $resp->get('user_id'),
+                'accountNo' => $resp->get('account_id'),
+            ]);
+            $epayUser->save(false);
+
+            $transaction->commit();
+
+            return $user;
+        } catch (\Exception $ex) {
+            $transaction->rollBack();
+            throw $ex;
+        }
     }
 }

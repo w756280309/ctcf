@@ -303,6 +303,10 @@ return [
     'alternativeRepayer' => [],
     //用款方
     'fundReceiver' => [],
+    //中融信资产配置
+    'zrx' => [
+        'signKey' => env('ZRX_SIGN_KEY') ?: null  //秘钥
+    ],
     //需要排除权限限制的path
     'backend_allow_paths' => [
         'site/index',

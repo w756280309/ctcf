@@ -136,6 +136,9 @@ return [
         ],
         'njq' => [
             'class' => 'api\\modules\\njq\\Module',
+        ],
+        'asset' => [
+            'class' => 'api\\modules\\asset\\Module',
         ]
     ],
     'params' => $params,
