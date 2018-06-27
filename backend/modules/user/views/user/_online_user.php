@@ -2,6 +2,7 @@
 use common\models\user\User;
 use common\utils\StringUtils;
 $isPersonal = $category === User::USER_TYPE_PERSONAL;
+$accounts = Yii::$app->params['borrowerSubtype'];
 ?>
 <div class="portlet-body">
     <table class="table table-striped table-bordered table-advance table-hover">
@@ -13,6 +14,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
         <?php } else { ?>
                 <th><input class="chooseall" type='checkbox'></th>
                 <th>企业名称</th>
+                <th>账户类型</th>
         <?php } ?>
                 <th>注册时间</th>
                 <th class="money">可用余额（元）</th>
@@ -24,6 +26,8 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                 <th>所属分销商</th>
                 <th>注册位置</th>
                 <th>联动状态</th>
+        <?php } else {?>
+                <th>联动商户号</th>
         <?php }?>
                 <th><center>操作</center></th>
             </tr>
@@ -39,6 +43,7 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                     <input class="choice" type='checkbox' name='choose[]' value='<?= $val['id'] ?>'>
                 </td>
                 <td><?= $val['org_name'] ?></td>
+                <td><?php echo $accounts[$val->borrowerInfo['type']]?></td>
         <?php }?>
                 <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>
                 <td class="money"><?= StringUtils::amountFormat3($isPersonal ? $val->lendAccount['available_balance'] : $val->borrowAccount['available_balance']) ?></td>
@@ -64,7 +69,9 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                     <td>
                         <button class="btn btn-primary get_order_status" uid="<?= $val['id'] ?>">查询联动状态</button>
                     </td>
-                <?php } ?>
+                <?php } else {?>
+                    <td><?php echo $val->epayUser->epayUserId;?></td>
+                <?php }?>
                 <td>
                 <center>
                      <?php if($isPersonal) { ?>

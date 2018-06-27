@@ -950,6 +950,14 @@ class RepaymentController extends BaseController
             return ['res' => 0, 'msg' => $this->code('000005').$fkError];
         }
 
+        //如果是网贷则判断是否有有效的放款方
+        if ($product->cid == 3) {
+            $to = $product->getFangKuanFang();
+            if (!$to) {
+                return ['res' => 0, 'msg' => '无有效放款方，请重新设置'];
+            }
+        }
+
         try {
             $this->loanToMer($fk, $product);  //标的放款
         } catch (\Exception $e) {

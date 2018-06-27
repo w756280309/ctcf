@@ -17,6 +17,7 @@ use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\promo\InviteRecord;
+use common\models\user\Borrower;
 use common\models\user\CoinsRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
@@ -195,7 +196,8 @@ class UserController extends BaseController
         $request = $this->validateRequest(Yii::$app->request->get());
 
         $query = User::find()
-            ->with('borrowAccount')
+            ->innerJoinWith('borrowAccount')
+            ->innerJoinWith('borrowerInfo')
             ->where([
                 'user.type' => User::USER_TYPE_ORG,
                 'is_soft_deleted' => 0,
@@ -203,6 +205,9 @@ class UserController extends BaseController
 
         if (isset($request['name']) && !empty($request['name'])) {
             $query->andFilterWhere(['like', 'org_name', $request['name']]);
+        }
+        if (!empty($request['accountType'])) {
+            $query->andFilterWhere(['borrower.type' => $request['accountType']]);
         }
 
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
@@ -777,6 +782,11 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
 
             $epayuser = EpayUser::findOne(['appUserId' => $id]);
             $userBank = UserBanks::findOne(['uid' => $id]);
+            $borrower = Borrower::findOne(['userId' => $id]);
+            if (null === $borrower) {
+                $borrower = new Borrower();
+                $borrower->userId = $id;
+            }
 
             if (!$epayuser) {
                 throw new \Exception('Epayuser info is null.');
@@ -802,8 +812,10 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
 
             if ($model->load(Yii::$app->request->post())
                 && $userBank->load(Yii::$app->request->post())
+                && $borrower->load(Yii::$app->request->post())
                 && $model->validate()
                 && $userBank->validate()
+                && $borrower->validate()
             ) {
                 $data = Yii::$app->request->post();
 
@@ -820,7 +832,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
                     $userBank->bank_name = $bank[$userBank->bank_id];
                 }
 
-                if ($model->save(false) && $userBank->save(false)) {
+                if ($model->save(false) && $userBank->save(false) && $borrower->save(false)) {
                     $this->redirect(['/user/user/listr', 'type' => 2]);
                 }
             }
@@ -842,6 +854,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'epayuser' => $epayuser,
             'userBank' => $userBank,
             'bank' => $bank,
+            'borrower' => $borrower,
         ]);
     }
 
@@ -864,6 +877,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'regDate' => date('Y-m-d'),
             'createTime' => date('Y-m-d H:i:s'),
         ]);
+        $borrower = new Borrower();
 
         $model = new User();
         $model->scenario = 'add';
@@ -872,9 +886,11 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
         if ($model->load(Yii::$app->request->post())
             && $epayuser->load(Yii::$app->request->post())
             && $userBank->load(Yii::$app->request->post())
+            && $borrower->load(Yii::$app->request->post())
             && $model->validate()
             && $epayuser->validate()
             && $userBank->validate()
+            && $borrower->validate()
         ) {
             $model->safeMobile = SecurityUtils::encrypt($model->mobile);
             if ($model->validate()) {
@@ -929,6 +945,15 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
                         throw new \Exception($err['attribute'] . ': ' . $err['message']);
                     }
 
+                    //添加融资会员附加信息
+                    $borrower->userId = $model->id;
+                    if (!$borrower->save(false)) {
+                        $transaction->rollBack();
+                        $err = $borrower->getSingleError();
+                        throw new \Exception($err['attribute'] . ': ' . $err['message']);
+                    }
+
+
                     $transaction->commit();
                     $this->redirect(['/user/user/listr', 'type' => 2]);
                 } else {
@@ -948,6 +973,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'epayuser' => $epayuser,
             'userBank' => $userBank,
             'bank' => $bank,
+            'borrower' => $borrower,
         ]);
     }
 
@@ -1141,6 +1167,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             [
                 '企业名称',
                 '企业用户名',
+                '账户类型',
                 '企业密码',
                 '联动用户ID号',
                 '企业联系人',
@@ -1148,22 +1175,25 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
                 '银行卡号',
             ],
         ];
-
+        $u = User::tableName();
+        $b = Borrower::tableName();
         $query = User::find()
-            ->select('id,org_name,username,real_name')
+            ->select("$u.id,$u.org_name,$u.username,$b.type,$u.real_name")
+            ->innerJoinWith('borrowerInfo')
             ->where([
-                'type' => User::USER_TYPE_ORG,
+                "$u.type" => User::USER_TYPE_ORG,
                 'is_soft_deleted' => 0,
             ]);
 
         if (!empty($ids)) {
-            $query = $query->andWhere(['in', 'id', explode(',', $ids)]);
+            $query = $query->andWhere(['in', "$u.id", explode(',', $ids)]);
         }
 
-        $users = $query->orderBy(['id' => SORT_ASC])->all();
+        $users = $query->orderBy(["$u.id" => SORT_ASC])->all();
 
         if (0 !== count($users)) {
             $banks = Yii::$app->params['bank'];
+            $account = Yii::$app->params['borrowerSubtype'];
             foreach ($banks as $key => $val) {
                 $bank[$key] = $val['bankname'];
             }
@@ -1174,6 +1204,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
 
                 $data[$key]['org_name'] = $user->org_name;
                 $data[$key]['username'] = $user->username;
+                $data[$key]['type'] = $account[$user->type];
                 $data[$key]['password'] = '';
                 $data[$key]['epayUserId'] = $epayuser->epayUserId;
                 $data[$key]['real_name'] = $user->real_name;

@@ -88,6 +88,11 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         <?= $form->field($model, 'username', ['template' => '{error}']); ?>
                     </div>
 
+                    <div class="controls"><label >账户类型：</label>
+                        <?= $form->field($borrower, 'type', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12']])->dropDownList(['' => '--选择--'] + Yii::$app->params['borrowerSubtype']) ?>
+                        <?= $form->field($borrower, 'type', ['template' => '{error}']); ?>
+                    </div>
+
                     <div class="controls"><label >企业初始密码：</label>
                         <?= $form->field($model, 'password_hash', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12']])->textInput($is_add ? ['readonly' => false] : []) ?>
                         <?= $form->field($model, 'password_hash', ['template' => '{error}']); ?>
@@ -171,6 +176,20 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <div class="controls">
                         <?= $form->field($model, 'tel', ['template' => '{input}', 'inputOptions' => ['autocomplete' => "off", 'class' => 'm-wrap span12', 'placeholder' => '办公电话']])->textInput() ?>
                         <?= $form->field($model, 'tel', ['template' => '{error}']); ?>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">作为收款方</label>
+                    <div class="controls">
+                        <?=
+                        $form->field($borrower, 'allowDisbursement', [
+                            'template' => '{input}',
+                            'inputOptions' => [
+                                'class' => 'm-wrap span12',
+                            ]])->checkbox()
+                        ?>
+                        <?= $form->field($borrower, 'allowDisbursement', ['template' => '{error}']) ?>
                     </div>
                 </div>
             <?php } ?>

@@ -1527,4 +1527,41 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ->andWhere(['type' => User::USER_TYPE_ORG])
             ->one();
     }
+
+    /**
+     * 标的对应的放款方编号
+     * @return null|object
+     */
+    public function getFangKuanFang()
+    {
+        if ($this->cid !== 3) {
+            return EpayUser::findOne(['appUserId' => $this->borrow_uid]);
+        }
+        if (null !== $this->fundReceiver) {
+            return EpayUser::find()
+                ->where(['appUserId' => $this->fundReceiver])
+                ->one();
+        }
+        $borrower = User::findOne($this->borrow_uid);
+        if (null !== $borrower && $borrower->borrowerInfo->allowDisbursement) {   //存在融资方，并且融资方允许放款
+            return $borrower->epayUser;
+        }
+
+        return null;
+    }
+
+    /**
+     * 标的对应的放款方名称
+     * @return string
+     */
+    public function getFangKuanFangName()
+    {
+        $epayUser = $this->getFangKuanFang();
+        if (null === $epayUser) {
+            return '无有效放款方';
+        }
+
+        return User::find()->select('org_name')->where(['id' => $epayUser->appUserId])->scalar();
+    }
+
 }

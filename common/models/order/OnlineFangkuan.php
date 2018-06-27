@@ -2,11 +2,16 @@
 
 namespace common\models\order;
 
+use common\models\draw\DrawManager;
+use common\models\epay\EpayUser;
 use common\models\product\OnlineProduct;
+use common\models\tx\DrawRecord;
 use common\models\user\User;
+use common\models\user\UserAccount;
 use P2pl\LoanFkInterface;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii;
 
 /**
  * This is the model class for table "online_fangkuan".

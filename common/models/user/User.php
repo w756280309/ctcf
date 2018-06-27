@@ -1304,4 +1304,10 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             throw $ex;
         }
     }
+
+    //关联融资用户附属信息
+    public function getBorrowerInfo()
+    {
+        return $this->hasOne(\common\models\user\Borrower::className(), ['userId' => 'id']);
+    }
 }

@@ -8,7 +8,7 @@ use yii\widgets\LinkPager;
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\web\YiiAsset']);
 
 $isPersonal = $category === User::USER_TYPE_PERSONAL;
-
+$accounts = Yii::$app->params['borrowerSubtype'];
 ?>
 
 <?php $this->beginBlock('blockmain'); ?>
@@ -171,6 +171,15 @@ $isPersonal = $category === User::USER_TYPE_PERSONAL;
                                 <td>
                                     <span class="title">企业名称</span>
                                     <input type="text" class="m-wrap span6" name='name' value="<?= Html::encode($request['name']) ?>" placeholder="企业名称">
+                                </td>
+                                <td>
+                                    <span class="title">账户类型</span>
+                                    <select name="accountType" class="m-wrap span6">
+                                        <option value="">全部</option>
+                                        <?php foreach ($accounts as $key => $account) :?>
+                                            <option <?php echo  Html::encode($request['accountType']) == $key ? 'selected' : ''; ?> value="<?php echo $key;?>"><?php echo $account;?></option>
+                                        <?php endforeach;?>
+                                    </select>
                                 </td>
                                 <td>
                                     <div align="right" class="search-btn">

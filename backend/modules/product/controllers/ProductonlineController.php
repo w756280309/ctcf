@@ -38,20 +38,18 @@ class ProductonlineController extends BaseController
     /**
      * 获取未被软删除的全部融资方信息.
      */
-    private function orgUserInfo()
+    private function orgUserInfo(array $type)
     {
-
-        //要排除的用款方、担保方、代偿方的用户ID集合
-        $arr = Yii::$app->params['alternativeRepayer'] + Yii::$app->params['fundReceiver'] + Yii::$app->params['guarantee'];
-        $extraIds = array_keys($arr);
-
-        return User::find()
-            ->where(['type' => User::USER_TYPE_ORG])
+        $u = User::tableName();
+        $b = \common\models\user\Borrower::tableName();
+        return  User::find()
+            ->innerJoinWith('borrowerInfo')
+            ->where(["$u.type" => User::USER_TYPE_ORG])
             ->andWhere(['is_soft_deleted' => 0])
-            ->andWhere(['not in', 'id', $extraIds])
+            ->andWhere(['in', "$b.type", $type])
             ->orderBy(['sort' => SORT_DESC])
-            ->select('org_name')
-            ->indexBy('id')
+            ->select("org_name")
+            ->indexBy("userId")
             ->column();
     }
 
@@ -268,7 +266,10 @@ class ProductonlineController extends BaseController
         return $this->render('edit', [
             'model' => $model,
             'ctmodel' => null,
-            'rongziInfo' => $this->orgUserInfo(),
+            'rongziInfo' => $this->orgUserInfo([1,2]),
+            'fundReceiver' => $this->orgUserInfo([3]),
+            'alternativeRepayer' => $this->orgUserInfo([4]),
+            'guarantee' => $this->orgUserInfo([5]),
             'con_name_arr' => $con_name_arr,
             'con_content_arr' => $con_content_arr,
             'issuer' => $this->issuerInfo(),
@@ -341,7 +342,10 @@ class ProductonlineController extends BaseController
         return $this->render('edit', [
             'model' => $model,
             'ctmodel' => $ctmodel,
-            'rongziInfo' => $this->orgUserInfo(),
+            'rongziInfo' => $this->orgUserInfo([1,2]),
+            'fundReceiver' => $this->orgUserInfo([3]),
+            'alternativeRepayer' => $this->orgUserInfo([4]),
+            'guarantee' => $this->orgUserInfo([5]),
             'con_name_arr' => $con_name_arr,
             'con_content_arr' => $con_content_arr,
             'issuer' => $this->issuerInfo(),
@@ -416,7 +420,10 @@ class ProductonlineController extends BaseController
         return $this->render('edit', [
             'model' => $model,
             'ctmodel' => $ctmodel,
-            'rongziInfo' => $this->orgUserInfo(),
+            'rongziInfo' => $this->orgUserInfo([1,2]),
+            'fundReceiver' => $this->orgUserInfo([3]),
+            'alternativeRepayer' => $this->orgUserInfo([4]),
+            'guarantee' => $this->orgUserInfo([5]),
             'con_name_arr' => $con_name_arr,
             'con_content_arr' => $con_content_arr,
             'issuer' => $this->issuerInfo(),

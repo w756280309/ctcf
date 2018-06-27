@@ -79,10 +79,22 @@ use yii\helpers\Html;
         <div class="page-container row-fluid" style="margin-top:0px">
             <div class="page-content">
                 <div class="form-horizontal form-view">
-                    <div class="control-group">
-                        <label class="control-label">项目名称:</label>
-                        <div class="controls">
-                            <span class="text"><?=$deal->title ?></span>
+                    <div class="row-fluid">
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label">项目名称:</label>
+                                <div class="controls">
+                                    <span class="text"><?=$deal->title ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label">放款方:</label>
+                                <div class="controls">
+                                    <span class="text" style="color: red"><?=$deal->getFangKuanFangName() ?></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row-fluid">
