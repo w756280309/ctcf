@@ -17,14 +17,15 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'enableRotation' => false,
                 ],
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['info'],
                     'categories' => ['recharge_log'],
                     'logFile' => '@app/runtime/logs/borrower/recharge'. date('Ymd').'.log',
-                    'maxFileSize' => 1024*2,
-                    'logVars' => ['trace'],
+                    'enableRotation' => false,
+                    'logVars' => [],
                     'prefix' => function ($message) {
                         return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     }
@@ -34,8 +35,8 @@ return [
                     'levels' => ['trace'],
                     'categories' => ['sms'],
                     'logFile' => '@app/runtime/logs/sms/sms'. date('Ymd').'.log',
-                    'maxFileSize' => 1024*2,
-                    'logVars' => ['trace'],
+                    'enableRotation' => false,
+                    'logVars' => [],
                     'prefix' => function ($message) {
                         return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     }
@@ -45,8 +46,8 @@ return [
                     'levels' => ['trace'],
                     'categories' => ['loan_order'],
                     'logFile' => '@app/runtime/logs/order/loan_order' . date('Ym') . '.log',
-                    'maxFileSize' => 1024 * 2,
-                    'logVars' => ['trace'],
+                    'enableRotation' => false,
+                    'logVars' => [],
                     'prefix' => function ($message) {
                         return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     }
@@ -56,8 +57,8 @@ return [
                     'levels' => ['trace'],
                     'categories' => ['bao_quan'],
                     'logFile' => '@app/runtime/logs/bao_quan/bao_quan' . date('Ym') . '.log',
-                    'maxFileSize' => 1024 * 2,
-                    'logVars' => ['trace'],
+                    'enableRotation' => false,
+                    'logVars' => [],
                     'prefix' => function ($message) {
                         return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     }
@@ -68,8 +69,8 @@ return [
                     'levels' => ['info'],
                     'categories' => ['umplog'],
                     'logFile' => '@app/runtime/logs/ump/ump'.date('Ymd').'.log',
-                    'maxFileSize' => 1024 * 2,
-                    'logVars' => ['trace'],
+                    'enableRotation' => false,
+                    'logVars' => [],
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -80,8 +81,8 @@ return [
                     'levels' => ['info'],
                     'categories' => ['user_log'],
                     'logFile' => '@app/runtime/logs/user/user_status'.date('Ymd').'.log',
-                    'maxFileSize' => 1024 * 2,
-                    'logVars' => ['trace'],
+                    'enableRotation' => false,
+                    'logVars' => [],
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -92,8 +93,8 @@ return [
                     'levels' => ['info'],
                     'categories' => ['queue'],
                     'logFile' => '@app/runtime/logs/queue/queue_'.date('Ymd').'.log',
-                    'maxFileSize' => 1024 * 2,
-                    'logVars' => ['trace'],
+                    'enableRotation' => false,
+                    'logVars' => [],
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -103,8 +104,8 @@ return [
                     'levels' => ['trace'],
                     'categories' => ['credit_order'],
                     'logFile' => '@app/runtime/credit/credit_order'.date('Ymd').'.log',
-                    'maxFileSize' => 1024 * 2,
-                    'logVars' => ['trace'],
+                    'enableRotation' => false,
+                    'logVars' => [],
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -114,8 +115,8 @@ return [
                     'levels' => ['info'],
                     'categories' => ['command'],
                     'logFile' => '@app/runtime/command_'.date('Ymd').'.log',
-                    'maxFileSize' => 1024 * 2,
-                    'logVars' => ['trace'],
+                    'enableRotation' => false,
+                    'logVars' => [],
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
@@ -126,8 +127,8 @@ return [
                     'levels' => ['info'],
                     'categories' => ['lihe'],
                     'logFile' => '@app/runtime/logs/exchange/lihe_'.date('Ymd').'.log',
-                    'maxFileSize' => 1024 * 2,
-                    'logVars' => ['trace'],
+                    'enableRotation' => false,
+                    'logVars' => [],
                     'prefix' => function ($message) {
                         return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },

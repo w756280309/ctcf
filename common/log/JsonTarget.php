@@ -28,7 +28,7 @@ class JsonTarget extends FileTarget
         }
 
         $data = [
-            'time' => $this->getTime($timestamp),
+            'time' => date('Y-m-d H:i:s', $timestamp),
             'level' => $level,
             'category' => $category,
             'text' => $text,
@@ -64,6 +64,7 @@ class JsonTarget extends FileTarget
         if (!empty($traces)) {
             $data['traces'] = $traces;
         }
+
 
         return json_encode($data);
     }
