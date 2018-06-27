@@ -22,7 +22,7 @@ $arr = [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class' => 'common\log\JsonTarget',
                     'levels' => ['error', 'warning'],
                     'logVars' => [],
                     'enableRotation' => false,
