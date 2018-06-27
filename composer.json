@@ -41,15 +41,14 @@
         "illuminate/redis":"5.4.*",
         "vlucas/phpdotenv": "^2.4",
         "dmstr/yii2-adminlte-asset": "2.*",
-        "yiisoft/yii2-queue": "~2.0.0"
+        "yiisoft/yii2-queue": "~2.0.0",
+        "lhjx/config": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",
         "yiisoft/yii2-faker": "*",
-        "phpro/grumphp": "0.11.5",
-        "squizlabs/php_codesniffer": "^3.0",
-        "codeception/codeception": "*"
+        "squizlabs/php_codesniffer": "^3.0"
     },
     "config": {
         "process-timeout": 1800,
@@ -64,6 +63,10 @@
     "repositories":[
         { "type": "vcs", "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git" },
         { "type": "vcs", "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/DINGNOTIFY/dingnotify.git" },
-        { "type": "composer", "url": "https://asset-packagist.org" }
+        { "type": "composer", "url": "https://asset-packagist.org" },
+        {
+            "type": "vcs",
+            "url": "ssh://vcs@dx.wangcaigu.cn/source/config.git"
+        }
     ]
 }
