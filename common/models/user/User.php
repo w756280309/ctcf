@@ -1169,7 +1169,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
         $mobile = SecurityUtils::decrypt($this->safeMobile);
         foreach ($setUserAssets as $v) {
             if ($v['mobile'] == $mobile) {
-                $balance = $v['money'] > $balance ? $v['money'] : $balance;
+                $balance = $v['money'];
             }
         }
         return $balance;
