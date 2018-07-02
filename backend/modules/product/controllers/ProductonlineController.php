@@ -297,7 +297,7 @@ class ProductonlineController extends BaseController
                 'cid', 'refund_method', 'yield_rate', 'expires', 'jiaxi', 'money', 'borrow_uid', 'allowedUids', 'isPrivate',
                 'issuer', 'issuerSn', 'filingAmount', 'start_money', 'dizeng_money', 'rateSteps', 'isFlexRate', 'paymentDay',
                 'allowUseCoupon', 'isTest', 'is_xs', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment',
-                'description'
+                'description', 'borrowerRate', 'alternativeRepayer', 'fundReceiver'
             ])
             ->where(['id' => $id])->one();
         if (is_null($model)) {
