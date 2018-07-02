@@ -8,7 +8,6 @@
 namespace api\modules\asset\controllers;
 
 use common\models\product\Asset;
-use common\models\user\CaptchaForm;
 use common\models\user\User;
 use common\utils\SecurityUtils;
 use yii\web\Controller;

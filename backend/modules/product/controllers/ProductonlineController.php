@@ -15,6 +15,7 @@ use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\payment\PaymentLog;
 use common\models\payment\Repayment;
+use common\models\product\Asset;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\promo\PromoService;
@@ -219,7 +220,7 @@ class ProductonlineController extends BaseController
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
         $data = Yii::$app->request->post();
-            if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
+        if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
             try {
                 $this->validateContract([
                     'title' => $con_name_arr,
@@ -240,6 +241,12 @@ class ProductonlineController extends BaseController
 
                     $log = AdminLog::initNew($model);
                     $log->save();
+                    //修改asset表对应资产包为已发标状态
+                    if (!empty($model->asset_id)) {
+                        $asset = Asset::findOne($model->asset_id);
+                        $asset->status = Asset::STATUS_SUCCESS;
+                        $asset->save(false);
+                    }
                 } catch (\Exception $e) {
                     $transaction->rollBack();
                     $model->addError('title', '标的添加异常'.$e->getMessage());
@@ -285,7 +292,17 @@ class ProductonlineController extends BaseController
             throw $this->ex404();
         }
 
-        $model = $this->findOr404(OnlineProduct::class, $id);
+        $model = OnlineProduct::find()
+            ->select([
+                'cid', 'refund_method', 'yield_rate', 'expires', 'jiaxi', 'money', 'borrow_uid', 'allowedUids', 'isPrivate',
+                'issuer', 'issuerSn', 'filingAmount', 'start_money', 'dizeng_money', 'rateSteps', 'isFlexRate', 'paymentDay',
+                'allowUseCoupon', 'isTest', 'is_xs', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment',
+                'description'
+            ])
+            ->where(['id' => $id])->one();
+        if (is_null($model)) {
+            throw $this->ex404('引用标的[' . $id . ']不存在');
+        }
         $model->scenario = 'create';
         $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
         $model->yield_rate = bcmul($model->yield_rate, 100, 2);
@@ -298,46 +315,7 @@ class ProductonlineController extends BaseController
         * issuer,issuerSn,filingAmount,start_money,dizeng_money,rateSteps,isFlexRate,paymentDay，allowUseCoupon，
          * isTest，is_xs，tags，isLicai，pointsMultiple，allowTransfer，isCustomRepayment，description
          */
-        //清除属性33
-        $model->sn = '';
-        $model->epayLoanAccountId = '';
-        $model->recommendTime = '';
-        if ($model->isDailyAccrual) {
-            $model->expires = '';
-            $model->isDailyAccrual = false;
-        }
-        $model->fee = '';
-        $model->expires_show = '';
-        $model->kuanxianqi = '';
-        $model->funded_money = '';
-        $model->channel = '';
-        $model->full_time = '';
-        $model->jixi_time = '';
-        $model->fk_examin_time = '';
-        $model->account_name = '';
-        $model->account = '';
-        $model->bank = '';
-        $model->del_status = '';
-        $model->yuqi_faxi = '';
-        $model->order_limit = '';
-        $model->finish_rate = '';
-        $model->is_jixi = '';
-        $model->sort = '';
-        $model->contract_type = '';
-        $model->creator_id = '';
-        $model->created_at = '';
-        $model->updated_at = '';
-        $model->isJixiExamined = '';
-        $model->publishTime = '';
-        $model->id = '';
-        $model->title = '';
-        $model->internalTitle = '';
-        $model->start_date = '';
-        $model->end_date = '';
-        $model->finish_date = '';
-        $model->online_status = '';
-        $model->status = '';
-        $model->is_fdate = '';
+        $model = new OnlineProduct($model);
 
         return $this->render('edit', [
             'model' => $model,
@@ -831,6 +809,11 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
                 ];
             }
             if ($model->save()) {
+                if ($model->asset_id) {
+                    $asset = Asset::findOne(['id' => $model->asset_id]);
+                    $asset->status = Asset::STATUS_INIT;
+                    $asset->save(false);
+                }
                 return ['code' => 1, 'message' => '删除成功'];
             }
         }
