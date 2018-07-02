@@ -9,6 +9,7 @@ namespace common\lib\pdf;
 
 use common\models\order\OnlineOrder;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use Knp\Snappy\Pdf;
 use Yii;
 
@@ -38,6 +39,8 @@ class CreatePDF
             . base64_encode(@file_get_contents(Yii::getAlias('@backend') . '/web'
                 . Yii::$app->params['platform_info.company_seal_640'])).'">';
         $fourTotalAsset = null;
+        $borrowerName = null;   //借款人
+        $borrowerCardNumber = null; //借款人身份证
         if (null !== $onlineOrder) {
             $date = date("Y年m月d日", $onlineOrder->order_time);
             $money = $onlineOrder->order_money;
@@ -50,6 +53,11 @@ class CreatePDF
             $loan = $onlineOrder->loan;
             if (null !== $loan) {
                 $fourTotalAsset = 4 * $loan->money;
+                $borrower = $loan->borrower;
+                if (!is_null($borrower)) {
+                    $borrowerName = $borrower->real_name;
+                    $borrowerCardNumber = SecurityUtils::decrypt($borrower->safeIdCard);
+                }
             }
         }
         $res = preg_match_all('/(\｛|\{){2}(.+?)(\｝|\}){2}/is', $content, $array);
@@ -83,6 +91,12 @@ class CreatePDF
                         break;
                     case '4期总资产':
                         $content = str_replace($array[0][$key], $fourTotalAsset, $content);
+                        break;
+                    case '借款人':
+                        $content = str_replace($array[0][$key], $borrowerName, $content);
+                        break;
+                    case '借款人身份证':
+                        $content = str_replace($array[0][$key], $borrowerCardNumber, $content);
                         break;
                     default:
                         break;
