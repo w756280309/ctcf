@@ -71,18 +71,14 @@ class AssetController extends BaseController
         $model->borrowerRate = $asset->rate;
         $model->money = $asset->amount;
         $model->borrow_uid = $asset->borrower->id;
-        $rongziInfo = User::find()
-            ->where(['type' => User::USER_TYPE_ORG])
-            ->andWhere(['is_soft_deleted' => 0])
-            ->orderBy(['sort' => SORT_DESC])
-            ->select('org_name')
-            ->indexBy('id')
-            ->column();
 
         return $this->render('/productonline/edit', [
             'model' => $model,
             'ctmodel' => null,
-            'rongziInfo' => $rongziInfo,
+            'rongziInfo' => $this->orgUserInfo([1,2]),
+            'fundReceiver' => $this->orgUserInfo([3]),
+            'alternativeRepayer' => $this->orgUserInfo([4]),
+            'guarantee' => $this->orgUserInfo([5]),
             'con_name_arr' => null,
             'con_content_arr' => null,
             'issuer' => Issuer::find()->all(),

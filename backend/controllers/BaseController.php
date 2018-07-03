@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\controllers\HelpersTrait;
 use common\filters\AdminAcesssControl;
+use common\models\user\User;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 
@@ -65,5 +66,22 @@ class BaseController extends Controller
         }
 
         return parent::render($view, $params);
+    }
+    /**
+     * 获取未被软删除的全部融资方信息.
+     */
+    public function orgUserInfo(array $type)
+    {
+        $u = User::tableName();
+        $b = \common\models\user\Borrower::tableName();
+        return  User::find()
+            ->innerJoinWith('borrowerInfo')
+            ->where(["$u.type" => User::USER_TYPE_ORG])
+            ->andWhere(['is_soft_deleted' => 0])
+            ->andWhere(['in', "$b.type", $type])
+            ->orderBy(['sort' => SORT_DESC])
+            ->select("org_name")
+            ->indexBy("userId")
+            ->column();
     }
 }
