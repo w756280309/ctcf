@@ -1504,17 +1504,18 @@ class Client
     }
 
     /**
-     * 4.4.6 个人客户无密提现
+     * 4.4.6 个人客户无密提现（默认商户承担手续费）
      *
-     * @param string $sn
-     * @param string $issueDate
-     * @param string $epayUserId
-     * @param string $amount
-     * @param string $notifyUrl
+     * @param string $sn 流水号
+     * @param string $issueDate 交易日期
+     * @param string $epayUserId 联动用户ID
+     * @param string $amount 金额
+     * @param string $notifyUrl 联动后台通知地址
+     * @param integer $feeReceiver 1交易方承担2平台商户承担
      *
      * @return Response
      */
-    public function orgDrawNoPass($sn, $issueDate, $epayUserId, $amount, $notifyUrl)
+    public function orgDrawNoPass($sn, $issueDate, $epayUserId, $amount, $notifyUrl, $feeReceiver = 2)
     {
         $data = [
             'service' => 'cust_withdrawals_nopwd',
@@ -1524,6 +1525,7 @@ class Client
             'order_id' => $sn,
             'user_id' => $epayUserId,
             'amount' => $amount * 100,
+            'com_amt_type' => $feeReceiver,
         ];
 
         return $this->doRequest($data);

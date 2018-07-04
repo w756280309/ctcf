@@ -1529,14 +1529,11 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     }
 
     /**
-     * 标的对应的放款方编号
+     * 标的对应的放款方第三方账户
      * @return null|object
      */
     public function getFangKuanFang()
     {
-        if ($this->cid !== 3) {
-            return EpayUser::findOne(['appUserId' => $this->borrow_uid]);
-        }
         if (null !== $this->fundReceiver) {
             return EpayUser::find()
                 ->where(['appUserId' => $this->fundReceiver])
@@ -1564,4 +1561,24 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         return User::find()->select('org_name')->where(['id' => $epayUser->appUserId])->scalar();
     }
 
+    /**
+     * 标的对应的放款方用户
+     * @return null|object
+     */
+    public function getFangKuanUser()
+    {
+        if (null !== $this->fundReceiver) {
+            return User::findOne($this->fundReceiver);
+        }
+
+        $borrower = User::findOne($this->borrow_uid);
+        if (null !== $borrower) {
+            $borrowerInfo = $borrower->borrowerInfo;
+            if (null !== $borrowerInfo && $borrowerInfo->allowDisbursement) {
+                return $borrower;
+            }
+        }
+
+        return null;
+    }
 }

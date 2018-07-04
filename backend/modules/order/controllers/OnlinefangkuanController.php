@@ -11,6 +11,7 @@ use common\models\order\OnlineFangkuan;
 use common\models\product\OnlineProduct;
 use common\models\user\User;
 use common\models\user\UserAccount;
+use common\utils\TxUtils;
 use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -82,9 +83,13 @@ class OnlinefangkuanController extends BaseController
             return ['res' => 0, 'msg' => self::code('000006').'当前放款状态不允许提现操作'];
         }
 
-        $account = UserAccount::findOne(['uid' => $onlineFangkuan->uid, 'type' => UserAccount::TYPE_BORROW]);
-        if (!$account) {
-            return ['res' => 0, 'msg' => self::code('000002').'融资用户账户信息不存在'];
+        $user = $onlineProduct->getFangKuanUser();
+        if (null === $user) {
+            return ['res' => 0, 'msg' => self::code('000002').'放款用户信息不存在'];
+        }
+        $account = $user->borrowAccount;
+        if (null === $account) {
+            return ['res' => 0, 'msg' => self::code('000002').'放款账户信息不存在'];
         }
 
         $transaction = Yii::$app->db->beginTransaction();
@@ -104,7 +109,13 @@ class OnlinefangkuanController extends BaseController
             $ump = Yii::$container->get('ump');
             //当不允许访问联动时候，默认联动测处理成功
             if (Yii::$app->params['ump_uat']) {
-                $resp = $ump->orgDrawApply($draw);
+                $borrowerInfo = $user->borrowerInfo;
+                $isPersonal = $borrowerInfo->isPersonal();
+                if ($isPersonal) {
+                    $resp = $ump->orgDrawNoPass(TxUtils::generateSn('DRP'), date('Ymd'), $user->epayUser->epayUserId, $onlineFangkuan->order_money, Yii::$app->request->hostInfo.'/order/drawnotify/notify');
+                } else {
+                    $resp = $ump->orgDrawApply($draw);
+                }
                 if (!$resp->isSuccessful()) {
                     throw new \Exception($resp->get('ret_code').$resp->get('ret_msg'));
                 }

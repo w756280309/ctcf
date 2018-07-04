@@ -4,7 +4,6 @@ namespace common\models\user;
 
 use common\models\affiliation\UserAffiliation;
 use common\models\bank\BankCardUpdate;
-use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\epay\EpayUser;
 use common\models\mall\ThirdPartyConnect;
@@ -18,6 +17,7 @@ use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
 use common\models\thirdparty\Channel;
 use common\models\thirdparty\SocialConnect;
+use common\models\user\Borrower as BorroweInfo;
 use common\models\user\RechargeRecord as Recharge;
 use common\models\user\DrawRecord as Draw;
 use common\utils\SecurityUtils;
@@ -1308,6 +1308,6 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     //关联融资用户附属信息
     public function getBorrowerInfo()
     {
-        return $this->hasOne(\common\models\user\Borrower::className(), ['userId' => 'id']);
+        return $this->hasOne(BorroweInfo::className(), ['userId' => 'id']);
     }
 }

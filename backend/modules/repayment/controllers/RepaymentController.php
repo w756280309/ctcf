@@ -950,14 +950,6 @@ class RepaymentController extends BaseController
             return ['res' => 0, 'msg' => $this->code('000005').$fkError];
         }
 
-        //如果是网贷则判断是否有有效的放款方
-        if ($product->cid == 3) {
-            $to = $product->getFangKuanFang();
-            if (!$to) {
-                return ['res' => 0, 'msg' => '无有效放款方，请重新设置'];
-            }
-        }
-
         try {
             $this->loanToMer($fk, $product);  //标的放款
         } catch (\Exception $e) {
@@ -966,20 +958,12 @@ class RepaymentController extends BaseController
             return ['res' => 0, 'msg' => $code.$e->getMessage()];
         }
 
-        if ($product->cid !== 3) {
-            //融资会员提现
-            //1.校验标的信息是否存在,放款记录是否存在,当前放款状态是否允许提现操作,融资用户账户信息是否存在
-            //2.创建一个提现申请（计算可以提现的金额,初始化提现记录）,写入放款流水,请求联动融资用户提现申请,修改放款审核状态
-            //3.修改提现申请的状态为已受理并记录流水及余额变动:提现状态校验,更新提现状态,记录money_record及更新user_account（分2块，提现金额、提现手续费）,短信提醒提现受理成功
-            $drawBack = OnlinefangkuanController::actionInit($pid);
+        $drawBack = OnlinefangkuanController::actionInit($pid);
 
-            return [
-                'res' => $drawBack['res'],
-                'msg' => $drawBack['res'] ? '放款成功' : $drawBack['msg'],
-            ];
-        } else {
-            return ['res' => 1, 'msg' => '放款成功'];
-        }
+        return [
+            'res' => $drawBack['res'],
+            'msg' => $drawBack['res'] ? '放款成功' : $drawBack['msg'],
+        ];
     }
 
     /**
@@ -987,6 +971,11 @@ class RepaymentController extends BaseController
      */
     private function loanToMer(OnlineFangkuan $fk, OnlineProduct $product)
     {
+        $fangkuanFang = $product->getFangKuanFang();
+        if (null === $fangkuanFang) {
+            throw new \Exception('无有效放款方，请重新设置', '000003');
+        }
+
         if (OnlineFangkuan::STATUS_EXAMINED === $fk->status) {
             //没有贴现过才会进行贴现
             if (!$product->isCouponAmountTransferred()) {
@@ -1004,25 +993,27 @@ class RepaymentController extends BaseController
             $transaction = Yii::$app->db->beginTransaction();
 
             try {
+                /** 更新联动标的状态 */
                 LoanService::updateLoanState($product, OnlineProduct::STATUS_HUAN);
 
-                $realBorrowerId = $product->fundReceiver ? $product->fundReceiver : $product->borrow_uid;
+                /** 更新收款方账户金额 */
+                $realBorrowerId = $fangkuanFang->appUserId;
                 $res = Yii::$app->db->createCommand("UPDATE `user_account` SET `account_balance` = `account_balance` + :money, `available_balance` = `available_balance` + :money, `drawable_balance` = `drawable_balance` + :money, `in_sum` = `in_sum` + :money WHERE `uid` = :uid and `type` = :userType", [
                     'money' => $product->funded_money,
                     'uid' => $realBorrowerId,
                     'userType' => UserAccount::TYPE_BORROW,
                 ])->execute();
-
                 if (!$res) {
                     throw new \Exception('更新融资账户异常', '000003');
                 }
 
+                /** 更新放款状态 */
                 $updateFangkuan = OnlineFangkuan::updateAll(['status' => OnlineFangkuan::STATUS_FANGKUAN], ['online_product_id' => $product->id]); //将所有放款批次变为已经放款
-
                 if (!$updateFangkuan) {
                     throw new \Exception('更新放款批次异常', '000003');
                 }
 
+                /** 添加资金流水 */
                 $ua = UserAccount::findOne(['uid' => $realBorrowerId, 'type' => UserAccount::TYPE_BORROW]);
                 $moneyRecord = new MoneyRecord([
                     'type' => MoneyRecord::TYPE_FANGKUAN,
@@ -1034,29 +1025,27 @@ class RepaymentController extends BaseController
                     'remark' => '已放款',
                     'balance' => $ua->available_balance,
                 ]);
-
                 if (!$moneyRecord->save()) {
                     throw new \Exception('资金流水记录异常', '000003');
                 }
 
-                //当不允许访问联动时候，默认联动处理成功
+                /** 当不允许访问联动时候，默认联动处理成功 */
                 if (Yii::$app->params['ump_uat']) {
                     $ump = Yii::$container->get('ump');
-                    //添加当资金使用方不为空时，标的将放款到资金使用方
+                    /** 添加当资金使用方不为空时，标的将放款到资金使用方，且暂不支持个人 */
+                    $fkSn = $fk->getTxSn();
+                    $fkDate = date('Ymd');
+                    $loanId = $fk->getLoanId();
+                    $amount = $fk->getAmount();
+                    $borrowerInfo = $ua->user->borrowerInfo;
+                    if (null === $borrowerInfo) {
+                        throw new \Exception('无法判断收款方账户类型信息');
+                    }
+                    $borrowerType = $borrowerInfo->isPersonal() ? 1 : 2;
                     if ($product->fundReceiver) {
-                        $fundReceiverId = $product->getFundReceiverId();
-                        if (null === $fundReceiverId) {
-                            throw new \Exception('未找到代偿方账户', '000003');
-                        }
-                        $resp = $ump->loanTransferToFundReceiver($fk->getTxSn(), date('Ymd'), $fk->getLoanId(), $fundReceiverId, $fk->getAmount());
+                        $resp = $ump->loanTransferToFundReceiver($fkSn, $fkDate, $loanId, $fangkuanFang->epayUserId, $amount);
                     } else {
-                        //当前不允许放款给个人融资方，即非企业商户
-                        $borrowerMerId = $fk->getBorrowerId();
-                        $merchantInfo = $ump->getMerchantInfo($borrowerMerId);
-                        if (!$merchantInfo->isSuccessful()) {
-                            throw new \Exception('暂不支持放款给非企业商户', '000003');
-                        }
-                        $resp = $ump->loanTransferToMer($fk);
+                        $resp = $ump->loanTransferToMer1($fk->getTxSn(), date('Ymd'), $loanId, $fangkuanFang->epayUserId, $amount, $borrowerType);
                     }
                     if (!$resp->isSuccessful()) {
                         throw new \Exception('联动一侧：'.$resp->get('ret_msg'));
