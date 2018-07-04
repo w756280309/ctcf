@@ -36,13 +36,13 @@ $accounts = Yii::$app->params['borrowerSubtype'];
         <?php foreach ($model as $key => $val) : ?>
             <tr>
         <?php if ($isPersonal) { ?>
-                <td><?= $val['mobile'] ?></td>
+                <td><a href="/user/user/detail?id=<?= $val['id'] ?>" ><?= $val['mobile'] ?></a></td>
                 <td><?= $val['real_name'] ? '<a href="/user/user/detail?id='.$val['id'].'">'.$val['real_name'].'</a>' : '---' ?></td>
         <?php } else { ?>
                 <td>
                     <input class="choice" type='checkbox' name='choose[]' value='<?= $val['id'] ?>'>
                 </td>
-                <td><?= $val['org_name'] ?></td>
+                <td><a href="/user/user/detail?id=<?= $val['id'] ?>" ><?= $val['org_name'] ?></a></td>
                 <td><?php echo $accounts[$val->borrowerInfo['type']]?></td>
         <?php }?>
                 <td><?= date('Y-m-d H:i:s',$val['created_at'])?></td>

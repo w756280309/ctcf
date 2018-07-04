@@ -167,7 +167,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn',
                 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates', 'isDailyAccrual', 'flexRepay',
                 'fundReceiver', 'alternativeRepayer', 'borrowerRate', 'guarantee', 'asset_id'],
-            'senior_edit' => ['title', 'internalTitle', 'kuanxianqi', 'issuerSn', 'pkg_sn'],
+            'senior_edit' => ['title', 'internalTitle', 'kuanxianqi', 'issuerSn', 'pkg_sn', 'fundReceiver'],
         ];
     }
 

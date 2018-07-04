@@ -4,21 +4,19 @@ namespace backend\modules\product\controllers;
 
 use backend\controllers\BaseController;
 use backend\modules\product\models\LoanSearch;
-use common\controllers\ContractTrait;
 use common\lib\bchelp\BcRound;
-use common\lib\product\ProductProcessor;
 use common\models\adminuser\AdminLog;
 use common\models\booking\BookingLog;
 use common\models\contract\ContractTemplate;
 use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
-use common\models\payment\PaymentLog;
 use common\models\payment\Repayment;
 use common\models\product\Asset;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\promo\PromoService;
+use common\models\user\Borrower as BorrowerInfo;
 use common\models\user\CoinsRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
@@ -42,7 +40,7 @@ class ProductonlineController extends BaseController
     private function orgUserInfo(array $type)
     {
         $u = User::tableName();
-        $b = \common\models\user\Borrower::tableName();
+        $b = BorrowerInfo::tableName();
         return  User::find()
             ->innerJoinWith('borrowerInfo')
             ->where(["$u.type" => User::USER_TYPE_ORG])
@@ -175,6 +173,7 @@ class ProductonlineController extends BaseController
         if (0 === $loan->issuer) {   //当发行方没有选择时,发行方项目编号为空
             $loan->issuerSn = null;
         }
+
         return $loan;
     }
 
@@ -414,15 +413,37 @@ class ProductonlineController extends BaseController
             throw $this->ex404();
         }
         $model = $this->findOr404(OnlineProduct::class, $id);
+        $originEpayUserId = $model->getFundReceiverId();
         $model->scenario = 'senior_edit';
         $data = Yii::$app->request->post();
         if ($model->load($data) && ($model = $this->exchangeSeniorEditValues($model)) && $model->validate()) {
             if (!$model->hasErrors()) {
+                $fundEpayUserId = $model->getFundReceiverId();
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
                     $model->save(false);
                     $log = AdminLog::initNew($model);
                     $log->save();
+                    //如果当前状态为未上标状态，无需更新绑定标的与用款方账户的联系
+                    if (!$model->online_status) {
+                        if ($fundEpayUserId !== $originEpayUserId) {
+                            $ump = Yii::$container->get('ump');
+                            if (null === $fundEpayUserId && null !== $originEpayUserId) {
+                                $resp = $ump->deleteLoanFundReceiver($model->id, $originEpayUserId);
+                            } elseif (null !== $fundEpayUserId && null === $originEpayUserId) {
+                                $resp = $ump->addLoanFundReceiver($model->id, $fundEpayUserId);
+                            } else {
+                                $respOrigin = $ump->deleteLoanFundReceiver($model->id, $originEpayUserId);
+                                if (!$respOrigin->isSuccessful()) {
+                                    throw new \Exception('更新用款方失败，联动返回：'.$respOrigin->get('ret_code').$respOrigin->get('ret_msg'));
+                                }
+                                $resp = $ump->addLoanFundReceiver($model->id, $fundEpayUserId);
+                            }
+                            if (!$resp->isSuccessful()) {
+                                throw new \Exception('更新用款方失败，联动返回：'.$resp->get('ret_code').$resp->get('ret_msg'));
+                            }
+                        }
+                    }
                     $transaction->commit();
                     return $this->redirect(['list']);
                 } catch (\Exception $e) {
@@ -435,6 +456,7 @@ class ProductonlineController extends BaseController
         return $this->render('senior_edit', [
             'model' => $model,
             'issuer' => $this->issuerInfo(),
+            'fundReceiver' => $this->orgUserInfo([3]),
         ]);
     }
 
