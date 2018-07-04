@@ -152,7 +152,14 @@ $bc = new BcRound();
         </div>
         <?php if (0 === (int) $qi[count($qi) - 1]['status']) { ?>
         <div class="form-actions" style="text-align:right">
-            <button type="button" class="btn blue button-repayment" qishu="<?= $qk ?>"><i class="icon-ok"></i> 确认还款</button>
+            <?php
+                $refundTime = date('Y-m-d', $qi[count($qi) - 1]['refund_time']);
+                $timeBorder = date('Y-m-d', strtotime('-9 day', $qi[count($qi) - 1]['refund_time']));
+                $isShowReminder = $today >= $timeBorder ? 0 : 1;
+            ?>
+            <input type="hidden" name="isShowReminder<?php echo $qk;?>" value="<?php echo $isShowReminder;?>">
+            <input type="hidden" name="refundTime<?php echo $qk;?>" value="<?php echo $refundTime;?>">
+            <button type="button" class="btn <?php echo $isShowReminder ? 'grey': 'blue'; ?> button-repayment" qishu="<?= $qk ?>"><i class="icon-ok"></i> 确认还款</button>
         </div>
         <?php } else { ?>
         <br>
@@ -166,8 +173,11 @@ $bc = new BcRound();
             var csrftoken= '<?= Yii::$app->request->getCsrfToken(); ?>';
             var pid = '<?= Yii::$app->request->get('pid');?>';
             var qishu = $(this).attr('qishu');
+            var refundTime = $('input[name=refundTime'+qishu+']').val();
+            var isShowReminder = $('input[name=isShowReminder'+qishu+']').val();
+            var remindInfo = isShowReminder === '1' ? '本期还款日：'+refundTime+'<br>确定今天还款吗？' : '是否确认还款？';
             $repbtn = $(this);
-            layer.confirm('是否确认还款？',{title:'确认还款',btn:['确定','取消']},function(){
+            layer.confirm(remindInfo,{title:'确认还款',btn:['确定','取消']},function(){
                 layer.closeAll();
                 $repbtn.attr('disabled','disabled');
                 $repbtn.html('正在处理……');

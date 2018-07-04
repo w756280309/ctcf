@@ -166,8 +166,8 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple',
                 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn',
                 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates', 'isDailyAccrual', 'flexRepay',
-                'fundReceiver', 'alternativeRepayer', 'borrowerRate', 'guarantee'],
-            'senior_edit' => ['title', 'internalTitle', 'kuanxianqi', 'issuerSn', 'pkg_sn'],
+                'fundReceiver', 'alternativeRepayer', 'borrowerRate', 'guarantee', 'asset_id'],
+            'senior_edit' => ['title', 'internalTitle', 'kuanxianqi', 'issuerSn', 'pkg_sn', 'fundReceiver'],
         ];
     }
 
@@ -236,7 +236,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             },  'whenClient' => "function (attribute, value) {
                 return $('#onlineproduct-is_fdate').parent().hasClass('checked');
             }"],
-            [['cid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id', 'pointsMultiple'], 'integer'],
+            [['cid', 'is_xs', 'borrow_uid', 'refund_method', 'expires', 'full_time', 'del_status', 'status', 'order_limit', 'creator_id', 'pointsMultiple', 'asset_id'], 'integer'],
             [['yield_rate', 'fee', 'money', 'start_money', 'dizeng_money', 'yuqi_faxi', 'jiaxi'], 'number'],
             [['isPrivate', 'kuanxianqi'], 'integer'],
             ['isPrivate', 'default', 'value' => 0],
@@ -1526,6 +1526,13 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             ->where(['id' => $repayerId])
             ->andWhere(['type' => User::USER_TYPE_ORG])
             ->one();
+    }
+    /**
+     * 获取小微资产包
+     */
+    public function getAsset()
+    {
+        return Asset::findOne($this->asset_id);
     }
 
     /**

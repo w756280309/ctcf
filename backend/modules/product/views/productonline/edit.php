@@ -109,6 +109,7 @@ TPL;
     <div class="portlet-body form">
         <!-- BEGIN FORM-->
         <?php $form = ActiveForm::begin(['id' => 'product_product_form', 'action' => '/product/productonline/'.($model->id ? 'edit?id='.$model->id : 'add'), 'options' => ['enctype' => 'multipart/form-data']]); ?>
+        <?= $form->field($model, 'asset_id', ['template' => '{input}']) ->hiddenInput()?>
         <h3 class="form-section">项目基本信息</h3>
         <?php if ($model->id) {  ?>
         <div class="row-fluid">
@@ -256,6 +257,7 @@ TPL;
                                 'autocomplete' => 'off',
                                 'placeholder' => '募集金额',
                                 'class' => 'm-wrap span12',
+                                'readonly' => $model->asset_id ? true : false,
                             ]
                         ])->textInput($disabled)
                     ?>
@@ -433,6 +435,9 @@ TPL;
                     ])->dropDownList(['' => '--选择--'] + $guarantee)
                     ?>
                 </div>
+                <?php if (!empty($model->asset_id)) : ?>
+                    <label class="control-label">小微资产编号：<?= $model->asset ? $model->asset->sn : null ?></label>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -821,7 +826,29 @@ TPL;
                 </div>
             </div>
         </div>
+        <?php if (!empty($model->asset_id)) : ?>
+            <h3 class="form-section">披露信息</h3>
+            <div class="row-fluid">
+                <div class="span12 ">
+                    <div class="control-group">
+                        <label class="control-label">披露信息</label>
+                        <div class="controls">
+                            <textarea id ='company' class='m-wrap span12'>
+已撮合未到期项目项目有关信息
 
+借款资金运营情况：经营周转
+借款人经营状况及财务状况：非常好
+借款人还款能力变化情况：无变化
+借款人逾期情况：无逾期
+借款人涉诉情况：无涉诉
+借款人受行政处罚情况：无行政处罚情况
+其他可能影响借款人还款的重大信息：无
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <div class="form-actions">
             <?= $form->field($model, 'status', ['template' => '{error}'])->textInput(); ?>
             <button id="product-submit" type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>

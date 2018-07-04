@@ -60,7 +60,19 @@ $user = Yii::$app->user->getIdentity();
             </div>
         </a>
     </li>
-    <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
+    <?php
+        /**
+         * 转让入口可见：
+         * 1. 配置允许转让
+         * 2. 用户登录
+         * 3. 用户投资次数大于0
+         */
+        if (
+            Yii::$app->params['feature_credit_note_on']
+            && !empty($user)
+            && $user->orderCount() > 0
+        ) {
+    ?>
         <li class="ops clearfix" style="border: none">
             <a href="/credit/trade/assets" class="clearfix">
                 <div class="lf" style="background-position: 0 -1.012rem">我的转让</div>

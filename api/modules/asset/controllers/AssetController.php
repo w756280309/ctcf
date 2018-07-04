@@ -8,7 +8,6 @@
 namespace api\modules\asset\controllers;
 
 use common\models\product\Asset;
-use common\models\user\CaptchaForm;
 use common\models\user\User;
 use common\utils\SecurityUtils;
 use yii\web\Controller;
@@ -45,7 +44,9 @@ class AssetController extends Controller
                 if (is_null($user)) {
                     try {
                         $extendInfo = json_decode($post['extendInfo'], true);
-                        User::createOrgUser($extendInfo['phone'], $post['loanUserIdcard'], $post['name']);
+                        //渠道是慧釜的资产，个人融资方允许做为收款方
+                        $allowDisbursement = trim($post['source']) == 'HF0001';
+                        User::createOrgUser($extendInfo['phone'], $post['loanUserIdcard'], $post['name'], $allowDisbursement);
                     } catch (\Exception $ex) {
 
                         return ['code' => 300, 'message' => '开户失败,' . $ex->getMessage()];

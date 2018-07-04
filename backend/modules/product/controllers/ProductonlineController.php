@@ -4,20 +4,19 @@ namespace backend\modules\product\controllers;
 
 use backend\controllers\BaseController;
 use backend\modules\product\models\LoanSearch;
-use common\controllers\ContractTrait;
 use common\lib\bchelp\BcRound;
-use common\lib\product\ProductProcessor;
 use common\models\adminuser\AdminLog;
 use common\models\booking\BookingLog;
 use common\models\contract\ContractTemplate;
 use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
-use common\models\payment\PaymentLog;
 use common\models\payment\Repayment;
+use common\models\product\Asset;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\promo\PromoService;
+use common\models\user\Borrower as BorrowerInfo;
 use common\models\user\CoinsRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
@@ -41,7 +40,7 @@ class ProductonlineController extends BaseController
     private function orgUserInfo(array $type)
     {
         $u = User::tableName();
-        $b = \common\models\user\Borrower::tableName();
+        $b = BorrowerInfo::tableName();
         return  User::find()
             ->innerJoinWith('borrowerInfo')
             ->where(["$u.type" => User::USER_TYPE_ORG])
@@ -174,6 +173,7 @@ class ProductonlineController extends BaseController
         if (0 === $loan->issuer) {   //当发行方没有选择时,发行方项目编号为空
             $loan->issuerSn = null;
         }
+
         return $loan;
     }
 
@@ -219,7 +219,7 @@ class ProductonlineController extends BaseController
         $con_name_arr = Yii::$app->request->post('name');
         $con_content_arr = Yii::$app->request->post('content');
         $data = Yii::$app->request->post();
-            if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
+        if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
             try {
                 $this->validateContract([
                     'title' => $con_name_arr,
@@ -240,6 +240,12 @@ class ProductonlineController extends BaseController
 
                     $log = AdminLog::initNew($model);
                     $log->save();
+                    //修改asset表对应资产包为已发标状态
+                    if (!empty($model->asset_id)) {
+                        $asset = Asset::findOne($model->asset_id);
+                        $asset->status = Asset::STATUS_SUCCESS;
+                        $asset->save(false);
+                    }
                 } catch (\Exception $e) {
                     $transaction->rollBack();
                     $model->addError('title', '标的添加异常'.$e->getMessage());
@@ -285,7 +291,17 @@ class ProductonlineController extends BaseController
             throw $this->ex404();
         }
 
-        $model = $this->findOr404(OnlineProduct::class, $id);
+        $model = OnlineProduct::find()
+            ->select([
+                'cid', 'refund_method', 'yield_rate', 'expires', 'jiaxi', 'money', 'borrow_uid', 'allowedUids', 'isPrivate',
+                'issuer', 'issuerSn', 'filingAmount', 'start_money', 'dizeng_money', 'rateSteps', 'isFlexRate', 'paymentDay',
+                'allowUseCoupon', 'isTest', 'is_xs', 'tags', 'isLicai', 'pointsMultiple', 'allowTransfer', 'isCustomRepayment',
+                'description', 'borrowerRate', 'alternativeRepayer', 'fundReceiver'
+            ])
+            ->where(['id' => $id])->one();
+        if (is_null($model)) {
+            throw $this->ex404('引用标的[' . $id . ']不存在');
+        }
         $model->scenario = 'create';
         $model->is_fdate = (0 === $model->finish_date) ? 0 : 1;
         $model->yield_rate = bcmul($model->yield_rate, 100, 2);
@@ -298,46 +314,7 @@ class ProductonlineController extends BaseController
         * issuer,issuerSn,filingAmount,start_money,dizeng_money,rateSteps,isFlexRate,paymentDay，allowUseCoupon，
          * isTest，is_xs，tags，isLicai，pointsMultiple，allowTransfer，isCustomRepayment，description
          */
-        //清除属性33
-        $model->sn = '';
-        $model->epayLoanAccountId = '';
-        $model->recommendTime = '';
-        if ($model->isDailyAccrual) {
-            $model->expires = '';
-            $model->isDailyAccrual = false;
-        }
-        $model->fee = '';
-        $model->expires_show = '';
-        $model->kuanxianqi = '';
-        $model->funded_money = '';
-        $model->channel = '';
-        $model->full_time = '';
-        $model->jixi_time = '';
-        $model->fk_examin_time = '';
-        $model->account_name = '';
-        $model->account = '';
-        $model->bank = '';
-        $model->del_status = '';
-        $model->yuqi_faxi = '';
-        $model->order_limit = '';
-        $model->finish_rate = '';
-        $model->is_jixi = '';
-        $model->sort = '';
-        $model->contract_type = '';
-        $model->creator_id = '';
-        $model->created_at = '';
-        $model->updated_at = '';
-        $model->isJixiExamined = '';
-        $model->publishTime = '';
-        $model->id = '';
-        $model->title = '';
-        $model->internalTitle = '';
-        $model->start_date = '';
-        $model->end_date = '';
-        $model->finish_date = '';
-        $model->online_status = '';
-        $model->status = '';
-        $model->is_fdate = '';
+        $model = new OnlineProduct($model);
 
         return $this->render('edit', [
             'model' => $model,
@@ -436,15 +413,37 @@ class ProductonlineController extends BaseController
             throw $this->ex404();
         }
         $model = $this->findOr404(OnlineProduct::class, $id);
+        $originEpayUserId = $model->getFundReceiverId();
         $model->scenario = 'senior_edit';
         $data = Yii::$app->request->post();
         if ($model->load($data) && ($model = $this->exchangeSeniorEditValues($model)) && $model->validate()) {
             if (!$model->hasErrors()) {
+                $fundEpayUserId = $model->getFundReceiverId();
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
                     $model->save(false);
                     $log = AdminLog::initNew($model);
                     $log->save();
+                    //如果当前状态为未上标状态，无需更新绑定标的与用款方账户的联系
+                    if (!$model->online_status) {
+                        if ($fundEpayUserId !== $originEpayUserId) {
+                            $ump = Yii::$container->get('ump');
+                            if (null === $fundEpayUserId && null !== $originEpayUserId) {
+                                $resp = $ump->deleteLoanFundReceiver($model->id, $originEpayUserId);
+                            } elseif (null !== $fundEpayUserId && null === $originEpayUserId) {
+                                $resp = $ump->addLoanFundReceiver($model->id, $fundEpayUserId);
+                            } else {
+                                $respOrigin = $ump->deleteLoanFundReceiver($model->id, $originEpayUserId);
+                                if (!$respOrigin->isSuccessful()) {
+                                    throw new \Exception('更新用款方失败，联动返回：'.$respOrigin->get('ret_code').$respOrigin->get('ret_msg'));
+                                }
+                                $resp = $ump->addLoanFundReceiver($model->id, $fundEpayUserId);
+                            }
+                            if (!$resp->isSuccessful()) {
+                                throw new \Exception('更新用款方失败，联动返回：'.$resp->get('ret_code').$resp->get('ret_msg'));
+                            }
+                        }
+                    }
                     $transaction->commit();
                     return $this->redirect(['list']);
                 } catch (\Exception $e) {
@@ -457,6 +456,7 @@ class ProductonlineController extends BaseController
         return $this->render('senior_edit', [
             'model' => $model,
             'issuer' => $this->issuerInfo(),
+            'fundReceiver' => $this->orgUserInfo([3]),
         ]);
     }
 
@@ -831,6 +831,11 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
                 ];
             }
             if ($model->save()) {
+                if ($model->asset_id) {
+                    $asset = Asset::findOne(['id' => $model->asset_id]);
+                    $asset->status = Asset::STATUS_INIT;
+                    $asset->save(false);
+                }
                 return ['code' => 1, 'message' => '删除成功'];
             }
         }

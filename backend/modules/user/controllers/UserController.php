@@ -204,10 +204,10 @@ class UserController extends BaseController
             ]);
 
         if (isset($request['name']) && !empty($request['name'])) {
-            $query->andFilterWhere(['like', 'org_name', $request['name']]);
+            $query->andFilterWhere(['like', 'org_name', trim($request['name'])]);
         }
         if (!empty($request['accountType'])) {
-            $query->andFilterWhere(['borrower.type' => $request['accountType']]);
+            $query->andFilterWhere(['borrower.type' => (int) $request['accountType']]);
         }
 
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
@@ -983,9 +983,22 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
     public function actionUmpOrgAccount($id)
     {
         $orgUser = $this->findOr404(User::class, ['id' => $id, 'type' => User::USER_TYPE_ORG]);
-        $epayUserId = $orgUser->epayUser->epayUserId;
+        $epayUser = $orgUser->epayUser;
+        if (null === $epayUser) {
+            throw $this->ex404('未找到第三方账户信息');
+        }
+        $epayUserId = $epayUser->epayUserId;
+        $borrowerInfo = $orgUser->borrowerInfo;
+        if (null === $borrowerInfo) {
+            throw $this->ex404('未找到融资方账户类型信息');
+        }
 
-        $resp = \Yii::$container->get('ump')->getMerchantInfo($epayUserId);
+        $ump = Yii::$container->get('ump');
+        if (2 === $borrowerInfo->type) {
+            $resp = $ump->getUserInfo($epayUserId);
+        } else {
+            $resp = $ump->getMerchantInfo($epayUserId);
+        }
 
         return [
             'balance' => StringUtils::amountFormat3(bcdiv($resp->get('balance'), 100, 2)),

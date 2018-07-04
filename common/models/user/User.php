@@ -38,6 +38,7 @@ use Zii\Model\CoinsTrait;
 use Zii\Model\ErrorExTrait;
 use Zii\Model\LevelTrait;
 use Zii\Validator\CnMobileValidator;
+use common\models\user\Borrower as PersonalBorrower;
 
 /**
  * This is the model class for table "user".
@@ -1229,10 +1230,11 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
      * @param $mobile  手机号
      * @param $idCard  身份证号
      * @param $name   姓名
+     * @param $allowDisbursement    是否作为收款方
      * @return User
      * @throws Exception
      */
-    public static function createOrgUser($mobile, $idCard, $name)
+    public static function createOrgUser($mobile, $idCard, $name, $allowDisbursement = false)
     {
         //去空
         $mobile = trim($mobile);
@@ -1268,7 +1270,13 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             if (!$user->save()) {
                 throw new Exception(json_encode($user->getFirstErrors()));
             }
-
+            //记录borrower表
+            $borrower = new PersonalBorrower([
+                'userId' => $user->id,
+                'allowDisbursement' => $allowDisbursement,
+                'type' => 2,
+            ]);
+            $borrower->save(false);
             //添加user_account
             $userAccount = new UserAccount([
                 'uid' => $user->id,

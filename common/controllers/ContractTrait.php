@@ -8,6 +8,7 @@ use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
 use common\models\user\User;
+use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use common\view\LoanHelper;
 use EBaoQuan\Client;
@@ -198,6 +199,13 @@ trait ContractTrait
             . base64_encode(@file_get_contents(Yii::getAlias('@backend') . '/web'
                 . Yii::$app->params['platform_info.company_seal_640'])).'">';
         $fourTotalAsset = 4 * $loan->money; //todo 4期总资产
+        $borrowerName = null;   //借款人
+        $borrowerCardNumber = null; //借款人身份证
+        $borrower = $loan->borrower;
+        if (!is_null($borrower)) {
+            $borrowerName = $borrower->real_name;
+            $borrowerCardNumber = SecurityUtils::decrypt($borrower->safeIdCard);
+        }
 
         $content = preg_replace("/{{投资人}}/is", $userName, $content);
         $content = preg_replace("/{{出借人}}/is", $userName, $content);
@@ -214,6 +222,8 @@ trait ContractTrait
         $content = preg_replace("/{{产品到期日}}/is", $finishDate, $content);
         $content = preg_replace("/{{平台章}}/is", $chapter, $content);
         $content = preg_replace("/{{4期总资产}}/is", $fourTotalAsset, $content);
+        $content = preg_replace("/{{借款人}}/is", $borrowerName, $content);
+        $content = preg_replace("/{{借款人身份证}}/is", $borrowerCardNumber, $content);
 
         $content = preg_replace("/｛｛投资人｝｝/is", $userName, $content);
         $content = preg_replace("/｛｛出借人｝｝/is", $userName, $content);
@@ -230,6 +240,8 @@ trait ContractTrait
         $content = preg_replace("/｛｛产品到期日｝｝/is", $finishDate, $content);
         $content = preg_replace("/｛｛平台章｝｝/is", $chapter, $content);
         $content = preg_replace("/｛｛4期总资产｝｝/is", $fourTotalAsset, $content);
+        $content = preg_replace("/｛｛借款人｝｝/is", $borrowerName, $content);
+        $content = preg_replace("/｛｛借款人身份证｝｝/is", $borrowerCardNumber, $content);
 
         return $content;
     }

@@ -27,19 +27,16 @@ $this->registerJs('var cp=' . $header['cp'] . ';', 1);
 $pc_cat = Yii::$app->params['pc_cat'];
 
 $user = Yii::$app->user->getIdentity();
+//是否展示转让
+$showTransfer = !empty($user) && $user->orderCount();
 ?>
 <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
     <div class="row list-title">
-<!--        区分大于5万显示南金中心，小于5万不显示-->
-<!--        --><?php //if (!empty($user) && $user->isShowNjq) { ?>
-<!--            <div class="col-xs-4"><a href="/deal/deal/index" class="cre-title --><?//= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?><!--">理财列表</a></div>-->
-<!--            <div class="col-xs-4"><a href="/licai/notes" class="cre-title --><?//= $action === 'licai/notes' ? 'active-cre-title' : '' ?><!--">转让列表</a></div>-->
-<!--            <div class="col-xs-4"><a href="/njq/loan-list" class="cre-title --><?//= $action === 'njq/loan/list' ? 'active-cre-title' : '' ?><!--">南金中心</a></div>-->
-<!--        --><?php //} else { ?>
-            <div class="col-xs-4"><a href="/deal/deal/loan" class="cre-title <?= $action === 'deal/deal/loan' ? 'active-cre-title' : '' ?>">定期</a></div>
-            <div class="col-xs-4"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">网贷</a></div>
+        <div class="<?= $showTransfer ? 'col-xs-4' : 'col-xs-6' ?>"><a href="/deal/deal/loan" class="cre-title <?= $action === 'deal/deal/loan' ? 'active-cre-title' : '' ?>">定期</a></div>
+        <div class="<?= $showTransfer ? 'col-xs-4' : 'col-xs-6' ?>"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">网贷</a></div>
+        <?php if ($showTransfer) : ?>
             <div class="col-xs-4"><a href="/licai/notes" class="cre-title <?= $action === 'licai/notes' ? 'active-cre-title' : '' ?>">转让</a></div>
-<!--        --><?php //} ?>
+        <?php endif; ?>
     </div>
 <?php } ?>
 

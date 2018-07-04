@@ -42,7 +42,7 @@
         "vlucas/phpdotenv": "^2.4",
         "dmstr/yii2-adminlte-asset": "2.*",
         "yiisoft/yii2-queue": "~2.0.0",
-        "lhjx/config": "dev-master"
+        "lhjx/config": "1.2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",

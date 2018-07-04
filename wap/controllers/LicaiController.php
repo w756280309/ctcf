@@ -18,6 +18,13 @@ class LicaiController extends Controller
     public function actionNotes($page = 1)
     {
         $user = Yii::$app->user->getIdentity();
+        //未登录或者未投资的用户不可见
+        if (
+            Yii::$app->params['plat_code'] == 'WDJF'
+            && (empty($user) || $user->orderCount() <= 0)
+        ) {
+            throw $this->ex404();
+        }
         if (is_null($user) || (null !== $user && $user->getJGMoney() < 50000)) {
             $jianguan = true;
         } else {

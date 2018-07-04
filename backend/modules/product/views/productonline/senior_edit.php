@@ -2,11 +2,9 @@
 
 $this->title = '标的'.($model->id ? '编辑' : '添加');
 
-use PayGate\Cfca\CfcaUtils;
 use yii\helpers\ArrayHelper;
 use yii\web\YiiAsset;
 use yii\widgets\ActiveForm;
-use common\models\product\OnlineProduct;
 
 $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsset::class]);
 $this->registerCssFile('/vendor/kindeditor/4.1.11/themes/default/default.css');
@@ -103,7 +101,36 @@ $refundMethodStatus = $model->refund_method !== 1 ? ['readonly' => 'readonly'] :
                 </div>
             </div>
         </div>
-
+        <div class="row-fluid">
+            <div class="span6 ">
+                <div class="control-group">
+                    <label class="control-label">用款方【标的放款前可编辑】</label>
+                    <div class="controls">
+                        <?php
+                            $disabled = [];
+                            if (in_array($model->status, [5, 6]) || !$model->online_status) {
+                                $disabled = ['disabled' => 'disabled'];
+                            }
+                            $inputOption = array_merge([
+                                'autocomplete' => 'off',
+                                'class' => 'chosen-with-diselect span6 selectpicker',
+                                'data-live-search' => 'true',
+                                'data-size' => 10,
+                            ], $disabled);
+                            if (in_array($model->status, [5, 6])) {
+                                $inputOption = array_merge($inputOption, ['disabled' => 'disabled']);
+                            }
+                        ?>
+                        <?=
+                            $form->field($model, 'fundReceiver', [
+                                'template' => '{input}{error}',
+                                'inputOptions' => $inputOption
+                            ])->dropDownList(['' => '--请选择--'] + $fundReceiver);
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row-fluid">
             <div class="span6 ">
                 <div class="control-group">

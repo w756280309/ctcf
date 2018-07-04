@@ -31,6 +31,13 @@ class TradeController extends BaseController
         }
 
         $user = $this->getAuthedUser();
+        //未登录或者未投资的用户不可见
+        if (
+            Yii::$app->params['plat_code'] == 'WDJF'
+            && (empty($user) || $user->orderCount() <= 0)
+        ) {
+            throw $this->ex404();
+        }
         $pageSize = 5;
 
         if (1 === $type) {   //可转让

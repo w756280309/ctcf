@@ -22,7 +22,11 @@ $user = Yii::$app->user->getIdentity();
         <li class="nav-content">
             <ul>
                 <li class="<?= 'user/user/myorder' === $action ? 'selected' : '' ?>"><a href="/user/user/myorder"><span class="star"></span>我的理财</a></li>
-                <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
+                <?php if (
+                        Yii::$app->params['feature_credit_note_on']
+                        && !empty($user)
+                        && $user->orderCount() > 0
+                ) {  ?>
                     <li class="<?= in_array($action, ['credit/trade/assets', 'credit/note/new']) ? 'selected' : '' ?>"><a href="/credit/trade/assets"><span class="star"></span>我的转让</a></li>
                 <?php } ?>
                 <li class="<?= 'user/coupon/index' === $action ? 'selected' : '' ?>"><a href="/user/coupon/"><span class="star"></span>我的代金券</a></li>
