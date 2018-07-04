@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "18c109865a033722b77e0952b3a1c76b",
+    "content-hash": "d4f0326fec712dbcb7321fd0c3c3ee96",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -1521,11 +1521,11 @@
         },
         {
             "name": "lhjx/config",
-            "version": "dev-master",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/source/config.git",
-                "reference": "60074d5b97efcf2804b74951be433b1a14279c88"
+                "reference": "0d334c31b1871441290401eb3aba6b0c0bb7c81b"
             },
             "require": {
                 "php": ">=5.6",
@@ -1542,7 +1542,7 @@
                 }
             },
             "description": "Configuration with validation",
-            "time": "2018-06-15T02:09:14+00:00"
+            "time": "2018-07-03T03:11:31+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3758,8 +3758,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "wcg/dingnotify": 20,
-        "wcg/libs": 20,
-        "lhjx/config": 20
+        "wcg/libs": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
