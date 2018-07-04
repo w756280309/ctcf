@@ -35,24 +35,6 @@ use yii\data\ArrayDataProvider;
 class ProductonlineController extends BaseController
 {
     /**
-     * 获取未被软删除的全部融资方信息.
-     */
-    private function orgUserInfo(array $type)
-    {
-        $u = User::tableName();
-        $b = BorrowerInfo::tableName();
-        return  User::find()
-            ->innerJoinWith('borrowerInfo')
-            ->where(["$u.type" => User::USER_TYPE_ORG])
-            ->andWhere(['is_soft_deleted' => 0])
-            ->andWhere(['in', "$b.type", $type])
-            ->orderBy(['sort' => SORT_DESC])
-            ->select("org_name")
-            ->indexBy("userId")
-            ->column();
-    }
-
-    /**
      * 获取全部发行商信息.
      */
     private function issuerInfo()

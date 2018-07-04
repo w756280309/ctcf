@@ -80,7 +80,7 @@ class BaseController extends Controller
             ->andWhere(['is_soft_deleted' => 0])
             ->andWhere(['in', "$b.type", $type])
             ->orderBy(['sort' => SORT_DESC])
-            ->select("org_name")
+            ->select("$u.org_name, $b.userId")
             ->indexBy("userId")
             ->column();
     }
