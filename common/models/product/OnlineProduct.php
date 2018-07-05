@@ -1541,17 +1541,13 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
      */
     public function getFangKuanFang()
     {
-        if (null !== $this->fundReceiver) {
-            return EpayUser::find()
-                ->where(['appUserId' => $this->fundReceiver])
-                ->one();
-        }
-        $borrower = User::findOne($this->borrow_uid);
-        if (null !== $borrower && $borrower->borrowerInfo->allowDisbursement) {   //存在融资方，并且融资方允许放款
-            return $borrower->epayUser;
+        $epayUser = null;
+        $user = $this->getFangKuanUser();
+        if (null === $user) {
+            return $epayUser;
         }
 
-        return null;
+        return $user->epayUser;
     }
 
     /**
@@ -1581,7 +1577,10 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         $borrower = User::findOne($this->borrow_uid);
         if (null !== $borrower) {
             $borrowerInfo = $borrower->borrowerInfo;
-            if (null !== $borrowerInfo && $borrowerInfo->allowDisbursement) {
+            if (null !== $borrowerInfo
+                && ($borrowerInfo->allowDisbursement
+                    || $this->is_xs)
+            ) {
                 return $borrower;
             }
         }
