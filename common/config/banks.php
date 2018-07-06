@@ -1370,4 +1370,11 @@ return [
         'limit' => [],
         'bin' => [],
     ],
+    '2000' => [
+        'sort' => '37',
+        'bankname' => '武汉农村商业银行',
+        'nickname' => 'WHRC',
+        'limit' => [],
+        'bin' => [],
+    ],
 ];
