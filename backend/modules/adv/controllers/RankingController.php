@@ -147,6 +147,7 @@ class RankingController extends BaseController
     {
         $query = new Query();
         $query->select([
+            'u.id as user_id',
             'u.real_name',
             'u.safeMobile',
             't.drawAt',

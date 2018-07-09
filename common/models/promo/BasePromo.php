@@ -109,16 +109,17 @@ class BasePromo
      */
     public function getDrawnCount(User $user, $isDaily = false)
     {
-        $query = (int) PromoLotteryTicket::find()
+        $query =  PromoLotteryTicket::find()
             ->where(['promo_id' => $this->promo->id])
             ->andWhere(['user_id' => $user->id])
             ->andWhere(['isDrawn' => true]);
 
         if ($isDaily) {
             $joinTime = new \DateTime();
-            $query->where(['date(from_unixtime(created_at))' => $joinTime->format('Y-m-d')]);
+            $query->andWhere(['date(from_unixtime(created_at))' => $joinTime->format('Y-m-d')]);
         }
-        return $query->count();
+
+        return (int)$query->count();
     }
 
     /**
