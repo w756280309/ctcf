@@ -2,10 +2,11 @@
 
 namespace common\models\offline;
 
-use common\models\adminuser\Admin;
+use common\models\product\RepaymentHelper;
 use yii\db\ActiveRecord;
 use common\models\affiliation\Affiliator;
 use Zii\Validator\CnIdCardValidator;
+use Yii;
 
 /**
  * This is the model class for table "offline_order".
@@ -114,10 +115,19 @@ class OfflineOrder extends ActiveRecord
     }
 
     /**
-     * 根据订单计算年化投资金额.
+     * 根据订单计算年化投资金额
+     * 还款方式为等额本息时与非等额本息计算方法不同
      */
     public function getAnnualInvestment()
     {
+        if ((int) $this->loan->repaymentMethod === 10) {
+            $startDate = (new \DateTime($this->orderDate))->add(new \DateInterval('P1D'))->format('Y-m-d');
+            $duration = intval($this->loan->expires);
+            $apr = $this->apr;
+            $amount = bcmul($this->money, 10000);
+
+            return RepaymentHelper::calcDebxAnnualInvest($startDate, $duration, $apr, $amount);
+        }
         if (strpos($this->loan->unit, '天') !== false) {
             $base = 365;
         } else {
@@ -169,5 +179,98 @@ class OfflineOrder extends ActiveRecord
             ]);
             return $plan->status ? 3 : 1;
         }
+    }
+
+    /**
+     * 获取等额本息线下所有的投标记录，$startDate和$endDate为空时获取所有线下投标记录，均不为空时获取某段时间内线下投标记录
+     * @param bool $isJixi 为true时获取计息后未到项目截止时间的投标记录，为false时所有投标记录
+     * @param string [optional] $startDate 开始时间
+     * @param string [optional] $endDate 结束时间
+     * @return array 线下投标记录数组
+     */
+    public static function getDebxOfflineOrdersArray($isJixi = false, $startDate = null, $endDate = null)
+    {
+        $where = null;
+        if ($isJixi) {
+            $date = date('Y-m-d H:i:s');
+            $where = " AND l.is_jixi = 1 
+                AND '" . $date . "' <= l.finish_date";
+        }
+        if ($startDate === null && $endDate === null) {
+            $sql = "SELECT o.orderDate, l.expires, (o.money * 10000) as money, o.apr 
+                FROM offline_order o 
+                INNER JOIN offline_loan l 
+                ON o.loan_id = l.id 
+                AND o.isDeleted = 0 
+                AND l.repaymentMethod = 10" . $where;
+
+            return Yii::$app->db->createCommand($sql)->queryAll();
+        } elseif ($startDate !== null && $endDate !== null) {
+            $sql = "SELECT o.orderDate, l.expires, (o.money * 10000) as money, o.apr 
+            FROM offline_order o 
+            INNER JOIN offline_loan l 
+            ON o.loan_id = l.id 
+            AND o.isDeleted = 0 
+            AND l.repaymentMethod = 10 
+            AND date(from_unixtime(o.created_at)) >= :startDate 
+            AND date(from_unixtime(o.created_at)) <= :endDate" . $where;
+
+            return Yii::$app->db->createCommand($sql, [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+            ])->queryAll();
+        }
+    }
+
+    /**
+     * 获取某个人某段时间内所有等额本息的投标记录
+     * @param $userId  登录线下用户id
+     * @param $startDate  开始日期
+     * @param $endDate  结束日期
+     * @return array  线下投标记录数组
+     */
+    public static function getDebxUserOfflineOrdersArray($userId, $startDate, $endDate)
+    {
+        $sql = "SELECT o.orderDate, l.expires, (o.money * 10000) as money, o.apr 
+            FROM offline_order o
+            INNER JOIN offline_loan l 
+            ON o.loan_id = l.id
+            INNER JOIN offline_user u 
+            ON u.id = o.user_id
+            WHERE o.onlineUserId = :userId 
+            AND l.isDeleted = 0 
+            AND l.repaymentMethod = 10 
+            AND date(from_unixtime(o.created_at)) >= :startDate
+            AND date(from_unixtime(o.created_at)) <= :endDate";
+
+        return Yii::$app->db->createCommand($sql, [
+            'userId' => $userId,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
+    }
+
+    /**
+     * 某段时间内非等额本息标的线下投标记录
+     * @param $startDate 开始时间
+     * @param $endDate 结束时间
+     * @return array  线下投标记录数组
+     */
+    public static function getOfflineOrdersArray($startDate, $endDate)
+    {
+        $offlineSql = "SELECT date_format(date(o.orderDate), '%Y-%m') as orderDate,
+        sum(truncate((if(l.repaymentMethod > 1, o.money*l.expires*10000/12, o.money*l.expires*10000/365)), 2)) as annual 
+        FROM offline_order o 
+        INNER JOIN offline_loan l 
+        ON o.loan_id = l.id 
+        WHERE o.isDeleted = 0 
+        AND l.repaymentMethod != 10 
+        AND date(o.orderDate) >= :startDate 
+        AND date(o.orderDate) <= :endDate 
+        GROUP BY month(date(o.orderDate))";
+        return Yii::$app->db->createCommand($offlineSql, [
+            'startDate' => $startDate,
+            'endDate' =>$endDate,
+        ])->queryAll();
     }
 }

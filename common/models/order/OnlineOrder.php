@@ -22,7 +22,6 @@ use phpDocumentor\Reflection\Types\Self_;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "online_order".
@@ -355,9 +354,18 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
 
     /**
      * 根据订单计算年化投资金额.
+     * 还款方式为等额本息时与非等额本息计算方法不同
      */
     public function getAnnualInvestment()
     {
+        if ((int) $this->loan->refund_method === 10) {
+            $startDate = (new \DateTime())->setTimestamp($this->order_time)->add(new \DateInterval('P1D'))->format('Y-m-d');
+            $duration = intval($this->loan->expires);
+            $apr = $this->yield_rate;
+            $amount = $this->order_money;
+
+            return RepaymentHelper::calcDebxAnnualInvest($startDate, $duration, $apr, $amount);
+        }
         if ($this->loan->isAmortized()) {
             $unit = 'm';    //按月计算
         } else {
@@ -643,5 +651,98 @@ class OnlineOrder extends ActiveRecord implements OrderTxInterface
             'date' => $date,
         ];
         return $data;
+    }
+
+    /**
+     * 获取某段时间内等额本息所有的线上投标记录,$startDate和$endDate为空时获取所有线上投标记录，均不为空时获取某段时间内线上投标记录
+     * @param bool $isJixi 为true时获取收益中和募集结束的投标记录，为false时所有投标记录
+     * @param string $startDate [optional] 开始时间
+     * @param string $endDate [optional] 结束时间
+     * @return array 线上投标记录数组
+     */
+    public static function getDebxOnlineOrdersArray($isJixi = false, $startDate = null, $endDate = null)
+    {
+        $where = null;
+        if ($isJixi) {
+            $where = " AND p.status in (5, 7)";
+        }
+        if ($startDate === null && $endDate === null) {
+            $sql = "SELECT o.order_time, p.expires, o.order_money AS money, o.yield_rate AS apr
+                FROM online_order o 
+                INNER JOIN online_product p 
+                ON o.online_pid = p.id 
+                WHERE o.status = 1 
+                AND p.isTest = 0 
+                AND p.refund_method = 10" . $where;
+
+            return Yii::$app->db->createCommand($sql)->queryAll();
+        } elseif ($startDate !== null && $endDate !== null) {
+            $sql = "SELECT o.order_time, p.expires, o.order_money AS money, o.yield_rate AS apr
+                FROM online_order o 
+                INNER JOIN online_product p 
+                ON o.online_pid = p.id 
+                WHERE o.status = 1 
+                AND p.isTest = 0 
+                AND p.refund_method = 10 
+                AND date(from_unixtime(o.order_time)) >= :startDate 
+                AND date(from_unixtime(o.order_time)) <= :endDate" . $where;
+
+            return Yii::$app->db->createCommand($sql, [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+            ])->queryAll();
+        }
+    }
+
+    /**
+     * 获取某个人某段时间内的所有等额本息线上投标记录
+     * @param $userId  登录线上用户的id
+     * @param $startDate 开始时间
+     * @param $endDate 结束时间
+     * @return array 线上投标记录数组
+     */
+    public static function getDebxUserOnlineOrdersArray($userId, $startDate, $endDate)
+    {
+        $sql = "SELECT o.order_time, p.expires, o.order_money AS money, o.yield_rate AS apr
+            FROM online_order o
+            INNER JOIN online_product p 
+            ON o.online_pid = p.id
+            WHERE o.uid = :userId 
+            AND o.status = 1 
+            AND p.isTest = 0 
+            AND p.refund_method = 10 
+            AND date(from_unixtime(o.order_time)) >= :startDate
+            AND date(from_unixtime(o.order_time)) <= :endDate";
+
+        return \Yii::$app->db->createCommand($sql, [
+            'userId' => $userId,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
+    }
+
+    /**
+     * 非等额本息标的某段时间内的线上投标记录
+     * @param $startDate 开始时间
+     * @param $endDate 结束时间
+     * @return array 线上投标记录数组
+     */
+    public static function getOnlineOrdersArray($startDate, $endDate)
+    {
+        $onlineSql = "SELECT date_format(from_unixtime(o.order_time), '%Y-%m') AS orderDate,
+            SUM(truncate(if(p.refund_method > 1, o.order_money * p.expires / 12, o.order_money * p.expires / 365), 2)) AS annual
+            FROM online_order o 
+            INNER JOIN online_product p 
+            ON o.online_pid = p.id 
+            WHERE o.status = 1 
+            AND p.isTest = 0 
+            and p.refund_method != 10
+            AND date(from_unixtime(o.order_time)) >= :startDate 
+            AND date(from_unixtime(o.order_time)) <= :endDate 
+            GROUP BY month(date(from_unixtime(o.order_time)))";
+        return \Yii::$app->db->createCommand($onlineSql, [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryAll();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace common\models\product;
 
+use common\lib\bchelp\BcRound;
 use Wcg\DateTime\DT;
 use Wcg\Interest\Builder;
 use Wcg\Math\Bc;
@@ -350,5 +351,30 @@ class RepaymentHelper
         }
 
         return $res;
+    }
+
+    /**
+     * 计算等额本息年化投资金额,计算公式为（1期本金*1 + 2期本金*2 + n期本金 * n）/12  1,2....n为期数
+     * @param string $startDate
+     * @param integer $duration
+     * @param float $apr
+     * @param integer $amount
+     * @return int|float
+     */
+    public static function calcDebxAnnualInvest($startDate, $duration, $apr, $amount)
+    {
+        $annualInvestAmount = 0;
+        $repayPlan = Builder::create(Builder::TYPE_DEBX)
+            ->setStartDate(new DT($startDate))
+            ->setMonth($duration)
+            ->setRate($apr)
+            ->build($amount);
+        foreach ($repayPlan as $index => $repayTerm) {
+            $key = $index + 1;
+            $annualInvestAmount += Bc::round($repayTerm->getPrincipal(), 2) * $key;
+        }
+        $annualInvestAmount /= 12;
+
+        return $annualInvestAmount;
     }
 }

@@ -2,12 +2,13 @@
 
 namespace common\models\stats;
 
-use common\models\coupon\CouponType;
-use common\models\coupon\UserCoupon;
 use common\models\growth\AppMeta;
+use common\models\offline\OfflineOrder;
 use common\models\offline\OfflineStats;
+use common\models\order\OnlineOrder;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
+use common\models\product\RepaymentHelper;
 use yii\db\ActiveRecord;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -448,8 +449,11 @@ AND p.is_xs = 1
 
     /**
      * 线上年化累计交易额
+     * 非等额本息计算公式
      * 到期本息  交易额×项目期限/365
      * 非到期本息：交易额×项目期限/12
+     * 等额本息计算公式
+     * (1期本金*1 + 2期本金×2 ... + n期本金*n)
      */
     public static function getOnlineAnnualTotalInvestment()
     {
@@ -458,14 +462,22 @@ AND p.is_xs = 1
               INNER JOIN online_product p 
               ON o.online_pid = p.id 
               WHERE o.status = 1 
-              AND p.isTest = 0';
-        return self::getDbRead()->createCommand($sql)->queryScalar();
+              AND p.isTest = 0
+              AND p.refund_method != 10';
+        $onlineAnnualInvest = self::getDbRead()->createCommand($sql)->queryScalar();
+        $onlineDebxAnnualInvest = self::getDebxOnlineAnnualInvest();
+        $allOnlineAnnualInvest = bcadd($onlineAnnualInvest, $onlineDebxAnnualInvest);
+
+        return $allOnlineAnnualInvest;
     }
 
     /**
      * 线下年化累计交易额
+     * 非等额本息计算公式
      * 以天为单位： 交易额×项目期限/365
      * 以月为单位：交易额×项目期限/12
+     * 等额本息计算公式
+     * (1期本金*1 + 2期本金×2 ... + n期本金*n)
      */
     public static function getOfflineAnnualTotalInvestment()
     {
@@ -473,8 +485,63 @@ AND p.is_xs = 1
             FROM offline_order o 
             INNER JOIN offline_loan l 
             ON o.loan_id = l.id 
-            WHERE o.isDeleted = 0';
-        return self::getDbRead()->createCommand($sql)->queryScalar();
+            WHERE o.isDeleted = 0 
+            AND l.repaymentMethod != 10';
+        $offlineAnnualInvest = self::getDbRead()->createCommand($sql)->queryScalar();
+        $offlineDebxAnnualInvest = self::getDebxOfflineAnnualInvest();
+        $allOfflineAnnualInvest = bcadd($offlineAnnualInvest, $offlineDebxAnnualInvest);
+
+        return $allOfflineAnnualInvest;
+    }
+
+    /**
+     * 统计线上等额本息所有的投标记录，计算累计年化投资金额
+     * bool $isJixi 为true时获取收益中和募集结束的年化投资金额，为false时所有等额本息年化投资金额
+     * @param string $startDate [optional] 订单开始时间
+     * @param string $endDate [optional]  订单结束时间
+     * @return float|int
+     */
+    public static function getDebxOnlineAnnualInvest($isJixi = false, $startDate = null, $endDate = null)
+    {
+        $onlineOrders = OnlineOrder::getDebxOnlineOrdersArray($isJixi, $startDate, $endDate);
+        $allAnnualInvestAmount = 0;
+        if (!empty($onlineOrders)) {
+            foreach ($onlineOrders as $order) {
+                $startDate = (new \DateTime())->setTimestamp($order['order_time'])->add(new \DateInterval('P1D'))->format('Y-m-d');
+                $duration = intval($order['expires']);
+                $apr = $order['apr'];
+                $amount = $order['money'];
+                $annualInvestAmount = RepaymentHelper::calcDebxAnnualInvest($startDate, $duration, $apr, $amount);
+                $allAnnualInvestAmount += $annualInvestAmount;
+            }
+        }
+
+        return $allAnnualInvestAmount;
+    }
+
+    /**
+     * 统计线下等额本息所有投标记录，计算累计年化投资金额
+     * @param bool $isJixi 为true时获取收益中和募集结束的年化投资金额，为false时所有等额本息年化投资金额
+     * @param string [optional] $startDate
+     * @param string [optional] $endDate
+     * @return float|int
+     */
+    public static function getDebxOfflineAnnualInvest($isJixi = false, $startDate = null, $endDate = null)
+    {
+        $offlineOrders = OfflineOrder::getDebxOfflineOrdersArray($isJixi, $startDate, $endDate);
+        $allAnnualInvestAmount = 0;
+        if (!empty($offlineOrders)) {
+            foreach ($offlineOrders as $order) {
+                $startDate = (new \DateTime($order['orderDate']))->add(new \DateInterval('P1D'))->format('Y-m-d');
+                $duration = intval($order['expires']);
+                $apr = $order['apr'];
+                $amount = $order['money'];
+                $annualInvestAmount = RepaymentHelper::calcDebxAnnualInvest($startDate, $duration, $apr, $amount);
+                $allAnnualInvestAmount += $annualInvestAmount;
+            }
+        }
+
+        return $allAnnualInvestAmount;
     }
 
     /**
@@ -488,7 +555,11 @@ AND p.is_xs = 1
         $sql = 'SELECT 
             SUM(funded_money * expires / ' . $productCond . ' ) 
             FROM online_product WHERE `status` IN(5,7) AND isTest = 0';
-        return self::getDbRead()->createCommand($sql)->queryScalar();
+        $annualInvest = self::getDbRead()->createCommand($sql)->queryScalar();
+        $debxAnnualInvest = self::getDebxOfflineAnnualInvest(true);
+        $allAnnualInvest = bcadd($annualInvest, $debxAnnualInvest);
+
+        return $allAnnualInvest;
     }
 
     /**
@@ -509,7 +580,11 @@ AND p.is_xs = 1
             AND l.is_jixi = 1 
             AND '" . $date ."' <= l.finish_date";
 
-        return self::getDbRead()->createCommand($sql)->queryScalar();
+        $annualInvest = self::getDbRead()->createCommand($sql)->queryScalar();
+        $debxAnnualInvest = self::getDebxOfflineAnnualInvest(true);
+        $allAnnualInvest = bcadd($annualInvest, $debxAnnualInvest);
+
+        return $allAnnualInvest;
     }
 
     //可用余额,网站所有用户的可用余额总和
@@ -832,7 +907,7 @@ FROM perf WHERE DATE_FORMAT(bizDate,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d') 
         return ArrayHelper::getColumn($data, 'uid');
     }
 
-
+    
     /**
      * 获取首页相关统计
      * @return array

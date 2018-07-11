@@ -2,7 +2,9 @@
 
 namespace common\models\user;
 
+use common\models\offline\OfflineOrder;
 use common\models\order\OnlineOrder;
+use common\models\product\RepaymentHelper;
 use yii\db\ActiveRecord;
 
 /**
@@ -175,12 +177,16 @@ class UserInfo extends ActiveRecord
     public static function calcAnnualInvest($userOrId, $startDate, $endDate)
     {
         $db = \Yii::$app->db;
-        $sql = "select sum(truncate((if(p.refund_method > 1, o.order_money*p.expires/12, o.order_money*p.expires/365)), 2)) as annual from online_order o inner join online_product p on o.online_pid = p.id inner join user u on u.id = o.uid where date(from_unixtime(o.order_time)) >= :startDate and date(from_unixtime(o.order_time)) <= :endDate and o.status = 1 and o.uid = :userId";
-        return (int) $db->createCommand($sql, [
+        $sql = "select sum(truncate((if(p.refund_method > 1, o.order_money*p.expires/12, o.order_money*p.expires/365)), 2)) as annual from online_order o inner join online_product p on o.online_pid = p.id inner join user u on u.id = o.uid where date(from_unixtime(o.order_time)) >= :startDate and date(from_unixtime(o.order_time)) <= :endDate and o.status = 1 and o.uid = :userId and p.refund_method != 10";
+        $annualInvest = (int) $db->createCommand($sql, [
             'userId' => $userOrId,
             'startDate' => $startDate,
             'endDate' => $endDate,
         ])->queryScalar();
+        $debxAnnualInvest = (int) self::getDebxOnlineAnnualInvest($userOrId, $startDate, $endDate);
+        $allAnnualInvest = $annualInvest + $debxAnnualInvest;
+
+        return $allAnnualInvest;
     }
 
     /**
@@ -227,15 +233,20 @@ inner join offline_user u
 where date(o.orderDate) >= :startDate 
     and date(o.orderDate) <= :endDate 
     and o.isDeleted = 0 
+    and p.repaymentMethod != 10 
     and date(from_unixtime(o.created_at)) >= :startDate 
     and date(from_unixtime(o.created_at)) <= :endDate 
     and u.onlineUserId = :userId";
 
-        return (int) $db->createCommand($sql, [
+        $annualInvest = (int) $db->createCommand($sql, [
             'userId' => $userOrId,
             'startDate' => $startDate,
             'endDate' => $endDate,
         ])->queryScalar();
+        $debxAnnualInvest = (int) self::getDebxOfflineAnnualInvest($userOrId, $startDate, $endDate);
+        $allAnnualInvest = $annualInvest + $debxAnnualInvest;
+
+        return $allAnnualInvest;
     }
 
     /**
@@ -278,5 +289,51 @@ where o.user_id = :userId
     public function getTotalInvestMoney()
     {
         return bcadd($this->investTotal, $this->creditInvestTotal, 2);
+    }
+
+    /**
+     * 统计线上某个人某段时间内所有等额本息投标记录,计算年化投资金额
+     * @param int $userId
+     * @param string $startDate
+     * @param string $endDate
+     * @return float|int
+     */
+    public static function getDebxOnlineAnnualInvest($userId, $startDate, $endDate)
+    {
+        $onlineOrders = OnlineOrder::getDebxUserOnlineOrdersArray($userId, $startDate, $endDate);
+        $allAnnualInvestAmount = 0;
+        foreach ($onlineOrders as $order) {
+            $startDate = (new \DateTime())->setTimestamp($order['order_time'])->add(new \DateInterval('P1D'))->format('Y-m-d');
+            $duration = intval($order['expires']);
+            $apr = $order['apr'];
+            $amount = $order['money'];
+            $annualInvestAmount = RepaymentHelper::calcDebxAnnualInvest($startDate, $duration, $apr, $amount);
+            $allAnnualInvestAmount += $annualInvestAmount;
+        }
+
+        return $allAnnualInvestAmount;
+    }
+
+    /**
+     * 统计线下某个人某段时间内所有等额本息投标记录,计算累计年化投资金额
+     * @param int $userId
+     * @param string $startDate
+     * @param string $endDate
+     * @return float|int
+     */
+    public static function getDebxOfflineAnnualInvest($userId, $startDate, $endDate)
+    {
+        $offlineOrders = OfflineOrder::getDebxUserOfflineOrdersArray($userId, $startDate, $endDate);
+        $allAnnualInvestAmount = 0;
+        foreach ($offlineOrders as $order) {
+            $startDate = (new \DateTime($order['orderDate']))->add(new \DateInterval('P1D'))->format('Y-m-d');
+            $duration = intval($order['expires']);
+            $apr = $order['apr'];
+            $amount = $order['money'];
+            $annualInvestAmount = RepaymentHelper::calcDebxAnnualInvest($startDate, $duration, $apr, $amount);
+            $allAnnualInvestAmount += $annualInvestAmount;
+        }
+
+        return $allAnnualInvestAmount;
     }
 }

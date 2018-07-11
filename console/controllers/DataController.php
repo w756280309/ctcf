@@ -6,6 +6,7 @@ use common\lib\user\UserStats;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\UserAffiliation;
 use common\models\draw\DrawManager;
+use common\models\offline\OfflineOrder;
 use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineFangkuan;
@@ -19,6 +20,7 @@ use common\models\promo\LoanOrderPoints;
 use common\models\promo\Poker;
 use common\models\promo\PokerUser;
 use common\models\promo\PromoLotteryTicket;
+use common\models\stats\Perf;
 use common\models\transfer\Transfer;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
@@ -29,6 +31,7 @@ use common\utils\StringUtils;
 use common\utils\TxUtils;
 use common\view\LoanHelper;
 use wap\modules\promotion\models\RankingPromo;
+use Wcg\Math\Bc;
 use yii\console\Controller;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -973,4 +976,41 @@ ci.affiliator_id = :id";
         $objWriter->save($file);
         exit();
     }
+
+    /**
+     * 按照月份导出非等额本息线上年化金额，线下年化金额，等额本息线上年化金额，及年化总金额
+     * @param $startDate  开始日期
+     * @param $endDate  结束日期
+     */
+    public function actionDurationAnnualInvest($startDate, $endDate)
+    {
+        //计算线上非等额本息单月年化投资金额
+        $onlineAnnualInvest = OnlineOrder::getOnlineOrdersArray($startDate, $endDate);
+        $onlineAnnualInvest = ArrayHelper::index($onlineAnnualInvest, 'orderDate');
+        //计算线下非等额本息单月的年化投资金额
+        $offlineAnnualInvest = OfflineOrder::getOfflineOrdersArray($startDate, $endDate);
+        $offlineAnnualInvest = ArrayHelper::index($offlineAnnualInvest, 'orderDate');
+        $annualInvest = [];
+        foreach ($onlineAnnualInvest as $key => $value) {
+            $startTime = date('Y-m-01', strtotime($key));
+            $endTime = date('Y-m-t', strtotime($key));
+            $debxOnlineAnnualInvest = Perf::getDebxOnlineAnnualInvest($startTime, $endTime);
+            $annualInvest[$key]['date'] = $key;
+            $annualInvest[$key]['onlineAnnualInvest'] = $value['annual'];
+            $offlineAnnualInvestAmount = isset($offlineAnnualInvest[$key]) ? $offlineAnnualInvest[$key]['annual'] : 0;
+            $annualInvest[$key]['offlineAnnualInvest'] = $offlineAnnualInvestAmount;
+            $annualInvest[$key]['debxOnlineAnnualInvest'] = $debxOnlineAnnualInvest;
+            $annualInvest[$key]['annual'] = Bc::round(bcadd(bcadd($value['annual'], $offlineAnnualInvestAmount), $debxOnlineAnnualInvest), 2) ;
+        }
+        ksort($annualInvest);
+        $title = ['月份', '线上非等额本息年化', '线下非等额本息年化', '线上等额本息年化', '累计年化总金额'];
+        array_unshift($annualInvest, $title);
+        $file = Yii::getAlias('@app/runtime/duration_annual_invest_'.date('YmdHis').'.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($annualInvest);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
+    }
 }
+
+
