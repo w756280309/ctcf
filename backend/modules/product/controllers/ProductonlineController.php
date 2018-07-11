@@ -406,8 +406,8 @@ class ProductonlineController extends BaseController
                     $model->save(false);
                     $log = AdminLog::initNew($model);
                     $log->save();
-                    //如果当前状态为未上标状态，无需更新绑定标的与用款方账户的联系
-                    if (!$model->online_status) {
+                    //如果当前状态为上标状态，才更新绑定标的与用款方账户的联系
+                    if ($model->online_status) {
                         if ($fundEpayUserId !== $originEpayUserId) {
                             $ump = Yii::$container->get('ump');
                             if (null === $fundEpayUserId && null !== $originEpayUserId) {
