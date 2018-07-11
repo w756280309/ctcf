@@ -57,7 +57,7 @@ class WechatMenuController extends Controller
         return [
             [
                 "type" => "view",
-                "name" => "我要理财",
+                "name" => "我要出借",
                 "url" => "https://m.hbctcf.com#t=wx"
             ],
             [
