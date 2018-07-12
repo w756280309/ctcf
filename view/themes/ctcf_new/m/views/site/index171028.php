@@ -258,8 +258,9 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
                 <a href="/deal/deal/detail?sn=<?= $val->sn ?>">
                     <div class="bid-title">
                         <h6 class="bid-title-h6"><?= $val->title ?></h6>
-                        <span>银企合作</span>
-                        <span>稳健增长</span>
+                        <?php if (!empty($val->tags) || $val->pointsMultiple > 1) : ?>
+                                <?= $this->renderFile("@common/views/tags.php", ['loan' => $val]) ?>
+                        <?php endif; ?>
                     </div>
                     <div class="bid-main-msg clearfix">
                         <div class="lf bid-about-rate">
