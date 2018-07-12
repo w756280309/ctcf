@@ -455,7 +455,7 @@ order by ua.investment_balance desc";
             $idCard = SecurityUtils::decrypt($user['idCard']);
             $user['idCard'] = $idCard;
             $user['mobile'] = SecurityUtils::decrypt($user['mobile']);
-            $user['gender'] = substr($idCard, -2, 1) % 2 ? '男' : '女';
+            $user['gender'] = intval(substr($idCard, -2, 1)) % 2 ? '男' : '女';
             if (!array_key_exists($idCard, $onlineUsers)) {
                 $onlineUsers[$idCard] = $user;
             } else {
