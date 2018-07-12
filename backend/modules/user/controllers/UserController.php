@@ -1276,4 +1276,25 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             ]);
         }
     }
+
+    /**
+     *用户销户（锁定用户，禁止登录）
+     */
+    public function actionUserAccess()
+    {
+        $request = Yii::$app->request;
+        $userId = (int)$request->get('id');
+        $user = User::findOne($userId);
+        if (null === $user) {
+            throw new \Exception('未查询到该用户，请联系管理员');
+        }
+        $user->scenario = 'userAccess';
+        if ($user->load($request->post()) && $user->validate() && $user->save(false)) {
+            $this->redirect('/user/user/listt');
+        }
+
+        return $this->render('access', [
+            'user' => $user,
+        ]);
+    }
 }

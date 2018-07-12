@@ -215,6 +215,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
             'kuaijie' => ['kuaijie_status'],
             'updateRegLocation' => ['regLocation'],
             'merge' => ['offlineUserId'],
+            'userAccess' => ['status'],
         ];
     }
 

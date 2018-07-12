@@ -26,6 +26,7 @@ $accounts = Yii::$app->params['borrowerSubtype'];
                 <th>所属分销商</th>
                 <th>注册位置</th>
                 <th>联动状态</th>
+                <th>账户状态</th>
         <?php } else {?>
                 <th>联动商户号</th>
         <?php }?>
@@ -69,19 +70,25 @@ $accounts = Yii::$app->params['borrowerSubtype'];
                     <td>
                         <button class="btn btn-primary get_order_status" uid="<?= $val['id'] ?>">查询联动状态</button>
                     </td>
+                    <td>
+                        <?php echo $val->status == 1 ? '正常': '禁用';?>
+                    </td>
                 <?php } else {?>
                     <td><?php echo $val->epayUser->epayUserId;?></td>
                 <?php }?>
                 <td>
                 <center>
                      <?php if($isPersonal) { ?>
-                        <a href="/user/user/detail?id=<?= $val['id'] ?>" ><span class="label label-success"><i class="icon-edit"></i> 查看用户详情</span></a>
+                        <a href="/user/user/detail?id=<?= $val['id'] ?>" ><span class="label label-success"><i class="icon-edit"></i> 详情</span></a>
                      <?php } else { ?>
                         <a href="/user/user/edit?id=<?= $val['id'] ?>&type=<?= $category ?>" ><span class="label label-success"><i class="icon-edit"></i> 编辑</span></a>
                         <a href="/user/user/detail?id=<?= $val['id'] ?>" ><span class="label label-success"><i class="icon-edit"></i> 查看用户详情</span></a>
                          <a href="/user/user/soft-delete-org-user?id=<?= $val['id'] ?>" class="soft_delete_org_user"><span class="label label-danger"><i class="icon-minus-sign"></i>删除</span></a>
                     <?php } ?>
                     | <a href="/user/point/add?userId=<?= $val['id'] ?>&backUrl=<?= '/user/user/listt' ?>"><span class="label label-success">给积分</span></a>
+                    | <?php if ($isPersonal) :?>
+                        <a href="/user/user/user-access?id=<?= $val['id'] ?>"><span class="label label-success">权限控制</span></a>
+                      <?php endif;?>
                 </center>
                 </td>
             </tr>
