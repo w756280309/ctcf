@@ -7,7 +7,6 @@ use common\models\affiliation\Affiliator;
 use common\models\affiliation\UserAffiliation;
 use common\models\draw\DrawManager;
 use common\models\offline\OfflineOrder;
-use common\models\offline\OfflineUser;
 use common\models\order\OnlineOrder;
 use common\models\order\OnlineFangkuan;
 use common\models\order\OnlineRepaymentRecord;
@@ -19,7 +18,6 @@ use common\models\promo\InviteRecord;
 use common\models\promo\LoanOrderPoints;
 use common\models\promo\Poker;
 use common\models\promo\PokerUser;
-use common\models\promo\PromoLotteryTicket;
 use common\models\stats\Perf;
 use common\models\transfer\Transfer;
 use common\models\user\MoneyRecord;
@@ -30,10 +28,12 @@ use common\utils\SecurityUtils;
 use common\utils\StringUtils;
 use common\utils\TxUtils;
 use common\view\LoanHelper;
+use PHPExcel_IOFactory;
 use wap\modules\promotion\models\RankingPromo;
 use Wcg\Math\Bc;
 use yii\console\Controller;
 use Yii;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 class DataController extends Controller
@@ -1011,6 +1011,53 @@ ci.affiliator_id = :id";
         $objWriter->save($file);
         exit();
     }
+
+    /**
+     * 导出用户在某活动获得的礼品信息情况
+     * 脚本命令：php yii data/export-promo-award 活动ID 导出截止时间（默认昨天）
+     * 文件位置：console/runtime/promo_award_*.xlsx
+     *
+     * @param integer $promoId 活动ID
+     * @param null|string $expireDate 导出截止日期【null|YYYY-MM-DD】
+     *
+     * @return integer
+     */
+    public function actionExportPromoReward($promoId, $expireDate = null)
+    {
+        $promoId = (int) $promoId;
+
+        if (null === $expireDate) {
+            $expireDate = date('Y-m-d', strtotime('-1 day'));
+        }
+        if (false === strtotime($expireDate)) {
+            $this->stdout('非日期格式参数');
+            return self::EXIT_CODE_ERROR;
+        }
+
+        $query = new Query();
+        $awards = $query->select([
+            'u.id as user_id',
+            'u.real_name',
+            'u.safeMobile',
+            'aw.createTime',
+            'r.name as rewardName',
+        ])->from('award as aw')
+            ->innerJoin('user as u', 'u.id = aw.user_id')
+            ->innerJoin('reward as r', 'r.id = aw.reward_id')
+            ->where(['aw.promo_id' => $promoId])
+            ->andFilterWhere(['<=', 'date(aw.createTime)', $expireDate])
+            ->orderBy(['aw.createTime' => SORT_DESC])
+            ->all();
+        foreach ($awards as $k => $award) {
+            $awards[$k]['safeMobile'] = SecurityUtils::decrypt($award['safeMobile']);
+        }
+
+        $title = ['用户ID', '姓名', '联系方式', '获奖时间', '奖品名称'];
+        array_unshift($awards, $title);
+        $file = Yii::getAlias('@app/runtime/promo_award_'.date('YmdHis').'.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($awards);
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
+    }
 }
-
-
