@@ -1377,4 +1377,18 @@ return [
         'limit' => [],
         'bin' => [],
     ],
+    '2001' => [
+        'sort' => '38',
+        'bankname' => '汉口银行',
+        'nickname' => 'HKB',
+        'limit' => [],
+        'bin' => [],
+    ],
+    '2002' => [
+        'sort' => '39',
+        'bankname' => '锦州银行',
+        'nickname' => 'BJZ',
+        'limit' => [],
+        'bin' => [],
+    ],
 ];
