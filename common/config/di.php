@@ -17,30 +17,6 @@ Yii::$container->set('db_queue', 'Queue\\DbQueue');
     \Yii::$app->params['weixin']['appId'],
     \Yii::$app->params['weixin']['appSecret'],
 ]);
-Yii::$container->set('laraq', function () {
-    $queue = new \Illuminate\Queue\Capsule\Manager();
-    $queue->getContainer()->singleton('redis', function () {
-        $config = [
-            'client' => 'phpredis',
-            'default' => [
-                'host' => Yii::$app->params['redis.host'],
-                'port' => Yii::$app->params['redis.port'],
-                'password' => Yii::$app->params['redis.password'],
-                'database' => Yii::$app->params['redis.database'],
-            ],
-        ];
-        return new \Illuminate\Redis\RedisManager('phpredis', $config);
-    });
-
-    $queue->addConnection([
-        'driver' => 'redis',
-        'connection' => 'default',
-        'queue' => 'default',
-        'retry_after' => 90,
-    ]);
-
-    return $queue;
-});
 Yii::$container->set('alisms', \common\service\AliSmsService::class, [
     Yii::$app->params['sms.ali.accessKeyId'],
     Yii::$app->params['sms.ali.accessKeySecret'],
