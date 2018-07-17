@@ -1,9 +1,21 @@
 <?php
 
-$finder = Symfony\CS\Finder\DefaultFinder::create()
-    ->in(__DIR__);
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__.'/common')
+    ->in(__DIR__.'/frontend')
+    ->in(__DIR__.'/wap')
+    ->in(__DIR__.'/api')
+    ->in(__DIR__.'/backend')
+    ->in(__DIR__.'/console')
+;
 
-return Symfony\CS\Config\Config::create()
-    ->level(Symfony\CS\FixerInterface::PSR2_LEVEL)
-    ->fixers(['operators_spaces'])
-    ->finder($finder);
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        'ordered_imports' => true,
+        'phpdoc_align' => false,
+        'phpdoc_summary' => false,
+        'phpdoc_to_comment' => false,
+    ])
+    ->setFinder($finder)
+;

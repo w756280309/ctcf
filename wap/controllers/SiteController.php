@@ -4,38 +4,33 @@ namespace app\controllers;
 
 use app\modules\wechat\controllers\PushController;
 use common\controllers\HelpersTrait;
+use common\models\adv\Adv;
+use common\models\adv\Share;
+use common\models\affiliation\AffiliateCampaign;
+use common\models\affiliation\Affiliator;
+use common\models\app\AccessToken;
+use common\models\bank\Bank;
+use common\models\bank\EbankConfig;
+use common\models\bank\QpayConfig;
 use common\models\growth\AppMeta;
+use common\models\log\LoginLog;
 use common\models\mall\PointRecord;
 use common\models\mall\ThirdPartyConnect;
 use common\models\message\PointMessage;
-use common\models\order\OnlineOrder;
-use common\models\product\LoanFinder;
-use common\models\stats\Perf;
-use common\models\thirdparty\SocialConnect;
-use common\models\user\UserInfo;
-use common\service\PointsService;
-use common\service\SmsService;
-use common\service\LoginService;
-use common\models\adv\Adv;
-use common\models\adv\Share;
-use common\models\affiliation\Affiliator;
-use common\models\affiliation\AffiliateCampaign;
-use common\models\app\AccessToken;
-use common\models\bank\EbankConfig;
-use common\models\bank\QpayConfig;
-use common\models\bank\Bank;
-use common\models\log\LoginLog;
-use common\models\product\Issuer;
+use common\models\news\News;
 use common\models\product\OnlineProduct;
 use common\models\promo\DuoBao;
-use common\models\news\News;
-use common\models\user\SignupForm;
-use common\models\user\LoginForm;
-use common\models\user\EditpassForm;
-use common\models\user\User;
+use common\models\stats\Perf;
+use common\models\thirdparty\SocialConnect;
 use common\models\user\CaptchaForm;
+use common\models\user\EditpassForm;
+use common\models\user\LoginForm;
+use common\models\user\SignupForm;
+use common\models\user\User;
+use common\service\LoginService;
+use common\service\PointsService;
+use common\service\SmsService;
 use common\utils\SecurityUtils;
-use EasyWeChat\Message\Text;
 use Lhjx\Noty\Noty;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
@@ -98,7 +93,7 @@ class SiteController extends Controller
     public function actionError()
     {
         $exception = \Yii::$app->errorHandler->exception;
-        if ($exception !== null) {
+        if (null !== $exception) {
             return $exception;
         } else {
             return '';
@@ -114,94 +109,8 @@ class SiteController extends Controller
     }
 
     /**
-     * WAP端首页展示.
-     *
-     * 1. 理财专区和新手专区只显示预告期或募集中项目,没有就不显示;
+     * 首页
      */
-/*    public function actionIndex()
-    {
-        $this->layout = 'normal';
-        $cond = [OnlineProduct::STATUS_PRE, OnlineProduct::STATUS_NOW];
-
-        //新手专区
-        $xs = LoanFinder::queryPublicLoans()
-            ->andWhere([
-                'is_xs' => true,
-                'status' => $cond,
-            ])
-            ->orderBy([
-                'xs_status' => SORT_DESC,
-                'recommendTime' => SORT_DESC,
-                'sort' => SORT_ASC,
-                'raiseDays' => SORT_DESC,
-                'finish_rate' => SORT_DESC,
-                'raiseSn' => SORT_DESC,
-                'id' => SORT_DESC,
-            ])
-            ->one();
-
-        //理财专区
-        $loans = OnlineProduct::find()
-            ->where([
-                'isPrivate' => 0,
-                'del_status' => OnlineProduct::STATUS_USE,
-                'online_status' => OnlineProduct::STATUS_ONLINE,
-                'is_xs' => false,
-                'status' => $cond,
-            ])
-            ->orderBy([
-                'recommendTime' => SORT_DESC,
-                'sort' => SORT_ASC,
-                'finish_rate' => SORT_DESC,
-                'id' => SORT_DESC,
-            ])
-            ->limit(2)
-            ->all();
-
-        //精选项目管理
-        $issuers = Issuer::find()
-            ->where(['isShow' => true])
-            ->andWhere(['!=', 'big_pic', 'null'])
-            ->andWhere(['!=', 'mid_pic', 'null'])
-            ->andWhere(['!=', 'small_pic', 'null'])
-            ->orderBy(['sort' => SORT_ASC])
-            ->limit(3)
-            ->all();
-
-        //开屏图
-        $queryKaiping = $this->advQuery()
-            ->andWhere(['type' => Adv::TYPE_KAIPING])
-            ->orderBy([
-                'show_order' => SORT_ASC,
-                'updated_at' => SORT_DESC,
-            ])
-            ->one();
-
-        //热门活动
-        $hotActs = Adv::fetchHomeBanners($is_m = 1);
-
-
-        //公告专区
-        $news = News::find()
-            ->where([
-                'status' => News::STATUS_PUBLISH,
-                'allowShowInList' => true,
-            ])
-            ->orderBy(['news_time' => SORT_DESC])
-            ->limit(3)
-            ->all();
-
-
-        return $this->render('index170109', [
-            'xs' => $xs,
-            'loans' => $loans,
-            'issuers' => $issuers,
-            'hotActs' => $hotActs,
-            'news' => $news,
-            'kaiPing' => $queryKaiping,
-        ]);
-    }*/
-
     public function actionIndex()
     {
         $this->layout = 'normal';
@@ -272,13 +181,14 @@ class SiteController extends Controller
             'isLoggedIn' => true,
         );
         if (\Yii::$app->user->isGuest) {
-             $json['isLoggedIn'] = false;
-             return $json;
+            $json['isLoggedIn'] = false;
+
+            return $json;
         }
         $user = $this->getAuthedUser();
         $count = $user->xsCount();
         //当返回结果是新手时
-        if ($count === 0) {
+        if (0 === $count) {
             $json['isInvestor'] = false;
         }
         //当返回结果投过新手标时
@@ -290,6 +200,7 @@ class SiteController extends Controller
         if ($investTotal > 50000) {
             $json['showplatformStats'] = true;
         }
+
         return $json;
     }
 
@@ -323,6 +234,7 @@ class SiteController extends Controller
     {
         return $this->render('udesk');
     }
+
     /**
      * 用户登录表单页.
      */
@@ -384,14 +296,14 @@ class SiteController extends Controller
                         $accessToken->save();
                         $output['token'] = $accessToken->token;
                         $output['expire'] = $accessToken->expireTime;
-                        $tourl = current(explode('?', $tourl)) . '?' . http_build_query($output);
+                        $tourl = current(explode('?', $tourl)).'?'.http_build_query($output);
                     }
                     //如果是兑吧，跳转到兑吧页面
                     if (in_array(parse_url($tourl, PHP_URL_HOST), [
-                        'activity.m.duiba.com.cn',//兑吧活动
-                        'www.duiba.com.cn',//兑吧商城
-                        'home.m.duiba.com.cn',//兑吧首页
-                        'goods.m.duiba.com.cn',//兑吧商品页面
+                        'activity.m.duiba.com.cn', //兑吧活动
+                        'www.duiba.com.cn', //兑吧商城
+                        'home.m.duiba.com.cn', //兑吧首页
+                        'goods.m.duiba.com.cn', //兑吧商品页面
                     ])) {
                         $tourl = ThirdPartyConnect::generateLoginUrl($tourl);
                     }
@@ -399,7 +311,7 @@ class SiteController extends Controller
                     return [
                         'code' => 0,
                         'message' => '登录成功',
-                        'tourl' => $tourl
+                        'tourl' => $tourl,
                     ];
                 }
             }
@@ -410,10 +322,10 @@ class SiteController extends Controller
             $showCaptcha = $login->isCaptchaRequired($model->phone);
             if ($model->getErrors()) {
                 $message = $model->firstErrors;
+
                 return ['code' => 1, 'message' => current($message), 'requiresCaptcha' => $showCaptcha];
             }
         }
-
 
         $hmsr = Yii::$app->request->get('hmsr');
         $aff = null;
@@ -529,7 +441,6 @@ class SiteController extends Controller
             $model->password = $data['father'];
             $model->sms = $data['sms'];
             if ($user = $model->signup(User::REG_FROM_WAP, $data['regContext'], $data['promoId'])) {
-
                 $isLoggedin = defined('IN_APP')
                     ? Yii::$app->user->setIdentity($user) || true
                     : Yii::$app->user->login($user);
@@ -791,6 +702,7 @@ class SiteController extends Controller
             if (!$this->fromWx()) {
                 return $this->redirect($redirect);
             }
+
             return $this->render('v2');
         }
 

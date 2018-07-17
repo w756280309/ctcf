@@ -59,3 +59,4 @@ main-local.php.bk
 common/config/payment/miit/cncert.pem
 common/config/payment/miit/client_pri.pem
 
+.php_cs.cache
