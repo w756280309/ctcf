@@ -2,6 +2,7 @@
 
 namespace common\models\tx;
 
+use common\models\growth\AppMeta;
 use common\models\promo\InviteRecord;
 use Yii;
 use Zii\Model\ActiveRecord;
@@ -275,9 +276,22 @@ class CreditNote extends ActiveRecord
             ->select('user_id')
             ->where(['invitee_id' => $userId])
             ->column();
-
+        $userIdsArray = [$userId];
+        //从app_meta中key值为'credit_user_visible'中获取转让标的让所有人可见的用户id
+        $creditUser = AppMeta::findOne(['key' => 'credit_user_visible']);
+        $creditUserIdString = $creditUser['value'];
+        if (strlen($creditUserIdString) > 0) {
+            $creditUserIdString = str_replace('，', ',', $creditUserIdString);
+            $creditUserIds = explode(',', $creditUserIdString);
+            if (is_array($creditUserIds)) {
+                foreach ($creditUserIds as $key => $value) {
+                    $creditUserIds[$key] = intval($value);
+                }
+                $userIdsArray = array_merge($userIdsArray, $creditUserIds);
+            }
+        }
         //合并用户ID
-        $allUids = array_merge([$userId], $inviteeUids, $userIds);
+        $allUids = array_merge($userIdsArray, $inviteeUids, $userIds);
 
         //转让中query
         $notesQuery = CreditNote::find()
