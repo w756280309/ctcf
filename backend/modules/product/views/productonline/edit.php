@@ -792,7 +792,7 @@ TPL;
 //                ]);
                 if (!empty($con_name_arr)) {
                     foreach ($con_name_arr as $key => $val) {
-                        if (in_array($key, [0, 1])) {
+                        if ($key === 0) {
                             continue;
                         }
                         echo CfcaUtils::renderXml($tpl2, [
