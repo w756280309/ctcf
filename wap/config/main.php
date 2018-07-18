@@ -33,24 +33,22 @@ $arr = [
                     'levels' => ['info'],
                     'categories' => ['umplog'],
                     'logFile' => '@app/runtime/logs/ump/ump'.date('Ymd').'.log',
-                    'maxFileSize' => 1024 * 2,
                     'logVars' => [],
                     'enableRotation' => false,
                     'prefix' => function ($message) {
-                        return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                        return ''; //去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
                 ],
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['info'],
                     'categories' => ['notify'],
-                    'logFile' => '@app/runtime/logs/notify/mall/mall_notify'. date('Ym').'.log',
-                    'maxFileSize' => 1024*2,
+                    'logFile' => '@app/runtime/logs/notify/mall/mall_notify'.date('Ym').'.log',
                     'logVars' => [],
                     'enableRotation' => false,
                     'prefix' => function ($message) {
-                        return "";//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
-                    }
+                        return ''; //去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                    },
                 ],
                 //用户信息变更日志
                 [
@@ -58,11 +56,10 @@ $arr = [
                     'levels' => ['info'],
                     'categories' => ['user_log'],
                     'logFile' => '@app/runtime/logs/user/user_status'.date('Ymd').'.log',
-                    'maxFileSize' => 1024 * 2,
                     'logVars' => [],
                     'enableRotation' => false,
                     'prefix' => function ($message) {
-                        return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                        return ''; //去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
                 ],
                 [
@@ -70,11 +67,10 @@ $arr = [
                     'levels' => ['info'],
                     'categories' => ['promo_log'],
                     'logFile' => '@app/runtime/logs/promo/user_join_'.date('Ymd').'.log',
-                    'maxFileSize' => 1024 * 2,
                     'logVars' => [],
                     'enableRotation' => false,
                     'prefix' => function ($message) {
-                        return '';//去掉消息返回的[IP address][User ID][Session ID][Severity Level]
+                        return ''; //去掉消息返回的[IP address][User ID][Session ID][Severity Level]
                     },
                 ],
             ],
@@ -170,7 +166,7 @@ $arr = [
     'as requestBehavior' => [
         'class' => \common\components\RequestBehavior::className(),
     ],
-    'as userAccountAccessControl'=> \common\filters\UserAccountAcesssControl::className(),
+    'as userAccountAccessControl' => \common\filters\UserAccountAcesssControl::className(),
     'as weixinOpenIdFilter' => [
         'class' => \common\filters\WeixinOpenIdFilter::className(),
         'except' => [
@@ -178,7 +174,7 @@ $arr = [
             'weixin/callback',
         ],
     ],
-    'as logFirstVisitTime' => \common\filters\LogFirstVisitTime::className(),//记录用户首次访问时间
+    'as logFirstVisitTime' => \common\filters\LogFirstVisitTime::className(), //记录用户首次访问时间
 ];
 
 //监管控制：未实名无法查看首页和列表页
@@ -188,4 +184,14 @@ if (!empty($params['supervise_access_filter'])) {
 if (!empty($params['login_access_filter'])) {
     $arr['as LoginAccessFilter'] = \common\filters\LoginAccessControl::className();
 }
+
+if (YII_DEBUG) {
+    //configuration adjustments for 'dev' environment
+    $arr['bootstrap'][] = 'debug';
+    $arr['modules']['debug'] = 'yii\debug\Module';
+
+    $arr['bootstrap'][] = 'gii';
+    $arr['modules']['gii'] = 'yii\gii\Module';
+}
+
 return $arr;
