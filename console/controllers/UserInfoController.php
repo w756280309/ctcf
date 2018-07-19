@@ -172,4 +172,31 @@ ON af.id = ua.affiliator_id";
         $objWriter->save($file);
         $this->stdout('操作成功，文件：'. $file . PHP_EOL);
     }
+
+    public function actionX()
+    {
+        $sql = "select u.real_name, u.safeMobile,p.title,date(from_unixtime(p.jixi_time)) startDate,date(from_unixtime(p.finish_date)) endDate,from_unixtime(o.created_at) investTime, o.order_money from online_order o inner join user u on o.uid=u.id 
+            left join online_product p on o.online_pid=p.id
+            where o.status=1 and u.campaign_source ='jdgbdst'";
+
+        $datas = Yii::$app->db->createCommand($sql)->queryAll();
+        $exportData[] = ['姓名', '手机号', '产品名称', '起息日', '到期日', '认购时间', '认购金额'];
+        foreach ($datas as $data) {
+            array_push($exportData, [
+                $data['real_name'],
+                SecurityUtils::decrypt($data['safeMobile']),
+                $data['title'],
+                $data['startDate'],
+                $data['endDate'],
+                $data['investTime'],
+                $data['order_money'],
+            ]);
+        }
+        //导出Excel
+        $file = Yii::getAlias('@app/runtime/aff-' . date("YmdHis") . '.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        $this->stdout('操作成功，文件：'. $file . PHP_EOL);
+    }
 }
