@@ -3,6 +3,7 @@ namespace common\ctcf\promo;
 
 use common\event\OrderEvent;
 use common\jobs\OrderQueueJob;
+use common\models\offline\OfflineOrder;
 use common\models\order\OnlineOrder;
 use common\models\promo\Reward;
 use common\models\promo\TicketToken;
@@ -18,6 +19,9 @@ class Promo180618 extends BasePromo
     public static function onOrderSuccess(OrderEvent $event)
     {
         $order = $event->order;
+        if ($order instanceof OfflineOrder) {
+            return;
+        }
         $user = $order->user;
         $promo = RankingPromo::findOne(['key' => 'promo_1806181']);
         if (null === $promo) {

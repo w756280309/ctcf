@@ -3,6 +3,7 @@ namespace common\models\promo;
 
 use common\event\OrderEvent;
 use common\jobs\OrderQueueJob;
+use common\models\offline\OfflineOrder;
 use common\models\order\OnlineOrder;
 use wap\modules\promotion\models\RankingPromo;
 use Yii;
@@ -13,6 +14,9 @@ class Promo180618 extends BasePromo
     public static function onOrderSuccess(OrderEvent $event)
     {
         $order = $event->order;
+        if ($order instanceof OfflineOrder) {
+            return;
+        }
         $user = $order->user;
         $promo = RankingPromo::findOne(['key' => 'promo_180618']);
         if (null === $promo) {
