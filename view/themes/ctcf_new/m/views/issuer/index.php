@@ -95,7 +95,7 @@ switch ($issuerId) {
                 <td class="rg">2年</td>
             </tr>
             <tr>
-                <td class="lf">认购起点</td>
+                <td class="lf">出借起点</td>
                 <td class="rg">5万元起购，按5万元的整数倍递增</td>
             </tr>
             <tr>
@@ -121,7 +121,7 @@ switch ($issuerId) {
             </tr>
         </table>
         <?php if ($loansCount) { ?>
-            <a href="/issuer/to-loan?issuerid=<?= $issuerId ?>">立即认购</a>
+            <a href="/issuer/to-loan?issuerid=<?= $issuerId ?>">立即出借</a>
         <?php } ?>
     </footer>
 <?php } elseif (5 === $issuerId) { ?>
@@ -194,7 +194,7 @@ switch ($issuerId) {
                 <td class="rg">1年</td>
             </tr>
             <tr>
-                <td class="lf">认购起点</td>
+                <td class="lf">出借起点</td>
                 <td class="rg">1万元起购，按1万元递增</td>
             </tr>
             <tr>
@@ -225,7 +225,7 @@ switch ($issuerId) {
         </table>
 
         <?php if ($loansCount) { ?>
-            <a href="/issuer/to-loan?issuerid=<?= $issuerId ?>">立即认购</a>
+            <a href="/issuer/to-loan?issuerid=<?= $issuerId ?>">立即出借</a>
         <?php } ?>
     </footer>
 <?php } elseif (3 === $issuerId) { ?>
@@ -316,7 +316,7 @@ switch ($issuerId) {
                 <td class="rg">12个月</td>
             </tr>
             <tr>
-                <td class="lf">认购起点</td>
+                <td class="lf">出借起点</td>
                 <td class="rg">5万元起购，按1万元递增</td>
             </tr>
             <tr>
@@ -333,7 +333,7 @@ switch ($issuerId) {
             </tr>
         </table>
         <?php if ($loansCount) { ?>
-            <a href="/issuer/to-loan?issuerid=<?= $issuerId ?>">立即认购</a>
+            <a href="/issuer/to-loan?issuerid=<?= $issuerId ?>">立即出借</a>
         <?php } ?>
     </footer>
 
@@ -439,7 +439,7 @@ switch ($issuerId) {
                 <td class="rg">1年</td>
             </tr>
             <tr>
-                <td class="lf">认购起点</td>
+                <td class="lf">出借起点</td>
                 <td class="rg">1万元起购，以1万元的整数倍递增</td>
             </tr>
             <tr>
@@ -465,7 +465,7 @@ switch ($issuerId) {
             </tr>
         </table>
         <?php if ($loansCount) { ?>
-            <a href="/issuer/to-loan?issuerid=<?= $issuerId ?>">立即认购</a>
+            <a href="/issuer/to-loan?issuerid=<?= $issuerId ?>">立即出借</a>
         <?php } ?>
     </footer>
 <?php } ?>

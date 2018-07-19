@@ -27,13 +27,13 @@ use common\utils\StringUtils;
         <div class="row loan-info">
             <div class="col-xs-8 loan-info1">
                 <p>
-                    <span class="info-label">认购金额：</span>
+                    <span class="info-label">出借金额：</span>
                     <span class="info-val">
                         <?= \common\utils\StringUtils::amountFormat3($val->money * 10000) ?>
                         元</span>
                 </p>
                 <p>
-                    <span class="info-label">认购日期：</span>
+                    <span class="info-label">出借日期：</span>
                     <span class="info-val">
                         <?= $val->orderDate ?>
                     </span>

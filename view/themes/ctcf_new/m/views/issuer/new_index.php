@@ -203,7 +203,7 @@ extract(unserialize($jxPage->content));
     <?php } ?>
 
     <?php if ($loansCount) { ?>
-        <a href="/issuer/to-loan?issuerid=<?= $issuer->id ?>">立即认购</a>
+        <a href="/issuer/to-loan?issuerid=<?= $issuer->id ?>">立即出借</a>
     <?php } ?>
 </footer>
 <script>

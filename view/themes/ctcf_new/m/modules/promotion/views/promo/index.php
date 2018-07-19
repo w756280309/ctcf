@@ -121,7 +121,7 @@ $config = json_decode($promo->config, true);
             <p class="f15">什么是楚天财富？</p>
             <ul>
                 <li></li>
-                <li class="f15" style="color: #333333;text-align: left;">楚天财富是隶属湖北日报新媒体集团旗下的理财平台。甄选各类金融机构、优质企业理财产品。提供银行级理财服务，保障用户资金，安享稳健收益。</li>
+                <li class="f15" style="color: #333333;text-align: left;">楚天财富是隶属湖北日报新媒体集团旗下的理财平台。甄选各类金融机构、优质企业产品。提供银行级理财服务，保障用户资金，安享稳健收益。</li>
             </ul>
         </div>
 

@@ -90,7 +90,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/deal/buy.css?v=20161113');
                 });
                 xhr.always(function () {
                     allowSub = true;
-                    buy.html("确认购买");
+                    buy.html("确出借买");
                 })
             } else {
                 $('#err_message').show();

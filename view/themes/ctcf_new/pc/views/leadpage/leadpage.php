@@ -74,7 +74,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/leadpage/leadpage.js?v=20160708', ['de
         <a class="container-right"></a>
     </div>
     <div class="container-box hidden">
-        <p class="tip-font">出借完成后，可到【账户】><span>【我的出借】</span>中，查看您的认购项目</p>
+        <p class="tip-font">出借完成后，可到【账户】><span>【我的出借】</span>中，查看您的出借项目</p>
         <a class="container-left"></a>
         <div class="container-center">
             <img src="<?= ASSETS_BASE_URI ?>ctcf/images/leadpage/display_5_new.png?v=1.0" width="649" alt="">

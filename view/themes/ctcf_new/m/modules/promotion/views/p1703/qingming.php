@@ -31,11 +31,11 @@ $this->share = $share;
     <div class="treeContent">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/Qingming-Festival/img/regular.png" alt="">
         <ol class="f14">
-            <li class="com">此活动为限时活动，仅限2017年3月30日至4月1日三天，以认购成功时间为准；</li>
+            <li class="com">此活动为限时活动，仅限2017年3月30日至4月1日三天，以出借成功时间为准；</li>
             <li class="com">本次活动面向所有楚天财富注册用户；</li>
-            <li class="com">活动期间出借楚天财富平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；</li>
+            <li class="com">活动期间出借楚天财富平台产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；</li>
             <div class="giftsList special">
-                <p class="f12">各款理财产品累计年化金额及对应礼品如下：</p>
+                <p class="f12">各款产品累计年化金额及对应礼品如下：</p>
                 <table class="tablebox" cellpadding="0" cellspacing="0">
                     <tr class="trSpical" style="border: none;">
                         <td style="border-right: 1px solid #be1c2b;">累计年化金额（元）</td>

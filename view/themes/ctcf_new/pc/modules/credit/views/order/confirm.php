@@ -11,7 +11,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                 <p class="credit-top-title lf">【转让】<?= Html::encode($loan->title)?></p>
                 <div class="credit-top-tip rg text-align-ct">
                     <input type="checkbox" checked="checked" class="" id="agree"><span>同意并签署</span>
-                    <i>"认购协议"</i><a href="/order/order/agreement?pid=<?= $loan->id?>&note_id=<?= $id?>" target="_blank" class="check">查看</a></div>
+                    <i>"出借协议"</i><a href="/order/order/agreement?pid=<?= $loan->id?>&note_id=<?= $id?>" target="_blank" class="check">查看</a></div>
             </div>
             <div style="clear: both"></div>
             <div class="credit-centent">
@@ -45,7 +45,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                     <p class="sum"><span class="lf-span">预期收益:</span><i class="rg-i text-align-rg" id="profit">0.00</i></p>
                     <div class="real-credit rg">
                         <p class="real-money"><span>实际支付:</span><i>￥</i><a id="payment"></a></p>
-                        <a  class="buy" id="sub_button">确认购买</a>
+                        <a  class="buy" id="sub_button">确出借买</a>
                     </div>
                     <p style="color: red;    padding-left: 10px;margin-top: 10px;" id="err_message"></p>
                 </div>
@@ -101,7 +101,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                 });
             } else {
                 $('#err_message').show();
-                $('#err_message').html('您还没有勾选 同意并签署"认购协议"');
+                $('#err_message').html('您还没有勾选 同意并签署"出借协议"');
             }
         })
     });

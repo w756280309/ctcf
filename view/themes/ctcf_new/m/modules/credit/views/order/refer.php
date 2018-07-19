@@ -24,7 +24,7 @@ $this->title = ("success" === $ret) ? "出借成功" : "出借失败";
 <div class="row daojishi" id='bind-close1'>
     <div class="col-xs-12 page_padding">
         <?php if ('success' === $ret) { ?>
-            <div>您已成功认购项目，可以进入我的出借查看认购详情</div>
+            <div>您已成功出借项目，可以进入我的出借查看出借详情</div>
         <?php } else { ?>
             <div>遇到问题请联系客服，电话：<a class="contact-tel" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a></div>
         <?php } ?>

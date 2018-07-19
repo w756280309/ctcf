@@ -64,7 +64,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20180102', ['d
                     <div class="information-content-right"><?= StringUtils::amountFormat2(bcmul($model->money, 10000)) ?>元</div>
                 </li>
                 <li>
-                    <div class="information-content-left">认购日期</div>
+                    <div class="information-content-left">出借日期</div>
                     <div class="information-content-right"><?= $model->orderDate ?></div>
                 </li>
                 <?php if ($model->loan->status != '募集中') : ?>
@@ -129,7 +129,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'css/touzixiangqing.css?v=20180102', ['d
     <div class="row" id="subscription-box">
         <div class="col-xs-12">
             <a href="#" class="subscription-title">
-                <div class="subscription-left">认购合同 <span class=""></span></div>
+                <div class="subscription-left">出借合同 <span class=""></span></div>
                 <div class="information-content-right" style="line-height: inherit">（已提供纸质版）</div>
             </a>
         </div>

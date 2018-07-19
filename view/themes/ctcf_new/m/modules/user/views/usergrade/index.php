@@ -212,7 +212,7 @@ if (7 === $level) {
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[4]['pictwo'] ?>-product-order.png" alt="产品预约">
             <h4 class="prerogative-title">产品预约</h4>
-            <p class="details">产品预约、单独挂标、次日起息(单笔认购100万以上)</p>
+            <p class="details">产品预约、单独挂标、次日起息(单笔出借100万以上)</p>
         </div>
         <div class="prerogative rg-prerogative rg">
         </div>
@@ -243,7 +243,7 @@ if (7 === $level) {
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[5]['pictwo'] ?>-product-order.png" alt="产品预约">
             <h4 class="prerogative-title">产品预约</h4>
-            <p class="details">产品预约、单独挂标、次日起息(单笔认购100万以上)</p>
+            <p class="details">产品预约、单独挂标、次日起息(单笔出借100万以上)</p>
         </div>
         <div class="prerogative rg-prerogative rg">
         </div>
@@ -274,7 +274,7 @@ if (7 === $level) {
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[6]['pictwo'] ?>-product-order.png" alt="产品预约">
             <h4 class="prerogative-title">产品预约</h4>
-            <p class="details">产品预约、单独挂标、次日起息(单笔认购100万以上)</p>
+            <p class="details">产品预约、单独挂标、次日起息(单笔出借100万以上)</p>
         </div>
         <div class="prerogative rg-prerogative rg">
         </div>
@@ -305,7 +305,7 @@ if (7 === $level) {
         <div class="prerogative lf-prerogative lf">
             <img src="<?= FE_BASE_URI ?>wap/memberlevel/img/<?= $shuzu[7]['pictwo'] ?>-product-order.png" alt="产品预约">
             <h4 class="prerogative-title">产品预约</h4>
-            <p class="details">产品预约、单独挂标、次日起息(单笔认购100万以上)</p>
+            <p class="details">产品预约、单独挂标、次日起息(单笔出借100万以上)</p>
         </div>
         <div class="prerogative rg-prerogative rg">
         </div>

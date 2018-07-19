@@ -28,7 +28,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/libs/lib.flexible3.js', ['depen
             </div>
             <div class="rg safe-title-part">
                 <h5>风控先进</h5>
-                <p>楚天财富理财的风控先进在哪？</p>
+                <p>楚天财富的风控先进在哪？</p>
             </div>
         </a>
     </li>

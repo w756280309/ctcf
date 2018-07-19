@@ -75,7 +75,7 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
                 <div class="ctn">
                     <dl class="dl-one">
                         <dt class="dt-com">什么是楚天财富？</dt>
-                        <dd>楚天财富是隶属湖北日报新媒体集团旗下的理财平台。甄选各类权威机构的理财产品。提供银行级理财服务，保障用户资金安全，安享稳定收益。</dd>
+                        <dd>楚天财富是隶属湖北日报新媒体集团旗下的理财平台。甄选各类权威机构的产品。提供银行级理财服务，保障用户资金安全，安享稳定收益。</dd>
                     </dl>
                     <dl class="dl-one">
                         <dt class="dt-com m60">股东背景</dt>

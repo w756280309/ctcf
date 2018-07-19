@@ -76,7 +76,7 @@ use common\utils\StringUtils;
                     <i>门店出借</i>
                     <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
                     <i class="redFont"><?= StringUtils::amountFormat3($user->offline->totalAssets) ?></i>元
-                    <div class="property-tishi" style="left: -20px;">门店下认购的正在出借中待回收本金总和<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
+                    <div class="property-tishi" style="left: -20px;">门店下出借的正在出借中待回收本金总和<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                 </li>
             </ul>
         </div>

@@ -36,7 +36,7 @@ use common\utils\StringUtils;
         <div class="row loan-info">
             <div class="col-xs-8 loan-info1">
                 <p>
-                    <span class="info-label">认购金额：</span>
+                    <span class="info-label">出借金额：</span>
                     <span class="info-val">
                         <?php
                             if (2 === $type) {
@@ -48,7 +48,7 @@ use common\utils\StringUtils;
                     元</span>
                 </p>
                 <p>
-                    <span class="info-label">认购日期：</span>
+                    <span class="info-label">出借日期：</span>
                     <span class="info-val">
                         <?php
                             if (2 === $type) {

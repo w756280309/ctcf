@@ -44,9 +44,9 @@ $this->share = new Share([
         <h5>活动规则</h5>
         <img class="close-btn" src="<?= FE_BASE_URI ?>wap/campaigns/active20170823/images/close.png" alt="">
         <ol>
-            <li>活动时间2017年8月28日-8月31日，以认购成功时间为准；</li>
+            <li>活动时间2017年8月28日-8月31日，以出借成功时间为准；</li>
             <li>本次活动面向所有楚天财富注册用户；</li>
-            <li>活动期间出借楚天财富平台理财产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；
+            <li>活动期间出借楚天财富平台产品累计年化金额达到指定额度，即可获得相应礼品（不含转让产品）；
                 <div class="reward-list">
                     <p class="leiji">累计年化金额（元）</p>
                     <p class="lipin">礼品</p>

@@ -100,17 +100,17 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
             <!--pl-subscription-->
             <div class="pl-subscription">
                 <ul class="clearfix">
-                    <li class="pl-grayBg"><span>认购金额（元）</span></li>
+                    <li class="pl-grayBg"><span>出借金额（元）</span></li>
                     <li class="pl-grayBg pl-center">预期年化收益率（%）</li>
                     <li>
-                        <div><i>累计认购<?= StringUtils::amountFormat2($deal->start_money) ?>起</i></div>
+                        <div><i>累计出借<?= StringUtils::amountFormat2($deal->start_money) ?>起</i></div>
                     </li>
                     <li>
                         <div class="pl-rborder pl-center"><?= StringUtils::amountFormat2($deal->yield_rate * 100) ?></div>
                     </li>
                     <?php foreach (RateSteps::parse($deal->rateSteps) as $val) { ?>
                         <li>
-                            <div><i>累计认购<?= StringUtils::amountFormat2($val['min']) ?>起</i></div>
+                            <div><i>累计出借<?= StringUtils::amountFormat2($val['min']) ?>起</i></div>
                         </li>
                         <li>
                             <div class="pl-rborder pl-center"><?= StringUtils::amountFormat2($val['rate']) ?></div>
@@ -121,29 +121,29 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
         <?php } ?>
 
 
-        <!--        1225添加认购表格和赎回说明开始-->
+        <!--        1225添加出借表格和赎回说明开始-->
         <!-- 添加内容开始 -->
         <?php if ($deal->isRedeemable) { ?>
         <div class=earn-ransom>
             <!-- <h5>收益说明</h5> -->
             <table class='earnings-tips'>
                 <tr>
-                    <th>认购金额（元）</th>
+                    <th>出借金额（元）</th>
                     <th>提前赎回利率</th>
                     <th>到期兑付利率</th>
                 </tr>
                 <tr>
-                    <td>累计认购10万(含)起</td>
+                    <td>累计出借10万(含)起</td>
                     <td>8.6</td>
                     <td>9</td>
                 </tr>
                 <tr>
-                    <td>累计认购50万(含)起</td>
+                    <td>累计出借50万(含)起</td>
                     <td>8.8</td>
                     <td>9.3</td>
                 </tr>
                 <tr>
-                    <td>累计认购100万(含)起</td>
+                    <td>累计出借100万(含)起</td>
                     <td>9.1</td>
                     <td>9.5</td>
                 </tr>
@@ -155,7 +155,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                     $closedExpireTime = RedeemHelper::getClosedPeriodExpireTime($deal->redemptionPeriods);
                     if (null !== $closedExpireTime) {
                 ?>
-                    <li class="ransom-list-weidth">封闭期：本产品从购买日至<?= $closedExpireTime->format('Y年m月d日') ?>属封闭期，出借者在封闭期内不得赎回理财产品。</li>
+                    <li class="ransom-list-weidth">封闭期：本产品从购买日至<?= $closedExpireTime->format('Y年m月d日') ?>属封闭期，出借者在封闭期内不得赎回产品。</li>
                 <?php } ?>
                 <li>提前赎回：封闭期过后，出借者可在<?= RedeemHelper::formatRedemptionPeriods($deal->redemptionPeriods) ?>期间预约提前赎回；预约成功后，<?= RedeemHelper::formatRedemptionPaymentDates($deal->redemptionPaymentDates) ?>当日为出借者兑付所有出借本金及收益。赎回不收取任何手续费。</li>
                 <li>到期自动兑付：如出借者不提前赎回，产品从购买日起算，满3年后，自动兑付所有出借本金及收益，收益率高于提前赎回利率。具体收益详见收益说明。</li>
@@ -166,7 +166,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
 
 
         <!-- 添加内容结束 -->
-        <!--        1225添加认购表格和赎回说明结束-->
+        <!--        1225添加出借表格和赎回说明结束-->
 
 
         <!--pl-detail-->

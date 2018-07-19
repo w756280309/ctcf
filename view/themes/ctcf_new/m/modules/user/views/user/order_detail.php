@@ -103,7 +103,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'ctcf/css/details-list/touzixiangqing.cs
                     <div class="information-content-right"><?= StringUtils::amountFormat2($deal->order_money) ?>元</div>
                 </li>
                 <li>
-                    <div class="information-content-left">认购日期</div>
+                    <div class="information-content-left">出借日期</div>
                     <div class="information-content-right"><?= (null !== $deal->created_at) ? date('Y-m-d', $deal->created_at) : '---' ?></div>
                 </li>
                 <li>
@@ -120,7 +120,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'ctcf/css/details-list/touzixiangqing.cs
                     <div class="information-content-right"><?= StringUtils::amountFormat2(bcdiv($asset['amount'], 100 , 2)) ?>元</div>
                 </li>
                 <li>
-                    <div class="information-content-left">认购日期</div>
+                    <div class="information-content-left">出借日期</div>
                     <div class="information-content-right"><?= (null !== $deal->created_at) ? date('Y-m-d', $deal->created_at) : '---' ?></div>
                 </li>
                 <li>
@@ -147,7 +147,7 @@ $this->registerCssFile(ASSETS_BASE_URI .'ctcf/css/details-list/touzixiangqing.cs
                     <div class="information-content-right"><?= StringUtils::amountFormat2($asset ? bcdiv($asset['amount'], 100 , 2) : $deal->order_money) ?>元</div>
                 </li>
                 <li>
-                    <div class="information-content-left">认购日期</div>
+                    <div class="information-content-left">出借日期</div>
                     <div class="information-content-right"><?= (null !== $deal->created_at) ? date('Y-m-d', $deal->created_at) : '---' ?></div>
                 </li>
                 <li>
@@ -236,11 +236,11 @@ $this->registerCssFile(ASSETS_BASE_URI .'ctcf/css/details-list/touzixiangqing.cs
         </div>
     <?php } ?>
     <?php if (!empty($asset)) { ?>
-        <!--认购合同-->
+        <!--出借合同-->
         <div class="row" id="subscription-box">
             <div class="col-xs-12">
                 <a href="/order/order/contract?asset_id=<?= $asset['id']?>" class="subscription-title">
-                    <div class="subscription-left">认购合同</div>
+                    <div class="subscription-left">出借合同</div>
                     <div class="subscription-right"><img src="<?= ASSETS_BASE_URI ?>images/arrowShang.png" alt=""></div>
                 </a>
         </div>

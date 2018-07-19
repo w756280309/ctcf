@@ -139,13 +139,13 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     </div>
     <div class="row message"  style="padding-bottom: 0px;" >
         <div class="col-xs-1  col-sm-1" ></div>
-        <div class="col-xs-5 money col-sm-5" style="color:#9c9c9c">认购金额(元)</div>
+        <div class="col-xs-5 money col-sm-5" style="color:#9c9c9c">出借金额(元)</div>
         <div class="col-xs-5 shouyi right_num col-sm-5"  style="color:#9c9c9c;" >预期年化收益率(%)</div>
         <div class="col-xs-1 right_hide  col-sm-1" ></div>
     </div>
     <div class="row message" style="padding-bottom: 0px;" >
         <div class="col-xs-1  col-sm-1" ></div>
-        <div class="col-xs-7 money col-sm-5">累计认购<?= StringUtils::amountFormat2($deal->start_money) ?>起</div>
+        <div class="col-xs-7 money col-sm-5">累计出借<?= StringUtils::amountFormat2($deal->start_money) ?>起</div>
         <div class="col-xs-3 shouyi center_num col-sm-5"><?= StringUtils::amountFormat2($deal->yield_rate * 100) ?></div>
         <div class="col-xs-1 col-sm-1" ></div>
     </div>
@@ -156,7 +156,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     ?>
         <div class="row message <?= $key === $count - 1 ? 'bottom-note' : '' ?>">
             <div class="col-xs-1 col-sm-1"></div>
-            <div class="col-xs-7 money col-sm-5">累计认购<?= StringUtils::amountFormat2($val['min']) ?>起</div>
+            <div class="col-xs-7 money col-sm-5">累计出借<?= StringUtils::amountFormat2($val['min']) ?>起</div>
             <div class="col-xs-3 shouyi center_num col-sm-5"><?= StringUtils::amountFormat2($val['rate']) ?></div>
             <div class="col-xs-1 col-sm-1"></div>
         </div>
@@ -174,17 +174,17 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
         <div class="col-xs-4 col">到期兑付利率</div>
     </div>
     <div class="row earnings-contain">
-        <div class="col-xs-4 col">认购10万(含)起</div>
+        <div class="col-xs-4 col">出借10万(含)起</div>
         <div class="col-xs-4 col">8.6</div>
         <div class="col-xs-4 col">9.0</div>
     </div>
     <div class="row earnings-contain">
-        <div class="col-xs-4 col">认购50万(含)起</div>
+        <div class="col-xs-4 col">出借50万(含)起</div>
         <div class="col-xs-4 col">8.8</div>
         <div class="col-xs-4 col">9.3</div>
     </div>
     <div class="row earnings-contain">
-        <div class="col-xs-4 col">认购100万(含)起</div>
+        <div class="col-xs-4 col">出借100万(含)起</div>
         <div class="col-xs-4 col">9.1</div>
         <div class="col-xs-4 col">9.5</div>
     </div>
@@ -195,7 +195,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
             $closedExpireTime = RedeemHelper::getClosedPeriodExpireTime($deal->redemptionPeriods);
             if (null !== $closedExpireTime) {
         ?>
-            <li>封闭期：本产品从购买日至<?= $closedExpireTime->format('Y年m月d日') ?>属封闭期，出借者在封闭期内不得赎回理财产品。</li>
+            <li>封闭期：本产品从购买日至<?= $closedExpireTime->format('Y年m月d日') ?>属封闭期，出借者在封闭期内不得赎回产品。</li>
         <?php } ?>
         <li>提前赎回：封闭期过后，出借者可在<?= RedeemHelper::formatRedemptionPeriods($deal->redemptionPeriods) ?>期间预约提前赎回；预约成功后，<?= RedeemHelper::formatRedemptionPaymentDates($deal->redemptionPaymentDates) ?>当日为出借者兑付所有出借本金及收益。赎回不收取任何手续费。</li>
         <li>到期自动兑付：如出借者不提前赎回，产品从购买日起算，满3年后，自动兑付所有出借本金及收益，收益率高于提前赎回利率。具体收益详见收益说明。</li>

@@ -25,7 +25,7 @@ $this->headerNavOn = true;
             <p class="title">基金来源</p>
             <div class="source">
                 <ul class="comFont">
-                    <li>1、现金捐赠，开发专属“慈善理财产品”，按募集总金额的万分之一捐赠；</li>
+                    <li>1、现金捐赠，开发专属“慈善产品”，按募集总金额的万分之一捐赠；</li>
                     <li>2、公司员工自愿捐赠；</li>
                     <li>3、爱心人士自愿捐赠。</li>
                     <li>您可以在楚天财富首页查看平台累计捐赠金额。</li>
