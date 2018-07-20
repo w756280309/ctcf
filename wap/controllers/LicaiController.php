@@ -51,6 +51,7 @@ class LicaiController extends Controller
         $selectSet =  [];
         $isShowPop = false;//是否展示弹窗
         $selectNoteIds = [];//筛选出的转让id
+        $notLoanIds = [];//非网贷标的
         //温都项目且非ajax请求则查询转让中的项目期限、利率、折让率,如果没有转让中项目，则查询项无条件。与产品确认，如果无转让中项目，此筛选功能要下架
         $p = OnlineProduct::tableName();
         $u = User::tableName();
@@ -146,11 +147,17 @@ class LicaiController extends Controller
             //获得所有可见的转让的id
             $userId = null === $user ? null : $user->id;
             $noteIds = CreditNote::getVisibleTradingIds($userId);
+            if (null !== $user && $user->getTotalAssets() < 50000) {
+                $notLoanIds = OnlineProduct::find()
+                    ->select('id')
+                    ->where(['!=', 'cid', 3])
+                    ->column();
+            }
         }
         $notes = [];
         $tp = 0;
         $txClient = Yii::$container->get('txClient');
-        $response = $txClient->post('credit-note/list', ['page' => $page, 'page_size' => 5, 'isCanceled' => false, 'loans' => $array, 'noteIds' => $noteIds, 'selectNoteIds' => $selectNoteIds]);
+        $response = $txClient->post('credit-note/list', ['page' => $page, 'page_size' => 5, 'isCanceled' => false, 'loans' => $array, 'noteIds' => $noteIds, 'selectNoteIds' => $selectNoteIds, 'notLoanIds' => $notLoanIds]);
         if (null !== $response) {
             $user = Yii::$app->user->getIdentity();
             if (!is_null($user)) {

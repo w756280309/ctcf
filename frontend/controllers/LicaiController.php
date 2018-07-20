@@ -78,12 +78,20 @@ class LicaiController extends Controller
         //获得所有可见的转让的id
         $userId = null === $user ? null : $user->id;
         $noteIds = CreditNote::getVisibleTradingIds($userId);
+        $notLoanIds = [];
+        if (null !== $user && $user->getTotalAssets() < 50000) {
+            $notLoanIds = OnlineProduct::find()
+                ->select('id')
+                ->where(['!=', 'cid', 3])
+                ->column();
+        }
+
         $notes = [];
         $totalCount = 0;
         $pageSize = 0;
 
         $txClient = Yii::$container->get('txClient');
-        $response = $txClient->post('credit-note/list', ['page' => $page, 'isCanceled' => false, 'loans' => $array, 'noteIds' => $noteIds]);
+        $response = $txClient->post('credit-note/list', ['page' => $page, 'isCanceled' => false, 'loans' => $array, 'noteIds' => $noteIds, 'notLoanIds' => $notLoanIds]);
 
         if (null !== $response) {
             $notes = $response['data'];

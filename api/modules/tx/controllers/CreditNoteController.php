@@ -129,6 +129,7 @@ class CreditNoteController extends Controller
         $loans = isset($reqData['loans']) ? $reqData['loans'] : [];
         $noteIds = isset($reqData['noteIds']) ? $reqData['noteIds'] : [];
         $selectNoteIds = isset($reqData['selectNoteIds']) ? $reqData['selectNoteIds'] : [];
+        $notLoanIds = isset($reqData['notLoanIds']) ? $reqData['notLoanIds'] : [];
         $sort = $getSort ? $getSort : 'isClosed,-createTime';
         $responseData = [
             'page' => $page,
@@ -169,6 +170,7 @@ class CreditNoteController extends Controller
             $query->andWhere(['in', 'id', $selectNoteIds]);
         }
 
+        $exIds = $loanExIds = [];
         //通过可见的转让中ID，然后排除掉不该看见的转让中ID
         if (!empty($noteIds)) {
             $exIds = CreditNote::find()
@@ -177,9 +179,19 @@ class CreditNoteController extends Controller
                 ->andWhere(['isTest' => false])
                 ->andWhere(['not in', 'id', $noteIds])
                 ->column();
-            if (!empty($exIds)) {
-                $query->andWhere(['not in', 'id', $exIds]);
-            }
+        }
+        //通过可见的转让id中，过滤掉资产端标的
+        if (!empty($notLoanIds)) {
+            $loanExIds = CreditNote::find()
+                ->select('id')
+                ->where(['isClosed' => false])
+                ->andWhere(['isTest' => false])
+                ->andWhere(['in', 'loan_id', $notLoanIds])
+                ->column();
+        }
+        if (!empty($exIds) || !empty($loanExIds)) {
+            $notIds = array_merge($exIds, $loanExIds);
+            $query->andWhere(['not in', 'id', $notIds]);
         }
 
         $count = $query->count();
