@@ -147,7 +147,7 @@ class LicaiController extends Controller
             //获得所有可见的转让的id
             $userId = null === $user ? null : $user->id;
             $noteIds = CreditNote::getVisibleTradingIds($userId);
-            if (null !== $user && $user->getTotalAssets() < 50000) {
+            if (null !== $user && $user->getJGMoney() < 50000) {
                 $notLoanIds = OnlineProduct::find()
                     ->select('id')
                     ->where(['!=', 'cid', 3])

@@ -79,7 +79,7 @@ class LicaiController extends Controller
         $userId = null === $user ? null : $user->id;
         $noteIds = CreditNote::getVisibleTradingIds($userId);
         $notLoanIds = [];
-        if (null !== $user && $user->getTotalAssets() < 50000) {
+        if (null !== $user && $user->getJGMoney() < 50000) {
             $notLoanIds = OnlineProduct::find()
                 ->select('id')
                 ->where(['!=', 'cid', 3])
