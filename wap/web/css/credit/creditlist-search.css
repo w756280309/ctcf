@@ -1,0 +1,191 @@
+.search{
+    /*height: 84px;*/
+    background-color: #fff;
+}
+.search .search-box{
+    text-align: center;
+    padding:8px 0;
+    position: relative;
+    white-space:nowrap;
+    font-size: 0px;
+}
+.search .search-box .go-back-search{
+    display: none;
+    vertical-align: middle;
+    width: 0;
+    height: 0;
+    padding-left: 10%;
+    padding-top: 5%;
+    background: url('/images/licaiSelect/search_toback_left.png') center center no-repeat;
+    -webkit-background-size: contain;
+    background-size: contain;
+}
+.search .search-box .search-box-btn{
+    display: none;
+    vertical-align: middle;
+    width: 11%;
+    /*line-height:20px;*/
+    font-size: 14px;
+    text-align: left;
+    color:#ec6b5f;
+}
+.search .search-box .search-input-box{
+    vertical-align: middle;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+.search .search-box .search-input-box img{
+    position: absolute;
+    z-index: 2;
+    width: 4.2666666666667%;
+    top:50%;
+    left:6.5%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.search .search-box .search-input-box input{
+    width: 93%;
+    /*height: 30px;*/
+    text-align: left;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    background: #f6f6f6;
+    font-size: 14px;
+    padding:8px 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 10%;
+    line-height: 1;
+    color:#131313;
+}
+.search .search-box input::-webkit-input-placeholder{
+    line-height: 1.5em;
+    font-size: 14px;
+    color:#bebebe;
+}
+
+/*下面的搜索框*/
+.search .select-lists{
+    height: 37px;
+}
+.search .select-lists .select-box{
+    width: 80%;
+}
+.search .select-lists .select-box>div{
+    width: 33.3%;
+    float: left;
+    height:37px;
+    line-height: 30px;
+    color:#666666;
+    font-size: 0px;
+}
+
+.search .select-lists .select-box>div span{
+    height: 37px;
+    display: inline-block;
+    font-size: 14px;
+    width: 80%;
+    text-align: right;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.search .select-lists .select-box>div u{
+    vertical-align: middle;
+    margin-left: 5%;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    padding-left: 8%;
+    padding-top: 6%;
+    background: url(/images/licaiSelect/select_bottom_icon.png);
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    text-decoration: none;
+    -webkit-transform: translateY(-4px);
+    -moz-transform: translateY(-4px);
+    -ms-transform: translateY(-4px);
+    -o-transform: translateY(-4px);
+    transform: translateY(-4px);
+}
+.search .select-lists .select-box>div.select-div span{
+    color:#f19d38;
+}
+.search .select-lists .select-box>div.select-div u{
+    background: url(/images/licaiSelect/select_top_icon.png);
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+.search .select-lists .rg{
+    width: 20%;
+    height: 37px;
+    text-align: center;
+    line-height: 30px;
+}
+.search .select-lists .rg span{
+    display: inline-block;
+    line-height: 25px;
+    padding:0px 14px;
+    font-size: 13px;
+    color:#ec6b5f;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border:1px solid #ec6b5f;
+}
+.list-content{
+    height: 0;
+    position: relative;
+    z-index: 2;
+}
+.list-content>div{
+    display:none;
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    top:0;
+    left:0;
+    background-color: rgba(0,0,0,0.5);
+}
+.list-content ul{
+    display:none;
+    background-color: #fff;
+}
+.list-content ul li:first-child{
+    padding-top: 5px;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+.list-content ul li:last-child{
+    padding-bottom: 5px;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+.list-content ul.select0 li{
+    /*padding-left: 6.33333333%;*/
+    padding-right: 80%;
+    text-align: right;
+}
+.list-content ul.select1 li{
+    padding-left: 25%;
+    padding-right: 40%;
+    text-align: center;
+}
+.list-content ul.select2 li{
+    padding-left: 63.33333333%;
+}
+.list-content ul li{
+    overflow: hidden;
+    height: 35px;
+    line-height: 35px;
+    color:#666;
+    font-size: 14px;
+}

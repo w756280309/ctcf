@@ -128,6 +128,7 @@ class CreditNoteController extends Controller
         $getSort = isset($reqData['sort']) ? $reqData['sort'] : 'isClosed,-createTime';
         $loans = isset($reqData['loans']) ? $reqData['loans'] : [];
         $noteIds = isset($reqData['noteIds']) ? $reqData['noteIds'] : [];
+        $selectNoteIds = isset($reqData['selectNoteIds']) ? $reqData['selectNoteIds'] : [];
         $sort = $getSort ? $getSort : 'isClosed,-createTime';
         $responseData = [
             'page' => $page,
@@ -162,6 +163,10 @@ class CreditNoteController extends Controller
 
         if (count($loans) > 0) {
             $query->andWhere(['in', 'loan_id', $loans]);
+        }
+
+        if (count($selectNoteIds) > 0) {
+            $query->andWhere(['in', 'id', $selectNoteIds]);
         }
 
         //通过可见的转让中ID，然后排除掉不该看见的转让中ID

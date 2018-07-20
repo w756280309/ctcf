@@ -7,10 +7,12 @@ $this->showBottomNav = true;
 $this->hideHeaderNav = HttpUtils::isWeixinRequest();
 $this->backUrl = false;
 
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=20161223', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=201612232', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist-search.css?v=201807196668', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/TouchSlide.1.1.js', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.classyloader.js', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit_page.js?v=171109', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit_page_wd.js?v=1807196688', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\assets\WapAsset']);
 
 $this->registerJs('var tp = ' . $tp . ';', 1);
 $this->registerJs("var url = '/licai/notes';", 1);
@@ -36,13 +38,75 @@ $user = Yii::$app->user->getIdentity();
             <div class="col-xs-4"><a href="/licai/notes" class="cre-title <?= $action === 'licai/notes' ? 'active-cre-title' : '' ?>">转让</a></div>
 <!--    --><?php //} ?>
 </div>
-
-<?php if ($notes) { ?>
-    <div id="credititem-list">
-        <?= $this->renderFile('@wap/views/licai/_more_note.php', ['notes' => $notes, 'tp' => $tp]) ?>
+<div class="search">
+    <div class="search-box">
+        <a href="/licai/notes" class="go-back-search"></a>
+        <div class="search-input-box">
+            <img src="/images/licaiSelect/licai_search_icon.png" alt="">
+            <input type="text" class="search-input" placeholder="输入标的名称">
+        </div>
+        <div class="search-box-btn">搜索</div>
     </div>
-    <!--加载更多-->
-    <div class="load"></div>
-<?php } else { ?>
-    <div class="cre-list-nums-none" style="display:block;">暂无数据</div>
-<?php } ?>
+    <div class="select-lists clearfix">
+        <div class="select-box lf">
+            <div id="select0">
+                <span>项目期限</span>
+                <u></u>
+            </div>
+            <div id="select1">
+                <span>项目利率</span>
+                <u></u>
+            </div>
+            <div id="select2">
+                <span>折让率</span>
+                <u></u>
+            </div>
+        </div>
+        <div class="rg">
+            <span class="now-to-search">搜索</span>
+        </div>
+    </div>
+    <div style="" class="list-content">
+        <div>
+            <ul class="select0 select-ul">
+                <?php if (!empty($selectSet['expireDaySets'])) :?>
+                    <?php foreach ($selectSet['expireDaySets'] as $expireSet) :?>
+                        <li k1="<?=$expireSet['expires'];?>" k2="day"><?= $expireSet['expires'];?>天</li>
+                    <?php endforeach;?>
+                <?php endif;?>
+                <?php if (!empty($selectSet['expireMonthSets'])) :?>
+                    <?php foreach ($selectSet['expireMonthSets'] as $expireMonthSet) :?>
+                        <li k1="<?=$expireMonthSet['expires'];?>" k2="month"><?= $expireMonthSet['expires'];?>月</li>
+                    <?php endforeach;?>
+                <?php endif;?>
+            </ul>
+            <ul class="select1 select-ul">
+                <?php if (!empty($selectSet['projectRateSet'])) :?>
+                    <?php foreach ($selectSet['projectRateSet'] as $projectRateSet) :?>
+                        <li k4="<?=$projectRateSet['yield_rate'];?>"><?=bcmul($projectRateSet['yield_rate'], 100, 2)?>%</li>
+                    <?php endforeach;?>
+                <?php endif;?>
+            </ul>
+            <ul class="select2 select-ul">
+                <?php if (!empty($selectSet['discountRateSet'])) :?>
+                    <?php foreach ($selectSet['discountRateSet'] as $discountRate) :?>
+                        <li k5="<?=$discountRate['discountRate'];?>"><?=$discountRate['discountRate'];?>%</li>
+                    <?php endforeach;?>
+                <?php endif;?>
+            </ul>
+        </div>
+    </div>
+</div>
+<div style="position: relative" class="all-list-item">
+    <?php if ($notes) { ?>
+        <div id="credititem-list">
+            <div class="mark-top" style="position:relative;bottom: -10px;background: #fff;height: 41px;line-height: 41px;color:#131313;font-size:14px;padding-left: 4.5%;border-bottom: 1px solid #ddd;">推荐转让<img style="width:7.5%;margin-left: 1%;" src="/images/licaiSelect/tuijian.png" alt=""></div>
+            <?= $this->renderFile('@wap/views/licai/_more_note.php', ['notes' => $notes, 'tp' => $tp]) ?>
+        </div>
+        <!--加载更多-->
+        <div class="load"></div>
+    <?php } else { ?>
+        <div class="cre-list-nums-none" style="display:block;">暂无数据</div>
+    <?php } ?>
+</div>
+
