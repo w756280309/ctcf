@@ -1,18 +1,28 @@
--- --------------------------------------------------------
--- Host:                         rr-bp1z450fa58j6w0tv.mysql.rds.aliyuncs.com
--- Server version:               5.6.16-log - Source distribution
--- Server OS:                    Linux
--- HeidiSQL Version:             9.5.0.5196
--- --------------------------------------------------------
+-- MySQL dump 10.13  Distrib 5.7.22, for Linux (x86_64)
+--
+-- Host: localhost    Database: wdjf_main
+-- ------------------------------------------------------
+-- Server version	5.7.22-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Dumping structure for table wjf.accesstoken
-CREATE TABLE IF NOT EXISTS `accesstoken` (
+--
+-- Table structure for table `accesstoken`
+--
+
+DROP TABLE IF EXISTS `accesstoken`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `accesstoken` (
   `uid` int(10) NOT NULL COMMENT '用户id',
   `expireTime` int(10) NOT NULL COMMENT '过期时间【暂定一个月】',
   `token` varchar(50) NOT NULL COMMENT '用户登录token',
@@ -23,10 +33,25 @@ CREATE TABLE IF NOT EXISTS `accesstoken` (
   `updateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='APP用户登录Token表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.admin
-CREATE TABLE IF NOT EXISTS `admin` (
+--
+-- Dumping data for table `accesstoken`
+--
+
+LOCK TABLES `accesstoken` WRITE;
+/*!40000 ALTER TABLE `accesstoken` DISABLE KEYS */;
+/*!40000 ALTER TABLE `accesstoken` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `admin`
+--
+
+DROP TABLE IF EXISTS `admin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `role_sn` char(10) NOT NULL COMMENT '角色sn',
   `username` char(32) NOT NULL COMMENT '管理员用户名',
@@ -42,11 +67,26 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `udesk_email` varchar(32) DEFAULT NULL,
   `affiliator_id` int(11) DEFAULT NULL COMMENT '门店id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8 COMMENT='管理员用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员用户表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.admin_auth
-CREATE TABLE IF NOT EXISTS `admin_auth` (
+--
+-- Dumping data for table `admin`
+--
+
+LOCK TABLES `admin` WRITE;
+/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `admin_auth`
+--
+
+DROP TABLE IF EXISTS `admin_auth`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin_auth` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `admin_id` int(4) NOT NULL COMMENT '管理者id',
   `role_sn` char(24) DEFAULT '' COMMENT '角色sn',
@@ -56,11 +96,26 @@ CREATE TABLE IF NOT EXISTS `admin_auth` (
   `updated_at` int(11) DEFAULT NULL,
   `created_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80392 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.admin_log
-CREATE TABLE IF NOT EXISTS `admin_log` (
+--
+-- Dumping data for table `admin_auth`
+--
+
+LOCK TABLES `admin_auth` WRITE;
+/*!40000 ALTER TABLE `admin_auth` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin_auth` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `admin_log`
+--
+
+DROP TABLE IF EXISTS `admin_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `admin_id` int(11) DEFAULT NULL,
   `created_at` int(11) DEFAULT NULL,
@@ -73,11 +128,26 @@ CREATE TABLE IF NOT EXISTS `admin_log` (
   KEY `admin_log_table_name` (`tableName`),
   KEY `admin_log_admin_id` (`admin_id`),
   KEY `admin_log_primary_key` (`primaryKey`)
-) ENGINE=InnoDB AUTO_INCREMENT=1644638 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.admin_op_log
-CREATE TABLE IF NOT EXISTS `admin_op_log` (
+--
+-- Dumping data for table `admin_log`
+--
+
+LOCK TABLES `admin_log` WRITE;
+/*!40000 ALTER TABLE `admin_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `admin_op_log`
+--
+
+DROP TABLE IF EXISTS `admin_op_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin_op_log` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `op_name` varchar(50) NOT NULL COMMENT '操作名称',
   `admin_id` int(4) NOT NULL COMMENT '管理者id',
@@ -94,10 +164,25 @@ CREATE TABLE IF NOT EXISTS `admin_op_log` (
   `created_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.admin_upload
-CREATE TABLE IF NOT EXISTS `admin_upload` (
+--
+-- Dumping data for table `admin_op_log`
+--
+
+LOCK TABLES `admin_op_log` WRITE;
+/*!40000 ALTER TABLE `admin_op_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin_op_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `admin_upload`
+--
+
+DROP TABLE IF EXISTS `admin_upload`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin_upload` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(30) NOT NULL,
   `link` varchar(100) NOT NULL,
@@ -106,11 +191,26 @@ CREATE TABLE IF NOT EXISTS `admin_upload` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.adv
-CREATE TABLE IF NOT EXISTS `adv` (
+--
+-- Dumping data for table `admin_upload`
+--
+
+LOCK TABLES `admin_upload` WRITE;
+/*!40000 ALTER TABLE `admin_upload` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin_upload` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `adv`
+--
+
+DROP TABLE IF EXISTS `adv`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `adv` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `sn` varchar(10) DEFAULT NULL COMMENT 'sn',
   `title` varchar(50) DEFAULT NULL COMMENT '标题',
@@ -131,21 +231,51 @@ CREATE TABLE IF NOT EXISTS `adv` (
   `timing` tinyint(1) DEFAULT '0',
   `investLeast` decimal(14,2) NOT NULL DEFAULT '0.00' COMMENT '最低投资可见',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=367 DEFAULT CHARSET=utf8 COMMENT='广告表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.affiliate_campaign
-CREATE TABLE IF NOT EXISTS `affiliate_campaign` (
+--
+-- Dumping data for table `adv`
+--
+
+LOCK TABLES `adv` WRITE;
+/*!40000 ALTER TABLE `adv` DISABLE KEYS */;
+/*!40000 ALTER TABLE `adv` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `affiliate_campaign`
+--
+
+DROP TABLE IF EXISTS `affiliate_campaign`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `affiliate_campaign` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `trackCode` varchar(255) DEFAULT NULL,
   `affiliator_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `trackCode` (`trackCode`)
-) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.affiliator
-CREATE TABLE IF NOT EXISTS `affiliator` (
+--
+-- Dumping data for table `affiliate_campaign`
+--
+
+LOCK TABLES `affiliate_campaign` WRITE;
+/*!40000 ALTER TABLE `affiliate_campaign` DISABLE KEYS */;
+/*!40000 ALTER TABLE `affiliate_campaign` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `affiliator`
+--
+
+DROP TABLE IF EXISTS `affiliator`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `affiliator` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `picPath` varchar(255) DEFAULT NULL,
@@ -157,21 +287,77 @@ CREATE TABLE IF NOT EXISTS `affiliator` (
   `hideSensitiveinfo` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否隐藏敏感信息',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.annual_report
-CREATE TABLE IF NOT EXISTS `annual_report` (
+--
+-- Dumping data for table `affiliator`
+--
+
+LOCK TABLES `affiliator` WRITE;
+/*!40000 ALTER TABLE `affiliator` DISABLE KEYS */;
+/*!40000 ALTER TABLE `affiliator` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `annual_report`
+--
+
+DROP TABLE IF EXISTS `annual_report`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `annual_report` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `totalProfit` decimal(14,2) DEFAULT '0.00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11210 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.appliament
-CREATE TABLE IF NOT EXISTS `appliament` (
+--
+-- Dumping data for table `annual_report`
+--
+
+LOCK TABLES `annual_report` WRITE;
+/*!40000 ALTER TABLE `annual_report` DISABLE KEYS */;
+/*!40000 ALTER TABLE `annual_report` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `app_meta`
+--
+
+DROP TABLE IF EXISTS `app_meta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `app_meta` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `key` varchar(64) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `app_meta`
+--
+
+LOCK TABLES `app_meta` WRITE;
+/*!40000 ALTER TABLE `app_meta` DISABLE KEYS */;
+/*!40000 ALTER TABLE `app_meta` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `appliament`
+--
+
+DROP TABLE IF EXISTS `appliament`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `appliament` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userID` int(11) unsigned NOT NULL COMMENT '用户ID',
   `appointmentTime` int(11) unsigned NOT NULL COMMENT '预约时间',
@@ -180,22 +366,26 @@ CREATE TABLE IF NOT EXISTS `appliament` (
   `appointmentAwardType` smallint(6) unsigned NOT NULL COMMENT '获奖类型，1：喜卡，2：加息券',
   PRIMARY KEY (`id`),
   KEY `userId` (`userID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1654 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.app_meta
-CREATE TABLE IF NOT EXISTS `app_meta` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `key` varchar(64) NOT NULL,
-  `value` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+--
+-- Dumping data for table `appliament`
+--
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.asset
-CREATE TABLE IF NOT EXISTS `asset` (
+LOCK TABLES `appliament` WRITE;
+/*!40000 ALTER TABLE `appliament` DISABLE KEYS */;
+/*!40000 ALTER TABLE `appliament` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `asset`
+--
+
+DROP TABLE IF EXISTS `asset`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `asset` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `source` varchar(255) NOT NULL COMMENT '渠道信息',
   `createTime` datetime NOT NULL COMMENT '创建时间',
@@ -215,11 +405,26 @@ CREATE TABLE IF NOT EXISTS `asset` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn` (`sn`),
   KEY `borrowerName` (`borrowerName`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.auth
-CREATE TABLE IF NOT EXISTS `auth` (
+--
+-- Dumping data for table `asset`
+--
+
+LOCK TABLES `asset` WRITE;
+/*!40000 ALTER TABLE `asset` DISABLE KEYS */;
+/*!40000 ALTER TABLE `asset` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth`
+--
+
+DROP TABLE IF EXISTS `auth`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `sn` char(24) DEFAULT '' COMMENT '编号',
   `psn` char(24) DEFAULT '' COMMENT '父级sn',
@@ -233,11 +438,26 @@ CREATE TABLE IF NOT EXISTS `auth` (
   `updated_at` int(11) DEFAULT NULL,
   `created_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=270 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.award
-CREATE TABLE IF NOT EXISTS `award` (
+--
+-- Dumping data for table `auth`
+--
+
+LOCK TABLES `auth` WRITE;
+/*!40000 ALTER TABLE `auth` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `award`
+--
+
+DROP TABLE IF EXISTS `award`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `award` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `createTime` datetime DEFAULT NULL,
@@ -248,34 +468,51 @@ CREATE TABLE IF NOT EXISTS `award` (
   `ref_id` int(11) DEFAULT NULL,
   `reward_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=140744 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.bank
-CREATE TABLE IF NOT EXISTS `bank` (
+--
+-- Dumping data for table `award`
+--
+
+LOCK TABLES `award` WRITE;
+/*!40000 ALTER TABLE `award` DISABLE KEYS */;
+/*!40000 ALTER TABLE `award` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bank`
+--
+
+DROP TABLE IF EXISTS `bank`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bank` (
   `id` int(1) NOT NULL AUTO_INCREMENT,
   `bankName` varchar(100) NOT NULL,
   `gateId` varchar(50) NOT NULL COMMENT '银行英文简称',
   PRIMARY KEY (`id`),
   UNIQUE KEY `gateId` (`gateId`)
-) ENGINE=InnoDB AUTO_INCREMENT=441 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.bankcardbin
-CREATE TABLE IF NOT EXISTS `bankcardbin` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cardBin` varchar(50) DEFAULT NULL COMMENT '卡号唯一判断数字',
-  `cardType` varchar(20) NOT NULL COMMENT '卡类型',
-  `bankId` int(11) DEFAULT NULL COMMENT '银行id',
-  `binDigits` int(11) DEFAULT NULL COMMENT '判断长度',
-  `cardDigits` int(11) NOT NULL COMMENT '卡长度',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `card_bin` (`cardBin`)
-) ENGINE=InnoDB AUTO_INCREMENT=1451 DEFAULT CHARSET=utf8;
+--
+-- Dumping data for table `bank`
+--
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.bank_card_update
-CREATE TABLE IF NOT EXISTS `bank_card_update` (
+LOCK TABLES `bank` WRITE;
+/*!40000 ALTER TABLE `bank` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bank` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bank_card_update`
+--
+
+DROP TABLE IF EXISTS `bank_card_update`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bank_card_update` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `sn` varchar(32) NOT NULL,
   `oldSn` varchar(32) NOT NULL,
@@ -292,11 +529,54 @@ CREATE TABLE IF NOT EXISTS `bank_card_update` (
   UNIQUE KEY `sn` (`sn`),
   KEY `idx_uid` (`uid`),
   KEY `idx_oldSn` (`oldSn`)
-) ENGINE=InnoDB AUTO_INCREMENT=3119 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.bao_quan_queue
-CREATE TABLE IF NOT EXISTS `bao_quan_queue` (
+--
+-- Dumping data for table `bank_card_update`
+--
+
+LOCK TABLES `bank_card_update` WRITE;
+/*!40000 ALTER TABLE `bank_card_update` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bank_card_update` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bankcardbin`
+--
+
+DROP TABLE IF EXISTS `bankcardbin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bankcardbin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cardBin` varchar(50) DEFAULT NULL COMMENT '卡号唯一判断数字',
+  `cardType` varchar(20) NOT NULL COMMENT '卡类型',
+  `bankId` int(11) DEFAULT NULL COMMENT '银行id',
+  `binDigits` int(11) DEFAULT NULL COMMENT '判断长度',
+  `cardDigits` int(11) NOT NULL COMMENT '卡长度',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `card_bin` (`cardBin`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bankcardbin`
+--
+
+LOCK TABLES `bankcardbin` WRITE;
+/*!40000 ALTER TABLE `bankcardbin` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bankcardbin` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bao_quan_queue`
+--
+
+DROP TABLE IF EXISTS `bao_quan_queue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bao_quan_queue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `itemId` int(11) DEFAULT NULL,
   `status` int(1) DEFAULT '1',
@@ -305,11 +585,26 @@ CREATE TABLE IF NOT EXISTS `bao_quan_queue` (
   `itemType` varchar(20) DEFAULT 'loan',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_item` (`itemId`,`itemType`)
-) ENGINE=InnoDB AUTO_INCREMENT=135139 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.booking_log
-CREATE TABLE IF NOT EXISTS `booking_log` (
+--
+-- Dumping data for table `bao_quan_queue`
+--
+
+LOCK TABLES `bao_quan_queue` WRITE;
+/*!40000 ALTER TABLE `bao_quan_queue` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bao_quan_queue` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `booking_log`
+--
+
+DROP TABLE IF EXISTS `booking_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `booking_log` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `uid` int(10) NOT NULL COMMENT '用户ID',
   `pid` int(10) NOT NULL COMMENT '项目ID',
@@ -319,11 +614,26 @@ CREATE TABLE IF NOT EXISTS `booking_log` (
   `created_at` int(10) NOT NULL COMMENT '创建时间',
   `updated_at` int(10) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='预约记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='预约记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.booking_product
-CREATE TABLE IF NOT EXISTS `booking_product` (
+--
+-- Dumping data for table `booking_log`
+--
+
+LOCK TABLES `booking_log` WRITE;
+/*!40000 ALTER TABLE `booking_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `booking_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `booking_product`
+--
+
+DROP TABLE IF EXISTS `booking_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `booking_product` (
   `id` int(10) NOT NULL COMMENT 'ID',
   `name` varchar(128) NOT NULL COMMENT '项目名称',
   `is_disabled` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁用',
@@ -335,10 +645,25 @@ CREATE TABLE IF NOT EXISTS `booking_product` (
   `updated_at` int(10) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='预约项目表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.borrower
-CREATE TABLE IF NOT EXISTS `borrower` (
+--
+-- Dumping data for table `booking_product`
+--
+
+LOCK TABLES `booking_product` WRITE;
+/*!40000 ALTER TABLE `booking_product` DISABLE KEYS */;
+/*!40000 ALTER TABLE `booking_product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `borrower`
+--
+
+DROP TABLE IF EXISTS `borrower`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `borrower` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL DEFAULT '0' COMMENT '融资会员ID',
   `allowDisbursement` tinyint(1) NOT NULL DEFAULT '0' COMMENT '能否作为放款方',
@@ -346,20 +671,51 @@ CREATE TABLE IF NOT EXISTS `borrower` (
   `created_at` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updated_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=836 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.cache_entry
-CREATE TABLE IF NOT EXISTS `cache_entry` (
+--
+-- Dumping data for table `borrower`
+--
+
+LOCK TABLES `borrower` WRITE;
+/*!40000 ALTER TABLE `borrower` DISABLE KEYS */;
+/*!40000 ALTER TABLE `borrower` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cache_entry`
+--
+
+DROP TABLE IF EXISTS `cache_entry`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cache_entry` (
   `id` char(128) NOT NULL DEFAULT '',
   `expire` int(11) DEFAULT NULL,
   `data` blob,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.callout
-CREATE TABLE IF NOT EXISTS `callout` (
+--
+-- Dumping data for table `cache_entry`
+--
+
+LOCK TABLES `cache_entry` WRITE;
+/*!40000 ALTER TABLE `cache_entry` DISABLE KEYS */;
+INSERT INTO `cache_entry` VALUES ('4e6ba1ecc9cf577fd6666d4eb7d2c062',1531893823,'a:2:{i:0;a:4:{s:16:\"totalTradeAmount\";s:4:\"0.00\";s:17:\"totalRefundAmount\";s:4:\"0.00\";s:19:\"totalRefundInterest\";s:4:\"0.00\";s:17:\"totalCharityAount\";s:4:\"0.00\";}i:1;N;}');
+/*!40000 ALTER TABLE `cache_entry` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `callout`
+--
+
+DROP TABLE IF EXISTS `callout`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `callout` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL COMMENT '召集人ID',
   `endTime` datetime DEFAULT NULL COMMENT '召集截止时间',
@@ -369,11 +725,26 @@ CREATE TABLE IF NOT EXISTS `callout` (
   `callerOpenId` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_key` (`promo_id`,`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=727 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.callout_responder
-CREATE TABLE IF NOT EXISTS `callout_responder` (
+--
+-- Dumping data for table `callout`
+--
+
+LOCK TABLES `callout` WRITE;
+/*!40000 ALTER TABLE `callout` DISABLE KEYS */;
+/*!40000 ALTER TABLE `callout` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `callout_responder`
+--
+
+DROP TABLE IF EXISTS `callout_responder`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `callout_responder` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `openid` varchar(64) DEFAULT NULL COMMENT '用户开放身份标识',
   `callout_id` int(11) NOT NULL COMMENT '召集ID',
@@ -381,11 +752,26 @@ CREATE TABLE IF NOT EXISTS `callout_responder` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `promo_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=278 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.cancelorder
-CREATE TABLE IF NOT EXISTS `cancelorder` (
+--
+-- Dumping data for table `callout_responder`
+--
+
+LOCK TABLES `callout_responder` WRITE;
+/*!40000 ALTER TABLE `callout_responder` DISABLE KEYS */;
+/*!40000 ALTER TABLE `callout_responder` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cancelorder`
+--
+
+DROP TABLE IF EXISTS `cancelorder`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cancelorder` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `orderSn` varchar(30) NOT NULL,
   `txSn` varchar(30) NOT NULL,
@@ -394,11 +780,26 @@ CREATE TABLE IF NOT EXISTS `cancelorder` (
   `created_at` int(10) NOT NULL,
   `updated_at` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='取消订单表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='取消订单表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.captcha
-CREATE TABLE IF NOT EXISTS `captcha` (
+--
+-- Dumping data for table `cancelorder`
+--
+
+LOCK TABLES `cancelorder` WRITE;
+/*!40000 ALTER TABLE `cancelorder` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cancelorder` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `captcha`
+--
+
+DROP TABLE IF EXISTS `captcha`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `captcha` (
   `id` varchar(255) NOT NULL,
   `code` varchar(255) NOT NULL,
   `createTime` datetime NOT NULL,
@@ -406,10 +807,25 @@ CREATE TABLE IF NOT EXISTS `captcha` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.category
-CREATE TABLE IF NOT EXISTS `category` (
+--
+-- Dumping data for table `captcha`
+--
+
+LOCK TABLES `captcha` WRITE;
+/*!40000 ALTER TABLE `captcha` DISABLE KEYS */;
+/*!40000 ALTER TABLE `captcha` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `category`
+--
+
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL COMMENT '分类名称',
   `key` varchar(20) NOT NULL COMMENT '分类KEY',
@@ -422,11 +838,26 @@ CREATE TABLE IF NOT EXISTS `category` (
   `updated_at` int(10) NOT NULL COMMENT '更新时间',
   `created_at` int(10) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='公共分类表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='公共分类表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.channel
-CREATE TABLE IF NOT EXISTS `channel` (
+--
+-- Dumping data for table `category`
+--
+
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `channel`
+--
+
+DROP TABLE IF EXISTS `channel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `channel` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `thirdPartyUser_id` varchar(255) NOT NULL,
@@ -434,11 +865,26 @@ CREATE TABLE IF NOT EXISTS `channel` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `userId` (`userId`),
   UNIQUE KEY `thirdPartyUser_id` (`thirdPartyUser_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6442 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.check_in
-CREATE TABLE IF NOT EXISTS `check_in` (
+--
+-- Dumping data for table `channel`
+--
+
+LOCK TABLES `channel` WRITE;
+/*!40000 ALTER TABLE `channel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `channel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `check_in`
+--
+
+DROP TABLE IF EXISTS `check_in`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `check_in` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `checkDate` date NOT NULL,
@@ -447,11 +893,26 @@ CREATE TABLE IF NOT EXISTS `check_in` (
   `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_user_date` (`user_id`,`checkDate`)
-) ENGINE=InnoDB AUTO_INCREMENT=1546016 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.code
-CREATE TABLE IF NOT EXISTS `code` (
+--
+-- Dumping data for table `check_in`
+--
+
+LOCK TABLES `check_in` WRITE;
+/*!40000 ALTER TABLE `check_in` DISABLE KEYS */;
+/*!40000 ALTER TABLE `check_in` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `code`
+--
+
+DROP TABLE IF EXISTS `code`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `code` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(16) NOT NULL,
   `user_id` int(10) DEFAULT NULL,
@@ -464,11 +925,26 @@ CREATE TABLE IF NOT EXISTS `code` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `goodsType_sn` (`goodsType_sn`)
-) ENGINE=InnoDB AUTO_INCREMENT=347610 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.coins_record
-CREATE TABLE IF NOT EXISTS `coins_record` (
+--
+-- Dumping data for table `code`
+--
+
+LOCK TABLES `code` WRITE;
+/*!40000 ALTER TABLE `code` DISABLE KEYS */;
+/*!40000 ALTER TABLE `code` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `coins_record`
+--
+
+DROP TABLE IF EXISTS `coins_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `coins_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
@@ -477,11 +953,26 @@ CREATE TABLE IF NOT EXISTS `coins_record` (
   `createTime` datetime NOT NULL,
   `isOffline` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73583 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.contract
-CREATE TABLE IF NOT EXISTS `contract` (
+--
+-- Dumping data for table `coins_record`
+--
+
+LOCK TABLES `coins_record` WRITE;
+/*!40000 ALTER TABLE `coins_record` DISABLE KEYS */;
+/*!40000 ALTER TABLE `coins_record` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `contract`
+--
+
+DROP TABLE IF EXISTS `contract`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contract` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `type` int(10) NOT NULL DEFAULT '0' COMMENT '类型。0对应channel_order 1对应online_order',
   `order_id` int(4) DEFAULT '0' COMMENT '订单id',
@@ -496,10 +987,25 @@ CREATE TABLE IF NOT EXISTS `contract` (
   `channel_order_sn` varchar(30) DEFAULT '' COMMENT '渠道订单sn',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.contract_template
-CREATE TABLE IF NOT EXISTS `contract_template` (
+--
+-- Dumping data for table `contract`
+--
+
+LOCK TABLES `contract` WRITE;
+/*!40000 ALTER TABLE `contract` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contract` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `contract_template`
+--
+
+DROP TABLE IF EXISTS `contract_template`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contract_template` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `type` int(1) DEFAULT '0' COMMENT '0固定1特殊模板',
   `pid` int(10) DEFAULT NULL COMMENT '产品id',
@@ -509,11 +1015,26 @@ CREATE TABLE IF NOT EXISTS `contract_template` (
   `status` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=40028 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.coupon_type
-CREATE TABLE IF NOT EXISTS `coupon_type` (
+--
+-- Dumping data for table `contract_template`
+--
+
+LOCK TABLES `contract_template` WRITE;
+/*!40000 ALTER TABLE `contract_template` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contract_template` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `coupon_type`
+--
+
+DROP TABLE IF EXISTS `coupon_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `coupon_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sn` varchar(20) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
@@ -539,11 +1060,26 @@ CREATE TABLE IF NOT EXISTS `coupon_type` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn` (`sn`),
   UNIQUE KEY `sn_2` (`sn`)
-) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_account
-CREATE TABLE IF NOT EXISTS `crm_account` (
+--
+-- Dumping data for table `coupon_type`
+--
+
+LOCK TABLES `coupon_type` WRITE;
+/*!40000 ALTER TABLE `coupon_type` DISABLE KEYS */;
+/*!40000 ALTER TABLE `coupon_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_account`
+--
+
+DROP TABLE IF EXISTS `crm_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `creator_id` int(11) DEFAULT NULL,
   `createTime` datetime DEFAULT NULL,
@@ -553,21 +1089,51 @@ CREATE TABLE IF NOT EXISTS `crm_account` (
   `isConverted` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pc_id` (`primaryContact_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=84661 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_account_contact
-CREATE TABLE IF NOT EXISTS `crm_account_contact` (
+--
+-- Dumping data for table `crm_account`
+--
+
+LOCK TABLES `crm_account` WRITE;
+/*!40000 ALTER TABLE `crm_account` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_account_contact`
+--
+
+DROP TABLE IF EXISTS `crm_account_contact`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_account_contact` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
   `contact_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_account_contact` (`account_id`,`contact_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=85612 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_activity
-CREATE TABLE IF NOT EXISTS `crm_activity` (
+--
+-- Dumping data for table `crm_account_contact`
+--
+
+LOCK TABLES `crm_account_contact` WRITE;
+/*!40000 ALTER TABLE `crm_account_contact` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_account_contact` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_activity`
+--
+
+DROP TABLE IF EXISTS `crm_activity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_activity` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
@@ -576,11 +1142,26 @@ CREATE TABLE IF NOT EXISTS `crm_activity` (
   `ref_type` varchar(255) DEFAULT NULL,
   `ref_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=93635 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_branch_visit
-CREATE TABLE IF NOT EXISTS `crm_branch_visit` (
+--
+-- Dumping data for table `crm_activity`
+--
+
+LOCK TABLES `crm_activity` WRITE;
+/*!40000 ALTER TABLE `crm_activity` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_activity` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_branch_visit`
+--
+
+DROP TABLE IF EXISTS `crm_branch_visit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_branch_visit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
@@ -591,11 +1172,26 @@ CREATE TABLE IF NOT EXISTS `crm_branch_visit` (
   `content` text,
   `comment` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4698 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_contact
-CREATE TABLE IF NOT EXISTS `crm_contact` (
+--
+-- Dumping data for table `crm_branch_visit`
+--
+
+LOCK TABLES `crm_branch_visit` WRITE;
+/*!40000 ALTER TABLE `crm_branch_visit` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_branch_visit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_contact`
+--
+
+DROP TABLE IF EXISTS `crm_contact`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_contact` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
@@ -605,11 +1201,26 @@ CREATE TABLE IF NOT EXISTS `crm_contact` (
   `obfsNumber` varchar(255) DEFAULT NULL,
   `encryptedNumber` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=79489 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_gift
-CREATE TABLE IF NOT EXISTS `crm_gift` (
+--
+-- Dumping data for table `crm_contact`
+--
+
+LOCK TABLES `crm_contact` WRITE;
+/*!40000 ALTER TABLE `crm_contact` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_contact` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_gift`
+--
+
+DROP TABLE IF EXISTS `crm_gift`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_gift` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
   `goodsType_id` int(11) NOT NULL,
@@ -621,11 +1232,26 @@ CREATE TABLE IF NOT EXISTS `crm_gift` (
   `updateTime` datetime DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8703 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_identity
-CREATE TABLE IF NOT EXISTS `crm_identity` (
+--
+-- Dumping data for table `crm_gift`
+--
+
+LOCK TABLES `crm_gift` WRITE;
+/*!40000 ALTER TABLE `crm_gift` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_gift` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_identity`
+--
+
+DROP TABLE IF EXISTS `crm_identity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_identity` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
@@ -644,11 +1270,26 @@ CREATE TABLE IF NOT EXISTS `crm_identity` (
   `emergencyContact` varchar(255) DEFAULT NULL COMMENT '紧急联系人',
   `address` varchar(255) DEFAULT NULL COMMENT '地址',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=84611 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_note
-CREATE TABLE IF NOT EXISTS `crm_note` (
+--
+-- Dumping data for table `crm_identity`
+--
+
+LOCK TABLES `crm_identity` WRITE;
+/*!40000 ALTER TABLE `crm_identity` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_identity` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_note`
+--
+
+DROP TABLE IF EXISTS `crm_note`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_note` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
@@ -657,11 +1298,26 @@ CREATE TABLE IF NOT EXISTS `crm_note` (
   `content` text,
   `isSolved` tinyint(1) DEFAULT '0' COMMENT '是否解决',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_order
-CREATE TABLE IF NOT EXISTS `crm_order` (
+--
+-- Dumping data for table `crm_note`
+--
+
+LOCK TABLES `crm_note` WRITE;
+/*!40000 ALTER TABLE `crm_note` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_note` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_order`
+--
+
+DROP TABLE IF EXISTS `crm_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
   `mobile` varchar(255) DEFAULT NULL COMMENT '手机号',
@@ -681,11 +1337,26 @@ CREATE TABLE IF NOT EXISTS `crm_order` (
   `auditor` int(11) DEFAULT NULL COMMENT '审核人',
   `offline_order_sn` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=911 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_phone_call
-CREATE TABLE IF NOT EXISTS `crm_phone_call` (
+--
+-- Dumping data for table `crm_order`
+--
+
+LOCK TABLES `crm_order` WRITE;
+/*!40000 ALTER TABLE `crm_order` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_phone_call`
+--
+
+DROP TABLE IF EXISTS `crm_phone_call`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_phone_call` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
@@ -702,11 +1373,26 @@ CREATE TABLE IF NOT EXISTS `crm_phone_call` (
   `comment` text,
   `reception` varchar(255) DEFAULT NULL COMMENT '门店接待',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=87816 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_solve_detail
-CREATE TABLE IF NOT EXISTS `crm_solve_detail` (
+--
+-- Dumping data for table `crm_phone_call`
+--
+
+LOCK TABLES `crm_phone_call` WRITE;
+/*!40000 ALTER TABLE `crm_phone_call` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_phone_call` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_solve_detail`
+--
+
+DROP TABLE IF EXISTS `crm_solve_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_solve_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(255) NOT NULL COMMENT '需求类型',
   `ref_id` int(11) NOT NULL COMMENT '需求id',
@@ -715,11 +1401,26 @@ CREATE TABLE IF NOT EXISTS `crm_solve_detail` (
   `auditor` int(11) NOT NULL COMMENT '操作人',
   `created_at` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.crm_test
-CREATE TABLE IF NOT EXISTS `crm_test` (
+--
+-- Dumping data for table `crm_solve_detail`
+--
+
+LOCK TABLES `crm_solve_detail` WRITE;
+/*!40000 ALTER TABLE `crm_solve_detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_solve_detail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_test`
+--
+
+DROP TABLE IF EXISTS `crm_test`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_test` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `a` varchar(255) DEFAULT NULL,
   `b` varchar(255) DEFAULT NULL,
@@ -738,11 +1439,26 @@ CREATE TABLE IF NOT EXISTS `crm_test` (
   `type` varchar(255) DEFAULT NULL,
   `error` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8094 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.draw_record
-CREATE TABLE IF NOT EXISTS `draw_record` (
+--
+-- Dumping data for table `crm_test`
+--
+
+LOCK TABLES `crm_test` WRITE;
+/*!40000 ALTER TABLE `crm_test` DISABLE KEYS */;
+/*!40000 ALTER TABLE `crm_test` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `draw_record`
+--
+
+DROP TABLE IF EXISTS `draw_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `draw_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pay_id` int(1) unsigned NOT NULL COMMENT '支付公司id【若线下划款，此字段没有意义】',
   `account_id` int(10) unsigned NOT NULL COMMENT '对应资金账户id',
@@ -767,11 +1483,26 @@ CREATE TABLE IF NOT EXISTS `draw_record` (
   `lastCronCheckTime` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=118120 DEFAULT CHARSET=utf8 COMMENT='提现记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='提现记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.ebankconfig
-CREATE TABLE IF NOT EXISTS `ebankconfig` (
+--
+-- Dumping data for table `draw_record`
+--
+
+LOCK TABLES `draw_record` WRITE;
+/*!40000 ALTER TABLE `draw_record` DISABLE KEYS */;
+/*!40000 ALTER TABLE `draw_record` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ebankconfig`
+--
+
+DROP TABLE IF EXISTS `ebankconfig`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ebankconfig` (
   `bankId` int(4) NOT NULL,
   `typePersonal` tinyint(1) NOT NULL DEFAULT '0' COMMENT '支持个人为1',
   `typeBusiness` tinyint(1) NOT NULL DEFAULT '0' COMMENT '支持企业为1',
@@ -780,10 +1511,25 @@ CREATE TABLE IF NOT EXISTS `ebankconfig` (
   `dailyLimit` decimal(14,2) NOT NULL COMMENT '单日限额',
   PRIMARY KEY (`bankId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.ebao_quan
-CREATE TABLE IF NOT EXISTS `ebao_quan` (
+--
+-- Dumping data for table `ebankconfig`
+--
+
+LOCK TABLES `ebankconfig` WRITE;
+/*!40000 ALTER TABLE `ebankconfig` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ebankconfig` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ebao_quan`
+--
+
+DROP TABLE IF EXISTS `ebao_quan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ebao_quan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` int(1) DEFAULT NULL,
   `title` varchar(200) DEFAULT NULL,
@@ -798,11 +1544,26 @@ CREATE TABLE IF NOT EXISTS `ebao_quan` (
   `updated_at` int(10) DEFAULT NULL,
   `itemType` varchar(20) DEFAULT 'loan_order',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=259835 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.epayuser
-CREATE TABLE IF NOT EXISTS `epayuser` (
+--
+-- Dumping data for table `ebao_quan`
+--
+
+LOCK TABLES `ebao_quan` WRITE;
+/*!40000 ALTER TABLE `ebao_quan` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ebao_quan` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `epayuser`
+--
+
+DROP TABLE IF EXISTS `epayuser`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `epayuser` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `appUserId` varchar(60) NOT NULL COMMENT '应用方用户ID（兼容非数字的用户标识）',
   `epayId` smallint(5) unsigned NOT NULL COMMENT '托管方ID',
@@ -815,11 +1576,26 @@ CREATE TABLE IF NOT EXISTS `epayuser` (
   UNIQUE KEY `epayId_2` (`epayId`,`epayUserId`),
   KEY `appUserId` (`appUserId`),
   KEY `epayId` (`epayId`)
-) ENGINE=InnoDB AUTO_INCREMENT=59916 DEFAULT CHARSET=utf8 COMMENT='托管方用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='托管方用户表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.goods_type
-CREATE TABLE IF NOT EXISTS `goods_type` (
+--
+-- Dumping data for table `epayuser`
+--
+
+LOCK TABLES `epayuser` WRITE;
+/*!40000 ALTER TABLE `epayuser` DISABLE KEYS */;
+/*!40000 ALTER TABLE `epayuser` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `goods_type`
+--
+
+DROP TABLE IF EXISTS `goods_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `goods_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sn` varchar(255) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -831,11 +1607,52 @@ CREATE TABLE IF NOT EXISTS `goods_type` (
   `stock` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn` (`sn`)
-) ENGINE=InnoDB AUTO_INCREMENT=270 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.inviterrelation
-CREATE TABLE IF NOT EXISTS `inviterrelation` (
+--
+-- Dumping data for table `goods_type`
+--
+
+LOCK TABLES `goods_type` WRITE;
+/*!40000 ALTER TABLE `goods_type` DISABLE KEYS */;
+/*!40000 ALTER TABLE `goods_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `invite_record`
+--
+
+DROP TABLE IF EXISTS `invite_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `invite_record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `invitee_id` int(11) DEFAULT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invite_record`
+--
+
+LOCK TABLES `invite_record` WRITE;
+/*!40000 ALTER TABLE `invite_record` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invite_record` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `inviterrelation`
+--
+
+DROP TABLE IF EXISTS `inviterrelation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inviterrelation` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `inviterUid` int(10) NOT NULL COMMENT '邀请人uid',
   `inviteeUid` int(10) NOT NULL COMMENT '被邀请人uid',
@@ -845,21 +1662,25 @@ CREATE TABLE IF NOT EXISTS `inviterrelation` (
   PRIMARY KEY (`id`),
   KEY `inviterUid` (`inviterUid`,`inviteeUid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='邀请关系表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.invite_record
-CREATE TABLE IF NOT EXISTS `invite_record` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
-  `invitee_id` int(11) DEFAULT NULL,
-  `created_at` int(11) DEFAULT NULL,
-  `updated_at` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6076 DEFAULT CHARSET=utf8;
+--
+-- Dumping data for table `inviterrelation`
+--
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.issuer
-CREATE TABLE IF NOT EXISTS `issuer` (
+LOCK TABLES `inviterrelation` WRITE;
+/*!40000 ALTER TABLE `inviterrelation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `inviterrelation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `issuer`
+--
+
+DROP TABLE IF EXISTS `issuer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `issuer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `mediaTitle` varchar(255) DEFAULT NULL,
@@ -877,11 +1698,26 @@ CREATE TABLE IF NOT EXISTS `issuer` (
   `pcLink` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.item_category
-CREATE TABLE IF NOT EXISTS `item_category` (
+--
+-- Dumping data for table `issuer`
+--
+
+LOCK TABLES `issuer` WRITE;
+/*!40000 ALTER TABLE `issuer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `issuer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `item_category`
+--
+
+DROP TABLE IF EXISTS `item_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item_category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `item_id` int(10) unsigned NOT NULL COMMENT '项目ID',
   `category_id` int(10) unsigned NOT NULL COMMENT '分类ID',
@@ -889,20 +1725,50 @@ CREATE TABLE IF NOT EXISTS `item_category` (
   `updated_at` int(10) NOT NULL COMMENT '更新时间',
   `created_at` int(10) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2862 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='项目、分类对照表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='项目、分类对照表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.item_message
-CREATE TABLE IF NOT EXISTS `item_message` (
+--
+-- Dumping data for table `item_category`
+--
+
+LOCK TABLES `item_category` WRITE;
+/*!40000 ALTER TABLE `item_category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `item_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `item_message`
+--
+
+DROP TABLE IF EXISTS `item_message`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item_message` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ticketId` int(11) DEFAULT NULL COMMENT '抽奖机会id',
   `content` varchar(255) DEFAULT NULL COMMENT '描述内容',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=179 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.jx_page
-CREATE TABLE IF NOT EXISTS `jx_page` (
+--
+-- Dumping data for table `item_message`
+--
+
+LOCK TABLES `item_message` WRITE;
+/*!40000 ALTER TABLE `item_message` DISABLE KEYS */;
+/*!40000 ALTER TABLE `item_message` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `jx_page`
+--
+
+DROP TABLE IF EXISTS `jx_page`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jx_page` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `issuerId` int(11) unsigned NOT NULL,
   `title` varchar(100) NOT NULL,
@@ -911,11 +1777,26 @@ CREATE TABLE IF NOT EXISTS `jx_page` (
   `admin_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `issuerId` (`issuerId`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.lenderstats
-CREATE TABLE IF NOT EXISTS `lenderstats` (
+--
+-- Dumping data for table `jx_page`
+--
+
+LOCK TABLES `jx_page` WRITE;
+/*!40000 ALTER TABLE `jx_page` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jx_page` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lenderstats`
+--
+
+DROP TABLE IF EXISTS `lenderstats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lenderstats` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(10) NOT NULL,
   `userRegTime` int(10) NOT NULL,
@@ -935,11 +1816,26 @@ CREATE TABLE IF NOT EXISTS `lenderstats` (
   `ototalFund` decimal(14,2) DEFAULT NULL,
   `ototalNum` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=111420 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.login_log
-CREATE TABLE IF NOT EXISTS `login_log` (
+--
+-- Dumping data for table `lenderstats`
+--
+
+LOCK TABLES `lenderstats` WRITE;
+/*!40000 ALTER TABLE `lenderstats` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lenderstats` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `login_log`
+--
+
+DROP TABLE IF EXISTS `login_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `login_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `ip` varchar(30) NOT NULL COMMENT 'IP地址',
   `type` tinyint(1) NOT NULL COMMENT '渠道类型：1代表前台wap;2代表前台pc端;3代表后端控制台',
@@ -948,30 +1844,76 @@ CREATE TABLE IF NOT EXISTS `login_log` (
   `created_at` int(11) NOT NULL COMMENT '记录创建时间',
   `status` tinyint(1) DEFAULT '0' COMMENT '状态：0-失败，1-成功',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=329025 DEFAULT CHARSET=utf8 COMMENT='登陆错误日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='登陆错误日志表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.media
-CREATE TABLE IF NOT EXISTS `media` (
+--
+-- Dumping data for table `login_log`
+--
+
+LOCK TABLES `login_log` WRITE;
+/*!40000 ALTER TABLE `login_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `login_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `media`
+--
+
+DROP TABLE IF EXISTS `media`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `media` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(255) NOT NULL,
   `uri` varchar(255) NOT NULL,
   `createTime` datetime NOT NULL,
   `updateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=701 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.migration
-CREATE TABLE IF NOT EXISTS `migration` (
+--
+-- Dumping data for table `media`
+--
+
+LOCK TABLES `media` WRITE;
+/*!40000 ALTER TABLE `media` DISABLE KEYS */;
+/*!40000 ALTER TABLE `media` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `migration`
+--
+
+DROP TABLE IF EXISTS `migration`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `migration` (
   `version` varchar(180) NOT NULL,
   `apply_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.money_record
-CREATE TABLE IF NOT EXISTS `money_record` (
+--
+-- Dumping data for table `migration`
+--
+
+LOCK TABLES `migration` WRITE;
+/*!40000 ALTER TABLE `migration` DISABLE KEYS */;
+INSERT INTO `migration` VALUES ('m000000_000000_base',1461840166),('m160428_071753_create_perf_table',1461840167),('m160503_123142_create_BankCardUpdate_table',1462533612),('m160505_023846_alter_table_user_add_column',1462533612),('m160505_093225_ebao_quan',1462951600),('m160509_050909_bao_quan_queue',1462951600),('m160510_170800_create_UserAffiliation_table',1462951600),('m160510_170801_create_OrderAffiliation_table',1462951600),('m160510_170802_create_AffiliateCampaign_table',1462951600),('m160510_170803_create_Affiliator_table',1462951600),('m160511_064438_alter_perf',1463468342),('m160516_034721_create_user_coupon_table',1463468342),('m160516_075042_create_coupon_type_table',1463468342),('m160516_132201_create_Promo160520Log_table',1463643399),('m160517_182811_alter_online_order',1463643399),('m160518_065317_ranking_promo',1464226862),('m160518_065910_ranking_promo_offline_sale',1464226862),('m160518_120836_create_weixin_auth_table',1463643399),('m160518_120858_create_weixin_url_table',1463643399),('m160518_155122_create_payment_log_table',1463643399),('m160523_013926_ranking_auth',1464226862),('m160524_091620_update_auth_table',1464226862),('m160524_092322_update_afiliator_table',1464226862),('m160524_092750_update_affiliate_campaign_table',1464226862),('m160525_015557_alter_offline_sale',1464226862),('m160525_020030_update_coupon_type_table',1464319676),('m160525_021623_insert_auth_table',1464319676),('m160526_081854_alter_perf',1464347955),('m160527_022727_update_coupon_type_table',1464319676),('m160527_054319_update_affiliator_table',1464691180),('m160527_070253_alter_perf',1464347955),('m160530_080514_alter_perf',1464691181),('m160531_072333_add_count_link_auth',1464847605),('m160531_114436_update_adv_table',1467119959),('m160612_053750_drop_user_bank_status',1467119959),('m160615_060245_update_user_coupon_table',1467119959),('m160622_063725_update_category_kind',1467119959),('m160623_055621_update_news_table',1467119959),('m160629_035251_create_issuer_table',1467335326),('m160629_050623_insert_issuer_table',1467335326),('m160629_052236_insert_online_product_table',1467335326),('m160629_084500_update_auth_table',1467335326),('m160701_012547_update_auth_table',1467680913),('m160701_062435_add_admin_upload',1468377616),('m160704_065638_insert_auth_table',1468377616),('m160705_051053_promo_lottery_ticket',1467900113),('m160705_051111_user_promo',1467900113),('m160705_051849_update_auth_table',1467900113),('m160705_090130_alter_ranking_promo',1467900113),('m160705_092713_add_coupon_type',1467900113),('m160705_102713_rename_table_ranking_promo',1467900113),('m160706_092301_update_auth_table',1467900113),('m160706_125347_alter_promo_lottery_ticket',1467900113),('m160713_023355_alter_onlineproduct',1468570129),('m160718_060959_user_info',1468979910),('m160720_033626_repayment',1469170922),('m160721_095211_update_auth_table',1469692333),('m160722_034451_alter_user',1469692333),('m160725_020651_add_auth',1469692333),('m160725_055112_alter_order',1469692333),('m160726_021546_insert_auth_table',1469692333),('m160726_033302_alter_draw_record_table',1469692333),('m160726_055758_insert_auth_table',1469692333),('m160727_063548_delete_invite',1470037023),('m160727_064130_invite_record',1470037023),('m160727_070611_add_coupon_type',1470037023),('m160728_023604_create_CouponCode_table',1469764108),('m160728_031158_create_invite_promo',1470037023),('m160729_012349_update_couponcode_table',1469764108),('m160730_113145_add_coupon_type',1470037023),('m160801_073625_alter_end_date',1470308930),('m160809_012954_create_settle_table',1470728398),('m160809_052857_insert_promo_table',1470900019),('m160809_092045_create_promo0809_log_table',1470900019),('m160810_030509_alter_loan',1471412573),('m160811_103351_update_settle_table',1471412573),('m160815_012611_alter_user_table',1471412573),('m160815_052503_alter_user_bank_table',1471413056),('m160815_060433_alter_online_product_table',1471413056),('m160816_012313_create_sale_branch_table',1471413056),('m160816_012532_create_offline_loan_table',1471413056),('m160816_012735_create_offline_order_table',1471413056),('m160816_102547_create_credit_trade_table',1471572527),('m160817_032529_insert_auth_table',1472007818),('m160818_091444_user_asset',1472007818),('m160818_092303_init_user_asset',1472007819),('m160819_081634_insert_auth_table',1472007819),('m160822_031115_drop_salebranch_table',1472007819),('m160822_032524_alter_offlineorder_table',1472007819),('m160825_034539_update_online_product_table',1472174437),('m160825_051340_insert_auth_table',1472214464),('m160825_060453_admin_log',1472697148),('m160826_032258_update_offline_order_table',1472214464),('m160829_092707_alter_admin_log',1472697148),('m160830_075734_alter_online_product_table',1472697148),('m160831_012750_insert_coupon_type_table',1473126739),('m160901_064105_insert_auth_table',1473126739),('m160912_074636_alter_recharge_record_table',1477893217),('m160912_075320_alter_draw_record_table',1477893217),('m160913_091529_delete_credit_trade',1477893217),('m160919_064033_insert_coupon_type_table',1474854575),('m160929_034329_alter_online_repayment_plan_table',1477893217),('m160929_082209_delete_user_asset_table',1477893217),('m161018_091202_add_auth',1477998384),('m161019_013414_update_issuer_table',1477893217),('m161020_080654_alter_bao_quan_queue',1477893217),('m161025_022306_alter_ebao_quan',1477998384),('m161027_093521_insert_auth_table',1478224454),('m161027_095235_alter_offline_order_table',1478224454),('m161031_093818_alter_online_product_table',1477998384),('m161101_073418_alter_bao_quan_queue',1477998384),('m161104_082727_insert_auth_table',1478590250),('m161108_020150_insert_auth_table',1478655349),('m161109_085730_alter_user',1478763243),('m161111_071621_delete_auth_table',1479108142),('m161116_013919_alter_issuer_table',1479310097),('m161116_064557_insert_auth_table',1479310097),('m161117_014225_alter_adv',1479384307),('m161117_014719_share',1479384307),('m161117_021803_insert_auth_table',1480242782),('m161117_070925_alter_user_table',1479384307),('m161122_014042_insert_auth_table',1480242782),('m161122_073043_alter_issuer_table',1480482768),('m161123_064657_insert_share_table',1480242782),('m161123_083805_create_media_table',1480482768),('m161124_073646_alter_share_table',1480242782),('m161125_060548_update_share_table',1480242782),('m161125_111434_delete_auth_table',1480482768),('m161128_104536_alter_draw_record',1481888187),('m161129_020439_update_share_table',1480482768),('m161129_061331_alter_perf',1480924471),('m161201_064355_third_party_connect',1480924471),('m161202_060828_insert_auth_table',1481705666),('m161205_060225_insert_auth_table',1480924471),('m161205_070754_alter_promo_ticket',1481300603),('m161205_071051_alter_promo',1481300603),('m161205_094615_add_promo',1481300603),('m161205_161756_add_coupon_type',1481300603),('m161207_052841_add_promo',1481300603),('m161207_063847_add_coupon_type',1481300603),('m161212_023225_alter_online_product',1481705666),('m161212_023733_alter_adv',1481705666),('m161212_034752_insert_auth_table',1481705666),('m161212_051712_add_auth',1481705666),('m161213_030052_add_auth',1481705666),('m161214_014450_alter_repayment_plan',1481705667),('m161220_022159_insert_auth_table',1482368639),('m161220_025019_add_promo',1482368639),('m161220_034921_create_page_meta_table',1482368639),('m161220_070100_add_coupon',1482368639),('m161220_121032_add_category',1482368639),('m161221_114104_add_use',1483092895),('m161222_013843_alter_user',1483092896),('m161222_013937_point_order',1483092896),('m161222_013945_point_record',1483092896),('m161222_015344_add_coupon_type',1482485969),('m161222_045514_add_promo',1482485969),('m161222_053626_alter_point_order',1483092896),('m161222_114458_alter_promo_order',1483092896),('m161223_011138_alter_point_order',1483092896),('m161223_030308_add_promo',1483092896),('m161223_060209_alter_user',1483092896),('m161226_064250_alter_user_table',1483092897),('m161227_053212_add_online_product',1483092897),('m161227_093151_create_coins_record_table',1483092897),('m161228_011750_add_auth',1483092897),('m161229_025958_alter_news_table',1482988344),('m161229_031345_add_coupon_type',1483092897),('m161229_052632_alter_coupon_code',1483092902),('m161229_060700_create_goods_type',1483092902),('m161230_070049_alter_point_record_table',1483092902),('m161230_103205_add_auth',1483098081),('m161230_105416_add_coupon_type',1483096526),('m170103_050909_update_auth_table',1483434619),('m170103_060920_alter_loadn',1483434619),('m170103_071042_alter_promo_table',1483692346),('m170104_092720_alter_goods_type',1483692346),('m170105_073832_alter_loan_sort',1483692346),('m170105_092644_add_auth',1483692346),('m170105_100708_add_auth_table',1483692346),('m170106_074528_add_issuer_table',1487036296),('m170106_080757_add_auth',1484025588),('m170106_083632_alter_offline_product',1484189427),('m170106_083641_alter_offline_order',1484189427),('m170106_083718_create_offline_user',1484189427),('m170109_065359_add_auth_table',1484025588),('m170109_104833_add_auth_table',1487036296),('m170109_114147_alter_access_token_table',1487725613),('m170110_073702_add_auth',1484189427),('m170110_073753_alter_offline_user',1484189427),('m170111_030947_create_offline_stats_table',1484189427),('m170111_032119_insert_offline_stats_table',1484189427),('m170111_033910_alter_adv',1484189427),('m170111_054547_add_auth',1484653324),('m170111_055152_insert_auth_table',1484189427),('m170111_060233_alter_point_order',1484653324),('m170111_060258_alter_point_record',1484653324),('m170111_060444_alter_coins_record',1484653324),('m170112_013744_alter_promo_table',1484653324),('m170112_081754_add_point_record',1484653324),('m170112_082354_add_auth',1484653324),('m170113_071200_insert_auth_table',1484653324),('m170113_094124_add_promo',1484653324),('m170114_013005_insert_promo_table',1484653324),('m170114_032601_alter_offline_order',1484877501),('m170114_060226_add_auth',1484877501),('m170117_062400_referral_source',1484877501),('m170118_081317_add_auth',1484877501),('m170119_012424_add_promo',1484925647),('m170120_081625_add_auth',1486630686),('m170122_033538_add_auth_table',1486447008),('m170126_080032_insert_promo_table',1485426391),('m170213_013733_alter_affilicate',1487298712),('m170213_022851_recommend',1487298712),('m170213_093820_alter_adv_table',1487747147),('m170214_023849_add_auth',1487298712),('m170214_052002_drop_adv_pos_table',1487747147),('m170214_080308_update_auth_table',1487747147),('m170215_054134_add_auth',1487298712),('m170216_012815_create_promo_mobile_table',1487298712),('m170216_012840_alter_promo_table',1487298712),('m170216_031533_insert_promo_table',1487298712),('m170216_081530_alter_promo_mobile_table',1487298712),('m170216_114817_update_promo_table',1487298712),('m170217_021607_update_promo_table',1487747147),('m170221_015708_alter_issuer',1488157610),('m170221_075759_create_jx_page',1488157610),('m170222_173758_add_auth',1488157610),('m170223_022107_create_sms_config_table',1488157610),('m170223_030025_insert_sms_config_table',1488157610),('m170224_085557_alter_user',1488448926),('m170227_022016_add_column',1488448927),('m170227_032639_alter_referral_source',1488448927),('m170227_080848_add_promo',1488448927),('m170227_090151_add_referral_source',1488448927),('m170227_174521_add_auth_table',1488448927),('m170228_082125_alter_user',1488935017),('m170302_074046_alter_perf',1488804855),('m170306_084543_insert_promo_table',1488804855),('m170307_011321_alter_perf',1488935017),('m170307_053851_alter_perf',1489045272),('m170307_061825_alter_user',1488935017),('m170307_074748_alter_coupon_type_table',1489045272),('m170307_081121_insert_coupon_type_table',1489045272),('m170308_074947_insert_auth_table',1489045272),('m170308_113144_create_virtual_card',1489137214),('m170308_114553_add_goods_type',1489137214),('m170308_115109_add_promo',1489137214),('m170308_115128_alter_referral_source',1489137214),('m170310_061726_update_promo',1489137214),('m170310_064949_insert_auth_table',1489482259),('m170313_062041_alter_coupon_type_table',1489482259),('m170313_062101_insert_coupon_type_table',1489482259),('m170314_013147_captcha',1491379467),('m170314_031905_alter_goods_type',1489988089),('m170314_031928_update_goods_type',1489988089),('m170314_031954_alter_affiliator',1489988089),('m170314_032021_update_affiliator',1489988090),('m170314_094903_insert_auth_table',1489988090),('m170314_122422_alter_virtual_card',1489988090),('m170314_124438_update_virtual_card',1489988090),('m170316_034306_add_auth',1489988090),('m170316_071552_points_batch',1490337341),('m170316_112432_add_auth',1490337341),('m170321_014330_add_affiliator',1490064118),('m170321_014341_add_goods_type',1490064118),('m170321_014355_add_virtual_card',1490064119),('m170321_014419_add_fin_union_admin',1490064119),('m170321_083039_update_promo',1490147210),('m170323_034247_alter_virtual_card',1490337341),('m170323_051425_insert_auth_table',1490337341),('m170323_072156_alter_points_batch',1490608669),('m170323_124315_insert_auth_table',1490337341),('m170324_014403_add_auth',1490608669),('m170324_093356_alter_user_info',1491008653),('m170327_080015_alter_user',1490768464),('m170327_080022_alter_promo',1490768464),('m170327_080447_alter_referral_source',1490768464),('m170329_032332_alter_draw_record',1491376495),('m170330_060038_queue_task',1491484603),('m170331_030207_insert_auth_table',1491376495),('m170331_061510_alter_user_coupon_table',1491376496),('m170401_051704_alter_qpaybinding_table',1491484603),('m170401_064636_alter_queue_task',1491484603),('m170405_102910_alter_offline_oder_table',1491484604),('m170406_025741_add_promo',1491814365),('m170406_051337_create_reward',1491814365),('m170406_064148_alter_sms_table',1492155468),('m170406_065324_alter_sms_message_table',1492155468),('m170410_021913_alter_reward',1491814365),('m170410_022458_add_coupon',1491814365),('m170412_012632_alter_online_order_table',1492518097),('m170413_081316_check_in',1492094759),('m170413_091408_add_coupon',1492094759),('m170418_025645_alter_offline_loan_table',1492776561),('m170418_032116_insert_auth_table',1492776561),('m170418_051250_create_voucher',1492596342),('m170418_053554_alter_goods_type',1492596342),('m170418_124754_offline_repayment',1492776561),('m170419_030758_alter_auth',1492596342),('m170419_055255_alter_bao_quan_queue',1492681930),('m170419_081213_insert_auth_table',1492776561),('m170420_102121_insert_auth_table',1492776561),('m170421_024709_alter_queue_task',1492776561),('m170421_085158_insert_auth_table',1494325641),('m170421_090116_alter_offline_loan_table',1492776561),('m170421_115703_insert_auth_table',1492776561),('m170424_051738_crm_account',1493116707),('m170424_064018_alter_crm',1493116707),('m170425_024102_alter_crm_contact',1493116707),('m170426_024359_crm_phone_call',1493274473),('m170426_072108_add_promo',1493271642),('m170427_030129_update_promo',1493293169),('m170427_070941_alter_phone_call',1493293219),('m170427_091608_alter_ebgagenebt',1493293219),('m170428_050154_alter_crm',1493378383),('m170428_072027_crm_test',1493378383),('m170502_061402_crm',1493717312),('m170503_095317_create_promo_sequence_table',1493946603),('m170503_100626_alter_promo_lottery_ticket_table',1493946603),('m170503_101556_insert_promo_sequence_table',1493946603),('m170504_110248_insert_promo_table',1493946603),('m170508_091145_alter_my_cache_table',1494325641),('m170509_015459_add_auth',1495875954),('m170510_095636_alter_user_table',1494573530),('m170511_052927_insert_auth_table',1494573530),('m170511_062150_alter_voucher',1494573530),('m170511_094021_alter_voucher',1494573530),('m170512_055441_alter_perf',1494997678),('m170512_082818_insert_auth_table',1494834257),('m170515_092932_create_transfer_table',1495099073),('m170516_055250_alter_online_product',1495616424),('m170518_032832_add_promo',1495185686),('m170521_145009_alter_user',1495616457),('m170524_071435_insert_auth_table',1495875954),('m170525_023633_insert_auth_table',1495875954),('m170525_053341_crm_gift',1496384794),('m170526_025332_create_app_meta_table',1495882367),('m170526_033310_insert_auth_table',1495882367),('m170531_073814_callout',1496418922),('m170531_073836_callout_responder',1496418922),('m170602_083149_alter_transfer',1496418922),('m170602_095548_alter_callout',1496418922),('m170606_024004_insert_auth_table',1497410170),('m170606_024921_social_connect',1497410170),('m170606_024931_social_connect_log',1497410170),('m170606_070447_create_referral_table',1497410170),('m170612_101431_alter_draw_record',1497410170),('m170614_054708_alter_loan',1498612553),('m170614_080252_insert_auth_table',1498612553),('m170615_055231_alter_callout',1497619682),('m170619_032659_alter_transfer',1497856505),('m170619_081803_alter_product',1498612553),('m170620_063122_add_auth',1498612553),('m170621_024103_award',1498612553),('m170621_031033_create_retention_table',1498477124),('m170626_075752_alter_crm_gift',1498641572),('m170628_075139_alter_online_order',1498828282),('m170629_084742_add_auth',1498735454),('m170629_104309_add_auth',1498735454),('m170629_125123_alter_user_coupon_table',1498828282),('m170703_080709_alter_online_product',1499084428),('m170707_025650_alter_online_product_table',1499761670),('m170711_090719_crm_account_contact',1500000598),('m170712_022654_alter_promo_lottery_ticket',1500036158),('m170713_011630_ticket_token',1500036158),('m170720_200201_alter_online_product',1500606402),('m170724_063903_alter_voucher',1500968184),('m170725_075244_create_table_risk_assessment',1501205044),('m170726_075503_alter_points_batch',1501205450),('m170728_032330_alter_table_adv',1501489031),('m170728_080316_alter_promo_mobile',1501251514),('m170804_054121_alter_offline_user',1502244159),('m170807_030552_alter_crm_account',1502244159),('m170807_033449_alter_offline_user',1502244157),('m170808_061948_add_auth',1502443990),('m170809_011625_alter_offline_order',1502443990),('m170809_030405_alter_offline_loan',1502443990),('m170809_030614_alter_user',1502275635),('m170816_061924_alter_user',1506304953),('m170817_023510_add_table',1503307519),('m170821_013200_alter_online_product',1503307520),('m170821_052444_alter_open_account',1503307520),('m170822_095057_alter_open_account',1503475886),('m170823_014024_alter_open_account',1503475886),('m170824_114808_alter_award',1503825169),('m170828_071521_alter_contract_template',1503904940),('m170906_094254_create_table_poker',1505114984),('m170906_094722_create_table_poker_user',1505114984),('m170906_110057_add_auth',1504763727),('m170907_014608_alter_sms_message',1504865202),('m170908_024929_alter_templateid',1504865204),('m170913_070920_add_auth',1505382824),('m170914_032832_alter_affiliator',1505382824),('m170925_063231_alter_table_user_affiliation_add_index',1506326355),('m170928_104755_alter_ebao_quan',1508120490),('m171010_024147_alter_online_product',1507605553),('m171011_112348_insert_auth_table',1508120490),('m171019_060348_alter_admin',1508479658),('m171019_084708_add_uid_index',1508403776),('m171019_103209_add_idx_user_id',1508420328),('m171026_005507_create_second_kill_table',1509334646),('m171026_050753_create_appliament_table',1509334646),('m171031_032036_alter_coupon_type',1510122464),('m171031_032052_alter_online_product',1510122466),('m171101_020353_alter_coupon_type',1510122466),('m171105_024905_alter_payment_log',1512371703),('m171108_011952_update_auth_table',1510130775),('m171109_031558_insert_auth_table',1510660981),('m171110_084423_insert_auth',1510637308),('m171114_032349_insert_auth',1511167127),('m171116_032108_add_column_pkg_sn_online_product',1511404227),('m171116_084757_alter_user_info',1511159729),('m171117_033420_alter_social_connect',1510902701),('m171120_032706_alter_online_product',1511173183),('m171121_012543_insert_auth',1511255083),('m171122_062053_alter_affiliator',1511426518),('m171122_074602_alter_fin_admin',1511426518),('m171122_075331_insert_auth',1511426518),('m171123_021847_insert_auth',1511876853),('m171127_054830_alter_crm_note',1513649267),('m171127_061342_alter_crm_identity',1513649267),('m171128_030601_create_table_crm_solve_detail',1513649267),('m171201_082302_alter_admin_and_affiliator',1513652438),('m171206_100732_create_wechat_reply',1512617600),('m171207_031732_insert_wechat_reply',1512617600),('m171209_053956_alter_crm_identity',1513649268),('m171209_083308_alter_online_and_offline',1513649270),('m171211_075545_create_crm_order',1513649270),('m171211_094402_alter_crm_identity',1513649270),('m171212_060213_alter_wechat_reply',1513066338),('m171212_070527_insert_auth',1513066338),('m171212_072602_insert_auth_table',1514624928),('m171212_080857_create_splash_table',1514624928),('m171214_102034_alter_offline_loan',1513760548),('m171215_064121_create_offline_repayment_plan',1513760548),('m171218_010420_alter_offline_repayment_plan',1513760548),('m171218_011340_alter_online_product',1513686204),('m171218_070335_insert_auth',1513760548),('m171219_064038_alter_offline_repayment_plan',1513760548),('m171220_021445_alter_offline_loan',1513760548),('m171221_094044_alter_crm_order',1513858821),('m171225_090904_alter_offline_order_and_crm_order',1515575981),('m171227_130746_alter_online_product',1514423453),('m180102_032058_insert_auth_table',1514884821),('m180103_030542_create_annual_export',1515075255),('m180104_011835_alter_adv',1515055667),('m180104_030132_alter_news',1515055667),('m180104_075143_insert_auth_table',1515499394),('m180106_042559_alter_callout_responder',1515327521),('m180108_085307_alter_auth',1515464595),('m180110_061148_insert_auth_table',1515575979),('m180111_065041_insert_auth_table',1515758033),('m180115_065647_revise_auth_table',1516274144),('m180124_114308_alter_code_table',1516794940),('m180126_090125_create_share_log_table',1517307666),('m180129_114936_insert_auth',1518179508),('m180201_091334_alter_share_log_table',1517479158),('m180202_012402_alter_offline_loan',1517897963),('m180205_070810_create_session',1518010706),('m180206_081635_insert_auth_table',1519695106),('m180207_100607_insert_app_meta',1518058845),('m180209_114441_insert_auth',1518179508),('m180210_054002_create_question_table',1519228356),('m180210_054018_create_option_table',1519228356),('m180210_054058_alter_session',1519228356),('m180210_074126_insert_auth',1518260655),('m180226_102122_insert_auth_table',1521102917),('m180228_062636_alter_crm_identity',1520488336),('m180304_062232_insert_auth',1520328915),('m180304_090503_alter_affiliator',1520161817),('m180305_084304_insert_auth',1520328915),('m180313_051727_alter_offline_order',1521535302),('m180316_090651_alter_online_product',1522125743),('m180326_033307_alter_qpayconfig',1522125744),('m180326_062021_update_qpayconfig',1522125744),('m180404_052707_alter_transfer',1522839895),('m180404_053006_alter_bank_card_update',1522839895),('m180408_022753_insert_auth',1523332575),('m180409_053141_alter_login_log',1523332576),('m180411_072139_insert_auth',1523436566),('m180417_024119_create_channel',1524461852),('m180417_062346_alter_promo_table',1525325330),('m180419_071959_insert_auth',1524132770),('m180419_100134_insert_auth',1526442225),('m180428_024953_create_item_message_table',1525681906),('m180502_062929_create_transfer_tx',1525360485),('m180509_110751_insert_auth',1525870791),('m180515_064925_insert_auth',1526453846),('m180517_040837_alter_online_product',1527238653),('m180528_073326_create_table_asset',1530007003),('m180530_061951_alter_online_product',1528192067),('m180530_115414_insert_into_auth',1528451295),('m180531_021831_create_borrower_table',1530078048),('m180531_060713_alter_user_and_offlineuser_table',1528337859),('m180625_022600_create_identity_table',1531995280),('m180626_085718_alter_asset',1530007003),('m180627_063440_alter_online_product',1530522777),('m180628_020619_insert_auth',1530522777),('m180630_082356_insert_auth_table',1531357083);
+/*!40000 ALTER TABLE `migration` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `money_record`
+--
+
+DROP TABLE IF EXISTS `money_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `money_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sn` varchar(30) DEFAULT NULL COMMENT '流水号',
   `type` int(1) NOT NULL DEFAULT '0' COMMENT '类型。',
@@ -986,11 +1928,26 @@ CREATE TABLE IF NOT EXISTS `money_record` (
   `updated_at` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=12147003 DEFAULT CHARSET=utf8 COMMENT='用户资金记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户资金记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.news
-CREATE TABLE IF NOT EXISTS `news` (
+--
+-- Dumping data for table `money_record`
+--
+
+LOCK TABLES `money_record` WRITE;
+/*!40000 ALTER TABLE `money_record` DISABLE KEYS */;
+/*!40000 ALTER TABLE `money_record` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `news`
+--
+
+DROP TABLE IF EXISTS `news`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `news` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL COMMENT '新闻标题',
   `summary` varchar(200) DEFAULT NULL COMMENT '新闻概括',
@@ -1009,21 +1966,51 @@ CREATE TABLE IF NOT EXISTS `news` (
   `allowShowInList` tinyint(1) NOT NULL DEFAULT '1',
   `investLeast` decimal(14,2) NOT NULL DEFAULT '0.00' COMMENT '最低投资可见',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=884 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='新闻表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='新闻表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.notifylog
-CREATE TABLE IF NOT EXISTS `notifylog` (
+--
+-- Dumping data for table `news`
+--
+
+LOCK TABLES `news` WRITE;
+/*!40000 ALTER TABLE `news` DISABLE KEYS */;
+/*!40000 ALTER TABLE `news` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notifylog`
+--
+
+DROP TABLE IF EXISTS `notifylog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifylog` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `query` text NOT NULL,
   `created_at` int(10) NOT NULL,
   `updated_at` int(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.offline_loan
-CREATE TABLE IF NOT EXISTS `offline_loan` (
+--
+-- Dumping data for table `notifylog`
+--
+
+LOCK TABLES `notifylog` WRITE;
+/*!40000 ALTER TABLE `notifylog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifylog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `offline_loan`
+--
+
+DROP TABLE IF EXISTS `offline_loan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `offline_loan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `expires` smallint(6) NOT NULL,
@@ -1037,11 +2024,26 @@ CREATE TABLE IF NOT EXISTS `offline_loan` (
   `paymentDay` int(11) DEFAULT NULL COMMENT '固定还款日',
   `isCustomRepayment` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否自定义还款',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=286 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.offline_order
-CREATE TABLE IF NOT EXISTS `offline_order` (
+--
+-- Dumping data for table `offline_loan`
+--
+
+LOCK TABLES `offline_loan` WRITE;
+/*!40000 ALTER TABLE `offline_loan` DISABLE KEYS */;
+/*!40000 ALTER TABLE `offline_loan` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `offline_order`
+--
+
+DROP TABLE IF EXISTS `offline_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `offline_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sn` varchar(255) DEFAULT NULL,
   `affiliator_id` int(10) NOT NULL,
@@ -1058,11 +2060,26 @@ CREATE TABLE IF NOT EXISTS `offline_order` (
   `valueDate` date DEFAULT NULL,
   `apr` decimal(14,6) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7266 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.offline_repayment
-CREATE TABLE IF NOT EXISTS `offline_repayment` (
+--
+-- Dumping data for table `offline_order`
+--
+
+LOCK TABLES `offline_order` WRITE;
+/*!40000 ALTER TABLE `offline_order` DISABLE KEYS */;
+/*!40000 ALTER TABLE `offline_order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `offline_repayment`
+--
+
+DROP TABLE IF EXISTS `offline_repayment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `offline_repayment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `loan_id` int(11) DEFAULT NULL,
   `term` int(2) DEFAULT NULL,
@@ -1075,11 +2092,26 @@ CREATE TABLE IF NOT EXISTS `offline_repayment` (
   `isRefunded` int(1) DEFAULT '0',
   `refundedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1904 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.offline_repayment_plan
-CREATE TABLE IF NOT EXISTS `offline_repayment_plan` (
+--
+-- Dumping data for table `offline_repayment`
+--
+
+LOCK TABLES `offline_repayment` WRITE;
+/*!40000 ALTER TABLE `offline_repayment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `offline_repayment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `offline_repayment_plan`
+--
+
+DROP TABLE IF EXISTS `offline_repayment_plan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `offline_repayment_plan` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `loan_id` int(11) NOT NULL COMMENT '线下标的id',
   `sn` varchar(255) NOT NULL COMMENT '计划编号',
@@ -1100,11 +2132,26 @@ CREATE TABLE IF NOT EXISTS `offline_repayment_plan` (
   `isSendSms` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否发送短信',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn` (`sn`)
-) ENGINE=InnoDB AUTO_INCREMENT=41765 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.offline_stats
-CREATE TABLE IF NOT EXISTS `offline_stats` (
+--
+-- Dumping data for table `offline_repayment_plan`
+--
+
+LOCK TABLES `offline_repayment_plan` WRITE;
+/*!40000 ALTER TABLE `offline_repayment_plan` DISABLE KEYS */;
+/*!40000 ALTER TABLE `offline_repayment_plan` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `offline_stats`
+--
+
+DROP TABLE IF EXISTS `offline_stats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `offline_stats` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tradedAmount` decimal(14,2) NOT NULL,
   `refundedPrincipal` decimal(14,2) NOT NULL,
@@ -1112,11 +2159,26 @@ CREATE TABLE IF NOT EXISTS `offline_stats` (
   `createTime` datetime NOT NULL,
   `updateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.offline_user
-CREATE TABLE IF NOT EXISTS `offline_user` (
+--
+-- Dumping data for table `offline_stats`
+--
+
+LOCK TABLES `offline_stats` WRITE;
+/*!40000 ALTER TABLE `offline_stats` DISABLE KEYS */;
+/*!40000 ALTER TABLE `offline_stats` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `offline_user`
+--
+
+DROP TABLE IF EXISTS `offline_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `offline_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `realName` varchar(50) NOT NULL,
   `mobile` varchar(20) NOT NULL,
@@ -1129,11 +2191,26 @@ CREATE TABLE IF NOT EXISTS `offline_user` (
   `onlineUserId` int(11) DEFAULT NULL COMMENT '线上用户id',
   PRIMARY KEY (`id`),
   KEY `crmAccount_id` (`crmAccount_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2964 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.online_fangkuan
-CREATE TABLE IF NOT EXISTS `online_fangkuan` (
+--
+-- Dumping data for table `offline_user`
+--
+
+LOCK TABLES `offline_user` WRITE;
+/*!40000 ALTER TABLE `offline_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `offline_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `online_fangkuan`
+--
+
+DROP TABLE IF EXISTS `online_fangkuan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `online_fangkuan` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '放款ID',
   `sn` varchar(30) NOT NULL COMMENT '批次序号',
   `order_money` decimal(14,2) DEFAULT NULL COMMENT '放款金额',
@@ -1146,11 +2223,26 @@ CREATE TABLE IF NOT EXISTS `online_fangkuan` (
   `created_at` int(10) unsigned DEFAULT NULL COMMENT '创建时间',
   `updated_at` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9750 DEFAULT CHARSET=utf8 COMMENT='在线标的放款订单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='在线标的放款订单';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.online_fangkuan_detail
-CREATE TABLE IF NOT EXISTS `online_fangkuan_detail` (
+--
+-- Dumping data for table `online_fangkuan`
+--
+
+LOCK TABLES `online_fangkuan` WRITE;
+/*!40000 ALTER TABLE `online_fangkuan` DISABLE KEYS */;
+/*!40000 ALTER TABLE `online_fangkuan` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `online_fangkuan_detail`
+--
+
+DROP TABLE IF EXISTS `online_fangkuan_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `online_fangkuan_detail` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '放款ID',
   `fangkuan_order_id` int(10) NOT NULL COMMENT '放款订单序号',
   `product_order_id` int(10) NOT NULL COMMENT '投标订单序号',
@@ -1162,11 +2254,26 @@ CREATE TABLE IF NOT EXISTS `online_fangkuan_detail` (
   `created_at` int(10) unsigned DEFAULT NULL COMMENT '创建时间',
   `updated_at` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=172078 DEFAULT CHARSET=utf8 COMMENT='在线标的放款订单明细';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='在线标的放款订单明细';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.online_order
-CREATE TABLE IF NOT EXISTS `online_order` (
+--
+-- Dumping data for table `online_fangkuan_detail`
+--
+
+LOCK TABLES `online_fangkuan_detail` WRITE;
+/*!40000 ALTER TABLE `online_fangkuan_detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `online_fangkuan_detail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `online_order`
+--
+
+DROP TABLE IF EXISTS `online_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `online_order` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '投标ID',
   `sn` varchar(30) NOT NULL COMMENT '订单序号',
   `online_pid` int(10) unsigned DEFAULT NULL COMMENT '项目标的ID',
@@ -1189,11 +2296,26 @@ CREATE TABLE IF NOT EXISTS `online_order` (
   KEY `online_pid` (`online_pid`),
   KEY `uid` (`uid`),
   KEY `status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=173767 DEFAULT CHARSET=utf8 COMMENT='标的订单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标的订单';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.online_product
-CREATE TABLE IF NOT EXISTS `online_product` (
+--
+-- Dumping data for table `online_order`
+--
+
+LOCK TABLES `online_order` WRITE;
+/*!40000 ALTER TABLE `online_order` DISABLE KEYS */;
+/*!40000 ALTER TABLE `online_order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `online_product`
+--
+
+DROP TABLE IF EXISTS `online_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `online_product` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `epayLoanAccountId` varchar(15) NOT NULL COMMENT '标的在托管平台的账户号',
   `title` varchar(128) NOT NULL COMMENT '标的项目名称',
@@ -1271,247 +2393,26 @@ CREATE TABLE IF NOT EXISTS `online_product` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn` (`sn`),
   UNIQUE KEY `asset_id` (`asset_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10134 DEFAULT CHARSET=utf8 COMMENT='线上标的产品表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='线上标的产品表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for view wjf.online_product_v1
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `online_product_v1` (
-	`id` INT(10) UNSIGNED NOT NULL,
-	`epayLoanAccountId` VARCHAR(15) NOT NULL COMMENT '标的在托管平台的账户号' COLLATE 'utf8_general_ci',
-	`title` VARCHAR(128) NOT NULL COMMENT '标的项目名称' COLLATE 'utf8_general_ci',
-	`sn` CHAR(32) NOT NULL COMMENT '标的项目编号' COLLATE 'utf8_general_ci',
-	`cid` INT(10) UNSIGNED NOT NULL COMMENT '分类id',
-	`is_xs` TINYINT(1) NOT NULL COMMENT '是否新手标1是',
-	`recommendTime` INT(10) NOT NULL COMMENT '推荐时间',
-	`borrow_uid` INT(10) NOT NULL COMMENT '融资用户ID',
-	`yield_rate` DECIMAL(6,4) NOT NULL COMMENT '年利率',
-	`jiaxi` DECIMAL(3,1) NULL COMMENT '加息利率（%）',
-	`fee` DECIMAL(14,6) NOT NULL COMMENT '平台手续费（放款时候收取，最小精度百万分之1）',
-	`expires_show` VARCHAR(50) NOT NULL COMMENT '还款期限文字显示' COLLATE 'utf8_general_ci',
-	`refund_method` INT(1) UNSIGNED NULL COMMENT '还款方式：1.按天到期本息 2.按月付息还本',
-	`expires` SMALLINT(6) UNSIGNED NULL COMMENT '借款期限 (以天为单位) 如 15  表示15天',
-	`kuanxianqi` SMALLINT(4) NOT NULL COMMENT '宽限期',
-	`money` DECIMAL(14,2) NOT NULL COMMENT '项目融资总额',
-	`funded_money` DECIMAL(14,2) NOT NULL COMMENT '实际募集金额',
-	`start_money` DECIMAL(14,2) NOT NULL COMMENT '起投金额',
-	`dizeng_money` DECIMAL(14,2) NOT NULL COMMENT '递增金额',
-	`finish_date` INT(10) NULL COMMENT '项目截止日',
-	`start_date` INT(10) NOT NULL COMMENT '融资开始日期',
-	`end_date` INT(10) NOT NULL COMMENT '融资结束日期',
-	`channel` TINYINT(1) NULL COMMENT '分销渠道',
-	`description` TEXT NOT NULL COMMENT '项目介绍' COLLATE 'utf8_general_ci',
-	`full_time` INT(10) NOT NULL COMMENT '满标时间',
-	`jixi_time` INT(10) NULL COMMENT '计息开始时间',
-	`fk_examin_time` INT(10) NULL COMMENT '放款审核时间',
-	`account_name` VARCHAR(50) NULL COMMENT '账户名称' COLLATE 'utf8_general_ci',
-	`account` VARCHAR(50) NULL COMMENT '账户' COLLATE 'utf8_general_ci',
-	`bank` VARCHAR(100) NULL COMMENT '开户行' COLLATE 'utf8_general_ci',
-	`del_status` INT(10) NULL COMMENT '状态1-无效 0-有效',
-	`online_status` TINYINT(1) NULL COMMENT '上线状态：1上线0未上线',
-	`status` INT(4) NOT NULL,
-	`yuqi_faxi` DECIMAL(14,6) NOT NULL COMMENT '逾期罚息',
-	`order_limit` INT(4) NULL COMMENT '限制投标uid，默认200次',
-	`isPrivate` TINYINT(1) NULL COMMENT '是否是定向标，0否1是',
-	`allowedUids` VARCHAR(200) NULL COMMENT '定向标用户id。以,分隔' COLLATE 'utf8_general_ci',
-	`finish_rate` DECIMAL(6,4) NULL COMMENT '募集完成比例',
-	`is_jixi` TINYINT(1) NULL COMMENT '是否已经计息0否1是',
-	`sort` TINYINT(1) NULL COMMENT '排序',
-	`contract_type` TINYINT(1) NULL COMMENT '0固定1特殊模板',
-	`creator_id` INT(10) UNSIGNED NOT NULL COMMENT '创建者管理员id',
-	`created_at` INT(10) UNSIGNED NULL,
-	`updated_at` INT(10) UNSIGNED NULL,
-	`isFlexRate` TINYINT(1) NULL COMMENT '是否启用浮动利率',
-	`rateSteps` VARCHAR(500) NULL COMMENT '浮动利率' COLLATE 'utf8_general_ci',
-	`issuer` INT(11) NULL,
-	`issuerSn` VARCHAR(30) NULL COLLATE 'utf8_general_ci',
-	`paymentDay` INT(5) NULL,
-	`isTest` TINYINT(1) NULL,
-	`filingAmount` DECIMAL(14,2) NULL,
-	`allowUseCoupon` TINYINT(1) NOT NULL,
-	`tags` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`isLicai` TINYINT(1) NULL,
-	`pointsMultiple` SMALLINT(6) NULL,
-	`allowTransfer` TINYINT(1) NULL,
-	`isCustomRepayment` TINYINT(1) NULL COMMENT '是否自定义还款',
-	`isJixiExamined` TINYINT(1) NULL COMMENT '计息审核',
-	`internalTitle` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`publishTime` DATETIME NULL,
-	`balance_limit` DECIMAL(14,2) NULL,
-	`allowRateCoupon` TINYINT(1) NULL COMMENT '加息券使用0:禁止;1:允许',
-	`originalBorrower` VARCHAR(20) NULL COMMENT '底层融资方' COLLATE 'utf8_general_ci',
-	`pkg_sn` VARCHAR(30) NULL COMMENT '资产包sn' COLLATE 'utf8_general_ci',
-	`isRedeemable` TINYINT(1) NULL,
-	`redemptionPeriods` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`redemptionPaymentDates` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`isDailyAccrual` TINYINT(1) NULL,
-	`flexRepay` TINYINT(1) NULL COMMENT '灵活还款1是0否',
-	`alternativeRepayer` INT(11) NULL COMMENT '代偿方',
-	`borrowerRate` DECIMAL(6,4) NULL COMMENT '融资方利率',
-	`fundReceiver` INT(11) NULL COMMENT '用款方',
-	`guarantee` INT(11) NULL COMMENT '担保方'
-) ENGINE=MyISAM;
+--
+-- Dumping data for table `online_product`
+--
 
--- Dumping structure for view wjf.online_product_v2
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `online_product_v2` (
-	`id` INT(10) UNSIGNED NOT NULL,
-	`epayLoanAccountId` VARCHAR(15) NOT NULL COMMENT '标的在托管平台的账户号' COLLATE 'utf8_general_ci',
-	`title` VARCHAR(128) NOT NULL COMMENT '标的项目名称' COLLATE 'utf8_general_ci',
-	`sn` CHAR(32) NOT NULL COMMENT '标的项目编号' COLLATE 'utf8_general_ci',
-	`cid` INT(10) UNSIGNED NOT NULL COMMENT '分类id',
-	`is_xs` TINYINT(1) NOT NULL COMMENT '是否新手标1是',
-	`recommendTime` INT(10) NOT NULL COMMENT '推荐时间',
-	`borrow_uid` INT(10) NOT NULL COMMENT '融资用户ID',
-	`yield_rate` DECIMAL(6,4) NOT NULL COMMENT '年利率',
-	`jiaxi` DECIMAL(3,1) NULL COMMENT '加息利率（%）',
-	`fee` DECIMAL(14,6) NOT NULL COMMENT '平台手续费（放款时候收取，最小精度百万分之1）',
-	`expires_show` VARCHAR(50) NOT NULL COMMENT '还款期限文字显示' COLLATE 'utf8_general_ci',
-	`refund_method` INT(1) UNSIGNED NULL COMMENT '还款方式：1.按天到期本息 2.按月付息还本',
-	`expires` SMALLINT(6) UNSIGNED NULL COMMENT '借款期限 (以天为单位) 如 15  表示15天',
-	`kuanxianqi` SMALLINT(4) NOT NULL COMMENT '宽限期',
-	`money` DECIMAL(14,2) NOT NULL COMMENT '项目融资总额',
-	`funded_money` DECIMAL(14,2) NOT NULL COMMENT '实际募集金额',
-	`start_money` DECIMAL(14,2) NOT NULL COMMENT '起投金额',
-	`dizeng_money` DECIMAL(14,2) NOT NULL COMMENT '递增金额',
-	`finish_date` INT(10) NULL COMMENT '项目截止日',
-	`start_date` INT(10) NOT NULL COMMENT '融资开始日期',
-	`end_date` INT(10) NOT NULL COMMENT '融资结束日期',
-	`channel` TINYINT(1) NULL COMMENT '分销渠道',
-	`description` TEXT NOT NULL COMMENT '项目介绍' COLLATE 'utf8_general_ci',
-	`full_time` INT(10) NOT NULL COMMENT '满标时间',
-	`jixi_time` INT(10) NULL COMMENT '计息开始时间',
-	`fk_examin_time` INT(10) NULL COMMENT '放款审核时间',
-	`account_name` VARCHAR(50) NULL COMMENT '账户名称' COLLATE 'utf8_general_ci',
-	`account` VARCHAR(50) NULL COMMENT '账户' COLLATE 'utf8_general_ci',
-	`bank` VARCHAR(100) NULL COMMENT '开户行' COLLATE 'utf8_general_ci',
-	`del_status` BIGINT(11) NULL,
-	`online_status` TINYINT(1) NULL COMMENT '上线状态：1上线0未上线',
-	`status` INT(4) NULL,
-	`yuqi_faxi` DECIMAL(14,6) NOT NULL COMMENT '逾期罚息',
-	`order_limit` INT(4) NULL COMMENT '限制投标uid，默认200次',
-	`isPrivate` TINYINT(1) NULL COMMENT '是否是定向标，0否1是',
-	`allowedUids` VARCHAR(200) NULL COMMENT '定向标用户id。以,分隔' COLLATE 'utf8_general_ci',
-	`finish_rate` DECIMAL(6,4) NULL COMMENT '募集完成比例',
-	`is_jixi` TINYINT(1) NULL COMMENT '是否已经计息0否1是',
-	`sort` TINYINT(1) NULL COMMENT '排序',
-	`contract_type` TINYINT(1) NULL COMMENT '0固定1特殊模板',
-	`creator_id` INT(10) UNSIGNED NOT NULL COMMENT '创建者管理员id',
-	`created_at` INT(10) UNSIGNED NULL,
-	`updated_at` INT(10) UNSIGNED NULL,
-	`isFlexRate` TINYINT(1) NULL COMMENT '是否启用浮动利率',
-	`rateSteps` VARCHAR(500) NULL COMMENT '浮动利率' COLLATE 'utf8_general_ci',
-	`issuer` INT(11) NULL,
-	`issuerSn` VARCHAR(30) NULL COLLATE 'utf8_general_ci',
-	`paymentDay` INT(5) NULL,
-	`isTest` TINYINT(1) NULL,
-	`filingAmount` DECIMAL(14,2) NULL,
-	`allowUseCoupon` TINYINT(1) NOT NULL,
-	`tags` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`isLicai` TINYINT(1) NULL,
-	`pointsMultiple` SMALLINT(6) NULL,
-	`allowTransfer` TINYINT(1) NULL,
-	`isCustomRepayment` TINYINT(1) NULL COMMENT '是否自定义还款',
-	`isJixiExamined` TINYINT(1) NULL COMMENT '计息审核',
-	`internalTitle` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`publishTime` DATETIME NULL,
-	`balance_limit` DECIMAL(14,2) NULL,
-	`allowRateCoupon` TINYINT(1) NULL COMMENT '加息券使用0:禁止;1:允许',
-	`originalBorrower` VARCHAR(20) NULL COMMENT '底层融资方' COLLATE 'utf8_general_ci',
-	`pkg_sn` VARCHAR(30) NULL COMMENT '资产包sn' COLLATE 'utf8_general_ci',
-	`isRedeemable` TINYINT(1) NULL,
-	`redemptionPeriods` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`redemptionPaymentDates` VARCHAR(255) NULL COLLATE 'utf8_general_ci',
-	`isDailyAccrual` TINYINT(1) NULL,
-	`flexRepay` TINYINT(1) NULL COMMENT '灵活还款1是0否',
-	`alternativeRepayer` INT(11) NULL COMMENT '代偿方',
-	`borrowerRate` DECIMAL(6,4) NULL COMMENT '融资方利率',
-	`fundReceiver` INT(11) NULL COMMENT '用款方',
-	`guarantee` INT(11) NULL COMMENT '担保方'
-) ENGINE=MyISAM;
+LOCK TABLES `online_product` WRITE;
+/*!40000 ALTER TABLE `online_product` DISABLE KEYS */;
+/*!40000 ALTER TABLE `online_product` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Dumping structure for table wjf.online_product_vv
-CREATE TABLE IF NOT EXISTS `online_product_vv` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `epayLoanAccountId` varchar(15) NOT NULL COMMENT '标的在托管平台的账户号',
-  `title` varchar(128) NOT NULL COMMENT '标的项目名称',
-  `sn` char(32) NOT NULL COMMENT '标的项目编号',
-  `cid` int(10) unsigned NOT NULL COMMENT '分类id',
-  `is_xs` tinyint(1) NOT NULL COMMENT '是否新手标1是',
-  `recommendTime` int(10) NOT NULL COMMENT '推荐时间',
-  `borrow_uid` int(10) NOT NULL COMMENT '融资用户ID',
-  `yield_rate` decimal(6,4) NOT NULL COMMENT '年利率',
-  `jiaxi` decimal(3,1) DEFAULT NULL COMMENT '加息利率（%）',
-  `fee` decimal(14,6) NOT NULL COMMENT '平台手续费（放款时候收取，最小精度百万分之1）',
-  `expires_show` varchar(50) NOT NULL DEFAULT '' COMMENT '还款期限文字显示',
-  `refund_method` int(1) unsigned DEFAULT '1' COMMENT '还款方式：1.按天到期本息 2.按月付息还本',
-  `expires` smallint(6) unsigned DEFAULT NULL COMMENT '借款期限 (以天为单位) 如 15  表示15天',
-  `kuanxianqi` smallint(4) NOT NULL COMMENT '宽限期',
-  `money` decimal(14,2) NOT NULL DEFAULT '0.00' COMMENT '项目融资总额',
-  `funded_money` decimal(14,2) NOT NULL COMMENT '实际募集金额',
-  `start_money` decimal(14,2) NOT NULL COMMENT '起投金额',
-  `dizeng_money` decimal(14,2) NOT NULL COMMENT '递增金额',
-  `finish_date` int(10) DEFAULT NULL COMMENT '项目截止日',
-  `start_date` int(10) NOT NULL COMMENT '融资开始日期',
-  `end_date` int(10) NOT NULL COMMENT '融资结束日期',
-  `channel` tinyint(1) DEFAULT '0' COMMENT '分销渠道',
-  `description` text NOT NULL COMMENT '项目介绍',
-  `full_time` int(10) NOT NULL COMMENT '满标时间',
-  `jixi_time` int(10) DEFAULT NULL COMMENT '计息开始时间',
-  `fk_examin_time` int(10) DEFAULT '0' COMMENT '放款审核时间',
-  `account_name` varchar(50) DEFAULT '' COMMENT '账户名称',
-  `account` varchar(50) DEFAULT '' COMMENT '账户',
-  `bank` varchar(100) DEFAULT '' COMMENT '开户行',
-  `del_status` int(10) DEFAULT '0' COMMENT '状态1-无效 0-有效',
-  `online_status` tinyint(1) DEFAULT '0' COMMENT '上线状态：1上线0未上线',
-  `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '标的进展： 1预告期、 2进行中,3满标,4流标,5还款中,6已还清 ',
-  `yuqi_faxi` decimal(14,6) NOT NULL COMMENT '逾期罚息',
-  `order_limit` int(4) DEFAULT '200' COMMENT '限制投标uid，默认200次',
-  `isPrivate` tinyint(1) DEFAULT '0' COMMENT '是否是定向标，0否1是',
-  `allowedUids` varchar(200) DEFAULT NULL COMMENT '定向标用户id。以,分隔',
-  `finish_rate` decimal(6,4) DEFAULT '0.0000' COMMENT '募集完成比例',
-  `is_jixi` tinyint(1) DEFAULT '0' COMMENT '是否已经计息0否1是',
-  `sort` tinyint(1) DEFAULT '0' COMMENT '排序',
-  `contract_type` tinyint(1) DEFAULT '0' COMMENT '0固定1特殊模板',
-  `creator_id` int(10) unsigned NOT NULL COMMENT '创建者管理员id',
-  `created_at` int(10) unsigned DEFAULT NULL,
-  `updated_at` int(10) unsigned DEFAULT NULL,
-  `isFlexRate` tinyint(1) DEFAULT '0' COMMENT '是否启用浮动利率',
-  `rateSteps` varchar(500) DEFAULT NULL COMMENT '浮动利率',
-  `issuer` int(11) DEFAULT NULL,
-  `issuerSn` varchar(30) DEFAULT NULL,
-  `paymentDay` int(5) DEFAULT NULL,
-  `isTest` tinyint(1) DEFAULT '0',
-  `filingAmount` decimal(14,2) DEFAULT NULL,
-  `allowUseCoupon` tinyint(1) NOT NULL,
-  `tags` varchar(255) DEFAULT NULL,
-  `isLicai` tinyint(1) DEFAULT NULL,
-  `pointsMultiple` smallint(6) DEFAULT '1',
-  `allowTransfer` tinyint(1) DEFAULT '1',
-  `isCustomRepayment` tinyint(1) DEFAULT NULL COMMENT '是否自定义还款',
-  `isJixiExamined` tinyint(1) DEFAULT '1' COMMENT '计息审核',
-  `internalTitle` varchar(255) DEFAULT NULL,
-  `publishTime` datetime DEFAULT NULL,
-  `balance_limit` decimal(14,2) DEFAULT '0.00',
-  `allowRateCoupon` tinyint(1) DEFAULT '0' COMMENT '加息券使用0:禁止;1:允许',
-  `originalBorrower` varchar(20) DEFAULT NULL COMMENT '底层融资方',
-  `pkg_sn` varchar(30) DEFAULT NULL COMMENT '资产包sn',
-  `isRedeemable` tinyint(1) DEFAULT '0',
-  `redemptionPeriods` varchar(255) DEFAULT NULL,
-  `redemptionPaymentDates` varchar(255) DEFAULT NULL,
-  `isDailyAccrual` tinyint(1) DEFAULT '0',
-  `flexRepay` tinyint(1) DEFAULT '0' COMMENT '灵活还款1是0否',
-  `alternativeRepayer` int(11) DEFAULT NULL COMMENT '代偿方',
-  `borrowerRate` decimal(6,4) DEFAULT NULL COMMENT '融资方利率',
-  `fundReceiver` int(11) DEFAULT NULL COMMENT '用款方',
-  `guarantee` int(11) DEFAULT NULL COMMENT '担保方',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `sn` (`sn`)
-) ENGINE=InnoDB AUTO_INCREMENT=9963 DEFAULT CHARSET=utf8 COMMENT='线上标的产品表';
+--
+-- Table structure for table `online_repayment_plan`
+--
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.online_repayment_plan
-CREATE TABLE IF NOT EXISTS `online_repayment_plan` (
+DROP TABLE IF EXISTS `online_repayment_plan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `online_repayment_plan` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `online_pid` int(10) unsigned NOT NULL COMMENT '标的id',
   `sn` varchar(30) NOT NULL COMMENT '计划编号',
@@ -1536,11 +2437,26 @@ CREATE TABLE IF NOT EXISTS `online_repayment_plan` (
   KEY `order_id` (`order_id`),
   KEY `status` (`status`),
   KEY `uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=247750 DEFAULT CHARSET=utf8 COMMENT='标的还款计划表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='标的还款计划表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.online_repayment_record
-CREATE TABLE IF NOT EXISTS `online_repayment_record` (
+--
+-- Dumping data for table `online_repayment_plan`
+--
+
+LOCK TABLES `online_repayment_plan` WRITE;
+/*!40000 ALTER TABLE `online_repayment_plan` DISABLE KEYS */;
+/*!40000 ALTER TABLE `online_repayment_plan` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `online_repayment_record`
+--
+
+DROP TABLE IF EXISTS `online_repayment_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `online_repayment_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `online_pid` int(10) unsigned DEFAULT NULL COMMENT '标的id',
   `order_id` int(10) NOT NULL COMMENT '投标订单id',
@@ -1559,11 +2475,26 @@ CREATE TABLE IF NOT EXISTS `online_repayment_record` (
   `updated_at` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=177328 DEFAULT CHARSET=utf8 COMMENT='还款记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='还款记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.open_account
-CREATE TABLE IF NOT EXISTS `open_account` (
+--
+-- Dumping data for table `online_repayment_record`
+--
+
+LOCK TABLES `online_repayment_record` WRITE;
+/*!40000 ALTER TABLE `online_repayment_record` DISABLE KEYS */;
+/*!40000 ALTER TABLE `online_repayment_record` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `open_account`
+--
+
+DROP TABLE IF EXISTS `open_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `open_account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `encryptedName` varchar(255) DEFAULT NULL,
@@ -1576,22 +2507,77 @@ CREATE TABLE IF NOT EXISTS `open_account` (
   `sn` varchar(30) DEFAULT NULL,
   `code` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49141 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.option
-CREATE TABLE IF NOT EXISTS `option` (
+--
+-- Dumping data for table `open_account`
+--
+
+LOCK TABLES `open_account` WRITE;
+/*!40000 ALTER TABLE `open_account` DISABLE KEYS */;
+/*!40000 ALTER TABLE `open_account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `option`
+--
+
+DROP TABLE IF EXISTS `option`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `option` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `questionId` int(11) NOT NULL COMMENT '题目ID',
   `content` text NOT NULL COMMENT '选项内容',
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `updateTime` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=481 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.orderqueue
-CREATE TABLE IF NOT EXISTS `orderqueue` (
+--
+-- Dumping data for table `option`
+--
+
+LOCK TABLES `option` WRITE;
+/*!40000 ALTER TABLE `option` DISABLE KEYS */;
+/*!40000 ALTER TABLE `option` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_affiliation`
+--
+
+DROP TABLE IF EXISTS `order_affiliation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_affiliation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) DEFAULT NULL,
+  `trackCode` varchar(255) DEFAULT NULL,
+  `affiliator_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_affiliation`
+--
+
+LOCK TABLES `order_affiliation` WRITE;
+/*!40000 ALTER TABLE `order_affiliation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order_affiliation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orderqueue`
+--
+
+DROP TABLE IF EXISTS `orderqueue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `orderqueue` (
   `orderSn` varchar(30) NOT NULL COMMENT '订单sn',
   `status` tinyint(1) NOT NULL COMMENT '处理状态0未处理1处理',
   `updated_at` int(11) NOT NULL,
@@ -1599,20 +2585,25 @@ CREATE TABLE IF NOT EXISTS `orderqueue` (
   PRIMARY KEY (`orderSn`),
   KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.order_affiliation
-CREATE TABLE IF NOT EXISTS `order_affiliation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `order_id` int(11) DEFAULT NULL,
-  `trackCode` varchar(255) DEFAULT NULL,
-  `affiliator_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20636 DEFAULT CHARSET=utf8;
+--
+-- Dumping data for table `orderqueue`
+--
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.page_meta
-CREATE TABLE IF NOT EXISTS `page_meta` (
+LOCK TABLES `orderqueue` WRITE;
+/*!40000 ALTER TABLE `orderqueue` DISABLE KEYS */;
+/*!40000 ALTER TABLE `orderqueue` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `page_meta`
+--
+
+DROP TABLE IF EXISTS `page_meta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `page_meta` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `alias` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
@@ -1622,11 +2613,26 @@ CREATE TABLE IF NOT EXISTS `page_meta` (
   `description` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `url` (`url`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.payment
-CREATE TABLE IF NOT EXISTS `payment` (
+--
+-- Dumping data for table `page_meta`
+--
+
+LOCK TABLES `page_meta` WRITE;
+/*!40000 ALTER TABLE `page_meta` DISABLE KEYS */;
+/*!40000 ALTER TABLE `page_meta` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment`
+--
+
+DROP TABLE IF EXISTS `payment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `payment` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `payment_name` varchar(50) DEFAULT NULL COMMENT '支付公司',
   `institution_id` char(30) DEFAULT NULL COMMENT '在支付公司的标识【例如此数在中金的机构号id】',
@@ -1638,10 +2644,25 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `updated_at` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付公司';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.payment_log
-CREATE TABLE IF NOT EXISTS `payment_log` (
+--
+-- Dumping data for table `payment`
+--
+
+LOCK TABLES `payment` WRITE;
+/*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment_log`
+--
+
+DROP TABLE IF EXISTS `payment_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `payment_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `txSn` varchar(32) NOT NULL,
   `amount` decimal(14,2) NOT NULL,
@@ -1652,11 +2673,26 @@ CREATE TABLE IF NOT EXISTS `payment_log` (
   `ref_type` smallint(6) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `txSn` (`txSn`)
-) ENGINE=InnoDB AUTO_INCREMENT=8714 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.perf
-CREATE TABLE IF NOT EXISTS `perf` (
+--
+-- Dumping data for table `payment_log`
+--
+
+LOCK TABLES `payment_log` WRITE;
+/*!40000 ALTER TABLE `payment_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payment_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `perf`
+--
+
+DROP TABLE IF EXISTS `perf`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `perf` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bizDate` date DEFAULT NULL,
   `uv` int(11) DEFAULT NULL,
@@ -1699,28 +2735,26 @@ CREATE TABLE IF NOT EXISTS `perf` (
   `xsInvSum` decimal(14,2) DEFAULT NULL,
   `checkIn` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=985 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.points_batch
-CREATE TABLE IF NOT EXISTS `points_batch` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `batchSn` varchar(32) NOT NULL,
-  `createTime` datetime DEFAULT NULL,
-  `isOnline` tinyint(1) DEFAULT NULL,
-  `publicMobile` varchar(11) DEFAULT NULL,
-  `safeMobile` varchar(255) DEFAULT NULL,
-  `points` int(11) NOT NULL,
-  `desc` varchar(255) DEFAULT NULL,
-  `status` smallint(6) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `idCard` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4091 DEFAULT CHARSET=utf8;
+--
+-- Dumping data for table `perf`
+--
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.point_order
-CREATE TABLE IF NOT EXISTS `point_order` (
+LOCK TABLES `perf` WRITE;
+/*!40000 ALTER TABLE `perf` DISABLE KEYS */;
+/*!40000 ALTER TABLE `perf` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `point_order`
+--
+
+DROP TABLE IF EXISTS `point_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `point_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sn` varchar(32) DEFAULT NULL,
   `orderNum` varchar(255) DEFAULT NULL,
@@ -1735,11 +2769,26 @@ CREATE TABLE IF NOT EXISTS `point_order` (
   `isOffline` tinyint(1) DEFAULT '0',
   `offGoodsName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49058 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.point_record
-CREATE TABLE IF NOT EXISTS `point_record` (
+--
+-- Dumping data for table `point_order`
+--
+
+LOCK TABLES `point_order` WRITE;
+/*!40000 ALTER TABLE `point_order` DISABLE KEYS */;
+/*!40000 ALTER TABLE `point_order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `point_record`
+--
+
+DROP TABLE IF EXISTS `point_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `point_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sn` varchar(32) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -1755,11 +2804,58 @@ CREATE TABLE IF NOT EXISTS `point_record` (
   `remark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1857129 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.poker
-CREATE TABLE IF NOT EXISTS `poker` (
+--
+-- Dumping data for table `point_record`
+--
+
+LOCK TABLES `point_record` WRITE;
+/*!40000 ALTER TABLE `point_record` DISABLE KEYS */;
+/*!40000 ALTER TABLE `point_record` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `points_batch`
+--
+
+DROP TABLE IF EXISTS `points_batch`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `points_batch` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `batchSn` varchar(32) NOT NULL,
+  `createTime` datetime DEFAULT NULL,
+  `isOnline` tinyint(1) DEFAULT NULL,
+  `publicMobile` varchar(11) DEFAULT NULL,
+  `safeMobile` varchar(255) DEFAULT NULL,
+  `points` int(11) NOT NULL,
+  `desc` varchar(255) DEFAULT NULL,
+  `status` smallint(6) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `idCard` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `points_batch`
+--
+
+LOCK TABLES `points_batch` WRITE;
+/*!40000 ALTER TABLE `points_batch` DISABLE KEYS */;
+/*!40000 ALTER TABLE `points_batch` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `poker`
+--
+
+DROP TABLE IF EXISTS `poker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `poker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `term` varchar(10) NOT NULL,
   `spade` int(11) NOT NULL,
@@ -1769,11 +2865,26 @@ CREATE TABLE IF NOT EXISTS `poker` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `term` (`term`),
   UNIQUE KEY `unique_term` (`term`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.poker_user
-CREATE TABLE IF NOT EXISTS `poker_user` (
+--
+-- Dumping data for table `poker`
+--
+
+LOCK TABLES `poker` WRITE;
+/*!40000 ALTER TABLE `poker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `poker` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `poker_user`
+--
+
+DROP TABLE IF EXISTS `poker_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `poker_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `term` varchar(10) NOT NULL COMMENT '期数',
@@ -1788,11 +2899,26 @@ CREATE TABLE IF NOT EXISTS `poker_user` (
   `updateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_unique` (`user_id`,`term`)
-) ENGINE=InnoDB AUTO_INCREMENT=357416 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.promo
-CREATE TABLE IF NOT EXISTS `promo` (
+--
+-- Dumping data for table `poker_user`
+--
+
+LOCK TABLES `poker_user` WRITE;
+/*!40000 ALTER TABLE `poker_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `poker_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promo`
+--
+
+DROP TABLE IF EXISTS `promo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(50) NOT NULL,
   `key` varchar(50) DEFAULT NULL,
@@ -1807,11 +2933,26 @@ CREATE TABLE IF NOT EXISTS `promo` (
   `sortValue` int(11) DEFAULT NULL COMMENT '排序值',
   `advSn` varchar(255) DEFAULT NULL COMMENT '首页轮播sn',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.promo0809_log
-CREATE TABLE IF NOT EXISTS `promo0809_log` (
+--
+-- Dumping data for table `promo`
+--
+
+LOCK TABLES `promo` WRITE;
+/*!40000 ALTER TABLE `promo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `promo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promo0809_log`
+--
+
+DROP TABLE IF EXISTS `promo0809_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promo0809_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `prize_id` int(1) NOT NULL,
@@ -1819,10 +2960,25 @@ CREATE TABLE IF NOT EXISTS `promo0809_log` (
   `createdAt` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.promo160520_log
-CREATE TABLE IF NOT EXISTS `promo160520_log` (
+--
+-- Dumping data for table `promo0809_log`
+--
+
+LOCK TABLES `promo0809_log` WRITE;
+/*!40000 ALTER TABLE `promo0809_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `promo0809_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promo160520_log`
+--
+
+DROP TABLE IF EXISTS `promo160520_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promo160520_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mobile` varchar(20) NOT NULL,
   `prizeId` smallint(1) NOT NULL,
@@ -1831,11 +2987,26 @@ CREATE TABLE IF NOT EXISTS `promo160520_log` (
   `createdAt` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `mobile` (`mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=414 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.promo_lottery_ticket
-CREATE TABLE IF NOT EXISTS `promo_lottery_ticket` (
+--
+-- Dumping data for table `promo160520_log`
+--
+
+LOCK TABLES `promo160520_log` WRITE;
+/*!40000 ALTER TABLE `promo160520_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `promo160520_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promo_lottery_ticket`
+--
+
+DROP TABLE IF EXISTS `promo_lottery_ticket`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promo_lottery_ticket` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `isDrawn` int(1) DEFAULT '0',
@@ -1852,11 +3023,26 @@ CREATE TABLE IF NOT EXISTS `promo_lottery_ticket` (
   `duobaoCode` varchar(255) DEFAULT NULL,
   `expiryTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=207526 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.promo_mobile
-CREATE TABLE IF NOT EXISTS `promo_mobile` (
+--
+-- Dumping data for table `promo_lottery_ticket`
+--
+
+LOCK TABLES `promo_lottery_ticket` WRITE;
+/*!40000 ALTER TABLE `promo_lottery_ticket` DISABLE KEYS */;
+/*!40000 ALTER TABLE `promo_lottery_ticket` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promo_mobile`
+--
+
+DROP TABLE IF EXISTS `promo_mobile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promo_mobile` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `promo_id` int(11) DEFAULT NULL,
   `mobile` varchar(255) NOT NULL,
@@ -1864,17 +3050,47 @@ CREATE TABLE IF NOT EXISTS `promo_mobile` (
   `ip` varchar(255) NOT NULL,
   `referralSource` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25839 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.promo_sequence
-CREATE TABLE IF NOT EXISTS `promo_sequence` (
+--
+-- Dumping data for table `promo_mobile`
+--
+
+LOCK TABLES `promo_mobile` WRITE;
+/*!40000 ALTER TABLE `promo_mobile` DISABLE KEYS */;
+/*!40000 ALTER TABLE `promo_mobile` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promo_sequence`
+--
+
+DROP TABLE IF EXISTS `promo_sequence`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promo_sequence` (
   `id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.qpaybinding
-CREATE TABLE IF NOT EXISTS `qpaybinding` (
+--
+-- Dumping data for table `promo_sequence`
+--
+
+LOCK TABLES `promo_sequence` WRITE;
+/*!40000 ALTER TABLE `promo_sequence` DISABLE KEYS */;
+/*!40000 ALTER TABLE `promo_sequence` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qpaybinding`
+--
+
+DROP TABLE IF EXISTS `qpaybinding`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qpaybinding` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `binding_sn` varchar(32) NOT NULL COMMENT '绑卡流水号',
   `uid` int(10) unsigned DEFAULT NULL,
@@ -1893,11 +3109,26 @@ CREATE TABLE IF NOT EXISTS `qpaybinding` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `binding_sn` (`binding_sn`),
   KEY `binding_sn_2` (`binding_sn`)
-) ENGINE=InnoDB AUTO_INCREMENT=30572 DEFAULT CHARSET=utf8 COMMENT='用户绑卡申请表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户绑卡申请表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.qpayconfig
-CREATE TABLE IF NOT EXISTS `qpayconfig` (
+--
+-- Dumping data for table `qpaybinding`
+--
+
+LOCK TABLES `qpaybinding` WRITE;
+/*!40000 ALTER TABLE `qpaybinding` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qpaybinding` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qpayconfig`
+--
+
+DROP TABLE IF EXISTS `qpayconfig`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qpayconfig` (
   `bankId` int(4) NOT NULL,
   `isDisabled` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁用0否1是',
   `singleLimit` decimal(14,2) NOT NULL COMMENT '单次限额',
@@ -1905,10 +3136,25 @@ CREATE TABLE IF NOT EXISTS `qpayconfig` (
   `allowBind` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`bankId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.question
-CREATE TABLE IF NOT EXISTS `question` (
+--
+-- Dumping data for table `qpayconfig`
+--
+
+LOCK TABLES `qpayconfig` WRITE;
+/*!40000 ALTER TABLE `qpayconfig` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qpayconfig` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `question`
+--
+
+DROP TABLE IF EXISTS `question`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `question` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL COMMENT '问题',
   `batchSn` varchar(20) NOT NULL COMMENT '批次号',
@@ -1917,11 +3163,26 @@ CREATE TABLE IF NOT EXISTS `question` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `updateTime` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=465 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.queue_task
-CREATE TABLE IF NOT EXISTS `queue_task` (
+--
+-- Dumping data for table `question`
+--
+
+LOCK TABLES `question` WRITE;
+/*!40000 ALTER TABLE `question` DISABLE KEYS */;
+/*!40000 ALTER TABLE `question` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `queue_task`
+--
+
+DROP TABLE IF EXISTS `queue_task`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `queue_task` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `runnable` varchar(255) DEFAULT NULL,
   `params` text,
@@ -1934,22 +3195,52 @@ CREATE TABLE IF NOT EXISTS `queue_task` (
   `runLimit` int(11) DEFAULT NULL,
   `nextRunTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=364552 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.ranking_promo_offline_sale
-CREATE TABLE IF NOT EXISTS `ranking_promo_offline_sale` (
+--
+-- Dumping data for table `queue_task`
+--
+
+LOCK TABLES `queue_task` WRITE;
+/*!40000 ALTER TABLE `queue_task` DISABLE KEYS */;
+/*!40000 ALTER TABLE `queue_task` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ranking_promo_offline_sale`
+--
+
+DROP TABLE IF EXISTS `ranking_promo_offline_sale`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ranking_promo_offline_sale` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `rankingPromoOfflineSale_id` int(11) NOT NULL,
   `mobile` varchar(11) DEFAULT NULL,
   `totalInvest` decimal(10,0) DEFAULT NULL,
   `investedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.recharge_record
-CREATE TABLE IF NOT EXISTS `recharge_record` (
+--
+-- Dumping data for table `ranking_promo_offline_sale`
+--
+
+LOCK TABLES `ranking_promo_offline_sale` WRITE;
+/*!40000 ALTER TABLE `ranking_promo_offline_sale` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ranking_promo_offline_sale` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `recharge_record`
+--
+
+DROP TABLE IF EXISTS `recharge_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recharge_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sn` varchar(30) DEFAULT NULL COMMENT '流水号',
   `pay_type` tinyint(1) NOT NULL COMMENT '1快捷充值,2网银充值',
@@ -1975,22 +3266,52 @@ CREATE TABLE IF NOT EXISTS `recharge_record` (
   KEY `status` (`status`),
   KEY `status_2` (`status`),
   KEY `uid_2` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=178758 DEFAULT CHARSET=utf8 COMMENT='充值记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.referral
-CREATE TABLE IF NOT EXISTS `referral` (
+--
+-- Dumping data for table `recharge_record`
+--
+
+LOCK TABLES `recharge_record` WRITE;
+/*!40000 ALTER TABLE `recharge_record` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recharge_record` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `referral`
+--
+
+DROP TABLE IF EXISTS `referral`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `referral` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `code` varchar(255) NOT NULL,
   `created_at` int(10) DEFAULT NULL,
   `updated_at` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.referral_source
-CREATE TABLE IF NOT EXISTS `referral_source` (
+--
+-- Dumping data for table `referral`
+--
+
+LOCK TABLES `referral` WRITE;
+/*!40000 ALTER TABLE `referral` DISABLE KEYS */;
+/*!40000 ALTER TABLE `referral` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `referral_source`
+--
+
+DROP TABLE IF EXISTS `referral_source`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `referral_source` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `key` varchar(15) NOT NULL,
   `target` varchar(255) NOT NULL,
@@ -2000,11 +3321,26 @@ CREATE TABLE IF NOT EXISTS `referral_source` (
   `createTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.region
-CREATE TABLE IF NOT EXISTS `region` (
+--
+-- Dumping data for table `referral_source`
+--
+
+LOCK TABLES `referral_source` WRITE;
+/*!40000 ALTER TABLE `referral_source` DISABLE KEYS */;
+/*!40000 ALTER TABLE `referral_source` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `region`
+--
+
+DROP TABLE IF EXISTS `region`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `region` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '区域ID',
   `code` varchar(64) NOT NULL COMMENT '代码',
   `name` varchar(256) NOT NULL COMMENT '名称',
@@ -2014,61 +3350,27 @@ CREATE TABLE IF NOT EXISTS `region` (
   PRIMARY KEY (`id`),
   KEY `i_region_code` (`code`),
   KEY `i_region_province_city` (`province_id`,`city_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3508 DEFAULT CHARSET=utf8 COMMENT='区域表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='区域表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.repayment
-CREATE TABLE IF NOT EXISTS `repayment` (
+--
+-- Dumping data for table `region`
+--
+
+LOCK TABLES `region` WRITE;
+/*!40000 ALTER TABLE `region` DISABLE KEYS */;
+/*!40000 ALTER TABLE `region` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `repayment`
+--
+
+DROP TABLE IF EXISTS `repayment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `repayment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `loan_id` int(11) DEFAULT NULL,
-  `term` int(2) DEFAULT NULL,
-  `dueDate` date DEFAULT NULL,
-  `amount` decimal(14,2) DEFAULT NULL,
-  `principal` decimal(14,2) DEFAULT NULL,
-  `interest` decimal(14,2) DEFAULT NULL,
-  `isRepaid` int(1) DEFAULT '0',
-  `repaidAt` datetime DEFAULT NULL,
-  `isRefunded` int(1) DEFAULT '0',
-  `refundedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19401 DEFAULT CHARSET=utf8;
-
--- Data exporting was unselected.
--- Dumping structure for view wjf.repayment_v1
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `repayment_v1` (
-	`id` INT(11) NOT NULL,
-	`loan_id` INT(11) NULL,
-	`term` INT(2) NULL,
-	`dueDate` DATE NULL,
-	`amount` DECIMAL(14,2) NULL,
-	`principal` DECIMAL(14,2) NULL,
-	`interest` DECIMAL(14,2) NULL,
-	`isRepaid` INT(1) NOT NULL,
-	`repaidAt` VARCHAR(29) NULL COLLATE 'utf8mb4_general_ci',
-	`isRefunded` INT(1) NOT NULL,
-	`refundedAt` VARCHAR(29) NULL COLLATE 'utf8mb4_general_ci'
-) ENGINE=MyISAM;
-
--- Dumping structure for view wjf.repayment_v2
--- Creating temporary table to overcome VIEW dependency errors
-CREATE TABLE `repayment_v2` (
-	`id` INT(11) NOT NULL,
-	`loan_id` INT(11) NULL,
-	`term` INT(2) NULL,
-	`dueDate` DATE NULL,
-	`amount` DECIMAL(14,2) NULL,
-	`principal` DECIMAL(14,2) NULL,
-	`interest` DECIMAL(14,2) NULL,
-	`isRepaid` BIGINT(11) NULL,
-	`repaidAt` DATETIME NULL,
-	`isRefunded` BIGINT(11) NULL,
-	`refundedAt` DATETIME NULL
-) ENGINE=MyISAM;
-
--- Dumping structure for table wjf.repayment_vv
-CREATE TABLE IF NOT EXISTS `repayment_vv` (
-  `id` int(11) NOT NULL DEFAULT '0',
   `loan_id` int(11) DEFAULT NULL,
   `term` int(2) DEFAULT NULL,
   `dueDate` date DEFAULT NULL,
@@ -2081,10 +3383,25 @@ CREATE TABLE IF NOT EXISTS `repayment_vv` (
   `refundedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.retention
-CREATE TABLE IF NOT EXISTS `retention` (
+--
+-- Dumping data for table `repayment`
+--
+
+LOCK TABLES `repayment` WRITE;
+/*!40000 ALTER TABLE `repayment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `repayment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `retention`
+--
+
+DROP TABLE IF EXISTS `retention`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `retention` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `seq` int(11) NOT NULL,
@@ -2095,11 +3412,26 @@ CREATE TABLE IF NOT EXISTS `retention` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_tactic_user_seq` (`tactic_id`,`user_id`,`seq`),
   KEY `idx_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=9889 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.reward
-CREATE TABLE IF NOT EXISTS `reward` (
+--
+-- Dumping data for table `retention`
+--
+
+LOCK TABLES `retention` WRITE;
+/*!40000 ALTER TABLE `retention` DISABLE KEYS */;
+/*!40000 ALTER TABLE `retention` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reward`
+--
+
+DROP TABLE IF EXISTS `reward`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reward` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sn` varchar(50) DEFAULT NULL,
   `name` varchar(100) NOT NULL,
@@ -2112,11 +3444,26 @@ CREATE TABLE IF NOT EXISTS `reward` (
   `ref_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn` (`sn`)
-) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.risk_assessment
-CREATE TABLE IF NOT EXISTS `risk_assessment` (
+--
+-- Dumping data for table `reward`
+--
+
+LOCK TABLES `reward` WRITE;
+/*!40000 ALTER TABLE `reward` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reward` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `risk_assessment`
+--
+
+DROP TABLE IF EXISTS `risk_assessment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `risk_assessment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `score` int(11) NOT NULL,
@@ -2125,11 +3472,26 @@ CREATE TABLE IF NOT EXISTS `risk_assessment` (
   `createTime` datetime NOT NULL,
   `isDel` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15784 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.role
-CREATE TABLE IF NOT EXISTS `role` (
+--
+-- Dumping data for table `risk_assessment`
+--
+
+LOCK TABLES `risk_assessment` WRITE;
+/*!40000 ALTER TABLE `risk_assessment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `risk_assessment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `sn` char(10) DEFAULT '' COMMENT '编号',
   `role_name` varchar(50) NOT NULL COMMENT '角色',
@@ -2139,11 +3501,26 @@ CREATE TABLE IF NOT EXISTS `role` (
   `created_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn_unique` (`sn`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.role_auth
-CREATE TABLE IF NOT EXISTS `role_auth` (
+--
+-- Dumping data for table `role`
+--
+
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role_auth`
+--
+
+DROP TABLE IF EXISTS `role_auth`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role_auth` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `role_sn` char(24) NOT NULL COMMENT '角色sn',
   `auth_sn` char(24) NOT NULL COMMENT '权限sn',
@@ -2152,33 +3529,78 @@ CREATE TABLE IF NOT EXISTS `role_auth` (
   `updated_at` int(11) DEFAULT NULL,
   `created_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1770 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.second_kill
-CREATE TABLE IF NOT EXISTS `second_kill` (
+--
+-- Dumping data for table `role_auth`
+--
+
+LOCK TABLES `role_auth` WRITE;
+/*!40000 ALTER TABLE `role_auth` DISABLE KEYS */;
+/*!40000 ALTER TABLE `role_auth` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `second_kill`
+--
+
+DROP TABLE IF EXISTS `second_kill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `second_kill` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userId` int(11) unsigned NOT NULL COMMENT '用户ID ',
   `createTime` int(11) unsigned NOT NULL COMMENT '获奖时间',
   `term` varchar(10) NOT NULL COMMENT '物品编号',
   PRIMARY KEY (`id`),
   UNIQUE KEY `term_2` (`userId`,`term`)
-) ENGINE=InnoDB AUTO_INCREMENT=279 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.session
-CREATE TABLE IF NOT EXISTS `session` (
+--
+-- Dumping data for table `second_kill`
+--
+
+LOCK TABLES `second_kill` WRITE;
+/*!40000 ALTER TABLE `second_kill` DISABLE KEYS */;
+/*!40000 ALTER TABLE `second_kill` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `session`
+--
+
+DROP TABLE IF EXISTS `session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `session` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `batchSn` varchar(255) NOT NULL,
   `createTime` datetime DEFAULT NULL,
   `answers` text COMMENT '答题信息记录',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101508 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.settle
-CREATE TABLE IF NOT EXISTS `settle` (
+--
+-- Dumping data for table `session`
+--
+
+LOCK TABLES `session` WRITE;
+/*!40000 ALTER TABLE `session` DISABLE KEYS */;
+/*!40000 ALTER TABLE `session` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `settle`
+--
+
+DROP TABLE IF EXISTS `settle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `settle` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `txSn` varchar(60) NOT NULL,
   `txDate` date NOT NULL,
@@ -2188,11 +3610,26 @@ CREATE TABLE IF NOT EXISTS `settle` (
   `txType` int(11) NOT NULL,
   `status` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1915 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.share
-CREATE TABLE IF NOT EXISTS `share` (
+--
+-- Dumping data for table `settle`
+--
+
+LOCK TABLES `settle` WRITE;
+/*!40000 ALTER TABLE `settle` DISABLE KEYS */;
+/*!40000 ALTER TABLE `settle` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `share`
+--
+
+DROP TABLE IF EXISTS `share`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `share` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `shareKey` varchar(20) DEFAULT NULL,
   `title` varchar(200) DEFAULT NULL,
@@ -2203,11 +3640,26 @@ CREATE TABLE IF NOT EXISTS `share` (
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `shareKey` (`shareKey`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.share_log
-CREATE TABLE IF NOT EXISTS `share_log` (
+--
+-- Dumping data for table `share`
+--
+
+LOCK TABLES `share` WRITE;
+/*!40000 ALTER TABLE `share` DISABLE KEYS */;
+/*!40000 ALTER TABLE `share` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `share_log`
+--
+
+DROP TABLE IF EXISTS `share_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `share_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL COMMENT '用户id',
   `scene` varchar(10) NOT NULL COMMENT '分享场景',
@@ -2215,11 +3667,26 @@ CREATE TABLE IF NOT EXISTS `share_log` (
   `ipAddress` varchar(50) DEFAULT NULL COMMENT 'ip地址',
   `createdAt` date NOT NULL COMMENT '分享日期',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34245 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.sms
-CREATE TABLE IF NOT EXISTS `sms` (
+--
+-- Dumping data for table `share_log`
+--
+
+LOCK TABLES `share_log` WRITE;
+/*!40000 ALTER TABLE `share_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `share_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sms`
+--
+
+DROP TABLE IF EXISTS `sms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sms` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `code` char(10) DEFAULT NULL COMMENT '短信码',
   `time_len` int(4) DEFAULT NULL COMMENT '短信有效时长',
@@ -2232,22 +3699,52 @@ CREATE TABLE IF NOT EXISTS `sms` (
   `created_at` int(11) DEFAULT NULL COMMENT '创建时间',
   `safeMobile` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=107563 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.sms_config
-CREATE TABLE IF NOT EXISTS `sms_config` (
+--
+-- Dumping data for table `sms`
+--
+
+LOCK TABLES `sms` WRITE;
+/*!40000 ALTER TABLE `sms` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sms` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sms_config`
+--
+
+DROP TABLE IF EXISTS `sms_config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sms_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `template_id` varchar(255) NOT NULL,
   `config` text NOT NULL,
   `createTime` datetime NOT NULL,
   `updateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.sms_message
-CREATE TABLE IF NOT EXISTS `sms_message` (
+--
+-- Dumping data for table `sms_config`
+--
+
+LOCK TABLES `sms_config` WRITE;
+/*!40000 ALTER TABLE `sms_config` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sms_config` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sms_message`
+--
+
+DROP TABLE IF EXISTS `sms_message`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sms_message` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `uid` int(4) NOT NULL COMMENT 'uid',
   `template_id` varchar(32) DEFAULT NULL,
@@ -2260,11 +3757,26 @@ CREATE TABLE IF NOT EXISTS `sms_message` (
   `serviceProvider` varchar(32) DEFAULT 'ytx' COMMENT '短信服务供应商',
   PRIMARY KEY (`id`),
   KEY `idx_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=1161410 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.social_connect
-CREATE TABLE IF NOT EXISTS `social_connect` (
+--
+-- Dumping data for table `sms_message`
+--
+
+LOCK TABLES `sms_message` WRITE;
+/*!40000 ALTER TABLE `sms_message` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sms_message` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `social_connect`
+--
+
+DROP TABLE IF EXISTS `social_connect`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `social_connect` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
   `resourceOwner_id` varchar(128) NOT NULL,
@@ -2273,11 +3785,26 @@ CREATE TABLE IF NOT EXISTS `social_connect` (
   `isAutoLogin` tinyint(1) DEFAULT '1' COMMENT '是否自动登录',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_owner` (`resourceOwner_id`,`provider_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=43738 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.social_connect_log
-CREATE TABLE IF NOT EXISTS `social_connect_log` (
+--
+-- Dumping data for table `social_connect`
+--
+
+LOCK TABLES `social_connect` WRITE;
+/*!40000 ALTER TABLE `social_connect` DISABLE KEYS */;
+/*!40000 ALTER TABLE `social_connect` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `social_connect_log`
+--
+
+DROP TABLE IF EXISTS `social_connect_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `social_connect_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
   `resourceOwner_id` varchar(128) NOT NULL,
@@ -2286,11 +3813,26 @@ CREATE TABLE IF NOT EXISTS `social_connect_log` (
   `data` text,
   `createTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45197 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.splash
-CREATE TABLE IF NOT EXISTS `splash` (
+--
+-- Dumping data for table `social_connect_log`
+--
+
+LOCK TABLES `social_connect_log` WRITE;
+/*!40000 ALTER TABLE `social_connect_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `social_connect_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `splash`
+--
+
+DROP TABLE IF EXISTS `splash`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `splash` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` char(60) NOT NULL COMMENT '标题',
   `sn` char(14) NOT NULL,
@@ -2306,11 +3848,26 @@ CREATE TABLE IF NOT EXISTS `splash` (
   `updateTime` int(11) unsigned DEFAULT NULL COMMENT '更新时间',
   `auto_publish` smallint(6) unsigned DEFAULT NULL COMMENT '是否自动发布',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.third_party_connect
-CREATE TABLE IF NOT EXISTS `third_party_connect` (
+--
+-- Dumping data for table `splash`
+--
+
+LOCK TABLES `splash` WRITE;
+/*!40000 ALTER TABLE `splash` DISABLE KEYS */;
+/*!40000 ALTER TABLE `splash` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `third_party_connect`
+--
+
+DROP TABLE IF EXISTS `third_party_connect`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `third_party_connect` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `publicId` varchar(255) NOT NULL,
   `visitor_id` varchar(255) DEFAULT NULL,
@@ -2318,20 +3875,50 @@ CREATE TABLE IF NOT EXISTS `third_party_connect` (
   `thirdPartyUser_id` varchar(255) DEFAULT NULL,
   `createTime` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18985 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.ticket_token
-CREATE TABLE IF NOT EXISTS `ticket_token` (
+--
+-- Dumping data for table `third_party_connect`
+--
+
+LOCK TABLES `third_party_connect` WRITE;
+/*!40000 ALTER TABLE `third_party_connect` DISABLE KEYS */;
+/*!40000 ALTER TABLE `third_party_connect` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ticket_token`
+--
+
+DROP TABLE IF EXISTS `ticket_token`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ticket_token` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `key` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=282514 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.tradelog
-CREATE TABLE IF NOT EXISTS `tradelog` (
+--
+-- Dumping data for table `ticket_token`
+--
+
+LOCK TABLES `ticket_token` WRITE;
+/*!40000 ALTER TABLE `ticket_token` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ticket_token` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tradelog`
+--
+
+DROP TABLE IF EXISTS `tradelog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tradelog` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `txType` varchar(50) NOT NULL COMMENT '交易标识',
   `direction` tinyint(1) NOT NULL COMMENT '1是请求，2是回调',
@@ -2347,11 +3934,26 @@ CREATE TABLE IF NOT EXISTS `tradelog` (
   `created_at` int(10) DEFAULT NULL,
   `updated_at` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4164566 DEFAULT CHARSET=utf8 COMMENT='交易日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='交易日志表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.transfer
-CREATE TABLE IF NOT EXISTS `transfer` (
+--
+-- Dumping data for table `tradelog`
+--
+
+LOCK TABLES `tradelog` WRITE;
+/*!40000 ALTER TABLE `tradelog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tradelog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transfer`
+--
+
+DROP TABLE IF EXISTS `transfer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transfer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `createTime` datetime NOT NULL,
@@ -2364,11 +3966,26 @@ CREATE TABLE IF NOT EXISTS `transfer` (
   PRIMARY KEY (`id`),
   KEY `idx_status` (`status`),
   KEY `idx_lastCronCheckTime` (`lastCronCheckTime`)
-) ENGINE=InnoDB AUTO_INCREMENT=3411 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.transfer_tx
-CREATE TABLE IF NOT EXISTS `transfer_tx` (
+--
+-- Dumping data for table `transfer`
+--
+
+LOCK TABLES `transfer` WRITE;
+/*!40000 ALTER TABLE `transfer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `transfer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transfer_tx`
+--
+
+DROP TABLE IF EXISTS `transfer_tx`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transfer_tx` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sn` varchar(255) NOT NULL COMMENT '流水号',
   `userId` int(11) NOT NULL COMMENT '转账方用户ID',
@@ -2380,11 +3997,26 @@ CREATE TABLE IF NOT EXISTS `transfer_tx` (
   `updateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sn` (`sn`)
-) ENGINE=InnoDB AUTO_INCREMENT=3818 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.user
-CREATE TABLE IF NOT EXISTS `user` (
+--
+-- Dumping data for table `transfer_tx`
+--
+
+LOCK TABLES `transfer_tx` WRITE;
+/*!40000 ALTER TABLE `transfer_tx` DISABLE KEYS */;
+/*!40000 ALTER TABLE `transfer_tx` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `type` int(11) NOT NULL DEFAULT '2' COMMENT '会员类别 1-普通用户 2-机构用户',
   `username` char(32) NOT NULL COMMENT '会员账号',
@@ -2428,11 +4060,26 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `usercode` (`usercode`),
   KEY `crmAccount_id` (`crmAccount_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75799 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.user_account
-CREATE TABLE IF NOT EXISTS `user_account` (
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_account`
+--
+
+DROP TABLE IF EXISTS `user_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_account` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '类型 1,投资账户 2，融资账户',
   `uid` int(10) unsigned NOT NULL,
@@ -2448,22 +4095,52 @@ CREATE TABLE IF NOT EXISTS `user_account` (
   `updated_at` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=75738 DEFAULT CHARSET=utf8 COMMENT='用户资金表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户资金表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.user_affiliation
-CREATE TABLE IF NOT EXISTS `user_affiliation` (
+--
+-- Dumping data for table `user_account`
+--
+
+LOCK TABLES `user_account` WRITE;
+/*!40000 ALTER TABLE `user_account` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_affiliation`
+--
+
+DROP TABLE IF EXISTS `user_affiliation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_affiliation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `trackCode` varchar(255) DEFAULT NULL,
   `affiliator_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `affiliator_id` (`affiliator_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52793 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.user_bank
-CREATE TABLE IF NOT EXISTS `user_bank` (
+--
+-- Dumping data for table `user_affiliation`
+--
+
+LOCK TABLES `user_affiliation` WRITE;
+/*!40000 ALTER TABLE `user_affiliation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_affiliation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_bank`
+--
+
+DROP TABLE IF EXISTS `user_bank`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_bank` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `binding_sn` varchar(32) DEFAULT NULL COMMENT '绑卡流水号',
   `uid` int(10) unsigned DEFAULT NULL,
@@ -2482,11 +4159,26 @@ CREATE TABLE IF NOT EXISTS `user_bank` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `binding_sn` (`binding_sn`),
   UNIQUE KEY `uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=23946 DEFAULT CHARSET=utf8 COMMENT='用户银行账号';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行账号';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.user_coupon
-CREATE TABLE IF NOT EXISTS `user_coupon` (
+--
+-- Dumping data for table `user_bank`
+--
+
+LOCK TABLES `user_bank` WRITE;
+/*!40000 ALTER TABLE `user_bank` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_bank` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_coupon`
+--
+
+DROP TABLE IF EXISTS `user_coupon`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_coupon` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `couponType_id` int(10) NOT NULL,
   `user_id` int(10) NOT NULL,
@@ -2498,11 +4190,26 @@ CREATE TABLE IF NOT EXISTS `user_coupon` (
   `ip` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=814498 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.user_info
-CREATE TABLE IF NOT EXISTS `user_info` (
+--
+-- Dumping data for table `user_coupon`
+--
+
+LOCK TABLES `user_coupon` WRITE;
+/*!40000 ALTER TABLE `user_coupon` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_coupon` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_info`
+--
+
+DROP TABLE IF EXISTS `user_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `isInvested` int(1) DEFAULT '0',
@@ -2518,11 +4225,26 @@ CREATE TABLE IF NOT EXISTS `user_info` (
   `creditInvestTotal` decimal(14,2) DEFAULT '0.00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75168 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.user_promo
-CREATE TABLE IF NOT EXISTS `user_promo` (
+--
+-- Dumping data for table `user_info`
+--
+
+LOCK TABLES `user_info` WRITE;
+/*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_promo`
+--
+
+DROP TABLE IF EXISTS `user_promo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_promo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `promo_key` varchar(50) DEFAULT NULL,
@@ -2530,11 +4252,26 @@ CREATE TABLE IF NOT EXISTS `user_promo` (
   `updated_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_uid_key` (`user_id`,`promo_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=896 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.virtual_card
-CREATE TABLE IF NOT EXISTS `virtual_card` (
+--
+-- Dumping data for table `user_promo`
+--
+
+LOCK TABLES `user_promo` WRITE;
+/*!40000 ALTER TABLE `user_promo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_promo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `virtual_card`
+--
+
+DROP TABLE IF EXISTS `virtual_card`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `virtual_card` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `serial` varchar(50) NOT NULL,
   `secret` varchar(255) DEFAULT NULL,
@@ -2551,11 +4288,26 @@ CREATE TABLE IF NOT EXISTS `virtual_card` (
   `isReserved` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `serial` (`serial`)
-) ENGINE=InnoDB AUTO_INCREMENT=664 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.voucher
-CREATE TABLE IF NOT EXISTS `voucher` (
+--
+-- Dumping data for table `virtual_card`
+--
+
+LOCK TABLES `virtual_card` WRITE;
+/*!40000 ALTER TABLE `virtual_card` DISABLE KEYS */;
+/*!40000 ALTER TABLE `virtual_card` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `voucher`
+--
+
+DROP TABLE IF EXISTS `voucher`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `voucher` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ref_type` varchar(255) DEFAULT NULL,
   `ref_id` varchar(255) DEFAULT NULL,
@@ -2574,11 +4326,26 @@ CREATE TABLE IF NOT EXISTS `voucher` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_ref_key` (`ref_type`,`ref_id`),
   UNIQUE KEY `orderNum` (`orderNum`)
-) ENGINE=InnoDB AUTO_INCREMENT=41380 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.wechat_reply
-CREATE TABLE IF NOT EXISTS `wechat_reply` (
+--
+-- Dumping data for table `voucher`
+--
+
+LOCK TABLES `voucher` WRITE;
+/*!40000 ALTER TABLE `voucher` DISABLE KEYS */;
+/*!40000 ALTER TABLE `voucher` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wechat_reply`
+--
+
+DROP TABLE IF EXISTS `wechat_reply`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wechat_reply` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(255) DEFAULT NULL COMMENT '回复类型',
   `keyword` varchar(255) DEFAULT NULL COMMENT '关键字',
@@ -2588,11 +4355,26 @@ CREATE TABLE IF NOT EXISTS `wechat_reply` (
   `updatedAt` int(11) NOT NULL COMMENT '更新时间',
   `style` varchar(255) DEFAULT NULL COMMENT '消息类型',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.weixin_auth
-CREATE TABLE IF NOT EXISTS `weixin_auth` (
+--
+-- Dumping data for table `wechat_reply`
+--
+
+LOCK TABLES `wechat_reply` WRITE;
+/*!40000 ALTER TABLE `wechat_reply` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wechat_reply` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `weixin_auth`
+--
+
+DROP TABLE IF EXISTS `weixin_auth`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `weixin_auth` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `appId` varchar(255) NOT NULL,
   `accessToken` varchar(255) DEFAULT NULL,
@@ -2600,38 +4382,49 @@ CREATE TABLE IF NOT EXISTS `weixin_auth` (
   `expiresAt` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `appId` (`appId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for table wjf.weixin_url
-CREATE TABLE IF NOT EXISTS `weixin_url` (
+--
+-- Dumping data for table `weixin_auth`
+--
+
+LOCK TABLES `weixin_auth` WRITE;
+/*!40000 ALTER TABLE `weixin_auth` DISABLE KEYS */;
+/*!40000 ALTER TABLE `weixin_auth` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `weixin_url`
+--
+
+DROP TABLE IF EXISTS `weixin_url`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `weixin_url` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `auth_id` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Data exporting was unselected.
--- Dumping structure for view wjf.online_product_v1
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `online_product_v1`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`wjf2017`@`%` SQL SECURITY DEFINER VIEW `online_product_v1` AS select `online_product`.`id` AS `id`,`online_product`.`epayLoanAccountId` AS `epayLoanAccountId`,`online_product`.`title` AS `title`,`online_product`.`sn` AS `sn`,`online_product`.`cid` AS `cid`,`online_product`.`is_xs` AS `is_xs`,`online_product`.`recommendTime` AS `recommendTime`,`online_product`.`borrow_uid` AS `borrow_uid`,`online_product`.`yield_rate` AS `yield_rate`,`online_product`.`jiaxi` AS `jiaxi`,`online_product`.`fee` AS `fee`,`online_product`.`expires_show` AS `expires_show`,`online_product`.`refund_method` AS `refund_method`,`online_product`.`expires` AS `expires`,`online_product`.`kuanxianqi` AS `kuanxianqi`,`online_product`.`money` AS `money`,`online_product`.`funded_money` AS `funded_money`,`online_product`.`start_money` AS `start_money`,`online_product`.`dizeng_money` AS `dizeng_money`,`online_product`.`finish_date` AS `finish_date`,`online_product`.`start_date` AS `start_date`,`online_product`.`end_date` AS `end_date`,`online_product`.`channel` AS `channel`,`online_product`.`description` AS `description`,`online_product`.`full_time` AS `full_time`,`online_product`.`jixi_time` AS `jixi_time`,`online_product`.`fk_examin_time` AS `fk_examin_time`,`online_product`.`account_name` AS `account_name`,`online_product`.`account` AS `account`,`online_product`.`bank` AS `bank`,`online_product`.`del_status` AS `del_status`,`online_product`.`online_status` AS `online_status`,if((`online_product`.`id` in ('id',3967,3969,3970,3979,4009,4015,4049,4072,4084,4118,4477,4485,4516,4531,4547,4558,4567,4604,4640,4695,4732,4752,4765,4803,4821,4861,4892,4913,4986,5031,5040,5053,5080,5101,5119,5165,5172,5208,5209,5230,5262,5264,5267,5274,5317,5330,5366,5391,5403,5409,5416,5421,5438,5473,5508,5524,5651,5678,5684,5691,5693,5702,5709,5710,5717,5732,5737,5750,5751,5752,5758,5759,5760,5762,5769,5774,5778,5782,5783,5787,5793,5811,5818,5828,5830,5836,5844,5850,5858,5870,5876,5883,5886,5892,5893,6020,6033,6039,6069,6070,6077,6078,6091,6100,6105,6106,6113,6115,6124,6135,6138,6144,6153,6162,6167,6180,6188,6189,6196,6197,6212,6233,6238,6258,6260,6265,6268,6271,6275,6279,6285,6295,6304,6308,6312,6319,6332,6334,6341,6345,6346,6359,6367,6370,6379,6384,6397,6407,6419,6422,6426,6431,6435,6440,6441,6442,6452,6454,6464,6478,6484,6500,6512,6529,6534,6542,6559,6576,6577,6589,6606,6610,6622,6635,6657,6659,6662,6671,6676,6680,6691,6703,6711,6721,6734,6776,6778,6801,6810,6812,6818,6829,6839,6840,6852,6865,6872,6881,6890,6897,6914,6935,6950,6963,6984,6995,6999,7026,7042,7045,7067,7074,7076,7090,7093,7100,7102,7109,7123,7138,7141,7147,7153,7157,7162,7171,7172,7176,7181,7186,7189,7192,7201,7202,7203,7206,7207,7214,7220,7221,7224,7230,7231,7238,7243,7244,7245,7256,7257,7258,7259,7260,7263,7264,7267,7268,7279,7284,7287,7294,7302,7307,7309,7316,7321,7325,7326,7336,7338,7342,7347,7353,7356,7359,7367,7372,7375,7381,7389,7398,7399,7400,7401,7402,7403,7408,7420,7422,7426,7434,7435,7447,7453,7455,7464,7471,7473,7475,7482,7487,7491,7496,7500,7512,7513,7514,7515,7516,7517,7540,7541,7556,7559,7560,7563,7564,7565,7566,7567,7580,7585,7589,7597,7604,7606,7609,7614,7621,7631,7634,7641,7642,7645,7662,7665,7677,7679,7681,7688,7690,7693,7696,7697,7704,7709,7710,7713,7715,7722,7723,7724,7727,7728,7730,7733,7734,7739,7746,7748,7752,7757,7758,7763,7765,7766,7771,7777,7779,7780,7781,7784,7787,7790,7797,7798,7799,7801,7803,7804,7805,7809,7811,7818,7821,7825,7827,7833,7840,7841,7897,7949,7950,7954,7961,7968,7969,7970,7974,7976,7981,7989,7994,7996,7998,8004,8008,8009,8010,8012,8023,8025,8029,8030,8032,8036,8041,8049,8050,8051,8052,8055,8056,8057,8058,8082,8083,8084,8085,8086,8087,8088,8089,8090,8091,8092,8093,8105,8106,8107,8112,8121,8126,8127,8128,8129,8133,8141,8143,8145,8150,8153,8161,8164,8166,8177,8178,8184,8187,8189,8192,8193,8196,8201,8204,8208,8210,8211,8214,8215,8216,8221,8224,8229,8230,8231,8234,8235,8239,8241,8243,8245,8253,8255,8256,8257,8258,8263,8268,8269,8273,8277,8279,8281,8285,8291,8292,8297,8300,8301,8304,8319,8322,8325,8328,8331,8335,8337,8338,8342,8343,8344,8348,8350,8353,8355,8356,8358,8366,8367,8370,8372,8373,8381,8383,8386,8389,8394,8405,8410,8412,8415,8423,8429,8435,8436,8439,8440,8443,8456,8458,8469,8471,8472,8473,8485,8495,8497,8499,8505,8518,8528,8530,8532,8539,8548,8570,8578,8589,8595,8603,8604,8611,8618,8632,8634,8652,8660,8674,8675,8676,8694,8706,8710,8711,8712,8714,8717,8721,8722,8725,8726,8727,8729,8737,8738,8739,8741,8747,8751,8754,8757,8759,8760,8767,8768,8776,8778,8779,8787,8791,8793,8797,8799,8806,8808,8812,8814,8818,8825,8828,8831,8832,8847,8848,8850,8852,8854,8859,8863,8865,8873,8874,8877,8882,8886,8888,8891,8894,8895,8897,8898,8899,8908,8911,8913,8916,8917,8921,8922,8923,8924,8929,8930,8931,8932,8933,8935,8936,8940,8943,8944,8945,8946,8947,8948,8949,8951,8953,8955,8956,8958,8963,8964,8965,8966,8978,8979,8980,8982,8983,8984,8986,8988,8989,8990,8991,8992,8993,8994,8995,8996,8997,8998,8999,9000,9001,9003,9004,9005,9006,9007,9009,9010,9015,9016,9017,9019,9020,9022,9023,9024,9025,9027,9028,9030,9031,9032,9036,9037,9039,9040,9042,9043,9045,9046,9047,9049,9051,9053,9054,9057,9059,9060,9063,9064,9065,9066,9068,9069,9072,9073,9074,9078,9086,9088,9090,9092,9093,9094,9095,9096,9097,9098,9099,9102,9103,9104,9106,9107,9111,9112,9113,9119,9121,9122,9124,9125,9127,9128,9129,9130,9131,9132,9134,9141,9144,9151,9152,9154,9156,9161,9162,9165,9166,9168,9169,9171,9172,9175,9179,9181,9182,9183,9185,9186,9188,9190,9191,9195,9196,9199,9200,9201,9202,9203,9206,9209,9210,9214,9215,9217,9223,9224,9225,9226,9227,9229,9231,9232,9233,9234,9235,9236,9237,9239,9243,9244,9245,9246,9247,9249,9250,9252,9253,9254,9255,9258,9261,9262,9265,9266,9267,9268,9269,9270,9271,9272,9274,9275,9276,9277,9278,9280,9283,9284,9287,9288,9289,9290,9293,9294,9296,9297,9300,9301,9303,9304,9306,9307,9308,9309,9310,9311,9312,9313,9315,9317,9320,9322,9324,9331,9332,9333,9334,9336,9337,9338,9340,9342,9345,9346,9348,9350,9351,9356,9358,9387)),6,`online_product`.`status`) AS `status`,`online_product`.`yuqi_faxi` AS `yuqi_faxi`,`online_product`.`order_limit` AS `order_limit`,`online_product`.`isPrivate` AS `isPrivate`,`online_product`.`allowedUids` AS `allowedUids`,`online_product`.`finish_rate` AS `finish_rate`,`online_product`.`is_jixi` AS `is_jixi`,`online_product`.`sort` AS `sort`,`online_product`.`contract_type` AS `contract_type`,`online_product`.`creator_id` AS `creator_id`,`online_product`.`created_at` AS `created_at`,`online_product`.`updated_at` AS `updated_at`,`online_product`.`isFlexRate` AS `isFlexRate`,`online_product`.`rateSteps` AS `rateSteps`,`online_product`.`issuer` AS `issuer`,`online_product`.`issuerSn` AS `issuerSn`,`online_product`.`paymentDay` AS `paymentDay`,`online_product`.`isTest` AS `isTest`,`online_product`.`filingAmount` AS `filingAmount`,`online_product`.`allowUseCoupon` AS `allowUseCoupon`,`online_product`.`tags` AS `tags`,`online_product`.`isLicai` AS `isLicai`,`online_product`.`pointsMultiple` AS `pointsMultiple`,`online_product`.`allowTransfer` AS `allowTransfer`,`online_product`.`isCustomRepayment` AS `isCustomRepayment`,`online_product`.`isJixiExamined` AS `isJixiExamined`,`online_product`.`internalTitle` AS `internalTitle`,`online_product`.`publishTime` AS `publishTime`,`online_product`.`balance_limit` AS `balance_limit`,`online_product`.`allowRateCoupon` AS `allowRateCoupon`,`online_product`.`originalBorrower` AS `originalBorrower`,`online_product`.`pkg_sn` AS `pkg_sn`,`online_product`.`isRedeemable` AS `isRedeemable`,`online_product`.`redemptionPeriods` AS `redemptionPeriods`,`online_product`.`redemptionPaymentDates` AS `redemptionPaymentDates`,`online_product`.`isDailyAccrual` AS `isDailyAccrual`,`online_product`.`flexRepay` AS `flexRepay`,`online_product`.`alternativeRepayer` AS `alternativeRepayer`,`online_product`.`borrowerRate` AS `borrowerRate`,`online_product`.`fundReceiver` AS `fundReceiver`,`online_product`.`guarantee` AS `guarantee` from `online_product` where ((((`online_product`.`finish_date` > 0) and (`online_product`.`finish_date` < 1522512000)) or (`online_product`.`id` in (3915,3946,3952,3959,3967,3969,3970,3978,3979,4009,4015,4049,4072,4084,4118,4129,4165,4197,4198,4199,4200,4201,4477,4485,4516,4531,4547,4558,4567,4604,4640,4695,4732,4752,4765,4803,4821,4861,4892,4913,4986,5031,5040,5053,5080,5101,5119,5165,5172,5208,5209,5230,5262,5264,5267,5274,5317,5330,5366,5391,5403,5409,5416,5421,5438,5473,5508,5524,5651,5678,5684,5691,5693,5702,5709,5710,5717,5732,5737,5750,5751,5752,5758,5759,5760,5762,5769,5774,5778,5782,5783,5787,5793,5811,5818,5828,5830,5836,5844,5850,5858,5870,5876,5883,5886,5892,5893,5921,5947,5963,5977,5990,5995,6020,6027,6033,6036,6039,6060,6066,6069,6070,6077,6078,6085,6091,6100,6105,6106,6109,6113,6115,6118,6119,6124,6125,6135,6136,6138,6144,6145,6153,6157,6159,6162,6167,6172,6180,6188,6189,6193,6196,6197,6200,6202,6205,6212,6215,6227,6233,6238,6244,6245,6258,6260,6264,6265,6268,6271,6274,6275,6279,6285,6295,6300,6304,6308,6312,6319,6332,6333,6334,6341,6345,6346,6359,6366,6367,6370,6379,6380,6384,6385,6397,6407,6414,6419,6420,6422,6426,6431,6435,6440,6441,6442,6450,6452,6454,6457,6458,6464,6478,6484,6490,6497,6500,6505,6512,6521,6527,6529,6534,6542,6543,6547,6559,6563,6565,6576,6577,6581,6587,6589,6591,6599,6606,6607,6609,6610,6622,6630,6633,6635,6638,6649,6653,6657,6659,6662,6668,6671,6676,6680,6683,6684,6688,6691,6695,6703,6704,6708,6711,6713,6721,6729,6731,6734,6736,6758,6760,6776,6778,6784,6795,6801,6808,6810,6811,6812,6814,6815,6817,6818,6829,6830,6834,6837,6839,6840,6852,6855,6865,6872,6881,6890,6897,6899,6901,6907,6908,6914,6917,6924,6927,6932,6935,6950,6955,6963,6966,6972,6984,6995,6999,7014,7026,7031,7040,7042,7045,7046,7054,7064,7067,7074,7076,7086,7090,7093,7098,7100,7101,7102,7109,7123,7138,7141,7147,7151,7153,7157,7162,7171,7172,7174,7176,7181,7186,7189,7192,7195,7201,7202,7203,7206,7207,7214,7215,7220,7221,7224,7230,7231,7238,7243,7244,7245,7249,7253,7256,7257,7258,7259,7260,7263,7264,7267,7268,7279,7284,7286,7287,7294,7301,7302,7307,7309,7312,7316,7319,7321,7325,7326,7333,7336,7338,7342,7347,7351,7353,7356,7359,7367,7372,7375,7378,7381,7389,7398,7399,7400,7401,7402,7403,7408,7411,7412,7420,7422,7426,7429,7434,7435,7443,7445,7446,7447,7453,7455,7463,7464,7465,7470,7471,7473,7475,7482,7485,7487,7491,7496,7497,7500,7512,7513,7514,7515,7516,7517,7520,7526,7538,7540,7541,7543,7555,7556,7559,7560,7563,7564,7565,7566,7567,7571,7573,7575,7580,7585,7588,7589,7597,7604,7606,7609,7614,7621,7628,7631,7634,7641,7642,7645,7662,7665,7677,7679,7681,7685,7688,7690,7693,7696,7697,7700,7703,7704,7709,7710,7712,7713,7715,7722,7723,7724,7725,7727,7728,7729,7730,7733,7734,7735,7739,7746,7748,7752,7757,7758,7763,7764,7765,7766,7771,7773,7777,7779,7780,7781,7783,7784,7787,7788,7790,7797,7798,7799,7801,7803,7804,7805,7809,7811,7817,7818,7819,7821,7824,7825,7827,7833,7835,7840,7841,7848,7853,7865,7884,7887,7897,7903,7924,7940,7949,7950,7954,7959,7961,7968,7969,7970,7973,7974,7976,7981,7982,7989,7990,7994,7996,7997,7998,8004,8007,8008,8009,8010,8012,8016,8023,8025,8029,8030,8032,8034,8036,8041,8049,8050,8051,8052,8055,8056,8057,8058,8060,8064,8066,8068,8082,8083,8084,8085,8086,8087,8088,8089,8090,8091,8092,8093,8094,8097,8098,8099,8100,8101,8105,8106,8107,8112,8121,8126,8127,8128,8129,8133,8141,8143,8145,8146,8149,8150,8153,8156,8161,8164,8166,8169,8177,8178,8184,8187,8189,8192,8193,8196,8201,8204,8208,8210,8211,8214,8215,8216,8221,8224,8229,8230,8231,8234,8235,8239,8241,8243,8245,8246,8253,8255,8256,8257,8258,8259,8263,8268,8269,8273,8277,8279,8281,8285,8291,8292,8297,8300,8301,8304,8319,8322,8325,8328,8330,8331,8335,8337,8338,8342,8343,8344,8348,8350,8353,8355,8356,8357,8358,8366,8367,8369,8370,8372,8373,8381,8382,8383,8384,8385,8386,8387,8389,8390,8391,8392,8394,8396,8405,8410,8412,8415,8423,8426,8429,8435,8436,8439,8440,8442,8443,8455,8456,8458,8461,8465,8469,8471,8472,8473,8475,8480,8485,8491,8495,8497,8499,8504,8505,8510,8515,8518,8528,8529,8530,8532,8539,8540,8548,8551,8561,8570,8573,8578,8589,8595,8602,8603,8604,8611,8618,8620,8627,8632,8634,8648,8652,8660,8664,8674,8675,8676,8677,8694,8696,8706,8710,8711,8712,8714,8717,8721,8722,8725,8726,8727,8729,8737,8738,8739,8741,8747,8751,8754,8757,8759,8760,8767,8768,8776,8778,8779,8787,8791,8793,8797,8799,8802,8806,8808,8812,8814,8818,8825,8828,8831,8832,8845,8847,8848,8850,8852,8854,8856,8859,8863,8865,8866,8873,8874,8877,8878,8882,8886,8888,8891,8894,8895,8897,8898,8899,8908,8911,8913,8916,8917,8921,8922,8923,8924,8929,8930,8931,8932,8933,8935,8936,8940,8943,8944,8945,8946,8947,8948,8949,8951,8953,8955,8956,8958,8963,8964,8965,8966,8978,8979,8980,8982,8983,8984,8986,8988,8989,8990,8991,8992,8993,8994,8995,8996,8997,8998,8999,9000,9001,9003,9004,9005,9006,9007,9009,9010,9015,9016,9017,9019,9020,9021,9022,9023,9024,9025,9027,9028,9030,9031,9032,9036,9037,9038,9039,9040,9042,9043,9045,9046,9047,9049,9051,9053,9054,9057,9058,9059,9060,9063,9064,9065,9066,9067,9068,9069,9072,9073,9074,9078,9086,9088,9090,9092,9093,9094,9095,9096,9097,9098,9099,9102,9103,9104,9106,9107,9111,9112,9113,9119,9120,9121,9122,9124,9125,9127,9128,9129,9130,9131,9132,9134,9141,9144,9151,9152,9154,9156,9161,9162,9165,9166,9168,9169,9171,9172,9175,9179,9181,9182,9183,9185,9186,9188,9190,9191,9193,9195,9196,9199,9200,9201,9202,9203,9206,9209,9210,9214,9215,9217,9222,9223,9224,9225,9226,9227,9229,9231,9232,9233,9234,9235,9236,9237,9239,9243,9244,9245,9246,9247,9249,9250,9252,9253,9254,9255,9258,9261,9262,9265,9266,9267,9268,9269,9270,9271,9272,9274,9275,9276,9277,9278,9280,9283,9284,9287,9288,9289,9290,9291,9293,9294,9296,9297,9300,9301,9303,9304,9306,9307,9308,9309,9310,9311,9312,9313,9315,9317,9320,9322,9324,9331,9332,9333,9334,9336,9337,9338,9340,9342,9345,9346,9348,9350,9351,9356,9357,9358,9387)) or (`online_product`.`cid` = 3)) and (`online_product`.`id` not in (889,891,892,893,895,897,898,905,907,910,914,918,920,930,933,941,944,947,954,968,976,984,993,998,1001,1009,1016,1027,1036,1049,1054,1061,1065,1071,1086,1098,1111,1121,1128,1131,1140,1150,1154,1164,1173,1185,1211,1214,1225,1226,1239,1253,1262,1282,1288,1289,1295,1305,1315,1323,1330,1339,1354,1356,1358,1365,1375,1385,1402,1409,1423,1434,1449,1459,1464,1540,1562,1563,1564,1565,1566,1568,1569,1572,1574,1575,1580,1596,1605,1612,1631,1653,1654,1655,1656,1674,1696,1718,1734,1748,1750,1759,1765,1775,1786,1807,1822,1831,1832,1835,1851,1868,1886,1915,1917,1942,1943,1952,1966,1989,2007,2028,2035,2037,2055,2079,2096,2115,2143,2146,2147,2150,2156,2171,2180,2191,2194,2220,2228,2230,2233,2248,2264,2284,2295,2316,2326,2328,2331,2346,2365,2393,2409,2420,2439,2460,2474,2483,2508,2515,2525,2541,2559,2574,2598,2625,2637,2642,2657,2673,2687,2708,2743,2751,2757,2765,2778,2792,2806,2830,2838,2844,2857,2869,2893,2912,2936,2944,2951,2970,2992,3006,3018,3036,3064,3076,3094,3121,3141,3166,3182,3219,3225,3230,3231,3258,3285,3311,3322,3328,3342,3361,3381,3402,3425,3433,3439,3455,3473,3494,3510,3523,3529,3533,3565,3591,3610,3626,3644,3654,3662,3680,3702,3831,3841,3862,3885,3916,3928,3931,3965,4002,4022,4043,4075,4083,4088,4115,4133,4147,4183,4207,4209,4210,4230,4231,4245,4262,4275,4297,4320,4328,4334,4351,4370,4381,4402,4457,4458,4459,4463,4472,4488,4504,4523,4550,4557,4563,4580,4601,4615,4631,4651,4652,4665,4681,4703,4722,4742,4760,4770,4772,4777,4796,4799,4812,4832,4844,4868,4880,4885,4903,4921,4931,4949,4987,4994,4997,5019,5041,5055,5077,5105,5114,5121,5147,5175,5178,5202,5227,5266,5278,5287,5306,5333,5354,5374,5422,5455,5462,5467,5471,5480,5484,5493,5496,5501,5532,5561,5578,5604,5629,5638,5643,5663,5677,5681,5701,5724,5763,5764,5784,5812,5833,5856,5874,5904,5918,5925,5926,5937,5954,5976,6002,6016,6024,6040,6049,6055,6073,6083,6101,6381,6388,6396,6415,6433,6443,6453,6468,6488,6509,6536,6564,6582,6583,6595,6614,6629,6642,6666,6677,6679,6699,6726,6738,6749,6769,6793,6800,6803,6836,6864,6891,6918,6953,6957,6961,6983,7006,7032,7053,7085,7096,7112,7121,7144,7175,7191,7218,7229,7236,7254,7280,7293,7323,7354,7364,7374,7391,7414,7437,7459,7499,7522,7524,7534,7554,7579,7598,7623,7635,7646,7647,7669,7695,7714,7737,7760,7768,7775,7791,7814,7831,7851,7886,7892,7920,7963,7992,8015,8038,8065,8108,8109,8113,8114,8117,8119,8132,8151,8175,8199,8207,8227,8247,8282,8309,8347,8349,8351,8365,8374,8402,8451,8463,8487,8526,8536,8543,8562,8582,8608,8637,8661,8669,8682,8686,8700,8719,8732,8746,8764,8774,8777,8796,8816,8836,8855,8879,8885,8890,8910,8934,8952,8961,8967,8968,8981,9008,9029,9050,9080,9100,9108,9114,9138,9155,9170,9189,9208,9213,9216,9238,9377,9381,9411,9420,9438,9446,9459,9530,9532,9950,9951,9957)));
+--
+-- Dumping data for table `weixin_url`
+--
 
--- Dumping structure for view wjf.online_product_v2
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `online_product_v2`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`wjf2017`@`%` SQL SECURITY DEFINER VIEW `online_product_v2` AS select `a`.`id` AS `id`,`a`.`epayLoanAccountId` AS `epayLoanAccountId`,`a`.`title` AS `title`,`a`.`sn` AS `sn`,`a`.`cid` AS `cid`,`a`.`is_xs` AS `is_xs`,`a`.`recommendTime` AS `recommendTime`,`a`.`borrow_uid` AS `borrow_uid`,`a`.`yield_rate` AS `yield_rate`,`a`.`jiaxi` AS `jiaxi`,`a`.`fee` AS `fee`,`a`.`expires_show` AS `expires_show`,`a`.`refund_method` AS `refund_method`,`a`.`expires` AS `expires`,`a`.`kuanxianqi` AS `kuanxianqi`,`a`.`money` AS `money`,`a`.`funded_money` AS `funded_money`,`a`.`start_money` AS `start_money`,`a`.`dizeng_money` AS `dizeng_money`,`a`.`finish_date` AS `finish_date`,`a`.`start_date` AS `start_date`,`a`.`end_date` AS `end_date`,`a`.`channel` AS `channel`,`a`.`description` AS `description`,`a`.`full_time` AS `full_time`,`a`.`jixi_time` AS `jixi_time`,`a`.`fk_examin_time` AS `fk_examin_time`,`a`.`account_name` AS `account_name`,`a`.`account` AS `account`,`a`.`bank` AS `bank`,if((`a`.`id` in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,45,47,48,49,50,51,52,56,58,59,62,64,65,66,67,73,75,77,78,79,80,86,87,92,95,101,102,103,104,108,113,117,124,125,130,131,132,136,137,141,145,153,154,155,160,161,173,174,175,192,193,203,204,206,207,208,211,212,215,216,217,222,228,230,231,232,242,243,249,250,254,257,258,259,260,263,264,269,270,271,273,277,279,284,285,287,288,290,291,295,296,297,299,301,302,303,304,305,306,307,308,310,312,313,314,315,316,317,318,320,321,323,324,327,328,330,331,332,333,334,337,340,343,352,353,356,359,361,363,365,369,375,376,378,381,385,387,398,403,404,406,408,409,410,413,420,421,422,423,431,437,440,443,444,446,448,452,454,459,461,462,467,473,476,481,483,488,495,497,505,510,514,531,554,573,588,597,608,611,615,616,635,638,648,649,662,664,667,670,679,686,695,703,711,713,718,723,725,727,728,731,732,736,740,744,745,756,758,759,760,762,764,776,777,779,785,786,790,793,794,806,820,830,837,838,839,840,844,845,852,861,872,883,886,889,891,892,893,895,897,898,900,905,906,907,910,911,913,914,917,918,920,926,930,933,936,941,942,944,945,947,948,954,956,958,968,976,982,984,986,993,998,999,1001,1009,1016,1027,1036,1049,1054,1061,1065,1071,1086,1098,1111,1121,1128,1131,1140,1150,1154,1164,1172,1173,1185,1203,1205,1206,1211,1214,1225,1226,1227,1236,1239,1246,1249,1253,1262,1272,1274,1282,1288,1289,1291,1295,1305,1315,1323,1330,1339,1354,1355,1356,1358,1363,1365,1375,1385,1393,1402,1409,1423,1434,1447,1449,1459,1464,1470,1485,1517,1540,1551,1552,1559,1560,1561,1562,1563,1564,1565,1566,1568,1569,1572,1574,1575,1580,1586,1596,1605,1612,1631,1653,1654,1655,1656,1674,1685,1696,1704,1718,1734,1748,1750,1759,1765,1775,1780,1782,1786,1807,1822,1831,1832,1835,1851,1868,1885,1886,1899,1914,1915,1917,1942,1943,1952,1966,1989,1992,2007,2028,2035,2037,2055,2061,2074,2079,2087,2096,2106,2115,2121,2127,2143,2146,2147,2150,2156,2157,2168,2171,2175,2180,2188,2191,2194,2209,2220,2225,2228,2230,2233,2248,2262,2264,2277,2284,2295,2300,2316,2326,2328,2331,2341,2346,2347,2353,2365,2376,2393,2409,2420,2431,2439,2457,2460,2463,2467,2474,2477,2478,2483,2501,2508,2515,2525,2541,2556,2559,2574,2598,2625,2637,2642,2657,2673,2687,2708,2742,2743,2751,2756,2757,2765,2766,2771,2778,2781,2786,2792,2797,2799,2804,2806,2808,2810,2821,2822,2828,2830,2832,2838,2844,2853,2856,2857,2858,2869,2874,2880,2886,2892,2893,2903,2904,2912,2917,2936,2944,2951,2970,2992,3006,3018,3029,3036,3043,3057,3062,3064,3070,3076,3081,3094,3097,3117,3121,3128,3130,3135,3141,3151,3166,3182,3219,3225,3230,3231,3237,3258,3285,3311,3322,3328,3342,3361,3381,3402,3425,3433,3439,3455,3460,3473,3480,3494,3507,3508,3510,3513,3521,3522,3523,3529,3533,3545,3564,3565,3566,3576,3586,3591,3593,3604,3607,3610,3613,3614,3626,3628,3630,3642,3644,3654,3662,3675,3680,3682,3696,3702,3707,3708,3714,3727,3734,3735,3744,3748,3751,3755,3763,3772,3784,3787,3791,3795,3798,3809,3814,3821,3822,3826,3831,3841,3842,3844,3860,3862,3866,3870,3885,3889,3890,3897,3900,3902,3910,3914,3916,3918,3920,3922,3928,3931,3934,3943,3947,3958,3962,3965,3971,3980,3981,3984,3985,3988,3989,3991,3995,3999,4000,4002,4004,4011,4014,4022,4023,4025,4029,4036,4041,4043,4045,4056,4058,4073,4075,4083,4085,4086,4088,4097,4100,4103,4104,4109,4115,4117,4121,4124,4131,4133,4136,4147,4153,4161,4166,4183,4188,4202,4203,4204,4205,4206,4207,4208,4209,4210,4211,4212,4230,4231,4245,4262,4267,4275,4279,4283,4284,4285,4297,4300,4305,4309,4313,4320,4325,4328,4331,4334,4339,4341,4345,4349,4350,4351,4358,4368,4369,4370,4373,4381,4382,4387,4390,4391,4398,4399,4402,4404,4406,4417,4420,4442,4443,4444,4445,4446,4447,4448,4449,4450,4451,4452,4453,4454,4455,4457,4458,4459,4463,4464,4472,4475,4488,4493,4496,4502,4504,4505,4522,4523,4525,4528,4538,4539,4550,4552,4557,4560,4563,4566,4574,4580,4584,4591,4597,4600,4601,4602,4614,4615,4617,4618,4631,4635,4641,4648,4651,4652,4653,4663,4665,4666,4667,4669,4681,4686,4687,4690,4702,4703,4707,4709,4710,4712,4722,4726,4735,4739,4742,4743,4745,4751,4760,4766,4767,4768,4770,4771,4772,4774,4777,4778,4779,4780,4781,4782,4784,4789,4790,4796,4797,4798,4799,4800,4805,4806,4812,4816,4817,4818,4828,4831,4832,4842,4844,4845,4847,4849,4850,4854,4868,4872,4876,4880,4882,4883,4884,4885,4889,4891,4898,4901,4903,4904,4909,4914,4917,4921,4922,4929,4931,4933,4935,4936,4937,4949,4950,4957,4961,4967,4969,4976,4977,4978,4987,4988,4990,4994,4997,4999,5000,5002,5011,5015,5016,5019,5021,5023,5024,5028,5029,5030,5032,5034,5035,5041,5044,5046,5055,5057,5058,5061,5068,5077,5081,5083,5085,5087,5096,5102,5105,5111,5114,5117,5121,5123,5124,5125,5126,5128,5139,5147,5148,5150,5152,5154,5158,5159,5160,5161,5162,5163,5175,5178,5181,5182,5183,5189,5191,5194,5195,5197,5202,5203,5205,5207,5219,5224,5225,5226,5227,5234,5236,5238,5239,5240,5241,5265,5266,5275,5276,5277,5278,5283,5284,5285,5286,5287,5289,5290,5291,5292,5293,5295,5306,5309,5313,5325,5329,5331,5333,5336,5337,5338,5341,5350,5354,5358,5359,5365,5373,5374,5378,5379,5381,5383,5384,5386,5404,5418,5422,5426,5427,5429,5430,5432,5441,5450,5452,5455,5456,5462,5467,5471,5472,5474,5475,5476,5477,5480,5484,5489,5490,5491,5492,5493,5494,5496,5501,5502,5503,5507,5515,5525,5532,5536,5537,5538,5541,5542,5543,5546,5550,5561,5564,5565,5568,5578,5581,5582,5583,5584,5585,5596,5600,5603,5604,5608,5609,5611,5612,5620,5623,5629,5630,5634,5635,5638,5642,5643,5644,5645,5646,5647,5652,5660,5662,5663,5665,5669,5670,5676,5677,5681,5682,5683,5686,5689,5695,5696,5697,5701,5704,5705,5712,5720,5724,5729,5730,5736,5738,5739,5740,5755,5756,5757,5763,5764,5768,5771,5780,5784,5785,5789,5790,5799,5809,5810,5812,5814,5815,5829,5833,5851,5853,5855,5856,5861,5862,5868,5874,5875,5878,5879,5880,5881,5889,5891,5898,5900,5903,5904,5905,5912,5916,5917,5918,5920,5925,5926,5927,5929,5930,5932,5933,5937,5941,5946,5949,5954,5959,5960,5965,5971,5974,5976,5978,5983,5985,5988,6002,6005,6006,6010,6016,6018,6019,6023,6024,6031,6035,6040,6042,6043,6045,6048,6049,6051,6053,6055,6057,6058,6062,6072,6073,6074,6075,6083,6087,6088,6089,6101,6107,6108,6110,6117,6120,6121,6128,6130,6132,6133,6137,6142,6146,6151,6152,6158,6168,6171,6182,6185,6186,6192,6201,6204,6206,6213,6214,6216,6217,6220,6221,6229,6232,6241,6242,6249,6250,6253,6254,6255,6257,6261,6262,6272,6280,6281,6282,6286,6302,6303,6305,6310,6317,6323,6338,6339,6340,6356,6361,6362,6371,6376,6377,6381,6386,6387,6388,6395,6396,6399,6400,6415,6416,6417,6418,6421,6423,6433,6434,6443,6444,6447,6449,6451,6453,6463,6468,6471,6472,6473,6475,6485,6488,6491,6494,6495,6499,6509,6510,6513,6514,6518,6520,6530,6536,6537,6540,6541,6545,6548,6550,6554,6562,6564,6578,6579,6582,6583,6584,6585,6586,6588,6595,6597,6598,6600,6614,6615,6616,6618,6619,6629,6631,6632,6641,6642,6643,6647,6648,6663,6666,6674,6675,6677,6679,6681,6682,6698,6699,6705,6706,6707,6709,6715,6718,6722,6725,6726,6728,6735,6738,6739,6740,6742,6746,6748,6749,6752,6753,6759,6761,6763,6764,6769,6771,6772,6773,6775,6779,6787,6793,6799,6800,6803,6805,6806,6807,6821,6831,6832,6833,6835,6836,6842,6843,6849,6851,6853,6857,6860,6864,6868,6869,6871,6873,6877,6879,6884,6887,6891,6894,6895,6898,6900,6903,6911,6916,6918,6920,6921,6925,6938,6951,6952,6953,6957,6961,6965,6967,6968,6969,6970,6979,6982,6983,6985,6986,6990,6993,7003,7004,7006,7010,7012,7015,7016,7017,7020,7022,7024,7025,7028,7030,7032,7035,7036,7037,7039,7048,7052,7053,7057,7059,7060,7063,7070,7071,7072,7078,7081,7085,7087,7088,7089,7095,7096,7103,7104,7105,7108,7110,7111,7112,7114,7115,7116,7119,7121,7124,7125,7126,7127,7131,7132,7142,7144,7148,7149,7150,7154,7155,7156,7161,7163,7164,7166,7170,7173,7175,7177,7178,7179,7180,7183,7188,7191,7193,7194,7197,7198,7211,7218,7223,7225,7227,7229,7232,7234,7236,7237,7240,7248,7254,7261,7262,7270,7275,7276,7277,7278,7280,7281,7283,7289,7292,7293,7295,7299,7300,7306,7317,7318,7320,7323,7329,7330,7341,7346,7354,7357,7363,7364,7365,7366,7368,7371,7374,7376,7377,7382,7386,7391,7393,7394,7395,7396,7404,7407,7414,7416,7417,7418,7419,7423,7424,7436,7437,7441,7442,7449,7457,7459,7460,7461,7462,7468,7474,7476,7499,7518,7519,7522,7524,7527,7528,7534,7536,7537,7553,7554,7561,7562,7572,7576,7579,7581,7582,7584,7586,7587,7592,7593,7598,7599,7600,7601,7603,7605,7608,7623,7625,7626,7629,7630,7635,7636,7637,7639,7643,7644,7646,7647,7648,7649,7652,7653,7654,7663,7667,7669,7671,7672,7673,7674,7675,7678,7680,7682,7684,7689,7694,7695,7701,7702,7707,7714,7718,7719,7720,7737,7740,7741,7742,7744,7747,7760,7768,7769,7770,7774,7775,7778,7791,7793,7794,7796,7802,7813,7814,7816,7820,7826,7828,7830,7831,7834,7838,7845,7846,7851,7854,7855,7856,7858,7860,7861,7862,7866,7868,7872,7879,7880,7881,7882,7883,7885,7886,7889,7891,7892,7893,7894,7895,7896,7899,7900,7901,7902,7906,7914,7915,7917,7918,7920,7922,7925,7926,7927,7928,7931,7933,7935,7936,7937,7941,7944,7952,7955,7963,7966,7971,7972,7984,7985,7986,7987,7992,8013,8015,8017,8019,8020,8021,8035,8038,8040,8059,8061,8062,8063,8065,8067,8073,8095,8096,8102,8103,8104,8108,8109,8110,8111,8113,8114,8116,8117,8119,8122,8130,8131,8132,8138,8147,8151,8155,8159,8174,8175,8179,8180,8181,8186,8194,8195,8199,8202,8203,8206,8207,8209,8226,8227,8232,8233,8247,8248,8249,8251,8252,8260,8261,8264,8266,8267,8270,8274,8276,8278,8280,8282,8283,8286,8287,8288,8289,8290,8294,8295,8296,8302,8308,8309,8310,8312,8313,8314,8315,8316,8321,8323,8324,8326,8327,8334,8339,8340,8345,8346,8347,8349,8351,8352,8359,8360,8362,8364,8365,8368,8374,8375,8376,8377,8378,8379,8397,8398,8399,8400,8402,8404,8406,8407,8408,8409,8411,8413,8416,8417,8419,8420,8422,8424,8425,8427,8430,8431,8437,8438,8441,8444,8445,8446,8447,8448,8449,8450,8451,8452,8457,8460,8462,8463,8466,8467,8468,8470,8474,8476,8478,8481,8482,8484,8487,8488,8489,8490,8492,8493,8494,8498,8501,8502,8506,8508,8511,8514,8516,8517,8519,8521,8522,8523,8524,8526,8527,8533,8535,8536,8538,8541,8543,8544,8545,8546,8547,8549,8550,8553,8554,8556,8557,8560,8562,8564,8565,8566,8568,8569,8571,8575,8576,8577,8580,8581,8582,8584,8585,8586,8587,8593,8594,8596,8598,8600,8601,8605,8606,8608,8610,8612,8613,8615,8616,8617,8621,8622,8625,8630,8633,8635,8636,8637,8639,8640,8641,8642,8643,8644,8645,8647,8650,8654,8656,8658,8659,8661,8663,8665,8667,8669,8672,8673,8678,8679,8680,8681,8682,8684,8685,8686,8687,8688,8690,8692,8693,8695,8698,8700,8701,8702,8703,8704,8705,8708,8713,8716,8718,8719,8720,8723,8730,8731,8732,8734,8735,8736,8742,8745,8746,8748,8749,8750,8753,8756,8761,8762,8764,8765,8769,8770,8771,8772,8774,8777,8780,8782,8783,8784,8789,8794,8796,8798,8800,8803,8804,8805,8811,8813,8816,8819,8820,8822,8823,8824,8827,8833,8835,8836,8838,8839,8840,8841,8842,8844,8855,8857,8858,8861,8862,8864,8871,8875,8876,8879,8880,8881,8883,8884,8885,8887,8889,8890,8892,8893,8896,8900,8901,8902,8903,8904,8905,8906,8907,8909,8910,8912,8914,8915,8918,8919,8920,8925,8926,8927,8928,8934,8937,8938,8939,8941,8942,8950,8952,8954,8957,8959,8960,8961,8962,8967,8968,8969,8970,8971,8972,8973,8974,8975,8976,8977,8981,8985,8987,9002,9008,9011,9012,9013,9014,9018,9026,9029,9033,9034,9035,9041,9044,9048,9050,9052,9055,9056,9061,9062,9070,9071,9075,9076,9077,9079,9080,9081,9082,9083,9084,9085,9087,9089,9091,9100,9101,9105,9108,9109,9110,9114,9115,9116,9117,9118,9123,9126,9133,9135,9136,9137,9138,9139,9140,9142,9143,9145,9146,9147,9148,9149,9150,9153,9155,9157,9158,9159,9160,9163,9164,9167,9170,9173,9174,9176,9177,9178,9180,9184,9187,9189,9192,9194,9197,9198,9204,9205,9207,9208,9211,9212,9213,9216,9218,9219,9220,9221,9228,9230,9238,9240,9241,9242,9248,9251,9256,9257,9260,9263,9264,9273,9281,9282,9285,9286,9292,9298,9299,9302,9305,9314,9318,9319,9321,9323,9325,9326,9327,9328,9329,9330,9335,9339,9341,9343,9347,9349,9354,9355,9359,9361,9362,9363,9364,9366,9367,9368,9369,9370,9371,9372,9373,9374,9375,9376,9377,9378,9379,9383,9384,9385,9386,9388,9389,9390,9391,9392,9393,9394,9396,9397,9398,9401,9402,9403,9405,9406,9407,9408,9409,9410,9413,9415,9416,9418,9423,9425,9428,9429,9430,9434,9437,9451,9461,9469,9475,9476,9477,9494,9501,9512,9520,9526,9528,9529,9530,9531,9532,9533,9535,9536,9537,9538,9539,9540,9541,9542,9543,9544,9545,9546,9547,9548,9549,9550,9551,9552,9553,9554,9555,9556,9557,9558,9559,9560,9561,9562,9563,9564,9565,9566,9567,9568,9569,9570,9571,9572,9573,9574,9575,9576,9577,9578,9579,9580,9581,9582,9583,9584,9585,9586,9587,9594,9627,9640,9646,9654,9660,9676,9682,9686,9693,9702,9714,9726,9730,9734,9735,9736,9737,9743,9751,9783,9785,9790,9792,9799,9801,9823,9842,9858,9863,9864,9867,9875,9889,9890,9893,9897,9898,9904,9905,9919,9927,9952,9957,9960)),1,`a`.`del_status`) AS `del_status`,`a`.`online_status` AS `online_status`,if(`b`.`id`,`b`.`status`,`a`.`status`) AS `status`,`a`.`yuqi_faxi` AS `yuqi_faxi`,`a`.`order_limit` AS `order_limit`,`a`.`isPrivate` AS `isPrivate`,`a`.`allowedUids` AS `allowedUids`,`a`.`finish_rate` AS `finish_rate`,`a`.`is_jixi` AS `is_jixi`,`a`.`sort` AS `sort`,`a`.`contract_type` AS `contract_type`,`a`.`creator_id` AS `creator_id`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`a`.`isFlexRate` AS `isFlexRate`,`a`.`rateSteps` AS `rateSteps`,`a`.`issuer` AS `issuer`,`a`.`issuerSn` AS `issuerSn`,`a`.`paymentDay` AS `paymentDay`,`a`.`isTest` AS `isTest`,`a`.`filingAmount` AS `filingAmount`,`a`.`allowUseCoupon` AS `allowUseCoupon`,`a`.`tags` AS `tags`,`a`.`isLicai` AS `isLicai`,`a`.`pointsMultiple` AS `pointsMultiple`,`a`.`allowTransfer` AS `allowTransfer`,`a`.`isCustomRepayment` AS `isCustomRepayment`,`a`.`isJixiExamined` AS `isJixiExamined`,`a`.`internalTitle` AS `internalTitle`,`a`.`publishTime` AS `publishTime`,`a`.`balance_limit` AS `balance_limit`,`a`.`allowRateCoupon` AS `allowRateCoupon`,`a`.`originalBorrower` AS `originalBorrower`,`a`.`pkg_sn` AS `pkg_sn`,`a`.`isRedeemable` AS `isRedeemable`,`a`.`redemptionPeriods` AS `redemptionPeriods`,`a`.`redemptionPaymentDates` AS `redemptionPaymentDates`,`a`.`isDailyAccrual` AS `isDailyAccrual`,`a`.`flexRepay` AS `flexRepay`,`a`.`alternativeRepayer` AS `alternativeRepayer`,`a`.`borrowerRate` AS `borrowerRate`,`a`.`fundReceiver` AS `fundReceiver`,`a`.`guarantee` AS `guarantee` from (`online_product` `a` left join `online_product_vv` `b` on((`a`.`sn` = `b`.`sn`)));
+LOCK TABLES `weixin_url` WRITE;
+/*!40000 ALTER TABLE `weixin_url` DISABLE KEYS */;
+/*!40000 ALTER TABLE `weixin_url` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
--- Dumping structure for view wjf.repayment_v1
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `repayment_v1`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`wjf2017`@`%` SQL SECURITY DEFINER VIEW `repayment_v1` AS select `repayment`.`id` AS `id`,`repayment`.`loan_id` AS `loan_id`,`repayment`.`term` AS `term`,`repayment`.`dueDate` AS `dueDate`,`repayment`.`amount` AS `amount`,`repayment`.`principal` AS `principal`,`repayment`.`interest` AS `interest`,if((`repayment`.`loan_id` in ('id',3967,3969,3970,3979,4009,4015,4049,4072,4084,4118,4477,4485,4516,4531,4547,4558,4567,4604,4640,4695,4732,4752,4765,4803,4821,4861,4892,4913,4986,5031,5040,5053,5080,5101,5119,5165,5172,5208,5209,5230,5262,5264,5267,5274,5317,5330,5366,5391,5403,5409,5416,5421,5438,5473,5508,5524,5651,5678,5684,5691,5693,5702,5709,5710,5717,5732,5737,5750,5751,5752,5758,5759,5760,5762,5769,5774,5778,5782,5783,5787,5793,5811,5818,5828,5830,5836,5844,5850,5858,5870,5876,5883,5886,5892,5893,6020,6033,6039,6069,6070,6077,6078,6091,6100,6105,6106,6113,6115,6124,6135,6138,6144,6153,6162,6167,6180,6188,6189,6196,6197,6212,6233,6238,6258,6260,6265,6268,6271,6275,6279,6285,6295,6304,6308,6312,6319,6332,6334,6341,6345,6346,6359,6367,6370,6379,6384,6397,6407,6419,6422,6426,6431,6435,6440,6441,6442,6452,6454,6464,6478,6484,6500,6512,6529,6534,6542,6559,6576,6577,6589,6606,6610,6622,6635,6657,6659,6662,6671,6676,6680,6691,6703,6711,6721,6734,6776,6778,6801,6810,6812,6818,6829,6839,6840,6852,6865,6872,6881,6890,6897,6914,6935,6950,6963,6984,6995,6999,7026,7042,7045,7067,7074,7076,7090,7093,7100,7102,7109,7123,7138,7141,7147,7153,7157,7162,7171,7172,7176,7181,7186,7189,7192,7201,7202,7203,7206,7207,7214,7220,7221,7224,7230,7231,7238,7243,7244,7245,7256,7257,7258,7259,7260,7263,7264,7267,7268,7279,7284,7287,7294,7302,7307,7309,7316,7321,7325,7326,7336,7338,7342,7347,7353,7356,7359,7367,7372,7375,7381,7389,7398,7399,7400,7401,7402,7403,7408,7420,7422,7426,7434,7435,7447,7453,7455,7464,7471,7473,7475,7482,7487,7491,7496,7500,7512,7513,7514,7515,7516,7517,7540,7541,7556,7559,7560,7563,7564,7565,7566,7567,7580,7585,7589,7597,7604,7606,7609,7614,7621,7631,7634,7641,7642,7645,7662,7665,7677,7679,7681,7688,7690,7693,7696,7697,7704,7709,7710,7713,7715,7722,7723,7724,7727,7728,7730,7733,7734,7739,7746,7748,7752,7757,7758,7763,7765,7766,7771,7777,7779,7780,7781,7784,7787,7790,7797,7798,7799,7801,7803,7804,7805,7809,7811,7818,7821,7825,7827,7833,7840,7841,7897,7949,7950,7954,7961,7968,7969,7970,7974,7976,7981,7989,7994,7996,7998,8004,8008,8009,8010,8012,8023,8025,8029,8030,8032,8036,8041,8049,8050,8051,8052,8055,8056,8057,8058,8082,8083,8084,8085,8086,8087,8088,8089,8090,8091,8092,8093,8105,8106,8107,8112,8121,8126,8127,8128,8129,8133,8141,8143,8145,8150,8153,8161,8164,8166,8177,8178,8184,8187,8189,8192,8193,8196,8201,8204,8208,8210,8211,8214,8215,8216,8221,8224,8229,8230,8231,8234,8235,8239,8241,8243,8245,8253,8255,8256,8257,8258,8263,8268,8269,8273,8277,8279,8281,8285,8291,8292,8297,8300,8301,8304,8319,8322,8325,8328,8331,8335,8337,8338,8342,8343,8344,8348,8350,8353,8355,8356,8358,8366,8367,8370,8372,8373,8381,8383,8386,8389,8394,8405,8410,8412,8415,8423,8429,8435,8436,8439,8440,8443,8456,8458,8469,8471,8472,8473,8485,8495,8497,8499,8505,8518,8528,8530,8532,8539,8548,8570,8578,8589,8595,8603,8604,8611,8618,8632,8634,8652,8660,8674,8675,8676,8694,8706,8710,8711,8712,8714,8717,8721,8722,8725,8726,8727,8729,8737,8738,8739,8741,8747,8751,8754,8757,8759,8760,8767,8768,8776,8778,8779,8787,8791,8793,8797,8799,8806,8808,8812,8814,8818,8825,8828,8831,8832,8847,8848,8850,8852,8854,8859,8863,8865,8873,8874,8877,8882,8886,8888,8891,8894,8895,8897,8898,8899,8908,8911,8913,8916,8917,8921,8922,8923,8924,8929,8930,8931,8932,8933,8935,8936,8940,8943,8944,8945,8946,8947,8948,8949,8951,8953,8955,8956,8958,8963,8964,8965,8966,8978,8979,8980,8982,8983,8984,8986,8988,8989,8990,8991,8992,8993,8994,8995,8996,8997,8998,8999,9000,9001,9003,9004,9005,9006,9007,9009,9010,9015,9016,9017,9019,9020,9022,9023,9024,9025,9027,9028,9030,9031,9032,9036,9037,9039,9040,9042,9043,9045,9046,9047,9049,9051,9053,9054,9057,9059,9060,9063,9064,9065,9066,9068,9069,9072,9073,9074,9078,9086,9088,9090,9092,9093,9094,9095,9096,9097,9098,9099,9102,9103,9104,9106,9107,9111,9112,9113,9119,9121,9122,9124,9125,9127,9128,9129,9130,9131,9132,9134,9141,9144,9151,9152,9154,9156,9161,9162,9165,9166,9168,9169,9171,9172,9175,9179,9181,9182,9183,9185,9186,9188,9190,9191,9195,9196,9199,9200,9201,9202,9203,9206,9209,9210,9214,9215,9217,9223,9224,9225,9226,9227,9229,9231,9232,9233,9234,9235,9236,9237,9239,9243,9244,9245,9246,9247,9249,9250,9252,9253,9254,9255,9258,9261,9262,9265,9266,9267,9268,9269,9270,9271,9272,9274,9275,9276,9277,9278,9280,9283,9284,9287,9288,9289,9290,9293,9294,9296,9297,9300,9301,9303,9304,9306,9307,9308,9309,9310,9311,9312,9313,9315,9317,9320,9322,9324,9331,9332,9333,9334,9336,9337,9338,9340,9342,9345,9346,9348,9350,9351,9356,9358,9387)),1,0) AS `isRepaid`,if((`repayment`.`loan_id` in ('id',3967,3969,3970,3979,4009,4015,4049,4072,4084,4118,4477,4485,4516,4531,4547,4558,4567,4604,4640,4695,4732,4752,4765,4803,4821,4861,4892,4913,4986,5031,5040,5053,5080,5101,5119,5165,5172,5208,5209,5230,5262,5264,5267,5274,5317,5330,5366,5391,5403,5409,5416,5421,5438,5473,5508,5524,5651,5678,5684,5691,5693,5702,5709,5710,5717,5732,5737,5750,5751,5752,5758,5759,5760,5762,5769,5774,5778,5782,5783,5787,5793,5811,5818,5828,5830,5836,5844,5850,5858,5870,5876,5883,5886,5892,5893,6020,6033,6039,6069,6070,6077,6078,6091,6100,6105,6106,6113,6115,6124,6135,6138,6144,6153,6162,6167,6180,6188,6189,6196,6197,6212,6233,6238,6258,6260,6265,6268,6271,6275,6279,6285,6295,6304,6308,6312,6319,6332,6334,6341,6345,6346,6359,6367,6370,6379,6384,6397,6407,6419,6422,6426,6431,6435,6440,6441,6442,6452,6454,6464,6478,6484,6500,6512,6529,6534,6542,6559,6576,6577,6589,6606,6610,6622,6635,6657,6659,6662,6671,6676,6680,6691,6703,6711,6721,6734,6776,6778,6801,6810,6812,6818,6829,6839,6840,6852,6865,6872,6881,6890,6897,6914,6935,6950,6963,6984,6995,6999,7026,7042,7045,7067,7074,7076,7090,7093,7100,7102,7109,7123,7138,7141,7147,7153,7157,7162,7171,7172,7176,7181,7186,7189,7192,7201,7202,7203,7206,7207,7214,7220,7221,7224,7230,7231,7238,7243,7244,7245,7256,7257,7258,7259,7260,7263,7264,7267,7268,7279,7284,7287,7294,7302,7307,7309,7316,7321,7325,7326,7336,7338,7342,7347,7353,7356,7359,7367,7372,7375,7381,7389,7398,7399,7400,7401,7402,7403,7408,7420,7422,7426,7434,7435,7447,7453,7455,7464,7471,7473,7475,7482,7487,7491,7496,7500,7512,7513,7514,7515,7516,7517,7540,7541,7556,7559,7560,7563,7564,7565,7566,7567,7580,7585,7589,7597,7604,7606,7609,7614,7621,7631,7634,7641,7642,7645,7662,7665,7677,7679,7681,7688,7690,7693,7696,7697,7704,7709,7710,7713,7715,7722,7723,7724,7727,7728,7730,7733,7734,7739,7746,7748,7752,7757,7758,7763,7765,7766,7771,7777,7779,7780,7781,7784,7787,7790,7797,7798,7799,7801,7803,7804,7805,7809,7811,7818,7821,7825,7827,7833,7840,7841,7897,7949,7950,7954,7961,7968,7969,7970,7974,7976,7981,7989,7994,7996,7998,8004,8008,8009,8010,8012,8023,8025,8029,8030,8032,8036,8041,8049,8050,8051,8052,8055,8056,8057,8058,8082,8083,8084,8085,8086,8087,8088,8089,8090,8091,8092,8093,8105,8106,8107,8112,8121,8126,8127,8128,8129,8133,8141,8143,8145,8150,8153,8161,8164,8166,8177,8178,8184,8187,8189,8192,8193,8196,8201,8204,8208,8210,8211,8214,8215,8216,8221,8224,8229,8230,8231,8234,8235,8239,8241,8243,8245,8253,8255,8256,8257,8258,8263,8268,8269,8273,8277,8279,8281,8285,8291,8292,8297,8300,8301,8304,8319,8322,8325,8328,8331,8335,8337,8338,8342,8343,8344,8348,8350,8353,8355,8356,8358,8366,8367,8370,8372,8373,8381,8383,8386,8389,8394,8405,8410,8412,8415,8423,8429,8435,8436,8439,8440,8443,8456,8458,8469,8471,8472,8473,8485,8495,8497,8499,8505,8518,8528,8530,8532,8539,8548,8570,8578,8589,8595,8603,8604,8611,8618,8632,8634,8652,8660,8674,8675,8676,8694,8706,8710,8711,8712,8714,8717,8721,8722,8725,8726,8727,8729,8737,8738,8739,8741,8747,8751,8754,8757,8759,8760,8767,8768,8776,8778,8779,8787,8791,8793,8797,8799,8806,8808,8812,8814,8818,8825,8828,8831,8832,8847,8848,8850,8852,8854,8859,8863,8865,8873,8874,8877,8882,8886,8888,8891,8894,8895,8897,8898,8899,8908,8911,8913,8916,8917,8921,8922,8923,8924,8929,8930,8931,8932,8933,8935,8936,8940,8943,8944,8945,8946,8947,8948,8949,8951,8953,8955,8956,8958,8963,8964,8965,8966,8978,8979,8980,8982,8983,8984,8986,8988,8989,8990,8991,8992,8993,8994,8995,8996,8997,8998,8999,9000,9001,9003,9004,9005,9006,9007,9009,9010,9015,9016,9017,9019,9020,9022,9023,9024,9025,9027,9028,9030,9031,9032,9036,9037,9039,9040,9042,9043,9045,9046,9047,9049,9051,9053,9054,9057,9059,9060,9063,9064,9065,9066,9068,9069,9072,9073,9074,9078,9086,9088,9090,9092,9093,9094,9095,9096,9097,9098,9099,9102,9103,9104,9106,9107,9111,9112,9113,9119,9121,9122,9124,9125,9127,9128,9129,9130,9131,9132,9134,9141,9144,9151,9152,9154,9156,9161,9162,9165,9166,9168,9169,9171,9172,9175,9179,9181,9182,9183,9185,9186,9188,9190,9191,9195,9196,9199,9200,9201,9202,9203,9206,9209,9210,9214,9215,9217,9223,9224,9225,9226,9227,9229,9231,9232,9233,9234,9235,9236,9237,9239,9243,9244,9245,9246,9247,9249,9250,9252,9253,9254,9255,9258,9261,9262,9265,9266,9267,9268,9269,9270,9271,9272,9274,9275,9276,9277,9278,9280,9283,9284,9287,9288,9289,9290,9293,9294,9296,9297,9300,9301,9303,9304,9306,9307,9308,9309,9310,9311,9312,9313,9315,9317,9320,9322,9324,9331,9332,9333,9334,9336,9337,9338,9340,9342,9345,9346,9348,9350,9351,9356,9358,9387)),('2018-04-01' + interval (`repayment`.`id` % 80) day),NULL) AS `repaidAt`,if((`repayment`.`loan_id` in (3967,3969,3970,3979,4009,4015,4049,4072,4084,4118,4477,4485,4516,4531,4547,4558,4567,4604,4640,4695,4732,4752,4765,4803,4821,5508,5524,6020,6033,6039,6069,6070,6077,6078,6091,6100,6105,6106,6113,6115,6124,6135,6138,6144,6153,6162,6167,6180,6188,6189,6196,6197,6212,6233,6238,6258,6260,6265,6268,6271,6275,6279,6285,6295,6304,6308,6312,6319,6332,6334,6341,6345,6346,6359,6367,6370,6379,6384,6397,6407,6419,6422,6426,6431,6435,6440,6441,6442,6452,6454,6464,6478,6484,6500,6512,6529,6534,6542,6559,6576,6577,6589,6606,6610,6622,6635,6657,6659,6662,6671,6676,6680,6691,6703,6711,6721,6734,6776,6778,6801,6810,6812,6818,6829,6839,6840,6852,6865,6872,6881,6890,6897,6914,6935,6950,6963,6984,6995,6999,7026,7042,7045,7067,7074,7076,7090,7093,7100,7102,7176,7181,7203,7206,7220,7221,7230,7243,7257,7258,7259,7260,7263,7264,7267,7302,7307,7316,7321,7326,7336,7342,7353,7359,7372,7375,7389,7398,7399,7400,7401,7402,7420,7434,7453,7487,7500,7512,7513,7556,7563,7564,7565,7566,7567,7585,7606,7609,7634,7642,7645,7662,7677,7679,7681,7688,7693,7696,7704,7710,7713,7722,7723,7724,7727,7733,7746,7748,7758,7763,7765,7777,7779,7780,7781,7787,7790,7797,7801,7803,7809,7821,7825,7827,7833,7840,7841,7897,7949,7950,7954,7961,7968,7969,7974,7994,7996,7998,8008,8009,8010,8025,8029,8030,8041,8049,8050,8051,8052,8055,8056,8082,8083,8084,8085,8086,8087,8105,8106,8107,8126,8127,8133,8141,8143,8145,8153,8184,8187,8189,8192,8193,8208,8210,8211,8214,8224,8229,8231,8234,8241,8253,8255,8256,8268,8269,8277,8279,8281,8285,8291,8292,8300,8301,8325,8328,8331,8337,8343,8348,8353,8358,8366,8370,8372,8386,8389,8394,8410,8423,8429,8435,8439,8440,8456,8458,8469,8472,8473,8485,8495,8497,8505,8518,8528,8532,8548,8570,8595,8603,8611,8634,8652,8674,8694,8706,8710,8711,8712,8717,8721,8722,8725,8726,8729,8737,8738,8739,8741,8747,8754,8759,8760,8767,8768,8776,8779,8787,8791,8793,8797,8799,8806,8808,8812,8818,8825,8831,8832,8847,8848,8852,8854,8859,8863,8865,8874,8882,8888,8891,8894,8898,8899,8908,8911,8913,8916,8917,8921,8922,8923,8924,8930,8932,8933,8936,8940,8943,8944,8945,8946,8947,8948,8949,8951,8953,8956,8958,8963,8966,8978,8979,8980,8982,8983,8984,8986,8988,8989,8990,8991,8992,8993,8995,8996,8997,8999,9000,9001,9003,9004,9005,9006,9007,9009,9015,9016,9017,9019,9022,9023,9024,9025,9027,9028,9030,9031,9032,9037,9039,9040,9043,9045,9046,9047,9049,9051,9053,9054,9059,9060,9063,9065,9069,9072,9073,9074,9078,9088,9093,9094,9096,9097,9098,9099,9102,9104,9106,9107,9112,9113,9119,9125,9127,9128,9129,9130,9131,9132,9134,9144,9152,9154,9156,9161,9165,9169,9171,9175,9179,9181,9182,9183,9186,9188,9190,9196,9199,9200,9202,9203,9209,9210,9214,9217,9223,9224,9225,9226,9229,9231,9232,9233,9234,9235,9236,9239,9243,9244,9246,9247,9249,9250,9252,9253,9255,9258,9261,9262,9265,9267,9268,9269,9270,9272,9274,9276,9277,9278,9280,9283,9284,9287,9288,9289,9293,9294,9296,9297,9300,9301,9303,9306,9308,9309,9310,9311,9313,9315,9317,9320,9331,9333,9334,9336,9337,9340,9342,9346,9348,9351,9356,9358,9387)),1,0) AS `isRefunded`,if((`repayment`.`loan_id` in ('id',3967,3969,3970,3979,4009,4015,4049,4072,4084,4118,4477,4485,4516,4531,4547,4558,4567,4604,4640,4695,4732,4752,4765,4803,4821,4861,4892,4913,4986,5031,5040,5053,5080,5101,5119,5165,5172,5208,5209,5230,5262,5264,5267,5274,5317,5330,5366,5391,5403,5409,5416,5421,5438,5473,5508,5524,5651,5678,5684,5691,5693,5702,5709,5710,5717,5732,5737,5750,5751,5752,5758,5759,5760,5762,5769,5774,5778,5782,5783,5787,5793,5811,5818,5828,5830,5836,5844,5850,5858,5870,5876,5883,5886,5892,5893,6020,6033,6039,6069,6070,6077,6078,6091,6100,6105,6106,6113,6115,6124,6135,6138,6144,6153,6162,6167,6180,6188,6189,6196,6197,6212,6233,6238,6258,6260,6265,6268,6271,6275,6279,6285,6295,6304,6308,6312,6319,6332,6334,6341,6345,6346,6359,6367,6370,6379,6384,6397,6407,6419,6422,6426,6431,6435,6440,6441,6442,6452,6454,6464,6478,6484,6500,6512,6529,6534,6542,6559,6576,6577,6589,6606,6610,6622,6635,6657,6659,6662,6671,6676,6680,6691,6703,6711,6721,6734,6776,6778,6801,6810,6812,6818,6829,6839,6840,6852,6865,6872,6881,6890,6897,6914,6935,6950,6963,6984,6995,6999,7026,7042,7045,7067,7074,7076,7090,7093,7100,7102,7109,7123,7138,7141,7147,7153,7157,7162,7171,7172,7176,7181,7186,7189,7192,7201,7202,7203,7206,7207,7214,7220,7221,7224,7230,7231,7238,7243,7244,7245,7256,7257,7258,7259,7260,7263,7264,7267,7268,7279,7284,7287,7294,7302,7307,7309,7316,7321,7325,7326,7336,7338,7342,7347,7353,7356,7359,7367,7372,7375,7381,7389,7398,7399,7400,7401,7402,7403,7408,7420,7422,7426,7434,7435,7447,7453,7455,7464,7471,7473,7475,7482,7487,7491,7496,7500,7512,7513,7514,7515,7516,7517,7540,7541,7556,7559,7560,7563,7564,7565,7566,7567,7580,7585,7589,7597,7604,7606,7609,7614,7621,7631,7634,7641,7642,7645,7662,7665,7677,7679,7681,7688,7690,7693,7696,7697,7704,7709,7710,7713,7715,7722,7723,7724,7727,7728,7730,7733,7734,7739,7746,7748,7752,7757,7758,7763,7765,7766,7771,7777,7779,7780,7781,7784,7787,7790,7797,7798,7799,7801,7803,7804,7805,7809,7811,7818,7821,7825,7827,7833,7840,7841,7897,7949,7950,7954,7961,7968,7969,7970,7974,7976,7981,7989,7994,7996,7998,8004,8008,8009,8010,8012,8023,8025,8029,8030,8032,8036,8041,8049,8050,8051,8052,8055,8056,8057,8058,8082,8083,8084,8085,8086,8087,8088,8089,8090,8091,8092,8093,8105,8106,8107,8112,8121,8126,8127,8128,8129,8133,8141,8143,8145,8150,8153,8161,8164,8166,8177,8178,8184,8187,8189,8192,8193,8196,8201,8204,8208,8210,8211,8214,8215,8216,8221,8224,8229,8230,8231,8234,8235,8239,8241,8243,8245,8253,8255,8256,8257,8258,8263,8268,8269,8273,8277,8279,8281,8285,8291,8292,8297,8300,8301,8304,8319,8322,8325,8328,8331,8335,8337,8338,8342,8343,8344,8348,8350,8353,8355,8356,8358,8366,8367,8370,8372,8373,8381,8383,8386,8389,8394,8405,8410,8412,8415,8423,8429,8435,8436,8439,8440,8443,8456,8458,8469,8471,8472,8473,8485,8495,8497,8499,8505,8518,8528,8530,8532,8539,8548,8570,8578,8589,8595,8603,8604,8611,8618,8632,8634,8652,8660,8674,8675,8676,8694,8706,8710,8711,8712,8714,8717,8721,8722,8725,8726,8727,8729,8737,8738,8739,8741,8747,8751,8754,8757,8759,8760,8767,8768,8776,8778,8779,8787,8791,8793,8797,8799,8806,8808,8812,8814,8818,8825,8828,8831,8832,8847,8848,8850,8852,8854,8859,8863,8865,8873,8874,8877,8882,8886,8888,8891,8894,8895,8897,8898,8899,8908,8911,8913,8916,8917,8921,8922,8923,8924,8929,8930,8931,8932,8933,8935,8936,8940,8943,8944,8945,8946,8947,8948,8949,8951,8953,8955,8956,8958,8963,8964,8965,8966,8978,8979,8980,8982,8983,8984,8986,8988,8989,8990,8991,8992,8993,8994,8995,8996,8997,8998,8999,9000,9001,9003,9004,9005,9006,9007,9009,9010,9015,9016,9017,9019,9020,9022,9023,9024,9025,9027,9028,9030,9031,9032,9036,9037,9039,9040,9042,9043,9045,9046,9047,9049,9051,9053,9054,9057,9059,9060,9063,9064,9065,9066,9068,9069,9072,9073,9074,9078,9086,9088,9090,9092,9093,9094,9095,9096,9097,9098,9099,9102,9103,9104,9106,9107,9111,9112,9113,9119,9121,9122,9124,9125,9127,9128,9129,9130,9131,9132,9134,9141,9144,9151,9152,9154,9156,9161,9162,9165,9166,9168,9169,9171,9172,9175,9179,9181,9182,9183,9185,9186,9188,9190,9191,9195,9196,9199,9200,9201,9202,9203,9206,9209,9210,9214,9215,9217,9223,9224,9225,9226,9227,9229,9231,9232,9233,9234,9235,9236,9237,9239,9243,9244,9245,9246,9247,9249,9250,9252,9253,9254,9255,9258,9261,9262,9265,9266,9267,9268,9269,9270,9271,9272,9274,9275,9276,9277,9278,9280,9283,9284,9287,9288,9289,9290,9293,9294,9296,9297,9300,9301,9303,9304,9306,9307,9308,9309,9310,9311,9312,9313,9315,9317,9320,9322,9324,9331,9332,9333,9334,9336,9337,9338,9340,9342,9345,9346,9348,9350,9351,9356,9358,9387)),('2018-04-01' + interval (`repayment`.`id` % 80) day),NULL) AS `refundedAt` from `repayment`;
-
--- Dumping structure for view wjf.repayment_v2
--- Removing temporary table and create final VIEW structure
-DROP TABLE IF EXISTS `repayment_v2`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`wjf2017`@`%` SQL SECURITY DEFINER VIEW `repayment_v2` AS select `a`.`id` AS `id`,`a`.`loan_id` AS `loan_id`,`a`.`term` AS `term`,`a`.`dueDate` AS `dueDate`,`a`.`amount` AS `amount`,`a`.`principal` AS `principal`,`a`.`interest` AS `interest`,if(`b`.`id`,`b`.`isRepaid`,`a`.`isRepaid`) AS `isRepaid`,if(`b`.`id`,`b`.`repaidAt`,`a`.`repaidAt`) AS `repaidAt`,if(`b`.`id`,`b`.`isRefunded`,`a`.`isRefunded`) AS `isRefunded`,if(`b`.`id`,`b`.`refundedAt`,`a`.`refundedAt`) AS `refundedAt` from (`repayment` `a` left join `repayment_vv` `b` on((`a`.`id` = `b`.`id`)));
-
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-07-20 15:21:09
