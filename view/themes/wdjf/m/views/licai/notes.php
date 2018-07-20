@@ -11,7 +11,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=201612232', 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist-search.css?v=201807196668', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/TouchSlide.1.1.js', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.classyloader.js', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit_page_wd.js?v=1807196688', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit_page_wd.js?v=180719668812', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\assets\WapAsset']);
 
 $this->registerJs('var tp = ' . $tp . ';', 1);
@@ -39,15 +39,27 @@ $user = Yii::$app->user->getIdentity();
 <!--    --><?php //} ?>
 </div>
 <div class="search">
+    <style>
+        div.search .select-lists .select-box>div u{
+            background: url(/images/licaiSelect/select_bottom_icon.png);
+            -webkit-background-size: 100% 100%;
+            background-size: 100% 100%;
+        }
+        div.search .select-lists .select-box>div.select-div u {
+            background: url(/images/licaiSelect/select_top_icon.png);
+            -webkit-background-size: 100% 100%;
+            background-size: 100% 100%;
+        }
+    </style>
     <div class="search-box">
-        <a href="/licai/notes" class="go-back-search"></a>
+        <a style="background: url(/images/licaiSelect/search_toback_left.png) center center no-repeat;-webkit-background-size: contain;background-size: contain;" href="/licai/notes" class="go-back-search"></a>
         <div class="search-input-box">
             <img src="/images/licaiSelect/licai_search_icon.png" alt="">
             <input type="text" class="search-input" placeholder="输入标的名称">
         </div>
         <div class="search-box-btn">搜索</div>
     </div>
-    <div class="select-lists clearfix">
+    <div style="display: none;" class="select-lists clearfix">
         <div class="select-box lf">
             <div id="select0">
                 <span>项目期限</span>

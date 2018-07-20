@@ -139,24 +139,21 @@ $(function() {
     //点击上面的搜索框
     $(".search-input").on('click',searchEvent);
     function searchEvent(){
-        // closeSearchBox();
         // 关闭下面的搜索出来的弹窗
-        $listDiv.find('ul').css('display','none');
-        $listDiv.css('display','none');
+        // $listDiv.find('ul').css('display','none');
+        // $listDiv.css('display','none');
         // 禁止滑动
-        $('.container').on('touchmove',delDefaultEvent);
+        // $('.container').on('touchmove',delDefaultEvent);
         //清除这个事件
         $(".search-input").off('click',searchEvent);
-        if($(".select-lists").css('display')=='block'){
-            $(".select-lists").css('display','none');
-            $allListItem.animate({"left":"-100%"},300,'linear',function(){
-                $allListItem.children('.col').remove().end().children('#credititem-list').html('');
-                $(".load").html('');
-                $allListItem.css('left',"0");
-                // 让这个页面可滑动
-                $('.container').off('touchmove',delDefaultEvent);
-            });
-        };
+        // $(".select-lists").css('display','none');
+        $allListItem.animate({"left":"-100%"},300,'linear',function(){
+            $allListItem.children('.col').remove().end().children('#credititem-list').html('');
+            $(".load").html('');
+            $allListItem.css('left',"0");
+            // 让这个页面可滑动
+            $('.container').off('touchmove',delDefaultEvent);
+        });
         $(".search-input-box").css('width','78%');
         $('.go-back-search').css('display','inline-block');
         $('.search-box-btn').css('display','inline-block');

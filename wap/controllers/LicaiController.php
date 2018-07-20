@@ -54,9 +54,9 @@ class LicaiController extends Controller
         //温都项目且非ajax请求则查询转让中的项目期限、利率、折让率,如果没有转让中项目，则查询项无条件。与产品确认，如果无转让中项目，此筛选功能要下架
         $p = OnlineProduct::tableName();
         $u = User::tableName();
-        if (Yii::$app->params['plat_code'] == 'WDJF' && !Yii::$app->request->isAjax) {
+/*        if (Yii::$app->params['plat_code'] == 'WDJF' && !Yii::$app->request->isAjax) {
             $selectSet = $this->getSelectType();
-        }
+        }*/
         //如果筛选类型值非法，则设置default为真，表示按照默认方式进行查询，目前为查询方式1
         if (!in_array($selectType, $selectTypeSet)) {
             $default = true;
