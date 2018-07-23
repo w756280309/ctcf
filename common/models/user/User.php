@@ -17,6 +17,7 @@ use common\models\promo\InviteRecord;
 use common\models\promo\PromoService;
 use common\models\thirdparty\Channel;
 use common\models\thirdparty\SocialConnect;
+use common\models\tx\CreditOrder;
 use common\models\user\Borrower as BorroweInfo;
 use common\models\user\RechargeRecord as Recharge;
 use common\models\user\DrawRecord as Draw;
@@ -981,6 +982,17 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
                 'uid' => $this->id,
             ])
             ->count('DISTINCT(online_pid)');
+    }
+
+    /**
+     * 获取用户投资成功转让标的的数量
+     */
+    public function creditOrderCount()
+    {
+        return (int) CreditOrder::find()
+            ->where(['status' => CreditOrder::STATUS_SUCCESS])
+            ->andWhere(['user_id' => $this->id])
+            ->count();
     }
 
     /**
