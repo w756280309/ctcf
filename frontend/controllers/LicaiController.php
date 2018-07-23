@@ -80,6 +80,7 @@ class LicaiController extends Controller
         $noteIds = CreditNote::getVisibleTradingIds($userId);
         $notLoanIds = [];
         if (null !== $user && $user->getJGMoney() < 50000) {
+            $noteIds = [];
             $notLoanIds = OnlineProduct::find()
                 ->select('id')
                 ->where(['!=', 'cid', 3])
