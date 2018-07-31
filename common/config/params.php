@@ -319,4 +319,6 @@ return [
     ],
     //担保方
     'guarantee' => [],
+    'microSystem.apiUrl' => env('MICRO_SYSTEM_API_URL') ?: null,
+    'microSystem.signKey' => env('MICRO_SYSTEM_SIGN_KEY') ?: null,
 ];

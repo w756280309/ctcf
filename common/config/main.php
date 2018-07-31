@@ -86,6 +86,12 @@ return [
                 ['common\models\promo\Promo180618', 'onOrderSuccess'],
                 ['common\ctcf\promo\Promo180618', 'onOrderSuccess'],
             ],
+            'fkSuccess' => [
+                ['common\handler\XiaoweiHandler', 'onFkSuccess'],
+            ],
+            'hkSuccess' => [
+                ['common\handler\XiaoweiHandler', 'onHkSuccess'],
+            ],
         ],
     ],
 ];
