@@ -259,12 +259,14 @@ class RepaymentController extends BaseController
         //更新资产回款状态（TX）
         $this->updateAssetRepaidStatus($loan);
 
-        //触发还款回调
-        $repayEvent = new RepayEvent([
-            'loan' => $loan,
-            'term' => $qishu,
-        ]);
-        Yii::$app->trigger('hkSuccess', $repayEvent);
+        if (Yii::$app->params['microSystem.callback']) {
+            //触发还款回调
+            $repayEvent = new RepayEvent([
+                'loan' => $loan,
+                'term' => $qishu,
+            ]);
+            Yii::$app->trigger('hkSuccess', $repayEvent);
+        }
 
         //非立合旺通投资用户
         if (!$isLhwxLoan) {
@@ -968,10 +970,14 @@ class RepaymentController extends BaseController
         }
 
         $drawBack = OnlinefangkuanController::actionInit($pid);
-        $loanEvent = new LoanEvent([
-            'loan' => $product,
-        ]);
-        Yii::$app->trigger('fkSuccess', $loanEvent);
+
+        if (Yii::$app->params['microSystem.callback']) {
+            //触发放款回调
+            $loanEvent = new LoanEvent([
+                'loan' => $product,
+            ]);
+            Yii::$app->trigger('fkSuccess', $loanEvent);
+        }
 
         return [
             'res' => $drawBack['res'],

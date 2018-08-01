@@ -319,6 +319,7 @@ return [
     ],
     //担保方
     'guarantee' => [],
+    'microSystem.callback' => env('MICRO_SYSTEM_CALLBACK') ?: false,
     'microSystem.apiUrl' => env('MICRO_SYSTEM_API_URL') ?: null,
     'microSystem.signKey' => env('MICRO_SYSTEM_SIGN_KEY') ?: null,
 ];
