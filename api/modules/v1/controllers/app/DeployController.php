@@ -68,13 +68,13 @@ class DeployController extends Controller
                     ];
                 }
             } else {
-                if ($versionCode < 3) {
+                if ($versionCode < 4) {
                     $content = [
                         'old_updatetype' => 2,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
-                        'updatedesc' => '优化在线客服；修复显示bug',  //新版本更新说明
-                        'versioncode' => '3',   //新版本版本号
-                        'versionname' => '2.3', //新版本版本名称
-                        'downloadurl' => 'https://dapp.hbctcf.com/ctcf_v2.3.apk',   //新版本下载地址, android 不支持 http 向 https 的跳转，协议必须严格匹配
+                        'updatedesc' => '修复已知问题，优化体验',  //新版本更新说明
+                        'versioncode' => '4',   //新版本版本号
+                        'versionname' => '2.3.1', //新版本版本名称
+                        'downloadurl' => 'https://dapp.hbctcf.com/ctcf_v2.3.1.apk',   //新版本下载地址, android 不支持 http 向 https 的跳转，协议必须严格匹配
                     ];
                 }
             }
