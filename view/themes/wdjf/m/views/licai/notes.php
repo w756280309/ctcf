@@ -51,6 +51,26 @@ $user = Yii::$app->user->getIdentity();
             -webkit-background-size: 100% 100%;
             background-size: 100% 100%;
         }
+        .credit-repay .col-xs-12 i::before{
+            content: '';
+            margin-right: 5px;
+            width: 5px;
+            height: 5px;
+            background: #f44336;
+            display: inline-block;
+            border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            vert-align: middle;
+            -webkit-transform: translateY(-0.18rem);
+            -moz-transform: translateY(-0.18rem);
+            -ms-transform: translateY(-0.18rem);
+            -o-transform: translateY(-0.18rem);
+            transform: translateY(-0.18rem);
+        }
     </style>
     <div class="search-box">
         <a style="background: url(/images/licaiSelect/search_toback_left.png) center center no-repeat;-webkit-background-size: contain;background-size: contain;" href="/licai/notes" class="go-back-search"></a>

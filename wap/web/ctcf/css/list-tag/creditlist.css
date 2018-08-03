@@ -255,3 +255,24 @@ i,em{
         font-size: 10px;
     }
 }
+
+.credit-repay .col-xs-12 i::before{
+    content: '';
+    margin-right: 5px;
+    width: 5px;
+    height: 5px;
+    background: #ff6707;
+    display: inline-block;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    vert-align: middle;
+    -webkit-transform: translateY(-0.18rem);
+    -moz-transform: translateY(-0.18rem);
+    -ms-transform: translateY(-0.18rem);
+    -o-transform: translateY(-0.18rem);
+    transform: translateY(-0.18rem);
+}
