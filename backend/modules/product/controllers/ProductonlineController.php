@@ -590,6 +590,9 @@ class ProductonlineController extends BaseController
         $loanSearch->isTest = !is_null($loanSearch->isTest) ? $loanSearch->isTest : Yii::$app->request->cookies->getValue('loanListFilterIsTest', 0);
         //记录用户查询标的状态
         Yii::$app->response->cookies->add(new Cookie(['name' => 'loanListFilterIsTest', 'value' => $loanSearch->isTest, 'expire' => strtotime('next year'), 'httpOnly' => false]));
+        if (isset($loanSearch->days) && $loanSearch->days != '' && !isset($loanSearch->status)) {
+            $loanSearch->status = OnlineProduct::STATUS_HUAN;
+        }
 
         /**
          * @var Query $query
