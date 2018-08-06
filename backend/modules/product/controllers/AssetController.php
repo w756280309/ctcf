@@ -11,6 +11,7 @@ use backend\controllers\BaseController;
 use common\models\product\Asset;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
+use common\models\user\OriginalBorrower;
 use common\models\user\User;
 use Yii;
 use yii\data\Pagination;
@@ -72,6 +73,8 @@ class AssetController extends BaseController
         $model->money = $asset->amount;
         $model->borrow_uid = $asset->borrower->id;
 
+        $ob = OriginalBorrower::find()->orderBy(['id' => SORT_ASC])->all();
+
         return $this->render('/productonline/edit', [
             'model' => $model,
             'ctmodel' => null,
@@ -82,6 +85,7 @@ class AssetController extends BaseController
             'con_name_arr' => null,
             'con_content_arr' => null,
             'issuer' => Issuer::find()->all(),
+            'ob' => $ob,
         ]);
 
     }

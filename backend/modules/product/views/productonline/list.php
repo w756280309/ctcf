@@ -163,6 +163,15 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         <div class="item_content">
                             <select id="type" class="m-wrap" name='status'>
                                 <option value="">--请选择--</option>
+                                <option value="-3" <?= Yii::$app->request->get('status') == '-3' ? 'selected' : '' ?>>
+                                    草稿
+                                </option>
+                                <option value="-2" <?= Yii::$app->request->get('status') == '-2' ? 'selected' : '' ?>>
+                                    待审核
+                                </option>
+                                <option value="-1" <?= Yii::$app->request->get('status') == '-1' ? 'selected' : '' ?>>
+                                    审核不通过
+                                </option>
                                 <option value="0" <?= Yii::$app->request->get('status') == '0' ? 'selected' : '' ?>>
                                     未上线
                                 </option>
@@ -270,8 +279,19 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                             <span class="title">底层融资方</span>
                         </div>
                         <div class="item_content">
-                            <input id="sn" type="text" class="m-wrap span4" name='originalBorrower'
-                                   value="<?= $loanSearch->originalBorrower ?>" placeholder="请输入底层融资方"/>
+                            <select class="m-wrap" name='original_borrower_id'>
+                                <option value="">--请选择--</option>
+                                <?php foreach ($ob as $key => $val): ?>
+                                    <option value="<?= $key ?>"
+                                        <?php
+                                        if ($loanSearch->original_borrower_id == $key) {
+                                            echo 'selected';
+                                        }
+                                        ?> >
+                                        <?= $val ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -368,7 +388,27 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     <td>
                         <?= !empty($val['fk_examin_time']) ? date('Y-m-d', $val['fk_examin_time']) : '--' ?>
                     </td>
-                    <td><?= $val['online_status'] ? $loanStatus[$val['status']] : '未上线' ?></td>
+                    <td>
+                        <?php
+                        if ($val['online_status']) {
+                            echo $loanStatus[$val['status']];
+                        } else {
+                            switch ($val['check_status']) {
+                                case 0:
+                                    echo '草稿';
+                                    break;
+                                case 1:
+                                    echo '待审核';
+                                    break;
+                                case 2:
+                                    echo '审核不通过';
+                                    break;
+                                default:
+                                    echo '未上线';
+                            }
+                        }
+                        ?>
+                    </td>
                     <td><?= $val['finish_date'] ? date('Y-m-d', $val['finish_date']) : '' ?></td>
                     <td>
                         <a href="/product/productonline/show?id=<?= $val['id'] ?>" class="btn mini green"><i
@@ -393,6 +433,20 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                                 | <a href="javascript:del('/product/productonline/del','<?= $val['id'] ?>')"
                                      class="btn mini red ajax_op" op="status" data-index="<?= $val['status'] ?>"
                                      index="<?= $val['id'] ?>"><i class="icon-minus-sign"></i>删除</a>
+                            <?php } ?>
+                            <?php if ($val['online_status'] != 1) { ?>
+                                <?php if ($val['check_status'] == 0) { ?>
+                                    | <a href="javascript:submitCheck('<?= $val['id'] ?>')" class="btn mini green"><i
+                                                class="icon-edit"></i> 提交审核</a>
+                                <?php } elseif ($val['check_status'] == 1) { ?>
+                                    | <a href="javascript:check('<?= $val['id'] ?>')" class="btn mini green"><i
+                                                class="icon-edit"></i> 审核</a>
+                                <?php } elseif ($val['check_status'] == 2) { ?>
+                                    | <a href="javascript:checkRemark('<?= $val['id'] ?>')" class="btn mini green"><i
+                                                class="icon-edit"></i> 审核备注</a>
+                                    | <a href="javascript:submitCheck('<?= $val['id'] ?>')" class="btn mini green"><i
+                                                class="icon-edit"></i> 提交审核</a>
+                                <?php } ?>
                             <?php } ?>
                             <?php if ($val->allowFkExamined() && !$val->flexRepay) { ?>
                                 |
@@ -592,6 +646,23 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         function formReset() {
             $.removeCookie('loanListFilterIsTest', {path: '/'});
             window.location.href = '/product/productonline/list';
+        }
+
+        function submitCheck(pid) {
+            $.get("/product/productonline/submit-check", {id: pid}, function (data) {
+                alert(data.message);
+                if (data.code === 1) {
+                    location.reload();
+                }
+            });
+        }
+
+        function check(pid) {
+            openwin('/product/productonline/check?id=' + pid, 400, 300, '审核');
+        }
+
+        function checkRemark(pid) {
+            openwin('/product/productonline/check-remark?id=' + pid, 400, 300, '审核');
         }
     </script>
 <?php $this->endBlock(); ?>

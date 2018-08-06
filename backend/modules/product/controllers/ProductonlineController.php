@@ -19,6 +19,7 @@ use common\models\promo\PromoService;
 use common\models\user\Borrower as BorrowerInfo;
 use common\models\user\CoinsRecord;
 use common\models\user\MoneyRecord;
+use common\models\user\OriginalBorrower;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\service\LoanService;
@@ -29,6 +30,7 @@ use Queue\DbQueue;
 use Yii;
 use yii\data\Pagination;
 use yii\db\Query;
+use yii\helpers\ArrayHelper;
 use yii\web\Cookie;
 use yii\data\ArrayDataProvider;
 
@@ -93,6 +95,9 @@ class ProductonlineController extends BaseController
         $loan->is_fdate = isset($data['OnlineProduct']['is_fdate']) ? $data['OnlineProduct']['is_fdate'] : 0;
         $refund_method = (int) $loan->refund_method;
         $loan->tags = trim(str_replace(',', '，', trim($loan->tags)), '，');
+        if (is_array($loan->original_borrower_id)) {
+            $loan->original_borrower_id = implode(',', $loan->original_borrower_id);
+        }
 
         //非测试标，起投金额、递增金额取整
         if (!$loan->isTest) {
@@ -115,10 +120,10 @@ class ProductonlineController extends BaseController
         if (0 === $loan->issuer) {   //当发行方没有选择时,发行方项目编号为空
             $loan->issuerSn = null;
         }
-        //当发行方选择不为立合时，底层融资方为空
-        if ("深圳立合旺通商业保理有限公司" !== $loan->issuerInfo->name) {
-            $loan->originalBorrower = null;
-        }
+//        //当发行方选择不为立合时，底层融资方为空
+//        if ("深圳立合旺通商业保理有限公司" !== $loan->issuerInfo->name) {
+//            $loan->originalBorrower = null;
+//        }
 
         if (!$loan->isFlexRate) {   //当是否启用浮动利率标志位为false时,清空浮动利率相关数据
             $loan->rateSteps = null;
@@ -218,6 +223,10 @@ class ProductonlineController extends BaseController
                     $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                     $model->allowedUids = $model->isPrivate ? LoanService::convertUid($model->allowedUids) : null;
                     $model->balance_limit = floatval($data['OnlineProduct']['balance_limit']);
+                    //当风控审核开关关闭时，创建的标的直接是审核通过的
+                    if (!Yii::$app->params['feature_product_risk_audit']) {
+                        $model->check_status = 3;
+                    }
                     $model->save(false);
 
                     $log = AdminLog::initNew($model);
@@ -261,6 +270,7 @@ class ProductonlineController extends BaseController
             'con_name_arr' => $con_name_arr,
             'con_content_arr' => $con_content_arr,
             'issuer' => $this->issuerInfo(),
+            'ob' => $this->obInfo(),
         ]);
     }
 
@@ -308,6 +318,7 @@ class ProductonlineController extends BaseController
             'con_name_arr' => $con_name_arr,
             'con_content_arr' => $con_content_arr,
             'issuer' => $this->issuerInfo(),
+            'ob' => $this->obInfo(),
         ]);
     }
 
@@ -332,6 +343,12 @@ class ProductonlineController extends BaseController
         $con_content_arr = Yii::$app->request->post('content');
         $data = Yii::$app->request->post();
 
+        $model->original_borrower_id = explode(',', $model->original_borrower_id);
+
+        if (!empty($data) && !is_array($data['OnlineProduct']['original_borrower_id'])) {
+            $data['OnlineProduct']['original_borrower_id'] = $model->original_borrower_id;
+        }
+
         if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
             try {
                 $this->validateContract([
@@ -349,6 +366,9 @@ class ProductonlineController extends BaseController
                     $model->yield_rate = bcdiv($model->yield_rate, 100, 14);
                     $model->allowedUids = $model->isPrivate ? LoanService::convertUid($model->allowedUids) : null;
                     $model->balance_limit = floatval($data['OnlineProduct']['balance_limit']);
+                    if (Yii::$app->params['feature_product_risk_audit'] && $model->online_status === 0 && $model->check_status === 3) {
+                        $model->check_status = 0;
+                    }
                     $model->save(false);
 
                     $log = AdminLog::initNew($model);
@@ -386,6 +406,7 @@ class ProductonlineController extends BaseController
             'con_name_arr' => $con_name_arr,
             'con_content_arr' => $con_content_arr,
             'issuer' => $this->issuerInfo(),
+            'ob' => $this->obInfo(),
         ]);
     }
     //高级编辑页面（有权限的操作人员在标的的整个过程中均可编辑保存）
@@ -459,6 +480,17 @@ class ProductonlineController extends BaseController
                 ->from(['online_product loan'])
                 ->innerJoin('epayuser eu', 'loan.borrow_uid=eu.appUserId')
                 ->where('loan.id in ('.$ids.')')->all();
+
+        $wrongStatusLoan = null;
+        foreach ($loans as $loan) {
+            if ($loan['online_status'] != 0 || $loan['check_status'] != 3) {
+                $wrongStatusLoan = $loan;
+                break;
+            }
+        }
+        if ($wrongStatusLoan !== null) {
+            return ['result' => 0, 'message' => '只有审核通过后的未上线项目才能上线'];
+        }
 
         $error_loans = '';
         $ump = Yii::$container->get('ump');
@@ -619,7 +651,8 @@ class ProductonlineController extends BaseController
             'pages' => $pages,
             'loanStatus' => $loanStatus,
             'loanSearch' => $loanSearch,
-            'userAuthSeniorEdit' => $userAuthSeniorEdit
+            'userAuthSeniorEdit' => $userAuthSeniorEdit,
+            'ob' => ArrayHelper::map($this->obInfo(),'id','name'),
         ]);
     }
 
@@ -1339,5 +1372,115 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
             ->groupBy('online_pid')
             ->asArray()
             ->all();
+    }
+
+    /**
+     * 获取全部底层融资方信息.
+     */
+    private function obInfo()
+    {
+        return OriginalBorrower::find()->orderBy(['id' => SORT_ASC])->all();
+    }
+
+    /**
+     * 标的提交审核功能.
+     */
+    public function actionSubmitCheck()
+    {
+        $dealId = Yii::$app->request->get('id');
+
+        if (empty($dealId)) {
+            throw $this->ex404();  //参数无效时,返回404错误
+        }
+
+        $deal = OnlineProduct::findOne($dealId);
+        if (!$deal) {
+            throw $this->ex404();
+        }
+
+        $deal->check_status = 1;
+
+        //记录标的日志
+        try {
+            $log = AdminLog::initNew($deal);
+            $log->save();
+        } catch (\Exception $e) {
+            Yii::info('标的日志记录失败：' . $e->getMessage());
+            return ['code' => 0, 'message' => '标的日志记录失败'];
+        }
+        if (!$deal->save(false)) {
+            return ['code' => 0, 'message' => '操作失败'];
+        }
+
+        return ['code' => 1, 'message' => '操作成功'];
+    }
+
+    /**
+     * 审核弹窗
+     */
+    public function actionCheck()
+    {
+        $this->layout = false;
+        $id = Yii::$app->request->get('id');
+        if (empty($id)) {
+            throw $this->ex404();  //参数无效时,返回404错误
+        }
+
+        $deal = OnlineProduct::findOne($id);
+
+        if ($deal === null) {
+            throw $this->ex404();  //参数无效时,返回404错误
+        }
+
+        return $this->render('check', ['deal' => $deal]);
+    }
+
+    /**
+     * 审核
+     */
+    public function actionDocheck()
+    {
+        $data = Yii::$app->request->post();
+        $id = $data['id'];
+        $check_status = $data['check_status'];
+        $check_remark = $data['check_remark'];
+        if (empty($id)) {
+            return ['code' => 1, 'message' => '参数异常'];
+        }
+
+        // 标的是否存在
+        $product = OnlineProduct::findOne($id);
+        if (null === $product) {
+            return ['code' => 1, '找不到对应的标的'];
+        }
+
+        $product->check_status = $check_status;
+        $product->check_remark = $check_remark;
+
+        if ($product->save(false)) {
+            return ['code' => 0, 'message' => '审核成功'];
+        } else {
+            return ['code' => 1, 'message' => '审核失败'];
+        }
+    }
+
+    /**
+     * 审核备注
+     */
+    public function actionCheckRemark()
+    {
+        $this->layout = false;
+        $id = Yii::$app->request->get('id');
+        if (empty($id)) {
+            throw $this->ex404();  //参数无效时,返回404错误
+        }
+
+        $deal = OnlineProduct::findOne($id);
+
+        if ($deal === null) {
+            throw $this->ex404();  //参数无效时,返回404错误
+        }
+
+        return $this->render('check', ['deal' => $deal]);
     }
 }
