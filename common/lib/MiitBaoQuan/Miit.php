@@ -141,9 +141,9 @@ class Miit
     /**
      * @TODO 查看合同的接口
      */
-    public function viewHetong($itemId)
+    public function viewHetong($itemId, $type = EbaoQuan::TYPE_M_LOAN, $itemType = EbaoQuan::ITEM_TYPE_LOAN_ORDER)
     {
-        $EbaoQuan = EbaoQuan::findOne(['itemId' => $itemId, 'success' => 1, 'type' => EbaoQuan::TYPE_M_LOAN]);
+        $EbaoQuan = EbaoQuan::findOne(['itemId' => $itemId, 'success' => 1, 'type' => $type, 'itemType' => $itemType]);
         if (is_null($EbaoQuan)) {
             return false;
             throw new \Exception('合同未上传');

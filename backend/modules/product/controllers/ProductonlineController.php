@@ -4,6 +4,7 @@ namespace backend\modules\product\controllers;
 
 use backend\controllers\BaseController;
 use backend\modules\product\models\LoanSearch;
+use common\jobs\MiitBaoQuanJob;
 use common\lib\bchelp\BcRound;
 use common\models\adminuser\AdminLog;
 use common\models\booking\BookingLog;
@@ -16,6 +17,7 @@ use common\models\product\Asset;
 use common\models\product\Issuer;
 use common\models\product\OnlineProduct;
 use common\models\promo\PromoService;
+use common\models\tx\CreditOrder;
 use common\models\user\Borrower as BorrowerInfo;
 use common\models\user\CoinsRecord;
 use common\models\user\MoneyRecord;
@@ -1286,23 +1288,14 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
             'page_size' => $pageSize,
         ]);
 
+        $creditOrders = $users = [];
         if (null !== $response) {
             $notes = $response['data'];
             $totalCount = $response['totalCount'];
             $pageSize = $response['pageSize'];
 
-            foreach ($notes as $key => $note) {
-                $userinfo = User::findOne($note['user_id']);
-                $notes[$key]['user'] = $userinfo;
-            }
-        }
-        foreach ($notes as $key => $creditOrder) {
-            $notes[$key]['baoquan'] = EbaoQuan::find()->where([
-                'uid' => $creditOrder['user_id'],
-                'itemType' => EbaoQuan::ITEM_TYPE_CREDIT_ORDER,
-                'itemId' => $creditOrder['id'],
-                'success' => 1,
-            ])->all();
+            $userIds = ArrayHelper::getColumn($notes, 'user_id');
+            $users= User::find()->where(['in', 'id', $userIds])->indexBy('id')->all();
         }
 
         $dataProvider = new ArrayDataProvider([
@@ -1313,7 +1306,11 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
         ]);
 
         $pages = new Pagination(['totalCount' => $totalCount, 'pageSize' => $pageSize]);
-        return $this->render('buytransfer', ['dataProvider' => $dataProvider, 'pages' => $pages]);
+        return $this->render('buytransfer', [
+            'dataProvider' => $dataProvider,
+            'users' => $users,
+            'pages' => $pages
+        ]);
     }
 
     /**
@@ -1482,5 +1479,30 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
         }
 
         return $this->render('check', ['deal' => $deal]);
+    }
+
+    //国家电子合同保全(重新保全国家电子合同)
+    public function actionMiitBaoquan($id, $type)
+    {
+        $order = CreditOrder::findOne($id);
+        //订单不存在
+        if (is_null($order)) {
+            throw $this->ex404();
+        }
+        $baoType = $type == 3 ? $type : 2;
+        $url = $order->getMiitViewUrl($baoType);
+        //成功保全的直接返回查看链接
+        if (!empty($url)) {
+            return ['code' => 1, 'url' => $url];
+        }
+        //保全失败的，重新保全
+        if (Yii::$app->params['enable_miitbaoquan']) {
+            Yii::$app->queue->push(new MiitBaoQuanJob([
+                'order' => $order,
+                'item_type' => 'credit_order',
+            ]));
+        }
+
+        return ['code' => 0, 'message' => '合同生成中，请稍后'];
     }
 }

@@ -13,6 +13,7 @@ use common\lib\MiitBaoQuan\Miit;
 use common\lib\pdf\CreatePDF;
 use common\models\order\OnlineOrder;
 use common\models\product\OnlineProduct;
+use common\models\tx\UserAsset;
 use common\models\user\User;
 use common\utils\SecurityUtils;
 use yii\queue\Job;
@@ -28,30 +29,23 @@ use org_mapu_themis_rop_model\ContractFilePreservationCreateRequest as ContractF
 use org_mapu_themis_rop_model\UserIdentiferType as UserIdentiferType;
 use org_mapu_themis_rop_model\PreservationType as PreservationType;
 use common\models\order\EbaoQuan;
-
+use common\controllers\ContractTrait;
 
 class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Job接口
 {
+    use ContractTrait;
     public $item_type;  //订单来源(3种,对应EbaoQuan的三种)
     public $order;
-
-    public $contracts;
-    public $user;
-    public $asset;
-
-    public $content;
-    public $amount;
-    public $loan;
-    public $noteId;
-    public $seller;
-    public $closeTime;
+    public $creditNote;
 
     public function execute($queue)
     {
         if ($this->item_type == EbaoQuan::ITEM_TYPE_LOAN_ORDER) {
             $this->baoquan_loan_order();
-        } else if ($this->item_type == EbaoQuan::ITEM_TYPE_CREDIT_ORDER) {
+        } elseif ($this->item_type == EbaoQuan::ITEM_TYPE_CREDIT_ORDER) {
             $this->baoquan_credit_order();
+        } elseif ($this->item_type == EbaoQuan::ITEM_TYPE_CREDIT_NOTE) {
+            $this->createCreditSellerBq();
         }
     }
 
@@ -98,9 +92,21 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
      */
     public function baoquan_credit_order()
     {
-        $contracts = $this->contracts;
         $order = $this->order;
-        if (!isset($contracts['loanContract']) || !isset($contracts['creditContract']) || !isset($contracts['loanAmount']) || !isset($contracts['loanId'])) {
+        $userAsset = UserAsset::find()
+            ->where(['credit_order_id' => $order->id])
+            ->asArray()
+            ->one();
+        if (null === $userAsset) {
+            throw new \Exception('未发现该用户转让资产记录');
+        }
+        $contracts = $this->getUserContract($userAsset);
+        $user = User::findOne($userAsset['user_id']);
+        if (!isset($contracts['loanContract'])
+            || !isset($contracts['creditContract'])
+            || !isset($contracts['loanAmount'])
+            || !isset($contracts['loanId'])
+        ) {
             throw new \Exception('合同内容不全');
         }
         $loan = OnlineProduct::findOne($contracts['loanId']);
@@ -110,23 +116,32 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
         $loanContract = $contracts['loanContract'];
         //合并标的合同
         $finalLoanContent = implode(array_column($loanContract, 'content'), ' <br/><br/><hr/><br/><br/>');
-        $loanAmount = $contracts['loanAmount'];
         //保全标的合同
         try {
             $file = self::createPdf($finalLoanContent, time().rand(10000, 99999));
             if (file_exists($file)) {
+                $loanBaoId = '001100' . $order->id;
                 //生成保全
-                $res = Miit::hetongUpload($file, $this->user, $order->sn, $loan->title, $order->order_time, EbaoQuan::TYPE_M_CREDIT, EbaoQuan::ITEM_TYPE_CREDIT_ORDER);
+                $res = (new Miit())->hetongUpload(
+                    $file,
+                    $user,
+                    $loanBaoId,
+                    $loan->title,
+                    strtotime($order->updateTime),
+                    EbaoQuan::TYPE_M_LOAN,
+                    EbaoQuan::ITEM_TYPE_CREDIT_ORDER,
+                    $order->id
+                );
                 unlink($file);
             }
         } catch (\Exception $ex) {
-            \Yii::trace('购买债权订单成功之后保全标的合同，标的ID:'.$contracts['loanId'].';保全失败,资产ID:'.$this->asset['id'].';失败信息'.$ex->getMessage(), 'bao_quan');
+            \Yii::trace('购买债权订单成功之后保全标的合同，标的ID:'.$contracts['loanId'].';保全失败,资产ID:'.$userAsset['id'].';失败信息'.$ex->getMessage(), 'bao_quan');
             throw $ex;
         }
         //保全债权合同
         $creditContract = $contracts['creditContract'];
         foreach ($creditContract as $contract) {
-            if (!isset($contract['type']) || !isset($contract['amount'])) {
+            if (!isset($contract['type'])) {
                 throw new \Exception('合同信息不完善');
             }
             if ($contract['type'] === 'credit_order') {
@@ -135,13 +150,22 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
                 try {
                     $file = self::createPdf($contract['content'], time().rand(10000, 99999));
                     if (file_exists($file)) {
+                        $creditBaoId = '001101'.$order->id;
                         //生成保全
-                        $responseJson = self::contractFileCreate($file, $user, $contract['amount'], $loan->title);
-                        self::addBaoQuan($responseJson, EbaoQuan::TYPE_E_CREDIT, $asset['credit_order_id'], EbaoQuan::ITEM_TYPE_CREDIT_ORDER, $loan->title, $user->id);
+                        $res = (new Miit())->hetongUpload(
+                            $file,
+                            $user,
+                            $creditBaoId,
+                            $loan->title,
+                            strtotime($order->updateTime),
+                            EbaoQuan::TYPE_M_CREDIT,
+                            EbaoQuan::ITEM_TYPE_CREDIT_ORDER,
+                            $order->id
+                        );
                         unlink($file);
                     }
                 } catch (\Exception $ex) {
-                    \Yii::trace('购买债权订单成功之后保全转让合同，标的ID:'.$contracts['loanId'].';保全失败,资产ID:'.$asset['id'].';失败信息'.$ex->getMessage(), 'bao_quan');
+                    \Yii::trace('购买债权订单成功之后保全转让合同，标的ID:'.$contracts['loanId'].';保全失败,资产ID:'.$userAsset['id'].';失败信息'.$ex->getMessage(), 'bao_quan');
                     throw $ex;
                 }
             }
@@ -149,18 +173,42 @@ class MiitBaoQuanJob extends Object implements Job  //需要继承Object类和Jo
     }
 
     //债权转让保全（卖方合同）
-    public function createCreditSellerBq() {
+    public function createCreditSellerBq()
+    {
+        $note = $this->creditNote;
+        $userAsset = UserAsset::find()
+            ->where(['note_id' => $note->id])
+            ->asArray()
+            ->one();
+        $seller = User::findOne($note['user_id']);
+        $loan = OnlineProduct::findOne($userAsset['loan_id']);
+        $txClient = \Yii::$container->get('txClient');
+        $creditContract = [];
+        if ($userAsset['note_id'] && $userAsset['credit_order_id']) {
+            //购买该转让生成的转让合同
+            $creditTemplate = $this->loadCreditContractByAsset($userAsset, $txClient, $loan);
+            $creditContract[] = $creditTemplate['content'];
+        }
+        $content = implode(' <br><hr><br> ', $creditContract);
         try {
-            $file = self::createPdf($this->content, time().rand(10000, 99999));
+            $file = self::createPdf($content, time().rand(10000, 99999));
             if (file_exists($file)) {
-                //保全id(编号ecode)由  字母'nt' + credit_note.id组成
-                $baoId = 'nt' . $this->noteId;
+                $baoId = '001102' . $note->id;
                 //生成保全
-                $res = Miit::hetongUpload($file, $this->seller, $baoId, $this->loan->title, $this->closeTime, EbaoQuan::TYPE_M_CREDIT, EbaoQuan::ITEM_TYPE_CREDIT_NOTE);
+                $res = (new Miit())->hetongUpload(
+                    $file,
+                    $seller,
+                    $baoId,
+                    $loan->title,
+                    $note->closeTime,
+                    EbaoQuan::TYPE_M_CREDIT,
+                    EbaoQuan::ITEM_TYPE_CREDIT_NOTE,
+                    $note->id
+                );
                 unlink($file);
             }
         } catch (\Exception $ex) {
-            \Yii::trace('转让结束之后生成保全合同，标的ID:'.$this->loan->id.';保全失败,债权ID:'.$this->noteId.';失败信息'.$ex->getMessage(), 'bao_quan');
+            \Yii::trace('转让结束之后生成保全合同，标的ID:'.$loan->id.';保全失败,债权ID:'.$note->id.';失败信息'.$ex->getMessage(), 'bao_quan');
             throw $ex;
         }
     }
