@@ -2,6 +2,8 @@
 
 namespace console\controllers;
 
+use common\lib\user\UserStats;
+use common\models\order\OnlineOrder;
 use common\models\order\OnlineRepaymentPlan;
 use common\models\payment\Repayment;
 use common\models\product\OnlineProduct;
@@ -107,5 +109,48 @@ class RepaymentController extends Controller
             .date('ymdHis', $time)
             .$usec
             .mt_rand(1000, 9999);
+    }
+
+    /**按照一定时间导出深圳居莫愁物业管理有限公司、北京居莫愁物业管理有限公司、上海浦壹电子科技有限公司、 深圳立合旺通商业保理有限公司的还款数据
+     * @param $startDate 开始时间
+     * @param $endDate 结束时间
+     */
+    public function actionGetRepaymentRecord($startDate, $endDate)
+    {
+        $sql = "select op.id from online_fangkuan f inner join online_product op on f.online_product_id=op.id inner join user u on op.borrow_uid=u.id where u.type=2 AND u.id in (64655,73030,58536,55868,73026,15) and op.status=5 AND date(from_unixtime(f.created_at)) BETWEEN :startDate and :endDate";
+        $productIds = \Yii::$app->db->createCommand($sql, [
+            'startDate' => $startDate,
+            'endDate' => $endDate
+        ])->queryAll();
+        $record = [];
+        $k = 0;
+        foreach ($productIds as $productId) {
+            $orders = OnlineOrder::find()
+                ->where(['status' => OnlineOrder::STATUS_SUCCESS])
+                ->andWhere(['online_pid' => $productId])
+                ->all();
+            foreach ($orders as $order) {
+                $data = OnlineRepaymentPlan::calcBenxi($order);
+                foreach ($data as $key => $value) {
+                    if ($value['date'] >= '2018-05-01' && $value['date'] <= '2018-08-07') {
+                        $k++;
+                        $record[$k]['org_name'] = $order->loan->borrower->org_name;
+                        $record[$k]['type'] = '还款';
+                        $record[$k]['sn'] = '';
+                        $record[$k]['date'] = $value['date'];
+                        $record[$k]['in_money'] = 0;
+                        $record[$k]['out_money'] = bcadd($value['principal'], $value['interest'], 2);
+                        $record[$k]['title'] = $order->loan->title;
+                    }
+                }
+            }
+        }
+        $file = \Yii::getAlias('@app/runtime/Retention_'.$startDate.'_'.$endDate .'_'. date('YmdHis').'.xlsx');
+        $exportData[] = ['融资方', '交易类型', '流水号', '交易日期', '入账金额', '出帐金额', '资金流向'];
+        $exportData = array_merge($exportData, $record);
+        $objPHPExcel = UserStats::initPhpExcelObject($exportData);
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
     }
 }
