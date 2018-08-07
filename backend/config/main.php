@@ -31,14 +31,14 @@ return [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning', 'info'], //,'trace'
+                    'levels' => ['error', 'warning'],
                     'logVars' => [], //_SERVER  _GET 等
                     //'logFile' => __DIR__.'/../../data/log/'.date('ymdhi').'.log',
                     //'messages'=>['test', 4, 'application', time()]
                 ],
                 [
                     'class' => 'common\log\JsonTarget',
-                    'levels' => ['info', 'error', 'warning'],
+                    'levels' => ['error', 'warning', 'info'],
                     'logVars' => [],
                     'enableRotation' => false,
                     'categories' => ['xiaowei'],
