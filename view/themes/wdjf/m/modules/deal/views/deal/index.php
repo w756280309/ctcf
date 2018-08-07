@@ -28,7 +28,7 @@ $pc_cat = Yii::$app->params['pc_cat'];
 
 $user = Yii::$app->user->getIdentity();
 //是否展示转让
-$showTransfer = !empty($user) && $user->orderCount();
+$showTransfer = !empty($user) && ($user->orderCount() > 0 || $user->creditOrderCount() > 0);
 ?>
 <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
     <div class="row list-title">

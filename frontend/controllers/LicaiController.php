@@ -55,7 +55,7 @@ class LicaiController extends Controller
         //未登录或者未投资的用户不可见
         if (
             Yii::$app->params['plat_code'] == 'WDJF'
-            && (empty($user) || $user->orderCount() <= 0)
+            && (empty($user) || ($user->orderCount() <= 0 && $user->creditOrderCount() <= 0))
         ) {
             throw $this->ex404();
         }
@@ -79,7 +79,8 @@ class LicaiController extends Controller
         $userId = null === $user ? null : $user->id;
         $noteIds = CreditNote::getVisibleTradingIds($userId);
         $notLoanIds = [];
-        if (null !== $user && $user->getTotalAssets() < 50000) {
+        if (null !== $user && $user->getJGMoney() < 50000) {
+            $noteIds = [];
             $notLoanIds = OnlineProduct::find()
                 ->select('id')
                 ->where(['!=', 'cid', 3])

@@ -39,12 +39,13 @@ class LoanSearch extends Model
     public $days;
     public $cid;
     public $originalBorrower;
+    public $original_borrower_id;
     public $hasInnerJoinOrder = false;
 
     public function rules()
     {
         return [
-            [['status', 'days', 'cid'], 'filter', 'filter' => function ($value) {
+            [['status', 'days', 'cid', 'original_borrower_id'], 'filter', 'filter' => function ($value) {
                 if (!is_null($value) && $value !== '') {
                     return intval($value);
                 } else {
@@ -84,13 +85,21 @@ class LoanSearch extends Model
         $query->andFilterWhere(['like', "$loanTable.title", $this->title]);
 
         //底层融资方
-        $query->andFilterWhere(['like', "$loanTable.originalBorrower", $this->originalBorrower]);
+        if ($this->original_borrower_id) {
+            $query->andWhere("find_in_set($this->original_borrower_id,$loanTable.original_borrower_id)");
+        }
         //项目副标题
         $query->andFilterWhere(['like', "$loanTable.internalTitle", $this->internalTitle]);
 
         //状态选择
-        if (0 === $this->status) {
-            $query->andWhere(["$loanTable.online_status" => $this->status]);
+        if (-3 === $this->status) {
+            $query->andWhere(["$loanTable.online_status" => 0, "$loanTable.check_status" => 0]);
+        } elseif (-2 === $this->status) {
+            $query->andWhere(["$loanTable.online_status" => 0, "$loanTable.check_status" => 1]);
+        } elseif (-1 === $this->status) {
+            $query->andWhere(["$loanTable.online_status" => 0, "$loanTable.check_status" => 2]);
+        } elseif (0 === $this->status) {
+            $query->andWhere(["$loanTable.online_status" => 0, "$loanTable.check_status" => 3]);
         } elseif ($this->status) {
             $query->andWhere(["$loanTable.online_status" => OnlineProduct::STATUS_ONLINE, "$loanTable.status" => $this->status]);
         }

@@ -104,11 +104,11 @@ class CreditNoteController extends Controller
      * 折让率默认为0
      * @param int $asset_id 资产ID
      * @param float $amount 新建转让的金额，已元为单位，最多两位小数;默认为0，表示全部转让
+     * @param float $discountRate 折让率 单位%，3%直接存3，范围0-3，两位小数
      */
-    public function actionAddNote($asset_id, $amount = 0)
+    public function actionAddNote($asset_id, $amount = 0, $discountRate = 0)
     {
         $asset_id = intval($asset_id);
-        $discountRate = 0;
         $time = time();
         $day = date('Y-m-d', $time);
         $asset = UserAsset::findOne($asset_id);

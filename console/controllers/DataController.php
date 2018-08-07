@@ -21,6 +21,7 @@ use common\models\promo\PokerUser;
 use common\models\stats\Perf;
 use common\models\transfer\Transfer;
 use common\models\user\MoneyRecord;
+use common\models\user\OriginalBorrower;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\service\AccountService;
@@ -68,14 +69,25 @@ class DataController extends Controller
         $issuer = $issuerData['issuer'];
         $repaymentPlan = $issuerData['plan'];
         $refundTime = $issuerData['refundTime'];
+        $ob = OriginalBorrower::find()->asArray()->all();
+        $ob = ArrayHelper::map($ob,'id','name');
         foreach ($records as $key => $loan) {
+            $obIds = [];
+            if (!empty($loan->original_borrower_id)) {
+                $obIds = explode(',', $loan->original_borrower_id);
+            }
+            $originalBorrower = '';
+            foreach ($obIds as $obId) {
+                $originalBorrower .= $ob[$obId].";";
+            }
+            $originalBorrower = rtrim($originalBorrower, ';');
             if (isset($repaymentPlan[$key])) {
                 foreach ($repaymentPlan[$key] as $repayment) {
                     $exportData[] = [
                         $repayment['qishu'],
                         $loan->borrower->org_name,
                         $issuer->name,
-                        $loan->originalBorrower,
+                        $originalBorrower,
                         $loan->title,
                         $loan->issuerSn,
                         \Yii::$app->params['deal_status'][$loan->status],
@@ -97,7 +109,7 @@ class DataController extends Controller
                     '---',
                     $loan->borrower->org_name,
                     $issuer->name,
-                    $loan->originalBorrower,
+                    $originalBorrower,
                     $loan->title,
                     $loan->issuerSn,
                     \Yii::$app->params['deal_status'][$loan->status],

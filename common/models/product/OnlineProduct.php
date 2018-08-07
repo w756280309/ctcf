@@ -162,7 +162,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                 'start_money', 'borrow_uid', 'fee', 'status', 'description', 'refund_method', 'account_name', 'account',
                 'bank', 'dizeng_money', 'start_date', 'end_date', 'full_time', 'is_xs', 'yuqi_faxi', 'order_limit',
                 'creator_id', 'del_status', 'status', 'isPrivate', 'allowedUids', 'finish_date', 'channel', 'jixi_time',
-                'sort', 'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'paymentDay', 'isTest',
+                'sort', 'jiaxi', 'kuanxianqi', 'isFlexRate', 'rateSteps', 'issuer', 'issuerSn', 'original_borrower_id', 'paymentDay', 'isTest',
                 'filingAmount', 'allowUseCoupon', 'allowRateCoupon',  'tags', 'isLicai', 'pointsMultiple',
                 'allowTransfer', 'isCustomRepayment', 'internalTitle', 'balance_limit', 'originalBorrower', 'pkg_sn',
                 'isRedeemable', 'redemptionPeriods', 'redemptionPaymentDates', 'isDailyAccrual', 'flexRepay',
@@ -230,7 +230,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
     public function rules()
     {
         return [
-            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'refund_method'], 'required'],
+            [['title', 'borrow_uid', 'yield_rate', 'money', 'start_money', 'dizeng_money', 'start_date', 'end_date', 'expires', 'cid', 'description', 'refund_method', 'original_borrower_id'], 'required'],
             ['finish_date', 'required', 'when' => function ($model) {
                 return $model->is_fdate == 1 && !empty($model->finish_date);
             },  'whenClient' => "function (attribute, value) {
@@ -294,6 +294,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
                 return $('#onlineproduct-isredeemable').parent().hasClass('checked');
             }"],
             ['redemptionPeriods', 'checkRedemptionPeriods'],
+            ['original_borrower_id', 'checkObnumber'],
         ];
     }
 
@@ -580,6 +581,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
             'isTest' => '是测试标',
             'issuer' => '发行方',
             'issuerSn' => '发行方项目编号',
+            'original_borrower_id' => '底层融资方ID',
             'allowUseCoupon' => '是否可以使用代金券',
             'allowRateCoupon' => '是否可以使用加息券',
             'isLicai' => '是否为理财计划标识',
@@ -1586,5 +1588,24 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
         }
 
         return null;
+    }
+
+    /**
+     * 底层融资方不能超过10个.
+     *
+     * @param type $attribute
+     * @param type $params
+     *
+     * @return bool
+     */
+    public function checkObnumber($attribute, $params)
+    {
+        $ob = explode(',', $this->$attribute);
+        $number = count($ob);
+        if ($number >= 1 && $number <= 10) {
+            return true;
+        } else {
+            $this->addError($attribute, '底层融资方不能超过10个');
+        }
     }
 }

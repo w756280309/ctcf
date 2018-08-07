@@ -48,25 +48,6 @@ trait ContractTrait
         if ($asset['note_id'] && $asset['credit_order_id']) {
             //购买该转让生成的转让合同
             $creditTemplate = $this->loadCreditContractByAsset($asset, $txClient, $loan);
-
-            //产看购买债权保全
-            $bq = EbaoQuan::find()->where([
-                'itemType' => EbaoQuan::ITEM_TYPE_CREDIT_ORDER,
-                'type' => EbaoQuan::TYPE_E_CREDIT,
-                'success' => 1,
-                'uid' => $user->id,
-                'itemId' => $asset['credit_order_id'],
-            ])->one();
-            if (null !== $bq) {
-                try {
-                    $bqCreditOrder['downUrl'] = Client::contractFileDownload($bq);
-                    $bqCreditOrder['linkUrl'] = Client::certificateLinkGet($bq);
-                } catch (\Exception $ex) {
-
-                }
-
-            }
-
             $creditContract[] = ['title' => '产品转让协议'. str_pad($key, 2, '0', STR_PAD_LEFT), 'content' => $creditTemplate['content'], 'amount' => $creditTemplate['amount'], 'type' => 'credit_order', 'bqCredit' => $bqCreditOrder];
             $key++;
         }
@@ -159,33 +140,6 @@ trait ContractTrait
         $loanAmount = $amount;
         //产看标的合同的保全
         $bqLoan = [];
-        if ($asset['note_id'] && $asset['credit_order_id']) {
-            $bq = EbaoQuan::find()->where([
-                'itemType' => EbaoQuan::ITEM_TYPE_CREDIT_ORDER,
-                'type' => EbaoQuan::TYPE_E_LOAN,
-                'success' => 1,
-                'uid' => $user->id,
-                'itemId' => $asset['credit_order_id'],
-            ])->one();
-        } else {
-            $bq = EbaoQuan::find()->where([
-                'itemType' => EbaoQuan::ITEM_TYPE_LOAN_ORDER,
-                'type' => EbaoQuan::TYPE_E_LOAN,
-                'success' => 1,
-                'uid' => $user->id,
-                'itemId' => $loanOrder->id,
-            ])->one();
-        }
-        if (null !== $bq) {
-            try {
-                $bqLoan['downUrl'] = Client::contractFileDownload($bq);
-                $bqLoan['linkUrl'] = Client::certificateLinkGet($bq);
-            } catch (\Exception $ex) {
-
-            }
-        } else {
-            $bqLoan = [];
-        }
         return ['loanContract' => $loanContract, 'loanAmount' => $loanAmount, 'bqLoan' => $bqLoan];
     }
 
@@ -251,7 +205,6 @@ trait ContractTrait
     {
         $orderAmount = 0;
         if ($asset['note_id'] && $asset['credit_order_id']) {
-            $queue = BaoQuanQueue::find()->where(['itemType' => BaoQuanQueue::TYPE_CREDIT_ORDER, 'itemId' => $asset['credit_order_id']])->one();
             $creditOrder = $txClient->get('credit-order/detail', ['id' => $asset['credit_order_id']]);
             $creditNote = $txClient->get('credit-note/detail', ['id' => $asset['note_id']]);
             $newPlans = $txClient->get('order/repayment', ['id' => $asset['order_id'], 'amount' => $creditOrder['principal']]);
@@ -270,9 +223,7 @@ trait ContractTrait
             }
             $user = User::findOne($prevAsset['user_id']);
             $buyer = User::findOne($creditOrder['user_id']);
-            if (
-                !empty($queue)
-                && !empty($creditOrder)
+            if (!empty($creditOrder)
                 && !empty($creditNote)
                 && !empty($newPlans)
                 && count($newPlans) > 0
@@ -300,33 +251,34 @@ trait ContractTrait
                         $remainingInterest = bcadd($remainingInterest, $plan['interest'], 2);
                     }
                 }
-
-                $creditTemplate = $this->renderFile('@common/views/credit_contract_template_'.$_ENV['BW_APP'].'.php', [
-                    'contractNum' => $queue->getNum(),
-                    'sellerName' => $user->real_name,
-                    'sellerIdCard' => $user->idcard,
-                    'buyerName' => $buyer->real_name,
-                    'buyerIdCard' => $buyer->idcard,
-                    'loanOrderCreateDate' => date('Y-m-d', $prevOrderTime),
-                    'loanTitle' => $loan->title,
-                    'loanOrderPrincipal' => $prevOrderAmount,
-                    'creditOrderPrincipal' => bcdiv($creditOrder['principal'], 100, 2),
-                    'loanIssuer' => $loan->issuerInfo ? $loan->issuerInfo->name : null,
-                    'exceptRaisedAmount' => $loan->money,
-                    'incrAmount' => $loan->start_money,
-                    'interestDate' => date('Y-m-d', $loan->jixi_time),
-                    'finishDate' => date('Y-m-d', $loan->finish_date),
-                    'yieldRate' => $loanRate,
-                    'refundMethod' =>$refund_method,
-                    'sellerInterest' => bcadd($payedInterest, bcdiv($creditOrder['interest'], 100, 2), 2),
-                    'buyerInterest' => bcsub($remainingInterest, bcdiv($creditOrder['interest'], 100, 2), 2),
-                    'discountRate' => $creditNote['discountRate'],
-                    'refundedInterest' => $payedInterest,
-                    'creditOrderPayAmount' => bcdiv($creditOrder['amount'], 100, 2),
-                    'feeRate' => 3,
-                    'feeAmount' => bcdiv($creditOrder['fee'], 100, 2),
-                ]);
-                $orderAmount = bcdiv($creditOrder['principal'], 100, 2);
+                $platCode = strtolower(\Yii::$app->params['plat_code']);
+                $platCode .= $platCode == 'wdjf' ? '' : '_new';
+                    $creditTemplate = Yii::$app->getView()->renderFile('@common/views/credit_contract_template_'.$platCode.'.php', [
+                    'contractNum' => str_pad($asset['credit_order_id'], 10, 0, STR_PAD_LEFT),
+                        'sellerName' => $user->real_name,
+                        'sellerIdCard' => $user->idcard,
+                        'buyerName' => $buyer->real_name,
+                        'buyerIdCard' => $buyer->idcard,
+                        'loanOrderCreateDate' => date('Y-m-d', $prevOrderTime),
+                        'loanTitle' => $loan->title,
+                        'loanOrderPrincipal' => $prevOrderAmount,
+                        'creditOrderPrincipal' => bcdiv($creditOrder['principal'], 100, 2),
+                        'loanIssuer' => $loan->issuerInfo ? $loan->issuerInfo->name : null,
+                        'exceptRaisedAmount' => $loan->money,
+                        'incrAmount' => $loan->start_money,
+                        'interestDate' => date('Y-m-d', $loan->jixi_time),
+                        'finishDate' => date('Y-m-d', $loan->finish_date),
+                        'yieldRate' => $loanRate,
+                        'refundMethod' => $refund_method,
+                        'sellerInterest' => bcadd($payedInterest, bcdiv($creditOrder['interest'], 100, 2), 2),
+                        'buyerInterest' => bcsub($remainingInterest, bcdiv($creditOrder['interest'], 100, 2), 2),
+                        'discountRate' => $creditNote['discountRate'],
+                        'refundedInterest' => $payedInterest,
+                        'creditOrderPayAmount' => bcdiv($creditOrder['amount'], 100, 2),
+                        'feeRate' => 3,
+                        'feeAmount' => bcdiv($creditOrder['fee'], 100, 2),
+                    ]);
+                    $orderAmount = bcdiv($creditOrder['principal'], 100, 2);
             } else {
                 $creditTemplate = '';
             }

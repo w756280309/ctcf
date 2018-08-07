@@ -25,7 +25,7 @@ $user = Yii::$app->user->getIdentity();
                 <?php if (
                         Yii::$app->params['feature_credit_note_on']
                         && !empty($user)
-                        && $user->orderCount() > 0
+                        && ($user->orderCount() > 0 || $user->creditOrderCount() > 0)
                 ) {  ?>
                     <li class="<?= in_array($action, ['credit/trade/assets', 'credit/note/new']) ? 'selected' : '' ?>"><a href="/credit/trade/assets"><span class="star"></span>我的转让</a></li>
                 <?php } ?>

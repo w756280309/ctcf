@@ -88,7 +88,7 @@ class CreditNoteController extends Controller
                 if ($months > 0) {
                     $message .= $months . "个月";
                 }
-                $message .= $days. "天, 预期年化利率" . bcmul($order->yield_rate, 100, 2) . "%, 转让金额" . number_format(bcdiv($note->amount, 100, 2), 2) . "元";
+                $message .= $days. "天, 预期年化利率" . bcmul($order->yield_rate, 100, 2) . "%, 转让金额" . number_format(bcdiv($note->amount, 100, 2), 2) . "元, 折让率" . $discountRate . '%';
                 $job = new DingtalkCorpMessageJob(\Yii::$app->params['ding_notify.user_list.create_note'], $message);
                 $queue->push($job);
             } else {

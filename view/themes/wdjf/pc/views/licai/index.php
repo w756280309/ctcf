@@ -14,7 +14,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/deallist.css?v=170718', ['depends' =
 $action = Yii::$app->controller->action->getUniqueId();
 $user = Yii::$app->user->getIdentity();
 //是否展示转让
-$showTransfer = !empty($user) && $user->orderCount();
+$showTransfer = !empty($user) && ($user->orderCount() > 0 || $user->creditOrderCount() > 0);
 ?>
 
 <div class="projectContainer">

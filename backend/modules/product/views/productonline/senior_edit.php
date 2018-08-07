@@ -219,11 +219,11 @@ $refundMethodStatus = $model->refund_method !== 1 ? ['readonly' => 'readonly'] :
             }
         });
 
-        if(originalBorrower == '深圳立合旺通商业保理有限公司') {
-            $(".originalBorrower").show()
-        } else {
-            $(".originalBorrower").hide()
-        }
+        // if(originalBorrower == '深圳立合旺通商业保理有限公司') {
+        //     $(".originalBorrower").show()
+        // } else {
+        //     $(".originalBorrower").hide()
+        // }
     });
 
 

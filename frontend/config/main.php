@@ -100,6 +100,9 @@ $arr = [
         'risk' => [
             'class' => 'Wcg\Xii\Risk\Module',
             'layout' => '@app/modules/user/views/layouts/main.php',
+            'params' => [
+                'platCode' => getenv('PLAT_CODE'),
+            ],
         ],
         'ctcf' => [
             'class' => 'frontend\modules\ctcf\Module',

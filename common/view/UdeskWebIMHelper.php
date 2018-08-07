@@ -74,7 +74,7 @@ class UdeskWebIMHelper
           
           var host = window.location.host.toLocaleLowerCase();
          
-          if(host.substr(0,4)==='app.' && versionName >= 2.3) {
+          if(host.substr(0,4)==='app.' && versionName >= '2.3') {
             $("#btn_udesk_im").attr('id','btn_udesk_im_app');
             $("#btn_udesk_im_app").on('click',function () {
                 

@@ -94,6 +94,8 @@
     text-align: right;
     overflow: hidden;
     vertical-align: middle;
+    white-space:nowrap;
+    text-overflow:ellipsis;
 }
 
 .search .select-lists .select-box>div u{
@@ -171,7 +173,7 @@
 }
 .list-content ul.select0 li{
     /*padding-left: 6.33333333%;*/
-    padding-right: 80%;
+    padding-right: 75%;
     text-align: right;
 }
 .list-content ul.select1 li{
@@ -180,7 +182,7 @@
     text-align: center;
 }
 .list-content ul.select2 li{
-    padding-left: 63.33333333%;
+    padding-left: 68.33333333%;
 }
 .list-content ul li{
     overflow: hidden;
@@ -188,4 +190,7 @@
     line-height: 35px;
     color:#666;
     font-size: 14px;
+}
+.list-content ul li.check-li{
+    color:#f19d38;
 }

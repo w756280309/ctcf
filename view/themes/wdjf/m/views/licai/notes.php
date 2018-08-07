@@ -8,11 +8,12 @@ $this->hideHeaderNav = HttpUtils::isWeixinRequest();
 $this->backUrl = false;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist.css?v=201612232', ['depends' => 'wap\assets\WapAsset']);
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist-search.css?v=201807196668', ['depends' => 'wap\assets\WapAsset']);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditlist-search.css?v=20180723311', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/TouchSlide.1.1.js', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.classyloader.js', ['depends' => 'wap\assets\WapAsset']);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit_page_wd.js?v=180719668812', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit_page_wd.js?v=18072361', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(FE_BASE_URI.'libs/bscroll.js', ['depends' => 'wap\assets\WapAsset']);
 
 $this->registerJs('var tp = ' . $tp . ';', 1);
 $this->registerJs("var url = '/licai/notes';", 1);
@@ -50,6 +51,26 @@ $user = Yii::$app->user->getIdentity();
             -webkit-background-size: 100% 100%;
             background-size: 100% 100%;
         }
+        .credit-repay .col-xs-12 i::before{
+            content: '';
+            margin-right: 5px;
+            width: 5px;
+            height: 5px;
+            background: #f44336;
+            display: inline-block;
+            border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            vert-align: middle;
+            -webkit-transform: translateY(-0.18rem);
+            -moz-transform: translateY(-0.18rem);
+            -ms-transform: translateY(-0.18rem);
+            -o-transform: translateY(-0.18rem);
+            transform: translateY(-0.18rem);
+        }
     </style>
     <div class="search-box">
         <a style="background: url(/images/licaiSelect/search_toback_left.png) center center no-repeat;-webkit-background-size: contain;background-size: contain;" href="/licai/notes" class="go-back-search"></a>
@@ -59,10 +80,10 @@ $user = Yii::$app->user->getIdentity();
         </div>
         <div class="search-box-btn">搜索</div>
     </div>
-    <div style="display: none;" class="select-lists clearfix">
+    <div style="" class="select-lists clearfix">
         <div class="select-box lf">
             <div id="select0">
-                <span>项目期限</span>
+                <span>剩余期限</span>
                 <u></u>
             </div>
             <div id="select1">
@@ -80,31 +101,30 @@ $user = Yii::$app->user->getIdentity();
     </div>
     <div style="" class="list-content">
         <div>
-            <ul class="select0 select-ul">
-                <?php if (!empty($selectSet['expireDaySets'])) :?>
-                    <?php foreach ($selectSet['expireDaySets'] as $expireSet) :?>
-                        <li k1="<?=$expireSet['expires'];?>" k2="day"><?= $expireSet['expires'];?>天</li>
-                    <?php endforeach;?>
-                <?php endif;?>
-                <?php if (!empty($selectSet['expireMonthSets'])) :?>
-                    <?php foreach ($selectSet['expireMonthSets'] as $expireMonthSet) :?>
-                        <li k1="<?=$expireMonthSet['expires'];?>" k2="month"><?= $expireMonthSet['expires'];?>月</li>
-                    <?php endforeach;?>
-                <?php endif;?>
-            </ul>
-            <ul class="select1 select-ul">
-                <?php if (!empty($selectSet['projectRateSet'])) :?>
-                    <?php foreach ($selectSet['projectRateSet'] as $projectRateSet) :?>
-                        <li k4="<?=$projectRateSet['yield_rate'];?>"><?=bcmul($projectRateSet['yield_rate'], 100, 2)?>%</li>
-                    <?php endforeach;?>
-                <?php endif;?>
-            </ul>
+            <div style="max-height: 300px; overflow: hidden;background: #fff;" class="scroll1">
+                <ul class="select0 select-ul">
+                    <li k1="0" k2="1">少于1个月</li>
+                    <li k1="1" k2="3">1-3个月</li>
+                    <li k1="3" k2="6">3-6个月</li>
+                    <li k1="6" k2="12">6-12个月</li>
+                    <li k1="12" k2="18">12-18个月</li>
+                    <li k1="18" k2="24">18-24个月</li>
+                    <li k1="24" k2="0">24个月以上</li>
+                </ul>
+            </div>
+            <div style="max-height: 300px; overflow: hidden;background: #fff;" class="scroll2">
+                <ul class="select1 select-ul">
+                    <li k3="0" k4="0.065">少于6.5%</li>
+                    <li k3="0.065" k4="0.070">6.5%-7%</li>
+                    <li k3="0.070" k4="0.075">7%-7.5%</li>
+                    <li k3="0.075" k4="0.080">7.5%-8%</li>
+                    <li k3="0.080" k4="0.085">8%-8.5%</li>
+                    <li k3="0.085" k4="0">8.5%以上</li>
+                </ul>
+            </div>
             <ul class="select2 select-ul">
-                <?php if (!empty($selectSet['discountRateSet'])) :?>
-                    <?php foreach ($selectSet['discountRateSet'] as $discountRate) :?>
-                        <li k5="<?=$discountRate['discountRate'];?>"><?=$discountRate['discountRate'];?>%</li>
-                    <?php endforeach;?>
-                <?php endif;?>
+                <li k5="1">有</li>
+                <li k5="0">无</li>
             </ul>
         </div>
     </div>

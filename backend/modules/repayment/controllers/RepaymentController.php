@@ -5,6 +5,8 @@ namespace backend\modules\repayment\controllers;
 use backend\controllers\BaseController;
 use backend\modules\order\controllers\OnlinefangkuanController;
 use backend\modules\order\core\FkCore;
+use common\event\LoanEvent;
+use common\event\RepayEvent;
 use common\lib\bchelp\BcRound;
 use common\lib\err\Err;
 use common\models\adminuser\AdminLog;
@@ -256,6 +258,15 @@ class RepaymentController extends BaseController
 
         //更新资产回款状态（TX）
         $this->updateAssetRepaidStatus($loan);
+
+        if (Yii::$app->params['microSystem.callback']) {
+            //触发还款回调
+            $repayEvent = new RepayEvent([
+                'loan' => $loan,
+                'term' => $qishu,
+            ]);
+            Yii::$app->trigger('hkSuccess', $repayEvent);
+        }
 
         //非立合旺通投资用户
         if (!$isLhwxLoan) {
@@ -959,6 +970,14 @@ class RepaymentController extends BaseController
         }
 
         $drawBack = OnlinefangkuanController::actionInit($pid);
+
+        if (Yii::$app->params['microSystem.callback']) {
+            //触发放款回调
+            $loanEvent = new LoanEvent([
+                'loan' => $product,
+            ]);
+            Yii::$app->trigger('fkSuccess', $loanEvent);
+        }
 
         return [
             'res' => $drawBack['res'],

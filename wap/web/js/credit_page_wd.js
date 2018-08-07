@@ -25,6 +25,10 @@ $(function() {
     var $span0=$select0.find('span');
     var $span1=$select1.find('span');
     var $span2=$select2.find('span');
+
+    // scroll实例
+    var scroll1=null;
+    var scroll2=null;
     // 3个选项选中某一个让其显示，再次选中同一个隐藏
     $select.on('click',function(e){
         var e=e||windwow.event;
@@ -35,6 +39,12 @@ $(function() {
             $listDiv.find('ul').css('display','none');
             $listDiv.css('display','none');
             $('.container').off('touchmove',delDefaultEvent);
+            // $listDiv.fadeOut(400);
+            // setTimeout(function(){
+            //     //$listDiv.css('display','none');
+            //     $listDiv.fadeOut(200);
+            //     $('.container').off('touchmove',delDefaultEvent);
+            // },400);
         }else{
             // 框
             $select.each(function(i,item){
@@ -46,37 +56,41 @@ $(function() {
             // 列表
             $listDiv.css('display','block');
             $listDiv.find('ul').stop().slideUp();
-            $listDiv.find('ul').eq($(this).index()).stop().slideDown();
+            $listDiv.find('ul').eq($(this).index()).stop().slideDown(400);
+            if($(this).index()==0){
+                if($(".select0").find('li').length>8){
+                    setTimeout(function(){
+                        scroll1 = new BScroll('.scroll1');
+                    },430);
+                }
+            }else if($(this).index()==1){
+                if($(".select1").find('li').length>8){
+                    setTimeout(function(){
+                        scroll2 = new BScroll('.scroll2');
+                    },430);
+                }
+            }
         }
     });
     // 列表赋值，点击外面区域关闭
     $listDiv.on('click',function (e) {
         var e=e||window.event;
-        if($(e.target).hasClass('select-ul')){
-            if($(e.target).hasClass('select0')){
-                $span0.text($(e.target).text());
-                $span0.attr('expires',$(e.target).attr('k1'));
-                $span0.attr('expireType',$(e.target).attr('k2'));
-                // $span0.attr('isDailyAccrual',$(e.target).attr('k3'));
-            }else if($(e.target).hasClass('select1')){
-                $span1.text($(e.target).text());
-                $span1.attr('projectRate',$(e.target).attr('k4'));
-            }else if($(e.target).hasClass('select2')){
-                $span2.text($(e.target).text());
-                $span2.attr('discountRate',$(e.target).attr('k5'));
-            }
-        }else if($(e.target).parent().hasClass('select-ul')){
+        if($(e.target).parent().hasClass('select-ul')){
+            $(e.target).siblings().removeClass('check-li');
+            if(!$(e.target).hasClass('check-li')){
+                $(e.target).addClass('check-li');
+            };
             if($(e.target).parent().hasClass('select0')){
                 $span0.text($(e.target).text());
-                $span0.attr('expires',$(e.target).attr('k1'));
-                $span0.attr('expireType',$(e.target).attr('k2'));
-                // $span0.attr('isDailyAccrual',$(e.target).attr('k3'));
+                $span0.attr('expireStart',$(e.target).attr('k1'));
+                $span0.attr('expireEnd',$(e.target).attr('k2'));
             }else if($(e.target).parent().hasClass('select1')){
                 $span1.text($(e.target).text());
-                $span1.attr('projectRate',$(e.target).attr('k4'));
+                $span1.attr('projectRateStart',$(e.target).attr('k3'));
+                $span1.attr('projectRateEnd',$(e.target).attr('k4'));
             }else if($(e.target).parent().hasClass('select2')){
                 $span2.text($(e.target).text());
-                $span2.attr('discountRate',$(e.target).attr('k5'));
+                $span2.attr('isDiscount',$(e.target).attr('k5'));
             }
         }else{
             // $listDiv.find('ul').css('display','none');
@@ -99,8 +113,8 @@ $(function() {
     var k5=null;
     $('.now-to-search').on('click',function(){
         selectType=3;
-        if($span0.text()=="项目期限"||$span1.text()=="项目利率"||$span2.text()=="折让率"){
-            toastCenter("您还有没选择的筛选项");
+        if($span0.text()=="剩余期限"||$span1.text()=="项目利率"||$span2.text()=="折让率"){
+            toastCenter("请选择所有筛选条件");
         }else{
             $select.each(function(i,item){
                 item.className='';
@@ -114,18 +128,18 @@ $(function() {
             searchCurrentPage = 1;
             searchTotalPage = 1;
             searchStop = true;
-            k1=$span0.attr('expires');
-            k2=$span0.attr('expireType');
-            // k3=$span0.attr('isDailyAccrual');
-            k4=$span1.attr('projectRate');
-            k5=$span2.attr('discountRate');
+            k1=$span0.attr('expireStart');
+            k2=$span0.attr('expireEnd');
+            k3=$span1.attr('projectRateStart');
+            k4=$span1.attr('projectRateEnd');
+            k5=$span2.attr('isDiscount');
             window.onscroll='';
-            getSearchPageList(selectType,nums,k1,k2,k4,k5);
+            getSearchPageList(selectType,nums,k1,k2,k3,k4,k5);
             window.onscroll=function()  {
                 //当内容滚动到底部时加载新的内容
                 if ($(this).scrollTop() + $(window).height() + 20 >= $(document).height() && $(this).scrollTop() > 20) {
                     //当前要加载的页码
-                    getSearchPageList(selectType,nums,k1,k2,k4,k5);
+                    getSearchPageList(selectType,nums,k1,k2,k3,k4,k5);
                 }
             };
         }
@@ -140,13 +154,16 @@ $(function() {
     $(".search-input").on('click',searchEvent);
     function searchEvent(){
         // 关闭下面的搜索出来的弹窗
-        // $listDiv.find('ul').css('display','none');
-        // $listDiv.css('display','none');
-        // 禁止滑动
-        // $('.container').on('touchmove',delDefaultEvent);
+        $listDiv.find('ul').css('display','none');
+        $listDiv.css('display','none');
+        //禁止滑动
+        $('.container').on('touchmove',delDefaultEvent);
         //清除这个事件
         $(".search-input").off('click',searchEvent);
-        // $(".select-lists").css('display','none');
+        // 隐藏条件搜索
+        if($('.select-lists').css('display')=='block'){
+            $('.select-lists').css('display','none');
+        }
         $allListItem.animate({"left":"-100%"},300,'linear',function(){
             $allListItem.children('.col').remove().end().children('#credititem-list').html('');
             $(".load").html('');
@@ -170,7 +187,6 @@ $(function() {
     // })
     // 定义一个参数，取值上面的搜索框，用于请求做参数
     var inputValue='';
-    var lastValue='';
     // 上边框右面的搜索
     $('.search-box-btn').on('click',function(){
         if(!$('.search-input').val()){
@@ -279,7 +295,7 @@ $(function() {
     }
 
     // 条件搜索功能的分页
-    function getSearchPageList(type,num,k1,k2,k4,k5) {
+    function getSearchPageList(type,num,k1,k2,k3,k4,k5) {
         if(type==2){
             if (searchStop === true && searchCurrentPage <= searchTotalPage) {
                 searchStop = false;
@@ -292,7 +308,7 @@ $(function() {
                     success: function(data)
                     {
                         if(data.isShowPop){
-                            toastCenter("您搜索的内容不存在",function(){
+                            toastCenter("没有符合条件的转让",function(){
                                 location.href='/licai/notes';
                             });
                             return false;
@@ -334,12 +350,12 @@ $(function() {
                 $.ajax({
                     type: 'GET',
                     url: searchReqUrl,
-                    data: {page: searchCurrentPage,'expires':k1,'expireType':k2,'projectRate':k4,'discountRate':k5,'selectType':3},
+                    data: {page: searchCurrentPage,'expireStart':k1*30,'expireEnd':k2*30,'projectRateStart':k3,'projectRateEnd':k4,'isDiscount':k5,'selectType':3},
                     dataType: 'json',
                     success: function(data)
                     {
                         if(data.isShowPop){
-                            toastCenter("您搜索的内容不存在",function(){
+                            toastCenter("没有符合条件的转让",function(){
                                 // location.href='/licai/notes';
                                 $('#credititem-list').html('<div class="mark-top" style="position:relative;bottom: -10px;background: #fff;height: 41px;line-height: 41px;color:#131313;font-size:14px;padding-left: 4.5%;border-bottom: 1px solid #ddd;">推荐转让<img style="width:7.5%;margin-left: 1%;" src="/images/licaiSelect/tuijian.png" alt=""></div>\n');
                                 window.onscroll='';
@@ -348,9 +364,10 @@ $(function() {
                                 totalPage = tp;
                                 stop = true;
                                 getPageList();
-                                $span0.text('项目期限');
+                                $span0.text('剩余期限');
                                 $span1.text('项目利率');
                                 $span2.text('折让率');
+                                $(".select-ul").children().removeClass('check-li');
                                 //自动加载分页数据
                                 window.onscroll=function() {
                                     //当内容滚动到底部时加载新的内容
@@ -407,6 +424,6 @@ $(function() {
             if (active) {
                 active();
             }
-        }, 2000);
+        }, 2500);
     }
 });

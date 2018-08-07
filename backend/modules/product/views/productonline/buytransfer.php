@@ -38,14 +38,14 @@ use yii\widgets\LinkPager;
                 [
                     'label' => '姓名',
                     'format' => 'html',
-                    'value' => function ($data) {
-                        return '<a href="/user/user/detail?id=' . $data['user_id'] . '&type=1">' . $data['user']->real_name . '</a>';
+                    'value' => function ($data) use ($users){
+                        return '<a href="/user/user/detail?id=' . $data['user_id'] . '&type=1">' . $users[$data['user_id']]->real_name . '</a>';
                     },
                 ],
                 [
                     'label' => '手机号',
-                    'value' => function ($data) {
-                        return $data['user']->mobile;
+                    'value' => function ($data) use ($users){
+                        return $users[$data['user_id']]->mobile;
                     },
                     'contentOptions' => ['class' => 'left'],
                     'headerOptions' => ['class' => 'left'],
@@ -68,38 +68,38 @@ use yii\widgets\LinkPager;
                 ],
                 [
                     'label' => '保全合同',
-                    'format' => 'html',
+                    'format' => 'raw',
                     'value' => function ($data) {
-                        $baoquanData = $data['baoquan'];
-                        $str = '';
-                        foreach ($baoquanData as $baoQuan) {
-                            /**
-                             * @var EbaoQuan $baoQuan
-                             */
-                            $url = \EBaoQuan\Client::contractFileDownload($baoQuan);
-                            if ($baoQuan->type === EbaoQuan::TYPE_E_LOAN) {
-                                $title = '标的合同';
-                            } elseif ($baoQuan->type === EbaoQuan::TYPE_E_CREDIT) {
-                                $title = '转让合同';
-                            }
-                            if (empty($url) || empty($title)) {
-                                continue;
-                            }
-
-                            $str .= ' <a href="' . $url . '" class="btn mini green">' . $title . '</a> | ';
-                        }
-                        if (empty($str)) {
-                            $str = '等待生成保全合同 | ';
-                            $str .= '<a href="javascript:void(0)" target="_blank" class="btn mini">交易凭证</a>';
-                        } else {
+                            $str .= ' <a href="javascript:;" class="btn mini green" onclick="miitbaoquan('. $data['id'] . ')">' . 标的合同 . '</a> | ';
+                            $str .= ' <a href="javascript:;" class="btn mini green" onclick="miitbaoquan('. $data['id'] . ','. 3 .')">' . 转让合同 . '</a> | ';
                             $str .= '<a href="/product/growth/transfer-cert?orderId='.$data['id'].'" target="_blank" class="btn mini" style="background-color:#36A9CE;color: white;">交易凭证</a>';
-                        }
-                        return rtrim($str, '| ');
+                        return $str;
                     }
                 ],
             ],
             'tableOptions' => ['class' => 'table table-striped table-bordered table-advance table-hover']
         ]) ?>
     </div>
+    <script>
+        //重新保全（国家电子合同）
+        function miitbaoquan(id, type = 2) {
+            if (id !== null && id !== undefined && id !== '') {
+                $.ajax({
+                    type: "GET",
+                    url: "/product/productonline/miit-baoquan",
+                    data: {id : id, type : type},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 0) {
+                            alert(data.message);
+                            window.location.reload();
+                        } else {
+                            window.open(data.url);
+                        }
+                    }
+                });
+            }
+        }
+    </script>
     <div class="pagination" style="text-align:center;clear: both"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
 <?php $this->endBlock(); ?>

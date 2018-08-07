@@ -11,7 +11,7 @@
 <div class="login-mark" style="display: none;"></div>
 <div class="loginUp-box" style="display: none;">
 <div class="test-remind">
-    <div class="test-remind-title">提示</div>
-    <p class="test-remind-word">根据相关法规要求，请先完成风险测评了解自身的风险承受能力，以便你更好地做出理性的出借决策。</p>
-    <a href="/risk/risk"><div class="test-remind-button">去测评</div></a>
+    <div class="test-remind-title" style="font-size: 21px;">提示</div>
+    <p class="test-remind-word" style="text-align: center;font-size: 15px;">出借前应完成风险承受能力评测</p>
+    <a href="/risk/risk"><div class="test-remind-button">立即评测</div></a>
 </div>

@@ -2,6 +2,7 @@
 
 namespace common\models\tx;
 
+use common\lib\MiitBaoQuan\Miit;
 use common\models\epay\EpayUser;
 use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
@@ -155,5 +156,18 @@ class CreditOrder extends ActiveRecord
             'created_at' => strtotime($this->createTime),
             'status' => $this->buyerPaymentStatus ? OnlineOrder::STATUS_SUCCESS : OnlineOrder::STATUS_FALSE,
         ]);
+    }
+
+    //获取‘和签’保全的链接
+    public function getMiitViewUrl($type = EbaoQuan::TYPE_M_LOAN)
+    {
+        if (Yii::$app->params['enable_miitbaoquan']) {
+            $miit = new Miit();
+            $miitBQ = $miit->viewHetong($this->id, $type, EbaoQuan::ITEM_TYPE_CREDIT_ORDER);
+        } else {
+            $miitBQ = null;
+        }
+
+        return $miitBQ;
     }
 }

@@ -36,6 +36,14 @@ return [
                     //'logFile' => __DIR__.'/../../data/log/'.date('ymdhi').'.log',
                     //'messages'=>['test', 4, 'application', time()]
                 ],
+                [
+                    'class' => 'common\log\JsonTarget',
+                    'levels' => ['info', 'error', 'warning'],
+                    'logVars' => [],
+                    'enableRotation' => false,
+                    'categories' => ['xiaowei'],
+                    'logFile' => '@app/runtime/logs/xiaowei/xiaowei'.date('Ymd').'.log',
+                ],
             ],
             'flushInterval' => 100,   // default is 1000
         ],

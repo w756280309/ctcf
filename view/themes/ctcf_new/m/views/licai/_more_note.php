@@ -77,7 +77,7 @@ use common\utils\StringUtils;
             </div>
             <div class="row credit-repay">
                 <div class="col-xs-12">
-                    <i></i>
+                    <i style="height: 24px;line-height: 24px;font-size: 12px;display: inline-block;">折让率：<?= $note['discountRate'];?>%</i>
                     <span>还款方式：<?= null === $loan ? '' :  Yii::$app->params['refund_method'][$loan->refund_method] ?></span>
                 </div>
             </div>

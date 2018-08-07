@@ -475,12 +475,23 @@ TPL;
                 </div>
             </div>
         </div>
-        <div class="row-fluid originalBorrower" style="display: none">
+        <div class="row-fluid">
             <div class="span6">
                 <div class="control-group">
                     <label>底层融资方</label>
                     <div class="controls">
-                        <?= $form->field($model, 'originalBorrower', ['template' => '{input}{error}', 'inputOptions' => ['autocomplete' => 'off', 'placeholder' => '底层融资方']])->textInput(['class' => 'm-wrap span6']) ?>
+                        <?php
+                        $change_input_option = array_merge([
+                            'autocomplete' => 'off',
+                            'class' => 'chosen-with-diselect span6',
+                        ], $disabled);
+                        ?>
+                        <?=
+                        $form->field($model, 'original_borrower_id', [
+                            'template' => '{input}{error}',
+                            'inputOptions' => $change_input_option])
+                            ->checkboxList(ArrayHelper::map($ob, 'id', 'name'), ['itemOptions' => $model->online_status ? ['disabled' => 'disabled'] : []])
+                        ?>
                     </div>
                 </div>
             </div>
@@ -851,8 +862,12 @@ TPL;
         <?php endif; ?>
         <div class="form-actions">
             <?= $form->field($model, 'status', ['template' => '{error}'])->textInput(); ?>
+            <?php if ($model->online_status === 0 && $model->check_status === 1) { ?>
+                <button type="button" class="btn blue" onclick="location.href='/product/productonline/list'"><i class="icon-ok"></i> 返回列表</button>
+            <?php } else { ?>
             <button id="product-submit" type="submit" class="btn blue"><i class="icon-ok"></i> 提交</button>
             <a href="/product/productonline/list" class="btn">取消</a>
+            <?php } ?>
         </div>
         <?php $form->end(); ?>
         <!-- END FORM-->
@@ -864,8 +879,8 @@ TPL;
     $(function() {
         var $productForm = $('#product_product_form');
         var $submit = $productForm.find('button[type=submit]');
-        var originalBorrower = $("#onlineproduct-issuer option:selected").text();
-        originalBorrower = originalBorrower.replace(/(^\s*)|(\s*$)/g,"");
+        // var originalBorrower = $("#onlineproduct-issuer option:selected").text();
+        // originalBorrower = originalBorrower.replace(/(^\s*)|(\s*$)/g,"");
         if(parseInt($("#onlineproduct-refund_method").val())===1){
             $('#onlineproduct-kuanxianqi').removeAttr('readonly');
         }
@@ -904,11 +919,11 @@ TPL;
             $('.gudinghk').hide();
         }
 
-        if(originalBorrower == '深圳立合旺通商业保理有限公司') {
-            $(".originalBorrower").show()
-        } else {
-            $(".originalBorrower").hide()
-        }
+        // if(originalBorrower == '深圳立合旺通商业保理有限公司') {
+        //     $(".originalBorrower").show()
+        // } else {
+        //     $(".originalBorrower").hide()
+        // }
 
         //是否使用截止日期关系着产品到期日和宽限期天数的设置。如果勾选，可以填写截止日和宽限期，否则不可以填写
         $('#onlineproduct-is_fdate').bind('click', function() {
@@ -986,16 +1001,16 @@ TPL;
             $('#onlineproduct-kuanxianqi').attr('readonly', 'readonly');
         }
     }
-    //当发行方选择为‘深圳立合旺通商业保理有限公司’时，底层融资方显示，否则隐藏
-    function changeIssueName(obj) {
-        var issueName = $(obj).find("option:selected").text();
-        issueName = issueName.replace(/(^\s*)|(\s*$)/g,"");    //去掉字符串两边的空格
-        if (issueName == '深圳立合旺通商业保理有限公司') {
-            $(".originalBorrower").show()
-        } else {
-            $(".originalBorrower").hide();
-        }
-    }
+    // //当发行方选择为‘深圳立合旺通商业保理有限公司’时，底层融资方显示，否则隐藏
+    // function changeIssueName(obj) {
+    //     var issueName = $(obj).find("option:selected").text();
+    //     issueName = issueName.replace(/(^\s*)|(\s*$)/g,"");    //去掉字符串两边的空格
+    //     if (issueName == '深圳立合旺通商业保理有限公司') {
+    //         $(".originalBorrower").show()
+    //     } else {
+    //         $(".originalBorrower").hide();
+    //     }
+    // }
 
     function kindEdit()
     {

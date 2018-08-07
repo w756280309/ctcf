@@ -144,6 +144,9 @@ $arr = [
         'risk' => [
             'class' => 'Wcg\Xii\Risk\Module',
             'layout' => 'risk',
+            'params' => [
+                'platCode' => getenv('PLAT_CODE'),
+            ],
         ],
         'wechat' => [
             'class' => 'app\modules\wechat\Module',

@@ -95,6 +95,7 @@ class LoanFinder
 
         //已登录状态 下获得 累计资金额 及添加用户所含 定向标的query 条件
         if ($isLoggedIn) {
+            $balance = $user->getJGMoney();
             $query->orWhere("concat(',', `allowedUids`, ',') like concat('%,', :userId, ',%') and isPrivate = 1", [
                 ':userId' => $user->id,
             ]);
@@ -103,7 +104,7 @@ class LoanFinder
             'cid' => 3,
             'del_status' => OnlineProduct::STATUS_USE,
             'online_status' => OnlineProduct::STATUS_ONLINE,
-        ]);
+        ])->andWhere(['<=', 'balance_limit', $balance]);
 
         return $query;
     }

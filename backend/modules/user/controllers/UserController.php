@@ -20,6 +20,7 @@ use common\models\promo\InviteRecord;
 use common\models\user\Borrower;
 use common\models\user\CoinsRecord;
 use common\models\user\MoneyRecord;
+use common\models\user\OriginalBorrower;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
@@ -1296,5 +1297,53 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
         return $this->render('access', [
             'user' => $user,
         ]);
+    }
+
+    /**
+     * 底层融资方列表.
+     */
+    public function actionListob()
+    {
+        $query = OriginalBorrower::find();
+
+        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
+        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy(['id' => SORT_DESC])->all();
+
+        return $this->render('ob_list', [
+            'model' => $model,
+            'pages' => $pages,
+        ]);
+    }
+
+    /**
+     * 添加底层融资方.
+     */
+    public function actionAddob()
+    {
+        $ob = new OriginalBorrower();
+        if ($ob->load(Yii::$app->request->post())
+            && $ob->validate()
+            && $ob->save()
+        ) {
+            $this->redirect('/user/user/listob');
+        }
+
+        return $this->render('ob_edit', ['ob' => $ob]);
+    }
+
+    /**
+     * 编辑底层融资方.
+     */
+    public function actionEditob($id)
+    {
+        $ob = $this->findOr404(OriginalBorrower::className(), $id);
+        if ($ob->load(Yii::$app->request->post())
+            && $ob->validate()
+            && $ob->save()
+        ) {
+            $this->redirect('/user/user/listob');
+        }
+
+        return $this->render('ob_edit', ['ob' => $ob]);
     }
 }

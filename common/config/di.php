@@ -52,3 +52,7 @@ Yii::$container->set('weixin_wdjf', function(){
     $app->access_token->setCache($cache);
     return $app;
 });
+Yii::$container->set('micro', 'XiaoWei\\Client', [
+    Yii::$app->params['microSystem.apiUrl'],
+    Yii::$app->params['microSystem.signKey'],
+]);

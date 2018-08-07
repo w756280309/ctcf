@@ -319,4 +319,9 @@ return [
     ],
     //担保方
     'guarantee' => [],
+    'microSystem.callback' => env('MICRO_SYSTEM_CALLBACK') ?: false,
+    'microSystem.apiUrl' => env('MICRO_SYSTEM_API_URL') ?: null,
+    'microSystem.signKey' => env('MICRO_SYSTEM_SIGN_KEY') ?: null,
+    //风控审核开关
+    'feature_product_risk_audit' => false,
 ];

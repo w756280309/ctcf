@@ -2,8 +2,7 @@
 
 namespace console\modules\tx\controllers;
 
-use common\models\order\OnlineOrder;
-use common\models\payment\Repayment;
+use common\jobs\MiitBaoQuanJob;
 use common\models\tx\FinUtils;
 use Tx\UmpClient as Client;
 use common\models\order\BaoQuanQueue;
@@ -23,7 +22,6 @@ use common\models\tx\UserManager;
 use Tx\PromoClient;
 use Yii;
 use yii\console\Controller;
-use yii\helpers\ArrayHelper;
 
 class CreditOrderController extends Controller
 {
@@ -72,7 +70,12 @@ class CreditOrderController extends Controller
                     ) {
                         $order->status = CreditOrder::STATUS_SUCCESS;
                         $order->save(false);
-                        $this->insertBuyerBaoQuanQueue($order);//债权订单成功之后添加保全合同队列
+                        if (Yii::$app->params['enable_miitbaoquan']) {
+                            Yii::$app->queue->push(new MiitBaoQuanJob([
+                                'order' => $order,
+                                'item_type' => 'credit_order',
+                            ]));
+                        }
                         //订单成功后更新当前购买人与转让人的持有数量
                         $this->updateSellerAndBuyerAmount($order);
 
@@ -155,7 +158,10 @@ class CreditOrderController extends Controller
                     ) {
                         $order->status = CreditOrder::STATUS_SUCCESS;
                         $order->save(false);
-                        $this->insertBuyerBaoQuanQueue($order);//债权订单成功之后添加保全合同队列
+                        Yii::$app->queue->push(new MiitBaoQuanJob([
+                            'order' => $order,
+                            'item_type' => 'credit_order',
+                        ]));
                         //订单成功后更新当前购买人与转让人的持有数量
                         $this->updateSellerAndBuyerAmount($order);
 
@@ -777,7 +783,12 @@ class CreditOrderController extends Controller
             }
             //当债权满标时候添加保全队列（转让卖方）
             if ($isNoteFull) {
-                $this->insertSellerBaoQuanQueue($creditNote);
+                if (Yii::$app->params['enable_miitbaoquan']) {
+                    Yii::$app->queue->push(new MiitBaoQuanJob([
+                        'creditNote' => $creditNote,
+                        'item_type' => 'credit_note',
+                    ]));
+                }
             }
             //当债权满标时发送短信
             if ($isNoteFull) {
