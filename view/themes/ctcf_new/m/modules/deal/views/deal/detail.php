@@ -357,7 +357,7 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
                         location.href = data.tourl;
                     });
                 } else {
-                    alertTrueVal(data.message,function(){
+                    alertRisk(function () {
                         location.href = data.tourl;
                     });
                 }
@@ -395,5 +395,17 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
     $('.m4 img').on('click',function(){
         $('#chart-box').stop(true,false).fadeToggle();
         $('#chart-box .col-xs-12 img').css({left:$(this).context.offsetLeft-16+"px"});
-    })
+    });
+
+    //楚天风险测评
+    function alertRisk(trued) {
+        var chongzhi = $('<div class="mask" style="display:block;"></div><div class="bing-info show"> <div class="bing-tishi">温馨提示</div> <p class="tishi-p" style="line-height: 20px;"> 出借前应完成风险承受能力评测</p > <div class="bind-btn"> <span class="true">立即评测</span> </div> </div>');
+        $(chongzhi).insertAfter($('form'));
+        $('.bing-info').on('click', function () {
+            $(chongzhi).remove();
+            if (typeof trued !== 'undefined') {
+                trued();
+            }
+        });
+    }
 </script>
