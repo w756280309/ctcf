@@ -1391,4 +1391,18 @@ return [
         'limit' => [],
         'bin' => [],
     ],
+    '2003' => [
+        'sort' => '40',
+        'bankname' => '宁波奉化农村商业银行',
+        'nickname' => 'NBFHRCB',
+        'limit' => [],
+        'bin' => [],
+    ],
+    '2004' => [
+        'sort' => '41',
+        'bankname' => '泉州农村商业银行',
+        'nickname' => 'QZRCB',
+        'limit' => [],
+        'bin' => [],
+    ],
 ];
