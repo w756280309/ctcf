@@ -117,7 +117,7 @@ class RepaymentController extends Controller
      */
     public function actionGetRepaymentRecord($startDate, $endDate)
     {
-        $sql = "select op.id from online_fangkuan f inner join online_product op on f.online_product_id=op.id inner join user u on op.borrow_uid=u.id where u.type=2 AND u.id in (64655,73030,58536,55868,73026,15) and op.status=5 AND date(from_unixtime(f.created_at)) BETWEEN :startDate and :endDate";
+        $sql = "select op.id from money_record mr inner join user u on mr.uid=u.id left join online_fangkuan of on mr.osn=of.sn left join online_product op on op.id=of.online_product_id where u.id in (64655,73030,58536,55868,73026,15) and date(from_unixtime(mr.created_at)) between :startDate and :endDate and mr.type=3 and op.isTest=0";
         $productIds = \Yii::$app->db->createCommand($sql, [
             'startDate' => $startDate,
             'endDate' => $endDate
@@ -132,14 +132,15 @@ class RepaymentController extends Controller
             foreach ($orders as $order) {
                 $data = OnlineRepaymentPlan::calcBenxi($order);
                 foreach ($data as $key => $value) {
-                    if ($value['date'] >= '2018-05-01' && $value['date'] <= '2018-08-07') {
+                    if ($value['date'] >= $startDate && $value['date'] <= $endDate) {
                         $k++;
                         $record[$k]['org_name'] = $order->loan->borrower->org_name;
                         $record[$k]['type'] = '还款';
                         $record[$k]['sn'] = '';
                         $record[$k]['date'] = $value['date'];
                         $record[$k]['in_money'] = 0;
-                        $record[$k]['out_money'] = bcadd($value['principal'], $value['interest'], 2);
+                        $orderBonusProfit = $order->getBonusProfit();
+                        $record[$k]['out_money'] = bcadd(bcadd($value['principal'], $value['interest'], 2), $orderBonusProfit, 2);
                         $record[$k]['title'] = $order->loan->title;
                     }
                 }
