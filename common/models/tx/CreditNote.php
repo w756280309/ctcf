@@ -166,11 +166,7 @@ class CreditNote extends ActiveRecord
             }
         }
 
-        $order = $this->order;
-        $interest = FinUtils::calculateCurrentProfit($this->loan, $this->amount, $order->apr);
-        $maxRate = bcmul(bcdiv($interest, bcadd($interest, $this->amount, 14), 14), 100, 2);
         $maxDiscountRate = $config['max_discount_rate'];
-        $maxDiscountRate = min($maxRate, $maxDiscountRate);
         if ($this->discountRate < 0) {
             $this->addError('discountRate', '折让率不能小于零');
         }

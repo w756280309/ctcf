@@ -25,7 +25,6 @@ $discountRate = Yii::$app->params['credit']['max_discount_rate'];
 $fee = Yii::$app->params['credit']['fee_rate'] * 1000;
 $minOrderAmount = bcdiv($asset['minOrderAmount'], 100, 2);
 $incrOrderAmount = bcdiv($asset['incrOrderAmount'], 100, 2);
-$calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bcadd($asset['currentInterest'], $asset['maxTradableAmount'], 14), 14), 100, 2));
 ?>
 
 <div class="row produce">
@@ -66,7 +65,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         <img src="<?= ASSETS_BASE_URI ?>images/credit/triangle.png" alt="">
         产品在转让时折让的比率，如折让率1%，则按照转让价值的99%来出售。
     </p>
-    <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于<?= $calcDiscountRate ?>%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" class="col-xs-7 safe-lf text-align-lf font-26">
+    <input type="text" name="discount_rate" id="discount_rate_input" value=""  placeholder="不高于<?= $discountRate ?>%，可设置2位小数" autocomplete="off" maxlength="4" t_value="" onkeyup=" if (this.value) {if (!this.value.match(/^[\+\-]?\d+?\.?\d*?$/)) {if (this.t_value) {this.value = this.t_value;} else {this.value = '';}} else {this.t_value = this.value;}}" class="col-xs-7 safe-lf text-align-lf font-26">
     <div class="safe-txt font-32 money_yuan">%</div>
 </div>
 <div class="hide toRefer"></div>
@@ -328,8 +327,7 @@ $calcDiscountRate = min($discountRate, bcmul(bcdiv($asset['currentInterest'], bc
         var amount = parseFloat(amount_input.val());
         var rate = parseFloat(discount_rate_input.val());
         var interest = parseFloat(data.interest);
-        var maxRate = interest / (amount + interest) * 100;
-        maxRate = Math.min(config_rate, maxRate);
+        var maxRate = config_rate;
         $('#discount_rate_input').attr('placeholder', '不高于' + (parseInt(maxRate * 100) / 100) + '%，可设置2位小数');
         if (rate > maxRate) {
             toastCenter('折让率不能大于'+(parseInt(maxRate * 100) / 100)+'%');
