@@ -357,9 +357,16 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
                         location.href = data.tourl;
                     });
                 } else {
-                    alertRisk(function () {
-                        location.href = data.tourl;
-                    });
+                    //如果是风险测评，则更换弹出方法
+                    if (data.tourl.match('risk/risk')) {
+                        alertRisk(function () {
+                            location.href = data.tourl;
+                        });
+                    } else {
+                        alertTrueVal(data.message,function() {
+                            location.href = data.tourl;
+                        });
+                    }
                 }
             } else {
                 if (data.code != 0) {
