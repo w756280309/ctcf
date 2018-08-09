@@ -46,13 +46,13 @@ class DeployController extends Controller
                     ];
                 }
             } else {
-                if ($versionCode < 23) {
+                if ($versionCode < 24) {
                     $content = [
-                        'old_updatetype' => 2,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
-                        'updatedesc' => '修复已知问题，优化体验',  //新版本更新说明
-                        'versioncode' => '23',   //新版本版本号
-                        'versionname' => '2.3.1', //新版本版本名称
-                        'downloadurl' => 'https://dapp.wenjf.com/wjf_v2.3.1.apk',   //新版本下载地址, android 不支持 http 向 https 的跳转，协议必须严格匹配
+                        'old_updatetype' => 3,  //旧版本更新类型 0:无更新;1:有更新,无提示;2:有更新,有提示;3:有更新,强制更新
+                        'updatedesc' => '理财界面优化，使用更流畅',  //新版本更新说明
+                        'versioncode' => '24',   //新版本版本号
+                        'versionname' => '2.3.2', //新版本版本名称
+                        'downloadurl' => 'https://dapp.wenjf.com/wjf_v2.3.2.apk',   //新版本下载地址, android 不支持 http 向 https 的跳转，协议必须严格匹配
                     ];
                 }
             }
