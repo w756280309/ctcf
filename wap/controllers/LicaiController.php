@@ -219,6 +219,6 @@ class LicaiController extends Controller
             'notes' => $notes,
             'tp' => $tp,
             'selectSet' => $selectSet,
-            ]);
+        ]);
     }
 }

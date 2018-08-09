@@ -21,11 +21,11 @@ $showTransfer = !empty($user) && ($user->orderCount() > 0 || $user->creditOrderC
     <div class="projectList">
         <?php if (Yii::$app->params['feature_credit_note_on']) {  ?>
             <div class="alist-box">
-                <a href='/licai/loan' class="list-span <?= 'licai/loan' === $action ? 'select-span' : '' ?>">网贷</a>
-                <a href='/licai/' class="list-span <?= 'licai/index' === $action ? 'select-span' : '' ?>">定期</a>
                 <?php if ($showTransfer) : ?>
                     <a href='/licai/notes' class="list-span <?= 'licai/notes' === $action ? 'select-span' : '' ?>">转让</a>
                 <?php endif; ?>
+                <a href='/licai/loan' class="list-span <?= 'licai/loan' === $action ? 'select-span' : '' ?>">网贷</a>
+                <a href='/licai/' class="list-span <?= 'licai/index' === $action ? 'select-span' : '' ?>">定期</a>
             </div>
         <?php } ?>
         <!--预告期-->
