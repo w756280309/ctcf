@@ -347,10 +347,6 @@ class ProductonlineController extends BaseController
 
         $model->original_borrower_id = explode(',', $model->original_borrower_id);
 
-        if (!empty($data) && !is_array($data['OnlineProduct']['original_borrower_id'])) {
-            $data['OnlineProduct']['original_borrower_id'] = $model->original_borrower_id;
-        }
-
         if ($model->load($data) && ($model = $this->exchangeValues($model, $data)) && $model->validate()) {
             try {
                 $this->validateContract([
