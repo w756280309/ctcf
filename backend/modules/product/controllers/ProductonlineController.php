@@ -620,14 +620,14 @@ class ProductonlineController extends BaseController
         $loanSearch->isTest = !is_null($loanSearch->isTest) ? $loanSearch->isTest : Yii::$app->request->cookies->getValue('loanListFilterIsTest', 0);
         //记录用户查询标的状态
         Yii::$app->response->cookies->add(new Cookie(['name' => 'loanListFilterIsTest', 'value' => $loanSearch->isTest, 'expire' => strtotime('next year'), 'httpOnly' => false]));
-        if (isset($loanSearch->days) && $loanSearch->days != '' && !isset($loanSearch->status)) {
-            $loanSearch->status = OnlineProduct::STATUS_HUAN;
-        }
 
         /**
          * @var Query $query
          */
         $query = $loanSearch->search();
+        if (isset($loanSearch->days) && $loanSearch->days != '' && !isset($loanSearch->status)){
+            $query->andWhere("if($loanTable.is_xs = 1,  $loanTable.status IN (" . OnlineProduct::STATUS_HUAN . "," . OnlineProduct::STATUS_FOUND . "), $loanTable.status=" . OnlineProduct::STATUS_HUAN . ")"); //  如果是新手标，要将状态为募集结束的查询出来
+        }
         $query->select("$loanTable.*")
             ->addSelect(['xs_status' => "if($loanTable.`is_xs` = 1 && $loanTable.`status` < 3, 1, 0)"])
             ->addSelect(['isrecommended' => "if($loanTable.`online_status`=1 && $loanTable.`isPrivate`=0, $loanTable.`recommendTime`, 0)"])
@@ -815,8 +815,9 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
 
         $endDay = date('Y-m-d', strtotime("+$days days"));    //所有区段都要统计自截止日之前的所有待还款项目
         $query->where(['<', 'dueDate', $endDay]);
+        $query->andWhere("if($op.is_xs = 1 , $op.status IN (" . OnlineProduct::STATUS_HUAN . ", " . OnlineProduct::STATUS_FOUND . "), $op.status = " . OnlineProduct::STATUS_HUAN . ")");   //只统计规定时间内的状态为还款中的标的，如果是新手标还要统计募集结束状态的标的
 
-        $model = $query->andWhere(['isRefunded' => 0, "$op.status" => OnlineProduct::STATUS_HUAN, "$op.isTest" => 0])->select(['loan_id'])   //只统计规定时间内的状态为还款中的标的
+        $model = $query->andWhere(['isRefunded' => 0, "$op.isTest" => 0])->select(['loan_id'])
             ->asArray()
             ->all();
 
