@@ -40,12 +40,12 @@ $showTransfer = !empty($user) && ($user->orderCount() > 0 || $user->creditOrderC
     </div>
 <?php } ?>
 
-<?php if ($action === 'deal/deal/loan' && !empty($user) && $user->getIsShowNjq(20000)) : ?>
+<?php if (in_array($action, ['deal/deal/loan', 'deal/deal/index']) && !empty($user) && $user->getIsShowNjq(20000)) : ?>
     <div class="deal-njfae-hint">
 <!--    --><?php //if (!defined('IN_APP')) : ?>
         <a class="njfae-hint-banner" href="/njq/connect?redirect=<?= urlencode('site/index?utm_source='.$user->campaign_source) ?>">
 <!--    --><?php //endif; ?>
-            <img src="<?= ASSETS_BASE_URI ?>images/product/notice_1805072220_750_228.png" alt="">
+            <img src="<?= ASSETS_BASE_URI ?>images/product/notice_180813_750_228.png" alt="">
 <!--    --><?php //if (!defined('IN_APP')) : ?>
         </a>
 <!--    --><?php //endif; ?>
