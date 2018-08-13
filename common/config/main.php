@@ -83,8 +83,7 @@ return [
         'class' => EventsBehavior::class,
         'events' => [
             'orderSuccess' => [
-                ['common\models\promo\Promo180618', 'onOrderSuccess'],
-                ['common\ctcf\promo\Promo180618', 'onOrderSuccess'],
+                ['common\handler\PromoHandler', 'onOrderSuccess'],
             ],
             'fkSuccess' => [
                 ['common\handler\XiaoweiHandler', 'onFkSuccess'],

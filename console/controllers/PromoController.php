@@ -8,6 +8,7 @@ use common\models\promo\DuoBao;
 use common\models\promo\PromoLotteryTicket;
 use common\models\promo\PromoService;
 use common\models\promo\Reward;
+use common\models\promo\TicketToken;
 use common\models\user\User;
 use common\utils\SecurityUtils;
 use wap\modules\promotion\models\RankingPromo;
@@ -312,5 +313,84 @@ class PromoController extends Controller
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($file);
         exit();
+    }
+
+    /*
+     * 七夕活动发奖操作
+     * */
+    public function actionP180814SendAward()
+    {
+        $promo = RankingPromo::findOne(['key' => 'promo_180814']);
+        if (null === $promo) {
+            return false;
+        }
+        $sql = "
+            SELECT 
+                pr.userId,sum(quantity) AS quantity,pl.record AS hasReward
+            FROM
+                promo_record AS pr 
+            LEFT JOIN
+                (
+                  SELECT 
+                    p.user_id,count(*) AS record
+                  FROM
+                    promo_lottery_ticket AS p
+				  WHERE
+					promo_id = $promo->id
+				  GROUP BY
+						p.user_id
+                ) AS pl
+			ON
+				pr.userId = pl.user_id
+			GROUP BY
+				pr.userId";
+        $result = Yii::$app->db->createCommand($sql)->queryAll();
+        if (empty($result)) {
+            return false;
+        }
+        $rewardPool = [];
+        foreach ($result as $item) {
+            if ($item['hasReward'] >= 3) {
+                continue;
+            } elseif ($item['hasReward'] == 2 && $item['quantity'] > 14) {
+                $rewardPool = [
+                    '180814_P77', '180814_RP7.7'
+                ];
+            } elseif ($item['hasReward'] == 1 && $item['quantity'] > 5) {
+                $rewardPool = [
+                    '180814_C50'
+                ];
+                if ($item['quantity'] > 14) {
+                    $rewardPool[] = '180814_P77';
+                    $rewardPool[] = '180814_RP7.7';
+                }
+
+            } elseif ($item['hasReward'] == 0 && $item['quantity'] > 1) {
+                $rewardPool = [
+                    '180814_C10'
+                ];
+                if ($item['quantity'] > 5 && $item['quantity'] < 15) {
+                    $rewardPool[] = '180814_C50';
+                } elseif ($item['quantity'] > 14) {
+                    $rewardPool[] = '180814_C50';
+                    $rewardPool[] = '180814_P77';
+                    $rewardPool[] = '180814_RP7.7';
+                }
+            }
+
+            $user = User::findOne(['id' => $item['userId']]);
+            if (null === $user) {
+                continue;
+            }
+            foreach ($rewardPool as $sn) {
+                $key = $promo->id . '-' . $user->id . '-' . $sn;
+                TicketToken::initNew($key)->save(false);
+                PromoLotteryTicket::initNew($user, $promo, $sn)->save(false);
+                $reward = Reward::fetchOneBySn($sn);
+                PromoService::award($user, $reward, $promo);
+            }
+        }
+
+        return true;
     }
 }

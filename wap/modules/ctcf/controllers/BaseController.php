@@ -372,9 +372,9 @@ JS;
      */
     public function actionAddShare($shareUrl, $scene)
     {
-        $user = Yii::$app->user;
+        $user = Yii::$app->user->getIdentity();
         if (null === $user) {
-            return;
+            return false;
         }
 
         $now = date("Y-m-d", time());
@@ -386,5 +386,7 @@ JS;
         $newShareLog->ipAddress = $ipAddress;
         $newShareLog->createdAt = $now;
         $newShareLog->save(false);
+
+        return true;
     }
 }
