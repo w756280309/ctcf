@@ -123,10 +123,13 @@ class CreditNoteController extends Controller
     {
 
         $reqData = json_decode($this->request->rawBody, true);
+        $isPagination = isset($reqData['isPagination']) ? $reqData['isPagination'] : true;
         $page = isset($reqData['page']) ? $reqData['page'] : 1;
         $pageSize = isset($reqData['page_size']) ? $reqData['page_size'] : 10;
         $getSort = isset($reqData['sort']) ? $reqData['sort'] : 'isClosed,-createTime';
         $loans = isset($reqData['loans']) ? $reqData['loans'] : [];
+        $users = isset($reqData['users']) ? $reqData['users'] : [];
+        $isClosed = isset($reqData['isClosed']) ? $reqData['isClosed'] : "";
         $noteIds = isset($reqData['noteIds']) ? $reqData['noteIds'] : [];
         $selectNoteIds = isset($reqData['selectNoteIds']) ? $reqData['selectNoteIds'] : [];
         $notLoanIds = isset($reqData['notLoanIds']) ? $reqData['notLoanIds'] : [];
@@ -166,6 +169,14 @@ class CreditNoteController extends Controller
             $query->andWhere(['in', 'loan_id', $loans]);
         }
 
+        if (count($users) > 0) {
+            $query->andWhere(['in', 'user_id', $users]);
+        }
+
+        if ($isClosed !== "") {
+            $query->andWhere(['isClosed' => $isClosed]);
+        }
+
         if (count($selectNoteIds) > 0) {
             $query->andWhere(['in', 'id', $selectNoteIds]);
         }
@@ -196,7 +207,12 @@ class CreditNoteController extends Controller
 
         $count = $query->count();
         $responseData['total_count'] = $count;
-        $creditNoteList = $query->offset(($page - 1) * $pageSize)->limit($pageSize)->orderBy($sortArray)->all();
+        if ($isPagination) {
+            $creditNoteList = $query->offset(($page - 1) * $pageSize)->limit($pageSize)->orderBy($sortArray)->all();
+        } else {
+            $creditNoteList = $query->orderBy($sortArray)->all();
+        }
+
         $responseData['data'] = $creditNoteList;
 
         return $responseData;

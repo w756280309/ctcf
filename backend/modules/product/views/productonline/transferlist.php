@@ -34,6 +34,51 @@ use yii\widgets\LinkPager;
             </li>
         </ul>
     </div>
+    <!--搜索部分-->
+    <div class="portlet-body">
+        <form action="/product/productonline/sponsoredtransfer" method="get" target="_self" id="loanFilter">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td>
+                        <span class="title">项目名称</span>
+                    </td>
+                    <td>
+                        <input type="text" class="m-wrap span4 " style="margin-bottom: 0px;width:200px" name='title' value="<?= Yii::$app->request->get('title') ?>" placeholder="请输入项目名称" />
+                    </td>
+                    <td>
+                        <span class="title">姓名</span>
+                    </td>
+                    <td>
+                        <input type="text" class="m-wrap span6" style="margin-bottom: 0px;width:200px" name='name' value="<?= Yii::$app->request->get('name') ?>" placeholder="请输入姓名" />
+                    </td>
+                    <td>
+                        <span class="title">状态</span>
+                    </td>
+                    <td>
+                        <select name="isClosed" class="m-wrap span6" style="width: 200px;">
+                            <option value="">选择状态</option>
+                            <option value="0" <?= Yii::$app->request->get('isClosed') == '0' ? 'selected' : '' ?> >转让中</option>
+                            <option value="1" <?= Yii::$app->request->get('isClosed') == '1' ? 'selected' : '' ?> >转让完成</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="3">
+                        <a class="btn blue" href="/product/productonline/transfer-export?<?= http_build_query(Yii::$app->request->get())?>">导出列表信息</a>
+                    </td>
+                    <td colspan="2">
+                        <div align="right" style="margin-right: 55px">
+                            <input type="button"  class="btn" value="重置" style="width: 100px;" onclick="location='/product/productonline/sponsoredtransfer'"/>
+                            <button type='submit' class="btn blue" style="width: 100px;">查询 <i class="m-icon-swapright m-icon-white"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
     <div class="portlet-body">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,

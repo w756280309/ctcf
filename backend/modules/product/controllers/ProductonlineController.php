@@ -6,6 +6,7 @@ use backend\controllers\BaseController;
 use backend\modules\product\models\LoanSearch;
 use common\jobs\MiitBaoQuanJob;
 use common\lib\bchelp\BcRound;
+use common\lib\user\UserStats;
 use common\models\adminuser\AdminLog;
 use common\models\booking\BookingLog;
 use common\models\contract\ContractTemplate;
@@ -25,6 +26,7 @@ use common\models\user\OriginalBorrower;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\service\LoanService;
+use common\utils\StringUtils;
 use common\utils\TxUtils;
 use console\command\SqlExportJob;
 use P2pl\Borrower;
@@ -1240,21 +1242,46 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
      */
     public function actionSponsoredtransfer($page = 1)
     {
+        $params = Yii::$app->request->get();
+        $title = trim($params['title']);
+        $name = trim($params['name']);
+        $isClosed = $params['isClosed'];
+
+        $loans = OnlineProduct::find()
+            ->select('id')
+            ->where(['like', 'title', $title])
+            ->column();
+
+        $users = User::find()
+            ->select('id')
+            ->where(['like', 'real_name', $name])
+            ->column();
+
         $notes = [];
         $totalCount = 0;
         $pageSize = 10;
 
-        $txClient = Yii::$container->get('txClient');
-        $response = $txClient->post('credit-note/list', ['page' => $page, 'page_size' => $pageSize, 'sort' => '-createTime']);
-        
-        if (null !== $response) {
-            $notes = $response['data'];
-            $totalCount = $response['total_count'];
-            $pageSize = $response['page_size'];
+        if (count($loans) > 0 && count($users) > 0) {
+            $txClient = Yii::$container->get('txClient');
+            $response = $txClient
+                ->post('credit-note/list', [
+                    'page' => $page,
+                    'page_size' => $pageSize,
+                    'sort' => '-createTime',
+                    'loans' => $loans,
+                    'users' => $users,
+                    'isClosed' => $isClosed
+                ]);
 
-            foreach ($notes as $key => $note) {
-                $notes[$key]['user'] = User::findOne($note['user_id']);
-                $notes[$key]['loan'] = OnlineProduct::findOne($note['loan_id']);
+            if (null !== $response) {
+                $notes = $response['data'];
+                $totalCount = $response['total_count'];
+                $pageSize = $response['page_size'];
+
+                foreach ($notes as $key => $note) {
+                    $notes[$key]['user'] = User::findOne($note['user_id']);
+                    $notes[$key]['loan'] = OnlineProduct::findOne($note['loan_id']);
+                }
             }
         }
 
@@ -1501,5 +1528,73 @@ ORDER BY p.id ASC,u.id ASC,o.id ASC";
         }
 
         return ['code' => 0, 'message' => '合同生成中，请稍后'];
+    }
+
+
+    public function actionTransferExport()
+    {
+        $exportData[] = [
+            '姓名',
+            '手机号',
+            '项目名称',
+            '转让时间',
+            '发起转让金额',
+            '折让率',
+            '已转让金额',
+            '状态',
+        ];
+
+        $params = Yii::$app->request->get();
+        $title = trim($params['title']);
+        $name = trim($params['name']);
+        $isClosed = $params['isClosed'];
+
+        $loans = OnlineProduct::find()
+            ->select('id')
+            ->where(['like', 'title', $title])
+            ->column();
+
+        $users = User::find()
+            ->select('id')
+            ->where(['like', 'real_name', $name])
+            ->column();
+
+        $notes = [];
+
+        if (count($loans) > 0 && count($users) > 0) {
+            $txClient = Yii::$container->get('txClient');
+            $response = $txClient
+                ->post('credit-note/list', [
+                    'isPagination' => false,
+                    'sort' => '-createTime',
+                    'loans' => $loans,
+                    'users' => $users,
+                    'isClosed' => $isClosed
+                ]);
+
+            if (null !== $response) {
+                $notes = $response['data'];
+
+                foreach ($notes as $key => $note) {
+                    $notes[$key]['user'] = User::findOne($note['user_id']);
+                    $notes[$key]['loan'] = OnlineProduct::findOne($note['loan_id']);
+                }
+            }
+        }
+
+        foreach ($notes as $note) {
+            $exportData[] = [
+                $note['user']->real_name,
+                $note['user']->mobile,
+                $note['loan']->title,
+                $note['createTime'],
+                StringUtils::amountFormat3(bcdiv($note['amount'], 100)),
+                StringUtils::amountFormat3($note['discountRate']),
+                StringUtils::amountFormat3(bcdiv($note['tradedAmount'], 100)),
+                $note['isClosed'] ? '转让完成' : '转让中',
+            ];
+        }
+
+        UserStats::exportAsXlsx($exportData, '转让导出表_' . date('YmdHis') . '.xlsx');
     }
 }
