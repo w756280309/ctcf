@@ -9,6 +9,7 @@ use common\lib\MiitBaoQuan\Miit;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\mall\PointRecord;
+use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
 use common\models\product\OnlineProduct;
@@ -269,8 +270,20 @@ class OrderController extends BaseController
             return $this->renderFile('@wap/modules/order/views/order/_contract.php', ['content' => $contracts[$key]['content'], 'bq' => $bq, 'isDisDownload' => $isDisDownload]);
         }
         //工信部保权合同
-        $miit = new Miit();
-        $miitBQ = $miit->viewHetong($asset['order_id']);
+        if (Yii::$app->params['enable_miitbaoquan']) {
+            $miit = new Miit();
+            if (isset($asset['credit_order_id'])) {
+                $miitBQ = $miit->viewHetong(
+                    $asset['credit_order_id'],
+                    EbaoQuan::TYPE_M_LOAN,
+                    EbaoQuan::ITEM_TYPE_CREDIT_ORDER
+                );
+            } else {
+                $miitBQ = $miit->viewHetong($asset['order_id']);
+            }
+        } else {
+            $miitBQ = null;
+        }
 
         return $this->render('contract', [
             'contracts' => $contracts,

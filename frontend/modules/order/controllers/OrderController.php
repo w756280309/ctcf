@@ -5,6 +5,7 @@ namespace frontend\modules\order\controllers;
 use common\controllers\ContractTrait;
 use common\lib\MiitBaoQuan\Miit;
 use common\models\coupon\UserCoupon;
+use common\models\order\EbaoQuan;
 use common\models\order\OnlineOrder;
 use common\models\order\OrderManager;
 use common\models\product\OnlineProduct;
@@ -161,7 +162,15 @@ class OrderController extends BaseController
         //和签保全
         if (Yii::$app->params['enable_miitbaoquan']) {
             $miit = new Miit();
-            $miitBQ = $miit->viewHetong($asset['order_id']);
+            if (isset($asset['credit_order_id'])) {
+                $miitBQ = $miit->viewHetong(
+                    $asset['credit_order_id'],
+                    EbaoQuan::TYPE_M_LOAN,
+                    EbaoQuan::ITEM_TYPE_CREDIT_ORDER
+                );
+            } else {
+                $miitBQ = $miit->viewHetong($asset['order_id']);
+            }
         } else {
             $miitBQ = null;
         }
