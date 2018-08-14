@@ -5,9 +5,6 @@ use common\utils\StringUtils;
 $this->registerCssFile(ASSETS_BASE_URI.'css/header.css', ['depends' => 'frontend\assets\FrontAsset']);
 $action = Yii::$app->controller->action->getUniqueId();
 $fromNb = \common\models\affiliation\Affiliator::isFromNb(Yii::$app->request);
-$user = Yii::$app->user->getIdentity();
-//是否展示转让
-$showTransfer = !empty($user) && ($user->orderCount() > 0 || $user->creditOrderCount() > 0);
 ?>
 
 <div id="header-top-box">
@@ -52,7 +49,7 @@ $showTransfer = !empty($user) && ($user->orderCount() > 0 || $user->creditOrderC
                 <li><a class="<?= 'site/index' === $action ? 'header-nav-click' : '' ?>" href="/">首页</a></li>
                 <li>
                     <a class="<?= 'licai/index' === $action || 'licai/notes' === $action || 'licai/loan' === $action ? 'header-nav-click' : '' ?>"
-                       href="<?= $showTransfer ? '/licai/notes' : '/licai/loan' ?>">我要理财</a>
+                       href="/licai/loan">我要理财</a>
                 </li>
                 <li><a class="<?= 'safeguard/index' === $action ? 'header-nav-click' : '' ?>" href="/safeguard/">安全保障</a></li>
                 <li><a class="<?= 'helpcenter/operation' === $action ? 'header-nav-click' : '' ?>" href="/helpcenter/operation/">帮助中心</a></li>

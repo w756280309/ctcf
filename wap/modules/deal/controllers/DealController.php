@@ -159,15 +159,6 @@ class DealController extends Controller
      */
     public function actionIndex($page = 1)
     {
-        $tab = Yii::$app->request->get('tab');
-        $user = Yii::$app->user->getIdentity();
-        if (
-            empty($tab)
-            && Yii::$app->params['plat_code'] == 'WDJF'
-            && (!empty($user) && ($user->orderCount() > 0 || $user->creditOrderCount() > 0))
-        ) {
-            return $this->redirect('/licai/notes');
-        }
         $size = 5;
         $query = LoanFinder::queryP2pLoans();
         $count = $query->count();

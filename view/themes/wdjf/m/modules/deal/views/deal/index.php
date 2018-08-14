@@ -35,7 +35,7 @@ $showTransfer = !empty($user) && ($user->orderCount() > 0 || $user->creditOrderC
         <?php if ($showTransfer) : ?>
             <div class="col-xs-4"><a href="/licai/notes" class="cre-title <?= $action === 'licai/notes' ? 'active-cre-title' : '' ?>">转让</a></div>
         <?php endif; ?>
-        <div class="<?= $showTransfer ? 'col-xs-4' : 'col-xs-6' ?>"><a href="/deal/deal/index?tab=1" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">网贷</a></div>
+        <div class="<?= $showTransfer ? 'col-xs-4' : 'col-xs-6' ?>"><a href="/deal/deal/index" class="cre-title <?= $action === 'deal/deal/index' ? 'active-cre-title' : '' ?>">网贷</a></div>
         <div class="<?= $showTransfer ? 'col-xs-4' : 'col-xs-6' ?>"><a href="/deal/deal/loan" class="cre-title <?= $action === 'deal/deal/loan' ? 'active-cre-title' : '' ?>">定期</a></div>
     </div>
 <?php } ?>
