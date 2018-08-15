@@ -33,6 +33,7 @@ class DealController extends Controller
         $count = $query->count();
         $pages = new Pagination(['totalCount' => $count, 'pageSize' => $size]);
         $deals = $query->orderBy([
+            'cid' => SORT_ASC,
             'xs_status' => SORT_DESC,
             'recommendTime' => SORT_DESC,
             'sort' => SORT_ASC,
