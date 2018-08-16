@@ -53,10 +53,19 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="row-fluid">
             <h4>请选择文件并导入</h4>
-            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'form-group' ,'id' => 'import_form']]); ?>
+            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'form-group' ,'id' => 'import_form', 'style' => 'margin-left:8px']]); ?>
             <?= \yii\helpers\Html::fileInput('pointsFile', null, ['class' => 'form-control', 'accept' => '.xlsx, .xls'])?>
             <?= \yii\helpers\Html::submitButton('预览', ['class' => 'btn btn-default', 'id' => 'submit_btn'])?>
             <?php $form->end(); ?>
+        </div>
+        <div class="row-fluid">
+            <h4>导入须知</h4>
+            <ul>
+                <li style="list-style-type:none;text-indent:-15px;">1、每条记录用户待操作的积分不应超过10万积分；</li>
+                <li style="list-style-type:decimal;text-indent:-15px;">2、表格一次性导入不应超过千行，尽量分批进行导入，例如每次导入200条；</li>
+                <li style="list-style-type:decimal;text-indent:-15px;">3、若导入的线下用户为已账户合并的用户，则积分依然会导入到其对应的线上用户中；</li>
+                <li style="list-style-type:decimal;text-indent:-15px;">4、尽量避免进行重复导入，若不确定可以通过会员管理>>查看用户详情>>积分来确认。</li>
+            </ul>
         </div>
     </div>
 </div>

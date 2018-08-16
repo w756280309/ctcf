@@ -35,6 +35,16 @@ class PointsService
             ) {
                 throw new \Exception('参数不合法');
             }
+
+            /** 判断用户是否为线下 */
+            if ($isOffline
+                && $user instanceof OfflineUser
+                && null !== ($mergeUser = $user->onlineUser)
+            ) {
+                $user = $mergeUser;
+                $isOffline = false;
+            }
+
             if ($isOffline) {
                 if (!$user instanceof OfflineUser) {
                     throw new \Exception('线下用户必须是OfflineUser类型');
