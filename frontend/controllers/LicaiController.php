@@ -28,6 +28,7 @@ class LicaiController extends Controller
         $pages = new Pagination(['totalCount' => $data->count(), 'pageSize' => '10']);
 
         $loans = $data->orderBy([
+            'cid' => SORT_ASC,
             'xs_status' => SORT_DESC,
             'recommendTime' => SORT_DESC,
             'sort' => SORT_ASC,
