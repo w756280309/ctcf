@@ -237,8 +237,8 @@ class OfflineOrder extends ActiveRecord
             ON o.loan_id = l.id
             INNER JOIN offline_user u 
             ON u.id = o.user_id
-            WHERE o.onlineUserId = :userId 
-            AND l.isDeleted = 0 
+            WHERE u.onlineUserId = :userId 
+            AND o.isDeleted = 0 
             AND l.repaymentMethod = 10 
             AND date(from_unixtime(o.created_at)) >= :startDate
             AND date(from_unixtime(o.created_at)) <= :endDate";
