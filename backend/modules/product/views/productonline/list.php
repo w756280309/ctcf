@@ -239,9 +239,9 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                         <div class="item_content">
                             <select class="m-wrap" name="cid">
                                 <option value="" >全部</option>
-                                <option value="1" <?= $loanSearch->cid === 1 ? 'selected' : '' ?>><?= $pc_cat['1'] ?></option>
-                                <option value="2" <?= $loanSearch->cid === 2 ? 'selected' : '' ?>><?= $pc_cat['2'] ?></option>
-                                <option value="3" <?= $loanSearch->cid === 3 ? 'selected' : '' ?>><?= $pc_cat['3'] ?></option>
+                                <?php foreach ($pc_cat as $k => $v) : ?>
+                                    <option value="<?= $k ?>" <?= $loanSearch->cid === $k ? 'selected' : '' ?>><?= $v ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ $action = Yii::$app->controller->action->getUniqueId();
     <div class="main">
         <ul class="product-nav clear-fix fz18">
             <li class="lf <?= 'licai/index' === $action ? 'active-nav-product' : '' ?>"><a href="/licai/">散标列表</a></li>
-            <li class="lf <?= 'licai/notes' === $action ? 'active-nav-product' : '' ?>"><a href="/licai/">转让列表</a></li>
+            <li class="lf <?= 'licai/notes' === $action ? 'active-nav-product' : '' ?>"><a href="/licai/notes">转让列表</a></li>
         </ul>
         <div class="attorn-product-list fz-gray">
             <ul class="attorn-list">

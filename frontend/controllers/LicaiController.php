@@ -20,7 +20,7 @@ class LicaiController extends Controller
     /**
      * 我要理财-理财列表页面.
      */
-    public function actionIndex()
+    public function actionLoan()
     {
         $data = LoanFinder::queryPublicLoans();
         $data = $data->andWhere('cid != 3');
@@ -118,7 +118,7 @@ class LicaiController extends Controller
     /**
      * 网贷列表
      */
-    public function actionLoan()
+    public function actionIndex()
     {
         $data = LoanFinder::queryP2pLoans();
 
