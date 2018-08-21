@@ -139,7 +139,7 @@ $this->title = '礼遇7月';
                 <li><i>5</i>本次活动虚拟奖品将立即发放到账，实物奖品将在7个工作内联系发放。</li>
             </ul>
         </div>
-        <p class="tips">本活动最终解释权归楚天财富所有<br>理财非存款&nbsp;&nbsp;&nbsp;投资需谨慎</p>
+        <p class="tips">本活动最终解释权归楚天财富所有<br>&nbsp;&nbsp;&nbsp;投资需谨慎</p>
     </div>
     <popout v-if="popout.isClosePopout" v-on:changeresult="closePopout" :awards="popout.awards"></popout>
     <giftslist v-if="isShowGiftsList" v-on:closelist="closeGiftsList"

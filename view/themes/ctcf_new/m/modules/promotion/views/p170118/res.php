@@ -28,7 +28,7 @@ if ($user && !($user->id % 2)) {
         <li><span class="f24 lf">3</span>前往积分商城兑换楚天猫充值卡</li>
     </ul>
 
-    <a class="f15 invest" href="<?= $toUrl ?>">去理财</a>
+    <a class="f15 invest" href="<?= $toUrl ?>">去出借</a>
 
     <p class="f12">客服热线：<a class="f15" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>(9:00~20:00)</p>
 </div>

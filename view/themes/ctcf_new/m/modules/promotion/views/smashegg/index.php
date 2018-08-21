@@ -145,7 +145,7 @@ $loginUrl = '/site/login?next='.urlencode(Yii::$app->request->absoluteUrl);
                     <li>活动结束后7个工作日内，工作人员将与您联系确认领取奖品相关事宜，请保持通讯畅通。</li>
                 </ul>
                 <div class="ruler-bottom f12">注：本活动最终解释权归楚天财富所有。</div>
-                <div class="remind-bottom f9">理财非存款 产品有风险 出借须谨慎</div>
+                <div class="remind-bottom f9">产品有风险 出借须谨慎</div>
             </div>
         </div>
     </div>

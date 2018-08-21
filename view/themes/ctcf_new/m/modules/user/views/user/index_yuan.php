@@ -50,7 +50,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/fastclick.js', ['depends' => JqueryAss
     </div>
     <div class="row accountcenter-center-left">
         <div class="col-xs-1"></div>
-        <div class="col-xs-5">理财资产（元）</div>
+        <div class="col-xs-5">出借资产（元）</div>
         <div class="col-xs-6 dj-tip-refer" style="position: relative;">
             冻结资金（元）
             <img class="common_img sm-height_tips_img" src="<?= ASSETS_BASE_URI ?>images/credit/icon_instruction.png" style="width: 16px" alt="">

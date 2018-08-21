@@ -20,7 +20,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                     <div class="section">
                         <div class="number">1</div>
                         <span>国资</span><span>背景</span>
-                        <p>隶属湖北日报新媒体集团旗下理财平台。</p>
+                        <p>隶属湖北日报新媒体集团旗下出借平台。</p>
                     </div>
 
                     <div class="section">

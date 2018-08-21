@@ -329,7 +329,7 @@ $this->registerJs('forceReload_V2();');
                         break;
                     case 'state4':
                         this.options.state = "<?= FE_BASE_URI ?>wap/happy-week/images/bg_04.png";
-                        this.options.title = "出借理财";
+                        this.options.title = "出借";
                         this.options.content = "任意出借即可点亮本期方片扑克牌。点亮4张扑克可参与本期抽奖。";
                         this.options.btnIsShow = true;
                         this.options.btn = '去出借';

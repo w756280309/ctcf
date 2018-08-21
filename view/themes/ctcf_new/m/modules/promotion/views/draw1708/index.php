@@ -44,7 +44,7 @@ if (1 === $promoStatus) {
             <li class="lf marginrg25">
                 <p class="task-top <?php if ($taskStatus['investFinished']) { ?>complete<?php } ?>"><em>每年化出借5万<br>得10元现金<br><span style="color:#fff;">已投<?= rtrim(rtrim(bcdiv($todayAnnualInvest, 10000, 1), '0'), '.') ?>万元</span></em></p>
                 <p class="task-mid"><em><span>最高100元</span><br>现金红包</em></p>
-                <a  class="task-bot <?= $btnStatusClass ?>" href="/deal/deal/index"><em>去理财</em></a>
+                <a  class="task-bot <?= $btnStatusClass ?>" href="/deal/deal/index"><em>去出借</em></a>
             </li>
             <li class="lf">
                 <p class="task-top <?php if ($taskStatus['inviteFinished']) { ?>complete<?php } ?>"><em>邀请好友首投<br>得500积分<br><span style="color:#fff;">已邀请<?= $invitePeopleCount ?>位</span></em></p>

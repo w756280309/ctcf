@@ -8,7 +8,7 @@
 
 use wap\assets\WapAsset;
 
-$this->title = '门店理财';
+$this->title = '门店出借';
 $this->backUrl = $backUrl ? $backUrl : '/user/user';
 $back = $backUrl ? urlencode(Yii::$app->request->hostInfo.$backUrl) : '';
 

@@ -82,18 +82,18 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
         </li>
     <?php } ?>
 </ul>
-<a href="/user/user/myofforder">
+<!--<a href="/user/user/myofforder">
     <div class="out_ops flex-content">
         <div style="width:0.69333333rem;height:1.226667rem;line-height:1.226667rem;text-align:left;vertical-align: middle;float:left;">
-            <img src="<?= ASSETS_BASE_URI ?>ctcf/images/ucenter/door_licai.png" style="height: 40%;" alt="">
+            <img src="<?/*= ASSETS_BASE_URI */?>ctcf/images/ucenter/door_licai.png" style="height: 40%;" alt="">
         </div>
         <div class="lf f15"style="background-position: 0 0">门店出借</div>
         <div class="rg">
             <span class="f15" id="off_licai" style="color: #ff6707"></span>
-            <img src="<?= FE_BASE_URI ?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
+            <img src="<?/*= FE_BASE_URI */?>wap/ucenter/images/pointer.png" alt="" style="width: 0.253rem;height:0.293rem;">
         </div>
     </div>
-</a>
+</a>-->
 <a href="/user/invite">
     <div class="out_ops flex-content">
         <div style="width:0.69333333rem;height:1.226667rem;line-height:1.226667rem;text-align:left;vertical-align: middle;float:left;">

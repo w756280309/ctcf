@@ -32,7 +32,7 @@ if ($isFromWrm && !$isIdVerified) {
     <?php if(!$isIdVerified) {?>
         <a class="f15 invest" href="<?= $toUrl ?>">立即实名认证</a>
     <?php } else { ?>
-        <a class="f15 invest" href="<?= $toUrl ?>">去理财</a>
+        <a class="f15 invest" href="<?= $toUrl ?>">去出借</a>
     <?php }?>
 
     <p class="f12">客服热线：<a class="f15" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><?= Yii::$app->params['platform_info.contact_tel'] ?></a>(9:00~20:00)</p>

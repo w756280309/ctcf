@@ -5,7 +5,7 @@ $this->title = '优惠券';
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>理财卡券</title>
+	<title>出借卡券</title>
 	<link rel="stylesheet" href="http://view.wendujf.com/css/base.css?v=20170907">
 	<script src="<?= FE_BASE_URI ?>libs/jquery-1.11.1.min.js"></script>
 	<script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
@@ -220,7 +220,7 @@ $this->title = '优惠券';
 			<h4 style="color:#ff6707;">优惠券规则</h4>
 			<ul>
 				<li class="rule-title">规则概述</li>
-				<li>理财卡券只适用于部分标的，其中转让标不可使用，同一项目代金券和加息券不可叠加使用。</li>
+				<li>出借卡券只适用于部分标的，其中转让标不可使用，同一项目代金券和加息券不可叠加使用。</li>
 				<li class="rule-title">代金券</li>
 				<li>1、一次出借可使用多张代金券，多张代金券使用需要满足出借额不少于多张代金券的累计金额。</li>
 				<li>2、代金券不能与加息券叠加使用。

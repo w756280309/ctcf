@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '节前理财送大礼';
+$this->title = '节前出借送大礼';
 $this->share = $share;
 
 ?>
@@ -66,7 +66,7 @@ $this->share = $share;
                 </table>
             </div>
             <li class="com">活动结束后3个工作日内，工作人员将与您联系确认领取奖品事宜，请保持通讯畅通。</li>
-            <li class="goInvest special f18"><a href="/deal/deal/index">去理财</a></li>
+            <li class="goInvest special f18"><a href="/deal/deal/index">去出借</a></li>
             <li class="declear special">*本次活动最终解释权归楚天财富所有</li>
         </ol>
     </div>

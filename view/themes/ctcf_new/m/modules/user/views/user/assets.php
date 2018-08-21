@@ -39,7 +39,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
         <ul>
             <li>
                 <a class="clearfix slb f15" href="/user/user/myorder?back_url=<?= urlencode($currentUrl) ?>">
-                    <div class="lf"><span class="colorBlock assetyellow"></span>理财资产</div>
+                    <div class="lf"><span class="colorBlock assetyellow"></span>出借资产</div>
                     <div class="rg"><span class="comColor"><?= StringUtils::amountFormat2($investmentBalance) ?></span>元</div>
                 </a>
             </li>
@@ -55,19 +55,19 @@ $currentUrl = Yii::$app->request->absoluteUrl;
                     <div class="rg"><span class="comColor"><?= StringUtils::amountFormat2($availableBalance) ?></span>元</div>
                 </a>
             </li>
-            <li>
-                <a class="clearfix slb f15" href="<?= $user->offline ? '/user/user/myofforder' : '#' ?>">
-                    <div class="lf"><span class="colorBlock assetgreen f15"></span>门店理财</div>
-                    <div class="rg"><span class="comColor"><?= $user->offline ? $user->offline->totalAssets : 0 ?></span>元</div>
+<!--            <li>
+                <a class="clearfix slb f15" href="<?/*= $user->offline ? '/user/user/myofforder' : '#' */?>">
+                    <div class="lf"><span class="colorBlock assetgreen f15"></span>门店出借</div>
+                    <div class="rg"><span class="comColor"><?/*= $user->offline ? $user->offline->totalAssets : 0 */?></span>元</div>
                 </a>
-            </li>
+            </li>-->
         </ul>
     </div>
 </div>
 
 <div class="mask cancel"></div>
 <div class="pomp f12">
-    <p class="grey">理财资产：</p>
+    <p class="grey">出借资产：</p>
     <p class="black">正在出借中待回收本金总和</p>
     <p class="grey">冻结资金：</p>
     <p class="black">出借资金在项目未满标时锁定的金额</p>
@@ -131,7 +131,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
                     },
                     data:[
                         {value: <?= $freezeBalance ?>, name:'冻结资金'},
-                        {value: <?= $investmentBalance ?>, name:'理财资产'},
+                        {value: <?= $investmentBalance ?>, name:'出借资产'},
                         {value: <?= $availableBalance ?>, name:'可用余额'}
                     ]
                 },

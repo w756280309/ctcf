@@ -65,7 +65,7 @@ $this->share = $share;
             <li>客服电话：<a href="tel:400-101-5151" class="special">400-101-5151</a></li>
             <li>官方网址：www.wenjf.com</li>
             <li>本活动最终解释权在法律范围内归楚天财富所有</li>
-            <li class="special">理财非存款 产品有风险 出借须谨慎</li>
+            <li class="special">产品有风险 出借须谨慎</li>
         </ul>
     </div>
     <div class="nav">

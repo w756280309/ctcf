@@ -5,7 +5,7 @@
  * Date: 18-1-3
  * Time: 下午1:51
  */
-$this->title = '门店理财';
+$this->title = '门店出借';
 
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/mytrade.css?v=20160805', ['depends' => 'frontend\assets\FrontAsset']);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css', ['depends' => 'frontend\assets\FrontAsset']);
@@ -27,7 +27,7 @@ use common\models\offline\OfflineRepaymentPlan;
 <div class="myCoupon-box">
     <div class="myCoupon-header">
         <div class="myCoupon-header-icon"></div>
-        <span class="myCoupon-header-font">门店理财</span>
+        <span class="myCoupon-header-font">门店出借</span>
     </div>
     <div class="myCoupon-content">
         <div class="list-single">

@@ -55,6 +55,6 @@ $this->headerNavOn = true;
     </div>
 
     <a class="invest" href="/deal/deal/index"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170424/img/btn.png" alt=""></a>
-    <p class="tips">本次活动最终解释权归楚天财富所有  &nbsp;&nbsp;&nbsp;理财非存款 产品有风险 出借须谨慎
+    <p class="tips">本次活动最终解释权归楚天财富所有  &nbsp;&nbsp;&nbsp;产品有风险 出借须谨慎
     </p>
 </div>

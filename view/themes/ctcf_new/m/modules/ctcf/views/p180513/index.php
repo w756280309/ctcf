@@ -44,7 +44,7 @@ $this->title = '母亲节送好礼';
             </div>
         </div>
     </div>
-    <a class="go-licai">去理财</a>
+    <a class="go-licai">去出借</a>
     <p class="all-invest">已累计年化：<span><?= $annualInvestAmount ?></span>万元</p>
     <div class="active-rule">
         <div class="rule-msg1">

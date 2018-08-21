@@ -155,7 +155,7 @@ if (!\Yii::$app->user->isGuest) {
         <!--tishi-box-->
         <div class="row tishi-box">
             <div class="col-xs-12">
-                <div>理财非存款，产品有风险，出借须谨慎</div>
+                <div>产品有风险，出借须谨慎</div>
             </div>
         </div>
         <!--invite-btn-->

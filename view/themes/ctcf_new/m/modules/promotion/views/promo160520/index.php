@@ -45,7 +45,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/weixin.js?v=201
             <div class="title_box row">
                 <div class="col-xs-1"></div>
                 <div class="col-xs-10 title_cn">
-                    楚天财富正式上线有金喜,理财代金券注册即抽
+                    楚天财富正式上线有金喜,出借代金券注册即抽
                 </div>
                 <div class="col-xs-1"></div>
             </div>
@@ -128,7 +128,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'promo/1605/choujiang/js/weixin.js?v=201
             </div>
             <p class="clear"></p>
             <div class="icon">
-                <div class="foot">理财非存款，产品有风险，出借需谨慎</div>
+                <div class="foot">产品有风险，出借需谨慎</div>
             </div>
             <div class="row">
                 <div class="col-xs-4"></div>

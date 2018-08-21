@@ -44,7 +44,7 @@ use common\utils\StringUtils;
         <div class="property-top-content blackFont">我的资产</div>
     </div>
     <div class="property-bottom">
-        <div class="property-tip-show grayFont">账户总资产=可用余额+理财资产+冻结资金 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
+        <div class="property-tip-show grayFont">账户总资产=可用余额+出借资产+冻结资金 <img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
         <img class="property-tip" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
         <div class="property-bottom-left" id="container">
         </div>
@@ -71,13 +71,13 @@ use common\utils\StringUtils;
                     <i class="redFont"><?= StringUtils::amountFormat3($user->lendAccount->freeze_balance) ?></i>元
                     <div class="property-tishi" style="left: -20px;">出借资金在标的未满标时锁定的金额<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
                 </li>
-                <li class="grayFont">
+<!--                <li class="grayFont">
                     <div class="property-point redBg"></div>
                     <i>门店出借</i>
-                    <img class="tips" src="<?= ASSETS_BASE_URI ?>images/useraccount/tip.png" alt="">
-                    <i class="redFont"><?= StringUtils::amountFormat3($user->offline->totalAssets) ?></i>元
-                    <div class="property-tishi" style="left: -20px;">门店下出借的正在出借中待回收本金总和<img class="dialog-jiao" src="<?= ASSETS_BASE_URI ?>images/useraccount/diglog-jiao.png" alt=""></div>
-                </li>
+                    <img class="tips" src="<?/*= ASSETS_BASE_URI */?>images/useraccount/tip.png" alt="">
+                    <i class="redFont"><?/*= StringUtils::amountFormat3($user->offline->totalAssets) */?></i>元
+                    <div class="property-tishi" style="left: -20px;">门店下出借的正在出借中待回收本金总和<img class="dialog-jiao" src="<?/*= ASSETS_BASE_URI */?>images/useraccount/diglog-jiao.png" alt=""></div>
+                </li>-->
             </ul>
         </div>
     </div>

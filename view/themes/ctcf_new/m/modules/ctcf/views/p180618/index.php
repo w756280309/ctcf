@@ -68,7 +68,7 @@ $this->title = '闯关赢好礼';
     </div>
     <div class="bottom-part">
         <p>本活动最终解释权归楚天财富所有</p>
-        <p>理财非存款&nbsp;&nbsp;投资需谨慎</p>
+        <p>&nbsp;&nbsp;投资需谨慎</p>
     </div>
 </div>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>

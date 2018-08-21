@@ -77,9 +77,9 @@ $this->headerNavOn = true;
 
     <div class="part-four">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/Mothers-day/images/task.png" alt="">
-        <a href="/deal/deal/index" class="go-invest">去理财</a>
+        <a href="/deal/deal/index" class="go-invest">去出借</a>
         <p>注：年化出借金额=出借金额*项目期限/365</p>
         <p>本次活动最终解释权归楚天财富所有</p>
-        <p>理财非存款 产品有风险 出借须谨慎</p>
+        <p>产品有风险 出借须谨慎</p>
     </div>
 </div>

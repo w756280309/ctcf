@@ -29,5 +29,5 @@ $this->headerNavOn = true;
 
     <a class="inviteFriends" href="/deal/deal/index"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-jinou/img/invest-btn.png" alt=""></a>
     <p class="tips pointsRed">本次活动最终解释权归楚天财富所有</p>
-    <p class="tips pointsRed">理财非存款 产品有风险 出借须谨慎</p>
+    <p class="tips pointsRed">产品有风险 出借须谨慎</p>
 </div>

@@ -51,7 +51,7 @@ $this->title = '限时积分新品';
             <div>去签到</div>
         </a>
         <a href="/deal/deal/index" class="get-box get-two">
-            <div>去理财</div>
+            <div>去出借</div>
         </a>
         <img src="<?= FE_BASE_URI ?>wap/point-shop/images/pic_remind.png" alt="" class="how-remind">
     </div>

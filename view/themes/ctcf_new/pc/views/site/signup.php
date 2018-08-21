@@ -63,7 +63,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/register/register.js?v=20180120',
         </div>
     <?php ActiveForm::end(); ?>
     <div class="register-image">
-        <img alt="" src="<?= ASSETS_BASE_URI ?>ctcf/images/register/new_banner.png">
+        <img alt="" src="<?= ASSETS_BASE_URI ?>ctcf/images/register/new_banner_1.png">
     </div>
 </div>
 <div class="clear"></div>

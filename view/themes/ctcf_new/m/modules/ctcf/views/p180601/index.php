@@ -49,7 +49,7 @@ $this->title = '楚天财富3周年';
     <div v-cloak class="part-two">
         <img @click.prevent src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180601/images/part_02.png?v=1.0" alt="">
         <a v-cloak @click="btnEvent(2)" class="go-invest draw" href="javascript:void(0);">{{drawMsg}}</a>
-        <div class="tip specialTips">理财非存款 产品有风险 投资须谨慎</div>
+        <div class="tip specialTips">产品有风险 投资须谨慎</div>
         <div class="tip">本活动最终解释权归楚天财富所有</div>
     </div>
 

@@ -53,7 +53,7 @@ $this->share = new Share([
             <p class="introTitle">
                 关于楚天财富
             </p>
-            <p class="introDetail">湖北日报新媒体集团旗下专业理财平台,国资背景、 收益稳健，首投还送50元超市卡。</p>
+            <p class="introDetail">湖北日报新媒体集团旗下专业出借平台,国资背景、 收益稳健，首投还送50元超市卡。</p>
             <div class="clearfix">
                 <dl class="lf">
                     <dt><img src="<?= FE_BASE_URI ?>wap/campaigns/active20170527/images/intro_01.png" alt=""></dt>

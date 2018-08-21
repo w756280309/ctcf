@@ -28,7 +28,7 @@ $this->title = '520天纪念活动';
         <li v-for="item in rightItems"><a :href="item.url"><img :src="item.img" alt=""></a></li>
     </ul>
     <p class="bottom-txt bottom-up">本次活动最终解释权归楚天财富所有</p>
-    <p class="bottom-txt bottom-down">理财非存款<i></i>产品有风险<i></i>出借须谨慎</p>
+    <p class="bottom-txt bottom-down"><i></i>产品有风险<i></i>出借须谨慎</p>
 </div>
 <script>
     var promoStatus = $('input[name=promoStatus]').val();

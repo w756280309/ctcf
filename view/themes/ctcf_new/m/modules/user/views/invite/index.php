@@ -12,7 +12,7 @@ $host = Yii::$app->params['clientOption']['host']['wap'];
 
 $share = new Share([
     'title' => '我在楚天财富出借啦，也送你888元福利，拿去花',
-    'description' => '楚天财富隶属湖北日报新媒体集团旗下理财平台，平台稳健运行3年，出借更放心',
+    'description' => '楚天财富隶属湖北日报新媒体集团旗下出借平台，平台稳健运行3年，出借更放心',
     'url' => $host.'luodiye/invite?code='.$user->usercode,
     'imgUrl' => (ASSETS_BASE_URI === '/' ? $host : ASSETS_BASE_URI).'ctcf/images/promo/share_weixin1.jpg',
 ]);

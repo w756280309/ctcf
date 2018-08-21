@@ -4,7 +4,7 @@ use wap\assets\WapAsset;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
-$this->title = '湖北日报新媒体集团旗下理财平台';
+$this->title = '湖北日报新媒体集团旗下出借平台';
 $this->params['breadcrumbs'][] = $this->title;
 $this->hideHeaderNav = true;
 $inApp = defined('IN_APP');
@@ -112,7 +112,7 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
                 </div>
             </div>
             <a class="link-last" href="/deal/deal/index/">立即出借</a>
-            <p class="danger-tip">理财非存款，产品有风险，出借须谨慎</p>
+            <p class="danger-tip">产品有风险，出借须谨慎</p>
             <div class="fixed-float">
                 <img src="<?= ASSETS_BASE_URI ?>images/luodiye/fixed-float.png" alt="">
             </div>

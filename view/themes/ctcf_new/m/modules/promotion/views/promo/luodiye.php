@@ -87,6 +87,6 @@ use yii\captcha\Captcha;
             </dt>
             <dd class="erweima f11"><img src="<?= FE_BASE_URI ?>wap/luodiye/images/erweima.png" alt=""><p>微信公众号</p></dd>
         </dl>
-        <p class="f11">*理财非存款，产品有风险，出借须谨慎</p>
+        <p class="f11">*产品有风险，出借须谨慎</p>
     </div>
 </div>

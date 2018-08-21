@@ -60,8 +60,8 @@ $this->headerNavOn = true;
     </div>
     <div class="part-four">
         <img src="<?= FE_BASE_URI ?>wap/campaigns/Youth-day/images/pic_renwu.png" alt="">
-        <a href="/deal/deal/index" class="button-invest">去理财</a>
+        <a href="/deal/deal/index" class="button-invest">去出借</a>
         <p class="attention">本次活动最终解释权归楚天财富所有</p>
-        <p class="attention">理财非存款 产品有风险 出借须谨慎</p>
+        <p class="attention">产品有风险 出借须谨慎</p>
     </div>
 </div>

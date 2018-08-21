@@ -67,7 +67,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 		font-weight: 800;
 	}
 </style>
-<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=18021211121">
+<link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=185">
 <!--<div>-->
 <!--    <img class="channel hide" src="--><?//= FE_BASE_URI ?><!--wap/index/images/channel.png" width="100%" alt="">-->
 <!--</div>-->
@@ -213,14 +213,12 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
     <?php } ?>
 	<div class="newbid-box" style="display:none">
 		<div class="newbid-insideBox">
-			<span class="newbid-insideBox-title">新手专享</span>
-			<p class="newbid-insideBox-shouyiNum">10%</p>
-			<p class="newbid-insideBox-shouyiTxt">预期年化收益</p>
-			<img src="<?= ASSETS_BASE_URI ?>ctcf/images/shouye/pic_newbid_new.png" class="newbid-insideBox-pic">
+            <img  class="newbid-insideBox-topPic" alt="" src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/pic_newbid_top.png">
+			<img src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/pic_newbid_new.png?v=1.0" class="newbid-insideBox-pic">
 			<a href="/site/signup" class="newbid-insideBox-register">注册</a>
 			<a href="/site/login" class="newbid-insideBox-login">登录</a>
 		</div>
-		<p class="newbid-wendu-link"><a href="/site/h5?wx_share_key=h5" style="color: #538feb;">1分钟了解楚天财富</a></p>
+		<p class="newbid-wendu-link"><a href="/site/h5?wx_share_key=h5">1分钟了解楚天财富</a></p>
 		<p class="newbid-wendu-txt">湖北日报新媒体集团旗下平台</p>
 	</div>
 	<div class="links-box clearfix">

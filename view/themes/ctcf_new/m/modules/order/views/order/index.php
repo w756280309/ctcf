@@ -231,7 +231,7 @@ $this->registerCssFile(ASSETS_BASE_URI . 'ctcf/css/buy-setting/setting.css?v=201
         </p>
         <p class="rules-parts">规则概述</p>
         <ul class="rules-content">
-            <li>理财卡券只适用于部分标的，其中转让标不可使用，同一项目代金券和加息券不可叠加使用。</li>
+            <li>出借卡券只适用于部分标的，其中转让标不可使用，同一项目代金券和加息券不可叠加使用。</li>
         </ul>
         <p class="rules-parts">代金券</p>
         <ul class="rules-content">

@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '周末理财积分翻倍';
+$this->title = '周末出借积分翻倍';
 $this->share = $share;
 $this->headerNavOn = true;
 

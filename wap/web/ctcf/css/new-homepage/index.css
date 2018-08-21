@@ -35,8 +35,8 @@ body {
   position: relative;
   top: -0.28rem;
   width: 9.2rem;
-  padding-top: 1.05333333rem;
-  padding-bottom: 0.56rem;
+  height:7.813333333rem;
+  padding-bottom: 0.4rem;
   margin: 0 auto 0.3rem;
   background-color: #fff;
   -webkit-border-radius: 0.10666667rem;
@@ -51,49 +51,20 @@ body {
 .flex-content .newbid-box .newbid-insideBox {
   position: relative;
   width: 8.69333333rem;
-  height: 5.17333333rem;
-  margin: 0 auto 1.26666667rem;
-  padding-top: 0.62666667rem;
-  /*border: 1px solid #ffb5b1;*/
+  height: 5.96rem;
+  margin: 0 auto;
+  padding-top: 0.45333333rem;
   box-sizing: border-box;
 }
-.flex-content .newbid-box .newbid-insideBox .newbid-insideBox-title {
-  background: url(../../images/new-homepage/new_person_bg.png) 0 0.1rem no-repeat;
-  -webkit-background-size: 100%;
-  background-size: 100%;
-  position: absolute;
-  top: -5%;
-  left: 50%;
-  margin-left: -1.74rem;
-  display: inline-block;
-  width: 3.48rem;
-  font-size: 0.5rem;
-  height: 0.6rem;
-  line-height: 0.6rem;
-  color: #4e545a;
-  background-color: #fff;
-  text-align: center;
-  z-index: 11;
-}
-.flex-content .newbid-box .newbid-insideBox .newbid-insideBox-shouyiNum {
-  color: #ff6707;
-  font-size: 0.96rem;
-  height: 0.96rem;
-  line-height: 0.96rem;
-  text-align: center;
-}
-.flex-content .newbid-box .newbid-insideBox .newbid-insideBox-shouyiTxt {
-  color: #9ea0a4;
-  font-size: 0.36rem;
-  height: 0.36rem;
-  line-height: 0.36rem;
-  text-align: center;
-  margin-top: 0.12rem;
+.flex-content .newbid-box .newbid-insideBox .newbid-insideBox-topPic {
+  display: block;
+  width: 2.866666667rem;
+  margin: 0 auto;
 }
 .flex-content .newbid-box .newbid-insideBox .newbid-insideBox-pic {
   display: block;
-  width: 7.06666667rem;
-  margin: 0.71794872rem auto 0;
+  width: 7.2533333333rem;
+  margin: 0.2rem auto 0;
 }
 .flex-content .newbid-box .newbid-insideBox a {
   position: absolute;
@@ -101,7 +72,6 @@ body {
   display: block;
   width: 3.86666667rem;
   height: 0.96rem;
-  margin-bottom: -0.57333333rem;
   line-height: 0.96rem;
   text-align: center;
   font-size: 0.5rem;
@@ -124,11 +94,18 @@ body {
   line-height: 0.46666667rem;
   text-align: center;
 }
+.flex-content .newbid-box .newbid-wendu-link {
+  line-height: 0.5066667rem;
+  margin-top: 0.466667rem;
+}
 .flex-content .newbid-box .newbid-wendu-link a {
-  color: #7cbaf3;
+  color: #419bf9;
+  font-size:0.3466667rem;
 }
 .flex-content .newbid-box .newbid-wendu-txt {
-  color: #9ea0a4;
+  color: #aab2bd;
+  line-height: 0.5066667rem;
+  font-size:0.3466667rem;
 }
 /*nav入口*/
 .flex-content .links-box {

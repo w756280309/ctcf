@@ -15,7 +15,7 @@
     <div class="content">
         <div class="lf content-lf"></div>
         <div class="rg content-rg">
-            <p class="error">抱歉！当前正有大批理财者进入，您暂时无法访问此页面！<a href="/" class="back-home">回首页></a></p>
+            <p class="error">抱歉！当前正有大批出借者进入，您暂时无法访问此页面！<a href="/" class="back-home">回首页></a></p>
             <p class="code-tip">如果您急需我们，请扫描下方二维码。</p>
             <ul class="ul-code">
                 <li><a href="javascript:void(0)"><img width="132" src="<?= ASSETS_BASE_URI ?>ctcf/images/weixin_follow.png" alt="官方微信"></a>

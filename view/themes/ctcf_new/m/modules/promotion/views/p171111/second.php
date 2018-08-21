@@ -21,7 +21,7 @@ $this->title = '11月理财节';
     <!-- 一、预约理财 -->
     <div class="slide slide-one">
         <div class="order-before order" :class="[ orderPop == '0' ? 'show': '']">
-            <p class="txt-tip">活动期间预约11月9-11日理财，可获得对应金额加息券1张。</p>
+            <p class="txt-tip">活动期间预约11月9-11日出借，可获得对应金额加息券1张。</p>
             <div class="select-box">
                 <div class="money input-box">
                     <label for="">预约金额</label>
@@ -90,7 +90,7 @@ $this->title = '11月理财节';
             <p class="txt-tip">喜卡可以在11月9-11日期间兑换现金红包，最高1111元哦！</p>
             <div class="result-box-task lf ">
                 <img class="finished" v-if="isAppointmented == 1" src="<?= FE_BASE_URI ?>wap/campaigns/active20171111/images/icon_finished.png" alt="">
-                <p class="top-invest">成功预约理财</p>
+                <p class="top-invest">成功预约出借</p>
                 <p class="center-txt"><span class="orderTask">{{isAppointmented}}</span>/1</p>
                 <a href="#" class="link">去预约</a>
             </div>

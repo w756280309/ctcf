@@ -5,7 +5,7 @@ use common\models\adv\Share;
 $this->title = '30亿狂欢盛宴';
 $this->share = new Share([
     'title' => '楚天财富交易额突破30亿，全民砸金蛋，100%中奖！快来加入狂欢盛宴吧！',
-    'description' => '楚天财富，湖北日报新媒体集团旗下理财平台，累计交易额突破30亿！',
+    'description' => '楚天财富，湖北日报新媒体集团旗下出借平台，累计交易额突破30亿！',
     'imgUrl' => FE_BASE_URI.'wap/campaigns/active20170830/images/wx_share.jpg',
     'url' => Yii::$app->params['clientOption']['host']['wap'].'promotion/golden-egg/',
 ]);
@@ -61,7 +61,7 @@ $this->share = new Share([
     <div id="toTop"></div>
     <div class="regular">
         <div class="regular-head">
-            <a class="goInvest" href="/deal/deal/index">去理财</a>
+            <a class="goInvest" href="/deal/deal/index">去出借</a>
             <p>活动规则</p>
             <a href="#toTop"><img v-on:click="packUp" v-bind:class="{ rotate: isRotate }" src="<?= FE_BASE_URI ?>wap/campaigns/active20170830/images/pointer.png" alt=""></a>
         </div>

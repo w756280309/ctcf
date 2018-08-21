@@ -54,7 +54,7 @@ $this->title = '3.15限时专享活动';
             </table>
             <li class="f14">活动结束后3个工作日内，工作人员会与您联系确认领取奖品事宜，请保持通讯畅通。</li>
         </ol>
-        <a class="a-invest f18" href="/deal/deal/index">去理财</a>
+        <a class="a-invest f18" href="/deal/deal/index">去出借</a>
         <p class="f11 ownership">*本次活动最终解释权归楚天财富所有</p>
     </div>
 </div>

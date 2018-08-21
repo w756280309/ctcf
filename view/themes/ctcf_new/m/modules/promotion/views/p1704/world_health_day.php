@@ -1,6 +1,6 @@
 <?php
 
-$this->title = '关爱健康，轻松理财';
+$this->title = '关爱健康，轻松出借';
 $this->share = $share;
 
 ?>
@@ -41,7 +41,7 @@ $this->share = $share;
             <li class="f14">本次活动每位用户最多可以获得2000积分，积分将于出借成功后的三个工作日内发放；</li>
             <li class="f14">实物礼品仅支持线下领取，领取地址：武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层。</li>
         </ol>
-        <a class="a-invest f18" href="/deal/deal/index">去理财</a>
+        <a class="a-invest f18" href="/deal/deal/index">去出借</a>
         <p class="f11 ownership">*本次活动最终解释权归楚天财富所有</p>
         <div class="bottom-img"></div>
     </div>

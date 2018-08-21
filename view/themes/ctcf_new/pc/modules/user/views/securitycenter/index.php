@@ -84,7 +84,7 @@ $mobile = StringUtils::obfsMobileNumber($user->mobile);
                 </div>
                 <div class="info info-name">
                     <h4>银行卡绑定</h4>
-                    <p>绑定银行卡，理财更任性。</p>
+                    <p>绑定银行卡，出借更任性。</p>
                 </div>
                 <?php if (null !== $user->qpay): ?>
                 <div class="info info-person">

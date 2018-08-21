@@ -98,13 +98,13 @@ $this->share = new Share([
                         </dt>
                         <dd class="lf">
                             <div class="status-one" v-if="!isStart">
-                                <p class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.2s">虽然我在2017年没有理财</p>
+                                <p class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.2s">虽然我在2017年没有出借</p>
                                 <p class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.2s">但这一天不会遥远</p>
                                 <img class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s" src="<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/intro_04.png" alt="">
                             </div>
                             <div class="status-two" v-if="isStart">
                                 <p class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.2s"><?= $investDateOut ?></p>
-                                <p class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.2s">我开始了第一次理财</p>
+                                <p class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.2s">我开始了第一次出借</p>
                                 <img class="ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0s" src="<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/intro_03.png" alt="">
                             </div>
                             <p class="p1 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.4s">楚天财富平台交易额一直稳步攀升</p>
@@ -239,7 +239,7 @@ $this->share = new Share([
                             <img class="icp ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="1s" swiper-animate-delay="0s" src="<?= FE_BASE_URI ?>wap/campaigns/active20180102/images/icp.png" alt="">
                             <p class="p2 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="0.6s">2017年5月，周年庆单日交易额突破6924万元</p>
                             <p class="p3 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1s">2017年11月，首批接入国家级合同保全的金融平台</p>
-                            <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1.4s">我们将继续努力奉行“稳健 专业 贴心”的价值观与“安全理财，幸福千万家”的使命</p>
+                            <p class="p4 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1.4s">我们将继续努力奉行“稳健 专业 贴心”的价值观与“安全出借，幸福千万家”的使命</p>
                             <p class="p5 ani" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.8s" swiper-animate-delay="1.8s">未来，楚天财富将继续与您携手同行</p>
                         </dd>
                     </dl>

@@ -133,7 +133,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                             <li class="f14 lf text-align-lf"><img class="icon5" src="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起借</li>
                             <li class="f14 lf comred"><img class="icon6" src="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>期限</li>
                             <li class="f14 lf text-align-rg"><img class="icon7" src="<?= FE_BASE_URI ?>wap/index/images/icon_07.png" alt=""> 限购一万</li>
-                            <li class="f18 lf">去理财</li>
+                            <li class="f18 lf">去出借</li>
                         </ul>
                     </a>
                 <?php } else { ?>
@@ -146,7 +146,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
                             <li class="f14 lf text-align-lf"><img class="icon5" src="<?= FE_BASE_URI ?>wap/index/images/icon_05.png" alt=""> <?= StringUtils::amountFormat2($xs->start_money) ?>元起借</li>
                             <li class="f14 lf comred"><img class="icon6" src="<?= FE_BASE_URI ?>wap/index/images/icon_06.png" alt=""> <?= $ex['value'].$ex['unit'] ?>期限</li>
                             <li class="f14 lf text-align-rg"><img class="icon7" src="<?= FE_BASE_URI ?>wap/index/images/icon_07.png" alt=""> 限购一万</li>
-                            <li class="f18 lf">去理财</li>
+                            <li class="f18 lf">去出借</li>
                         </ul>
                     </a>
                 <?php } ?>
@@ -207,7 +207,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
         <?php if (!empty($loans)) { ?>
             <div class="invest">
                 <p class="clearfix">
-                    <span class="lf f15">理财专区</span>
+                    <span class="lf f15">出借专区</span>
                     <a class="rg f15" href="/deal/deal/index">查看全部产品</a>
                 </p>
                 <ul>
@@ -314,7 +314,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
             <p class="f14">武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层</p>
         </div>
 
-        <footer class="f11"><span></span>湖北日报新媒体集团旗下理财平台<span></span></footer>
+        <footer class="f11"><span></span>湖北日报新媒体集团旗下出借平台<span></span></footer>
         <?php if (!defined('IN_APP') && $this->showBottomNav) { ?>
             <?= $this->renderFile('@wap/views/layouts/footer.php')?>
         <?php } ?>

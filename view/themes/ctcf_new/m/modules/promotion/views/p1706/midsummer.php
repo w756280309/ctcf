@@ -23,9 +23,9 @@ $currentUrl = Yii::$app->request->absoluteUrl;
             <div class="open-it">拆</div>
         </div>
         <div class="show-hongbao">我的红包</div>
-        <a href="/deal/deal/index" class="go-invest">去理财</a>
+        <a href="/deal/deal/index" class="go-invest">去出借</a>
         <p class="remind">本次活动最终解释权归楚天财富所有</p>
-        <p class="remind">理财非存款 产品有风险 出借须谨慎</p>
+        <p class="remind">产品有风险 出借须谨慎</p>
     </div>
     <div class="mask"></div>
     <div class="have-hongbao">
@@ -49,7 +49,7 @@ $currentUrl = Yii::$app->request->absoluteUrl;
         <div class="tanhao">!</div>
         <p class="no-hongbao-content">您还没有红包哦</p>
         <p class="no-hongbao-content">快去出借吧！</p>
-        <a href="/deal/deal/index" class="go-invest">去理财</a>
+        <a href="/deal/deal/index" class="go-invest">去出借</a>
         <img src="<?= FE_BASE_URI ?>wap/campaigns/xiazhi/images/btn_off.png" alt="" class="btn-off">
     </div>
     <div class="get-hongbao">

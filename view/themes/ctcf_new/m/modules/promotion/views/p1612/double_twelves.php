@@ -182,7 +182,7 @@ use common\utils\StringUtils;
     <a class="goindex" href="/<?= !defined('IN_APP') ? '?v='.time() : '' ?>"><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/goindex.png" alt=""></a>
 </section>
 <!--footer-->
-<footer><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/adv.png" alt=""> 理财非存款 产品有风险 出借须谨慎 </footer>
+<footer><img src="<?= FE_BASE_URI ?>wap/campaigns/double-twelve/images/adv.png" alt="">产品有风险 出借须谨慎 </footer>
 
 <!--遮罩-->
 <div class="mask"></div>
