@@ -214,7 +214,7 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 	<div class="newbid-box" style="display:none">
 		<div class="newbid-insideBox">
             <img  class="newbid-insideBox-topPic" alt="" src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/pic_newbid_top.png">
-			<img src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/pic_newbid_new.png?v=1.0" class="newbid-insideBox-pic">
+			<img src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/pic_newbid_new.png?v=1.1" class="newbid-insideBox-pic">
 			<a href="/site/signup" class="newbid-insideBox-register">注册</a>
 			<a href="/site/login" class="newbid-insideBox-login">登录</a>
 		</div>
