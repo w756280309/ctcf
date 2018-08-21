@@ -16,6 +16,11 @@ use Zii\Validator\CnIdCardValidator;
  * @property integer $idCard           身份证号码
  * @property integer $mobile           客户手机号
  * @property string  $annualInvestment 用户累计年化投资额
+ * @property string  $points           积分
+ * @property integer $created_at       创建时间戳
+ * @property integer $crmAccount_id    crm关联客户ID
+ * @property boolean $isReg            未确定含义
+ * @property integer $onlineUserId     关联的线上用户ID
  */
 class OfflineUser extends ActiveRecord
 {
@@ -100,5 +105,18 @@ class OfflineUser extends ActiveRecord
     public function getOnlineUser()
     {
         return $this->hasOne(User::class, ['id' => 'onlineUserId']);
+    }
+
+    /**
+     * 获得当前用户的积分
+     */
+    public function getPoints()
+    {
+        $points = $this->points;
+        if (null !== ($onlineUser = $this->onlineUser)) {
+            return $onlineUser->points;
+        }
+
+        return $points;
     }
 }

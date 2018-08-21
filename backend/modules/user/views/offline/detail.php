@@ -57,7 +57,7 @@ $this->title = '线下会员详情';
                 </tr>
                 <tr>
                     <td><strong>积分</strong></td>
-                    <td><?= StringUtils::amountFormat2($user->online ? $user->online->points :$user->points) ?></td>
+                    <td><?= StringUtils::amountFormat2($user->getPoints()) ?></td>
                     <td><strong>会员等级</strong></td>
                     <td>VIP<?= $user->getLevel() ?></td>
                     <td><strong>会员财富值</strong></td>
