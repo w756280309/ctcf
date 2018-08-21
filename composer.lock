@@ -153,7 +153,7 @@
             "version": "v1.3.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/bestiejs/punycode.js.git",
+                "url": "git@github.com:bestiejs/punycode.js.git",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
             },
             "dist": {
@@ -3051,7 +3051,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git",
-                "reference": "975148f1c31777dd24f0ccaf8ae7cd695eb46bf4"
+                "reference": "55e0d774a97615895316f425f8778190108edde6"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -3075,7 +3075,7 @@
             ],
             "description": "工具库",
             "homepage": "http://dx.wangcaigu.cn/diffusion/WCGLIBS/",
-            "time": "2018-08-14T05:09:21+00:00"
+            "time": "2018-08-21T01:34:14+00:00"
         },
         {
             "name": "yiisoft/yii2",
@@ -3518,7 +3518,7 @@
             "version": "v0.11.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twitter/typeahead.js.git",
+                "url": "git@github.com:twitter/typeahead.js.git",
                 "reference": "588440f66559714280628a4f9799f0c4eb880a4a"
             },
             "dist": {
