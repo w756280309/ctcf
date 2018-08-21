@@ -5,6 +5,7 @@ use common\models\affiliation\AffiliateCampaign;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\UserAffiliation;
 use common\models\growth\AppMeta;
+use common\models\payment\Repayment;
 use Yii;
 use common\models\user\UserInfo;
 
@@ -68,6 +69,14 @@ class LoanFinder
                 $query->andWhere('if(refund_method = 1, expires >= 180, expires >= 6) or is_xs = 1');
             }
         }
+
+        //排除已还清时间>6月29日的标的
+        $ids = Repayment::find()
+            ->where(['isRepaid' => 1])
+            ->andWhere(['>', 'date(repaidAt)', '2018-06-29'])
+            ->select('distinct(loan_id)')
+            ->column();
+        $query = $query->andWhere(['not in', 'id', $ids]);
 
         return $query;
     }
