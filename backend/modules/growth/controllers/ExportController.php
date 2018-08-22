@@ -638,6 +638,46 @@ AND u.id not in
                 'itemType' => ['date', 'string', 'string', 'string', 'string', 'string', 'float', 'float', 'string',
                     'float', 'date', 'string'],
             ],
+            'draw_failure_export' => [
+                'key' => 'draw_failure_export',
+                'title' => '提现失败信息导出',
+                'content' => '导出一段时间内提现失败信息',
+                'sql' => "SELECT 
+dr.sn as '提现订单号',
+u.real_name as '用户姓名',
+u.safeMobile as '手机号',
+ub.bank_name as '银行名称',
+ub.card_number as '银行卡号',
+from_unixtime(dr.created_at) as '提现时间',
+dr.money as '提现金额' 
+FROM draw_record dr 
+INNER JOIN user u on dr.uid = u.id 
+INNER JOIN user_bank ub on ub.id = dr.user_bank_id 
+WHERE 
+u.type = 1 
+AND dr.status in (11, 3) 
+AND date(from_unixtime(dr.created_at)) >= :startDate 
+AND date(from_unixtime(dr.created_at)) <= :endDate
+",
+                'params' => [
+                    'startDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'startDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d', strtotime('-2 month')),//参数的默认值
+                        'title' => '开始日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                    'endDate' => [//参数列表， key 是参数名， 不可为空
+                        'name' => 'endDate',//参数名
+                        'type' => 'date',//参数的数据类型
+                        'value' => date('Y-m-d'),//参数的默认值
+                        'title' => '结束日期',//参数标题
+                        'isRequired' => true,//是否必要参数, 默认都是必要参数
+                    ],
+                ],
+                'itemLabels' => ['提现订单号', '用户姓名', '手机号', '银行名称', '银行卡号', '提现时间', '提现金额(元)'],
+                'itemType' => ['string', 'string', 'string', 'string', 'string', 'date', 'float'],
+            ],
         ];
         parent::init();
     }

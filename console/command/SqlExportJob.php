@@ -2,12 +2,8 @@
 
 namespace console\command;
 
-
 use common\lib\user\UserStats;
-use common\models\order\OnlineRepaymentPlan;
-use common\models\product\OnlineProduct;
 use common\models\queue\Job;
-use common\models\tx\UserAsset;
 use Yii;
 use common\utils\SecurityUtils;
 
