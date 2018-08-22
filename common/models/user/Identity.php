@@ -14,7 +14,7 @@ class Identity extends ActiveRecord
     public function rules()
     {
         return [
-            [['encryptedIdCard', 'create_time'], 'required'],
+            [['encryptedName', 'encryptedIdCard', 'create_time'], 'required'],
             ['encryptedIdCard', 'unique'],
         ];
     }
