@@ -68,11 +68,6 @@ class CreditNote
             return ['code' => 1, 'message' => '原始项目不存在'];
         }
 
-        //余额不足
-        if (bccomp($user->lendAccount->available_balance, $amount, 2) < 0) {
-            return ['code' => 1, 'message' => '您的可用余额不足'];
-        }
-
         //实际支付
         $note = TxCreditNote::findOne($id);
         $order = $note->order;
