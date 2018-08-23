@@ -3,6 +3,7 @@
 namespace backend\modules\coupon\controllers;
 
 use backend\controllers\BaseController;
+use common\models\adminuser\AdminLog;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
 use common\models\order\OnlineOrder;
@@ -402,6 +403,45 @@ class CouponController extends BaseController
                     return $this->redirect('/user/user/detail?id=' . $userCoupon->user_id . '&tabClass=' . $tabClass);
                 }
             }
+        }
+    }
+
+    /**
+     * 批量删除代金券
+     */
+    public function actionBatchDel()
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+        $ids = Yii::$app->request->post('ids');
+        $newExpiryDate = date("Y-m-d", strtotime("-1 day"));
+
+        try {
+            $userCoupon = UserCoupon::find()
+                ->where(['in', 'id', $ids])
+                ->andWhere(['<>', 'isUsed', 1])
+                ->andWhere(['>', 'expiryDate', date("Y-m-d")])
+                ->asArray()
+                ->all();
+            if ($userCoupon) {
+                $couponIds = array_column($userCoupon, 'id');
+                if (UserCoupon::updateAll(['expiryDate' => $newExpiryDate], ['in', 'id', $couponIds])) {
+                    foreach ($couponIds as $couponId) {
+                        //  记录日志
+                        $log = AdminLog::initNew(['tableName' => UserCoupon::tableName(), 'primaryKey' => $couponId],
+                            Yii::$app->user, ['expiryDate' => $newExpiryDate]);
+                        $log->save();
+                    }
+                    $transaction->commit();
+
+                    return ['status' => 1];
+                }
+            }
+
+            return ['status' => 0];
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+
+            return ['status' => 2];
         }
     }
 }
