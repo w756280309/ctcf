@@ -61,9 +61,6 @@ class RepaymentController extends Controller
                         'type' => null !== $plan->asset_id ? MoneyRecord::TYPE_CREDIT_HUIKUAN : MoneyRecord::TYPE_HUIKUAN,
                         'osn' => null !== $plan->asset_id ? $plan->asset_id : $plan->sn,
                         'uid' => $plan->uid,
-                        'in_money' => $plan->benxi,
-                        'balance' => $lendAccount->available_balance,
-                        'remark' => '第'.$plan->qishu.'期'.'本金:'.$plan->benjin.'元;利息:'.$plan->lixi.'元;',
                     ])
                     ->one();
                 if (!is_null($mr)) {
@@ -72,6 +69,17 @@ class RepaymentController extends Controller
                 }
 
                 $refundTime = strtotime($plan->actualRefundTime);
+
+                $balance = $plan->benxi;
+                $moneyRecord = MoneyRecord::find()
+                    ->where(['uid' => $plan->uid])
+                    ->andWhere(['<=', 'created_at', $refundTime])
+                    ->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC])
+                    ->one();
+                if (!is_null($moneyRecord)) {
+                    $balance += $moneyRecord->balance;
+                }
+
                 $sn = $this->createSn($refundTime);
 
                 //添加投资人流水更新
@@ -83,7 +91,7 @@ class RepaymentController extends Controller
                         'osn' => null !== $plan->asset_id ? $plan->asset_id : $plan->sn,
                         'uid' => $plan->uid,
                         'in_money' => $plan->benxi,
-                        'balance' => $lendAccount->available_balance,
+                        'balance' => $balance,
                         'remark' => '第'.$plan->qishu.'期'.'本金:'.$plan->benjin.'元;利息:'.$plan->lixi.'元;',
                     ]);
                     $lenderMoneyRecord->save(false);
