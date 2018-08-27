@@ -1,11 +1,16 @@
 <?php
 namespace console\controllers;
 
+use common\lib\user\UserStats;
 use common\models\mall\PointRecord;
 use common\models\offline\OfflineOrder;
 use common\models\offline\OfflineUser;
+use common\models\user\User;
+use common\utils\SecurityUtils;
 use common\utils\TxUtils;
+use PHPExcel_IOFactory;
 use yii\console\Controller;
+use Yii;
 
 class PointController extends Controller
 {
@@ -64,5 +69,40 @@ class PointController extends Controller
             }
         }
         var_dump($err);
+    }
+
+    //导出温都所有用户的积分数值，线上线下分开
+    //要素：用户姓名、手机号、积分数值
+    public function actionExport()
+    {
+        $data[] = ['用户姓名', '手机号', '积分数值'];
+        $onlinePoints = User::find()
+            ->select('real_name as realName,safeMobile as mobile,points')
+            ->where([
+                'type' => 1,
+                'status' => 1,
+                'is_soft_deleted' => 0,
+            ])
+            ->andWhere(['>', 'points', 0])
+            ->asArray()
+            ->all();
+        foreach ($onlinePoints as $onlinePoint) {
+            $onlinePoint['mobile'] = SecurityUtils::decrypt($onlinePoint['mobile']);
+            $data[] = $onlinePoint;
+        }
+        $offlinePoints = OfflineUser::find()
+            ->select('realName,mobile,points')
+            ->where('onlineUserId is null')
+            ->andWhere(['>', 'points', 0])
+            ->asArray()
+            ->all();
+        foreach ($offlinePoints as $offlinePoint) {
+            $data[] = $offlinePoint;
+        }
+        $file = Yii::getAlias('@app/runtime/points_'.date('YmdHis').'.xlsx');
+        $objPHPExcel = UserStats::initPhpExcelObject($data);
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($file);
+        exit();
     }
 }
