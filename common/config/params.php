@@ -324,4 +324,5 @@ return [
     'microSystem.signKey' => env('MICRO_SYSTEM_SIGN_KEY') ?: null,
     //风控审核开关
     'feature_product_risk_audit' => false,
+    'enable_verify' => false,
 ];
