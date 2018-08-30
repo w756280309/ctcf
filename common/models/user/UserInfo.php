@@ -336,4 +336,22 @@ where o.user_id = :userId
 
         return $allAnnualInvestAmount;
     }
+
+    /**
+     * 计算某个人一段时间内不包含新手标的累计年化金额
+     * @param $userOrId
+     * @param $startDate
+     * @param $endDate
+     * @return int
+     */
+    public static function calcAnnualInvestNoXS($userOrId, $startDate, $endDate)
+    {
+        $db = \Yii::$app->db;
+        $sql = "select sum(truncate((if(p.refund_method > 1, o.order_money*p.expires/12, o.order_money*p.expires/365)), 2)) as annual from online_order o inner join online_product p on o.online_pid = p.id where date(from_unixtime(o.order_time)) >= :startDate and date(from_unixtime(o.order_time)) <= :endDate and o.status = 1 and o.uid = :userId and p.is_xs = 0";
+        return (int) $db->createCommand($sql, [
+            'userId' => $userOrId,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])->queryScalar();
+    }
 }

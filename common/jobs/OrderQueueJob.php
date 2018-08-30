@@ -27,6 +27,10 @@ class OrderQueueJob extends Object implements Job  //需要继承Object类和Job
         $reward = Reward::fetchOneBySn($this->sn);
         $user = User::findOne($this->userId);
         $promo = RankingPromo::findOne($this->promoId);
-        PromoService::award($user, $reward, $promo);
+        try {
+            PromoService::award($user, $reward, $promo);
+        } catch (\Exception $e) {
+            \Yii::info($e, 'queue');
+        }
     }
 }

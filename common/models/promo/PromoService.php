@@ -3,6 +3,7 @@
 namespace common\models\promo;
 
 use common\exception\NotActivePromoException;
+use common\exception\PromoException;
 use common\models\code\GoodsType;
 use common\models\coupon\CouponType;
 use common\models\coupon\UserCoupon;
@@ -242,23 +243,28 @@ class PromoService
     {
         //减库存
         if (!reward::decStoreBySn($reward->sn)) {
-            throw new \Exception('0002:抽奖失败，请联系客服!');
+            throw new PromoException($promo, $user, '0002:抽奖失败，请联系客服!', 22);
         }
+        $transaction = Yii::$app->db->beginTransaction();
         switch ($reward->ref_type) {
             case Reward::TYPE_COUPON:
                 $couponType = CouponType::findOne($reward->ref_id);
                 if (null === $couponType) {
-                    throw new \Exception('1001:未找到可发放的代金券');
+                    throw new PromoException($promo, $user, '1001:未找到可发放的代金券', 22);
                 }
                 $userCoupon = UserCoupon::addUserCoupon($user, $couponType);
                 $userCoupon->save(false);
-                Award::couponAward($user, $promo, $userCoupon, $ticket, $reward)->save(false);
+                $award = Award::couponAward($user, $promo, $userCoupon, $ticket, $reward)->save(false);
+                if (false === $award) {
+                    $transaction->rollBack();
+                    throw new PromoException($promo, $user, '优惠券奖励记录保存失败', 22);
+                };
                 break;
             case Reward::TYPE_RANDOM_POINT:
             case Reward::TYPE_POINT:
                 $point = $reward->ref_amount;
                 if (!is_numeric($point) || $point <= 0) {
-                    throw new \Exception('1003:积分应大于0');
+                    throw new PromoException($promo, $user, '1003:积分应大于0', 22);
                 }
                 $pointSql = "update user set points = points + :points where id = :userId";
                 $num = Yii::$app->db->createCommand($pointSql, [
@@ -266,7 +272,7 @@ class PromoService
                     'userId' => $user->id,
                 ])->execute();
                 if ($num <= 0) {
-                    throw new \Exception('1004:更新用户积分失败');
+                    throw new PromoException($promo, $user, '1004:更新用户积分失败', 22);
                 }
                 $user->refresh();
                 $pointRecord = new PointRecord([
@@ -281,12 +287,16 @@ class PromoService
                     'remark' => '活动获得',
                 ]);
                 $pointRecord->save(false);
-                Award::pointsAward($user, $promo, $pointRecord, $ticket, $reward)->save(false);
+                $award = Award::pointsAward($user, $promo, $pointRecord, $ticket, $reward)->save(false);
+                if (false === $award) {
+                    $transaction->rollBack();
+                    throw new PromoException($promo, $user, '积分奖励记录保存失败', 22);
+                };
                 break;
             case Reward::TYPE_PIKU:
                 $goodsType = GoodsType::findOne($reward->ref_id);
                 if (null === $goodsType) {
-                    throw new \Exception('1005:未找到对应实体商品');
+                    throw new PromoException($promo, $user, '1005:未找到对应实体商品', 22);
                 }
                 Award::goodsAward($user, $promo, $goodsType, $ticket, $reward)->save(false);
                 break;
@@ -294,9 +304,14 @@ class PromoService
                 $metadata['promo_id'] = $reward->promo_id;
                 $transfer = Transfer::initNew($user, $reward->ref_amount, $metadata);
                 $transfer->save(false);
-                Award::transferAward($user, $promo, $transfer, $ticket, $reward)->save(false);
+                $award = Award::transferAward($user, $promo, $transfer, $ticket, $reward)->save(false);
+                if (false === $award) {
+                    $transaction->rollBack();
+                    throw new PromoException($promo, $user, '现金奖励记录保存失败', 22);
+                };
                 break;
         }
+        $transaction->commit();
 
         return true;
     }

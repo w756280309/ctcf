@@ -227,11 +227,12 @@ class BasePromo
      *
      * @param object $user 用户对象
      * @param bool $isAnnual 是否为计算累计年化
+     * @param bool $exceptXS 是否排除新手标
      * @param string $range all为全部，offline为线下，online为线上
      *
      * @return string
      */
-    public function calcUserAmount($user, $isAnnual = true, $range = 'all')
+    public function calcUserAmount($user, $isAnnual = true, $exceptXS = true, $range = 'all')
     {
         if ($user instanceof OfflineUser) {
             $user = $user->getOnlineUser();
@@ -244,11 +245,19 @@ class BasePromo
         $startDate = (new \DateTime($this->promo->startTime))->format('Y-m-d');
         $endDate = $endTime->format('Y-m-d');
         if ($isAnnual) {
-            $onlineInvestment = UserInfo::calcAnnualInvest($user->id, $startDate, $endDate);
+            if ($exceptXS) {
+                $onlineInvestment = UserInfo::calcAnnualInvestNoXS($user->id, $startDate, $endDate);
+            } else {
+                $onlineInvestment = UserInfo::calcAnnualInvest($user->id, $startDate, $endDate);
+            }
             $offlineInvestment = UserInfo::calcOfflineAnnualInvest($user->id, $startDate, $endDate);
             $totalInvestment = $offlineInvestment + $onlineInvestment;
         } else {
-            $onlineInvestment = UserInfo::calcInvest($user->id, $startDate, $endDate);
+            if ($exceptXS) {
+                $onlineInvestment = UserInfo::calcInvestNoXS($user->id, $startDate, $endDate);
+            } else {
+                $onlineInvestment = UserInfo::calcInvest($user->id, $startDate, $endDate);
+            }
             $offlineInvestment = UserInfo::calcOfflineInvest($user->id, $startDate, $endDate);
             $totalInvestment = $offlineInvestment + $onlineInvestment;
         }

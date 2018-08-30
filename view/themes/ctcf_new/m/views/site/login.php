@@ -16,7 +16,7 @@ $this->title = '登录';
 
 <div class="row kongxi">
     <?php $form = ActiveForm::begin(['id' => 'login', 'action' => "/site/login", 'options' => ['data-to'=>'1']]); ?>
-    <input name="from" type="hidden" value="<?= urlencode($from) ?>">
+    <input name="from" type="hidden" value="<?= $from ?>">
     <input id="iphone" class="login-info" name="LoginForm[phone]" maxlength="11" type="tel" placeholder="请输入手机号" autocomplete="off" >
 
     <div class="row sm-height">
@@ -125,7 +125,7 @@ $this->title = '登录';
             $('#pass').val('********');
             $('#pass').attr('type', 'text');
 
-            var datas = {'phone':$('#iphone').val(),'bad':$('#pass2').val(),'verifyCode':$('#verifycode').val(),'sms':$('#yanzhengma').val()};
+            var datas = {'phone':$('#iphone').val(),'bad':$('#pass2').val(),'verifyCode':$('#verifycode').val(),'sms':$('#yanzhengma').val(), 'from': $('input[name=from]').val()};
             var $btn = $('#login-btn');
             var to = $('#login').attr("data-to");//设置如果返回错误，是否需要跳转界面
 

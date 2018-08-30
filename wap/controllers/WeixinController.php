@@ -40,6 +40,7 @@ class WeixinController extends Controller
             'timestamp' => $params['timestamp'], // 必填，生成签名的时间戳
             'nonceStr' => $params['noncestr'], // 必填，生成签名的随机串
             'signature' => $params['sign'],// 必填，签名，见附录1
+            'appId' => Yii::$app->params['weixin']['appId'], //微信的appId
         ];
     }
 
