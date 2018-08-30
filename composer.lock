@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "d4f0326fec712dbcb7321fd0c3c3ee96",
@@ -3051,7 +3051,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://vcs@dx.wangcaigu.cn/diffusion/WCGLIBS/wcg-libs.git",
-                "reference": "66115db32090b1f2a596c126e3ff775ad84f5f5e"
+                "reference": "72dfbf9c56fda7e9772af6282d69628df4a964d9"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -3075,7 +3075,7 @@
             ],
             "description": "工具库",
             "homepage": "http://dx.wangcaigu.cn/diffusion/WCGLIBS/",
-            "time": "2018-08-28T01:01:48+00:00"
+            "time": "2018-08-30T02:27:01+00:00"
         },
         {
             "name": "yiisoft/yii2",
