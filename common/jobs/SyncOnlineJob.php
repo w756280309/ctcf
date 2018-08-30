@@ -12,6 +12,7 @@ class SyncOnlineJob extends Object implements Job
     public $idCard;
     public $crmAccountId;
     public $inviterId;
+    public $affiliatorId;
 
     public function execute($queue)
     {
