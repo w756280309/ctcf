@@ -123,6 +123,9 @@ return [
         'wechat' => [
             'class' => 'backend\modules\wechat\Module',
         ],
+        'toolbox' => [
+            'class' => 'backend\modules\toolbox\Module',
+        ],
     ],
     'as LoginStatusFilter' => [
         'class' => \common\filters\LoginStatusFilter::className(),   //用户登录状态，保持各端只有一个有效的会话

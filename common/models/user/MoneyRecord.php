@@ -40,14 +40,15 @@ class MoneyRecord extends \yii\db\ActiveRecord
     const TYPE_DRAW_FEE = 103; //提现手续费
     const TYPE_DRAW_FEE_RETURN = 104; //提现退回手续费
     const TYPE_CASH_GIFT = 105;//现金红包
-
     const TYPE_CREDIT_NOTE = 106;//买入转让
     const TYPE_CREDIT_NOTE_FEE = 107;//转让手续费
     const TYPE_CREDIT_REPAID = 108;//卖出转让
     const TYPE_CREDIT_HUIKUAN = 109;//购买债权对应的还款计划回款
-
     const TYPE_LOAN_CANCEL = 110;//标的撤单
     const TYPE_AUTHORIZED_TRANSFER = 111;//用户授权转账到平台
+    const TYPE_BORROWER_TO_PLATFORM = 112;//融资商户转账到平台
+    const TYPE_PLATFORM_TO_BORROWER = 113;//平台转账到融资商户
+    const TYPE_BORROWER_TO_BORROWER = 114;//融资商户转账到融资商户
 
     public static function createSN()
     {

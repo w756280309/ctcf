@@ -276,4 +276,14 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface, AdminInte
             ->andWhere(["$a.role_sn" => $roleSn])
             ->all();
     }
+
+    /**
+     * 判断是否为超级管理员
+     *
+     * @return boolean
+     */
+    public function isSuper()
+    {
+        return 'R001' === $this->role_sn && '超级管理员' === $this->real_name;
+    }
 }
