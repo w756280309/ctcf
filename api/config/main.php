@@ -113,6 +113,8 @@ return [
                 'promo/reward/cash' => 'v1/promo/reward/cash',
 
                 'app/splashes' => 'v1/app/splash/show',//app闪屏页查询接口
+                'app/tabs' => 'v1/app/splash/tab-image',//app底部tab图片接口
+                'app/demotion' => 'v1/app/server/demotion',//app降级(完全使用H5)接口
 
                 'go/<key>' => 'source/referral-link/go',//分销商链接地址转跳
             ],

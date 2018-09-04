@@ -1,5 +1,12 @@
 $(function() {
-    //分页相关
+  var uaString = navigator.userAgent.toLowerCase();
+  var ownBrowser = [[/(wjfa.*?)\/([\w\.]+)/i], [UAParser.BROWSER.NAME, UAParser.BROWSER.VERSION]];
+  var parser = new UAParser(uaString, {browser: ownBrowser});
+  var versionName= parser.getBrowser().version;
+  if(versionName >= '2.4'){
+    window.NativePageController('openPullRefresh', {  'enable': "true" });
+  }
+  //分页相关
     var req_url = url;
     var currentPage = 2;
     var totalPage = tp;

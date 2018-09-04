@@ -5,6 +5,7 @@ namespace api\modules\v1\controllers\app;
 use api\modules\v1\controllers\Controller;
 use common\models\adv\Splash;
 use Yii;
+use yii\db\Query;
 
 class SplashController extends Controller
 {
@@ -36,6 +37,42 @@ class SplashController extends Controller
                 'img_1080x1920' => $baseDir . $splashModel->getMediaUri($splash['img1080x1920']), //安卓端
                 'title' => $splash['title'],
             ],
+        ];
+
+        $message = '成功';
+
+        return [
+            'status' => 'success',
+            'message' => $message,
+            'data' => $data,
+        ];
+    }
+
+    /**
+     * 返回App首页底部Tab图片链接地址
+     * 后台文件上传指定文件名图片（文件名首次确定后不可变），客户端根据文件名展示图片地址
+     * 目的：解决切换tab图片，app需要发版问题
+     * @return array
+     */
+    public function actionTabImage()
+    {
+        $uri = isset(Yii::$app->params['upload_base_uri']) ? Yii::$app->params['upload_base_uri']: '';
+        $tabImages = (new Query())
+            ->select('title,link')
+            ->from('admin_upload')
+            ->where("title like 'app%'")
+            ->indexBy('title')
+            ->all();
+        if (count($tabImages) < 6) {
+            $tabImages = [];
+        }
+        if (!empty($tabImages)) {
+            $tabImages['uri'] = $uri;
+        }
+        $data = [
+            'result' => 'success',
+            'msg' => '成功',
+            'content' => $tabImages,
         ];
 
         $message = '成功';

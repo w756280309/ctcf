@@ -3,6 +3,9 @@ use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
 $this->title = '修改登录密码';
+$this->registerJsFile(ASSETS_BASE_URI.'js/ua-parser.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/setting.css?v=20160422">
 <style>
@@ -50,7 +53,14 @@ $this->title = '修改登录密码';
 <script type="text/javascript">
     var csrf;
     $(function() {
-       csrf = $("meta[name=csrf-token]").attr('content');
+      var uaString = navigator.userAgent.toLowerCase();
+      var ownBrowser = [[/(wjfa.*?)\/([\w\.]+)/i], [UAParser.BROWSER.NAME, UAParser.BROWSER.VERSION]];
+      var parser = new UAParser(uaString, {browser: ownBrowser});
+      var versionName= parser.getBrowser().version;
+      if(versionName >= '2.4'){
+        window.NativePageController('openPullRefresh', {  'enable': "true" });
+      }
+      csrf = $("meta[name=csrf-token]").attr('content');
        $('#editpassbtn').bind('click', function() {
             if ($('#password').val() === '') {
                 toast('原密码不能为空');

@@ -12,6 +12,8 @@ $this->title = '借款详情';
 $this->registerCssFile(FE_BASE_URI.'libs/videojs/video-js.min.css', ['position' => 1]);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/details-list/xiangqing.css?v=20180212111', ['depends' => WapAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/ua-parser.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
 
 ?>
 <style>
@@ -318,6 +320,13 @@ $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]
         }
     <?php } ?>
     $(function() {
+      var uaString = navigator.userAgent.toLowerCase();
+      var ownBrowser = [[/(wjfa.*?)\/([\w\.]+)/i], [UAParser.BROWSER.NAME, UAParser.BROWSER.VERSION]];
+      var parser = new UAParser(uaString, {browser: ownBrowser});
+      var versionName= parser.getBrowser().version;
+      if(versionName >= '2.4'){
+        window.NativePageController('openPullRefresh', {  'enable': "true" });
+      }
         $('.tabs div').click(function() {
             var index = $('.tabs div').index(this);
             $('.tabs div').css({background:'#ffffff',color:'#434a54'}); //303030

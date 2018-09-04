@@ -11,6 +11,8 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/list-tag/creditlist.css?v=20180
 $this->registerJsFile(ASSETS_BASE_URI.'js/TouchSlide.1.1.js', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.classyloader.js', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJsFile(ASSETS_BASE_URI.'ctcf/js/licai/credit_page.js?v=171109', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/ua-parser.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
 
 $this->registerJs('var tp = ' . $tp . ';', 1);
 $this->registerJs("var url = '/licai/notes';", 1);
@@ -32,3 +34,13 @@ $action = Yii::$app->controller->action->getUniqueId();
 <?php } else { ?>
     <div class="cre-list-nums-none" style="display:block;">暂无数据</div>
 <?php } ?>
+<script>
+   $(function () {
+     var uaString = navigator.userAgent.toLowerCase();
+     var ownBrowser = [[/(wjfa.*?)\/([\w\.]+)/i], [UAParser.BROWSER.NAME, UAParser.BROWSER.VERSION]];
+     var parser = new UAParser(uaString, {browser: ownBrowser});
+     var versionName= parser.getBrowser().version;
+     if(versionName >= '2.4'){
+       window.NativePageController('openPullRefresh', {  'enable': "true" });
+     }   })
+</script>

@@ -9,6 +9,9 @@ $investmentBalance = $user->lendAccount->investment_balance;
 $freezeBalance = $user->lendAccount->freeze_balance;
 $availableBalance = $user->lendAccount->available_balance;
 $currentUrl = Yii::$app->request->absoluteUrl;
+$this->registerJsFile(ASSETS_BASE_URI.'js/ua-parser.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
@@ -77,7 +80,15 @@ $currentUrl = Yii::$app->request->absoluteUrl;
 </div>
 <script>
     $(function () {
-        //提示信息
+      var uaString = navigator.userAgent.toLowerCase();
+      var ownBrowser = [[/(wjfa.*?)\/([\w\.]+)/i], [UAParser.BROWSER.NAME, UAParser.BROWSER.VERSION]];
+      var parser = new UAParser(uaString, {browser: ownBrowser});
+      var versionName= parser.getBrowser().version;
+      if(versionName >= '2.4'){
+        window.NativePageController('openPullRefresh', {  'enable': "true" });
+      }
+
+      //提示信息
         $(".question").on("click",function(e){
             $('.cancel').show();
             $('.pomp').show();

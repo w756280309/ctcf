@@ -25,6 +25,8 @@ $this->registerJsFile(FE_BASE_URI . 'res/js/js.cookie.js', ['depends' => JqueryA
 $this->registerJsFile(FE_BASE_URI . 'libs/fastclick.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(FE_BASE_URI . 'libs/jquery.lazyload.min.js', ['depends' => JqueryAsset::class]);
 $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends' => JqueryAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/ua-parser.min.js', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' => 'wap\assets\WapAsset']);
 //$this->registerJsFile(ASSETS_BASE_URI . 'ctcf/js/mask/mask.js?v=1.11113', ['depends' => JqueryAsset::class]);
 ?>
 <style>
@@ -65,6 +67,13 @@ $this->registerJsFile(FE_BASE_URI . 'libs/swiper/swiper-3.4.2.min.js', ['depends
 	}
 	.data-box-show .data-box-show-line3 span{
 		font-weight: 800;
+	}
+	a{
+		text-decoration: none !important;
+	}
+	a:active,a:hover,a:link,a:visited{
+		color: #8c8c8c;
+		text-decoration: none !important;
 	}
 </style>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/new-homepage/index.css?v=185">
@@ -574,5 +583,13 @@ $this->registerJs(<<<JSFILE
             // $('.mask-login-invest').find('.close-box').css('display','block');
         });
     })
+   var uaString = navigator.userAgent.toLowerCase();
+   var ownBrowser = [[/(wjfa.*?)\/([\w\.]+)/i], [UAParser.BROWSER.NAME, UAParser.BROWSER.VERSION]];
+   var parser = new UAParser(uaString, {browser: ownBrowser});
+   var versionName= parser.getBrowser().version;
+    if(versionName >= '2.4'){
+      window.NativePageController('openPullRefresh', {  'enable': "true" });
+    }
+  
 JSFILE
 ) ?>

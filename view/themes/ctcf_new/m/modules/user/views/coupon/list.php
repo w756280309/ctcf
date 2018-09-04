@@ -1,5 +1,8 @@
 <?php
 $this->title = '优惠券';
+$this->registerJsFile(ASSETS_BASE_URI.'js/ua-parser.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -252,7 +255,15 @@ $this->title = '优惠券';
 </div>
 <script>
   $(function () {
-      $('.menu > div').on('click', function(){
+    var uaString = navigator.userAgent.toLowerCase();
+    var ownBrowser = [[/(wjfa.*?)\/([\w\.]+)/i], [UAParser.BROWSER.NAME, UAParser.BROWSER.VERSION]];
+    var parser = new UAParser(uaString, {browser: ownBrowser});
+    var versionName= parser.getBrowser().version;
+    if(versionName >= '2.4'){
+      window.NativePageController('openPullRefresh', {  'enable': "true" });
+    }
+
+    $('.menu > div').on('click', function(){
           var index = $(this).index();
           $('.menu > div').removeClass('active');
           $('.menu > div').eq(index).addClass('active');

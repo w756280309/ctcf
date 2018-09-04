@@ -7,14 +7,14 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/activeComHeader.css?v=20170906">
-<!--<link rel="stylesheet" href="--><?//= FE_BASE_URI ?><!--wap/ucenter/css/homePage.css?v=20170629">-->
-<!--<link rel="stylesheet" href="--><?//= ASSETS_BASE_URI ?><!--ctcf/common/ucenter/css/homePage.css?v=20180210">-->
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/ucenter/homePage.css?v=20180327">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/user/guide.min.css">
 <script src="<?= FE_BASE_URI ?>libs/fastclick.js"></script>
 <script src="<?= FE_BASE_URI ?>libs/lib.flexible3.js"></script>
 <script src="<?= ASSETS_BASE_URI ?>js/common.js"></script>
 
+<script src="<?= ASSETS_BASE_URI ?>js/ua-parser.min.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/AppJSBridge.min.js?v=1"></script>
 <?php if (!defined('IN_APP')) { ?>
     <div class="UtopTitle f18 flex-content">
         <a class="f14" href="/user/checkin">签到</a>
@@ -308,7 +308,14 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
 <?php } ?>
 <script>
     $(function () {
-        if($('.mask-no-invest')){
+      var uaString = navigator.userAgent.toLowerCase();
+      var ownBrowser = [[/(wjfa.*?)\/([\w\.]+)/i], [UAParser.BROWSER.NAME, UAParser.BROWSER.VERSION]];
+      var parser = new UAParser(uaString, {browser: ownBrowser});
+      var versionName= parser.getBrowser().version;
+      if(versionName >= '2.4'){
+        window.NativePageController('openPullRefresh', {  'enable': "true" });
+      }
+      if($('.mask-no-invest')){
            if($('.mask-no-invest').css('display')=='block'){
                $('body,.mask-no-invest').on('touchmove',function(e){
                    var e=e||window.event;
@@ -320,5 +327,5 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
                })
            }
         }
-    })
+    });
 </script>

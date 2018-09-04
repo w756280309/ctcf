@@ -4,6 +4,8 @@ use common\utils\StringUtils;
 use yii\helpers\Html;
 
 $this->title = '资产总览';
+$this->registerJsFile(ASSETS_BASE_URI.'js/ua-parser.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
 
 ?>
 <link rel="stylesheet" href="<?= FE_BASE_URI ?>wap/common/css/wenjfbase.css?v=20170906">
@@ -15,7 +17,7 @@ $this->title = '资产总览';
     var url = '/user/user/profit';
     var tp = '<?= $header['tp'] ?>';
 </script>
-<script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=2"></script>
 
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>

@@ -15,6 +15,8 @@ $this->registerJsFile(ASSETS_BASE_URI .'js/TouchSlide.1.1.js', ['depends' => Jqu
 $this->registerJsFile(ASSETS_BASE_URI .'js/jquery.classyloader.js', ['depends' => JqueryAsset::class, 'position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI .'ctcf/js/libs/list.js?v=20180211', ['depends' => JqueryAsset::class, 'position' => 1]);
 
+$this->registerJsFile(ASSETS_BASE_URI.'js/ua-parser.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
 $this->registerJs('var total=' . $header['count'] . ';', 1);
 $this->registerJs('var size=' . $header['size'] . ';', 1);
 $this->registerJs('var tp=' . $header['tp'] . ';', 1);
@@ -39,3 +41,15 @@ $action = Yii::$app->controller->action->getUniqueId();
 <?php } else { ?>
     <div class="nodata" style="display:block;">暂无数据</div>
 <?php } ?>
+<script>
+
+	$(function () {
+    var uaString = navigator.userAgent.toLowerCase();
+    var ownBrowser = [[/(wjfa.*?)\/([\w\.]+)/i], [UAParser.BROWSER.NAME, UAParser.BROWSER.VERSION]];
+    var parser = new UAParser(uaString, {browser: ownBrowser});
+    var versionName= parser.getBrowser().version;
+    if(versionName >= '2.4'){
+      window.NativePageController('openPullRefresh', {  'enable': "true" });
+    }
+  })
+</script>

@@ -60,4 +60,62 @@ class ServerController extends Controller
             ]
         ];
     }
+
+    /**
+     * 是否进行降级处理
+     * 区分平台温都、楚天
+     * 区分手机ios/android
+     */
+    public function actionDemotion()
+    {
+        $version = (int)\Yii::$app->request->get('version');
+        $clientType = strtolower(\Yii::$app->request->get('clientType'));
+        $platCode = \Yii::$app->params['plat_code'];
+        //ios需要降级处理版本号 params-local配置
+        $iosVersion = isset(\Yii::$app->params['iosVersion']) ? \Yii::$app->params['iosVersion']: [];
+        //android需要降级处理版本号 params-local配置
+        $androidVersion = isset(\Yii::$app->params['androidVersion']) ? \Yii::$app->params['androidVersion']: [];
+        if (empty($version) || !in_array($clientType, ['ios', 'android'])) {
+            return [
+                'status' => 'fail', //程序级别成功失败
+                'message' => '参数错误',
+                'data' => [],
+            ];
+        }
+
+        $isDemotion = false;
+        if ('WDJF' == $platCode) {
+            if ('ios' === $clientType) {
+                if (in_array($version, $iosVersion)) {
+                    $isDemotion = true;
+                }
+            } else {
+                if (in_array($version, $androidVersion)) {
+                    $isDemotion = true;
+                }
+            }
+        } else {
+            if ('ios' === $clientType) {
+                if (in_array($version, $iosVersion)) {
+                    $isDemotion = true;
+                }
+            } else {
+                if (in_array($version, $androidVersion)) {
+                    $isDemotion = true;
+                }
+            }
+        }
+
+        return [
+            'status' => 'success', //程序级别成功失败
+            'message' => '成功',
+            'data' => [
+                'result' => 'success', //业务级别成功失败
+                'msg' => '成功',
+                'content' => [
+                    'isDemotion' => $isDemotion,//是否降级
+                ],
+            ],
+        ];
+    }
 }

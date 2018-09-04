@@ -8,13 +8,16 @@ $back = $backUrl ? urlencode(Yii::$app->request->hostInfo.$backUrl) : '';
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/bind.css?v=1', ['depends' => WapAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/licai/licai.css?v=20180210111111', ['depends' => WapAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/ua-parser.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
+
 
 ?>
 <script type="text/javascript">
     var url = '/user/user/myorder?type=<?= $type ?>';
     var tp = '<?= $pages->pageCount ?>';
 </script>
-<script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=1"></script>
 
 <div class="row list-title">
     <div class="col-xs-4"><a href="/user/user/myorder?type=1&back_url=<?= $back ?>" class="<?= 1 === $type ? 'active-trans-title' : '' ?> trans-title">收益中</a></div>
