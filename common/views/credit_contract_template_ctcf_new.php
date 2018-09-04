@@ -34,126 +34,152 @@
         <span style=" font-size:14pt; font-weight:bold">产品转让协议</span>
     </p>
     <p style="text-align:right; ">
-        <span>编号：</span>
+        <span>合同编号：</span>
         <span><?= $contractNum ?></span>
     </p>
     <p>
-        <span>甲方：</span>
+        <span>本协议由以下各方于<?= $loanOrderCreateDate ?>在武汉市武昌区签订：</span>
+    </p>
+    <p>
+        <span>甲方（债权转让人）：</span>
         <span><?= $sellerName ?></span>
     </p>
     <p>
-        <span>身份证号：</span>
+        <span>身份证号码：</span>
         <span><?= $sellerIdCard ?></span>
     </p>
     <p>
-        <span>乙方：</span>
+        <span>楚天财富用户名：</span>
+        <span><?= $sellerMobile ?></span>
+    </p>
+    <p>
+        <span>乙方（债权受让人）：</span>
         <span><?= $buyerName ?></span>
     </p>
     <p>
-        <span>身份证号：</span>
+        <span>身份证号码：</span>
         <span><?= $buyerIdCard ?></span>
     </p>
     <p>
-        <span>丙方：</span>
-        <span>楚天财富（武汉）金融服务有限公司</span>
+        <span>楚天财富用户名：</span>
+        <span><?= $buyerMobile ?></span>
     </p>
     <p>
-        <span>法定代表人：韦奇志</span>
+        <span>丙方（服务方）：</span>
+        <span>楚天财富金融服务有限公司</span>
     </p>
     <p>
-        <span>注册地址：武汉市东湖路181号楚天文化创意产业园8号楼1层</span>
-    </p>
-    <p>
-        <span style="font-weight:bold">鉴于：</span>
+        <span>住所：武汉市武昌区东湖路楚天181产业园8号楼1层</span>
     </p>
     <p class="text_index">
-        <span>甲方于<?= $loanOrderCreateDate ?>，通过丙方运营互联网金融平台（包括名为“楚天财富”、网址为</span>
-        <a style="color:#0563c1" href="https://www.wenjf.com/"><span style="text-decoration:underline">https://www.hbctcf.com</span></a>
-        <span>的网站和名为“楚天财富”的手机APP；下称“楚天财富”）认购<?= $loanTitle ?>产品（以下简称本产品），认购金额为<?= $loanOrderPrincipal ?>元。截至该产品的转让之日，该产品尚未到期。</span>
+        <span>鉴于甲方在丙方楚天财富金融服务有限公司运营的楚天财富平台（网址：https://www.hbctcf.com//移动客户端）上对债务人<?= $affiliator ?>拥有合法债权，现甲、乙双方本着诚实、自愿的原则，就甲方通过丙方楚天财富平台向乙方转让债权事宜，达成如下协议：</span>
     </p>
     <p class="text_index">
-        <span>现甲方由于自身原因，拟通过楚天财富向其他合格投资者（包括个人投资者和机构投资者）部分/全部转让其所持有的本产品（本产品的相关合同中不含有禁止转让条款），甲方拟转让本产品的投资本金金额（以下简称“转让金额”）为<?= $creditOrderPrincipal ?>元（本产品的起购金额≤<?= $creditOrderPrincipal ?>≤<?= $loanOrderPrincipal ?>）。</span>
-    </p>
-    <p class="text_index"><span>前款所称合格投资者是指具备一定投资条件和识别能力，对拟投资品种自行判断、自行决策、自担风险，、自享收益的自然人或机构。机构投资者应具备以下条件：依法设立并有效存续；具有相关业务资质；具有良好的商业信誉，近三年无严重违法违规行为；具有固定的经营场所和必要的设施；具有健全的内部管理制度；有与承担风险相匹配的资产投资能力和资产额度。个人投资者应具备以下条件：是符合中华人民共和国法律规定的具有完全民事权利和民事行为能力，能够独立承担民事责任的自然人；有来源合法、可自主支配的用于投资的必要资金；有相关产品风险识别和判断能力；具备投资同类金融产品的投资经历或者相关投资能力。</span>
-    </p>
-    <p class="text_index"><span>乙方系符合本产品的合格投资者标准的楚天财富的注册会员，且乙方同意受让甲方拟转让的本产品。乙方已完整阅读拟受让的本产品的《产品说明书》、《产品认购协议》、《产品风险揭示书》等相关产品合同，完全理解该产品的类型、性质及受让后果，对该产品可能发生的风险有足够的了解和认识并愿意自行承担投资该产品可能带来的财产损益和法律责任。</span>
-    </p>
-    <p class="text_index"><span>“产品转让服务”仅为楚天财富向甲方（转让方）和乙方（受让方）提供的中介服务。本次产品转让活动涉及资金和权益的处分，由此带来的任何风险包括潜在风险需要甲方和乙方自行判断和承担。</span>
-    </p>
-    <p class="text_index"><span>现就甲方持有的本产品转让事宜，甲乙丙三方达成以下协议：</span></p>
-    <p class="text_index"><span style="font-weight:bold">一、本产品信息：</span></p>
-    <p class="text_index"><span>产品名称：<?= $loanTitle ?></span></p>
-    <p class="text_index"><span>产品类型：</span><span style="font-style:italic">收益权凭证、定向融资工具、理财计划</span></p>
-    <p class="text_index"><span>发行人/管理人：<?= $loanIssuer ?></span></p>
-<!--    <p class="text_index"><span>挂牌机构：--><?//= $affiliator ?><!--</span></p>-->
-    <p class="text_index"><span>发行规模：<?= $exceptRaisedAmount ?></span></p>
-    <p class="text_index"><span>起购金额：<?= $incrAmount ?></span></p>
-    <p class="text_index"><span>收益起算日：<?= $interestDate ?></span></p>
-    <p class="text_index"><span>产品到期日：<?= $finishDate ?></span></p>
-    <p class="text_index"><span>预期年化收益率：<?= $yieldRate ?></span></p>
-    <p class="text_index"><span>支付本金及预期收益方式：<?= $refundMethod ?></span></p>
-    <p class="text_index"><span style="font-weight:bold">二、本产品的转让价款计算及结算</span></p>
-    <p class="text_index">
-        <span>2.1乙方成功支付转让价款日为本协议定义的转让成功日。自本产品的收益起算日（含）至转让成功日（含），按照本产品预期收益率计算的投资收益<?= $sellerInterest ?>元归属甲方所有；</span>
-        <span style="font-weight:bold">自转让成功日（不含）至本产品到期日（不含），按照本产品预期收益率计算的投资收益<?= $buyerInterest ?>归属乙方所有。产品到期后，产品发行人向乙方支付投资本金及收益<?= $buyerInterest ?>。</span>
-    </p>
-    <p class="text_index"><span>2.2甲方拟向乙方转让其持有的本产品投资本金金额（转让金额）<?= $creditOrderPrincipal ?>元，且同意以折让率（指产品在转让时折让的比率，折让率可以为零）<?= $discountRate ?>%向乙方转让。截至转让成功日，根据产品合同约定计算的自收益起算日至转让成功日的投资收益为<?= $sellerInterest ?>元，甲方已经收取的投资收益为<?= $refundedInterest ?>元（如有），乙方应向甲方支付的转让价款<?= $creditOrderPayAmount ?>元。产品转让价款t=（转让金额n+自收益起算日至转让成功日的投资收益m-已收取的投资收益j（如有））*（1-折让率v）=<?= $creditOrderPayAmount ?>元。</span></p>
-    <p class="text_index">
-        <span>2.3因丙方为甲方的产品转让提供了技术服务，甲方同意在产品成功转让后，按照转让金额的<?= $feeRate ?>‰向丙方支付转让手续费<?= $feeAmount ?>元。转让手续费k=转让金额n*转让手续费费率e‰=<?= $feeAmount ?>元。</span>
+        <span style="font-weight:bold">第一条 债权转让标的</span>
     </p>
     <p class="text_index">
-        <span>2.4甲方、丙方同意在转让成功日一次性结算转让手续费。丙方将从本产品转让价款中直接扣取本协议约定的转让手续费，将扣取手续费后的剩余转让价款划转到甲方在与丙方合作的第三方支付机构开立的账户内。</span>
+        <span>1、借款人：<?= $affiliator ?>；</span>
     </p>
     <p class="text_index">
-        <span>三、产品转让协议的签署及生效方式</span>
+        <span>2、借款项目名称：<?= $loanTitle ?>；</span>
     </p>
     <p class="text_index">
-        <span>甲方在楚天财富网页以点击确认的形式向合格投资者发出的部分/全部转让所持有本产品之要约，乙方在楚天财富网页以点击确认的形式签署本转让协议且成功支付转让价款的，视为向甲方发出的受让甲方持有的部分/全部本产品要约之承诺，本转让协议生效。
-        </span>
+        <span>3、债权转让标的金额：<?= $creditOrderPrincipal + $sellerInterest - $refundedInterest; ?> 元；</span>
     </p>
     <p class="text_index">
-        <span>四、相关风险揭示</span>
-    </p>
-    <p class="text_index"><span>4.1 甲方的主要风险</span></p>
-    <p class="text_index">
-        <span>4.1.1 损失部分利息风险。楚天财富转让规则规定，根据转让人设定的折让率计算所得的转让价款不得低于转让金额（转让金额为转让人拟转让的投资本金，折让率是指产品在转让时折让的比率）。因此，如果您设定的折让率为零，您不会因转让行为损失投资本金和根据合同约定所计算的自收益起算日至转让成功日期间的投资收益；但如果您设定的折让率大于零，您将损失部分投资收益。</span>
+        <span>4、债权年化利率(365天/年)：<?= $yieldRate ?>；</span>
     </p>
     <p class="text_index">
-        <span>4.1.2 转让失败风险。楚天财富仅为转让人和受让人提供中介服务，并不承诺保证每一个转让申请都能全部/部分成功完成转让。因此，在转让申请时效内，甲方可能面临全部/部分产品转让失败的风险。</span>
+        <span>5、转让后债权期限：<?= $interestDate ?>到<?= $finishDate ?>；</span>
     </p>
     <p class="text_index">
-        <span>4.2 乙方的主要风险</span>
+        <span>6、还款方式：<?= $refundMethod ?>。</span>
     </p>
     <p class="text_index">
-        <span>4.2.1 发行人经营风险及信用。如在产品存续期间发行人无法继续经营或经营出现困难，则可能会对本产品的本金及收益的兑付产生不利影响。乙方还可能面临因发行人提前兑付或延迟兑付所带来的损失收益及投资机会的风险。</span>
+        <span style="font-weight:bold">第二条 债权转让价款</span>
     </p>
     <p class="text_index">
-        <span>4.2.2 受让失败风险。乙方受让甲方持有的本产品可能因为网络、操作等问题而导致本产品的认购失败、资金划拨失败等，从而导致乙方的本金及收益发生损失。</span>
+        <span>1、债权转让价款为：<?= $creditOrderPayAmount ?>元</span>
     </p>
     <p class="text_index">
-        <span>4.2.3 操作风险。包括不可预测或无法控制的系统故障、设备故障、通讯故障、停电等突发事故将有可能给乙方造成一定损失；由于乙方密码失密、操作不当、决策失误、黑客攻击等原因可能会造成损失；网上交易、热键操作完毕，未及时退出，他人进行恶意操作将可能造成损失；委托他人代理交易、或长期不关注账户变化，可能致使他人恶意操作而造成损失；由于银行系统延迟、代扣代收机构系统故障等原因，造成交易双方不能及时收取或支付本协议项下款项。</span>
+        <span style="font-weight:bold">第三条 债权转让流程</span>
     </p>
     <p class="text_index">
-        <span>以上风险事项仅为列举性质，未能详尽列明甲方、乙方所面临的全部风险和可能导致资产损失的所有因素。</span>
+        <span>3.1 本协议自乙方在楚天财富平台点击“确定转让”时成立且视为乙方不可撤销地授权丙方有权委托银行或第三方支付机构，将转让价款在扣除甲方应支付给丙方的转让管理费之后划转给甲方，上述转让价款划转完成即视为本协议生效且标的债权转让成功。</span>
     </p>
     <p class="text_index">
-        <span>五、其他</span>
+        <span>3.2 本协议生效后，丙方视情况（必要时）通知与标的债权对应的借款人。</span>
     </p>
     <p class="text_index">
-        <span>5.1 乙方在楚天财富以点击形式签署本协议并成功支付转让价款之日起成为继受的产品持有人，享有</span>
-        <span><?= $loanTitle ?></span>
-        <span>产品的产品合同中约定的所有权利义务。</span>
+        <span>3.3 自标的债权转让成功时，乙方成为标的债权的新债权人，承继网络借贷相关协议项下出借人的权利和义务。</span>
     </p>
     <p class="text_index">
-        <span>5.2 甲方、丙方共同确认，转让价款按照甲方购买<?= $loanTitle ?>产品时的资金路径支付至甲方的账户中。</span>
+        <span>3.4 丙方有权对甲方提交的债权转让申请进行审核，以确保该转让申请符合法律法规及楚天财富平台交易规则的要求。</span>
     </p>
     <p class="text_index">
-        <span>5.3 转让成功后，乙方即成为本产品投资者，根据产品相关合同的约定，享有本产品投资者的权利、承担相应义务。</span>
+        <span style="font-weight:bold">第四条</span> 甲方因转让债权而产生的相关费用及支付方式见楚天财富平台在债权转让模块的展示信息。
     </p>
     <p class="text_index">
-        <span>5.4 本次转让完成后，丙方需及时向南京金融资产交易中心提交产品转让登记申请。</span>
+        <span style="font-weight:bold">第五条 保证与承诺</span>
     </p>
     <p class="text_index">
-        <span>注：本协议属于产品转让协议的通用版，适用于在丙方发布的所有产品的产品转让行为。投资者（包括转让人和受让人）对本协议条款没有异议的，请以点击确认的方式予以签署。</span>
+        <span>5.1 甲方保证其转让的债权系其合法、有效的债权，不存在转让的限制。甲方同意并承诺按本协议及楚天财富网站有关规则向丙方支付转让管理费。</span>
+    </p>
+    <p class="text_index">
+        <span>5.2 乙方保证其出借资金来源合法，是其出借资金的合法所有人，完全有权出借该笔资金。如果第三人对资金归属、合法性问题提出异议，由乙方负责解决并自行承担相关责任，与本协议其他各方无关。</span>
+    </p>
+    <p class="text_index">
+        <span>5.3 甲乙双方应对在本协议签订过程中所获悉的其他方信息，包括但不限于个人身份信息、公司财务信息及商业信息等，承担保密义务。非经书面同意，任何一方均不得将上述任何信息向其他第三方擅自转让或披露，违反保密义务给他方造成损失的，由违约方承担全部责任。</span>
+    </p>
+    <p class="text_index">
+        <span>5.4 丙方为甲乙双方的债权转让和受让交易提供信息搜集、信息公布、信息交互、借贷撮合等服务，针对楚天财富网站上的债权，丙方仅在债权形成前对借款人的借款需求及相关信息进行必要审核，如果发生债权转让，丙方不会在债权转让时再次对借款人进行信用审核，并且丙方不对借款人相关信息的真实性、准确性、完整性和合法性作出保证，不对借款人还款能力及本协议的履行做出任何明示或默示的担保或保证，也不对甲方本金及/或收益做出任何明示或默示的担保或保证。丙方将依据相关法律法规的要求对于网络借贷有关信息进行披露，但甲乙双方之间因网络借贷交易发生的或与交易有关的任何纠纷，应由纠纷各方自行解决，网络借贷交易风险应由甲乙双方各自承担，丙方不承担任何交易风险及法律责任。</span>
+    </p>
+    <p class="text_index">
+        <span>5.5 乙方自本协议项下的债权成功转让之日起承继甲方在原借款合同下的所有权利义务。</span>
+    </p>
+    <p class="text_index">
+        <span>5.6 乙方受让后的债权可通过楚天财富平台再次转让给在楚天财富平台注册的第三人，但转让前乙方应至少持有受让后的债权三十个自然日，否则不得再次转让。</span>
+    </p>
+    <p class="text_index">
+        <span style="font-weight:bold">第六条 违约责任</span>
+    </p>
+    <p class="text_index">
+        <span>6.1 各方同意，如果一方违反其在本协议中所作的保证、承诺或任何其他义务，致使其他方遭受或发生损害、损失等责任，违约方须向守约方赔偿守约方因此遭受的一切经济损失，包括但不限于守约方为实现权利支付的调查费、律师费和诉讼费等。</span>
+    </p>
+    <p class="text_index">
+        <span>6.2 各方均有过错的，应根据各方实际过错程度，分别承担各自的违约责任。</span>
+    </p>
+    <p class="text_index">
+        <span style="font-weight:bold">第七条 适用法律和争议解决</span>
+    </p>
+    <p class="text_index">
+        <span>7.1 本协议的签订、履行、终止、解释均适用中华人民共和国法律。</span>
+    </p>
+    <p class="text_index">
+        <span>7.2 本协议在履行过程中，如发生任何争执或纠纷，各方应友好协商解决；若协商不成，任何一方均有权向丙方所在地人民法院提起诉讼。</span>
+    </p>
+    <p class="text_index">
+        <span style="font-weight:bold">第八条 其他</span>
+    </p>
+    <p class="text_index">
+        <span>8.1 本协议自约定的债权转让价款支付至甲方在丙方合作的银行或第三方支付机构开设的账户之日起生效。</span>
+    </p>
+    <p class="text_index">
+        <span>8.2 本协议的签署、生效和履行以不违反中国的法律法规为前提。如果本协议中的任何一条或多条违反适用的法律法规，则该条将被视为无效，但该无效条款并不影响本协议其他条款的效力。</span>
+    </p>
+    <p class="text_index">
+        <span>8.3 本协议及其附件均通过楚天财富网站以电子文本形式制成，可以一份或多份，每份具有同等法律效力。本协议在本协议有效期间及终止后5年内，由楚天财富在专用服务器上保管和备查。</span>
+    </p>
+    <p class="text_index">
+        <span>8.4 本协议经各方协商一致，可以以电子文本形式做出修改和补充。补充协议是本协议组成部分，与本协议具有同等法律效力。</span>
+    </p>
+    <p class="text_index">
+        <span>甲方：<?= $sellerName ?></span>
+    </p>
+    <p class="text_index">
+        <span>乙方：<?= $buyerName ?></span>
+    </p>
+    <p class="text_index">
+        <span>丙方（服务方）：楚天财富（武汉）金融服务有限公司</span>
     </p>
 </div>
