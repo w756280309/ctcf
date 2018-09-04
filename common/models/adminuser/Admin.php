@@ -286,4 +286,33 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface, AdminInte
     {
         return 'R001' === $this->role_sn && '超级管理员' === $this->real_name;
     }
+
+    //判断用户是否有某个权限
+    public function hasAuth($path = "")
+    {
+        if (empty($path)) {
+            return true;
+        }
+
+        if ('R001' === $this->role_sn) {
+            return true;
+        }
+
+        //需要排除权限限制的path
+        $allow_paths = Yii::$app->params['backend_allow_paths'];
+        if (in_array($path, $allow_paths)) {
+            return true;
+        }
+
+        $auth_table = Auth::tableName();
+        $admin_auth_table = AdminAuth::tableName();
+
+        $adminAuth = AdminAuth::find()
+            ->innerJoin($auth_table, $admin_auth_table.'.auth_sn='.$auth_table.'.sn')
+            ->where(['admin_id' => $this->id])
+            ->andWhere(['or', ['path' => $path], ['path' => $path.'/index']])
+            ->one();
+
+        return !empty($adminAuth);
+    }
 }

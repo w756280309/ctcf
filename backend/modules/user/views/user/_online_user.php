@@ -97,7 +97,7 @@ $accounts = Yii::$app->params['borrowerSubtype'];
     </table>
 </div>
 
-<?php if (empty($model)) { ?>
+<?php if (!$hideOrgList && empty($model)) { ?>
     <div class="note">暂无数据</div>
 <?php } ?>
 

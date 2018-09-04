@@ -170,7 +170,7 @@ $accounts = Yii::$app->params['borrowerSubtype'];
                             <tr>
                                 <td>
                                     <span class="title">企业名称</span>
-                                    <input type="text" class="m-wrap span6" name='name' value="<?= Html::encode($request['name']) ?>" placeholder="企业名称">
+                                    <input id="orgName" type="text" class="m-wrap span6" name='name' value="<?= Html::encode($request['name']) ?>" placeholder="企业名称">
                                 </td>
                                 <td>
                                     <span class="title">账户类型</span>
@@ -183,7 +183,7 @@ $accounts = Yii::$app->params['borrowerSubtype'];
                                 </td>
                                 <td>
                                     <div align="right" class="search-btn">
-                                        <button type='submit' class="btn blue btn-block button-search">搜索
+                                        <button id="orgSearch" type='submit' class="btn blue btn-block button-search">搜索
                                             <i class="m-icon-swapright m-icon-white"></i></button>
                                     </div>
                                 </td>
@@ -203,7 +203,7 @@ $accounts = Yii::$app->params['borrowerSubtype'];
 
         <!--search end -->
         <!--会员列表-->
-        <?= $this->renderFile('@backend/modules/user/views/user/_online_user.php', ['model' => $model, 'category' => $category, 'affiliators' => $affiliators]); ?>
+        <?= $this->renderFile('@backend/modules/user/views/user/_online_user.php', ['model' => $model, 'category' => $category, 'affiliators' => $affiliators, 'hideOrgList' => $hideOrgList]); ?>
         <!--分页-->
         <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
     </div>
@@ -239,6 +239,15 @@ $accounts = Yii::$app->params['borrowerSubtype'];
         }
         $(this).attr('href','/user/user/org-user-info-export?ids='+ids.join(',')).trigger(click);
     });
+    $('#orgSearch').on('click',function(event){
+        var event = event || window.event;
+        event.preventDefault();
+        if($('#orgName').val().trim()){
+            $('form').submit();
+        } else {
+            alert('请输入企业名称');
+        }
+    })
 </script>
 <?php $this->endBlock(); ?>
 

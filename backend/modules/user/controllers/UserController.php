@@ -6,7 +6,9 @@ use backend\controllers\BaseController;
 use backend\modules\user\core\v1_0\UserAccountBackendCore;
 use common\lib\err\Err;
 use common\lib\user\UserStats;
+use common\models\adminuser\AdminAuth;
 use common\models\adminuser\AdminLog;
+use common\models\adminuser\Auth;
 use common\models\affiliation\Affiliator;
 use common\models\affiliation\UserAffiliation;
 use common\models\bank\Bank;
@@ -195,30 +197,40 @@ class UserController extends BaseController
     public function actionListr()
     {
         $request = $this->validateRequest(Yii::$app->request->get());
+        $admin = Yii::$app->user->getIdentity();
+        $showOrgList = $admin->hasAuth('user/user/show-org-list');
+        $hideOrgList = false;
 
-        $query = User::find()
-            ->innerJoinWith('borrowAccount')
-            ->innerJoinWith('borrowerInfo')
-            ->where([
-                'user.type' => User::USER_TYPE_ORG,
-                'is_soft_deleted' => 0,
-            ]);
+        if ((!isset($request['search']) || empty($request['search'])) && !$showOrgList) {
+            $pages = new Pagination(['totalCount' => 0, 'pageSize' => '15']);
+            $model = [];
+            $hideOrgList = true;
+        } else {
+            $query = User::find()
+                ->innerJoinWith('borrowAccount')
+                ->innerJoinWith('borrowerInfo')
+                ->where([
+                    'user.type' => User::USER_TYPE_ORG,
+                    'is_soft_deleted' => 0,
+                ]);
 
-        if (isset($request['name']) && !empty($request['name'])) {
-            $query->andFilterWhere(['like', 'org_name', trim($request['name'])]);
+            if (isset($request['name']) && !empty($request['name'])) {
+                $query->andFilterWhere(['like', 'org_name', trim($request['name'])]);
+            }
+            if (!empty($request['accountType'])) {
+                $query->andFilterWhere(['borrower.type' => (int) $request['accountType']]);
+            }
+
+            $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
+            $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('created_at desc')->all();
         }
-        if (!empty($request['accountType'])) {
-            $query->andFilterWhere(['borrower.type' => (int) $request['accountType']]);
-        }
-
-        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '15']);
-        $model = $query->offset($pages->offset)->limit($pages->limit)->orderBy('created_at desc')->all();
 
         return $this->render('list', [
             'model' => $model,
             'category' => User::USER_TYPE_ORG,
             'pages' => $pages,
             'request' => $request,
+            'hideOrgList' => $hideOrgList,
         ]);
     }
 
