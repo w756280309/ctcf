@@ -11,7 +11,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' =>
     var url = '/credit/trade/assets?type=<?= $type ?>';
     var tp = '<?= $pages->pageCount ?>';
 </script>
-<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=1"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=20180905"></script>
 
 <div class="row list-title">
     <div class="col-xs-4"><a href="/credit/trade/assets?type=1" class="<?= 1 === $type ? 'active-trans-title' : '' ?> trans-title">可转让</a></div>

@@ -11,7 +11,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/jiaoyimingxi.css', ['depends' => Wap
     var url = '/mall/point/list';
     var tp = '<?= $header['tp'] ?>';
 </script>
-<script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=20180905"></script>
 
 <?php if ($points) { ?>
     <?= $this->render('_list', ['points' => $points]) ?>

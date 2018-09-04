@@ -15,7 +15,7 @@ $this->title = '资产总览';
     var url = '/user/user/profit';
     var tp = '<?= $header['tp'] ?>';
 </script>
-<script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=20180905"></script>
 
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>

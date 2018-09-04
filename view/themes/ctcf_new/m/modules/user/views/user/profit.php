@@ -17,7 +17,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' =>
     var url = '/user/user/profit';
     var tp = '<?= $header['tp'] ?>';
 </script>
-<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=2"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=20180905"></script>
 
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>

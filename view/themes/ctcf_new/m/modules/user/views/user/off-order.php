@@ -20,7 +20,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/licai/licai.css?v=20160927', ['
         var url = '/user/user/myofforder?type=<?= $type ?>';
         var tp = '<?= $pages->pageCount ?>';
     </script>
-    <script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/page.js?v=20180905"></script>
 
 <div class="row list-title">
     <div class="col-xs-4"><a href="/user/user/myofforder?type=2&back_url=<?= $back ?>" class="<?= 2 === $type ? 'active-trans-title' : '' ?> trans-title">待成立</a></div>

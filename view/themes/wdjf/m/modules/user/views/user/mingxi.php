@@ -9,7 +9,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/jiaoyimingxi.css?v=1', ['depends' =>
     var url = '/user/user/mingxi';
     var tp = '<?= $header['tp'] ?>';
 </script>
-<script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=20180905"></script>
 
 <?php if ($model) { ?>
     <?= $this->renderFile('@wap/modules/user/views/user/_mingxi_list.php', ['model' => $model]) ?>

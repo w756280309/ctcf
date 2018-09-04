@@ -9,7 +9,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/credit/creditcontent.css', ['depends
     var url = '/credit/note/orders?id=<?= Html::encode($id) ?>';
     var tp = '<?= $pages->pageCount ?>';
 </script>
-<script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=20180905"></script>
 
 <div class="container credit-content">
     <div class="row cre-list">

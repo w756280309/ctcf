@@ -4,10 +4,10 @@ $this->title = '转让详情';
 use frontend\assets\FrontAsset;
 use yii\web\JqueryAsset;
 
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=160922', ['depends' => FrontAsset::class]);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=180904', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=161008', ['depends' => FrontAsset::class]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/login/login_form.js', ['depends' => JqueryAsset::class]);
-$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=161025', ['depends' => FrontAsset::class]);
+$this->registerCssFile(ASSETS_BASE_URI.'css/credit/credit.css?v=180904', ['depends' => FrontAsset::class]);
 $this->registerCssFile(ASSETS_BASE_URI.'css/pagination.css');
 $this->registerCssFile(ASSETS_BASE_URI . 'css/useraccount/chargedeposit.css');
 

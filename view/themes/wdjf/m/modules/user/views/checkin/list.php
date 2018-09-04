@@ -11,7 +11,7 @@ $this->title = '签到记录';
     var url = '/user/checkin/list';
     var tp = '<?= $header['tp'] ?>';
 </script>
-<script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=20180905"></script>
 
 <div class="flex-content">
     <?php if (!defined('IN_APP')) { ?>

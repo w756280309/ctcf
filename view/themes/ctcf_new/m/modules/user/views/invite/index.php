@@ -25,7 +25,7 @@ $this->registerJs('var invite_url = "'.$share->url.'";', 1);
     var url = '/user/invite';
     var tp = '<?= $pages->pageCount ?>';
 </script>
-<script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
+<script src="<?= ASSETS_BASE_URI ?>js/page.js?v=20180905"></script>
 
 <!--banner-box-->
 <div style="clear: both;"></div>

@@ -20,7 +20,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/licai.css?v=20160927', ['depends' =>
         var url = '/user/user/myofforder?type=<?= $type ?>';
         var tp = '<?= $pages->pageCount ?>';
     </script>
-    <script src="<?= ASSETS_BASE_URI ?>js/page.js"></script>
+    <script src="<?= ASSETS_BASE_URI ?>js/page.js?v=20180905"></script>
 
 <div class="row list-title">
     <div class="col-xs-4"><a href="/user/user/myofforder?type=1&back_url=<?= $back ?>" class="<?= 1 === $type ? 'active-trans-title' : '' ?> trans-title">收益中</a></div>

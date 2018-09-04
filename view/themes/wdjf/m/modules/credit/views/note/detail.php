@@ -19,7 +19,7 @@ $isClosed = $respData['isClosed'] || $nowTime >= $endTime;
 
 $this->registerCssFile(ASSETS_BASE_URI.'css/credit/detail.css?v=20161217', ['depends' => 'wap\assets\WapAsset']);
 $this->registerJs('var remainTime = '.strtotime($isClosed ? 'now' : $respData['endTime']).';', 1);
-$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=161027', ['depends' => 'wap\assets\WapAsset']);
+$this->registerJsFile(ASSETS_BASE_URI.'js/credit/detail.js?v=180904', ['depends' => 'wap\assets\WapAsset']);
 
 ?>
 
