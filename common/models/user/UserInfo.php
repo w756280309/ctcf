@@ -267,7 +267,7 @@ sum(money*10000)
 from offline_order o 
 inner join offline_user u 
     on o.user_id = u.id 
-where o.user_id = :userId 
+where u.onlineUserId = :userId 
     and o.isDeleted = false 
     and o.orderDate >= :startTime 
     and o.orderDate <= :endTime 
