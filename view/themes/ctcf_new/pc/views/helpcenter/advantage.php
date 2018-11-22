@@ -20,7 +20,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                     <div class="section">
                         <div class="number">1</div>
                         <span>国资</span><span>背景</span>
-                        <p>隶属湖北日报新媒体集团旗下出借平台。</p>
+                        <p>隶属湖北日报荆楚网旗下互金平台。</p>
                     </div>
 
                     <div class="section">
@@ -32,7 +32,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                     <div class="section">
                         <div class="number">3</div>
                         <span>稳健</span><span>合规</span>
-                        <p>资金全程托管，与平台隔离不被挪用；</p>
+                        <p>资金全程分离，与平台隔离不被挪用；</p>
                         <p>绑定本人银行卡，提现只进本人账户很安全；</p>
                         <p>层层风控，专业稳健，合法合规。</p>
                     </div>

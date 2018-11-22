@@ -147,7 +147,7 @@ class RechargerecordController extends BaseController
                     //0初始,2成功,3失败,4不明,5交易关闭
                     $return_message = [0 => '初始', 2 => '成功', 3 => '失败', 4 => '不明', 5 => '交易关闭'];
                     if ($tran_state >= 0 && key_exists($tran_state, $return_message)) {
-                        return ['code' => true, 'message' => $return_message[$tran_state]];
+                        return ['code' => true, 'message' => $return_message[$tran_state].",联动订单号:".$res->get('order_id')];
                     }
                     return ['code' => false, 'message' => '返回信息不明确'];
                 }

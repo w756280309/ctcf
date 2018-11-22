@@ -86,7 +86,7 @@ $this->registerJsFile(FE_BASE_URI.'wap/luodiye/js/luodiye.js?v=20180118', ['depe
 
             <div class="row description-box">
                 <p class="description-header"><span>什么是楚天财富？</span></p>
-                <p class="description-content">楚天财富（武汉）金融服务有限公司简称“楚天财富”，隶属湖北日报新媒体集团下平台，是湖北省首家具有国资背景的从事互联网金融综合信息服务的企业，是国内传统“纸媒”行业响应国家“十二五”规划和新时代发展战略的创新举措。</p>
+                <p class="description-content">楚天财富（武汉）金融服务有限公司简称“楚天财富”，隶属湖北日报荆楚网下平台，是湖北省首家具有国资背景的从事互联网金融综合信息服务的企业，是国内传统“纸媒”行业响应国家“十二五”规划和新时代发展战略的创新举措。</p>
             </div>
 <!--            <div class="row production-box">-->
 <!--                <p class="production-header">精品理财</p>-->
