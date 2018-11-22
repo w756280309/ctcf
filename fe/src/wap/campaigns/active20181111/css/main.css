@@ -1,0 +1,367 @@
+body,html,button,div,img,a,p,input,textarea,ul,li{
+	margin: 0;
+	padding: 0;
+}
+img{
+	vertical-align: middle;
+	border: none;
+}
+a{
+	text-decoration: none;
+}
+button,input,textarea{ 
+	-webkit-appearance: none; 
+} 
+body{
+	font: 14px/1.5 "Microsoft YaHei";
+    color: #fff;
+    height: 100%;
+    overflow-y: auto;
+}
+/*main*/
+.main-content{
+	height: 100%;
+	background-image:url("../images/img-bg.jpg") ;
+	background-position: left top;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	padding-top: 9rem;
+}
+.section{
+	padding: 1.5rem 1rem 1rem 1rem;
+}
+.section-tit{
+	width: 60%;
+	margin: 0 auto;
+}
+.section-tit img{
+	width:100%;
+}
+.section-main{
+	margin-top: 1rem;
+	position: relative;
+}
+.packet{
+	width: 92%;
+	height: 19rem;
+	margin: 0 auto;
+	background-image:url("../images/img-hongbao.png") ;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	margin-top: -1.5rem;
+}
+.packet .packet-btn{
+	display: block;
+	width: 20%;
+	margin: 0 auto;
+	padding-top: 10rem;
+}
+.packet .packet-btn-tips{
+	width: 40%;
+	text-align: center;
+	font-size: 0.8rem;
+	color: #fdc084;
+}
+.packet .packet-btn img{
+	width: 100%;
+}
+.section-main .side-btn{
+	display: block;
+	position: absolute;
+	top: 7rem;
+	right: -1rem;
+	padding: 0.8rem 0.6rem;
+	font-size: 0.8rem;
+	border-radius: 0.6rem 0 0 0.6rem;
+	background: #f03838;
+	color: #fff;
+	line-height: 1rem;
+}
+.packet-notice{
+	width: 100%;
+	text-align: center;
+	font-size: 0.75rem;
+	opacity: 0.7;
+	margin: 0.2rem 0;
+}
+.gift-settings .gift-tit{
+	text-align: center;
+	font-size: 0.9rem;
+	color: #ffffcc;
+	margin: 0.8rem 0 1rem;
+}
+.gift-settings .gift-tit span{
+	margin: 0 0.5rem;
+	font-size: 0.6rem;
+	opacity: 0.4;
+}
+.gift-settings .gift-box{
+	width: 100%;
+}
+.gift-settings .gift-box tr td:first-child{
+	padding-right: 0.5rem;
+}
+.gift-settings .gift-box tr td:last-child{
+	padding-left: 0.5rem;
+}
+.gift-settings .gift-box tr td{
+	border-bottom: 1rem solid transparent;
+}
+.gift-settings .gift-box tr:last-child td{
+	border: none;
+}
+.gift-settings .gift-box tr td img{
+	width: 100%;
+}
+.cj-box{
+	width: 100%;
+	background: url("../images/img-jtbg.png");
+	background-position: left top;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	margin-top: -1.5rem;
+	padding: 4rem 0 4.5rem 0;
+}
+.cj-box p{
+	padding: 0.5rem 1rem;
+	font-size: 0.92rem;
+	line-height: 1.6rem;
+	letter-spacing: 1px;
+}
+.cj-box p span{
+	font-weight: bold;
+	color: #f03838;
+	font-style: italic;
+}
+.cj-box .jl-tit img{
+	width: 25%;
+	padding-left: 1rem;
+	margin-top: 0.8rem;
+}
+.cj-btn{
+	display: block;
+	width: 66%;
+	margin: 0 auto;
+	height: 3.5rem;
+	line-height: 3.5rem;
+	border-radius: 2rem;
+	background: #f03838;
+	box-shadow: 2px 0 5px #f03838;
+	color: #ffffcc;
+	font-size: 1rem;
+	text-align: center;
+	letter-spacing: 1px;
+}
+.tips{
+	margin-top: 0.8rem;
+	font-size: 0.9rem;
+	margin-bottom: 1rem;
+}
+.tips p{
+	margin-bottom: 0.2rem;
+	line-height: 1.5rem;
+}
+.tips .tips-arrow{
+	display: block;
+	width: 100%;
+	text-align: center;
+	margin: 1rem 0 0 0;
+}
+.tips .tips-arrow img{
+	width: 8%;
+}
+/*tanchuang*/
+.alert-container{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,.65);
+}
+.alert-container .alert-content{
+	width: 90%;
+	margin: 40% auto;
+}
+.alert-packet{
+	background-image: url("../images/img-cjbg.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	height: 20rem;
+}
+.alert-packet .packet-detail{
+	width: 100%;
+	text-align: center;
+	font-size: 0.8rem;
+	color: #dea661;
+	padding-top: 8rem;
+}
+.alert-packet .packet-detail span{
+	display: block;
+	font-size: 1.5rem;
+}
+.alert-packet .packet-ts{
+	width: 100%;
+	text-align: center;
+	font-size: 0.75rem;
+	margin-top: 3.5rem;
+}
+.alert-container .icon-close{
+	position: absolute;
+	top: 20%;
+	right: 3%;
+	width: 2rem;
+	height: 2rem;
+	background-image: url("../images/icon-close.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+.alert-giftlist{
+	background-image: url("../images/img-listbg.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	height: 24rem;
+}
+.alert-giftlist .gift-list{
+	width: 100%;	
+	padding-top: 50%;
+}
+.alert-giftlist .gift-list .list-detail{
+	width: 80%;
+	height: 10.5rem;
+	margin: 0 auto;
+	overflow-y: auto;
+}
+.alert-giftlist .list-detail table{
+	width: 80%;
+	margin: 0 auto;
+}
+.alert-giftlist .list-detail table tr td{
+	padding: 1rem 0;
+	border-bottom: 1px dashed #ff9999;
+	font-size: 0.8rem;
+	color: #ff9966;
+	text-align: right;
+}
+.alert-giftlist .list-detail table tr td:first-child{
+	font-size: 1rem;
+	color: #ffff99;
+	font-weight: 500;
+	text-align: left;
+	padding-left: 0.3rem;
+}
+.alert-giftlist .list-detail table tr:last-child td{
+	border-bottom: none;
+}
+
+@media only screen and (max-width: 320px) {
+	.main-content{
+		padding-top: 8rem;
+	}
+	.section{
+		padding-top: 0.5rem;
+	}
+	.packet{
+		height: 16rem;
+	}
+	.packet .packet-btn{
+		padding-top: 8.5rem;
+	}
+	.cj-box{
+		padding-top: 3rem;
+		padding-bottom: 2.5rem;
+	}
+	.cj-box p{
+		font-size: 0.75rem;
+	}
+	.cj-btn{
+	    height: 3rem;
+    	line-height: 3rem;
+    	font-size: 0.8rem;
+	}
+	.tips p{
+		font-size: 0.7rem;
+		line-height: 1.35rem;
+	}
+	.alert-packet .packet-ts{
+		margin-top: 2.5rem;
+		font-size: 0.7rem;
+	}
+	.alert-giftlist .gift-list{
+		padding-top: 55%;
+	}
+}
+@media only screen and (min-width: 321px) and (max-width: 360px) {
+	.section{
+		padding-top: 1rem;
+	}
+	.packet{
+		height: 18rem;
+	}
+	.packet .packet-btn{
+		padding-top: 9.5rem;
+	}
+	.cj-box{
+		padding-bottom: 3.5rem;
+	}
+	.cj-box p{
+		font-size: 0.85rem;
+	}
+	.tips p{
+		font-size: 0.8rem;
+		line-height: 1.4rem;
+	}
+	.alert-packet .packet-ts{
+		margin-top: 3rem;
+	}
+}
+@media only screen and (min-width: 376px) and (max-width: 435px) {
+	.main-content{
+		padding-top: 10rem;
+	}
+	.packet{
+		padding: 1rem 0;
+	}
+	.packet-notice{
+		font-size: 0.8rem;
+	}
+	.packet .packet-btn-tips{
+		font-size: 1rem;
+	}
+	.cj-box{
+		padding: 4.5rem 0 5.5rem 0;
+	}
+	.cj-box p{
+		padding: 0.5rem 1.5rem;
+		font-size: 1rem;
+		line-height: 1.8rem;
+	}
+	.cj-box .jl-tit img{
+		padding-left: 1.5rem;
+	}
+	.cj-btn{
+		height: 4rem;
+		line-height: 4rem;
+		font-size: 1.2rem;
+	}
+	.tips{
+		font-size: 1rem;
+	}
+	.gift-settings .gift-tit{
+		font-size: 1.2rem;
+	}
+	.alert-packet .packet-detail{
+		padding-top: 7.5rem;
+	}
+	.alert-packet .packet-detail span{
+		font-size: 1.8rem;
+	}
+	.alert-packet .packet-ts{
+		margin-top: 4rem;
+		font-size: 0.8rem;
+	}
+}

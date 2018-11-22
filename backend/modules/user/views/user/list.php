@@ -147,6 +147,17 @@ $accounts = Yii::$app->params['borrowerSubtype'];
                             </tr>
                             <tr>
                                 <td>
+                                    <span class="title">账户状态 </span>
+                                    <?php $status =  null === $request['status'] ? (string)USER::NORMAL_STATUS : Html::encode($request['status']); ?>
+                                    <select name="status" class="m-wrap span6">
+                                        <option <?= '' === $status  ? 'selected' : '' ?> value="">全部</option>
+                                        <option <?= '1' === $status ? 'selected' : '' ?> value="1">正常</option>
+                                        <option <?= '0' === $status ? 'selected' : '' ?> value="0">禁用</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <div align="left" class="search-btn">
                                         <button type='submit' class="btn blue btn-block button-search">搜索
                                             <i class="m-icon-swapright m-icon-white"></i></button>

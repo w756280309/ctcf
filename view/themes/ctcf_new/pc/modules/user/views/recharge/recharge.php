@@ -58,6 +58,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/chargedeposit.css?v
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/frontend.css?v=20160833');
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/mytrade.css?v=20160722');
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/bindcardalready.css?v=1.0');
+$testUid = [43949, 45796, 37419, 40952];
 ?>
 
 <div class="myCoupon-box">
@@ -69,6 +70,9 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/bindcardalready.css
         <div class="list-single">
             <a class="a_first select" href="/user/recharge/init">个人网银</a>
             <a class="a_second " href="/user/userbank/recharge">快捷充值</a>
+            <?php if(in_array($user->id, $testUid)){?>
+            <a class="a_third " href="/user/userbank/recharge-depute">快捷充值(商业委托)</a>
+            <?php }?>
         </div>
         <br>
         <h3>网银充值</h3>

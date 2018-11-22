@@ -32,9 +32,9 @@ class Piwik
         if ($clientType !== 'all') {
             throw new \Exception('目前只支持全部客户端数据查询');
         }
-        $wapData = Piwik::request('https://d.wendujf.com/index.php?module=API&method=UserId.getUsers&idSite=2&period=day&date='.$date.'&format=JSON&token_auth='.$authKey.'&filter_limit=-1');
-        $appData = Piwik::request('https://d.wendujf.com/index.php?module=API&method=UserId.getUsers&idSite=3&period=day&date='.$date.'&format=JSON&token_auth='.$authKey.'&filter_limit=-1');
-        $pcData = Piwik::request('https://d.wendujf.com/index.php?module=API&method=UserId.getUsers&idSite=4&period=day&date='.$date.'&format=JSON&token_auth='.$authKey.'&filter_limit=-1');
+        $wapData = Piwik::request('https://d.wendujf.com/index.php?module=API&method=UserId.getUsers&idSite=5&period=day&date='.$date.'&format=JSON&token_auth='.$authKey.'&filter_limit=-1');
+        $appData = Piwik::request('https://d.wendujf.com/index.php?module=API&method=UserId.getUsers&idSite=7&period=day&date='.$date.'&format=JSON&token_auth='.$authKey.'&filter_limit=-1');
+        $pcData = Piwik::request('https://d.wendujf.com/index.php?module=API&method=UserId.getUsers&idSite=6&period=day&date='.$date.'&format=JSON&token_auth='.$authKey.'&filter_limit=-1');
         $allData = [];
 
         if (!empty($wapData)) {
@@ -58,9 +58,9 @@ class Piwik
     public static function getChannelUserNum($startDate, $endDate)
     {
         $authKey = Yii::$app->params['piwik_auth_key'];
-        $wapData = Piwik::request('https://d.wendujf.com/index.php?module=API&action=index&idSite=2&period=day&idSite=2&method=Referrers.getAll&showColumns=nb_visits&period=range&date='.$startDate.','.$endDate . '&format=json&token_auth='.$authKey.'&filter_limit=-1');
-        $appData = Piwik::request('https://d.wendujf.com/index.php?module=API&action=index&idSite=3&period=day&idSite=2&method=Referrers.getAll&showColumns=nb_visits&period=range&date='.$startDate.','.$endDate . '&format=json&token_auth='.$authKey.'&filter_limit=-1');
-        $pcData = Piwik::request('https://d.wendujf.com/index.php?module=API&action=index&idSite=4&period=day&idSite=2&method=Referrers.getAll&showColumns=nb_visits&period=range&date='.$startDate.','.$endDate . '&format=json&token_auth='.$authKey.'&filter_limit=-1');
+        $wapData = Piwik::request('https://d.wendujf.com/index.php?module=API&action=index&idSite=2&period=day&idSite=5&method=Referrers.getAll&showColumns=nb_visits&period=range&date='.$startDate.','.$endDate . '&format=json&token_auth='.$authKey.'&filter_limit=-1');
+        $appData = Piwik::request('https://d.wendujf.com/index.php?module=API&action=index&idSite=3&period=day&idSite=7&method=Referrers.getAll&showColumns=nb_visits&period=range&date='.$startDate.','.$endDate . '&format=json&token_auth='.$authKey.'&filter_limit=-1');
+        $pcData = Piwik::request('https://d.wendujf.com/index.php?module=API&action=index&idSite=4&period=day&idSite=6&method=Referrers.getAll&showColumns=nb_visits&period=range&date='.$startDate.','.$endDate . '&format=json&token_auth='.$authKey.'&filter_limit=-1');
         $allKeys = [];
         if (!empty($wapData)) {
             $wapData = ArrayHelper::index($wapData, 'label');

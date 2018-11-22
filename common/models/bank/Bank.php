@@ -124,7 +124,7 @@ class Bank extends \yii\db\ActiveRecord
      */
     public function getIsDisabled()
     {
-        if (false === $this->isPersonal && false === $this->isBusiness && false === $this->isQuick && false === $this->isBinding) {
+        if (false === $this->isPersonal && false === $this->isBusiness && false === $this->isQuick && false === $this->isBinding && false === $this->deputeIsQuick) {
             return true;
         } else {
             return false;
@@ -145,5 +145,34 @@ class Bank extends \yii\db\ActiveRecord
         }
 
         return $isApproved;
+    }
+
+    /**
+     * 判断用户是否支持商业委托快捷充值
+     * @return bool
+     */
+    public function getDeputeIsQuick()
+    {
+        $qPayConfig = QpayDeputeConfig::find()->where(['bankId' => $this->id, 'isDisabled' => 0])->one();
+        if (null !== $qPayConfig) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * 获取银行限额
+     * @return string
+     */
+    public function getDeputeQuota()
+    {
+        $qPayConfig = QpayDeputeConfig::find()->where(['bankId' => $this->id, 'isDisabled' => 0])->one();
+        if (null !== $qPayConfig) {
+            $singleLimit = $qPayConfig->singleLimit;
+            $dailyLimit = $qPayConfig->dailyLimit;
+            return floatval($singleLimit/10000) . ' 万/次，' . floatval($dailyLimit/10000) . ' 万/日';
+        }
+        return '无';
     }
 }

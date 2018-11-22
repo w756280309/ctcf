@@ -102,7 +102,7 @@ use yii\helpers\Html;
                             <div class="control-group">
                                 <label class="control-label" for="">融资用户:</label>
                                 <div class="controls">
-                                    <span class="text"><?= $borrow_user->org_name ?></span>
+                                    <span class="text"><?= $borrow_user->type == 2 ? $borrow_user->org_name : $borrow_user->real_name ?></span>
                                 </div>
                             </div>
                         </div>

@@ -29,7 +29,7 @@ class OnlinefangkuanController extends BaseController
         }
 
         $deal = OnlineProduct::findOne($pid);
-        $financing_user = User::findOne(['type' => User::USER_TYPE_ORG, 'id' => $deal->borrow_uid]);
+        $financing_user = User::findOne(['id' => $deal->borrow_uid]);
         if (null === $deal || null === $financing_user) {    //当数据库中没有标的和融资人信息时,抛出404错误
             throw $this->ex404();  //参数无效时,返回404错误
         }

@@ -311,7 +311,7 @@ $this->registerJsFile(ASSETS_BASE_URI . 'js/swiper.min.js', ['depends' => Jquery
 
         <div class="address">
             <a class="f14" href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>"><img data-original="<?= FE_BASE_URI ?>wap/index/images/phone.png" alt=""><?= Yii::$app->params['platform_info.contact_tel'] ?></a>
-            <p class="f14">武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层</p>
+            <p class="f14">武汉市武昌区东湖路181号楚天文化创意产业园区1号楼6层</p>
         </div>
 
         <footer class="f11"><span></span>湖北日报新媒体集团旗下出借平台<span></span></footer>

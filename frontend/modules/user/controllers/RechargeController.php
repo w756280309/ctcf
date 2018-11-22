@@ -62,6 +62,7 @@ class RechargeController extends BaseController
             'bank' => $bank,
             'url' => $url,
             'data' => $data,
+            'user' => $this->user,
         ]);
     }
 

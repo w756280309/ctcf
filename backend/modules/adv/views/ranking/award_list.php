@@ -60,7 +60,7 @@ $this->title = '获奖列表';
                         [
                             'header' => '抽奖时间',
                             'value' => function ($model) {
-                                return null !== $model['drawAt'] ? date('Y-m-d H:i:s', $model['drawAt']) : '---';
+                                return null !== $model['drawAt'] ? date('Y-m-d H:i:s', $model['drawAt']) : $model['createTime'];
                             }
                         ],
                         [

@@ -79,6 +79,7 @@ class AssetController extends BaseController
             'model' => $model,
             'ctmodel' => null,
             'rongziInfo' => $this->orgUserInfo([1,2]),
+        	'grrongziInfo' => $this->perUserInfo([1,2]),
             'fundReceiver' => $this->orgUserInfo([3]),
             'alternativeRepayer' => $this->orgUserInfo([4]),
             'guarantee' => $this->orgUserInfo([5]),

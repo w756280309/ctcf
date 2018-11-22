@@ -167,6 +167,7 @@ class DealController extends Controller
         $deals = $query->orderBy([
             'xs_status' => SORT_DESC,
             'recommendTime' => SORT_DESC,
+            'syz' => SORT_DESC,
             'sort' => SORT_ASC,
             'raiseDays' => SORT_DESC,
             'finish_rate' => SORT_DESC,

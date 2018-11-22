@@ -388,7 +388,7 @@ TPL;
                             $form->field($model, 'borrow_uid', [
                                 'template' => '{input}{error}',
                                 'inputOptions' => $borrow_uid_input_option,
-                            ])->dropDownList(['' => '--选择--'] + $rongziInfo)
+                            ])->dropDownList(['' => '--选择--'] + $rongziInfo + $grrongziInfo)
                         ?>
                     </div>
                     <label class="control-label">用款方<span style="color:grey">(<?= $desc ?>)</span></label>
@@ -758,8 +758,8 @@ TPL;
         <?php
             if ($ctmodel && !$model->hasErrors()) {
                 echo CfcaUtils::renderXml($tpl, [
-                    'contentName' => '认购协议标题',
-                    'contentDetail' => '认购协议内容',
+                    'contentName' => '借款协议标题',
+                    'contentDetail' => '借款协议内容',
                     'name' => $ctmodel[0]['name'],
                     'content' => $ctmodel[0]['content'],
                 ]);
@@ -790,8 +790,8 @@ TPL;
                 }
             } else {
                 echo CfcaUtils::renderXml($tpl, [
-                    'contentName' => '认购协议标题',
-                    'contentDetail' => '认购协议内容',
+                    'contentName' => '借款协议标题',
+                    'contentDetail' => '借款协议内容',
                     'name' => $con_name_arr[0],
                     'content' => $con_content_arr[0],
                 ]);

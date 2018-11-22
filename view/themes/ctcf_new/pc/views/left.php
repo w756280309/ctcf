@@ -14,7 +14,7 @@ $action = Yii::$app->controller->action->getUniqueId();
         <li class="nav-content">
             <ul>
                 <li class="<?= 'user/user/index' === $action ? 'selected' : '' ?>"><a href="/user/user"><span class="star"></span>资产总览</a></li>
-                <li class="recharge <?= ('user/userbank/recharge' == $action || 'user/recharge/init' == $action) ? 'selected' : '' ?>"><a href="/user/recharge/init"><span class="star"></span>充值</a></li>
+                <li class="recharge <?= ('user/userbank/recharge' == $action || 'user/recharge/init' == $action || 'user/userbank/recharge-depute' == $action) ? 'selected' : '' ?>"><a href="/user/recharge/init"><span class="star"></span>充值</a></li>
                 <li class="draw <?= ('user/draw/tixian' == $action) ? 'selected' : '' ?>"><a href="/user/draw/tixian"><span class="star"></span>提现</a></li>
             </ul>
         </li>

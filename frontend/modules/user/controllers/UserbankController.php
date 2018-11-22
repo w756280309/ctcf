@@ -7,6 +7,7 @@ use common\models\bank\BankManager;
 use common\models\bank\QpayConfig;
 use common\models\user\QpayBinding;
 use common\models\user\UserAccount;
+use common\models\user\UserFreepwdRecord;
 use common\service\BankService;
 use frontend\controllers\BaseController;
 use Yii;
@@ -142,5 +143,92 @@ class UserbankController extends BaseController
         $this->layout = false;
 
         return $this->render('ebank_limit', ['bid' => $bid]);
+    }
+
+    /**
+     * 快捷充值商业委托
+    */
+    public function actionRechargeDepute(){
+        //保存目的地
+        Yii::$app->session->set('to_url', '/user/userbank/recharge-depute');
+        //检查是否开户
+        $user = $this->getAuthedUser();
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($user, $cond, true);
+        if ($data['code']) {
+            return $this->render('identity', [
+                'title' => '快捷充值(商业委托)',
+            ]);
+        }
+
+        $user_bank = $user->qpay;
+        //检查用户是否开通商业委托免密协议
+        $userfree = UserFreepwdRecord::find()
+            ->where(['uid' => $user->id])
+            ->orderBy('status desc')->one();
+        $toOpenMm = [];
+        if($user_bank){
+            if(empty($userfree)){//未开通
+                $toOpenMm = UserFreepwdRecord::getCheckStatusInfo()[0];
+            }else if(UserFreepwdRecord::OPEN_FREE_RECHARGE_PASS !== UserFreepwdRecord::getCheckStatusInfo()[$userfree->status]['code']){
+                $toOpenMm  = UserFreepwdRecord::getCheckStatusInfo()[$userfree->status];
+            }
+        }
+
+        $bank = QpayConfig::findOne($user_bank->bank_id);
+        $binding = QpayBinding::findOne(['uid' => $user->id, 'status' => QpayBinding::STATUS_ACK]);
+        return $this->render('recharge-depute', [
+            'user_bank' => $user_bank,
+            'data' => $data,
+            'bank' => $bank,
+            'user' => $user,
+            'binding' => $binding,
+            'toOpenMm' => $toOpenMm,
+        ]);
+    }
+
+    /**
+     * 开通快捷支付（商业委托）
+     * */
+    public function  actionFastpay(){
+        $user = $this->getAuthedUser();
+        if(null === $user){
+            $this->redirect('/site/login');
+        }
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($user, $cond, true);
+        if ($data['code']) {
+            return $this->render('identity', [
+                'title' => '快捷充值(商业委托)',
+            ]);
+        }
+        $epayUserId = $user->epayUser->epayUserId;
+        $oneinfo = UserFreepwdRecord::findOne(['uid'=> $user->id]);
+        if(empty($oneinfo)){
+            $model = new UserFreepwdRecord();
+            $model->uid = $user->id;
+            $model->status = UserFreepwdRecord::OPEN_FREE_STATUS_WAIT;
+            $model->epayUserId = $epayUserId;
+            $model->save(false);
+        }
+        $this->redirect(Yii::$container->get('ump')->openFastPay($epayUserId, CLIENT_TYPE));
+    }
+
+    /**
+     * 开通免密充值（商业委托）
+     * */
+    public function  actionFreeRecharge(){
+        $user = $this->getAuthedUser();
+        if(null === $user){
+            $this->redirect('/site/login');
+        }
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($user, $cond, true);
+        if ($data['code']) {
+            return $this->render('identity', [
+                'title' => '快捷充值(商业委托)',
+            ]);
+        }
+        $this->redirect(Yii::$container->get('ump')->openFreeRecharge($user->epayUser->epayUserId, CLIENT_TYPE));
     }
 }

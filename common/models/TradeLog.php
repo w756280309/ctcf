@@ -71,10 +71,11 @@ class TradeLog extends \yii\db\ActiveRecord
         $uid = 0;
         if (array_key_exists('user_id', $rqData)) {//联动用户标识
             $epayUser = epay\EpayUser::findOne(['epayUserId' => $rqData['user_id']]);
-            $uid = $epayUser->appUserId;
+            $uid = !empty($epayUser) ? $epayUser->appUserId : '';
         } else if (array_key_exists('mer_cust_id', $rqData)) {//温都金服用户标识
             $uid = $rqData['mer_cust_id'];
         }
+
         $log = new self();
         $log->txType = array_key_exists('service', $rqData) ? $rqData['service'] : '';
         $log->direction = $direction;

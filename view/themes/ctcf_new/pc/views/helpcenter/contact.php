@@ -21,7 +21,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/contact.css', ['depends' => 'fr
                         <!--百度地图容器-->
                         <div style="width:100%;margin-bottom:30px;height:350px;border:#ccc solid 1px;font-size:12px" id="map"></div>
                     </div>
-                    <p>公司地址 : 武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层</p>
+                    <p>公司地址 : 武汉市武昌区东湖路181号楚天文化创意产业园区1号楼6层</p>
                     <p>工作时间 : 9:00-17:30（周一至周五）</p>
                     <p>客服电话 : <?= \Yii::$app->params['platform_info.contact_tel'] ?></p>
                     <p>客服时间 : 9:00-20:00（周一至周日，节假日例外）</p>

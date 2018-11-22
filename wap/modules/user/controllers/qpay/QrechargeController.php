@@ -5,6 +5,7 @@ namespace app\modules\user\controllers\qpay;
 use app\controllers\BaseController;
 use common\models\bank\BankManager;
 use common\models\user\RechargeRecord;
+use common\models\user\UserFreepwdRecord;
 use common\utils\TxUtils;
 use Yii;
 use yii\base\Model;
@@ -17,6 +18,17 @@ class QrechargeController extends BaseController
         $ubank = $cpuser->qpay;
         if (empty($ubank)) {
             return $this->createErrorResponse('请先绑卡');
+        }
+
+        /**
+         * 验证快捷支付（商业委托）是否开通
+         */
+        $depute = Yii::$app->request->post('depute');
+        if('depute' === $depute){
+            $userfree = UserFreepwdRecord::findOne(['uid'=> $cpuser->id, 'status' => UserFreepwdRecord::OPEN_FREE_RECHARGE_PASS]);
+            if(empty($userfree)){
+                return ['next'=> '/user/userbank/recharge-depute-wap'];
+            }
         }
         // 已验证的数据:无需验证
         $safe = [
@@ -50,7 +62,12 @@ class QrechargeController extends BaseController
                 if (!$rec_model->save(false)) {
                     throw new \Exception('Insert recharge record err.');
                 }
-                $next = Yii::$container->get('ump')->rechargeViaQpay($rec_model);
+                if('depute' !== $depute){
+                    $next = Yii::$container->get('ump')->rechargeViaQpay($rec_model);
+                }else{
+                    $next = Yii::$container->get('ump')->doUserFreeRecharge($rec_model);
+                }
+
                 if ($next->isRedirection()) {
                     return ['next' => $next->getLocation()];
                 } else {

@@ -66,7 +66,7 @@ $this->registerJs('forceReload_V2();');
             <div class="intro-footer clearfix">
                 <ul class="lf">
                     <li><?= Yii::$app->params['platform_info.contact_tel'] ?><span>（9:00～20:00）</span></li>
-                    <li>地址：武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层</li>
+                    <li>地址：武汉市武昌区东湖路181号楚天文化创意产业园区1号楼6层</li>
                     <li>*产品有风险 出借须谨慎</li>
                 </ul>
                 <img class="erweima" src="<?= FE_BASE_URI ?>wap/guide/images/erweima.png" alt="">

@@ -14,6 +14,7 @@ class UserSearch extends User
         return [
             'name',
             'usercode',
+            'status',
             'mobile',
             'noInvestDaysMin',
             'noInvestDaysMax',
@@ -215,6 +216,9 @@ class UserSearch extends User
         if ($get_user_ids) {
             $query->andWhere(['user.id' => $uids]);
         }
+
+        //过滤会员状态
+        is_numeric($this->status) && $query->andFilterWhere(['user.status'=>$this->status]);
 
         return $query;
     }

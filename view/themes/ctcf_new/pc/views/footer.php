@@ -45,7 +45,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/footer.min.css', ['depends' => 
         </div>
     </div>
     <div class="footer-bottom ctcf-container fz14">
-        <p>楚天财富（武汉）金融服务有限公司&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;武汉市武昌区东湖路181号楚天文化创意产业园区8号楼1层</p>
+        <p>楚天财富（武汉）金融服务有限公司&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;武汉市武昌区东湖路181号楚天文化创意产业园区1号楼6层</p>
         <p>鄂ICP备15002057号-1</p>
     </div>
 </div>

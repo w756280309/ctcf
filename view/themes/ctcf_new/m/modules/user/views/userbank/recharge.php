@@ -8,11 +8,19 @@ $this->title="充值";
 if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     $this->backUrl = Html::encode($backUrl);
 }
+$actionC = Yii::$app->controller->action->id;
+$testUid = [43949, 45796, 37419, 40952];
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/chongzhi.css?v=20171213"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/udesk.css">
 <script src="<?= ASSETS_BASE_URI ?>js/layer.js?v=1"></script>
+<div class="row list-title">
+    <div class="col-xs-6"><a href="/user/userbank/recharge" class="<?= $actionC === 'recharge' ? 'active-trans-title' : '' ?> trans-title">充值</a></div>
+    <?php if(in_array($uid, $testUid)){?>
+    <div class="col-xs-6"><a href="/user/userbank/recharge-depute-wap" class="<?= $actionC === 'recharge-depute-wap' ? 'active-trans-title' : '' ?> trans-title">快捷充值(商业委托)</a></div>
+    <?php }?>
+</div>
 <!--银行卡-->
 <div class="row bank-card">
     <div class="col-xs-2 bank-img"><img src="<?= ASSETS_BASE_URI ?>images/bankicon/<?= $user_bank->bank_id ?>.png" alt=""/></div>

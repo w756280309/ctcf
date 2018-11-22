@@ -19,6 +19,7 @@ use common\models\user\RechargeRecord;
 use common\models\user\DrawRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\User;
+use common\models\transfer\Transfer;
 use common\models\user\UserAccount;
 use common\service\AccountService;
 use common\service\LoanService;
@@ -1911,5 +1912,27 @@ group by o.uid
             $resp = $ump->getMerchantInfo($epayUserId);
         }
         var_dump($resp);
+    }
+
+    /**
+     * 测试发现金红包接口
+    */
+    public function actionPromotCash($mobile, $amount, $promoId){
+        if(empty($mobile) || empty($amount) || empty($promoId)){
+            exit('no param!');
+        }
+        $mobile = SecurityUtils::encrypt(trim($mobile));
+        $user = User::findOne(['safeMobile'=>$mobile]);
+        if(empty($user)){
+            exit('查无此人!');
+        }
+        try {
+            $transfer = Transfer::initNew($user, $amount, ['promo_id'=>$promoId]);
+            if($transfer->save(false)){
+                echo '用户'.$mobile.'发放金额'.$amount.'成功'.PHP_EOL;
+            }
+        } catch (\Exception $e) {
+            \Yii::info($e, 'queue');
+        }
     }
 }

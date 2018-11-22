@@ -10,7 +10,7 @@ use yii\helpers\HtmlPurifier;
 $this->title = '借款详情';
 
 $this->registerCssFile(FE_BASE_URI.'libs/videojs/video-js.min.css', ['position' => 1]);
-$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/details-list/xiangqing.css?v=20180212111', ['depends' => WapAsset::class, 'position' => 1]);
+$this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/details-list/xiangqing.css', ['depends' => WapAsset::class, 'position' => 1]);
 $this->registerJsFile(FE_BASE_URI.'libs/videojs/video.min.js', ['position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/ua-parser.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
 $this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' => 'wap\assets\WapAsset','position' => 1]);
@@ -223,12 +223,15 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' =>
         </div>
     </div>
 <?php } ?>
-
+<?php $tabwidth="50%";if ($deal->refund_method==10) {$tabwidth='33.33%';}?>
 <div class="row tab">
     <div class="col-xs-1"></div>
     <div class="col-xs-10 tabs">
-        <div class="tab1">借款详情</div>
-        <div class="tab2">出借记录</div>
+        <div class="tab31" style="width:<?=$tabwidth?>;">借款详情</div>
+        <div class="tab32" style="width:<?=$tabwidth?>;">出借记录</div>
+        <?php if ($deal->refund_method==10) {?>
+            <div class="tab33" style="width:33.33%;">还款计划</div>
+        <?php } ?>
     </div>
     <div class="col-xs-1"></div>
 </div>
@@ -251,6 +254,42 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' =>
             </div>
 
         </div>
+    <div class="col-xs-1"></div>
+</div>
+<!--还款计划-->
+<div class="row huankuan-box">
+    <div class="col-xs-1"></div>
+    <div class="col-xs-10 col">
+        <div class="row huankuan">
+            <div class="col-xs-3 col">还款期数</div>
+            <div class="col-xs-3">还款日期</div>
+            <div class="col-xs-3" style="padding: 0px;">本期利息</div>
+            <div class="col-xs-3">还款本金</div>
+        </div>
+        <?php
+            if ($deal->refund_method==10) {
+                $lastbenjin = $deal->money ;
+                $perratio = (LoanHelper::getDealRate($deal) + $deal->jiaxi)/12/100;
+                $pertotal = ($lastbenjin * $perratio * pow((1+$perratio),$ex['value']))/(pow((1+$perratio),$ex['value']) - 1);
+
+                for ($i = 1;$i <= $ex['value']; $i++) {
+                    $thislixi = $lastbenjin*$perratio;
+                    $thisbenjin = $pertotal - $thislixi;
+                    $lastmonth = $ex['value'] - $i;
+                    $thisriqi = $deal->finish_date > 0 ? date('Y-m-d',strtotime("- $lastmonth month",$deal->finish_date)) : ($deal->jixi_time > 0 ? date('Y-m-d',strtotime("+ $i month",$deal->jixi_time)) : "待计息后确定");
+        ?>
+        <div class="row huankuan-content border-bottom1">
+            <div class="col-xs-3 col">第<?=$i?>期</div>
+            <div class="col-xs-3 data"><span class="data1"><?=$thisriqi?></span></div>
+            <div class="col-xs-3"><?=StringUtils::amountFormat3($thislixi)?></div>
+            <div class="col-xs-3"><?=StringUtils::amountFormat3($thisbenjin)?></div>
+        </div>
+        <?php
+                    $lastbenjin = $lastbenjin - $thisbenjin;
+                }
+            }
+        ?>
+    </div>
     <div class="col-xs-1"></div>
 </div>
 
@@ -334,26 +373,45 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' =>
             if(index==1){
                 $('.tab-conten').css({display:'none'});
                 $('.touzi-box').css({display:'block'});
-            }else{
+                $('.huankuan-box').css({display:'none'});
+            }
+            else if(index==2){
+                $('.tab-conten').css({display:'none'});
+                $('.touzi-box').css({display:'none'});
+                $('.huankuan-box').css({display:'block'});
+            }
+            else{
                 $('.tab-conten').css({display:'block'});
                 $('.touzi-box').css({display:'none'});
+                $('.huankuan-box').css({display:'none'});
             }
         })
 
         pid = '<?=$deal->id;?>';
+        var uid = '<?php echo null !== $user ? $user->getId() : false;?>';
         $.get('/deal/deal/orderlist',{pid:pid},function(data){
             html = "";
-            for(var i=0;i<data.orders.length;i++){
+            if(!uid){
+                html+='<div class="row touzi-content border-bottom1">【<a onclick="login()" style="cursor: pointer;color: #419bf9;">登录</a>】后才能查看</div>';
+            }else{
+                for(var i=0;i<data.orders.length;i++){
                     html+='<div class="row touzi-content border-bottom1">';
                     html+='    <div class="col-xs-3 col">'+data.orders[i]['mobile']+'</div>';
                     html+='    <div class="col-xs-5 data"><span class="data1">'+data.orders[i]['time']+'</span><span class="data2">'+data.orders[i]['his']+'</span></div>';
                     html+='    <div class="col-xs-4">'+data.orders[i]['money']+'</div>';
                     html+='</div>';
+                }
             }
+
             $('.datafirst').after(html)
         })
 
     });
+    
+    function login() {
+        window.location.href ='/site/login';
+        return;
+    }
 
     function subForm2(form)
     {

@@ -50,10 +50,11 @@ JSFILE
         <?php if (Yii::$app->user->isGuest) { ?>
         <!--未登录-->
         <div class="login-box">
-            <p class="fz22 fz-white mgt40b30">最高出借收益率</p>
+            <p class="fz22 fz-white mgt40b30" style="margin-top: 36px;margin-bottom: 20px;">最高出借收益率</p>
             <p class="fz60 fz-yellow">10%</p>
-            <a class="fz18 fz-black btn-yellow mgt28b8" href="/site/signup">立即注册</a>
+            <a class="fz18 fz-black btn-yellow mgt28b8" style="margin-top: 20px;margin-bottom: 16px;" href="/site/signup">立即注册</a>
             <p class="fz14 fz-white">已有账户，立即<a class="fz-yellow" href="/site/login">登录</a></p>
+            <p class="fz12 fz-white" style="margin-top: 10px; opacity: 0.7;">- 旧版系统<a class="fz-yellow" href="http://legacy.hbctcf.com/user/login">登录</a> -</p>
         </div>
         <?php } else { ?>
         <!--已登录-->

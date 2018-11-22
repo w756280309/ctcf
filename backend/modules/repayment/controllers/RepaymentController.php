@@ -82,7 +82,6 @@ class RepaymentController extends BaseController
             $couponsAmount += $orderBonusProfit;
             $allBonusProfits[$value['order_id']] = $orderBonusProfit;
         }
-
         foreach ($model as $val) {
             $qishu = intval($val['qishu']);
             $total_origin_lixi = bcadd($total_origin_lixi, $val['lixi'], 14);
@@ -101,6 +100,15 @@ class RepaymentController extends BaseController
                     $val['benxi'] = bcadd($val['lixi'], $val['benjin'], 2);
                 }
             }
+            
+            //分期产品提前还款只计算当期利息
+            if ($deal->isAmortized()
+            		&& $today <= date('Y-m-d',strtotime($repayment[$qishu]['dueDate']." -1 month"))
+            		) {
+            	$val['lixi'] = 0;
+            	$val['benxi'] = bcadd($val['lixi'], $val['benjin'], 2);
+            }
+            
             $val['payed'] = (bool) $payed;
             $total_bj = bcadd($total_bj, $val['benjin'], 14);
             $total_lixi = bcadd($total_lixi, $val['lixi'], 14);
@@ -524,6 +532,13 @@ class RepaymentController extends BaseController
         if (null === $borrowerEpayUser) {
             throw new \Exception('还款对应联动账户信息不存在');
         }
+        
+        //查找还款批次表的期数及回款状态
+        $repayment = Repayment::find()
+        ->where(['loan_id' => $loan->id])
+        ->indexBy('term')
+        ->asArray()
+        ->all();
 
         //当不允许访问联动时候，默认联动测处理成功，查看联动标的状态
         $ump = Yii::$container->get('ump');
@@ -573,6 +588,14 @@ class RepaymentController extends BaseController
                 $plan->benxi = bcadd($plan->benjin, $plan->lixi, 2);
                 $plan->refund_time = time();
             }
+            //分期产品提前还款只计算当期利息
+            if ($loan->isAmortized()
+            		&& $today <= date('Y-m-d',strtotime($repayment[$plan->qishu]['dueDate']." -1 month"))
+            		) {
+            			$plan->lixi = 0;
+            			$plan->benxi = bcadd($plan->benjin, $plan->lixi, 2);
+            }
+            
             $totalBenxi = bcadd($totalBenxi, $plan->benxi, 2);
         }
         $totalFund = bcsub($totalBenxi, $totalBonusProfit, 2);
@@ -603,7 +626,7 @@ class RepaymentController extends BaseController
             $transaction = $db->beginTransaction();
             try {
                 //如果在宽限期内，需要将重新计算的还款计划保存，以及将还款记录更新还款金额及利息
-                if ($isRefreshCalcLiXi) {
+                if ($isRefreshCalcLiXi || $loan->isAmortized()) {
                     $totalLixi = 0;
                     foreach ($plans as $plan) {
                         $totalLixi = bcadd($totalLixi, $plan->lixi, 2);

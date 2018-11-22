@@ -84,4 +84,21 @@ class BaseController extends Controller
             ->indexBy("userId")
             ->column();
     }
+    
+    /**
+     * 获取未被软删除的全部融资方个人信息.
+     */
+    public function perUserInfo(array $type)
+    {
+    	$u = User::tableName();
+    	return  User::find()
+    	->innerJoinWith('userAffiliation')
+    	->where(["$u.type" => User::USER_TYPE_PERSONAL])
+    	->andWhere(['trackcode' => 'hema123'])
+    	->andWhere(['is_soft_deleted' => 0])
+    	->orderBy(['sort' => SORT_DESC])
+		->select(["CONCAT($u.real_name,' ',$u.usercode)","$u.id"])
+    	->indexBy("id")
+    	->column();
+    }    
 }

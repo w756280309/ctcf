@@ -67,7 +67,7 @@ class Client
     /**
      * @var string 联动API版本号
      */
-    private $version = '1.0';
+    private $version = '4.0';
 
     private $logAdapter;
 
@@ -314,7 +314,7 @@ class Client
             'project_expire_date' => date('Ymd', $loan->getLoanExpireDate()), // 只做格式校验。没有对时间做其他限制
             'loan_user_id' => $borrower->getLoanUserId(), // 会去联动一侧判断用户是否存在[测试上投资用户可以用来融资]
             'loan_acc_type' => (null === $borrower->getLoanAccountType() || 1 === $borrower->getLoanAccountType()) ? '01' : '02', //当为商户号时loan_acc_type 为必填字段，值02
-            'ctrl_over_invest' => 0,//联动控制超投标志0不允许超投1允许
+//            'ctrl_over_invest' => 0,//联动控制超投标志0不允许超投1允许
         ];
 
         //获得代偿方联动用户ID
@@ -1255,6 +1255,7 @@ class Client
         return $prorp;
     }
 
+
     public function buildQuery(array $data)
     {
         $starttime = microtime(true);
@@ -1287,7 +1288,6 @@ class Client
     protected function processHttpResponse(Psr7ResponseInterface $response)
     {
         $content = trim($response->getBody()->getContents());
-
         if (302 === $response->getStatusCode()) {
             return new Response([], $response->getHeader('Location')[0]);
         } elseif ($response->hasHeader('Content-Type')) {
@@ -1690,6 +1690,96 @@ class Client
             'receive_user_id' => $epayUserId,
             'receive_acc_type' => '02', //商户
         ];
+
+        return $this->doRequest($data);
+    }
+
+    /**
+     *  4.2.15 签约免密协议
+     * 开通借记卡快捷支付
+     * @param $epayUserId 托管平台用户号
+     * @param $channel pc 或者 wap
+     */
+    public function openFastPay($epayUserId, $channel = null)
+    {
+        $data = [
+            'service' => 'ptp_mer_bind_agreement',
+            'ret_url' => $this->hostInfo . "/user/qpay/fastpaynotify/frontend",
+            'notify_url' => $this->hostInfo . "/user/qpay/fastpaynotify/backend",
+            'user_id' => $epayUserId,
+            'user_bind_agreement_list' => "ZKJP0701",//开通借记卡快捷支付
+        ];
+
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
+        $params = $this->buildQuery($data);
+
+        return $this->apiUrl.'?'.$params;
+    }
+
+    /**
+     * 4.2.15 签约免密协议
+     * 开通借记卡快捷免密充值.
+     * @param $epayUserId 托管平台用户号
+     * @param $channel pc 或者 wap
+     */
+    public function openFreeRecharge($epayUserId, $channel = null)
+    {
+        $data = [
+            'service' => 'ptp_mer_bind_agreement',
+            'ret_url' => $this->hostInfo . "/user/qpay/fastpaynotify/refrontend",
+            'notify_url' => $this->hostInfo . "/user/qpay/fastpaynotify/rebackend",
+            'user_id' => $epayUserId,
+            'user_bind_agreement_list' => "ZCZP0802",//开通借记卡快捷免密充值
+        ];
+
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
+        $params = $this->buildQuery($data);
+
+        return $this->apiUrl.'?'.$params;
+    }
+
+
+    /**
+     * 4.4.16 个人客户无密充值
+     * @param $epayUserId 托管平台用户号
+     * @param $sn 流水号 变长字符串
+     * @param $amount 充值金额 (单位：分)
+     */
+    public function doUserFreeRecharge($qpay, $channel = null)
+    {
+        $data = [
+            'service' => 'mer_recharge_person_nopwd_union',
+//            'ret_url' => $this->hostInfo . "/user/qpay/qpaynotify/frontend",
+            'notify_url' => $this->hostInfo . "/user/qpay/qpaynotify/backend",
+            'order_id' => $qpay->getTxSn(),
+            'mer_date' => $qpay->getTxDate(),
+            'pay_type' => 'DEBITCARD',
+            'user_id' => $qpay->getEpayUserId(),
+            'amount' => $qpay->getAmount(),
+            'user_ip' => $qpay->getClientIp(),
+            'com_amt_type' => 2,
+        ];
+
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
+
+        return $this->doRequest($data);
+    }
+
+    public function checkUserFree($userid, $channel = null){
+        $data = [
+            'service' => 'mer_bind_agreement_notify',
+            'user_id' => $userid,
+        ];
+
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
 
         return $this->doRequest($data);
     }

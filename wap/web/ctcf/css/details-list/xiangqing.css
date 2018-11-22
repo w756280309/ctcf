@@ -1,4 +1,4 @@
-ï»¿body,p,ul,ol,li,dl,dt,dd,form,h1,h2,h3,h4,h5,h6,input{
+body,p,ul,ol,li,dl,dt,dd,form,h1,h2,h3,h4,h5,h6,input{
     margin:0;
     padding:0;
     list-style:none;
@@ -42,7 +42,7 @@ i,em {
     font-size: 18px;
     color: #333;
 }
-/*é¢„å‘ŠæœŸ*/
+/*Ô¤¸æÆÚ*/
 .column {
     position: relative;
     background: #fff;
@@ -94,7 +94,7 @@ i,em {
     font-size: 34px;
     color: #ff6707;
 }
-/* é˜¶æ¢¯åˆ©ç‡å­—ä½“å¤§å°æ ·å¼ */
+/* ½×ÌİÀûÂÊ×ÖÌå´óĞ¡ÑùÊ½ */
 .rate-steps li div {
     font-size: 27px;
 }
@@ -218,7 +218,7 @@ i,em {
     background: url("../../../images/tubiao.png") no-repeat -3px -116px;
 }
 
-/*è§†é¢‘çš„å¢åŠ */
+/*ÊÓÆµµÄÔö¼Ó*/
 .col-zero{
     margin:0;
     padding:0;
@@ -417,7 +417,7 @@ i,em {
     top: -7px;
     z-index: 1;
 }
-/* æ”¶ç›Šè¯´æ˜æ¨¡å—æ ·å¼ */
+/* ÊÕÒæËµÃ÷Ä£¿éÑùÊ½ */
 .lee_title { padding-top:20px; }
 .lee_shuoming { font-size: 16px;line-height:34px;border-bottom:1px solid #ebebed; }
 .message .money{ padding-right:0;font-size:14px; height: 20px; line-height: 20px; }
@@ -451,7 +451,7 @@ p.notice-coupon {
 .bottom-note {
     padding-bottom: 10px;
 }
-/*20171218é¡µé¢ä¿®æ”¹*/
+/*20171218Ò³ÃæĞŞ¸Ä*/
 .earn-ransom{
    border-top:1px solid #e7eaf1;
     /*margin-top: 20px;*/
@@ -504,4 +504,48 @@ p.notice-coupon {
 }
 .earn-ransom ol li:first-child{
     color:#ff6058;
+}
+.tab31{
+    float: left;
+    height: 36px;
+    background: #ff6707;
+    text-align: center;
+    line-height: 36px;
+    font-size: 12px;
+    color: #fff;
+    border-right: 1px solid #ff6707;
+}
+.tab32{
+    float: left;
+    height: 36px;
+    text-align: center;
+    line-height: 36px;
+    font-size: 12px;
+    color: #ff6707;
+}
+.tab33{
+    float: left;
+    height: 36px;
+    text-align: center;
+    line-height: 36px;
+    font-size: 12px;
+    color: #ff6707;
+    border-left: 1px solid #ff6707;
+}
+.huankuan-box{
+    background: #fff;
+    padding-top: 10px;
+    font-size: 10px;
+    display: none;
+}
+.huankuan {
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background: #f0f4fd;
+}
+.huankuan-content{
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
 }

@@ -143,7 +143,7 @@ class DrawrecordController extends BaseController
                 ];
 
                 if (isset($status[$tranState])) {
-                    return ['code' => 0, 'message' => $status[$tranState]];
+                    return ['code' => 0, 'message' => $status[$tranState].",联动订单号:".$res->get('order_id')];
                 }
 
                 return ['code' => 1, 'message' => '返回信息不明确'];

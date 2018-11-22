@@ -43,6 +43,8 @@ $menus = AuthSys::getMenus('A100000');
                 <th style="text-align: center">快捷绑卡</th>
                 <th style="text-align: center">快捷充值</th>
                 <th style="text-align: center">快捷充值限额</th>
+                <th style="text-align: center">商业委托快捷充值</th>
+                <th style="text-align: center">商业委托快捷充值限额</th>
                 <th style="text-align: center">操作</th>
             </tr>
             </thead>
@@ -80,6 +82,16 @@ $menus = AuthSys::getMenus('A100000');
                     </td>
                     <td style="text-align: center">
                         <?= $val->quota ?>
+                    </td>
+                    <td style="text-align: center">
+                        <?php if ($val->deputeIsQuick): ?>
+                            <i class="icon-ok green" style="color: green;"></i>
+                        <?php else: ?>
+                            <i class="icon-remove" style="color: red;"></i>
+                        <?php endif; ?>
+                    </td>
+                    <td style="text-align: center">
+                        <?= $val->deputeQuota ?>
                     </td>
                     <td style="text-align: left;width: 130px;">
                         <a href="javascript:void(0)" onclick="edit_blank(<?= $val->id ?>,'<?= $val->bankName ?>')"

@@ -23,6 +23,7 @@ use common\models\user\Borrower;
 use common\models\user\CoinsRecord;
 use common\models\user\MoneyRecord;
 use common\models\user\OriginalBorrower;
+use common\models\user\QpayBinding;
 use common\models\user\User;
 use common\models\user\UserAccount;
 use common\models\user\UserBanks;
@@ -30,6 +31,7 @@ use common\models\user\RechargeRecord;
 use common\models\user\UserInfo;
 use common\models\user\UserSearch;
 use common\models\user\DrawRecord;
+use common\models\user\UserFreepwdRecord;
 use common\models\tx\UserAsset;
 use common\models\tx\CreditNote;
 use common\utils\SecurityUtils;
@@ -434,6 +436,9 @@ class UserController extends BaseController
             case 'credit_note':
                 return $this->getCreditNote($user);
                 break;
+            case 'commercial_record':
+                return $this->getCommercialNote($user);
+                break;
             default :
                 break;
         }
@@ -544,6 +549,32 @@ class UserController extends BaseController
         return $this->renderFile('@backend/modules/user/views/user/_offline_user.php', [
             'dataProvider' => $dataProvider,
             'user' => $user,
+        ]);
+    }
+
+    /**
+     * 获取商业委托免密开通状态
+     */
+    private function getCommercialNote(User $user)
+    {
+        $r = UserFreepwdRecord::tableName();
+        $u = QpayBinding::tableName();
+        $query = (new \yii\db\Query)
+            ->select(["$r.*", "$u.card_number"])
+            ->from($r)
+            ->leftJoin($u, "$r.uid = $u.uid")
+            ->where(["$r.uid" => $user->id])
+            ->orderBy(["$r.created_at" => SORT_DESC]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        $records = $dataProvider->getModels();
+        return $this->renderFile('@backend/modules/user/views/user/_commercial_record.php', [
+            'dataProvider' => $dataProvider,
+            'user' => $records,
         ]);
     }
 

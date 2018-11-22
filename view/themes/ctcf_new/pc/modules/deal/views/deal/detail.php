@@ -178,6 +178,12 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                 <div class="plD-btn">
                     <div>出借记录</div>
                 </div>
+                <!--10 等额本息 JS生成还款计划 -->
+                <?php if ($deal->refund_method == '10') { ?>                    
+                <div class="plD-btn">
+                    <div>还款计划</div>
+                </div>     
+                <?php } ?>           
             </div>
             <div class="plD-content show">
                 <div class="plD-inner-box">
@@ -185,6 +191,44 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/jquery.ba-throttle-debounce.min.js?v=1
                 </div>
             </div>
             <div class="plD-content hide" id="order_list"></div>
+            <!--10 等额本息 JS生成还款计划 -->
+            <?php if ($deal->refund_method == '10') { ?>            
+            <div class="plD-content hide">
+                <div class="piD-data-box">
+                    <table class="piD-data-inner">
+                        <tbody>
+                            <tr style="background: rgb(239, 239, 243);">
+                                <th class="piD-th2 piD-left"><span>还款期数</span></th>
+                                <th class="piD-th2 piD-left"><span>还款日期</span></th>
+                                <th class="piD-th3 piD-right"><span>本期利息</span></th>
+                                <th class="piD-th4 piD-right"><span>还款本金</span></th>
+                            </tr>
+                        <?php
+                            $lastbenjin = $deal->money ;
+                            $perratio = (LoanHelper::getDealRate($deal) + $deal->jiaxi)/12/100;
+                            $pertotal = ($lastbenjin * $perratio * pow((1+$perratio),$ex['value']))/(pow((1+$perratio),$ex['value']) - 1);
+
+                            for ($i = 1;$i <= $ex['value']; $i++) {
+                                $thislixi = $lastbenjin*$perratio;
+                                $thisbenjin = $pertotal - $thislixi;
+                                $lastmonth = $ex['value'] - $i;
+                                $thisriqi = $deal->finish_date > 0 ? date('Y-m-d',strtotime("- $lastmonth month",$deal->finish_date)) : ($deal->jixi_time > 0 ? date('Y-m-d',strtotime("+ $i month",$deal->jixi_time)) : "待计息后确定");
+                        ?>
+                        <tr style="">
+                            <td class="piD-th1 piD-left"><span>第<?=$i?>期</span></td>
+                            <td class="piD-th2 piD-left"><span><?=$thisriqi?></span></td>
+                            <td class="piD-th3 piD-right"><span><?=StringUtils::amountFormat3($thislixi)?></span></td>
+                            <td class="piD-th4 piD-right"><span><?=StringUtils::amountFormat3($thisbenjin)?></span></td>
+                        </tr>
+                        <?php
+                                $lastbenjin = $lastbenjin - $thisbenjin;
+                            }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <?php } ?>
         </div>
     </div>
     <div class="project-right">

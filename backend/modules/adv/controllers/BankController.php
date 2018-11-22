@@ -13,6 +13,7 @@ use backend\controllers\BaseController;
 use common\models\bank\Bank;
 use common\models\bank\EbankConfig;
 use common\models\bank\QpayConfig;
+use common\models\bank\QpayDeputeConfig;
 use Yii;
 use yii\data\Pagination;
 use yii\web\NotFoundHttpException;
@@ -51,16 +52,21 @@ class BankController extends BaseController
 
         $eBank = EbankConfig::find()->where(['bankId' => $id])->one();
         $qPay = QpayConfig::find()->where(['bankId' => $id])->one();
-        if (!$eBank || !$qPay) {
+        $qDeputePay = QpayDeputeConfig::find()->where(['bankId' => $id])->one();
+        if (!$eBank || !$qPay || !$qDeputePay) {
             throw new NotFoundHttpException('信息未找到');
         }
         $qPay->singleLimit = floatval($qPay->singleLimit/10000);
         $qPay->dailyLimit = floatval($qPay->dailyLimit/10000);
-        if ($eBank->load(Yii::$app->request->post()) && $qPay->load(Yii::$app->request->post())) {
+        $qDeputePay->singleLimit = floatval($qDeputePay->singleLimit/10000);
+        $qDeputePay->dailyLimit = floatval($qDeputePay->dailyLimit/10000);
+        if ($eBank->load(Yii::$app->request->post()) && $qPay->load(Yii::$app->request->post()) && $qDeputePay->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             $qPay->singleLimit = 10000*$qPay->singleLimit;
             $qPay->dailyLimit = 10000*$qPay->dailyLimit;
-            if ($eBank->save(false) && $qPay->save(false)) {
+            $qDeputePay->singleLimit = 10000*$qDeputePay->singleLimit;
+            $qDeputePay->dailyLimit = 10000*$qDeputePay->dailyLimit;
+            if ($eBank->save(false) && $qPay->save(false) && $qDeputePay->save(false)) {
                 return ['code' => true, 'msg' => '更新成功'];
             } else {
                 return ['code' => false, 'msg' => '更新失败'];
@@ -69,6 +75,7 @@ class BankController extends BaseController
         return $this->render('edit', [
             'eBank' => $eBank,
             'qPay' => $qPay,
+            'qDeputePay' => $qDeputePay,
             'id' => $id,
         ]);
     }

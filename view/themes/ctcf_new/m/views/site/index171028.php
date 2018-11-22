@@ -328,7 +328,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' =>
 			<a href="tel:<?= Yii::$app->params['platform_info.contact_tel'] ?>" class="rg"><img
 					src="<?= ASSETS_BASE_URI ?>ctcf/images/new-homepage/go_phone_summer.png" alt=""></a>
 		</div>
-		<p class="phone-box-address">地址：武汉市武昌区东湖路181号楚天文化创意产业园<br/>8号楼1层</p>
+		<p class="phone-box-address">地址：武汉市武昌区东湖路181号楚天文化创意产业园<br/>1号楼6层</p>
 	</div>
     <div class="aboutus-box swiper-container">
         <div class="swiper-wrapper">

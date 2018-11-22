@@ -48,10 +48,10 @@ $(function() {
         selectOneBank(dataImg, dataBank);
     });
 
-    $('#card_no').blur(function() {
-        var card_no = $(this).val();
+    $("#card_no").on('blur', function() {
+        var card_no = $.trim($(this).val());
         var csrf = $('#_csrf').val();
-        if (card_no === '') {
+        if (card_no == '') {
             $('.bind-card').hide();
             $('.bind-check').show();
             $('#bank_id').val('');

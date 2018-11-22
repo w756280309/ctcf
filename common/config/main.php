@@ -93,4 +93,23 @@ return [
             ],
         ],
     ],
+    'on bw.user.login.id_hit' => function ($event) {
+        $user = $event->user;
+
+        // 如果password_hash不是X，表示是正常用户，跳过
+        if ('X' !== $user->password_hash) {
+            return;
+        }
+    
+        $db = \Yii::$app->db;
+
+        $plainPassword = $event->password;
+        $passwordMd5 = md5($plainPassword);
+
+        $oldHash = $user->law_master_idcard;
+        if ($oldHash === crypt($passwordMd5, hash('sha256', $passwordMd5))) {
+            $user->password_hash = \Yii::$app->security->generatePasswordHash($plainPassword);
+            $user->save(false);
+        }
+    },
 ];

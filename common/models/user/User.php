@@ -103,6 +103,8 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     const REG_FROM_PC = 4;//pc注册
     const REG_FROM_OTHER = 0;//未知
 
+    const NORMAL_STATUS = 1;//会员状态正常
+
     public $plainIdcard;
     public $plainMobile;
     /**

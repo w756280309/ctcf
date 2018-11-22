@@ -122,7 +122,7 @@ trait ContractTrait
         $loanContract = [];
         foreach ($loanTemplates as $key => $loanTemplate) {
             if ($key === 0) {
-                $title = '认购合同';
+                $title = '借款合同';
             } else {
                 $title = Yii::$app->functions->cut_str($loanTemplate->name, 5, 0, '**');
             }
@@ -334,7 +334,7 @@ trait ContractTrait
         }
         foreach ($model as $k => $val) {
             if ($k === 0) {
-                $title = '认购合同';
+                $title = '借款合同';
             } else {
                 $title = Yii::$app->functions->cut_str($val['name'], 5, 0, '**');
             }

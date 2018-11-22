@@ -37,7 +37,7 @@ $this->title = '新人首投礼';
         <li class="detail">完成活动任务后，红包与积分即时发放到账，您可在账户中心查看；</li>
         <li class="detail time">超市卡将在兑换后的3个工作日内审核发放，如果遇到刷单的情况，公司有权取消活动奖励。如有疑问请联系客服<?= Yii::$app->params['platform_info.contact_tel'] ?>。</li>
         <li class="title">公司地址：</li>
-        <li class="detail">武汉市东湖路181号楚天文化创意产业园8号楼1层。</li>
+        <li class="detail">武汉市东湖路181号楚天文化创意产业园1号楼6层。</li>
         <li class="last-detail clearfix" style="height: auto;">
             <div class="lf-txt">
                 <p class="weixin">了解更多内容<br/>请添加官方客服微信号：</p>

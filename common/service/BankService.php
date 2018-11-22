@@ -43,7 +43,7 @@ class BankService
      * @param User $user 用户对象
      * @param int $cond 查询条件
      */
-    public static function check($user, $cond)
+    public static function check($user, $cond, $chk_s = false)
     {
         if (($cond & self::IDCARDRZ_VALIDATE_Y) && $user->idcard_status == User::IDCARD_STATUS_PASS) {
             return [
@@ -60,21 +60,14 @@ class BankService
                 'message' => '您还没有开通第三方资金托管账户，请前往开通',
             ];
         }
-
-        if (($cond & self::MIANMI_VALIDATE_N) && !$user->mianmiStatus) {
-            return [
-                'tourl' => (defined('CLIENT_TYPE') && 'pc' === CLIENT_TYPE) ? '/user/qpay/binding/umpmianmi' : '/user/user/mianmi',
-                'code' => 1,
-                'message' => '您还没有开通免密支付功能，请前往开通',
-            ];
-        }
-
-        if (($cond & self::MIANMI_VALIDATE_Y) && $user->mianmiStatus) {
-            return [
-                'tourl' => '/user/bank',
-                'code' => 1,
-                'message' => '您已经开通免密支付功能，请勿重复操作',
-            ];
+        if(false === $chk_s){
+            if (($cond & self::MIANMI_VALIDATE_Y) && $user->mianmiStatus) {
+                return [
+                    'tourl' => '/user/bank',
+                    'code' => 1,
+                    'message' => '您已经开通免密支付功能，请勿重复操作',
+                ];
+            }
         }
 
         $user_bank = $user->qpay;

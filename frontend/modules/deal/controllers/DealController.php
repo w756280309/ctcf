@@ -79,6 +79,7 @@ class DealController extends BaseController
      */
     public function actionOrderList($pid)
     {
+        $user = $this->getAuthedUser();//获取用户登录信息
         $this->findOr404(OnlineProduct::className(), ['id' => $pid]);
         $ol = OnlineOrder::tableName();
         $u = User::tableName();
@@ -93,6 +94,7 @@ class DealController extends BaseController
         $data = $query->offset($pages->offset)->limit($pages->limit)->all();
         return $this->renderFile('@frontend/modules/deal/views/deal/_order_list.php', [
             'data' => $data,
+            'user' => $user,
             'pages' => $pages,
         ]);
     }
