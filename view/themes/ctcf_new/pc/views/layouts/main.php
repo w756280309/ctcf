@@ -46,6 +46,15 @@ $this->registerMetaTag([
                 hmsr();
             })
         </script>
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?779cc2b103544ff6e5f50e5f7c8bac2a";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
     </head>
 
     <body>

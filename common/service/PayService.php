@@ -57,6 +57,7 @@ class PayService
     const ERROR_MR = 192;//资金记录异常
     const ERROR_LAW = 198;//非法请求
     const ERROR_SYSTEM = 199;//系统错误
+    const ERROR_OPENMIANMI = 201;//需要开通免密协议
 
     /**
      * 获取错误内容.
@@ -96,6 +97,7 @@ class PayService
             self::ERROR_BANK_BIND => '您未绑定银行卡',
             self::ERROR_MONEY_LAST => '购买后可投余额不可低于起投金额',
             self::ERROR_MONEY_XS_LIMIT => '新手专享标最多只能投' . \Yii::$app->params['xs_money_limit']. '元',
+            self::ERROR_OPENMIANMI => '用户需要开通免密投资协议',
         ];
 
         return $data[$code];
@@ -106,6 +108,7 @@ class PayService
         if (null === $user) {
             return ['code' => self::ERROR_LOGIN,  'message' => self::getErrorByCode(self::ERROR_LOGIN), 'tourl' => '/site/login'];
         }
+
 
         if (!in_array($this->postmethod, [1, 2])) {
             return ['code' => self::ERROR_LAW,  'message' => self::getErrorByCode(self::ERROR_LAW)];
@@ -132,6 +135,10 @@ class PayService
         $bankRet = BankService::check($user, $cond);
         if ($bankRet['code']) {
             return $bankRet;
+        }
+
+        if(empty($user->mianmiStatus)){
+            return ['code' => self::ERROR_OPENMIANMI,  'message' => self::getErrorByCode(self::ERROR_OPENMIANMI), 'tourl' => '/user/qpay/binding/umpmianmi'];
         }
 
         $deal = OnlineProduct::findOne(['sn' => $sn]);

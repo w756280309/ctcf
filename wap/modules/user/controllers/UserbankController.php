@@ -138,6 +138,7 @@ class UserbankController extends BaseController
             'user_acount' => $user_acount,
             'data' => $data,
             'bank' => $bank,
+            'uid' => $user->id,
         ]);
     }
 
@@ -370,6 +371,7 @@ class UserbankController extends BaseController
             'data' => $data,
             'bank' => $bank,
             'toOpenMm' => $toOpenMm,
+            'uid' => $user->id,
         ]);
     }
 
@@ -438,5 +440,21 @@ class UserbankController extends BaseController
             }
         }
         $this->redirect(Yii::$container->get('ump')->openFreeRecharge($user->epayUser->epayUserId));
+    }
+
+    /**
+     * 用户开通免密协议
+     */
+    public function actionOpenfree(){
+        $user = $this->getAuthedUser();
+        if(null === $user){
+            $this->redirect('/site/login');
+        }
+        if(empty($user->mianmiStatus)){
+            $next = Yii::$container->get('ump')->openmianmi($user->epayUser->epayUserId);
+        }else{
+            $next = 'deal/deal/index';
+        }
+        $this->redirect($next);
     }
 }
