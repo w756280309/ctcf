@@ -24,7 +24,7 @@ class QrechargeController extends BaseController
         */
         $depute = Yii::$app->request->post('depute');
         if('depute' === $depute){
-            $userfree = UserFreepwdRecord::findOne(['uid'=> $cpuser->id, 'status' => UserFreepwdRecord::OPEN_FREE_RECHARGE_PASS]);
+            $userfree = UserFreepwdRecord::findOne(['uid'=> $cpuser->id, 'status' => UserFreepwdRecord::OPEN_FASTPAY_STATUS_PASS]);
             if(empty($userfree)){
                 return ['next' => '/user/userbank/recharge-depute'];
             }
@@ -64,11 +64,7 @@ class QrechargeController extends BaseController
                 if('depute' !== $depute){
                     $next = Yii::$container->get('ump')->rechargeViaQpay($rec_model, 'pc');
                 }else {
-                    $next = Yii::$container->get('ump')->doUserFreeRecharge($rec_model, 'pc');
-                    if($next->isSuccessful()){
-                        $url = '/user/user/index';
-                        return ['next'=> '/info/success?source=chongzhi&jumpUrl='.$url];
-                    }
+                    $next = Yii::$container->get('ump')->doUserFastRecharge($rec_model, 'pc');
                 }
                 if ($next->isRedirection()) {
                     return ['next' => $next->getLocation()];

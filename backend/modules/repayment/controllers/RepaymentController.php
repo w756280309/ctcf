@@ -606,7 +606,11 @@ class RepaymentController extends BaseController
         }
         //判断实际联动方融资者账户信息是否异常
         if (Yii::$app->params['ump_uat']) {
-            $orgResp = $ump->getMerchantInfo($borrowerEpayUser->epayUserId);
+            if(User::USER_TYPE_PERSONAL === $borrower->type){//个人
+                $orgResp = $ump->getUserInfo($borrowerEpayUser->epayUserId);
+            }else{
+                $orgResp = $ump->getMerchantInfo($borrowerEpayUser->epayUserId);
+            }
             if ($orgResp->isSuccessful()) {
                 if ('1' !== $orgResp->get('account_state')) {
                     throw new \Exception('当前联动端融资者账户状态异常');

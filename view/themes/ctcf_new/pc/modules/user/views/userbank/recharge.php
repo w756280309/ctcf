@@ -17,9 +17,9 @@ $testUid = [43949, 45796, 37419];
         <div class="list-single">
             <a class="a_first " href="/user/recharge/init">个人网银</a>
             <a class="a_second select" href="/user/userbank/recharge">快捷充值</a>
-            <?php if(in_array($user->id, $testUid)){?>
+            <?php //if(in_array($user->id, $testUid)){?>
             <a class="a_third" style="left:318px;" href="/user/userbank/recharge-depute">快捷充值(商业委托)</a>
-            <?php }?>
+            <?php //}?>
         </div>
         <?php if($user_bank) { ?>
         <p class="bindCard-content-header">已绑定银行卡：</p>

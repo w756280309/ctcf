@@ -50,7 +50,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/leadpage/leadpage.js?v=20160708', ['de
         <a class="container-right"></a>
     </div>
     <div class="container-box hidden">
-        <p class="tip-font">用户注册成功后，<span>点击【充值】</span>，进入开通资金托管账户页面，<span>完成实名认证</span></p>
+        <p class="tip-font">用户注册成功后，<span>点击【充值】</span>，进入开通第三方支付账户页面，<span>完成实名认证</span></p>
         <a class="container-left"></a>
         <div class="container-center">
             <img src="<?= ASSETS_BASE_URI ?>ctcf/images/leadpage/display_2.png" width="649" alt="">

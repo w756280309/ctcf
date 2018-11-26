@@ -1526,7 +1526,7 @@ class OnlineProduct extends \yii\db\ActiveRecord implements LoanInterface
 
         return User::find()
             ->where(['id' => $repayerId])
-            ->andWhere(['type' => User::USER_TYPE_ORG])
+            //->andWhere(['type' => User::USER_TYPE_ORG])
             ->one();
     }
     /**

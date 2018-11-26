@@ -5,7 +5,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/bindcardalready.css
 $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/useraccount/chargedeposit.css?v=20160832');
 
 use common\utils\StringUtils;
-$testUid = [43949, 45796, 37419, 40952];
+$testUid = [43949, 45796, 37419, 40952, 23808];
 ?>
 
 <div class="bindCard-box">
@@ -17,9 +17,9 @@ $testUid = [43949, 45796, 37419, 40952];
         <div class="list-single">
             <a class="a_first " href="/user/recharge/init">个人网银</a>
             <a class="a_second" href="/user/userbank/recharge">快捷充值</a>
-            <?php if(in_array($user->id, $testUid)){?>
+            <?php //if(in_array($user->id, $testUid)){?>
             <a class="a_third select" style="left:318px;"  href="/user/userbank/recharge-depute">快捷充值(商业委托)</a>
-            <?php }?>
+            <?php //}?>
         </div>
         <?php if($toOpenMm){ ?>
             <p class="bindCard-content-header" style="color: #ff0000"><?php echo $toOpenMm['message'];?>：</p>
@@ -118,9 +118,9 @@ $testUid = [43949, 45796, 37419, 40952];
 
 <script>
     var m = <?= $user->mianmiStatus?>;
-    if (m == 0) {
-        mianmi();
-    }
+//    if (m == 0) {
+//        mianmi();
+//    }
     function err_message(message){
         if (message.length > 0) {
             $('.error').show();

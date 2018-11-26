@@ -37,7 +37,7 @@ class FastpaynotifyController extends BaseController
                 return $this->goReferrer($ret['tourl']);
             }else{
                 if('0000' === $data['ret_code']){//跳转
-                    return $this->redirect('/user/userbank/free-recharge');
+                    return $this->redirect('/user/userbank/recharge-depute');
                 }else{
                     throw new \Exception($data['order_id'] . '快捷支付开通失败');
                 }
@@ -136,7 +136,7 @@ class FastpaynotifyController extends BaseController
         if (
             Yii::$container->get('ump')->verifySign($data)
             && '0000' === $data['ret_code']
-            && 'ptp_mer_bind_agreement' === $data['service']
+            && 'mer_bind_agreement_notify' === $data['service']
         ) {
             if('pay' == $step){
                 $status = UserFreepwdRecord::OPEN_FASTPAY_STATUS_PASS;
@@ -152,7 +152,7 @@ class FastpaynotifyController extends BaseController
             }
         }
         $epayUser = EpayUser::findOne(['epayUserId' => $data['user_id']]);
-        $upt = UserFreepwdRecord::updateAll(["status" => $status, 'ret_code'=> $data['ret_code'], 'ret_msg'=> $data['ret_msg']], "uid=" . $epayUser->appUserId. " and epayUserId = ". $data['user_id']);
+        $upt = UserFreepwdRecord::updateAll(["status" => $status, 'ret_code'=> $data['ret_code'], 'ret_msg'=> $data['ret_msg']],  ['uid'=> $epayUser->appUserId, 'epayUserId' => $data['user_id']]);
         if($upt){
             return User::findOne($epayUser->appUserId);
         }else{
