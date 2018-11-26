@@ -32,13 +32,8 @@ $this->title = '开户';
 <div class="charge-explain">
     <p class="charge-explain-title">为什么要开通第三方支付账户？</p>
     <div class="charge-explain-content">
-        <span class="span-left">合法合规的需要：</span>
-        <span class="span-right">楚天财富接入了联动优势电子商务有限公司的第三方账户体系，实现了平台对个人及企业用户的账户进行独立管理，交易仅限用户本人操作，资金安全有保障。</span>
-        <div class="clear"></div>
-    </div>
-    <div class="charge-explain-content">
         <span class="span-left">资金安全的需要：</span>
-        <span class="span-right">开通第三方支付账户后，可避免资金挪用风险，用户完全拥有资金自主使用权，可有效保证投/融资双方资金安全。</span>
+        <span class="span-right">开通第三方支付账户后，可避免资金挪用风险，用户完全拥有资金自主使用权，可有效保证借款人出借人双方资金安全。</span>
         <div class="clear"></div>
     </div>
 </div>
