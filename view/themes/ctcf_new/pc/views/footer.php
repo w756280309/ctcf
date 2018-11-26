@@ -18,7 +18,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'ctcf/css/footer.min.css', ['depends' => 
             <dl class="help-ct fz14 lf">
                 <dt class="fz16">帮助中心</dt>
                 <dd><a class="footer-hover" href="/helpcenter/operation/">注册登录</a></dd>
-                <dd><a class="footer-hover" href="/helpcenter/operation?type=1">开通资金托管</a></dd>
+                <dd><a class="footer-hover" href="/helpcenter/operation?type=1">开通第三方支付账户</a></dd>
                 <dd><a class="footer-hover" href="/helpcenter/operation?type=2">绑卡充值</a></dd>
                 <dd><a class="footer-hover" href="/helpcenter/operation?type=3">出借提现</a></dd>
             </dl>

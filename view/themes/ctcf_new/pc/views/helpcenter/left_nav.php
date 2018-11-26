@@ -14,7 +14,7 @@ $action = Yii::$app->controller->action->getUniqueId();
         <li class="nav-content">
             <ul>
                 <li class="scrollClick top1 <?= 'helpcenter/operation' === $action && 0 == $type ? 'selected' : '' ?>"><a href="/helpcenter/operation?type=0"><span class="star"></span>注册登录</a></li>
-                <li class="scrollClick top2 <?= 'helpcenter/operation' === $action && 1 == $type ? 'selected' : '' ?>"><a href="/helpcenter/operation?type=1"><span class="star"></span>开通资金托管</a></li>
+                <li class="scrollClick top2 <?= 'helpcenter/operation' === $action && 1 == $type ? 'selected' : '' ?>"><a href="/helpcenter/operation?type=1"><span class="star"></span>开通第三方支付</a></li>
                 <li class="scrollClick top3 <?= 'helpcenter/operation' === $action && 2 == $type ? 'selected' : '' ?>"><a href="/helpcenter/operation?type=2"><span class="star"></span>绑卡充值</a></li>
                 <li class="scrollClick top4 <?= 'helpcenter/operation' === $action && 3 == $type ? 'selected' : '' ?>"><a href="/helpcenter/operation?type=3"><span class="star"></span>出借提现</a></li>
             </ul>
