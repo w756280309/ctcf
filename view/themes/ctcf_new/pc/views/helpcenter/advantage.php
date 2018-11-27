@@ -26,7 +26,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                     <div class="section">
                         <div class="number">2</div>
                         <span>股东</span><span>强势</span>
-                        <p>系湖北荆楚网络科技股份有限公司、湖北新海天出借有限公司出借。</p>
+                        <p>系湖北荆楚网络科技股份有限公司、湖北新海天投资有限公司出借。</p>
                     </div>
 
                     <div class="section">
@@ -48,7 +48,7 @@ $this->registerCssFile(ASSETS_BASE_URI.'css/help/advantage.css', ['depends' => '
                         <div class="number">5</div>
                         <span>灵活</span><span>便捷</span>
                         <p>网上有平台，线下有门店，楚天财富在您身边；</p>
-                        <p>千元起借，手机操作，随时随地实现财富增值。</p>
+                        <p>千元起借，手机电脑均可操作，随时随地都能出借。</p>
                     </div>
                 </div>
             </div>

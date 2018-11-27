@@ -719,11 +719,24 @@ class RepaymentController extends BaseController
                 //联动一测融资用户还款到标的账户
                 if ($totalFund > 0 && Yii::$app->params['ump_uat']) {
                     if ($loan->borrow_uid === $borrower->id) {
-                        $hk = $ump->huankuan(
-                            TxUtils::generateSn('HK'),
-                            $loan->id,
-                            $borrowerEpayUser->epayUserId,
-                            $totalFund);
+                    	Yii::info($borrowerEpayUser->epayUserId, 'xiaowei');
+                    	
+                    	if(User::USER_TYPE_PERSONAL === $borrower->type){//个人
+                    		$hk = $ump->huankuan_gr(
+                    				TxUtils::generateSn('HK'),
+                    				$loan->id,
+                    				$borrowerEpayUser->epayUserId,
+                    				$totalFund);
+                    		Yii::info($hk, 'xiaowei');
+                    	}
+                    	else {
+                    		$hk = $ump->huankuan(
+                    				TxUtils::generateSn('HK'),
+                    				$loan->id,
+                    				$borrowerEpayUser->epayUserId,
+                    				$totalFund);
+                    	}
+                    	Yii::info($hk, 'xiaowei');
                     } else {
                         $hk = $ump->refundViaAltRepayer(
                             TxUtils::generateSn('HK'),

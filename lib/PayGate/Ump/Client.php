@@ -137,6 +137,24 @@ class Client
 
         return $this->apiUrl.'?'.$params;
     }
+
+    public function openmianmirepay($epayUserId, $channel = null)
+    {
+        $data = [
+            'service' => 'ptp_mer_bind_agreement',
+            'ret_url' => $this->hostInfo . "/user/qpay/agreementnotify/frontend",
+            'notify_url' => $this->hostInfo . "/user/qpay/agreementnotify/backend",
+            'user_id' => $epayUserId,
+            'user_bind_agreement_list' => "ZHKB0H01",//免密还款协议
+        ];
+
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
+        $params = $this->buildQuery($data);
+
+        return $this->apiUrl.'?'.$params;
+    }
     /**
      * 4.5.2 查询用户的账号和协议签署情况.
      *
@@ -1025,6 +1043,32 @@ class Client
 
         return $this->doRequest($data);
     }
+    
+    /**
+     * 4.3.5 个人融资用户还款(商户→平台)
+     * @param type $txSn 商户订单号
+     * @param type $txDate 商户订单日期
+     * @param type $projectId 标的号
+     * @param type $particUserId 转账方用户号 企业用户：联动开立的商户号
+     * @param type $amount 金额
+     */
+    public function huankuan_gr($txSn, $projectId, $particUserId, $amount)
+    {
+    	$data = [
+    			'service' => 'project_transfer_nopwd',
+    			'order_id' => $txSn,
+    			'mer_date' => date('Ymd'),  //商户生成订单的日期，格式YYYYMMDD
+    			'project_id' => $projectId,  //标的号,本地id值
+    			'serv_type' => '03',
+    			'trans_action' => '01',
+    			'partic_type' => '02',
+    			'partic_acc_type' => '01',
+    			'partic_user_id' => $particUserId,
+    			'amount' => $amount * 100,  //单位为分
+    	];
+    
+    	return $this->doRequest($data);
+    }    
 
     /**
      * 4.2.13 充值交易密码
@@ -1234,7 +1278,6 @@ class Client
         // 签名
         $sign_data = $data['sign'] = $this->sign($data);
         $data['sign_type'] = $this->signType;
-
         $httpResponse = $this->getHttpClient()->request('POST', null, [
             'form_params' => $data,
         ]);
@@ -1753,7 +1796,6 @@ class Client
     {
         $data = [
             'service' => 'mer_recharge_person_nopwd_union',
-//            'ret_url' => $this->hostInfo . "/user/qpay/qpaynotify/frontend",
             'notify_url' => $this->hostInfo . "/user/qpay/qpaynotify/backend",
             'order_id' => $qpay->getTxSn(),
             'mer_date' => $qpay->getTxDate(),
@@ -1771,10 +1813,24 @@ class Client
         return $this->doRequest($data);
     }
 
-    public function checkUserFree($userid, $channel = null){
+    /**
+     * 4.4.15 个人客户充值申请
+     * @param $epayUserId 托管平台用户号
+     * @param $sn 流水号 变长字符串
+     * @param $amount 充值金额 (单位：分)
+     */
+    public function doUserFastRecharge($qpay, $channel = null){
         $data = [
-            'service' => 'mer_bind_agreement_notify',
-            'user_id' => $userid,
+            'service' => 'mer_recharge_person_union',
+            'ret_url' => $this->hostInfo . "/user/qpay/qpaynotify/frontend-depute",
+            'notify_url' => $this->hostInfo . "/user/qpay/qpaynotify/backend-depute",
+            'order_id' => $qpay->getTxSn(),
+            'mer_date' => $qpay->getTxDate(),
+            'pay_type' => 'DEBITCARD',
+            'user_id' => $qpay->getEpayUserId(),
+            'amount' => $qpay->getAmount(),
+            'user_ip' => $qpay->getClientIp(),
+            'com_amt_type' => 2,
         ];
 
         if ('pc' !== $channel) {
@@ -1782,5 +1838,26 @@ class Client
         }
 
         return $this->doRequest($data);
+    }
+
+    public function unBindDepute($user_id, $channel= null){
+        $data = [
+            'service' => 'mer_unbind_agreement',    //接口名称
+            'charset' => $this->charset,
+            'res_format' => 'HTML',
+            'mer_id' => $this->merchantId,
+            'ret_url' => $this->hostInfo."/user/qpay/qpaynotify1/unbind-frontend",     //页面跳转同步通知页面路径
+            'user_id' => $user_id,      //资金账户托管平台的用户号
+            'version' => '4.0',
+            'account_id' => '02000207756898',    //资金账户托管平台的账户号
+            'user_unbind_agreement_list' => 'ZKJP0701',     //用户需解约的协议列表信息
+        ];
+
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
+        $params = $this->buildQuery($data);
+
+        return $this->apiUrl.'?'.$params;
     }
 }

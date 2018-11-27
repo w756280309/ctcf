@@ -66,6 +66,7 @@ class QrechargeController extends BaseController
                 }else {
                     $next = Yii::$container->get('ump')->doUserFastRecharge($rec_model, 'pc');
                 }
+                Yii::info('充值接口'.$next, 'umplog');
                 if ($next->isRedirection()) {
                     return ['next' => $next->getLocation()];
                 } else {

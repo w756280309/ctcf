@@ -228,7 +228,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' =>
 			<a href="/site/login" class="newbid-insideBox-login">登录</a>
 		</div>
 		<p class="newbid-wendu-link"><a href="/site/h5?wx_share_key=h5">1分钟了解楚天财富</a></p>
-		<p class="newbid-wendu-txt">湖北日报新媒体集团旗下平台</p>
+		<p class="newbid-wendu-txt">湖北日报荆楚网旗下平台</p>
 	</div>
 	<div class="links-box clearfix">
 		<a href="/user/checkin" class="lf">

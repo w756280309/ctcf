@@ -119,7 +119,7 @@
         <p class="h-first"><a href="javascript:;" class="number">1</a>国资背景</p>
         <p class="suojin">隶属湖北日报新媒体集团旗下平台；</p>
         <p class="h-num"><a href="javascript:;" class="number">2</a>股东强势</p>
-        <p class="suojin">系湖北荆楚网络科技股份有限公司、湖北新海天出借有限公司出借</p>
+        <p class="suojin">系湖北荆楚网络科技股份有限公司、湖北新海天投资有限公司出借</p>
 <!--        <p class="suojin">南京金融资产交易中心，</p>-->
 <!--        <p class="suojin">省级金融主管部门审批的合规平台；</p>-->
         <p class="h-num"><a href="javascript:;" class="number">3</a>稳健合规</p>
@@ -131,7 +131,7 @@
         <p class="suojin">优质供应链金融产品，期限多样，收益可观；</p>
         <p class="h-num"><a href="javascript:;" class="number">5</a>灵活便捷</p>
         <p class="suojin">网上有平台，线下有门店，楚天财富在您身边</p>
-        <p class="suojin">千元起借，手机操作，随时随地实现财富增值。</p>
+        <p class="suojin">千元起借，手机电脑均可操作，随时随地都能出借。</p>
     </div>
 
 </div>
