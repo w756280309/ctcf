@@ -9,7 +9,11 @@ use common\models\order\OnlineRepaymentPlan as Plan;
 use common\models\product\OnlineProduct as Loan;
 use common\utils\StringUtils;
 ?>
-
+<style>
+    .redBtnBg{
+        top:31px;
+    }
+</style>
 <!--账户总资产-->
 <input id="property-value" type="hidden" value="<?= StringUtils::amountFormat3($user->totalAssets) ?>">
 <!--可用余额-->
@@ -28,7 +32,7 @@ use common\utils\StringUtils;
             <li><a href="/user/securitycenter/"><img src="<?= ASSETS_BASE_URI ?>images/useraccount/card<?= $user->isQpayEnabled() ? 0 : 1 ?>.png" alt=""></a></li>
         </ul>
         <a href="/user/recharge/init" class="recharge-btn redBtnBg">充值</a>
-        <a href="/user/draw/tixian" class="tixian-btn redBtnBg">提现</a>
+        <a href="/user/draw/tixian?type=1" class="tixian-btn redBtnBg">提现</a>
     </div>
     <div class="top-box-bottom">
         <ul class="clearfix">
@@ -36,6 +40,18 @@ use common\utils\StringUtils;
             <li class="grayFont">累计收益：<span class="redFont"><?= StringUtils::amountFormat3($user->getProfit()) ?></span> <i class="blackFont">元</i></li>
         </ul>
     </div>
+
+</div>
+<div class="top-box" style="height: 90px;margin-top: 20px;">
+    <?php if(null !== $user->borrowerInfo):?>
+        <div class="top-box-bottom">
+            <ul class="clearfix">
+                <li class="grayFont">借款账户余额：<span class="redFont"><?= null !== $user->borrowAccount ? StringUtils::amountFormat3($user->borrowAccount->available_balance): '0.00' ?></span><i class="blackFont">元</i></li>
+            </ul>
+            <a href="/user/recharge/borrower-recharge" class="recharge-btn redBtnBg">充值</a>
+            <a href="/user/draw/tixian?type=2" class="tixian-btn redBtnBg">提现</a>
+        </div>
+    <?php endif;?>
 </div>
 <!--property-box-->
 <div class="property-box">

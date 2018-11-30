@@ -692,7 +692,7 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
 
     public function getProfit()
     {
-        return $this->lendAccount->profit_balance;
+        return null !== $this->lendAccount ? $this->lendAccount->profit_balance : 0;
     }
 
     public function getPendingProfit()
@@ -1332,5 +1332,13 @@ class User extends ActiveRecord implements IdentityInterface, UserInterface
     public function getBorrowerInfo()
     {
         return $this->hasOne(BorroweInfo::className(), ['userId' => 'id']);
+    }
+
+    /**
+     * 根据用户id查询`user_affiliation`表
+     * */
+    public function getAffiliationByUid()
+    {
+        return $this->hasOne(UserAffiliation::className(), ['user_id' => 'id'])->onCondition(['trackcode'=>'hema123']);
     }
 }

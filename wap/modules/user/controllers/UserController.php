@@ -115,7 +115,7 @@ class UserController extends BaseController
             //代金券总值
             $sumCoupon = UserCoupon::findCouponInUse($user->id, date('Y-m-d'))->sum('amount');
             $countCoupon = UserCoupon::findCouponInUse($user->id, date('Y-m-d'))->count();
-            $sumLicai = bcadd($ua->freeze_balance, $ua->investment_balance, 2);
+            $sumLicai = null !== $ua ? bcadd($ua->freeze_balance, $ua->investment_balance, 2) : 0;
         }
 
         //账户中心页初始化页面时资产总额、累计收益、我的积分、可用余额、我的理财、门店理财的显示状态,第一次默认为显示状态
@@ -145,7 +145,6 @@ class UserController extends BaseController
         //判断用户是否绑卡成功
         $isBindCard = $user->qpay;
 
-
         return [
             'sumCoupon' => $sumCoupon,
             'countCoupon' => $countCoupon,
@@ -157,6 +156,8 @@ class UserController extends BaseController
             'off_licai' => (!is_null($user) && $user->offline) ? $user->offline->totalAssets : 0,
             'isBindCard' => $isBindCard,
             'eyeStatus' => $eyeStatus,
+            'borrowerInfo' => $user->borrowerInfo,
+            'borrowerAccount' => $user->borrowAccount,
         ];
     }
 

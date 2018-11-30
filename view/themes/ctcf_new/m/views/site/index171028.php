@@ -15,6 +15,8 @@ use yii\helpers\Html;
 use yii\web\JqueryAsset;
 use common\view\LoanHelper;
 use common\utils\StringUtils;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
 
 
 $this->registerCssFile(FE_BASE_URI . "libs/swiper/swiper-3.4.2.min.css");
@@ -342,6 +344,7 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' =>
     </div>
 </div>
 
+
 <?php if (!defined('IN_APP') && $this->showBottomNav) { ?>
     <?= $this->renderFile('@wap/views/layouts/footer.php') ?>
 <?php } ?>
@@ -382,6 +385,33 @@ $this->registerJsFile(ASSETS_BASE_URI.'js/AppJSBridge.min.js?v=1', ['depends' =>
 		     alt="">
 	</div>
 <?php } ?>
+<?php
+if($open_repay){
+    Modal::begin([
+        'id' => 'repay-modal',
+        'header' => '<h3 align="center">消息</h3>',
+        'footer' => '<div align="center"><a href="#" id="iknow" align="center" data-toggle="modal" class="btn btn-primary" data-dismiss="modal"><font color="#f0f8ff">前往开通</font></a></div>',
+        'options'=>[
+            'data-backdrop'=>'static',
+            'data-keyboard'=>false,
+            'data-show'=>false,
+        ],
+        'size'=>'modal-lg',
+    ]);
+
+    $js = <<<JS
+            $('#repay-modal').modal('show');
+            $('.close').remove();
+            $('.modal-dialog').css('top', '30%');
+            $('.modal-body').html('您未开通免密还款协议，请开通!').css('text-align', 'center');
+            $('#iknow').on('click', function(){
+                window.location.href = '/site/open-free-repay';
+            });
+JS;
+    $this->registerJs($js);
+    Modal::end();
+}
+?>
 <script>
   function closeAdv() {
     $('.mask').addClass('hide');

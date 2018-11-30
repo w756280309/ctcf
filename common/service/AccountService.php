@@ -27,7 +27,7 @@ class AccountService
      *
      * @return bool
      */
-    public function confirmRecharge(RechargeRecord $recharge)
+    public function confirmRecharge(RechargeRecord $recharge, $type = User::NORMAL_STATUS)
     {
         //充值记录状态为成功，不做处理
         if (RechargeRecord::STATUS_YES === $recharge->status) {
@@ -55,7 +55,7 @@ class AccountService
         //添加资金流水
         //获得当前最新的user_account
         $user = $recharge->user;
-        $userAccount = $user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : $user->borrowAccount;
+        $userAccount = $type === USER_TYPE_ORG ?  $user->borrowAccount : ($user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : $user->borrowAccount);
         $userAccount->refresh();
         $bc = new BcRound();
         bcscale(14);

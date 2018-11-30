@@ -77,7 +77,7 @@ class DrawManager
      * @return DrawRecord
      * @throws DrawException
      */
-    public static function ackDraw(DrawRecord $draw)
+    public static function ackDraw(DrawRecord $draw, $accountType = 1)
     {
         //提现状态校验
         if (DrawRecord::STATUS_ZERO !== (int) $draw->status) {
@@ -103,7 +103,7 @@ class DrawManager
         $draw->refresh();
         $user = $draw->user;
         $fee = $draw->fee;
-        $account = $user->type == 1 ? $user->lendAccount : $user->borrowAccount;
+        $account = $accountType === UserAccount::TYPE_BORROW  ? $user->borrowAccount : ($user->type == 1 ? $user->lendAccount : $user->borrowAccount);
 
         //记录money_record及更新user_account，分2块，提现金额、提现手续费
         /* 提现金额 */

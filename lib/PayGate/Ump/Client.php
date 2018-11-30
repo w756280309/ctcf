@@ -138,12 +138,15 @@ class Client
         return $this->apiUrl.'?'.$params;
     }
 
+    /**
+     * 开通免密还款
+    */
     public function openmianmirepay($epayUserId, $channel = null)
     {
         $data = [
             'service' => 'ptp_mer_bind_agreement',
-            'ret_url' => $this->hostInfo . "/user/qpay/agreementnotify/frontend",
-            'notify_url' => $this->hostInfo . "/user/qpay/agreementnotify/backend",
+            'ret_url' => $this->hostInfo . "/user/qpay/freerepaynotify/frontend",
+            'notify_url' => $this->hostInfo . "/user/qpay/freerepaynotify/backend",
             'user_id' => $epayUserId,
             'user_bind_agreement_list' => "ZHKB0H01",//免密还款协议
         ];
@@ -310,6 +313,43 @@ class Client
         $params = $this->buildQuery($data);
 
         return $this->apiUrl.'?'.$params;
+    }
+
+    /**
+     * 借款人申请提现
+    */
+    public function initBorrowerDraw(WithdrawalInterface $draw, $channel = null, $option = array())
+    {
+        $ret_url_param = "";
+        if ('pc' === $channel) {
+            $ret_url_param = "?channel=pc";
+        }
+        if (array_key_exists('app_token', $option)) {
+            if ("" === $ret_url_param) {
+                $ret_url_param = "?token=" . $option['app_token'];
+            } else {
+                $ret_url_param .= "&token=" . $option['app_token'];
+            }
+        }
+        $data = [
+            'service' => 'cust_withdrawals',
+            'ret_url' => $this->hostInfo . "/user/qpay/drawnotify/frontend".$ret_url_param,
+            'notify_url' => $this->hostInfo . "/user/qpay/drawnotify/backend",
+            'order_id' => $draw->getTxSn(),
+            'mer_date' => date('Ymd', $draw->getTxDate()),
+            'user_id' => $draw->getEpayUserId(),
+            'amount' => $draw->getAmount() * 100,
+            'com_amt_type' => $draw->fee > 0 ? 1 : 2, //1交易方承担 2平台商户（手续费账户）承担
+        ];
+
+        if ('pc' !== $channel) {
+            $data['sourceV'] = 'HTML5';
+        }
+
+        $params = $this->buildQuery($data);
+
+        return $this->apiUrl.'?'.$params;
+
     }
 
     /**
@@ -519,6 +559,35 @@ class Client
             'service' => 'mer_recharge_person',
             'ret_url' => $this->hostInfo . "/user/bpay/brecharge/frontend-notify",
             'notify_url' => $this->hostInfo . "/user/bpay/brecharge/backend-notify",
+            'sourceV' => 'HTML5',
+            'order_id' => $qpay->getTxSn(),
+            'mer_date' => $qpay->getTxDate(),
+            'pay_type' => 'B2CDEBITBANK',
+            'user_id' => $qpay->getEpayUserId(),
+            'amount' => $qpay->getAmount(),   //以分为单位
+            'gate_id' => $gateId,
+            'user_ip' => $qpay->getClientIp(),
+            'com_amt_type' => 2,
+        ];
+
+        $params = $this->buildQuery($data);
+        header('Location:'.$this->apiUrl.'?'.$params);
+    }
+
+    /**
+     * 4.4.1 借款客户网银充值申请.
+     *
+     * @param QpayTxInterface $qpay
+     * @param string          $gateId 银行简码
+     *
+     * @return response
+     */
+    public function borrowerRechargeViaBpay(QpayTxInterface $qpay, $gateId)
+    {
+        $data = [
+            'service' => 'mer_recharge_person',
+            'ret_url' => $this->hostInfo . "/user/bpay/borrowerrecharge/frontend-notify",
+            'notify_url' => $this->hostInfo . "/user/bpay/borrowerrecharge/backend-notify",
             'sourceV' => 'HTML5',
             'order_id' => $qpay->getTxSn(),
             'mer_date' => $qpay->getTxDate(),

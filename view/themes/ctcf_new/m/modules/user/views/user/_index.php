@@ -38,7 +38,7 @@ use common\models\user\User;
                 <li class="number lf">
                     <a href="/user/user/assets">
                         <p class="property_word f15">资产总额 (元)</p>
-                        <p class="property_number f24" id="zonge"><?= isset($ua) ? StringUtils::amountFormat3($user->totalAssets) : '' ?></p>
+                        <p class="property_number f24" id="zonge"><?= isset($ua) && null !== $ua ? StringUtils::amountFormat3($user->totalAssets) : '' ?></p>
                     </a>
                 </li>
                 <li class="number lf">
@@ -62,7 +62,7 @@ use common\models\user\User;
 <?php if (!\Yii::$app->user->isGuest) { ?>
     <div class="remain flex-content">
         <div class="lf" style="position: absolute;">
-            <p class="remain_num f24" id="keyong"><?= StringUtils::amountFormat3($ua->available_balance) ?></p>
+            <p class="remain_num f24" id="keyong"><?= null !== $ua ? StringUtils::amountFormat3($ua->available_balance) : '0.00'; ?></p>
             <p class="remain_word f12">可用余额（元）</p>
         </div>
         <div class="rg f15" style="width: 49%; overflow: hidden;">
@@ -70,6 +70,20 @@ use common\models\user\User;
             <a href="javascript:void(0);" class="remain_button rg" style="margin-left: 0;" onclick="recharge()">充值</a>
         </div>
     </div>
+    <!--借款人提现-->
+    <?php if(null !== $borrowerInfo):?>
+    <div class="remain flex-content">
+        <div class="lf" style="position: absolute;">
+            <p class="remain_num f24" id="borrow_money"><?=null !== $borrowerAccount ? StringUtils::amountFormat3($borrowerAccount->available_balance): '0.00' ?></p>
+            <p class="remain_word f12">借款余额（元）</p>
+        </div>
+        <div class="rg f15" style="width: 49%; overflow: hidden;">
+            <!--<a href="javascript:void(0);" class="remain_button rg" onclick="tixian()">提现</a>-->
+            <a href="javascript:void(0);" class="remain_button rg" style="margin-left: 0;" onclick="tixian(2)">提现</a>
+        </div>
+    </div>
+    <?php endif;?>
+    <!--借款人提现-->
 <?php } ?>
 
 <div class="youihui flex-content clearfix">

@@ -195,7 +195,7 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
         });
     });
 
-    function tixian()
+    function tixian(borrowertype =1)
     {
         var xhr = $.get('/user/user/check-kuaijie', function (data) {
             if (data.code) {
@@ -205,7 +205,8 @@ $old_site_visible_user_id = explode(',', Yii::$app->params['old_site_visible_use
                     }
                 });
             } else {
-                location.href='/user/userbank/tixian';
+                var param = 1 === borrowertype ? '?type=1' : '?type=2';
+                location.href='/user/userbank/tixian'+param
             }
         });
 

@@ -26,10 +26,12 @@ use common\models\user\CaptchaForm;
 use common\models\user\EditpassForm;
 use common\models\user\LoginForm;
 use common\models\user\SignupForm;
+use common\models\user\UserAccount;
 use common\models\user\User;
 use common\service\LoginService;
 use common\service\PointsService;
 use common\service\SmsService;
+use common\service\BankService;
 use common\utils\SecurityUtils;
 use Lhjx\Noty\Noty;
 use wap\modules\promotion\models\RankingPromo;
@@ -120,6 +122,9 @@ class SiteController extends Controller
         } else {
             $totalAssets = 0;
         }
+        //1开通
+        $open_repay = !empty($user->affiliationByUid) && empty($user->borrowerInfo) ? 1 : 0;
+
         //热门活动
         $hotActs = Adv::fetchHomeBanners($is_m = 1, $totalAssets);
 
@@ -150,6 +155,7 @@ class SiteController extends Controller
             'news' => $news,
             'kaiPing' => $queryKaiping,
             'loans' => $loans,
+            'open_repay' => $open_repay,
         ]);
     }
 
@@ -728,5 +734,27 @@ class SiteController extends Controller
         }
 
         return $this->render('refer');
+    }
+
+    /**
+     * 开通免密还款协议
+    */
+    public function actionOpenFreeRepay(){
+        $user= $this->getAuthedUser();
+        if(empty($user)){
+            return $this->redirect('/site/login');
+        }
+
+        $cond = 0 | BankService::IDCARDRZ_VALIDATE_N;
+        $data = BankService::check($user, $cond);
+        if ($data['code']) {
+            return $this->redirect($data['tourl']);
+        }
+        $epayUser = $user->epayUser->epayUserId;
+        if(empty($epayUser)){
+            return $this->redirect('/user/bank');
+        }
+        $next = Yii::$container->get('ump')->openmianmirepay($epayUser);
+        $this->redirect($next);
     }
 }

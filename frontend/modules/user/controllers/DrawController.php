@@ -6,6 +6,7 @@ use Yii;
 use frontend\controllers\BaseController;
 use common\service\BankService;
 use common\models\user\DrawRecord;
+use common\models\user\UserAccount;
 use common\models\draw\DrawException;
 use common\models\draw\DrawManager;
 use yii\filters\AccessControl;
@@ -33,9 +34,10 @@ class DrawController extends BaseController
     public function actionTixian()
     {
         $this->layout = 'main';
+        $type = Yii::$app->request->get('type');
         if (Yii::$app->controller->action->id == 'tixian') {
             //记录目标url
-            Yii::$app->session->set('to_url', '/user/draw/tixian');
+            Yii::$app->session->set('to_url', '/user/draw/tixian?type='.$type);
         }
 
         //检查是否开户
@@ -51,7 +53,7 @@ class DrawController extends BaseController
         $user = $this->getAuthedUser();
         $uid = $user->id;
 
-        $user_acount = $user->lendAccount;
+        $user_acount =  $type === UserAccount::TYPE_LEND ? $user->lendAccount : $user->borrowAccount;
         $user_bank = $user->qpay;
 
         if(Yii::$app->request->isPost) {
@@ -68,7 +70,11 @@ class DrawController extends BaseController
                     if (null != Yii::$app->request->get('token')) {
                         $option['app_token'] = Yii::$app->request->get('token');
                     }
-                    $next = Yii::$container->get('ump')->initDraw($drawres, 'pc', $option);
+                    if(UserAccount::TYPE_LEND === $type){
+                        $next = Yii::$container->get('ump')->initDraw($drawres, 'pc', $option);
+                    }else{
+                        $next = Yii::$container->get('ump')->initBorrowerDraw($drawres, 'pc', $option);
+                    }
 
                     return ['code' => 0, 'message' => '', 'tourl' => $next];
                 } catch (DrawException $ex) {

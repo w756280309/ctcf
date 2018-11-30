@@ -55,13 +55,13 @@ $this->registerMetaTag([
             <?php } ?>
         });
         //百度统计
-        var _hmt = _hmt || [];
+        /*var _hmt = _hmt || [];
         (function() {
           var hm = document.createElement("script");
           hm.src = "https://hm.baidu.com/hm.js?e02d46b2beb08711f28dbf9321dcfe56";
           var s = document.getElementsByTagName("script")[0];
           s.parentNode.insertBefore(hm, s);
-        })();
+        })();*/
     </script>
 </head>
 <body>

@@ -21,7 +21,7 @@ $this->title="提现";
     <div class="row tixian">
         <div class="hidden-xs col-sm-1"></div>
         <div class="col-xs-4 col-sm-2">可提现金额：</div>
-        <div class="col-xs-8 col-sm-6"><?= rtrim(rtrim(number_format($user_acount->available_balance, 2), '0'), '.') ?>元</div>
+        <div class="col-xs-8 col-sm-6"><?= null!==$user_acount ? rtrim(rtrim(number_format($user_acount->available_balance, 2), '0'), '.') : '0'; ?>元</div>
         <div class="hidden-xs col-sm-3"></div>
     </div>
 
@@ -29,6 +29,7 @@ $this->title="提现";
     <form method="post" class="cmxform" id="form" action="/user/userbank/tixian" data-to="1">
         <input name="_csrf" type="hidden" id="_csrf" value="<?= Yii::$app->request->csrfToken ?>">
         <input name="flag" type="hidden" value="checktrade">
+        <input name="borrowertype" type="hidden" value="<?php echo $type;?>">
         <div class="row kahao">
             <div class="hidden-xs col-sm-1"></div>
             <div class="col-xs-3 col-sm-2">提现金额</div>
@@ -43,7 +44,7 @@ $this->title="提现";
             <div class="col-xs-12 col-sm-10" style="padding: 0">
                 <?php
                     $drawFreeLimit = Yii::$app->params['draw_free_limit'];
-                    $restDrawCount = $drawFreeLimit - $user_acount->user->getDrawCount();
+                    $restDrawCount = null !== $user_acount ? $drawFreeLimit - $user_acount->user->getDrawCount():$drawFreeLimit;
                 ?>
                 <span style="height: auto" class="tixian-msg">(每月有<?= $drawFreeLimit ?>次免费发起提现的机会，本月您还有<?= $restDrawCount > 0 ? $restDrawCount : 0 ?>次免费机会，之后每笔收取<?= Yii::$app->params['drawFee'] ?>元手续费)</span>
                 <span style="height: auto" class="tixian-msg">

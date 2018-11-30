@@ -154,8 +154,8 @@ class UserbankController extends BaseController
     {
         $user = $this->getAuthedUser();
         $uid = $user->id;
-
-        $user_acount = $user->lendAccount;
+        $type = Yii::$app->request->get('type');
+        $user_acount = (1=== (int)$type) ? $user->lendAccount : $user->borrowAccount;
         $user_bank = $user->qpay;
 
         $cond = 0 | BankService::IDCARDRZ_VALIDATE_N | BankService::BINDBANK_VALIDATE_N;
@@ -171,6 +171,8 @@ class UserbankController extends BaseController
         $draw = new DrawRecord();
         $draw->uid = $uid;
         if ($draw->load(Yii::$app->request->post()) && $draw->validate()) {
+            $borrowertype = Yii::$app->request->post('borrowertype');
+            $user_acount = (1=== (int)$borrowertype) ? $user->lendAccount : $user->borrowAccount;
             try {
                 $drawFee = $user->getDrawCount() >= Yii::$app->params['draw_free_limit'] ? Yii::$app->params['drawFee'] : 0;
                 $drawres = DrawManager::initDraw($user_acount, $draw->money, $drawFee);
@@ -181,7 +183,11 @@ class UserbankController extends BaseController
                 if (null != Yii::$app->request->get('token')) {
                     $option['app_token'] = Yii::$app->request->get('token');
                 }
-                $next = Yii::$container->get('ump')->initDraw($drawres, null, $option);
+                if(1=== (int)$borrowertype){
+                    $next = Yii::$container->get('ump')->initDraw($drawres, null, $option);
+                }else{
+                    $next = Yii::$container->get('ump')->initBorrowerDraw($drawres, null, $option);
+                }
 
                 return ['code' => 0, 'message' => '', 'tourl' => $next];
             } catch (DrawException $ex) {
@@ -204,6 +210,7 @@ class UserbankController extends BaseController
         return $this->render('tixian', [
             'user_bank' => $user_bank,
             'user_acount' => $user_acount,
+            'type' => $type,
             'data' => [
                 'code' => 0,
                 'message' => '',

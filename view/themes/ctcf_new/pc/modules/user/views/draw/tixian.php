@@ -8,7 +8,7 @@
 
     $drawFreeLimit = Yii::$app->params['draw_free_limit'];
     $drawFee = Yii::$app->params['drawFee'];
-    $restDrawCount = $drawFreeLimit - $user_acount->user->getDrawCount();
+    $restDrawCount = $user_acount->user !== null ? $drawFreeLimit - $user_acount->user->getDrawCount() : $drawFreeLimit;
 ?>
 <div class="bindCard-box">
 <div class="bindCard-header">
