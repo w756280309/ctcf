@@ -86,13 +86,15 @@ class P181225Controller extends BaseController
                 $awardNums = 0;
             }
             //获奖列表
-//            $awardlist = $this->getAwardList();
+            $awardlist = $this->getAwards();
+            $awardlist = $awardlist ? $awardlist : [];
         } else {
-            return $this->redirect('/site/login');
+            $awardlist = '';
+            $awardNums = [];
         }
 
         return $this->render('index', [
-//            'awardlist'=> $awardlist,
+            'awardlist'=> $awardlist,
             'awardNums' => $awardNums,
             'isGet' => $isGet,
             'isLoggedIn' => $isLoggedIn,
@@ -175,16 +177,37 @@ class P181225Controller extends BaseController
         return $this->getRandomNum() <= $rate ? 1 : 0;
     }
 
-    public function actionAwards(){
+    private  function getAwards(){
+        $awards_arr = [];
         $user = $this->getAuthedUser();
         $uid = $user->id;
-        $awards = Yii::$app->db->createCommand('select * from award where user_id = :id and promo_id = :promo_id',
+        $awards = Yii::$app->db->createCommand('select amount,ref_type from award where user_id = :id and promo_id = :promo_id',
             [
                 'id' => $uid,
                 'promo_id' => '67',
             ])
             ->queryAll();
-        return $awards;
+        foreach ($awards as $v)
+        {
+            switch($v['ref_type']){
+                case 'coupon' :
+                    $awards_arr[] = "{$v['amount']}元代金券";
+                    break;
+                case 'cash' :
+                    $awards_arr[] = "{$v['amount']}元现金";
+                    break;
+                case 'goods' :
+                    $awards_arr[] = "小米手环3";
+                    break;
+                case 'transfer' :
+                    $awards_arr[] = "{$v['amount']}元现金";
+                    break;
+                case 'points' :
+                    $awards_arr[] = "{$v['amount']}积分";
+                    break;
+            }
+        }
+        return $awards_arr;
     }
     /**
      * 开始派奖
