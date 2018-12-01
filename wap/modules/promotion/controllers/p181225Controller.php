@@ -67,7 +67,7 @@ class P181225Controller extends BaseController
         //echo '活动首页';exit;
         $user = $this->getAuthedUser();
         $isLoggedIn = null !== $user;
-        $isGet = 0;
+        $isGet = $awardlist = $awardNums = 0;
 //        $awardlist = [];
         if ($isLoggedIn) {
             $uid = $user->id;
@@ -88,9 +88,6 @@ class P181225Controller extends BaseController
             //获奖列表
             $awardlist = $this->getAwards();
             $awardlist = $awardlist ? $awardlist : [];
-        } else {
-            $awardlist = '';
-            $awardNums = [];
         }
 
         return $this->render('index', [

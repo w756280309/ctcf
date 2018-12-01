@@ -1,7 +1,7 @@
 <?php
 $this->title = '圣诞狂欢派对 岁末感恩钜惠';
 ?>
-<link rel="stylesheet" type="text/css" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/css/main.css">
+<link rel="stylesheet" type="text/css" href="<?= FE_BASE_URI ?>wap/campaigns/active20181225/css/main.css">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/index.min.css?v=1.4">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/window-box.min.css?v=1.3">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/window-box.min.css?v=1.3">
@@ -16,7 +16,7 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
             <a href="#"  id="get_gifts" class="rt"><i class="icon icon03"></i>我的礼物</a>
         </dd>
         <div class="tit">
-            <img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-tit01.png">
+            <img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-tit01.png">
             <p>赢iPhone xs max</p>
         </div>
         <p class="rules">活动期间，用户通过分享活动或出借或邀请好友可获得拆圣诞礼物的次数，将有机会赢取<span style="color: #ffe59f;">iPhone xs max</span>。</p>
@@ -30,29 +30,29 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
                 <table border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td>
-                            <dd><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-gift01.png"></dd>
+                            <dd><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-gift01.png"></dd>
                             <dd>Iphone Xs Max <br />256G</dd>
                         </td>
                         <td>
-                            <dd><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-gift02.png"></dd>
+                            <dd><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-gift02.png"></dd>
                             <dd>戴森V10 Fluffy<br />吸尘器</dd>
                         </td>
                         <td>
-                            <dd><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-gift03.png"></dd>
+                            <dd><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-gift03.png"></dd>
                             <dd>小米手环3</dd>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <dd><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-gift04.png"></dd>
+                            <dd><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-gift04.png"></dd>
                             <dd>20元代金券</dd>
                         </td>
                         <td>
-                            <dd><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-gift05.png"></dd>
+                            <dd><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-gift05.png"></dd>
                             <dd>10元现金</dd>
                         </td>
                         <td>
-                            <dd><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-gift06.png"></dd>
+                            <dd><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-gift06.png"></dd>
                             <dd>20积分</dd>
                         </td>
                     </tr>
@@ -65,22 +65,22 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
     </div>
     <div class="point-box bg02">
         <div class="tit">
-            <img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-tit02.png">
+            <img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-tit02.png">
             <p>年终限时折扣秒杀</p>
         </div>
         <p class="rules">活动期间，每天上午10点，积分商城限时折扣兑换，数量有限，先到先兑，兑完即止。</p>
         <div class="point-content">
             <div class="point-part">
                 <ul class="point-list">
-                    <li><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-points01.png"></li>
-                    <li><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-points02.png"></li>
+                    <li><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-points01.png"></li>
+                    <li><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-points02.png"></li>
                 </ul>
                 <a href="#" class="mainbtn point-btn">10积分限时秒杀</a>
             </div>
             <div class="point-part">
                 <ul class="point-list">
-                    <li><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-points03.png"></li>
-                    <li><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-points04.png"></li>
+                    <li><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-points03.png"></li>
+                    <li><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-points04.png"></li>
                 </ul>
                 <a href="#" class="mainbtn point-btn">8折限时兑换</a>
             </div>
@@ -88,16 +88,16 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
     </div>
     <div class="card-box bg01">
         <div class="tit">
-            <img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-tit03.png">
+            <img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-tit03.png">
             <p>最高享300元京东卡</p>
         </div>
         <p class="rules">活动期间，老用户（非首次出借）累计出借金额（仅限半年标）达到相应金额可获得以下奖励：</p>
-        <div class="card-list"><img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-card.png"></div>
+        <div class="card-list"><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-card.png"></div>
         <a href="/deal/deal/index" class="mainbtn card-btn">立即出借</a>
     </div>
     <div class="rules-box bg01">
         <div class="tit">
-            <img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-tit04.png">
+            <img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-tit04.png">
         </div>
         <div class="rules-list">
             <p>1、活动时间：2018年12月17日0：00 - 2018年12月28日23:59</p>
@@ -108,7 +108,7 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
             <p>6、本活动最终解释权归楚天财富所有，如有疑问，请咨询400-660-2799</p>
         </div>
         <a class="tips-arrow">
-            <img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/icon-arrow.png">
+            <img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/icon-arrow.png">
         </a>
     </div>
 </div>
@@ -128,15 +128,15 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
     <div class="alert-content chances-content">
         <ul class="chances-list">
             <li>
-                <img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-rule01.png">
+                <img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-rule01.png">
                 <span>分享至朋友圈<br />获得1次</span>
             </li>
             <li>
-                <img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-rule02.png">
+                <img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-rule02.png">
                 <span>单笔出借≥5千<br />获得1次</span>
             </li>
             <li>
-                <img src="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20181225/images/img-rule03.png">
+                <img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-rule03.png">
                 <span>邀请好友出借<br />获得1次</span>
             </li>
         </ul>
@@ -173,6 +173,14 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
 </body>
 <script type="text/javascript">
     $(function() {
+
+        var isLoggedIn = "<?php echo $isLoggedIn?>";
+        if(!isLoggedIn) {
+            setTimeout(function () {
+                location.href = '/site/login?next=<?= urlencode(Yii::$app->request->absoluteUrl) ?>';
+            }, 2000);
+        }
+
         $("html").css("font-size", (window.innerWidth) / 3.75 + 'px');
 
         $('#rule2').on('click',function(){
