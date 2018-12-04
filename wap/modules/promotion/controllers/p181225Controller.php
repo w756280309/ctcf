@@ -41,13 +41,13 @@ class P181225Controller extends BaseController
     private $hashNumKey = 'gifts181225Num';
 
     private $pool = [
-                        self::P20_KEY=>['rate'=>100, 'num'=>100000],
-                        self::RP10_KEY=>['rate'=> 50, 'num'=> 30],
-                        self::C20_KEY=>['rate'=> 27, 'num'=> 20],
-                        self::CTCF_XM_KEY=> ['rate'=> 10, 'num'=> 1],
-                        self::CTCF_DS_KEY=> ['rate'=>0, 'num'=>0],
-                        self::CTCF_IPXS_KEY=> ['rate'=>0, 'num'=>0],
-                    ];
+        self::P20_KEY => ['rate' => 100, 'num' => 100000],
+        self::RP10_KEY => ['rate' => 50, 'num' => 30],
+        self::C20_KEY => ['rate' => 27, 'num' => 20],
+        self::CTCF_XM_KEY => ['rate' => 10, 'num' => 1],
+        self::CTCF_DS_KEY => ['rate' => 0, 'num' => 0],
+        self::CTCF_IPXS_KEY => ['rate' => 0, 'num' => 0],
+    ];
 
     /**
      * redis连接
@@ -63,8 +63,10 @@ class P181225Controller extends BaseController
      */
     public function actionIndex()
     {
-//        $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_181225']);
-        //echo '活动首页';exit;
+        $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_181225']);
+        echo $promo->startTime;
+        echo $promo->endTime;
+        exit;
         $user = $this->getAuthedUser();
         $isLoggedIn = null !== $user;
         $isGet = $awardlist = $awardNums = 0;
@@ -91,7 +93,7 @@ class P181225Controller extends BaseController
         }
 
         return $this->render('index', [
-            'awardlist'=> $awardlist,
+            'awardlist' => $awardlist,
             'awardNums' => $awardNums,
             'isGet' => $isGet,
             'isLoggedIn' => $isLoggedIn,
@@ -132,8 +134,8 @@ class P181225Controller extends BaseController
             $ret = $User20181225DrawModel->save(false);
             $reward = Reward::fetchOneBySn($this->sendAward($investMoney, $redis, $promo));
             $sendRes = false;
-            if(!empty($reward)){
-                switch (strtolower($reward->ref_type)){
+            if (!empty($reward)) {
+                switch (strtolower($reward->ref_type)) {
                     case 'point':
                         $sendRes = $this->sendScore($reward, $promo);
                         $rewardName = '20账户积分';
@@ -170,11 +172,13 @@ class P181225Controller extends BaseController
     /**
      * 判断是否中奖
      * */
-    private function checkIsAward($rate){
+    private function checkIsAward($rate)
+    {
         return $this->getRandomNum() <= $rate ? 1 : 0;
     }
 
-    private  function getAwards(){
+    private function getAwards()
+    {
         $awards_arr = [];
         $user = $this->getAuthedUser();
         $uid = $user->id;
@@ -184,9 +188,8 @@ class P181225Controller extends BaseController
                 'promo_id' => '67',
             ])
             ->queryAll();
-        foreach ($awards as $v)
-        {
-            switch($v['ref_type']){
+        foreach ($awards as $v) {
+            switch ($v['ref_type']) {
                 case 'coupon' :
                     $awards_arr[] = "{$v['amount']}元代金券";
                     break;
@@ -206,37 +209,39 @@ class P181225Controller extends BaseController
         }
         return $awards_arr;
     }
+
     /**
      * 开始派奖
-    */
-    private function sendAward($investMoney, $redis, $promo){
+     */
+    private function sendAward($investMoney, $redis, $promo)
+    {
         //查询要求用户
-        if($investMoney>=5000 && $redis->hget('gifts181225', self::RP10_KEY)>0){
-            if($this->checkIsAward($this->pool[self::RP10_KEY]['rate'])){
+        if ($investMoney >= 5000 && $redis->hget('gifts181225', self::RP10_KEY) > 0) {
+            if ($this->checkIsAward($this->pool[self::RP10_KEY]['rate'])) {
                 $redis->hincrby('gifts181225', self::RP10_KEY, -1);
                 return self::RP10_KEY;
             }
         }
-        if(InviteRecord::getFriendsCountByUser($this->getAuthedUser(), $promo->startTime, $promo->endTime) > 0 && $redis->hget('gifts181225', self::RP10_KEY)>0){
-            if($this->checkIsAward($this->pool[self::RP10_KEY]['rate'])){
+        if (InviteRecord::getFriendsCountByUser($this->getAuthedUser(), $promo->startTime, $promo->endTime) > 0 && $redis->hget('gifts181225', self::RP10_KEY) > 0) {
+            if ($this->checkIsAward($this->pool[self::RP10_KEY]['rate'])) {
                 $redis->hincrby('gifts181225', self::RP10_KEY, -1);
                 return self::RP10_KEY;
             }
         }
-        if($investMoney>=10000 && $redis->hget('gifts181225', self::C20_KEY)>0){
-            if($this->checkIsAward($this->pool[self::C20_KEY]['rate'])){
+        if ($investMoney >= 10000 && $redis->hget('gifts181225', self::C20_KEY) > 0) {
+            if ($this->checkIsAward($this->pool[self::C20_KEY]['rate'])) {
                 $redis->hincrby('gifts181225', self::C20_KEY, -1);
                 return self::C20_KEY;
             }
         }
-        if($investMoney>=50000 && $redis->hget('gifts181225', self::CTCF_XM_KEY)>0){
-            if($this->checkIsAward($this->pool[self::CTCF_XM_KEY]['rate'])){
+        if ($investMoney >= 50000 && $redis->hget('gifts181225', self::CTCF_XM_KEY) > 0) {
+            if ($this->checkIsAward($this->pool[self::CTCF_XM_KEY]['rate'])) {
                 $redis->hincrby('gifts181225', self::CTCF_XM_KEY, -1);
                 return self::CTCF_XM_KEY;
             }
         }
-        if($redis->hget('gifts181225', self::P20_KEY)>0){
-            if($this->checkIsAward($this->pool[self::P20_KEY]['rate'])){
+        if ($redis->hget('gifts181225', self::P20_KEY) > 0) {
+            if ($this->checkIsAward($this->pool[self::P20_KEY]['rate'])) {
                 $redis->hincrby('gifts181225', self::P20_KEY, -1);
                 return self::P20_KEY;
             }
@@ -245,16 +250,18 @@ class P181225Controller extends BaseController
 
     /**
      * 获取随机数
-    */
-    private function getRandomNum($min = 0, $max = 1) {
+     */
+    private function getRandomNum($min = 0, $max = 1)
+    {
         return intval($min + mt_rand() / mt_getrandmax() * ($max - $min));
     }
 
     /**
      * 获取投资金额
      * */
-    private function getMaxInvestMoney($uid){
-        if(empty($uid)){
+    private function getMaxInvestMoney($uid)
+    {
+        if (empty($uid)) {
             return false;
         }
         $order = OnlineOrder::find()
@@ -278,7 +285,7 @@ class P181225Controller extends BaseController
             return ['code' => 201, 'message' => '请登录'];
         }
         $redis = $this->redisConnect();
-        if($redis->hexists('sharewx', $user->id.':'.date('Ymd'))){
+        if ($redis->hexists('sharewx', $user->id . ':' . date('Ymd'))) {
             return ['code' => 204, 'message' => '今天已经分享了'];
         }
         try {
@@ -291,7 +298,7 @@ class P181225Controller extends BaseController
             }
             $ret = $model->save(false);
             if (Yii::$app->request->isAjax && $ret) {
-                $redis->hmset('sharewx', $user->id.':'.date('Ymd'), 1);
+                $redis->hmset('sharewx', $user->id . ':' . date('Ymd'), 1);
                 $redis->expire('sharewx', 5);
                 return ['code' => 200, 'message' => '添加成功'];
             }
@@ -307,7 +314,7 @@ class P181225Controller extends BaseController
      */
     private function sendTicket($reward, $promo)
     {
-        if(empty($reward)){
+        if (empty($reward)) {
             return false;
         }
         $user = $this->getAuthedUser();
@@ -327,7 +334,7 @@ class P181225Controller extends BaseController
      */
     private function sendScore($reward, $promo)
     {
-        if(empty($reward)){
+        if (empty($reward)) {
             return false;
         }
         $user = $this->getAuthedUser();
@@ -365,15 +372,17 @@ class P181225Controller extends BaseController
         $transaction->commit();
         return true;
     }
+
     /**
      * 发现金红包
      * */
-    private function sendCash($reward, $promo){
+    private function sendCash($reward, $promo)
+    {
         $user = $this->getAuthedUser();
-        $transfer = Transfer::initNew($user, $reward->ref_amount, ['promo_id'=>$promo->id]);
-        if($transfer->save(false)){
-            Award::transferAward($user, $promo,  $transfer, null, $reward)->save(false);
-        }else{
+        $transfer = Transfer::initNew($user, $reward->ref_amount, ['promo_id' => $promo->id]);
+        if ($transfer->save(false)) {
+            Award::transferAward($user, $promo, $transfer, null, $reward)->save(false);
+        } else {
             return false;
         }
         return true;
@@ -382,13 +391,14 @@ class P181225Controller extends BaseController
     /**
      * 发实物
      * */
-    private function sendGoods($reward, $promo){
+    private function sendGoods($reward, $promo)
+    {
         $user = $this->getAuthedUser();
         $goodsType = GoodsType::find()
             ->select('*')
             ->where(['id' => $reward->ref_id])
             ->one();
-        $award = Award::goodsAward($user, $promo,  $goodsType, null, $reward)->save(false);
+        $award = Award::goodsAward($user, $promo, $goodsType, null, $reward)->save(false);
         return true === $award;
     }
 
@@ -400,26 +410,26 @@ class P181225Controller extends BaseController
         $redis = $this->redisConnect();
         $msg = '';
 
-        foreach($this->pool as $k=> $v){
+        foreach ($this->pool as $k => $v) {
             $redis->hmset('gifts181225', $k, $v['num']);
-            switch ($k){
+            switch ($k) {
                 case '181225_points_20':
-                    $msg .= ';20积分'.$v['num'].'个';
+                    $msg .= ';20积分' . $v['num'] . '个';
                     break;
                 case '181225_CTCF_RP10':
-                    $msg .= ';10现金'.$v['num'].'个';
+                    $msg .= ';10现金' . $v['num'] . '个';
                     break;
                 case '181225_C20':
-                    $msg .= ';20代金券'.$v['num'].'个';
+                    $msg .= ';20代金券' . $v['num'] . '个';
                     break;
                 case '181225_CTCF_XM':
-                    $msg .= ';小米手环'.$v['num'].'个';
+                    $msg .= ';小米手环' . $v['num'] . '个';
                     break;
 
             }
         }
         $redis->expire($this->hashNumKey, 2 * 60);
-        echo '设置奖品数量成功'.$msg;
+        echo '设置奖品数量成功' . $msg;
     }
 
     public function actionSet()
@@ -434,26 +444,26 @@ class P181225Controller extends BaseController
         exit;*/
         $redis = $this->redisConnect();
         $msg = '';
-        foreach($this->pool as $k=> $v){
+        foreach ($this->pool as $k => $v) {
             $redis->hmset('gifts181225', $k, $v['num']);
-            switch ($k){
+            switch ($k) {
                 case '181225_points_20':
-                    $msg .= ';20积分'.$v['num'].'个';
+                    $msg .= ';20积分' . $v['num'] . '个';
                     break;
                 case '181225_CTCF_RP10':
-                    $msg .= ';10现金'.$v['num'].'个';
+                    $msg .= ';10现金' . $v['num'] . '个';
                     break;
                 case '181225_C20':
-                    $msg .= ';20代金券'.$v['num'].'个';
+                    $msg .= ';20代金券' . $v['num'] . '个';
                     break;
                 case '181225_CTCF_XM':
-                    $msg .= ';小米手环'.$v['num'].'个';
+                    $msg .= ';小米手环' . $v['num'] . '个';
                     break;
 
             }
         }
         $redis->expire('gifts181225', 5);
-        echo '设置奖品数量成功'.$msg;
+        echo '设置奖品数量成功' . $msg;
     }
 
     public function actionGet()
@@ -464,7 +474,7 @@ class P181225Controller extends BaseController
             $data = $redis->hget('gifts181225', '181225_points_20');
             if (0 === $data) {
                 $redis->hdel('gifts181225', '181225_points_20');
-            }else{
+            } else {
                 print_r($data);
             }
         } else {

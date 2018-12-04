@@ -55,7 +55,7 @@ class AccountService
         //添加资金流水
         //获得当前最新的user_account
         $user = $recharge->user;
-        $userAccount = $type === USER_TYPE_ORG ?  $user->borrowAccount : ($user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : $user->borrowAccount);
+        $userAccount = $type === User::USER_TYPE_ORG ?  $user->borrowAccount : ($user->type === User::USER_TYPE_PERSONAL ? $user->lendAccount : $user->borrowAccount);
         $userAccount->refresh();
         $bc = new BcRound();
         bcscale(14);

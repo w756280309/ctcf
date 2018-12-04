@@ -52,8 +52,7 @@ class DrawController extends BaseController
 
         $user = $this->getAuthedUser();
         $uid = $user->id;
-
-        $user_acount =  $type === UserAccount::TYPE_LEND ? $user->lendAccount : $user->borrowAccount;
+        $user_acount =  UserAccount::TYPE_LEND  === (int)$type ? $user->lendAccount : $user->borrowAccount;
         $user_bank = $user->qpay;
 
         if(Yii::$app->request->isPost) {
@@ -70,7 +69,7 @@ class DrawController extends BaseController
                     if (null != Yii::$app->request->get('token')) {
                         $option['app_token'] = Yii::$app->request->get('token');
                     }
-                    if(UserAccount::TYPE_LEND === $type){
+                    if(UserAccount::TYPE_LEND === (int)$type){
                         $next = Yii::$container->get('ump')->initDraw($drawres, 'pc', $option);
                     }else{
                         $next = Yii::$container->get('ump')->initBorrowerDraw($drawres, 'pc', $option);

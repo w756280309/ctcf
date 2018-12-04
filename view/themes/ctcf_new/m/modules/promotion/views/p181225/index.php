@@ -7,6 +7,7 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/window-box.min.css?v=1.3">
 <body>
 <div class="main-container">
+    <input id="_csrf" name="_csrf" type="hidden" value="<?= Yii::$app->request->csrfToken; ?>">
     <div class="top-banner">
     </div>
     <div class="gift-box">
@@ -208,7 +209,8 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
         });
     });
     $("#open_gift").click(function(){
-        $.get('/promotion/p181225/open-gift',[], function(data) {
+        var csrf = $("#_csrf").val();
+            $.post('/promotion/p181225/open-gift',{_csrf:csrf}, function(data) {
             if(data['code'] !== 200){
                 $('#content-message').html(data['message']);
                 $("#gifts-content").show();
