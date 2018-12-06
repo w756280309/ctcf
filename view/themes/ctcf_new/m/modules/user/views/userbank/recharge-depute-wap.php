@@ -9,7 +9,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     $this->backUrl = Html::encode($backUrl);
 }
 $actionC = Yii::$app->controller->action->id;
-$testUid = [43949, 45796, 37419, 40952];
+//$testUid = [43949, 45796, 37419, 40952, 23808, 24074, 140, 32872, 19168];
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/chongzhi.css?v=20171213"/>
@@ -18,13 +18,11 @@ $testUid = [43949, 45796, 37419, 40952];
 
 <div class="row list-title">
     <div class="col-xs-6"><a href="/user/userbank/recharge" class="<?= $actionC === 'recharge' ? 'active-trans-title' : '' ?> trans-title">充值</a></div>
-    <?php if(in_array($uid, $testUid)){?>
     <div class="col-xs-6"><a href="/user/userbank/recharge-depute-wap" class="<?= $actionC === 'recharge-depute-wap' ? 'active-trans-title' : '' ?> trans-title">快捷充值(商业委托)</a></div>
-    <?php }?>
 </div>
-<?php if($toOpenMm){?>
-    <p class="bindCard-content-header" style="color: #ff0000"><?php echo $toOpenMm['message'];?>：</p>
-    <div class="bindCard-yet">
+<?php  if($toOpenMm){?>
+    <p class="bindCard-content-header" style="color: #ff0000;font-size: 1.63rem"><?php echo $toOpenMm['message'];?>：</p>
+    <div class="bindCard-yet" style="font-size: 1.63rem;">
         <span class="single-left"></span>
         <a class="single-div">
             <span class="add-icon"></span>
@@ -209,7 +207,6 @@ $testUid = [43949, 45796, 37419, 40952];
         );
 
         xhr.done(function(data) {
-            alert(data);return;
             $('#rechargebtn').attr('disabled', false);
             location.href=data['next']
         });

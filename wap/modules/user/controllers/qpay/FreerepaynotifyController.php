@@ -63,7 +63,7 @@ class FreerepaynotifyController extends Controller
     }
 
 
-    public static function processing($data)
+    private function processing($data)
     {
         TradeLog::initLog(2, $data, $data['sign'])->save();
         if (array_key_exists('token', $data)) {
@@ -86,13 +86,12 @@ class FreerepaynotifyController extends Controller
                 Yii::info('sql语句:'.$sql, 'notify');
             }
 
-            $user = User::findOne($epayUser->appUserId);
             $borrowerinfo = Borrower::findOne(['userId'=> $epayUser->appUserId]);
             if(empty($borrowerinfo)){
                 $borrower = new Borrower();
                 $borrower->userId = $epayUser->appUserId;
                 $borrower->allowDisbursement = 1;
-                $borrower->type = $user->type;
+                $borrower->type = 2;
                 if(!$borrower->save()){
                     Yii::info('插入Borrower表'.current($borrower->firstErrors), 'notify');
                 }
@@ -100,18 +99,18 @@ class FreerepaynotifyController extends Controller
                 Yii::info('Borrower表用户'.$epayUser->appUserId.'已存在', 'notify');
             }
 
-            $userAccountinfo = UserAccount::findOne(['uid'=> $epayUser->appUserId, 'type'=>UserAccount::TYPE_LEND]);
+            $userAccountinfo = UserAccount::findOne(['uid'=> $epayUser->appUserId, 'type'=>UserAccount::TYPE_BORROW]);
             if(empty($userAccountinfo)){
                 $userAccount = new UserAccount();
-                $userAccount->type = UserAccount::TYPE_LEND;
+                $userAccount->type = UserAccount::TYPE_BORROW;
                 $userAccount->uid = $epayUser->appUserId;
-                if(!$borrower->save()){
-                    Yii::info('插入useraccount表'.current($borrower->firstErrors), 'notify');
+                if(!$userAccount->save()){
+                    Yii::info('插入useraccount表'.current($userAccount->firstErrors), 'notify');
                 }
             }else{
                 Yii::info('useraccount表用户'.$epayUser->appUserId.'已存在', 'notify');
             }
-            return $user;
+            return User::findOne($epayUser->appUserId);;
         } else {
             throw new \Exception($data['order_id'] . '处理失败');
         }

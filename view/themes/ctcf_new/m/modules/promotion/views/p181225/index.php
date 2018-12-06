@@ -5,7 +5,6 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/index.min.css?v=1.4">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/window-box.min.css?v=1.3">
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/promotion/active20180618/css/window-box.min.css?v=1.3">
-<body>
 <div class="main-container">
     <input id="_csrf" name="_csrf" type="hidden" value="<?= Yii::$app->request->csrfToken; ?>">
     <div class="top-banner">
@@ -22,10 +21,12 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
         </div>
         <p class="rules">活动期间，用户通过分享活动或出借或邀请好友可获得拆圣诞礼物的次数，将有机会赢取<span style="color: #ffe59f;">iPhone xs max</span>。</p>
         <div class="gift-content">
-            <?php if ($awardNums['draws'] > 0 && $isLoggedIn == 1) : ?>
-            <a class="mainbtn gift-btn" id="open_gift">赶紧拆礼物</a>
-            <?php else:?>
-            <a  class="mainbtn gift-btn" >没有拆礼物的机会哦</a>
+            <?php if ($promoState !== 1): ?>
+                <a  class="mainbtn gift-btn" ><?php echo $promoStr;?></a>
+            <?php elseif ($awardNums['draws'] > 0 && $promoState == 1):?>
+                <a href="" class="mainbtn gift-btn" id="open_gift">赶紧拆礼物</a>
+            <?php else : ?>
+                <a  class="mainbtn gift-btn" >没有拆礼物的机会哦</a>
             <?php endif; ?>
             <div class="gift-list">
                 <table border="0" cellspacing="0" cellpadding="0">
@@ -76,14 +77,14 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
                     <li><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-points01.png"></li>
                     <li><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-points02.png"></li>
                 </ul>
-                <a href="#" class="mainbtn point-btn">10积分限时秒杀</a>
+                <a href="/mall/portal/guest" class="mainbtn point-btn">10积分限时秒杀</a>
             </div>
             <div class="point-part">
                 <ul class="point-list">
                     <li><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-points03.png"></li>
                     <li><img src="<?= FE_BASE_URI ?>wap/campaigns/active20181225/images/img-points04.png"></li>
                 </ul>
-                <a href="#" class="mainbtn point-btn">8折限时兑换</a>
+                <a href="/mall/portal/guest" class="mainbtn point-btn">8折限时兑换</a>
             </div>
         </div>
     </div>
@@ -150,9 +151,9 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
         <ul class="mygift-list">
             <?php if(!empty($awardlist)) :?>
 
-            <?php foreach ($awardlist as $v){?>
-                <li><?= $v?></li>
-            <?php }?>
+                <?php foreach ($awardlist as $v){?>
+                    <li><?= $v?></li>
+                <?php }?>
 
             <?php else:?>
                 <li>你还没有获得奖品！</li>
@@ -170,8 +171,8 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
         </ul>
     </div>
 </div>
-
-</body>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="<?= FE_BASE_URI ?>libs/wxShare.js?v=1"></script>
 <script type="text/javascript">
     $(function() {
 
@@ -207,10 +208,17 @@ $this->title = '圣诞狂欢派对 岁末感恩钜惠';
         $('#gifts-content').on('click',function(){
             $("#gifts-content").hide();
         });
+
+        //分享内容设置
+        wxShare.setParams("20181225圣诞节活动", "点击链接，立即参与~", "<?= Yii::$app->params['clientOption']['host']['wap'] ?>/promotion/p181225/index?code=<?= $user !== null ? $user->usercode : '' ?>", "https://static.wenjf.com/upload/link/link1524908202540711.png", "<?= Yii::$app->params['weixin']['appId'] ?>", "/promotion/p181225/ajax-share");
+        //微信分享回调
+        wxShare.TimelineSuccessCallBack = function () {
+            $.get("/promotion/p18225/ajax-share?scene=timeline&shareUrl=" + encodeURIComponent(location.href))
+        };
     });
     $("#open_gift").click(function(){
         var csrf = $("#_csrf").val();
-            $.post('/promotion/p181225/open-gift',{_csrf:csrf}, function(data) {
+        $.post('/promotion/p181225/open-gift',{_csrf:csrf}, function(data) {
             if(data['code'] !== 200){
                 $('#content-message').html(data['message']);
                 $("#gifts-content").show();

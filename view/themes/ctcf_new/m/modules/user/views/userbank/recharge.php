@@ -9,7 +9,7 @@ if ($backUrl = \Yii::$app->session['recharge_back_url']) {
     $this->backUrl = Html::encode($backUrl);
 }
 $actionC = Yii::$app->controller->action->id;
-$testUid = [43949, 45796, 37419, 40952];
+//$testUid = [43949, 45796, 37419, 40952, 23808, 24074, 140, 32872, 19168];
 ?>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>css/bind.css"/>
 <link rel="stylesheet" href="<?= ASSETS_BASE_URI ?>ctcf/css/chongzhi.css?v=20171213"/>
@@ -17,9 +17,7 @@ $testUid = [43949, 45796, 37419, 40952];
 <script src="<?= ASSETS_BASE_URI ?>js/layer.js?v=1"></script>
 <div class="row list-title">
     <div class="col-xs-6"><a href="/user/userbank/recharge" class="<?= $actionC === 'recharge' ? 'active-trans-title' : '' ?> trans-title">充值</a></div>
-    <?php if(in_array($uid, $testUid)){?>
     <div class="col-xs-6"><a href="/user/userbank/recharge-depute-wap" class="<?= $actionC === 'recharge-depute-wap' ? 'active-trans-title' : '' ?> trans-title">快捷充值(商业委托)</a></div>
-    <?php }?>
 </div>
 <!--银行卡-->
 <div class="row bank-card">

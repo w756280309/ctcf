@@ -39,7 +39,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     </li>
             </ul>
         </div>
-
+      <div id="son_content1">
          <div class="portlet-body">
             <table class="table">
                     <tr>
@@ -55,6 +55,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
                     </tr>
             </table>
         </div>
+      </div>
 
 
         <!--search start-->
@@ -98,7 +99,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         </div>
 
         <!--search end -->
-
+        <div id="son_content2">
         <div class="portlet-body">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
@@ -145,6 +146,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => 'yii\we
         </div>
         <!--分页-->
         <div class="pagination" style="text-align:center"><?= LinkPager::widget(['pagination' => $pages]); ?></div>
+      </div>
     </div>
 </div>
 

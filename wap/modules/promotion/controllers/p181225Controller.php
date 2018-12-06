@@ -63,10 +63,18 @@ class P181225Controller extends BaseController
      */
     public function actionIndex()
     {
+        $promoStr = '';
+        $currentTime = time();
         $promo = $this->findOr404(RankingPromo::class, ['key' => 'promo_181225']);
-        echo $promo->startTime;
-        echo $promo->endTime;
-        exit;
+        if( $currentTime < strtotime($promo->startTime) ) {
+            $promoState = 0;
+            $promoStr = "活动还未开始！";
+        } elseif ( $currentTime > strtotime($promo->endTime) ) {
+            $promoState = 2;
+            $promoStr = "活动已经结束！";
+        } else {
+            $promoState = 1;
+        }
         $user = $this->getAuthedUser();
         $isLoggedIn = null !== $user;
         $isGet = $awardlist = $awardNums = 0;
@@ -93,10 +101,13 @@ class P181225Controller extends BaseController
         }
 
         return $this->render('index', [
+            'promoStr' => $promoStr,
+            'promoState' => $promoState,
             'awardlist' => $awardlist,
             'awardNums' => $awardNums,
             'isGet' => $isGet,
             'isLoggedIn' => $isLoggedIn,
+            'user' => $user,
         ]);
     }
 
@@ -278,7 +289,7 @@ class P181225Controller extends BaseController
     /**
      * 分享后添加一次开礼物机会
      */
-    public function actionAjax20181225Record()
+    public function actionAjaxShare()
     {
         $user = $this->getAuthedUser();
         if (empty($user)) {
@@ -289,6 +300,9 @@ class P181225Controller extends BaseController
             return ['code' => 204, 'message' => '今天已经分享了'];
         }
         try {
+            $scene = Yii::$app->request->get('scene');
+            $shareUrl = Yii::$app->request->get('shareUrl');
+            $this->actionAddShare($shareUrl, $scene);
             $model = new User20181225DrawRecord();
             $model->uid = $user->id;
             $model->type = User20181225DrawRecord::TYPE_SHARE;

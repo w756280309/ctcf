@@ -58,6 +58,44 @@ class QpaynotifyController extends Controller
     }
 
     /**
+    * 快捷充值前台通知地址
+    */
+    public function actionFrontendDepute()
+    {
+        $data = Yii::$app->request->get();
+        $ret = $this->processing($data);
+        if ($ret instanceof RechargeRecord) {
+            return $this->redirect('/user/userbank/qpayres?ret=success');
+        }
+
+        return $this->redirect('/user/userbank/qpayres');
+    }
+
+    /**
+     * 快捷充值后台通知地址
+     */
+    public function actionBackendDepute()
+    {
+        $this->layout = false;
+        $err = '00009999';
+        $errmsg = 'no error';
+        $data = Yii::$app->request->get();
+        $ret = $this->processing($data);
+        if ($ret instanceof RechargeRecord) {
+            $err = '0000';
+        } else {
+            $errmsg = '异常';
+        }
+        $content = Yii::$container->get('ump')->buildQuery([
+            'order_id' => $data['order_id'],
+            'mer_date' => $data['mer_date'],
+            'reg_code' => $err,
+        ]);
+
+        return $this->render('@borrower/modules/user/views/recharge/recharge_notify.php', ['content' => $content]);
+    }
+
+    /**
      * @param array $data
      *                    说明 data 中 amount，user_id，account_id，mobile_id是判断pos充值的依据
      *

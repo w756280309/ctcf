@@ -183,8 +183,8 @@ use common\utils\StringUtils;
             </ul>
         <?php } else { ?>
             <!--无数据是显示-->
-            <p class="without-font">暂无出借明细</p>
-            <a class="link-tender" href="/licai/">立即出借</a>
+            <p class="without-font" style="top:1030px;">暂无出借明细</p>
+            <a class="link-tender" href="/licai/" style="top: 1065px;">立即出借</a>
         <?php } ?>
     </div>
 </div>

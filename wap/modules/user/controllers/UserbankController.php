@@ -356,7 +356,7 @@ class UserbankController extends BaseController
         $toOpenMm = [];
         if(empty($userfree)){//未开通
             $toOpenMm = UserFreepwdRecord::getCheckStatusInfo()[0];
-        }else if(UserFreepwdRecord::OPEN_FREE_RECHARGE_PASS !== UserFreepwdRecord::getCheckStatusInfo()[$userfree->status]['code']){
+        }else if(UserFreepwdRecord::OPEN_FASTPAY_STATUS_PASS !== UserFreepwdRecord::getCheckStatusInfo()[$userfree->status]['code']){
             $toOpenMm  = UserFreepwdRecord::getCheckStatusInfo()[$userfree->status];
         }
 

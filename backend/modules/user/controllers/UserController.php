@@ -708,6 +708,7 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
     private function normalUserDetail(User $user, $tabClass = null)
     {
         $id = $user->id;
+        $borrowerInfo = $user->borrowerInfo;
         //查询是否绑定微信息
         if ((new \yii\db\Query())
             ->from('social_connect')
@@ -750,8 +751,8 @@ IN (" . implode(',', $recordIds) . ")")->queryAll();
             'with' => 'transfer_count,transfer_sum',
         ]);
 
-
         return $this->render('detail', [
+            'borrowerInfo' => $borrowerInfo,
             'czTime' => $rcMax,
             'czNum' => $recharge['count'],
             'czMoneyTotal' => $recharge['sum'],

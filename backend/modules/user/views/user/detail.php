@@ -224,6 +224,9 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                     <li role="presentation" class="invite_nav"><a>关系详情</a></li>
                     <li role="presentation" class="offline_nav"><a>线下会员</a></li>
                     <li role="presentation" class="commercial_commissioning_nav"><a>商业委托签约</a></li>
+                    <?php if(isset($borrowerInfo)):?>
+                    <li role="presentation" class="financing_detail"><a>融资明细</a></li>
+                    <?php endif;?>
                 </ul>
             </div>
             <div class="container-fluid"  id="list">
@@ -240,6 +243,7 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
                 <div class="list_detail" id="invite_list"></div>
                 <div class="list_detail" id="offline_user"></div>
                 <div class="list_detail" id="commercial_commissioning_list"></div>
+                <div class="list_detail" id="financing_detail_list"></div>
             </div>
         </div>
     </div>
@@ -373,6 +377,18 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
         })
     }
 
+    function getFinancingDetailList(href)
+    {
+        $.get(href, function(data) {
+            if (data) {
+                var Obj = $("<code></code>").append($(data));
+                var $html1 = $("#son_content1", Obj);
+                var $html2 = $("#son_content2", Obj);
+                $('#financing_detail_list').html($html1.html() + $html2.html());
+            }
+        })
+    }
+
     $('#list_nav li').click(function () {
         var index = $("#list_nav li").index(this);
         if(!$(this).hasClass('active')) {
@@ -458,6 +474,12 @@ $this->registerJsFile('/js/My97DatePicker/WdatePicker.js', ['depends' => YiiAsse
     $('.commercial_commissioning_nav').click(function(){
         if (!$('#commercial_commissioning_list').html()) {
             getCommercialCommissioningList('/user/user/detail?id=<?= $normalUser->id?>&key=commercial_record')
+        }
+    });
+
+    $('.financing_detail').click(function(){
+        if (!$('#financing_detail_list').html()) {
+            getFinancingDetailList('/order/onlineorder/detailr?id=<?= $normalUser->id?>&type=2')
         }
     });
 </script>

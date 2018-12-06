@@ -86,8 +86,8 @@ $arr = [
             'class' => 'common\view\WapView',
             'theme' => [
                 'pathMap' => [
-                    '@app/views' => '@view/themes/'.$_ENV['BW_APP'].'/m/views',
-                    '@app/modules' => '@view/themes/'.$_ENV['BW_APP'].'/m/modules',
+                    '@app/views' => '@view/themes/'.env('BW_APP').'/m/views',
+                    '@app/modules' => '@view/themes/'.env('BW_APP').'/m/modules',
                 ],
             ],
         ],
